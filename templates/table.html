@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block submenu %}
+	<h2>Kunder</h2>
+	<a href=""><span>Oprett ny kunde</span></a>
+{% endblock %}
+
+{% block maincontent %}
+				<!-- Tabular Data - no div#inner because padding isnt needed -->
+				<table class="tablesorter hover">
+					<thead> 
+						<tr> 
+							<th class="checkbox"><input type="checkbox"></th> 
+							<th>Post Title</th> 
+							<th>Author</th> 
+							<th>Catagories</th> 
+							<th>Tags</th> 
+							<th>Comments</th> 
+							<th>Date</th> 
+				 
+						</tr> 
+					</thead>
+					<tbody> 
+						<tr> 
+							<td><input type="checkbox"></td> 
+							<td>Apple finally release the iPhone 4</td> 
+							<td>Steve Jobs</td>
+							<td>Apple</td> 
+							<td>apple, iphone, iphone os, phone</td> 
+							<td>184</td> 
+							<td>12.06.10</td> 
+						</tr>
+					</tbody>
+				</table>
+				<!-- /End Tabular Data -->	
+{% endblock %}	

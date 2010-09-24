@@ -1,0 +1,20 @@
+
+Required packages for FOCUS
+
+MySQL
+gettext
+
+Django >= 1.2
+python-mysql
+
+django-storages (bruk for opp-nedlastning av filer)
+django-reversion (logging/backup av endring av objekter)
+South (migreringsverktøy)
+
+
+KANSKJE
+python-dateutil
+python-vobject
+python-reportlab
+sphinx
+ipython

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+		{% block submenu %}
+			<a href="add"><span>Oprett nytt prosjekt</span></a>
+		{% endblock %}
+
+		{% block maincontent %}
+				<table class="tablesorter">
+					<thead> 
+						<tr> 
+							<th>Prosjektnavn</th>
+							<th>#</th>
+						</tr> 
+					</thead>
+					<tbody> 
+					
+						{% for p in timetrackings %}
+							<tr> 
+								<td>{{p.date}}</td> 
+								<td>
+									<a href="{% url app.timetracking.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
+									<a href="{% url app.timetracking.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+								</td>
+							</tr>
+						{% endfor %}		
+					</tbody>
+				</table>	
+{% endblock %}	

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{%block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+
+
+{% block maincontent %}
+
+<div id="inner">
+	
+	{{customer.name}}
+	<br>
+	
+	<br><br>
+	<b>Tilhørende prosjekter og ordrer</b>
+	<br><br>
+	<table>
+		{% for project in customer.projects.for_user %}
+			<tr>
+				<td>{{project.project_name}}</td>
+				<td></td>
+			</tr>
+			
+			{% for order in project.orders.for_user %}
+			<tr>
+				<td></td>
+				<td>{{order.order_name}}</td>
+			</tr>
+			{% endfor %}
+		{% endfor %}
+	</table>
+			
+</div>	
+   
+{% endblock %}	

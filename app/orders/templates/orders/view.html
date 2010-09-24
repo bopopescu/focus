@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{%block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+{% block maincontent %}
+
+<div id="inner">
+	<br><br>
+	<b>Tilhørende ordrer</b>
+	<table>
+		{% for order in project.orders.for_user %}
+			<tr>
+				<td>{{order.order_name}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+			
+</div>	
+   
+{% endblock %}	

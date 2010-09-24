@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{%block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+
+
+{% block maincontent %}
+
+<div id="inner">
+	
+	{{order}}
+	
+	<br><br>
+	<b>Hvem som kan se dette prosjektet</b>
+	v
+	<table>
+		{% for participant in order.participant %}
+			<tr>
+				<td>{{participant}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+			
+</div>	
+   
+{% endblock %}	

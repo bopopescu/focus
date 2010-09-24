@@ -1,0 +1,14 @@
+{% if messages %}
+						 
+ {% for message in messages %}
+ 
+ 	<div class="notification {{ message.tags }}" style="position:absolute">
+ 		{{ message }}
+ 		<a href="#" style="float:right" class="close"><img src="/media/images/notification_close.png" alt="" /></a>		
+	</div>	
+	
+ {% endfor %}
+						 
+{% endif %}
+				
+				

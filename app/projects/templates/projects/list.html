@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+		{% block submenu %}
+			<a href="add"><span>Oprett nytt prosjekt</span></a>
+		{% endblock %}
+
+		{% block maincontent %}
+				<table class="tablesorter">
+					<thead> 
+						<tr> 
+							<th>Prosjektnavn</th>
+							<th>#</th>
+						</tr> 
+					</thead>
+					<tbody> 
+					
+						{% for p in projects %}
+							<tr> 
+								<td><a href="{% url app.projects.views.view p.id %}">{{p.project_name}}</a></td> 
+								<td>
+									<a href="{% url app.projects.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
+									<a href="{% url app.projects.views.permissions p.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
+									<a href="{% url app.projects.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+								</td>
+							</tr>
+						{% endfor %}		
+					</tbody>
+				</table>	
+{% endblock %}	

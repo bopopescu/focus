@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{%block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+
+
+{% block maincontent %}
+
+<div id="inner">
+
+	{{user.first_name}} {{user.last_name}}
+	<br>
+	<br><br>
+	Medlem av
+	<table style="text-align:center">
+		
+		{% for member in user.memberships.all %}
+		
+			<tr>
+				<td><a href="">{{member.name}}</a></td>
+			</tr>
+		
+		{% endfor %}
+		
+	</table>
+	
+	<br><br>
+	<b>Rettigheter</b>
+	<br><br>
+	<table style="text-align:center">
+	
+		<tr>
+			<td></td>
+			<td>Objekt</td>
+			<td>Kan se</td>
+			<td>Kan endre</td>
+			<td>Kan slette</td>
+			<td>Negativ rettighet</td>
+			<td></td>
+		</tr>
+	
+		<tr><td style="text-align:left;"><b>Kunder</b></td><td colspan=5></td></tr>
+		{% for perm in CustomerPerm %}
+			<tr>
+				<td></td>
+				<td style="text-align:left;"><a href="{% url app.customers.views.view perm.object_id %}">{{perm}}</a></td>
+				<td>{% if perm.can_view %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_change %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_delete %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.negative %}
+    					X
+    				{% endif %}
+				</td>
+				
+				<td>{% if perm.membership %}
+    					Gjennom gruppen {{ perm.membership }}
+    				{% endif %}
+				</td>
+				
+			</tr>
+		{% endfor %}
+		
+		<tr><td style="text-align:left;"><b>Kontakter</b></td><td colspan=5></td></tr>
+    {% for perm in ContactPerm %}
+      <tr>
+        <td></td>
+        <td style="text-align:left;"><a href="{% url app.contacts.views.edit perm.object_id %}">{{perm}}</a></td>
+        <td>{% if perm.can_view %}
+              X
+            {% endif %}
+        </td>
+        <td>{% if perm.can_change %}
+              X
+            {% endif %}
+        </td>
+        <td>{% if perm.can_delete %}
+              X
+            {% endif %}
+        </td>
+        <td>{% if perm.negative %}
+              X
+            {% endif %}
+        </td>
+        
+        <td>{% if perm.membership %}
+              Gjennom gruppen {{ perm.membership }}
+            {% endif %}
+        </td>
+        
+      </tr>
+    {% endfor %}
+
+		<tr><td style="text-align:left;"><b>Prosjekter</b></td><td colspan=5></td></tr>
+		{% for perm in ProjectPerm %}
+			<tr>
+							<td></td>
+			
+				<td style="text-align:left;"><a href="{% url app.projects.views.view perm.object_id %}">{{perm}}</a></td>
+				<td>{% if perm.can_view %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_change %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_delete %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.negative %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.membership %}
+    					Gjennom gruppen {{ perm.membership }}
+    				{% endif %}
+				</td>
+				
+			</tr>
+		{% endfor %}
+		
+		<tr><td style="text-align:left;"><b>Ordrer</b></td><td colspan=5></td></tr>
+		{% for perm in OrderPerm %}
+			<tr>
+							<td></td>
+			
+				<td style="text-align:left;"><a href="{% url app.orders.views.view perm.object_id %}">{{perm}}</a></td>
+				<td>{% if perm.can_view %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_change %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_delete %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.negative %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.membership %}
+    					Gjennom gruppen {{ perm.membership }}
+    				{% endif %}
+				</td>
+				
+			</tr>
+		{% endfor %}
+		
+		
+		
+		
+	</table>
+			
+</div>	
+   
+{% endblock %}	

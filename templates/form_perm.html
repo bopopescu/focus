@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+  
+		{% block maincontent %}
+		<link rel="stylesheet" type="text/css" href="/media/admin/css/forms.css" />
+    <link rel="stylesheet" type="text/css" href="/media/css/admin-widgets.css" />
+
+
+<form enctype="multipart/form-data" action="" method="post">
+	
+			{{ form_perm.management_form }}
+		
+					
+				<table class="tablesorter">
+					<thead> 
+						<tr> 
+							<th>Bruker</th>
+							<th>Medlemmer av</th>
+							<th>Kan se</th>
+							<th>Kan endre</th>
+							<th>Kan slette</th>
+							<th>Negativ rettighet</th>
+							<th>Slett denne</th>
+						</tr> 
+					</thead>
+					<tbody> 
+					
+					{% for forms in form_perm.forms %}
+ 		
+		 				{# Include the hidden fields in the form #}
+			                {% for hidden in forms.hidden_fields %}
+			                	{{ hidden }}
+			                {% endfor %}
+            	
+		            	<tr> 
+								<td>{{ forms.user }}</td> 
+								<td>{{ forms.membership }}</td> 
+								<td>{{ forms.can_view }}</td> 
+								<td>{{ forms.can_change }}</td> 
+								<td>{{ forms.can_delete }}</td> 
+								<td>{{ forms.negative }}</td> 			
+								<td onclick="return alert('Husk at den vil bli slettet permanent')">{{ forms.deleted }}</td> 			
+						</tr>  			
+    	
+    				{% endfor %}		
+					</tbody>
+				</table>	
+
+  <div class="submit-row" style="overflow: auto;">
+      <input type="submit" value="Lagre" class="default" name="_save" />
+  </div>
+  
+{% endblock %}	

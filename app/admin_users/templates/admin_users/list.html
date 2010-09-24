@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block submenu %}
+	<a href="add"><span>Oprett ny kunde</span></a>
+{% endblock %}
+
+
+{% block maincontent %}	
+
+				<table class="tablesorter hover">
+					<thead> 
+						<tr> 
+							<th>Navn</th> 
+							<th>Epostadresse</th> 
+							<th>Telefon</th> 
+							<th>Epostadresse</th> 
+							<th>#</th> 				 
+						</tr> 
+					</thead>
+					
+		<tbody>
+		{% for u in users %}
+			<tr> 
+				<td><a href="{% url app.admin_users.views.view u.id %}">{{u.first_name}} {{u.last_name}}</a></td> 
+				<td>{{u.email}}</td>
+				<td>{{contact.phone}}</td> 
+				<td>{{contact.email}}</td> 
+				<td>
+				<a href="{% url app.admin_users.views.edit u.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
+				<a href="{% url app.admin_users.views.delete u.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+				</td>
+			</tr>
+		{% endfor %}	
+		</tbody>			
+	</table>
+	
+
+{% endblock %}

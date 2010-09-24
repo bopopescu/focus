@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block submenu %}
+	<a href="add"><span>Oprett ny kunde</span></a>
+{% endblock %}
+
+
+{% block maincontent %}	
+
+				<table class="tablesorter hover">
+					<thead> 
+						<tr> 
+							<th>Tittel</th> 
+							<th>#</th> 				 
+						</tr> 
+					</thead>
+					
+		<tbody>
+		{% for a in announcements %}
+			<tr> 
+				<td>{{a.title}}</td> 
+				<td>
+				<a href="{% url app.announcements.views.edit a.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
+				<a href="{% url app.announcements.views.delete a.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+				</td>
+			</tr>
+		{% endfor %}	
+		</tbody>			
+	</table>
+	
+
+{% endblock %}

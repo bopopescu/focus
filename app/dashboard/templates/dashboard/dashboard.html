@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{%block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+{% block maincontent %}
+
+<div id="inner">
+  
+  <div id="leftbar">
+  {% for announcement in announcements %}
+ 
+    <h2>{{announcement.title}}    
+        <div id="datepublished">Skrevet av {{announcement.creator.first_name}}, {{announcement.date_created|date:"d.m.Y H:i"}}</div>
+    </h2>   
+   
+    {{announcement.text}}
+    
+  {% endfor %}
+  </div>
+  
+  <div id="rightbar">
+    <h6> <img src="/media/images/icons/book.png" alt=""> Dine prosjekter </h6> 
+    <div id="textInRightBar">
+      {% for project in projects %}
+        - <a href="{% url app.projects.views.view project.id %}">{{project}}</a><br> 
+      {% endfor %}
+    </div>
+  
+  </div>
+  
+  <div id="rightbar">
+    <h6> <img src="/media/images/icons/basket.png" alt=""> Dine ordrer </h6> 
+    <div id="textInRightBar">
+      {% for order in orders %}
+         - <a href="{% url app.orders.views.view order.id %}">{{order}}</a><br>
+      {% endfor %}
+    </div>
+  </div>
+  
+  
+</div>
+
+
+
+{% endblock %}  
