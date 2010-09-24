@@ -145,6 +145,7 @@ INSTALLED_APPS = (
     #Other    
     'south',    
     'reversion'
+
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
