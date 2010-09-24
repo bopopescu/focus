@@ -2,11 +2,13 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 
+
 from core.models import ObjectPermission
 
 class ObjectPermBackend(object):
+    
     supports_object_permissions = True
-    supports_anonymous_user = True
+    supports_anonymous_user = False
 
     def authenticate(self, username, password):
         return None
@@ -57,7 +59,7 @@ class ObjectPermBackend(object):
         
         try:
             perm = perm.split('.')[-1].split('_')[0]
-        except IndexError:
+        except Exception:
             return False
 
         p = ObjectPermission.objects.filter(content_type=ct,
