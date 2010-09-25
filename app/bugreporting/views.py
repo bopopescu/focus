@@ -6,6 +6,8 @@ from forms import *
 from core.shortcuts import *
 from django.contrib import messages
 
+from filetransfers.api import prepare_upload
+
 @login_required
 def overview(request):
     Bugreportings = Bug.objects.all()    
@@ -37,7 +39,7 @@ def delete(request, id):
 
 @login_required
 def form (request, id = False):        
-
+    
     if id:
         instance = get_object_or_404(Bug, id = id, deleted=False)
         msg = "Velykket endret bug"
@@ -47,8 +49,8 @@ def form (request, id = False):
         
     #Save and set to active, require valid form
     if request.method == 'POST':
-        
-        form = BugreportingForm(request.POST, instance=instance)       
+
+        form = BugreportingForm(request.POST, request.FILES, instance=instance)       
         if form.is_valid():    
             o = form.save(commit=False)
             o.owner = request.user
@@ -59,5 +61,6 @@ def form (request, id = False):
             return overview(request)      
     else:
         form = BugreportingForm(instance=instance)
-    
-    return render_with_request(request, "form.html", {'title':'Bugs', 'form': form })
+        
+    return render_with_request(request, "form.html", {'title':'Bugs', 
+                                                      'form': form })

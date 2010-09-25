@@ -144,7 +144,8 @@ INSTALLED_APPS = (
     
     #Other    
     'south',    
-    'reversion'
+    'filetransfers',
+    'reversion',
 
 )
 
