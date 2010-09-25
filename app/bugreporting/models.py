@@ -5,9 +5,18 @@ from core.models import *
 class Bug(PersistentModel):
     title = models.CharField("Tittel", max_length=80)
     description = models.TextField("Beskrivelse")
+    closed = models.BooleanField(default=False)
     
     def __unicode__(self):
         return self.title
-    
-import reversion
-reversion.register(Bug)
+
+class BugComment(PersistentModel):
+    text = models.TextField()
+    bug = models.ForeignKey(Bug, related_name="comments")
+
+from reversion.admin import VersionAdmin
+class ModelAdmin(VersionAdmin):
+    """Admin settings go here."""
+
+admin.site.register(Bug, ModelAdmin)
+admin.site.register(BugComment, ModelAdmin)

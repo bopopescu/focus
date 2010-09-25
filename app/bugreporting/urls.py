@@ -9,7 +9,9 @@ urlpatterns = patterns('app.bugreporting.views',
     # (r'^iceonweb/', include('iceonweb.foo.urls')),
         url(r'^$', 'overview'), 
         url(r'^add/$', 'add'), 
+        url(r'^view/(\d+)/?$',   'view'),
         url(r'^edit/(\d+)/?$', 'edit'), 
+        url(r'^changeStatus/(\d+)/?',   'changeStatus'),
         url(r'^delete/(\d+)/?$', 'delete'), 
                 
      # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

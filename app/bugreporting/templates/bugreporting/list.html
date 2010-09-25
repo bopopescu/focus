@@ -17,7 +17,7 @@
 		<tbody>
 		{% for b in bugs %}
 			<tr> 
-				<td>{{b.title}}</td> 
+				<td><a href="{% url app.bugreporting.views.view b.id %}">{{b.title}}</a></td> 
 				<td>
 				<a href="{% url app.bugreporting.views.edit b.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
 				<a href="{% url app.bugreporting.views.delete b.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>

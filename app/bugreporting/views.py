@@ -16,6 +16,18 @@ def add(request):
     return form(request)
 
 @login_required
+def view(request, id):
+    ticket = Bug.objects.get(id=id)
+    return render_with_request(request, 'bugreporting/view.html', {'title':ticket.title, 'ticket':ticket})
+
+@login_required
+def changeStatus(request, id):
+    ticket = Bug.objects.get(id=id)
+    ticket.closed = not ticket.closed
+    ticket.save()
+    return redirect(view, id)
+    
+@login_required
 def edit(request, id):
     return form(request, id)
 
