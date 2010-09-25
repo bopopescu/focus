@@ -6,7 +6,6 @@ class Bug(PersistentModel):
     title = models.CharField("Tittel", max_length=80)
     description = models.TextField("Beskrivelse")
     closed = models.BooleanField(default=False)
-    image = models.FileField(upload_to='../uploads/')
     
     def __unicode__(self):
         return self.title
