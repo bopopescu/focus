@@ -34,15 +34,22 @@
     {{ticket.description}}
     
     <br><br>--------------------<br>
-    
+      
     Skrevet av {{ticket.creator.first_name}}, {{ticket.date_created|date:"d.m.Y H:i"}}
+  
   </div>
   
   <div id="rightbar">
     <h6> <img src="/media/images/icons/report.png" alt=""> Kommentarer </h6> 
     <div id="textInRightBar">
-      {% for order in orders %}
-         - <a href="{% url app.orders.views.view order.id %}">{{order}}</a><br>
+      <form enctype="multipart/form-data" action="{% url app.bugreporting.views.addComment ticket.id %}" method="post">
+      
+      {{commentForm.as_p}}
+      
+      <input type="submit" value="Lagre">
+      </form>
+      {% for cm in comments %}
+         {{cm}}<br><br>
       {% endfor %}
     </div>
   </div>

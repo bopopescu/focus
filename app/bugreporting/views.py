@@ -6,8 +6,6 @@ from forms import *
 from core.shortcuts import *
 from django.contrib import messages
 
-from filetransfers.api import prepare_upload
-
 @login_required
 def overview(request):
     Bugreportings = Bug.objects.all()    
@@ -20,7 +18,27 @@ def add(request):
 @login_required
 def view(request, id):
     ticket = Bug.objects.get(id=id)
-    return render_with_request(request, 'bugreporting/view.html', {'title':ticket.title, 'ticket':ticket})
+    comments = BugComment.objects.filter(bug=ticket)
+    commentForm = CommentForm(instance = BugComment())
+    return render_with_request(request, 'bugreporting/view.html', {'title':ticket.title, 
+                                                                   'ticket':ticket,
+                                                                   'comments':comments,
+                                                                   'commentForm':commentForm})
+
+@login_required
+def addComment(request, bugID):
+
+    instance = BugComment()
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=instance)       
+        if form.is_valid(): 
+            ticket = Bug.objects.get(id=bugID)
+            o = form.save(commit=False)
+            o.bug = ticket
+            o.owner = request.user
+            o.save()
+
+    return redirect(view, bugID)    
 
 @login_required
 def changeStatus(request, id):
