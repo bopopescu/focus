@@ -1,0 +1,6 @@
+*.pyc
+focusDB
+project.db
+.project
+.settings
+.pydevproject
