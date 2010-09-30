@@ -6,6 +6,15 @@ from managers import PersistentManager
 from django.conf import settings
 from core.middleware import *
 import datetime
+
+"""
+For auto-version of objects
+"""
+from reversion.admin import VersionAdmin
+class ModelAdmin(VersionAdmin):
+    """Admin settings go here."""
+    
+    
 """
 The Company class.
 All users belong to a company, therefore all objects belongs to a company, like projects, orders...
@@ -54,12 +63,12 @@ class PersistentModel(models.Model):
         self.deleted = True
         super(PersistentModel, self).save()     
    
-admin.site.register(Company)
+
+admin.site.register(Company, ModelAdmin)
 
 """
 Memberships, user can can be members of memberships, which can have permissions for instance
 """
-
 class Membership(models.Model):
     name = models.CharField(max_length=50)
     users = models.ManyToManyField(User, related_name="memberships")
@@ -68,7 +77,24 @@ class Membership(models.Model):
     def __unicode__(self):
         return self.name
     
-admin.site.register(Membership)
+admin.site.register(Membership, ModelAdmin)
+
+"""
+ROLES
+"""
+class Role(models.Model):
+    name = models.CharField(max_length=200)
+    permission = models.CharField(max_length=50, default="")
+    user = models.ForeignKey(User, blank=True, null=True, related_name="roles")
+    membership = models.ForeignKey(Membership, blank=True, null=True, related_name='roles')
+    
+    content_type = models.ForeignKey(ContentType)
+
+    def __unicode__(self):
+        return unicode(self.content_type)
+
+
+admin.site.register(Role, ModelAdmin)
 
 
 """
@@ -77,9 +103,7 @@ Adding object permissins to object, using a content_type for binding with all ki
 class ObjectPermission(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, related_name="permissions")
     membership = models.ForeignKey(Membership, blank=True, null=True, related_name='permissions')
-    
-    globalPermission = models.BooleanField()
-    
+        
     deleted = models.BooleanField()
     
     #General permissions
@@ -95,8 +119,7 @@ class ObjectPermission(models.Model):
     def __unicode__(self):
         return unicode(self.content_type.get_object_for_this_type(id=self.object_id))
 
-admin.site.register(ObjectPermission)
-
+admin.site.register(ObjectPermission, ModelAdmin)
 
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
@@ -140,11 +163,11 @@ def initial_data ():
     comp = Company(name="Focus AS")
     comp.save()
     
-    a = User(username="superadmin", first_name="SuperAdmin", last_name="", is_superuser = True, is_staff=True, is_active=True)
+    a = User.objects.get_or_create()(username="superadmin", first_name="SuperAdmin", last_name="", is_superuser = True, is_staff=True, is_active=True)
     a.set_password("superpassord")
     a.save()
 
-    u = User(username="bjarte", first_name="Bjarte", last_name="Hatlenes", is_active=True)
+    u = User.objects.get_or_create(username="bjarte", first_name="Bjarte", last_name="Hatlenes", is_active=True)
     u.set_password("superpassord")
     u.save()
     u.get_profile().company = comp

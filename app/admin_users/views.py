@@ -28,12 +28,12 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
-def get_permissions(user, content_type, globalPermissions = False):
+def get_permissions(user, content_type):
     #PermOnUser = ObjectPermission.objects.filter(user=user, content_type = ContentType.objects.get_for_model(content_type))
     #PermFromGroups = ObjectPermission.objects.filter(membership__in=user.memberships.all, content_type = content_type)
     
     Permissions = ObjectPermission.objects.filter(
-                                                  (Q(user=user, globalPermission=globalPermissions) | Q(membership__in=user.memberships.all)) & 
+                                                  (Q(membership__in=user.memberships.all)) & 
                                                   Q(content_type = ContentType.objects.get_for_model(content_type)))
     return Permissions
     
