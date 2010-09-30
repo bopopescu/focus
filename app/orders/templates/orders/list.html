@@ -21,7 +21,7 @@
 								<td>{{p.order_name}}</td> 
 								<td>
 									<a href="{% url app.orders.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
-									<a href="{% url app.contacts.views.permissions p.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
+									<a href="{% url app.orders.views.permissions p.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
 									<a href="{% url app.orders.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
 								</td>
 							</tr>
