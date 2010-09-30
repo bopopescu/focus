@@ -125,8 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
 
     #Admin-for leaders
-    'app.admin_users',
-    'app.admin_memberships',
+    'app.admin',
     
     #All the applicaitons
     'core',  
