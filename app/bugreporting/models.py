@@ -12,7 +12,7 @@ class Bug(PersistentModel):
         return self.title
 
 class BugComment(PersistentModel):
-    title = models.CharField(max_length=80)
+    title = models.CharField(max_length=80, blank=True)
     text = models.TextField()
     bug = models.ForeignKey(Bug, related_name="comments")
     
