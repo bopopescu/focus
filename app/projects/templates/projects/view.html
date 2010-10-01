@@ -12,20 +12,29 @@
 
 {% block maincontent %}
 
-<div id="inner">
+<div id="inner">	
 	
-	{{order}}
-	
+	<b>Tilhørende ordrer</b>
 	<br><br>
-	<b>Hvem som kan se dette prosjektet</b>
-	v
 	<table>
-		{% for participant in order.participant %}
+		<tr>
+			<th>Ordre</th>
+			<th>Registrert</th>
+			<th>Sist endret</th>
+			<th>Sist endret av</th>
+			<th>Opprettet av</th>
+		</tr>
+		{% for order in project.orders.all %}
 			<tr>
-				<td>{{participant}}</td>
+				<td><a href="{% url app.orders.views.view order.id %}">{{order}}</a></td>
+				<td>{{order.date_created|date:"d.m.Y"}}</td>
+				<td>{{order.date_edited|date:"d.m.Y"}}</td>
+				<td>{{order.editor}}</td>
+				<td>{{order.creator}}</td>
 			</tr>
 		{% endfor %}
 	</table>
+	
 			
 </div>	
    

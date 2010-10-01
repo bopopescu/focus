@@ -27,7 +27,7 @@ def delete(request, id):
 @login_required
 def view(request, id):
     order = Order.objects.for_user().get(id=id)
-    return render_with_request(request, 'projects/view.html', {'title':'Ordre: %s' % order.order_name, 
+    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name, 
                                                                'order':order})
 
 @login_required
