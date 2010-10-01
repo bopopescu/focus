@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404, Ht
 from django.contrib.auth.decorators import login_required, permission_required
 
 from core.models import *
-from forms import *
+from app.admin.forms import *
 from core.shortcuts import *
 
 from django.contrib import messages
@@ -13,13 +13,13 @@ from django.db.models import Q
 def overview(request):
     Company = request.user.get_profile().company
     Users = User.objects.filter(userprofile__company=Company)
-    return render_with_request(request, 'admin_users/list.html', {'title':'Brukere', 'users':Users})
+    return render_with_request(request, 'admin/list.html', {'title':'Brukere', 'users':Users})
 
 @login_required
 def grant_permissions(request):
     Users = User.objects.all()    
     Permissions = Permission.objects.all()
-    return render_with_request(request, 'admin_users/grant_permssions.html', {'title':'Brukere', 'users':Users, 'permissions':Permissions })
+    return render_with_request(request, 'admin/grant_permssions.html', {'title':'Brukere', 'users':Users, 'permissions':Permissions })
 
 def add(request):
     return form(request)
@@ -72,7 +72,7 @@ def view(request, id):
     OrderPerm = get_permissions(user, Order)
     ContactPerm = get_permissions(user, Contact)
     
-    return render_with_request(request, 'admin_users/view.html', {'user':user, 
+    return render_with_request(request, 'admin/view.html', {'user':user, 
                                                                   'CustomerPerm':CustomerPerm,
                                                                   'ProjectPerm':ProjectPerm,
                                                                   'ContactPerm':ContactPerm,

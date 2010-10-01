@@ -32,8 +32,8 @@ urlpatterns = patterns('',
     
     
     #settings
-    (r'^useradmin/',                include('app.admin_users.urls')),
-    (r'participants/addPop/$',      'app.admin_users.views.addPop'),
+    (r'^useradmin/',                include('app.admin.urls')),
+    (r'participants/addPop/$',      'app.admin.views.users.addPop'),
  
  
     #media
