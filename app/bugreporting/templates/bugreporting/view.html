@@ -15,9 +15,7 @@
 
 <div id="inner">
   
-  
-  <div id="leftbar">
-   <h4>
+     <h4>
     Status: 
     {% if ticket.closed %}
     CLOSED
@@ -25,34 +23,59 @@
     OPEN
     {% endif %}
     </h4> 
-    
-    <a href="{% url app.bugreporting.views.changeStatus ticket.id %}">endre status</a>
-    
+        
     <br><br>
-    <br>Beskrivelse:<br>--------------------<br><br>
-    
-    {{ticket.description}}
-    
-    <br><br>--------------------<br>
-      
-    Skrevet av {{ticket.creator.first_name}}, {{ticket.date_created|date:"d.m.Y H:i"}}
+    		 
+	<div class="bugboxesQ">
+		<div class="bugboxesInfo">
+			<h1 style="float:left;">{{ticket.title}}</h1>
+			
+			<div class="createInfo">
+					Lagt inn av: {{ticket.creator.first_name}}<br>
+					Opprettet: {{ticket.date_created|date:"d.m.Y H:i"}}
+			</div>
+			
+			
+			<hr>
+		</div>
+		
+    	{{ticket.description}}
+
+
+	</div>
+	
+	{% for cm in comments %}
+         
+	<div class="bugboxes">
+		<div class="bugboxesInfo">
+			<h1 style="float:left;">{{cm.title}}</h1>
+			
+			<div class="createInfo">
+					Lagt inn av: {{cm.creator.first_name}}<br>
+					Opprettet: {{cm.date_created|date:"d.m.Y H:i"}}
+			</div>
+			
+			
+			<hr>
+		</div>
+		
+    	{{cm.text}}
+		
+	</div>
+     
+	{% endfor %}
   
-  </div>
+  <br><br>   
   
-  <div id="rightbar">
-    <h6> <img src="/media/images/icons/report.png" alt=""> Kommentarer </h6> 
-    <div id="textInRightBar">
-      <form enctype="multipart/form-data" action="{% url app.bugreporting.views.addComment ticket.id %}" method="post">
+  <h1>Ny kommentar</h1>
+  <form enctype="multipart/form-data" action="{% url app.bugreporting.views.addComment ticket.id %}" method="post">
       
       {{commentForm.as_p}}
       
       <input type="submit" value="Lagre">
       </form>
-      {% for cm in comments %}
-         {{cm}}<br><br>
-      {% endfor %}
-    </div>
-  </div>
+	  
+
   
 </div>  
    

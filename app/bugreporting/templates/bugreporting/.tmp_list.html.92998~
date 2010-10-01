@@ -10,10 +10,8 @@
 					<thead> 
 						<tr> 
 							<th>Navn</th> 
-							<th>Status</th>
-							<th>Registrert</th>
-							<th>Sist endret</th>
-							<th>Kommentarer</th>
+							<th>Registret</th>
+							<th>Kommentarer<th>
 							<th>Valg</th> 		 
 						</tr> 
 					</thead>
@@ -22,15 +20,7 @@
 		{% for b in bugs %}
 			<tr> 
 				<td><a href="{% url app.bugreporting.views.view b.id %}">{{b.title}}</a></td> 
-				<td>
-					{% if b.closed %}
-				    CLOSED
-				    {% else %}
-				    OPEN
-				    {% endif %}	
-				</td>
 				<td>{{ b.date_created|date:"d.m.Y H:i" }}</td>
-				<td>{{ b.date_edited|date:"d.m.Y H:i" }}</td>
 				<td>{{ b.comments.count }}</td>
 				<td>
 				<a href="{% url app.bugreporting.views.edit b.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>

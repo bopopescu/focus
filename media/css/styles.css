@@ -73,7 +73,7 @@ a:focus{
 }
 
 hr{
-	border: 0 #ccc solid;
+	border: 1 #ccc solid;
 	border-top-f: 1px;
 	clear: both;
 	height: 0;
@@ -1142,3 +1142,27 @@ table th,table td{
 		background-color: #ededed;
 		}
 
+.bugboxesQ {
+	padding:10px;
+	width:90%; 
+	height:auto; 
+	border:1px solid #bbbbbb; 
+	background-color:#fafad4;
+}
+
+.bugboxesInfo {
+	width:100%;
+}
+	.bugboxesInfo .createInfo {
+		float:right;
+		padding:10px;
+	}
+
+.bugboxes {
+	margin-top:30px;
+	padding:10px;
+	width:90%; 
+	height:auto; 
+	border:1px solid #bbbbbb; 
+	background-color:#e9e9e9;
+}

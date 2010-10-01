@@ -163,11 +163,11 @@ def initial_data ():
     comp = Company(name="Focus AS")
     comp.save()
     
-    a = User.objects.get_or_create()(username="superadmin", first_name="SuperAdmin", last_name="", is_superuser = True, is_staff=True, is_active=True)
+    a, created = User.objects.get_or_create()(username="superadmin", first_name="SuperAdmin", last_name="", is_superuser = True, is_staff=True, is_active=True)
     a.set_password("superpassord")
     a.save()
 
-    u = User.objects.get_or_create(username="bjarte", first_name="Bjarte", last_name="Hatlenes", is_active=True)
+    u,created = User.objects.get_or_create(username="bjarte", first_name="Bjarte", last_name="Hatlenes", is_active=True)
     u.set_password("superpassord")
     u.save()
     u.get_profile().company = comp

@@ -8,7 +8,7 @@ from django.contrib import messages
 
 @login_required
 def overview(request):
-    Bugreportings = Bug.objects.all()    
+    Bugreportings = Bug.objects.all().order_by("closed", "date_created")    
     return render_with_request(request, 'bugreporting/list.html', {'title':'Registrerte bugs', 'bugs':Bugreportings})
 
 @login_required
