@@ -6,6 +6,9 @@ from forms import *
 from core.shortcuts import *
 from django.contrib import messages
 
+from django.core.mail import send_mail
+
+
 @login_required
 def overview(request):
     Bugreportings = Bug.objects.all().order_by("closed", "date_created")    
@@ -25,6 +28,18 @@ def view(request, id):
                                                                    'comments':comments,
                                                                    'commentForm':commentForm})
 
+
+@login_required
+def getRecipientForEmailNoteComment(request, bugID):
+    ticket = Bug.objects.get(id=bugID)
+    recipients = set([])
+    for c in ticket.comments.all():
+        recipients.add(c.creator.email)
+
+    recipients.discard(request.user.email)
+
+    return recipients
+
 @login_required
 def addComment(request, bugID):
 
@@ -37,6 +52,9 @@ def addComment(request, bugID):
             o.bug = ticket
             o.owner = request.user
             o.save()
+            
+            send_mail('Ny kommentar til registrert bug %s' % ticket.title, '%s har lagt inn en ny kommentar: \n\n %s' % (request.user, o.text), 
+                      'noreply@focussecurity.no', getRecipientForEmailNoteComment(request,bugID), fail_silently=False)
 
     return redirect(view, bugID)    
 
