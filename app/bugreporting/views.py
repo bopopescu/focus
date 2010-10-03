@@ -81,7 +81,7 @@ def form (request, id = False):
         msg = "Velykket endret bug"
     else:
         instance = Bug()
-        msg = "Velykket lagt til ny bug"
+        msg = "Vellykket lagt til ny bug"
         
     #Save and set to active, require valid form
     if request.method == 'POST':
