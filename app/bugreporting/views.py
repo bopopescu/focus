@@ -83,11 +83,13 @@ def form (request, id = False):
         instance = Bug()
         msg = "Vellykket lagt til ny bug"
         
+    print "OK"
+    
     #Save and set to active, require valid form
     if request.method == 'POST':
 
         form = BugreportingForm(request.POST, request.FILES, instance=instance)       
-
+        
         if form.is_valid():    
             o = form.save(commit=False)
             o.owner = request.user
