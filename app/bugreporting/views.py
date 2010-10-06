@@ -45,7 +45,7 @@ def addComment(request, bugID):
 
     instance = BugComment()
     if request.method == 'POST':
-        form = CommentForm(request.POST, instance=instance)       
+        form = CommentForm(request.POST, request.FILES, instance=instance)       
         if form.is_valid(): 
             ticket = Bug.objects.get(id=bugID)
             o = form.save(commit=False)
@@ -87,14 +87,17 @@ def form (request, id = False):
     if request.method == 'POST':
 
         form = BugreportingForm(request.POST, request.FILES, instance=instance)       
+
         if form.is_valid():    
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
             form.save_m2m()
             messages.success(request, msg)
+            
             #Redirects after save for direct editing
             return overview(request)      
+        
     else:
         form = BugreportingForm(instance=instance)
         

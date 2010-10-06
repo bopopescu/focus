@@ -14,4 +14,4 @@ class CommentForm(ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'cols':'100;','rows':'5',}))
     class Meta:
         model = BugComment
-        fields = ('title','text')
+        fields = ('title','text','image')

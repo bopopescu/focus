@@ -41,7 +41,12 @@
 		
     	{{ticket.description}}
 
-
+      <br><br>
+      {% if ticket.image %}
+        <img width="100%" height="100%" src="/media/{{MEDIA_ROOT}}{{ticket.image}}">
+      {% endif %}
+      
+      
 	</div>
 	
 	{% for cm in comments %}
@@ -61,6 +66,12 @@
 		
     	{{cm.text}}
 		
+		  <br><br>
+		  {% if cm.image %}
+		    <img width="100%" height="100%" src="/media/{{MEDIA_ROOT}}{{cm.image}}">
+		  {% endif %}
+		  
+		
 	</div>
      
 	{% endfor %}
@@ -69,6 +80,8 @@
   
   <h1>Ny kommentar</h1>
   <form enctype="multipart/form-data" action="{% url app.bugreporting.views.addComment ticket.id %}" method="post">
+    
+      {{commentForm.errors}}
       
       {{commentForm.as_p}}
       
