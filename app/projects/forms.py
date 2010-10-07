@@ -11,7 +11,7 @@ from app.customers.models import *
 class ProjectForm(ModelForm):    
     class Meta:
         model = Project
-        fields = ('name','customer')
+        fields = ('project_name','customer')
         
     def __init__(self,*args,**kwrds):
         super(ProjectForm,self).__init__(*args,**kwrds)
