@@ -23,11 +23,15 @@ def overview_all(request):
     projects = Project.objects.for_company()  
     return render_with_request(request, 'projects/list.html', {'title':'Alle prosjekter', 'projects':projects})
 
+
 @require_perm('view', Project)
 def view(request, id):
-    project = Project.objects.for_user().get(id=id)
-    Project.objects.all()
-    return render_with_request(request, 'projects/view.html', {'title':'Prosjekt: %s' % project.project_name, 'project':project})
+    project = Project.objects.for_company().get(id=id)
+    whoCanSeeThis = project.whoHasPermissionTo('view')
+    return render_with_request(request, 'projects/view.html', {'title':'Prosjekt: %s' % project.name, 
+                                                               'project':project,
+                                                               'whoCanSeeThis':whoCanSeeThis,
+                                                               })
  
 @login_required
 def addPop(request):

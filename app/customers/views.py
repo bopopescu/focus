@@ -17,7 +17,7 @@ def overview(request):
 def overview_deleted(request):
     customers = Customer.objects.for_company(deleted=True)
     return render_with_request(request, 'customers/list.html', {'title':'Slettede kunder', 
-                                                       'customers':customers})
+                                                                'customers':customers})
 
 @login_required
 def overview_all(request):
@@ -33,20 +33,21 @@ def view(request, id):
     
 @login_required
 def addPop(request):
-    instance = Order()
+    instance = Customer()
     
     if request.method == "POST": 
-        form = OrderFormSimple(request.POST, instance=instance)
+        form = CustomerFormSimple(request.POST, instance=instance)
         if form.is_valid():    
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
             form.save_m2m()
             
-            return redirect(permissions, o.id, popup=True) 
-       
+            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
+                            ((o._get_pk_val()), (o)))
+                
     else:
-        form = OrderFormSimple(instance=instance)
+        form = CustomerFormSimple(instance=instance)
             
     return render_with_request(request, "simpleform.html", {'title':'Kunde', 'form': form })
 
@@ -62,6 +63,14 @@ def edit(request, id):
 @require_perm("delete", Customer)
 def delete(request, id):
     Customer.objects.get(id=id).delete()
+    return redirect(overview)
+
+@login_required
+def recover(request, id):
+    c = Customer.objects.get(id=id)
+    c.deleted = not c.deleted
+    c.save()
+    
     return redirect(overview)
 
 @login_required

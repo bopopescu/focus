@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.contrib import admin
-from core.models import *
+from core.models import PersistentModel
 from app.orders.models import *
 import datetime
 

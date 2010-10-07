@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib import admin
-from core.models import *
+from core.models import PersistentModel
 
 class Contact(PersistentModel):
     full_name = models.CharField("Fullt navn", max_length=80)

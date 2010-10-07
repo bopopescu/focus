@@ -19,8 +19,6 @@ class CustomerForm(ModelForm):
     
     def __init__(self,*args,**kwrds):
         super(CustomerForm,self).__init__(*args,**kwrds)
-        self.fields['projects'].widget = MultipleSelectWithPop()
-        self.fields['projects'].queryset=Project.objects.for_company()
         self.fields['contacts'].widget = MultipleSelectWithPop()
         self.fields['contacts'].queryset=Contact.objects.for_company()
            

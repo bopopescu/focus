@@ -3,7 +3,15 @@ from django.contrib.contenttypes.generic import GenericTabularInline
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FPAdmin
 
-from core.models import ObjectPermission
+from core.models import *
+
+"""
+For auto-version of objects
+"""
+from reversion.admin import VersionAdmin
+class ModelAdmin(VersionAdmin):
+    """Admin settings go here."""
+    
 
 class ObjectPermissionInline(GenericTabularInline):
     model = ObjectPermission
@@ -23,3 +31,18 @@ class FlatPageAdmin(ObjectPermissionMixin, FPAdmin):
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)
+
+#Company
+admin.site.register(Company, ModelAdmin)
+
+#Membership (groups)
+admin.site.register(Membership, ModelAdmin)
+
+#Roles
+admin.site.register(Role, ModelAdmin)
+
+#Objectpermissions
+admin.site.register(ObjectPermission, ModelAdmin)
+
+#Profile for users, extending the user
+admin.site.register(UserProfile)

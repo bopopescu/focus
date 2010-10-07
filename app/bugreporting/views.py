@@ -52,9 +52,13 @@ def addComment(request, bugID):
             o.bug = ticket
             o.owner = request.user
             o.save()
+            ticket.save()
             
-            send_mail('Ny kommentar til registrert bug %s' % ticket.title, '%s har lagt inn en ny kommentar: \n\n %s' % (request.user, o.text), 
-                      'noreply@focussecurity.no', getRecipientForEmailNoteComment(request,bugID), fail_silently=False)
+            send_mail('Ny kommentar til registrert bug %s' % ticket.title, '%s har lagt inn en ny kommentar i buggen: %s : \n\n %s' 
+                      
+                      % (request.user.first_name, o.text, ticket.title), 
+                      
+                      'time@focussecurity.no', getRecipientForEmailNoteComment(request,bugID), fail_silently=False)
 
     return redirect(view, bugID)    
 

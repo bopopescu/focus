@@ -16,4 +16,7 @@ urlpatterns = patterns('app.customers.views',
         url(r'^permissions/(\d+)/?$', 'permissions'), 
         url(r'^delete/(\d+)/?$', 'delete'),         
 
+        url(r'^recover/(\d+)/?$', 'recover'),         
+
+
 )
