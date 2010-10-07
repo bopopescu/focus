@@ -4,7 +4,7 @@ from core.models import PersistentModel
 from app.customers.models import Customer
 
 class Project(PersistentModel):
-    customer = models.ForeignKey(Customer, verbose_name="Kunde", related_name="projects")
+    customer = models.ForeignKey(Customer, verbose_name="Kunde", related_name="projects", default=None, null=True)
     project_name = models.CharField("Prosjektnavn", max_length=80)
     
     def __unicode__(self):
