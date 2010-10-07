@@ -14,7 +14,6 @@ _thread_locals = threading.local()
 def get_current_user():
     return getattr(_thread_locals, 'user', None)
 
-
 def get_company_users(): 
     company = get_current_user().get_profile().company
     users = User.objects.filter(userprofile__company = company)
