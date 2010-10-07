@@ -5,9 +5,11 @@ from forms import *
 from core.shortcuts import *
 from django.contrib import messages
 from django.utils.html import escape 
+from core.views import updateTimeout
 
 @login_required
 def overview(request):
+    updateTimeout(request)
     timetrackings = Timetracking.objects.for_user()    
     return render_with_request(request, 'timetracking/list.html', {'title':'Timeforinger', 'timetrackings':timetrackings})
 

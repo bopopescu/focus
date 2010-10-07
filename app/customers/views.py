@@ -5,10 +5,12 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm
+from core.views import form_perm, updateTimeout
+
 
 @login_required
 def overview(request):
+    updateTimeout(request)
     customers = Customer.objects.for_user()    
     return render_with_request(request, 'customers/list.html', {'title':'Kunder', 
                                                        'customers':customers})

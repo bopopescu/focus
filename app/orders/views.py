@@ -4,11 +4,12 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from django.contrib import messages
-from core.views import *
+from core.views import updateTimeout, form_perm
 from core.decorators import *
 
 @login_required
 def overview(request):
+    updateTimeout(request)
     orders = Order.objects.all()    
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 

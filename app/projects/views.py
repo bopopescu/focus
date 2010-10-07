@@ -6,10 +6,11 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm
+from core.views import form_perm, updateTimeout
 
 @login_required
 def overview(request):
+    updateTimeout(request)
     projects = Project.objects.for_user()  
     return render_with_request(request, 'projects/list.html', {'title':'Prosjekter', 'projects':projects})
 

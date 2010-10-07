@@ -4,13 +4,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from core.models import *
 from app.admin.forms import *
 from core.shortcuts import *
-
+from core.views import updateTimeout
 from django.contrib import messages
 
 from django.db.models import Q
 
 @login_required
 def overview(request):
+    updateTimeout(request)
     Company = request.user.get_profile().company
     Users = User.objects.filter(userprofile__company=Company)
     return render_with_request(request, 'admin/list.html', {'title':'Brukere', 'users':Users})

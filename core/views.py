@@ -7,6 +7,11 @@ from django.contrib import messages
 from django.db.models import Q
 
 @login_required
+def updateTimeout(request):
+    request.session.set_expiry(1800)
+    return
+
+@login_required
 def form_perm(request, type, id, url, message, popup = False):
     object = type.objects.get(pk=id)
     content_type = ContentType.objects.get_for_model(type)

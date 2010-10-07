@@ -15,14 +15,15 @@
 
 <div id="inner">
   
-     <h4>
+    
     Status: 
     {% if ticket.closed %}
-    CLOSED
+      <h4> CLOSED </h4>
+       <a href="{% url app.bugreporting.views.changeStatus ticket.id %}">OPEN AGAIN</a>
     {% else %}
-    OPEN
+      <h4>OPEN</h4>
+      <a href="{% url app.bugreporting.views.changeStatus ticket.id %}">CLOSE THIS</a>
     {% endif %}
-    </h4> 
         
     <br><br>
     		 

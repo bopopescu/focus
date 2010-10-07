@@ -8,7 +8,7 @@ class Project(PersistentModel):
     project_name = models.CharField("Prosjektnavn", max_length=80)
     
     def __unicode__(self):
-        return self.name
+        return self.project_name
 
 from reversion.admin import VersionAdmin
 
