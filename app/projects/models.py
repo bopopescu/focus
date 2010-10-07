@@ -5,7 +5,7 @@ from app.customers.models import Customer
 
 class Project(PersistentModel):
     customer = models.ForeignKey(Customer, verbose_name="Kunde", related_name="projects")
-    name = models.CharField("Prosjektnavn", max_length=80)
+    project_name = models.CharField("Prosjektnavn", max_length=80)
     
     def __unicode__(self):
         return self.name
