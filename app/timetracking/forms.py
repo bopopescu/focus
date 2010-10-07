@@ -11,7 +11,7 @@ class TimetrackingForm(ModelForm):
     
     class Meta:
         model = Timetracking
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company')
+        exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company','hours_worked')
         
 class TypeOfTimeTrackingForm(ModelForm):
     class Meta:

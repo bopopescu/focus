@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib import admin
 from core.models import PersistentModel
 from app.orders.models import *
-import datetime
+from datetime import datetime
 
     
 class TypeOfTimeTracking(PersistentModel):
@@ -14,16 +14,19 @@ class TypeOfTimeTracking(PersistentModel):
         return self.name
     
 class Timetracking(PersistentModel):
-    
-    date = models.DateField()
+
+    date = models.DateField(default=datetime.now())
     order = models.ForeignKey(Order)
-    typeOfWork = models.ForeignKey(TypeOfTimeTracking, default=1)
+    typeOfWork = models.ForeignKey(TypeOfTimeTracking)
     time_start = models.CharField(max_length=5)
     time_end = models.CharField(max_length=5)
     description = models.TextField()
     
+    hours_worked = models.IntegerField()
+    
+    
     def __unicode__(self):
-        return self.date
+        return unicode(self.date)
 
 class TimetrackingModelAdmin(VersionAdmin):
     """Admin settings go here."""

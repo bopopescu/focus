@@ -4,9 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from managers import PersistentManager
 from django.conf import settings
 from core.middleware import *
-import datetime
+from datetime import datetime
 
-    
 """
 The Company class.
 All users belong to a company, therefore all objects belongs to a company, like projects, orders...
@@ -28,8 +27,8 @@ It also automatic saves the information about the user interaction with the obje
 
 class PersistentModel(models.Model):
     deleted = models.BooleanField(default = False)
-    date_created = models.DateTimeField(default=datetime.datetime.now())
-    date_edited = models.DateTimeField(default=datetime.datetime.now())    
+    date_created = models.DateTimeField(default=datetime.now())
+    date_edited = models.DateTimeField(default=datetime.now())    
 
     creator =   models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_created")
     editor  =   models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_edited")
@@ -42,14 +41,13 @@ class PersistentModel(models.Model):
         abstract = True
         
     def save(self, **kwargs):
+        
         if not self.id:
             self.creator = get_current_user()
             self.company = get_current_user().get_profile().company
             
         self.editor = get_current_user()
-            
-        
-        self.date_edited = datetime.datetime.now()    
+        self.date_edited = datetime.now()    
         
         super(PersistentModel, self).save()
 
