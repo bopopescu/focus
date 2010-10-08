@@ -5,6 +5,13 @@
     <link rel="stylesheet" type="text/css" href="/media/css/admin-widgets.css" />
 
 
+    <script>
+    
+    function giveWarning(self) {
+        return alert('Husk at den vil bli slettet permanent');
+    }
+    </script>
+
 <form enctype="multipart/form-data" action="" method="post">
 	
 			{{ form_perm.management_form }}
@@ -38,7 +45,7 @@
 								<td>{{ forms.can_change }}</td> 
 								<td>{{ forms.can_delete }}</td> 
 								<td>{{ forms.negative }}</td> 			
-								<td onclick="return alert('Husk at den vil bli slettet permanent')">{{ forms.deleted }}</td> 			
+								<td onclick="giveWarning(this);">{{ forms.deleted }}</td> 			
 						</tr>  			
     	
     				{% endfor %}		

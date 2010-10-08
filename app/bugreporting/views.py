@@ -24,22 +24,66 @@ def view(request, id):
     ticket = Bug.objects.get(id=id)
     comments = BugComment.objects.filter(bug=ticket)
     commentForm = CommentForm(instance = BugComment())
+    
+    #Remove the user from notSeenList
+    updateNotSeenList(request, id)
+    
     return render_with_request(request, 'bugreporting/view.html', {'title':ticket.title, 
                                                                    'ticket':ticket,
                                                                    'comments':comments,
                                                                    'commentForm':commentForm})
 
 
+def updateNotSeenList(request, bugID):
+    ticket = Bug.objects.get(id=bugID)
+    notSeen = ticket.usersNotSeenChanges
+    notSeen.remove(request.user)
+    return
+
+"""
+Sends email to all who have written comments in this bugs
+Also all of them except the writer to a list, who shows who has not read the changes
+or new comment yet.
+"""
 @login_required
-def getRecipientForEmailNoteComment(request, bugID):
+def sendEmailAndUpdateNotSeenList(request, bugID):
     ticket = Bug.objects.get(id=bugID)
     recipients = set([])
-    for c in ticket.comments.all():
-        recipients.add(c.creator.email)
+    recipientsEmails = set([])
+    
+    notSeen = ticket.usersNotSeenChanges
+    
+    #Add the ticket creator to recipients list
+    if ticket.creator not in recipients:
+        recipients.add(ticket.creator)
+    
+    #Add the comment creators to recipients list
+    for comment in ticket.comments.all():        
+        if comment.creator not in ticket.usersNotSeenChanges.all():
+            recipients.add(comment.creator)
 
-    recipients.discard(request.user.email)
+    #Remove current user, so the current wont get emails and set status to unseen
+    recipients.discard(request.user)
 
-    return recipients
+    #Set the bug to unseen for all the creators, and add them to email-list    
+    #only send email, if they have to seen latest changes
+    for user in recipients:              
+        if user not in ticket.usersNotSeenChanges.all():
+            ticket.usersNotSeenChanges.add(user)
+            recipientsEmails.add(user.email)
+             
+    ticket.save()
+    
+    try:
+        send_mail('Ny kommentar til registrert bug %s' % ticket.title, 
+                  '%s har lagt inn en ny kommentar i buggen: %s : \n\n'         
+                          % (request.user.first_name+" "+request.user.last_name, ticket.title),                       
+                          'time@focussecurity.no', recipients, fail_silently=False)
+    except:
+        print "EMAIL ERROR; CANT SEND EMAIL"
+
+    return recipients    
+
 
 @login_required
 def addComment(request, bugID):
@@ -53,14 +97,13 @@ def addComment(request, bugID):
             o.bug = ticket
             o.owner = request.user
             o.save()
+            
+            if ticket.closed:
+                ticket.closed = not ticket.closed
+                
+            sendEmailAndUpdateNotSeenList(request, bugID)
             ticket.save()
             
-            send_mail('Ny kommentar til registrert bug %s' % ticket.title, '%s har lagt inn en ny kommentar i buggen: %s : \n\n %s' 
-                      
-                      % (request.user.first_name, o.text, ticket.title), 
-                      
-                      'time@focussecurity.no', getRecipientForEmailNoteComment(request,bugID), fail_silently=False)
-
     return redirect(view, bugID)    
 
 @login_required

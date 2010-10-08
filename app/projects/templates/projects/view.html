@@ -25,7 +25,7 @@
     </tr>
     {% for user in whoCanSeeThis %}
       <tr>
-        <td><a href="{% url app.admin.views.users.view user.id %}">{{user.first_name}} {{user.last_name}}</a></td>
+        <td><a href="{% url app.admin.users.views.view user.id %}">{{user.first_name}} {{user.last_name}}</a></td>
       </tr>
     {% endfor %}
   </table>

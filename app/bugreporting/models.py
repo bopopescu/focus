@@ -1,14 +1,16 @@
 from django.db import models
 from django.contrib import admin
 from core.models import PersistentModel
-
+from django.contrib.admin.models import User
 
 class Bug(PersistentModel):
     title = models.CharField("Tittel", max_length=80)
     description = models.TextField("Beskrivelse")
     closed = models.BooleanField(default=False)
-    
     image = models.FileField(upload_to="uploads/bugreporting/", verbose_name="Bilde", blank=True)
+    
+    #Contains users who have not seed latest changes
+    usersNotSeenChanges = models.ManyToManyField(User, related_name="unseen_bugs_changes", blank=True)
     
     def __unicode__(self):
         return self.title

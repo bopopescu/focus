@@ -8,7 +8,7 @@ from models import *
 class BugreportingForm(ModelForm):
     class Meta:
         model = Bug
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company',)
+        exclude = ('deleted', 'usersNotSeenChanges','date_created', 'date_edited', 'owner','creator','editor','company',)
         
 class CommentForm(ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'cols':'100;','rows':'5',}))

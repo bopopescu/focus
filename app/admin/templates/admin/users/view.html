@@ -26,7 +26,7 @@
 		{% for member in user.memberships.all %}
 		
 			<tr>
-				<td><a href="{% url app.admin.views.memberships.view member.id %}">{{member}}</a></td>
+				<td><a href="{% url app.admin.memberships.views.view member.id %}">{{member}}</a></td>
 			</tr>
 		
 		{% endfor %}

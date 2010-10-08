@@ -42,7 +42,7 @@
 
 		<!-- Main Area Container -->
 		<div id="container">
-
+		  
 			{% load menu_tags %}
 			
 			<div id="sidebar">
@@ -132,8 +132,8 @@
 					<li class="{% active request "^/useradmin/" %}">
 						<a href=""><img src="/media/images/icons/layout.png" alt="">Brukeradministrasjon</a>
 						<ul>
-							<li><a href="{% url app.admin.views.users.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
-							<li><a href="{% url app.admin.views.users.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny bruker</a></li>
+							<li><a href="{% url app.admin.users.views.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
+							<li><a href="{% url app.admin.users.views.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny bruker</a></li>
 						</ul>
 					</li>
 					
@@ -141,15 +141,11 @@
           <li class="{% active request "^/groupadmin/" %}">
             <a href=""><img src="/media/images/icons/layout.png" alt="">Gruppeadministrasjon</a>
             <ul>
-              <li><a href="{% url app.admin.views.memberships.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
-              <li><a href="{% url app.admin.views.memberships.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny gruppe</a></li>
+              <li><a href="{% url app.admin.memberships.views.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
+              <li><a href="{% url app.admin.memberships.views.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny gruppe</a></li>
             </ul>
-          </li>
-
-    
-          
+          </li>  
         </ul>
-        
         
 				<!-- /End Settings Navigation -->
 				

@@ -12,8 +12,9 @@ from core.views import form_perm, updateTimeout
 def overview(request):
     updateTimeout(request)
     customers = Customer.objects.for_user()    
+
     return render_with_request(request, 'customers/list.html', {'title':'Kunder', 
-                                                       'customers':customers})
+                                                                'customers':customers})
 
 @login_required
 def overview_deleted(request):
