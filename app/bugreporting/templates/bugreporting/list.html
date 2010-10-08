@@ -13,8 +13,9 @@
 						  <th></th>
 							<th>Navn</th> 
 							<th>Status</th>
-							<th>Registrert</th>
+							<th>Sist endret av</th>
 							<th>Sist endret</th>
+              <th>Registrert</th>
 							<th>Kommentarer</th>
 							<th>Valg</th> 		 
 						</tr> 
@@ -33,8 +34,9 @@
 				    OPEN
 				    {% endif %}	
 				</td>
-				<td>{{ b.date_created|date:"d.m.Y H:i" }}</td>
+        <td>{{ b.editor.first_name }} {{ b.editor.last_name }}</td>
 				<td>{{ b.date_edited|date:"d.m.Y H:i" }}</td>
+				<td>{{ b.date_created|date:"d.m.Y H:i" }}</td>
 				<td>{{ b.comments.count }}</td>
 				<td>
 				<a href="{% url app.bugreporting.views.edit b.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
