@@ -7,10 +7,11 @@ from django.contrib import messages
 from core.views import updateTimeout, form_perm
 from core.decorators import *
 
+
 @login_required
 def overview(request):
+    orders = Order.objects.for_user()    
     updateTimeout(request)
-    orders = Order.objects.all()    
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
 @login_required
@@ -25,7 +26,8 @@ def edit(request, id):
 def delete(request, id):
     return form(request, id)
 
-@login_required
+
+@require_perm('view', Order)
 def view(request, id):
     order = Order.objects.for_company().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
