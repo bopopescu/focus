@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib import admin
-from core.models import *
+from core.models import PersistentModel
 import datetime
 
 class Ticket(PersistentModel):

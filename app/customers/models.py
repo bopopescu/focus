@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib import admin
-from app.projects.models import Project
 from app.contacts.models import Contact
 from core.admin import *
 from django.contrib.auth.models import User
@@ -14,14 +13,13 @@ class Customer(PersistentModel):
     email = models.EmailField("Epostadresse", max_length=80)
     address = models.CharField("Adresse", max_length=80, blank=True)
     phone = models.CharField("Telefon", max_length=20, blank=True)
+    zip = models.CharField("Postnr", max_length=4, blank=True)
     city = models.CharField("By", max_length=20, blank=True)
-    zip = models.IntegerField("Postnr", max_length=4, blank=True)
-    birth_date = models.DateField("F.dato", blank=True, null=True)
+
     alternative_address = models.CharField("Alternativ adresse", max_length=20, blank=True)
 
     owner = models.ForeignKey(User, blank=True, related_name="UsersContacts");    
-    
-    projects = models.ManyToManyField(Project, blank=True, related_name="customers", verbose_name="Prosjekter")
+
     contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name="Kontakter")
     
     def __unicode__(self):

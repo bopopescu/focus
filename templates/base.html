@@ -29,11 +29,12 @@
 			<p>
 				<strong>
 				{% if user.is_authenticated %}
-					Logget inn som <a href="{% url app.admin.views.users.view user.id %}">{{user.first_name}} {{user.last_name}}</a> 
+				  				
+					Logget inn som <a href="{% url app.admin.users.views.view user.id %}">{{user.first_name}} {{user.last_name}}</a> 
 				{%endif%}
 				
 				</strong>
-				|
+				
 				<a href="/accounts/logout">Logg ut</a>
 			</p>
 		</div>
@@ -140,18 +141,12 @@
           <li class="{% active request "^/groupadmin/" %}">
             <a href=""><img src="/media/images/icons/layout.png" alt="">Gruppeadministrasjon</a>
             <ul>
-              <li><a href="{% url app.admin.views.users.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
-              <li><a href="{% url app.admin.views.users.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny bruker</a></li>
+              <li><a href="{% url app.admin.views.memberships.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
+              <li><a href="{% url app.admin.views.memberships.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny gruppe</a></li>
             </ul>
           </li>
 
-          <li class="{% active request "^/roleadmin/" %}">
-            <a href=""><img src="/media/images/icons/layout.png" alt="">Rolleadministrasjon</a>
-            <ul>
-              <li><a href="{% url app.admin.views.users.overview %}"><img src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
-              <li><a href="{% url app.admin.views.users.add %}"><img src="/media/images/icons/layout_add.png  " alt="">Legg til ny bruker</a></li>
-            </ul>
-          </li>
+    
           
         </ul>
         

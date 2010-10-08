@@ -6,11 +6,12 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm
+from core.views import form_perm, updateTimeout
 
 @login_required
 def overview(request):
-    projects = Project.objects.for_user()  
+    updateTimeout(request)
+    projects = Project.objects.for_user()
     return render_with_request(request, 'projects/list.html', {'title':'Prosjekter', 'projects':projects})
 
 @login_required
@@ -23,12 +24,15 @@ def overview_all(request):
     projects = Project.objects.for_company()  
     return render_with_request(request, 'projects/list.html', {'title':'Alle prosjekter', 'projects':projects})
 
+
 @require_perm('view', Project)
 def view(request, id):
-    project = Project.objects.for_user().get(id=id)
-    Project.objects.all()
-    return render_with_request(request, 'projects/view.html', {'title':'Prosjekt: %s' % project.project_name, 'project':project})
- 
+    project = Project.objects.for_company(deleted=None).get(id=id)
+    whoCanSeeThis = project.whoHasPermissionTo('view')
+    return render_with_request(request, 'projects/view.html', {'title':'Prosjekt: %s' % project, 
+                                                               'project':project,
+                                                               'whoCanSeeThis':whoCanSeeThis,
+                                                               })
 @login_required
 def addPop(request):
     instance = Project()
@@ -43,8 +47,7 @@ def addPop(request):
 
             return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
                            (escape(o._get_pk_val()), escape(o)))
-            
-            
+             
     else:
         form = ProjectForm(instance=instance)
             
@@ -57,6 +60,13 @@ def add(request):
 
 @require_perm('change', Project)
 def edit(request, id):
+    
+    #Check if deleted, print error message
+    if Project.objects.get(id=id):
+        message = "Prosjektet er slettet, gjennopprett om du vil endre.."
+        messages.error(request, message)        
+        return redirect(overview)
+    
     return form(request, id)
 
 @require_perm('delete', Project)

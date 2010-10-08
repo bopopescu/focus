@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.contrib import admin
-from core.models import *
+from core.models import PersistentModel
 from app.orders.models import *
 from datetime import datetime
 
@@ -22,8 +22,7 @@ class Timetracking(PersistentModel):
     time_end = models.CharField(max_length=5)
     description = models.TextField()
     
-    hours_worked = models.IntegerField()
-    
+    hours_worked = models.DecimalField(decimal_places=3, max_digits=5)
     
     def __unicode__(self):
         return unicode(self.date)

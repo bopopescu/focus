@@ -5,12 +5,13 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from django.contrib import messages
-
+from core.views import updateTimeout
 from django.core.mail import send_mail
 
 
 @login_required
 def overview(request):
+    updateTimeout(request)
     Bugreportings = Bug.objects.all().order_by("closed", "date_created")    
     return render_with_request(request, 'bugreporting/list.html', {'title':'Registrerte bugs', 'bugs':Bugreportings})
 
@@ -52,9 +53,13 @@ def addComment(request, bugID):
             o.bug = ticket
             o.owner = request.user
             o.save()
+            ticket.save()
             
-            send_mail('Ny kommentar til registrert bug %s' % ticket.title, '%s har lagt inn en ny kommentar: \n\n %s' % (request.user, o.text), 
-                      'noreply@focussecurity.no', getRecipientForEmailNoteComment(request,bugID), fail_silently=False)
+            send_mail('Ny kommentar til registrert bug %s' % ticket.title, '%s har lagt inn en ny kommentar i buggen: %s : \n\n %s' 
+                      
+                      % (request.user.first_name, o.text, ticket.title), 
+                      
+                      'time@focussecurity.no', getRecipientForEmailNoteComment(request,bugID), fail_silently=False)
 
     return redirect(view, bugID)    
 

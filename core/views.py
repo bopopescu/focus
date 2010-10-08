@@ -7,6 +7,11 @@ from django.contrib import messages
 from django.db.models import Q
 
 @login_required
+def updateTimeout(request):
+    request.session.set_expiry(1800)
+    return
+
+@login_required
 def form_perm(request, type, id, url, message, popup = False):
     object = type.objects.get(pk=id)
     content_type = ContentType.objects.get_for_model(type)
@@ -22,9 +27,7 @@ def form_perm(request, type, id, url, message, popup = False):
                 o.content_type = content_type
                 o.object_id = id
 
-                if o.user is None or o.membership is None:     
-                    Permission = ObjectPermission.objects.filter( ( Q(user=o.user) | Q(membership=o.membership) ) )
-                    
+                if o.user is None or o.membership is None:                    
                     #if not Permission.exists() or o.id is None:
                     o.save()
                     messages.success(request, message)
@@ -42,11 +45,17 @@ def form_perm(request, type, id, url, message, popup = False):
         if popup:
              return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
                             ((o._get_pk_val()), (o))) 
+             
         return HttpResponseRedirect("/%s" % (url))
     
     else:
+                
+        if ObjectPermission.objects.filter(content_type=content_type, object_id=id).count() == 0 and object.creator == request.user:
+            k = ObjectPermission(content_type=content_type, object_id=id, user=request.user, can_view=True,can_change=True, can_delete=True)
+            k.save()
+            
         PermSet = PermFormSet(queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id))
-        
+
         if popup:
             return render_with_request(request, "form_perm_simple.html", {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet })
         

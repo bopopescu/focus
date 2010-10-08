@@ -15,14 +15,15 @@
 
 <div id="inner">
   
-     <h4>
+    
     Status: 
     {% if ticket.closed %}
-    CLOSED
+      <h4> CLOSED </h4>
+       <a href="{% url app.bugreporting.views.changeStatus ticket.id %}">OPEN AGAIN</a>
     {% else %}
-    OPEN
+      <h4>OPEN</h4>
+      <a href="{% url app.bugreporting.views.changeStatus ticket.id %}">CLOSE THIS</a>
     {% endif %}
-    </h4> 
         
     <br><br>
     		 
@@ -31,7 +32,7 @@
 			<h1 style="float:left;">{{ticket.title}}</h1>
 			
 			<div class="createInfo">
-					Lagt inn av: {{ticket.creator.first_name}}<br>
+					Lagt inn av: {{ticket.creator.first_name}} {{ticket.creator.last_name}}<br>
 					Opprettet: {{ticket.date_created|date:"d.m.Y H:i"}}
 			</div>
 			
@@ -56,7 +57,7 @@
 			<h1 style="float:left;">{{cm.title}}</h1>
 			
 			<div class="createInfo">
-					Lagt inn av: {{cm.creator.first_name}}<br>
+					Lagt inn av: {{cm.creator.first_name}} {{cm.creator.last_name}}<br>
 					Opprettet: {{cm.date_created|date:"d.m.Y H:i"}}
 			</div>
 			

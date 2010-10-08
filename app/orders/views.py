@@ -4,12 +4,14 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from django.contrib import messages
-from core.views import *
+from core.views import updateTimeout, form_perm
 from core.decorators import *
+
 
 @login_required
 def overview(request):
     orders = Order.objects.for_user()    
+    updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
 @login_required
@@ -27,9 +29,11 @@ def delete(request, id):
 
 @require_perm('view', Order)
 def view(request, id):
-    print id
-    order = Order.objects.for_user().get(id=id)
-    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,                                                                'order':order})
+    order = Order.objects.for_company().get(id=id)
+    whoCanSeeThis = order.whoHasPermissionTo('view')
+    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name, 
+                                                             'order':order,
+                                                             'whoCanSeeThis':whoCanSeeThis})
 
 @login_required
 def permissions(request, id):
@@ -86,4 +90,4 @@ def form (request, id = False):
     else:
         form = OrderForm(instance=instance)
     
-    return render_with_request(request, "orders/form.html", {'title':'Ordre', 'form': form })
+    return render_with_request(request, "form.html", {'title':'Ordre', 'form': form })

@@ -1,19 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User, UserManager, Group
 from django.contrib.contenttypes.models import ContentType
-from django.contrib import admin
 from managers import PersistentManager
 from django.conf import settings
 from core.middleware import *
 from datetime import datetime
 
-"""
-For auto-version of objects
-"""
-from reversion.admin import VersionAdmin
-class ModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-    
 """
 The Company class.
 All users belong to a company, therefore all objects belongs to a company, like projects, orders...
@@ -26,11 +18,13 @@ class Company (models.Model):
     def __unicode__(self):
         return self.name
 
+
 """
 The "all mighty" model, all other models inherit from this one. 
 Contains all the useful fields like who created and edited the object, and when it was done.
 It also automatic saves the information about the user interaction with the object.
 """
+
 class PersistentModel(models.Model):
     deleted = models.BooleanField(default = False)
     date_created = models.DateTimeField(default=datetime.now())
@@ -62,20 +56,37 @@ class PersistentModel(models.Model):
         super(PersistentModel, self).save()     
    
 
-admin.site.register(Company, ModelAdmin)
+    """
+    whoHasPermissionTo
+    returns a list of users who are permitted to do action on object
+    """
+    def whoHasPermissionTo(self, perm):
+        try:
+            content_type = ContentType.objects.get_for_model(self)
+            id = self.id
+            users = []
+    
+            for u in ObjectPermission.objects.filter(content_type=content_type, negative=False, object_id=id, **{'can_%s' % perm: True}):
+                if u.user and u.user not in users:
+                    users.append(u.user)
+                if u.membership:
+                    for user in u.membership.users.all():
+                        if user and user not in users:
+                            users.append(user)
+            return users 
+        except:
+            return []
 
 """
 Memberships, user can can be members of memberships, which can have permissions for instance
 """
-class Membership(models.Model):
+class Membership(PersistentModel):
     name = models.CharField(max_length=50)
     users = models.ManyToManyField(User, related_name="memberships")
-    company = models.ForeignKey(Company, blank=True, null=True, related_name="memberships")
     
     def __unicode__(self):
         return self.name
     
-admin.site.register(Membership, ModelAdmin)
 
 """
 ROLES
@@ -91,8 +102,6 @@ class Role(models.Model):
     def __unicode__(self):
         return unicode(self.content_type)
 
-
-admin.site.register(Role, ModelAdmin)
 
 
 """
@@ -117,7 +126,6 @@ class ObjectPermission(models.Model):
     def __unicode__(self):
         return unicode(self.content_type.get_object_for_this_type(id=self.object_id))
 
-admin.site.register(ObjectPermission, ModelAdmin)
 
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
@@ -133,7 +141,6 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return "Profile for: %s" % self.user
 
-admin.site.register(UserProfile)
 
 """
 Keeping users and their userprofile in sync, when creating a user, a userprofile is createad as well.

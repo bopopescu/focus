@@ -27,7 +27,15 @@
 				<td>
 				<a href="{% url app.customers.views.edit customer.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
 				<a href="{% url app.customers.views.permissions customer.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
-				<a href="{% url app.customers.views.delete customer.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+				
+				{% if customer.deleted %}
+				  <a href="{% url app.customers.views.recover customer.id %}" class="edit admintool"><img src="/media/images/icons/cog_go.png" alt=""></a>
+				{% endif %}
+				
+				{% if not customer.deleted %}
+          <a href="{% url app.customers.views.delete customer.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+        {% endif %}
+        
 				</td>
 			</tr>
 		{% endfor %}	
