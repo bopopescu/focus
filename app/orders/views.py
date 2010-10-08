@@ -28,8 +28,10 @@ def delete(request, id):
 @login_required
 def view(request, id):
     order = Order.objects.for_user().get(id=id)
+    whoCanSeeThis = order.whoHasPermissionTo('view')
     return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name, 
-                                                               'order':order})
+                                                             'order':order,
+                                                             'whoCanSeeThis':whoCanSeeThis})
 
 @login_required
 def permissions(request, id):

@@ -12,8 +12,28 @@
 
 <div id="inner">
 
-	{{order}}
-			
+  {% if order.project %}
+    Ordrer ligger under prosjektet: <a href="{% url app.projects.views.view order.project.id %}">{{order.project}}</a>
+  {% endif %}
+  <br><br><br>
+  <b>Beskrivelse</b><br>	
+	 {{description}}
+  <br><br><br>
+  
+  <b>Hvem som kan se denne ordren</b>
+  <br><br>
+  <table>
+    <tr>
+      <th>Fullt navn</th>
+    </tr>
+    {% for user in whoCanSeeThis %}
+      <tr>
+        <td><a href="{% url app.admin.views.users.view user.id %}">{{user.first_name}} {{user.last_name}}</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+  
+  
 </div>	
    
 {% endblock %}	
