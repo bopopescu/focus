@@ -9,7 +9,7 @@ from core.decorators import *
 
 @login_required
 def overview(request):
-    orders = Order.objects.all()    
+    orders = Order.objects.for_user()    
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
 @login_required
@@ -24,11 +24,12 @@ def edit(request, id):
 def delete(request, id):
     return form(request, id)
 
-@login_required
+
+@require_perm('view', Order)
 def view(request, id):
+    print id
     order = Order.objects.for_user().get(id=id)
-    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name, 
-                                                               'order':order})
+    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,                                                                'order':order})
 
 @login_required
 def permissions(request, id):
