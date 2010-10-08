@@ -8,7 +8,8 @@
 				<table class="tablesorter">
 					<thead> 
 						<tr> 
-							<th>Prosjektnavn</th>
+							<th>Dato</th>
+							<th>Timer</th>
 							<th>#</th>
 						</tr> 
 					</thead>
@@ -17,12 +18,21 @@
 						{% for p in timetrackings %}
 							<tr> 
 								<td>{{p.date}}</td> 
+                <td>{{p.hours_worked}}</td> 
 								<td>
 									<a href="{% url app.timetracking.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
 									<a href="{% url app.timetracking.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
 								</td>
 							</tr>
-						{% endfor %}		
+						{% endfor %}	
+						
+						    <tr> 
+                <td></td> 
+                <td><b>Sum: 38</b></td> 
+                <td></td>
+              </tr>
+              
+              
 					</tbody>
 				</table>	
 {% endblock %}	

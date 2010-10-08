@@ -26,7 +26,6 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
-    print id
     Timetracking.objects.get(id=id).delete()
     return redirect(overview)
 
@@ -74,9 +73,30 @@ def form (request, id = False):
     
         form = TimetrackingForm(request.POST, instance=instance)       
         
-        if form.is_valid():    
+        import time
+        
+        clockValid = True
+        mg = "Ugyldig klokkeformat, eks: 15:32"
+        
+        try:
+          start = time.strptime("2010 " + request.POST['time_start'], "%Y %H:%M")
+          end = time.strptime("2010 " + request.POST['time_end'], "%Y %H:%M") 
+          diff = time.mktime(end)-time.mktime(start)
+
+          if diff<1:
+              mg = "Sjekk klokkeslettene en gang til"
+              raise Exception() 
+          
+          diff = str(diff/3600)
+          
+        except:
+            messages.error(request, mg)
+            clockValid = False
+            
+        if form.is_valid() and clockValid:    
             o = form.save(commit=False)
             o.owner = request.user
+            o.hours_worked = diff
             o.save()
             messages.success(request, msg)        
 

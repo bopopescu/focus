@@ -29,7 +29,7 @@ class PersistentManager(models.Manager):
 
             return qs 
             
-        except:          
+        except:    
             raise Http404
         
     def for_user(self, *args, **kwargs):
@@ -37,8 +37,9 @@ class PersistentManager(models.Manager):
         
         if u.is_anonymous():
             HttpResponseRedirect("/accounts/")
-  
-        permitted = []              
+        
+        permitted = []       
+               
         try:
             qs = self.for_company(*args, **kwargs)
             for l in qs.all():

@@ -16,7 +16,7 @@
 					
 						{% for p in projects %}
 							<tr> 
-								<td><a href="{% url app.projects.views.view p.id %}">{{p.name}}</a></td> 
+								<td><a href="{% url app.projects.views.view p.id %}">{{p}}</a></td> 
 								<td>
 									<a href="{% url app.projects.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
 									<a href="{% url app.projects.views.permissions p.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
