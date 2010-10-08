@@ -107,4 +107,4 @@ def form (request, id = False):
     else:
         form = CustomerForm(instance=instance)
         
-    return render_with_request(request, "customers/form.html", {'title':'Kunde', 'form': form })
+    return render_with_request(request, "form.html", {'title':'Kunde', 'form': form })

@@ -27,7 +27,7 @@ def delete(request, id):
 
 @login_required
 def view(request, id):
-    order = Order.objects.for_user().get(id=id)
+    order = Order.objects.for_company().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
     return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name, 
                                                              'order':order,
@@ -88,4 +88,4 @@ def form (request, id = False):
     else:
         form = OrderForm(instance=instance)
     
-    return render_with_request(request, "orders/form.html", {'title':'Ordre', 'form': form })
+    return render_with_request(request, "form.html", {'title':'Ordre', 'form': form })

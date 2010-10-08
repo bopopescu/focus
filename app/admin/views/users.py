@@ -14,13 +14,13 @@ def overview(request):
     updateTimeout(request)
     Company = request.user.get_profile().company
     Users = User.objects.filter(userprofile__company=Company)
-    return render_with_request(request, 'admin/list.html', {'title':'Brukere', 'users':Users})
+    return render_with_request(request, 'admin/users/list.html', {'title':'Brukere', 'users':Users})
 
 @login_required
 def grant_permissions(request):
     Users = User.objects.all()    
     Permissions = Permission.objects.all()
-    return render_with_request(request, 'admin/grant_permssions.html', {'title':'Brukere', 'users':Users, 'permissions':Permissions })
+    return render_with_request(request, 'admin/users/grant_permssions.html', {'title':'Brukere', 'users':Users, 'permissions':Permissions })
 
 def add(request):
     return form(request)
@@ -34,7 +34,7 @@ def get_permissions(user, content_type):
                                                   (Q(content_type = ContentType.objects.get_for_model(content_type)) & 
                                                   (Q(user=user)| Q(membership__in=user.memberships.all))
                                                   )
-                                                  )
+                                                )
 
     return Permissions
     
@@ -73,7 +73,7 @@ def view(request, id):
     OrderPerm = get_permissions(user, Order)
     ContactPerm = get_permissions(user, Contact)
     
-    return render_with_request(request, 'admin/view.html', {'user':user, 
+    return render_with_request(request, 'admin/users/view.html', {'user':user, 
                                                                   'CustomerPerm':CustomerPerm,
                                                                   'ProjectPerm':ProjectPerm,
                                                                   'ContactPerm':ContactPerm,

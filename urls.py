@@ -33,7 +33,13 @@ urlpatterns = patterns('',
     
     #settings
     (r'^useradmin/',                include('app.admin.urls')),
-    (r'participants/addPop/$',      'app.admin.views.users.addPop'),
+    (r'^groupadmin/',                include('app.admin.urls')),
+    
+    
+    #Directlink for use of popup
+        #For adding users
+        (r'participants/addPop/$',      'app.admin.views.users.addPop'),
+        (r'users/addPop/$',             'app.admin.views.users.addPop'),
  
  
     #media

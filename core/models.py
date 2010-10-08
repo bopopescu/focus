@@ -80,10 +80,9 @@ class PersistentModel(models.Model):
 """
 Memberships, user can can be members of memberships, which can have permissions for instance
 """
-class Membership(models.Model):
+class Membership(PersistentModel):
     name = models.CharField(max_length=50)
     users = models.ManyToManyField(User, related_name="memberships")
-    company = models.ForeignKey(Company, blank=True, null=True, related_name="memberships")
     
     def __unicode__(self):
         return self.name

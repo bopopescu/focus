@@ -25,4 +25,4 @@ class CustomerForm(ModelForm):
 class CustomerFormSimple(ModelForm):
     class Meta:
         model = Customer
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor','company', 'projects')        
+        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor','company', 'projects',)
