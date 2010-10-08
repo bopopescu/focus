@@ -29,11 +29,12 @@
 			<p>
 				<strong>
 				{% if user.is_authenticated %}
-					Logget inn som <a href="{% url app.admin.views.users.view user.id %}">{{user.first_name}} {{user.last_name}}</a> 
+				  				
+					Logget inn som <a href="{% url app.admin.users.views.view user.id %}">{{user.first_name}} {{user.last_name}}</a> 
 				{%endif%}
 				
 				</strong>
-				|
+				
 				<a href="/accounts/logout">Logg ut</a>
 			</p>
 		</div>

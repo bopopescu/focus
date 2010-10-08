@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        
-    ('^admin/',                     include(admin.site.urls)),
+    ('^adminO/',                     include(admin.site.urls)),
 
     (r'^$',                         include('app.dashboard.urls')),
     
@@ -32,8 +32,8 @@ urlpatterns = patterns('',
     
     
     #settings
-    (r'^useradmin/',                include('app.admin.urls')),
-    (r'^groupadmin/',                include('app.admin.urls')),
+    (r'^useradmin/',               include('app.admin.users.urls')),
+    (r'^groupadmin',               include('app.admin.memberships.urls')),
     
     
     #Directlink for use of popup
