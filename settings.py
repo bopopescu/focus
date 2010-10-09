@@ -8,6 +8,9 @@ BASE_PATH = os.path.dirname(__file__)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
+
+
 SERVER_EMAIL = 'fredrik@fncit.no'
 
 ADMINS = (
@@ -52,6 +55,8 @@ TIME_ZONE = 'Europe/Oslo'
 LANGUAGE_CODE = 'no-nb'
 
 SITE_ID = 1
+
+SITE_URL = "http://focus.fncit.no/"
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

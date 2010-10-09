@@ -7,8 +7,9 @@ from core.shortcuts import *
 from django.contrib import messages
 from core.views import updateTimeout
 from django.core.mail import send_mail
-
 from django.core import urlresolvers
+
+from settings import SITE_URL
 
 @login_required
 def overview(request):
@@ -76,10 +77,9 @@ def sendEmailAndUpdateNotSeenList(request, bugID):
     ticket.save()
     
     
-    
+
     try:
-        link = urlresolvers.reverse('app.bugreporting.views.view', args=("%s"%ticket.id,))
-        
+        link = SITE_URL + urlresolvers.reverse('app.bugreporting.views.view', args=("%s"%ticket.id,))
         send_mail('Ny kommentar, bug %s' % ticket.title, 
                   '%s har lagt inn en ny kommentar i buggen: %s \n\n Direktelink: %s' % (request.user.first_name, ticket.title, link),
                   'time@focussecurity.no', 
