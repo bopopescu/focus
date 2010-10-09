@@ -74,10 +74,10 @@ def sendEmailAndUpdateNotSeenList(request, bugID):
             recipientsEmails.add(user.email)
              
     ticket.save()
-    
+        
     try:
         send_mail('Ny kommentar, bug %s' % ticket.title, 
-                  '%s har lagt inn en ny kommentar i buggen: %s \n\n Direktelink: %s' % (request.user.first_name, ticket.title, urlresolvers.reverse('app.bugreporting.views.view', args=(ticket.id))),
+                  '%s har lagt inn en ny kommentar i buggen: %s \n\n Direktelink: %s' % (request.user.first_name, ticket.title, urlresolvers.reverse('app.bugreporting.views.view', args=("%s"%ticket.id,))),
                   'time@focussecurity.no', 
                   recipientsEmails, 
                   fail_silently=False)
