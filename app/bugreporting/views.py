@@ -76,9 +76,10 @@ def sendEmailAndUpdateNotSeenList(request, bugID):
     
     try:
         send_mail('Ny kommentar til registrert bug %s' % ticket.title, 
-                  '%s har lagt inn en ny kommentar i buggen: %s : \n\n'         
-                          % (request.user.first_name+" "+request.user.last_name, ticket.title),                       
-                          'time@focussecurity.no', recipients, fail_silently=False)
+                  '%s har lagt inn en ny kommentar i buggen: %s' % (request.user.first_name, ticket.title),
+                  'time@focussecurity.no', 
+                  recipientsEmails, 
+                  fail_silently=False)
     except:
         print "EMAIL ERROR; CANT SEND EMAIL"
 
