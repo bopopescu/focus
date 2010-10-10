@@ -56,7 +56,7 @@ LANGUAGE_CODE = 'no-nb'
 
 SITE_ID = 1
 
-SITE_URL = "http://focus.fncit.no/"
+SITE_URL = "http://focus.fncit.no"
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -119,6 +119,11 @@ TEMPLATE_DIRS = (
     BASE_PATH+'/templates/',
 )
 
+#SETTINGS FOR SEARCH
+HAYSTACK_SITECONF = 'search_sites'
+HAYSTACK_SEARCH_ENGINE = 'simple'
+
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -149,6 +154,7 @@ INSTALLED_APPS = (
     #Other    
     'south',    
     'reversion',
+    'haystack',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

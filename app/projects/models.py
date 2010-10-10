@@ -13,7 +13,6 @@ class Project(PersistentModel):
         return self.project_name
 
 from reversion.admin import VersionAdmin
-
 class ProjectModelAdmin(VersionAdmin):
     """Admin settings go here."""
 
