@@ -119,10 +119,6 @@ TEMPLATE_DIRS = (
     BASE_PATH+'/templates/',
 )
 
-#SETTINGS FOR SEARCH
-HAYSTACK_SITECONF = 'search_sites'
-HAYSTACK_SEARCH_ENGINE = 'simple'
-
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -154,7 +150,6 @@ INSTALLED_APPS = (
     #Other    
     'south',    
     'reversion',
-    'haystack',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

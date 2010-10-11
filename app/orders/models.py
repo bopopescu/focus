@@ -3,6 +3,7 @@ from django.contrib import admin
 from core.models import *
 from app.projects.models import *
 from app.contacts.models import *    
+from django.core import urlresolvers
 
 
 class Order(PersistentModel):
@@ -14,6 +15,9 @@ class Order(PersistentModel):
 
     def __unicode__(self):
         return self.order_name
+    
+    def get_url(self):
+        return urlresolvers.reverse('app.orders.views.edit', args=("%s"%self.id,))
     
 class OrderModelAdmin(VersionAdmin):
     """Admin settings go here."""

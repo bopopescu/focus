@@ -41,9 +41,6 @@ urlpatterns = patterns('',
         (r'participants/addPop/$',      'app.admin.users.views.addPop'),
         (r'users/addPop/$',             'app.admin.users.views.addPop'),
  
-    #Search
-    (r'^search/', include('haystack.urls')),
- 
     #media
     (r'^media/(?P<path>.*)', 'django.views.static.serve', {'document_root': os.path.join(settings.BASE_PATH, 'media')}),
    

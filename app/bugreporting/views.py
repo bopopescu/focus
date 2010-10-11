@@ -8,7 +8,6 @@ from django.contrib import messages
 from core.views import updateTimeout
 from django.core.mail import send_mail
 from django.core import urlresolvers
-
 from settings import SITE_URL
 
 @login_required

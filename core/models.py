@@ -124,8 +124,10 @@ class ObjectPermission(models.Model):
     object_id = models.PositiveIntegerField()
 
     def __unicode__(self):
-        return unicode(self.content_type.get_object_for_this_type(id=self.object_id))
+        return unicode(self.get_object())
 
+    def get_object(self):
+        return self.content_type.get_object_for_this_type(id=self.object_id)
 
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist

@@ -62,7 +62,7 @@ def add(request):
 def edit(request, id):
     
     #Check if deleted, print error message
-    if Project.objects.get(id=id):
+    if Project.objects.get(id=id).deleted:
         message = "Prosjektet er slettet, gjennopprett om du vil endre.."
         messages.error(request, message)        
         return redirect(overview)
