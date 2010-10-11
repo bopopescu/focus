@@ -103,6 +103,7 @@ def addComment(request, bugID):
             o.bug = ticket
             o.owner = request.user
             o.save()
+        
             
             if ticket.closed:
                 ticket.closed = not ticket.closed

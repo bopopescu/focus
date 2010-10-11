@@ -18,14 +18,16 @@ def overview(request):
 
 @login_required
 def overview_deleted(request):
+
     customers = Customer.objects.for_company(deleted=True)
     return render_with_request(request, 'customers/list.html', {'title':'Slettede kunder', 
                                                                 'customers':customers})
 
 @login_required
 def overview_all(request):
+
     customers = Customer.objects.for_company()
-    return render_with_request(request, 'customers/list.html', {'title':'Alle aktive kunder', 
+    return render_with_request(request, 'customers/list.html', {'title':'Alle aktive kunder',
                                                        'customers':customers})
 
 @require_perm('view', Customer)

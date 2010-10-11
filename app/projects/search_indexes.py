@@ -8,3 +8,4 @@ class ProjectIndex(SearchIndex):
     project_name = CharField(document=True, use_template=True)
 
 site.register(Project, ProjectIndex)
+

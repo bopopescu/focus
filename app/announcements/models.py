@@ -14,4 +14,5 @@ from reversion.admin import VersionAdmin
 class ModelAdmin(VersionAdmin):
     """Admin settings go here."""
 
+
 admin.site.register(Announcement, ModelAdmin)
