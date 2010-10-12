@@ -32,6 +32,9 @@ def edit(request, id):
 def get_permissions(user):
     Permissions = ObjectPermission.objects.filter(
                                                   (
+                                                   
+                                                   #Q(content_type__fabelf="K") &
+                                                   
                                                    (
                                                     Q(user=user) 
                                                     |
