@@ -10,7 +10,6 @@ from django.test import TestCase
 from models import *
 
 class CustomerTesting(TestCase):
-    
     def setUp(self):
         Customer.objects.create(full_name="dfgj", zip=1234)
         User.objects.create_user('test', 'test@example.com', 'test')

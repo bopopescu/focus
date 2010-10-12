@@ -29,7 +29,7 @@ def view(request, id):
     #Remove the user from notSeenList
     updateNotSeenList(request, id)
     
-    return render_with_request(request, 'bugreporting/view.html', {'title':ticket.title, 
+    return render_with_request(request, 'bugreporting/view.html', {'title':ticket.title,
                                                                    'ticket':ticket,
                                                                    'comments':comments,
                                                                    'commentForm':commentForm})
