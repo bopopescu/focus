@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%block extrahead %}
+{% block extrahead %}
 
 {% endblock %}
 
@@ -12,36 +12,36 @@
 
 {% block maincontent %}
 
-<div id="inner">
-	
-	{{customer.name}}
-	<br>
-	
-	<br><br>
-	<b>Tilhørende prosjekter og ordrer</b>
-	<br><br>
-	<table>
-		
-		<tr>
-			<th>Prosjekt</th>
-			<th>Ordrer</th>
-		</tr>
-		
-		{% for project in customer.projects.for_user %}
-			<tr>
-				<td><a href="{% url app.projects.views.view project.id %}">{{project.project_name}}</a></td>
-				<td></td>
-			</tr>
-			
-			{% for order in project.orders.for_user %}
-			<tr>
-				<td></td>
-				<td><a href="{% url app.orders.views.view order.id %}">{{order.order_name}}</a></td>
-			</tr>
-			{% endfor %}
-		{% endfor %}
-	</table>
-			
-</div>	
-   
+    <div id="inner">
+
+        {{ customer.name }}
+        <br>
+
+        <br><br>
+        <b>Tilhørende prosjekter og ordrer</b>
+        <br><br>
+        <table>
+
+            <tr>
+                <th>Prosjekt</th>
+                <th>Ordrer</th>
+            </tr>
+
+            {% for project in customer.projects.for_user %}
+                <tr>
+                    <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
+                    <td></td>
+                </tr>
+
+                {% for order in project.orders.for_user %}
+                    <tr>
+                        <td></td>
+                        <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+
+    </div>
+
 {% endblock %}	

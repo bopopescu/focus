@@ -1,7 +1,3 @@
-from django.db import models
-
-from django.contrib import admin
-from core.models import PersistentModel
 from app.orders.models import *
 from datetime import datetime
 
@@ -33,6 +29,5 @@ class TimetrackingModelAdmin(VersionAdmin):
 class TypeOfTimeTrackingModelAdmin(VersionAdmin):
     """Admin settings go here."""
 
-from reversion.admin import VersionAdmin
 admin.site.register(TypeOfTimeTracking, TypeOfTimeTrackingModelAdmin)
 admin.site.register(Timetracking, TimetrackingModelAdmin)

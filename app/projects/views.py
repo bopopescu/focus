@@ -1,12 +1,11 @@
-from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib import messages
-from django.utils.html import escape 
-from models import *
+# -*- coding: utf-8 -*-
+
+from django.contrib.auth.decorators import login_required
+from django.utils.html import escape
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
+from core.views import form_perm, updateTimeout, standardError
 
 @login_required
 def overview(request):
@@ -60,13 +59,11 @@ def add(request):
 
 @require_perm('change', Project)
 def edit(request, id):
-    
+
     #Check if deleted, print error message
-    if Project.objects.get(id=id).deleted:
-        message = "Prosjektet er slettet, gjennopprett om du vil endre.."
-        messages.error(request, message)        
-        return redirect(overview)
-    
+    #if Project.objects.get(id=id).deleted:
+    #    return standardError(request, ("Prosjektet er slettet, gjennopprett om du vil endre.."))
+
     return form(request, id)
 
 @require_perm('delete', Project)
@@ -83,9 +80,9 @@ def permissions(request, id):
 
 @login_required
 def form (request, id = False):
-        
+
     if id:
-        instance = get_object_or_404(Project, id = id, deleted=False)
+        instance = get_object_or_error(request, Project, id = id, deleted=False)
         msg = "Velykket endret prosjekt"
     else:
         instance = Project()

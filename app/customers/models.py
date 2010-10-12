@@ -18,15 +18,15 @@ class Customer(PersistentModel):
     city = models.CharField("By", max_length=20, blank=True)
 
     alternative_address = models.CharField("Alternativ adresse", max_length=20, blank=True)
-    owner = models.ForeignKey(User, blank=True, related_name="UsersContacts");    
+    owner = models.ForeignKey(User, blank=True, related_name="UsersContacts");
     contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name="Kontakter")
-    
+
     def __unicode__(self):
         return self.full_name
 
     def get_url(self):
-        return urlresolvers.reverse('app.customers.views.view', args=("%s"%self.id,))
-    
+        return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
+
 class ObjectPermissionInline(GenericTabularInline):
     model = ObjectPermission
     raw_id_fields = ['user']
@@ -46,3 +46,4 @@ class CustomerAdmin(VersionAdmin, admin.ModelAdmin, ObjectPermissionMixin):
     inlines = [ObjectPermissionInline]
 
 admin.site.register(Customer, CustomerAdmin)
+
