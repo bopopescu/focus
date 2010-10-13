@@ -1,16 +1,12 @@
-from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required, permission_required
-from models import *
 from forms import *
 from core.shortcuts import *
-from django.contrib import messages
 from core.views import updateTimeout, form_perm
 from core.decorators import *
 
 
 @login_required
 def overview(request):
-    orders = Order.objects.for_user()    
+    orders = Order.objects.for_user()
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
@@ -31,7 +27,7 @@ def delete(request, id):
 def view(request, id):
     order = Order.objects.for_company().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
-    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name, 
+    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,
                                                              'order':order,
                                                              'whoCanSeeThis':whoCanSeeThis})
 
@@ -46,48 +42,47 @@ def permissions(request, id):
 @login_required
 def addPop(request):
     instance = Order()
-    
-    if request.method == "POST": 
+
+    if request.method == "POST":
         form = OrderFormSimple(request.POST, instance=instance)
-        if form.is_valid():    
+        if form.is_valid():
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
             form.save_m2m()
-            
-            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-                            ((o._get_pk_val()), (o)))
+
+            return HttpResponse(
+                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
+                    ((o._get_pk_val()), (o)))
     else:
         form = OrderFormSimple(instance=instance)
-            
-    return render_with_request(request, "simpleform.html", {'title':'Ordre', 'form': form })
+
+    return render_with_request(request, "simpleform.html", {'title':'Ordre', 'form': form})
 
 @login_required
-def form (request, id = False):
-        
+def form (request, id=False):
     if id:
-        instance = get_object_or_404(Order, id = id, deleted=False)
+        instance = get_object_or_404(Order, id=id, deleted=False)
         msg = "Velykket endret ordre"
     else:
         instance = Order()
         msg = "Velykket lagt til nytt ordre"
-      
+
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-    
-        form = OrderForm(request.POST, instance=instance)       
-        if form.is_valid():    
+        form = OrderForm(request.POST, instance=instance)
+        if form.is_valid():
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
             form.save_m2m()
-            messages.success(request, msg)        
-            if not id:      
-                return redirect(permissions, o.id)  
-            return redirect(overview) 
-        
+            messages.success(request, msg)
+            if not id:
+                return redirect(permissions, o.id)
+            return redirect(overview)
+
     else:
         form = OrderForm(instance=instance)
-    
-    return render_with_request(request, "form.html", {'title':'Ordre', 'form': form })
+
+    return render_with_request(request, "form.html", {'title':'Ordre', 'form': form})
