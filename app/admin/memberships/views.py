@@ -23,14 +23,18 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
-def get_permissions(membership, content_type):
+
+def get_permissions(membership):
     Permissions = ObjectPermission.objects.filter(
-                                                  (Q(content_type = ContentType.objects.get_for_model(content_type)) & 
-                                                  (Q(membership=membership))
+                                                  (
+
+                                                    Q(membership=membership)
+
                                                   )
-                                                )
+                                                ).order_by('content_type')
     return Permissions
-    
+
+
 
 @login_required
 def addPop(request):
@@ -57,21 +61,12 @@ def view(request, id):
     
     membership = Membership.objects.get(id=id)
 
-    from app.customers.models import Customer
-    from app.projects.models import Project
-    from app.orders.models import Order
-    from app.contacts.models import Contact
-    
-    CustomerPerm = get_permissions(membership, Customer)
-    ProjectPerm = get_permissions(membership, Project)
-    OrderPerm = get_permissions(membership, Order)
-    ContactPerm = get_permissions(membership, Contact)
-    
-    return render_with_request(request, 'admin/memberships/view.html', {'membership':membership, 
-                                                                  'CustomerPerm':CustomerPerm,
-                                                                  'ProjectPerm':ProjectPerm,
-                                                                  'ContactPerm':ContactPerm,
-                                                                  'OrderPerm':OrderPerm})
+    Permissions = get_permissions(membership)
+
+    return render_with_request(request, 'admin/memberships/view.html', {'title':'Gruppe',
+                                                                        'membership':membership,
+                                                                        'permissions':Permissions,
+                                                                        })
 @login_required
 def delete(request, id):
     messages.success(request, "Velykket slettet bruker")        

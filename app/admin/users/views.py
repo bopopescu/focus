@@ -70,7 +70,8 @@ def view(request, id):
 
     Permissions = get_permissions(user)
     
-    return render_with_request(request, 'admin/users/view.html', {'user':user, 
+    return render_with_request(request, 'admin/users/view.html', {'title':'Bruker',
+                                                                  'user':user,
                                                                   'permissions':Permissions,
                                                                   })
 @login_required

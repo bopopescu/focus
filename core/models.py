@@ -20,7 +20,7 @@ class Company(models.Model):
 """
 The "all mighty" model, all other models inherit from this one. 
 Contains all the useful fields like who created and edited the object, and when it was done.
-It also automatic saves the information about the user interaction with the object.
+It also automatically saves the information about the user interaction with the object.
 """
 
 class PersistentModel(models.Model):
@@ -55,7 +55,7 @@ class PersistentModel(models.Model):
 
     """
     whoHasPermissionTo
-    returns a list of users who are permitted to do action on object
+    returns a list of users who are permitted perform actions on the object
     """
 
     def whoHasPermissionTo(self, perm):
@@ -77,7 +77,7 @@ class PersistentModel(models.Model):
             return []
 
 """
-Memberships, user can can be members of memberships, which can have permissions for instance
+Memberships, user can be members of memberships, which can have permissions for instance
 """
 class Membership(PersistentModel):
     name = models.CharField(max_length=50)

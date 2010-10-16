@@ -59,9 +59,7 @@
 			<tr><td style="text-align:left;"><b>{{type.grouper}}</b></td><td colspan=5></td></tr>
 			
 			{% for perm in type.list %}
-			
-			{{perm.content_type.model}}
-			
+
 			<tr>
 				<td></td>
 				<td style="text-align:left;"><a href='{{perm.get_object.get_url}}'>{{perm.get_object}}</a></td>
@@ -83,7 +81,7 @@
 				</td>
 				
 				<td>{% if perm.membership %}
-    					Gjennom gruppen {{ perm.membership }}
+    					Gjennom gruppen <a href="{% url app.admin.memberships.views.view perm.membership.id %}">{{ perm.membership }}</a>
     				{% endif %}
 				</td>
 				

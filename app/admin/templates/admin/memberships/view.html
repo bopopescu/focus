@@ -32,130 +32,58 @@
     {% endfor %}
     
   </table>
-  
-  <br><br>
-  <b>Rettigheter</b>
-  <br><br>
-  <table style="text-align:center">
-  
-    <tr>
-      <th></th>
-      <th>Objekt</th>
-      <th>Kan se</th>
-      <th>Kan endre</th>
-      <th>Kan slette</th>
-      <th>Negativ rettighet</th>
-    </tr>
-  
-    <tr><td style="text-align:left;"><b>Kunder</b></td><td colspan=5></td></tr>
-    {% for perm in CustomerPerm %}
-      <tr>
-        <td></td>
-        <td style="text-align:left;"><a href="{% url app.customers.views.view perm.object_id %}">{{perm}}</a></td>
-        <td>{% if perm.can_view %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_change %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_delete %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.negative %}
-              X
-            {% endif %}
-        </td>
 
-      </tr>
-    {% endfor %}
-    
-    <tr><td style="text-align:left;"><b>Kontakter</b></td><td colspan=5></td></tr>
-    {% for perm in ContactPerm %}
-      <tr>
-        <td></td>
-        <td style="text-align:left;"><a href="{% url app.contacts.views.edit perm.object_id %}">{{perm}}</a></td>
-        <td>{% if perm.can_view %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_change %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_delete %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.negative %}
-              X
-            {% endif %}
-        </td>
 
-      </tr>
-    {% endfor %}
 
-    <tr><td style="text-align:left;"><b>Prosjekter</b></td><td colspan=5></td></tr>
-    {% for perm in ProjectPerm %}
-      <tr>
-              <td></td>
-      
-        <td style="text-align:left;"><a href="{% url app.projects.views.view perm.object_id %}">{{perm}}</a></td>
-        <td>{% if perm.can_view %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_change %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_delete %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.negative %}
-              X
-            {% endif %}
-        </td>
-   
-        
-      </tr>
-    {% endfor %}
-    
-    <tr><td style="text-align:left;"><b>Ordrer</b></td><td colspan=5></td></tr>
-    {% for perm in OrderPerm %}
-      <tr>
-              <td></td>
-      
-        <td style="text-align:left;"><a href="{% url app.orders.views.view perm.object_id %}">{{perm}}</a></td>
-        <td>{% if perm.can_view %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_change %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.can_delete %}
-              X
-            {% endif %}
-        </td>
-        <td>{% if perm.negative %}
-              X
-            {% endif %}
-        </td>
-       
-        
-      </tr>
-    {% endfor %}
-    
-    
-    
-    
-  </table>
-      
+    {% regroup permissions by content_type as Permissions %}
+
+	<br><br>
+	<b>Rettigheter</b>
+	<br><br>
+	<table style="text-align:center">
+
+		<tr>
+			<th></th>
+			<th>Objekt</th>
+			<th>Kan se</th>
+			<th>Kan endre</th>
+			<th>Kan slette</th>
+		</tr>
+
+
+
+	{% for type in Permissions %}
+
+			<tr><td style="text-align:left;"><b>{{type.grouper}}</b></td><td colspan=5></td></tr>
+
+			{% for perm in type.list %}
+
+			<tr>
+				<td></td>
+				<td style="text-align:left;"><a href='{{perm.get_object.get_url}}'>{{perm.get_object}}</a></td>
+				<td>{% if perm.can_view %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_change %}
+    					X
+    				{% endif %}
+				</td>
+				<td>{% if perm.can_delete %}
+    					X
+    				{% endif %}
+				</td>
+
+			</tr>
+		{% endfor %}
+		</tr>
+
+		{% endfor %}
+
+	</table>
+
+
+
 </div>  
    
 {% endblock %}  

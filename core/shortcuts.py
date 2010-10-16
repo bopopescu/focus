@@ -26,20 +26,6 @@ def standardError(request, msg=""):
     return render_with_request(request, 'deletedOrNoPermission.html', {'msg':msg, })
 
 
-
-def get_k(klass,*args,**kwargs):
-    queryset = _get_queryset(klass)
-    try:
-        return queryset.get(*args, **kwargs)
-    except queryset.model.DoesNotExist:
-        return False
-
-
-
-class ExH(Exception, request):
-    print "Spennende"
-
-
 def get_object_or_error(request, klass, *args, **kwargs):
 
     """

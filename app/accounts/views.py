@@ -18,4 +18,4 @@ def login(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect("/accounts/login/")  
+    return HttpResponseRedirect("/accounts/login/")
