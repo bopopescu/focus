@@ -143,7 +143,7 @@ INSTALLED_APPS = (
     'app.orders',
     'app.contacts',
     'app.internalmessages',
-    'app.tickets',
+
     'app.dashboard',
     
     #Other    
