@@ -22,12 +22,3 @@ class Timetracking(PersistentModel):
     
     def __unicode__(self):
         return unicode(self.date)
-
-class TimetrackingModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-
-class TypeOfTimeTrackingModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-
-admin.site.register(TypeOfTimeTracking, TypeOfTimeTrackingModelAdmin)
-admin.site.register(Timetracking, TimetrackingModelAdmin)

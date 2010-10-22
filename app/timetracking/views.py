@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
 from models import *
@@ -11,7 +13,7 @@ from core.views import updateTimeout
 def overview(request):
     updateTimeout(request)
     timetrackings = Timetracking.objects.for_user()    
-    return render_with_request(request, 'timetracking/list.html', {'title':'Timeforinger', 'timetrackings':timetrackings})
+    return render_with_request(request, 'timetracking/list.html', {'title':'Timeføringer', 'timetrackings':timetrackings})
 
 
 @login_required
@@ -62,10 +64,10 @@ def form (request, id = False):
         
     if id:
         instance = get_object_or_404(Timetracking, id = id, deleted=False)
-        msg = "Velykket endret timeforing"
+        msg = "Velykket endret timeføring"
     else:
         instance = Timetracking()
-        msg = "Velykket lagt til nytt timeforing"
+        msg = "Velykket lagt til nytt timeføring"
             
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -107,4 +109,4 @@ def form (request, id = False):
     else:
         form = TimetrackingForm(instance=instance)
     
-    return render_with_request(request, "form.html", {'title':'Timeforing', 'form': form })
+    return render_with_request(request, "form.html", {'title':'Timeføring', 'form': form })
