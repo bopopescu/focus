@@ -110,15 +110,7 @@
 							<li><a href="{% url app.timetracking.views.overview %}"><img src="/media/images/icons/clock.png" alt="">Oversikt</a></li>
 						</ul>
 					</li>	
-					
-					<li class="{% active request "^/bugreporting/" %}">
-						<a href=""><img src="/media/images/icons/bug.png" alt="">Bugrapportering</a>
-						<ul>
-							<li><a href="{% url app.bugreporting.views.add %}"><img src="/media/images/icons/add.png" alt="">Registrer ny bug</a></li>
-							<li><a href="{% url app.bugreporting.views.overview %}"><img src="/media/images/icons/bug.png" alt="">Oversikt</a></li>
-						</ul>
-					</li>
-					
+
 					<li class="{% active request "^/announcements/" %}">
 						<a href=""><img src="/media/images/icons/layout.png" alt="">Oppslag</a>
 						<ul>

@@ -27,10 +27,7 @@ urlpatterns = patterns('',
     (r'^typeOfWorks/addPop/?$',     'app.timetracking.views.addTypeOfWork'),
     
     (r'^announcements/',            include('app.announcements.urls')),
-    
-    (r'^bugreporting/',             include('app.bugreporting.urls')),
-    
-    
+
     #settings for admin
     (r'^useradmin/',               include('app.admin.users.urls')),
     (r'^groupadmin/',               include('app.admin.memberships.urls')),

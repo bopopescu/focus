@@ -1,7 +1,7 @@
+from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FPAdmin
-
 from core.models import *
 
 """
