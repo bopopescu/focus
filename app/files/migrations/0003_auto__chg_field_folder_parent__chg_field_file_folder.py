@@ -8,26 +8,20 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'InternalMessage.creator'
-        db.add_column('internalmessages_internalmessage', 'creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='internalmessages_internalmessage_created', null=True, blank=True, to=orm['auth.User']), keep_default=False)
+        # Changing field 'Folder.parent'
+        db.alter_column('files_folder', 'parent_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, blank=True, to=orm['files.Folder']))
 
-        # Adding field 'InternalMessage.editor'
-        db.add_column('internalmessages_internalmessage', 'editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='internalmessages_internalmessage_edited', null=True, blank=True, to=orm['auth.User']), keep_default=False)
-
-        # Adding field 'InternalMessage.company'
-        db.add_column('internalmessages_internalmessage', 'company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='internalmessages_internalmessage_edited', null=True, blank=True, to=orm['core.Company']), keep_default=False)
+        # Changing field 'File.folder'
+        db.alter_column('files_file', 'folder_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, blank=True, to=orm['files.Folder']))
 
 
     def backwards(self, orm):
         
-        # Deleting field 'InternalMessage.creator'
-        db.delete_column('internalmessages_internalmessage', 'creator_id')
+        # Changing field 'Folder.parent'
+        db.alter_column('files_folder', 'parent_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['files.Folder']))
 
-        # Deleting field 'InternalMessage.editor'
-        db.delete_column('internalmessages_internalmessage', 'editor_id')
-
-        # Deleting field 'InternalMessage.company'
-        db.delete_column('internalmessages_internalmessage', 'company_id')
+        # Changing field 'File.folder'
+        db.alter_column('files_file', 'folder_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['files.Folder']))
 
 
     models = {
@@ -72,27 +66,31 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'})
         },
-        'internalmessages.internalmessage': {
-            'Meta': {'object_name': 'InternalMessage'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'internalmessages_internalmessage_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'internalmessages_internalmessage_created'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+        'files.file': {
+            'Meta': {'object_name': 'File'},
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'file_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'file_created'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 22, 23, 39, 38, 570040)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 22, 23, 39, 38, 570080)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'internalmessages_internalmessage_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
+            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'file_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
+            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'folder': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'files'", 'null': 'True', 'blank': 'True', 'to': "orm['files.Folder']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'recipients': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'recievedMessages'", 'symmetrical': 'False', 'through': "orm['internalmessages.InternalMessageUser']", 'to': "orm['auth.User']"}),
-            'sender': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sendtMessages'", 'to': "orm['auth.User']"}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '80'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
-        'internalmessages.internalmessageuser': {
-            'InternalMessage': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['internalmessages.InternalMessage']"}),
-            'Meta': {'object_name': 'InternalMessageUser'},
-            'date_read': ('django.db.models.fields.DateField', [], {}),
+        'files.folder': {
+            'Meta': {'object_name': 'Folder'},
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'folder_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'folder_created'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 22, 23, 39, 38, 570040)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 22, 23, 39, 38, 570080)'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'folder_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'folders'", 'null': 'True', 'blank': 'True', 'to': "orm['files.Folder']"})
         }
     }
 
-    complete_apps = ['internalmessages']
+    complete_apps = ['files']

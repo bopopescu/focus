@@ -142,8 +142,7 @@ INSTALLED_APPS = (
     'app.projects',
     'app.orders',
     'app.contacts',
-    'app.internalmessages',
-
+    'app.files',
     'app.dashboard',
     
     #Other    

@@ -8,31 +8,25 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'InternalMessageUser'
-        db.create_table('internalmessages_internalmessageuser', (
+        # Adding model 'File'
+        db.create_table('files_file', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('InternalMessage', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['internalmessages.InternalMessage'])),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('date_read', self.gf('django.db.models.fields.DateField')()),
+            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 10, 22, 21, 29, 46, 884153))),
+            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 10, 22, 21, 29, 46, 884193))),
+            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='file_created', null=True, blank=True, to=orm['auth.User'])),
+            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='file_edited', null=True, blank=True, to=orm['auth.User'])),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='file_edited', null=True, blank=True, to=orm['core.Company'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
-        db.send_create_signal('internalmessages', ['InternalMessageUser'])
-
-        # Removing M2M table for field recipients on 'InternalMessage'
-        db.delete_table('internalmessages_internalmessage_recipients')
+        db.send_create_signal('files', ['File'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'InternalMessageUser'
-        db.delete_table('internalmessages_internalmessageuser')
-
-        # Adding M2M table for field recipients on 'InternalMessage'
-        db.create_table('internalmessages_internalmessage_recipients', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('internalmessage', models.ForeignKey(orm['internalmessages.internalmessage'], null=False)),
-            ('user', models.ForeignKey(orm['auth.user'], null=False))
-        ))
-        db.create_unique('internalmessages_internalmessage_recipients', ['internalmessage_id', 'user_id'])
+        # Deleting model 'File'
+        db.delete_table('files_file')
 
 
     models = {
@@ -72,24 +66,23 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'internalmessages.internalmessage': {
-            'Meta': {'object_name': 'InternalMessage'},
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+        'core.company': {
+            'Meta': {'object_name': 'Company'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'recipients': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'recievedMessages'", 'symmetrical': 'False', 'through': "orm['internalmessages.InternalMessageUser']", 'to': "orm['auth.User']"}),
-            'sender': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sendtMessages'", 'to': "orm['auth.User']"}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '80'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '80'})
         },
-        'internalmessages.internalmessageuser': {
-            'InternalMessage': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['internalmessages.InternalMessage']"}),
-            'Meta': {'object_name': 'InternalMessageUser'},
-            'date_read': ('django.db.models.fields.DateField', [], {}),
+        'files.file': {
+            'Meta': {'object_name': 'File'},
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'file_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'file_created'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 22, 21, 29, 46, 884153)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 22, 21, 29, 46, 884193)'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'file_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
+            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         }
     }
 
-    complete_apps = ['internalmessages']
+    complete_apps = ['files']

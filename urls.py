@@ -20,16 +20,20 @@ urlpatterns = patterns('',
     (r'^projects/',                 include('app.projects.urls')),           
 
     (r'^accounts/',                 include('app.accounts.urls')),
-    
+
+    (r'^files/',                    include('app.files.files.urls')),
+
+    (r'^folders/',                  include('app.files.folders.urls')),
+
     (r'^orders/',                   include('app.orders.urls')),
-    
+
     (r'^timetracking/',             include('app.timetracking.urls')),
     (r'^typeOfWorks/addPop/?$',     'app.timetracking.views.addTypeOfWork'),
     
     (r'^announcements/',            include('app.announcements.urls')),
 
     #settings for admin
-    (r'^useradmin/',               include('app.admin.users.urls')),
+    (r'^useradmin/',                include('app.admin.users.urls')),
     (r'^groupadmin/',               include('app.admin.memberships.urls')),
 
 

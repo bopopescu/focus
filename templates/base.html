@@ -94,14 +94,25 @@
 					</li>
 					
 					
-					<li class="{% active request "^/orders/" %}">
+					<li class="{% active request "^/files/" %}">
+						<a href=""><img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">Filer</a>
+						<ul>
+							<li><a href="{% url app.files.files.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg til ny fil</a></li>
+							<li><a href="{% url app.files.files.views.overview %}"><img width="12px" height="12px" src="/media/images/icons/fileIcon.png" alt="">Oversikt</a></li>
+						</ul>
+					</li>
+
+
+                    <li class="{% active request "^/orders/" %}">
 						<a href=""><img src="/media/images/icons/basket.png" alt="">Ordrer</a>
 						<ul>
 							<li><a href="{% url app.orders.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg til ny ordre</a></li>
 							<li><a href="{% url app.orders.views.overview %}"><img src="/media/images/icons/basket.png" alt="">Oversikt</a></li>
 						</ul>
 					</li>
-					
+
+
+
 					<li class="{% active request "^/timetracking/" %}">
 						<a href=""><img src="/media/images/icons/clock.png" alt="">Timeregistrering</a>
 						<ul>

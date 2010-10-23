@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+
+
+		{% block maincontent %}
+
+            <script src="/media/js/jquery-ui.js"></script>
+
+
+
+            <link rel="stylesheet" href="../demos.css">
+            <style>
+            #draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
+            #droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
+            </style>
+
+            <script>
+                $(function() {
+                    $( ".draggable" ).draggable({ revert: "invalid"});
+
+                    $( ".droppable" ).droppable({
+			            drop: function( event, ui ) {
+                            (ui.draggable).fadeOut();
+			            }
+		            });
+                });
+                </script>
+
+
+                <div class="draggable">HNN</div>
+
+                {% if folder %}
+
+                    {% if folder.parent %}
+                        Opp <a href="{% url app.files.files.views.folder folder.parent.id %}">{{folder.parent.name}}</a>
+                    {% endif %}
+
+                    {% if folder.parent == None %}
+                        Opp <a href="{% url app.files.files.views.overview %}">Topp</a>
+                    {% endif %}
+
+                {% endif %}
+
+
+                <a href="{% url app.files.files.views.add folder.id %}">Ny fil</a>
+                <a href="{% url app.files.folders.views.add folder.id %}">Ny mappe</a>
+
+
+                        {% for p in folders %}
+                               <div class="item draggable droppable">
+							        <img width="16px" height="16" src="/media/images/icons/folder.png" alt="">
+                                    <a href="{% url app.files.files.views.folder p.id %}">{{p.name}}</a>
+							   </div>
+						{% endfor %}
+
+						{% for p in files %}
+
+                            <div class="item draggable">
+							    <img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">
+                                <a href="{% url app.files.files.views.view p.id %}">{{p.name}}</a>
+                            </div>
+
+						{% endfor %}
+					</tbody>
+				</table>
+
+{% endblock %}
