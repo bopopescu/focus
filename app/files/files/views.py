@@ -35,6 +35,34 @@ def folder(request, folderID):
                                                             'folders':folders,
                                                          })
 
+def moveFile(request):
+    fileID      = request.GET.get("fileID")
+    toFolder    = request.GET.get("folderID")
+
+    file        = File.objects.get(id=fileID)
+    file.folder = Folder.objects.get(id=toFolder)
+    file.save()
+
+    return
+
+def moveFolder(request):
+    folderID    = request.GET.get("folderID")
+    parentID    = request.GET.get("parentID")
+
+
+    folder        = Folder.objects.get(id=folderID)
+
+    if parentID == "root":
+        folder.parent = None
+        folder.save()
+        return
+
+    folder.parent = Folder.objects.get(id=parentID)
+    folder.save()
+
+    return
+
+
 @login_required
 def add(request, folderID = None):
     return form(request, False, folderID)
