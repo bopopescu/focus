@@ -15,6 +15,7 @@
 
 
             <link rel="stylesheet" href="../demos.css">
+
             <style>
             #draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
             #droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
@@ -27,8 +28,6 @@
 
                     $( ".droppable" ).droppable({
 
-                        hoverClass: "itemHover",
-                        activeClass: "itemActive",
 
 			            drop: function( event, ui ) {
 
@@ -61,13 +60,42 @@
                 });
                 </script>
 
+                <style>
 
-                <div class="draggable">HNN</div>
+
+                .button {
+                    background-color:#efefef;
+                    border:1px solid #dfdfdf;
+                    width:100px;
+                    float:left;
+                    margin-left:20px;
+                    text-align:center;
+                    padding-top:3px;
+
+                }
+
+                .button a {
+                    text-decoration:None;
+                }
+
+                </style>
+
+                <div style="padding:10px; width:500px;">
+
+                    <div class="button">
+                        <a href="{% url app.files.files.views.add folder.id %}">
+                        <img src="/media/images/icons/add.png">Ny fil</a>
+                    </div>
+
+                    <div class="button">
+                        <a href="{% url app.files.folders.views.add folder.id %}">
+                        <img src="/media/images/icons/folder_add.png">Ny mappe</a>
+                    </div>
+
+                </div>
 
 
-                <a href="{% url app.files.files.views.add folder.id %}">Ny fil</a>
-                <a href="{% url app.files.folders.views.add folder.id %}">Ny mappe</a>
-
+                <br><br>
 
                     {% if folder %}
 
