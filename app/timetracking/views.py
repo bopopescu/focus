@@ -31,6 +31,8 @@ def delete(request, id):
     Timetracking.objects.get(id=id).delete()
     return redirect(overview)
 
+def addAjax(request):
+    return
 
 @login_required
 def addTypeOfWork(request):

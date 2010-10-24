@@ -43,10 +43,10 @@ class PermissionsTesting(TestCase):
         self.assertFalse(user2.has_perm('view', page))
                 
     def testUserInMembershipPermissions(self):
-        membership_obj = Membership.objects.get(name="fiogjdf")
-        user = User.objects.get(username="test")
-        user2 = User.objects.get(username="test2")
-        page = FlatPage.objects.get(title="dfgj")
+        membership_obj = Membership.objects.get_or_create(name="fiogjdf")
+        user = User.objects.get_or_create(username="test")
+        user2 = User.objects.get_or_create(username="test2")
+        page = FlatPage.objects.get_or_create(title="dfgj")
         
         #Test permission on flatpages, before permisisons added
         self.assertFalse(user.has_perm('delete', page))
