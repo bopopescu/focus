@@ -58,8 +58,29 @@ def addTypeOfWork(request):
 
 @login_required
 def calendar(request):
-    return render_with_request(request, "timetracking/calendar.html", {'title':'Timeregistrering' })    
+    timetrackings = Timetracking.objects.for_user()
 
+    return render_with_request(request, "timetracking/calendar.html", {'title':'Timeregistrering','timetrackings':timetrackings })
+
+
+@login_required
+def ajaxResizeCalendar(request):
+
+    timeTrackingID          = request.GET.get("timeTrackingID")
+
+    TimeTracking            = Timetracking.objects.get(id=timeTrackingID)
+
+
+    time_start = "%s" % request.GET.get("time_start")
+    time_stop = "%s" % request.GET.get("time_end")
+
+    TimeTracking.time_start = time_start
+    TimeTracking.time_end   = time_stop
+
+    TimeTracking.save()
+
+
+    return HttpResponse("OK")
 
 @login_required
 def form (request, id = False):
