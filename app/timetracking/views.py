@@ -8,13 +8,13 @@ from core.shortcuts import *
 from django.contrib import messages
 from django.utils.html import escape 
 from core.views import updateTimeout
+import time
 
 @login_required
 def overview(request):
     updateTimeout(request)
     timetrackings = Timetracking.objects.for_user()    
     return render_with_request(request, 'timetracking/list.html', {'title':'Timeføringer', 'timetrackings':timetrackings})
-
 
 @login_required
 def add(request):
@@ -56,6 +56,27 @@ def addTypeOfWork(request):
     return render_with_request(request, "simpleform.html", {'title':'Typer arbeid', 'form': form })
 
 
+
+@login_required
+def calculateHoursWorked(request, start, end):
+
+
+    diff = 0
+    start = time.strptime("2010 " + start, "%Y %H:%M")
+    end = time.strptime("2010 " + end, "%Y %H:%M")
+    diff = time.mktime(end)-time.mktime(start)
+
+    if diff<1:
+        mg = "Sjekk klokkeslettene en gang til"
+        messages.error(request, mg)
+
+    diff = str(diff/3600)
+
+
+    return diff
+
+
+
 @login_required
 def calendar(request):
     timetrackings = Timetracking.objects.for_user()
@@ -78,6 +99,29 @@ def ajaxResizeCalendar(request):
     TimeTracking.time_end   = time_stop
 
     TimeTracking.save()
+    return HttpResponse("OK")
+
+@login_required
+def ajaxAddCalendar(request):
+
+
+    n = Timetracking()
+    """
+    #time_start = "%s" % request.GET.get("time_start")
+    #time_stop = "%s" % request.GET.get("time_end")
+
+    orderen = Order.objects.get(id=1)
+    from datetime import date
+
+    n.hours_worked   = "1"
+    n.time_start     = "12:30"
+    n.time_end       = "14:00"
+    n.description    = "BESKRIVELSEN"
+    n.date           = date.today()
+    n.order          = orderen
+    """
+    n.hours_worked = 1
+    n.save()
 
 
     return HttpResponse("OK")
@@ -98,30 +142,14 @@ def form (request, id = False):
     
         form = TimetrackingForm(request.POST, instance=instance)       
         
-        import time
-        
         clockValid = True
-        mg = "Ugyldig klokkeformat, eks: 15:32"
-        
-        try:
-          start = time.strptime("2010 " + request.POST['time_start'], "%Y %H:%M")
-          end = time.strptime("2010 " + request.POST['time_end'], "%Y %H:%M") 
-          diff = time.mktime(end)-time.mktime(start)
-
-          if diff<1:
-              mg = "Sjekk klokkeslettene en gang til"
-              raise Exception() 
-          
-          diff = str(diff/3600)
-          
-        except:
-            messages.error(request, mg)
+        hoursWorked = calculateHoursWorked(request, request.POST['time_start'], request.POST['time_end']) == 0
+        if hoursWorked == 0:
             clockValid = False
             
         if form.is_valid() and clockValid:    
             o = form.save(commit=False)
-            o.owner = request.user
-            o.hours_worked = diff
+            o.hours_worked = hoursWorked
             o.save()
             messages.success(request, msg)        
 

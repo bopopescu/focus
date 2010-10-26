@@ -90,6 +90,20 @@ $(document).ready(function() {
 
                   $calendar.weekCalendar("removeUnsavedEvents");
                   $calendar.weekCalendar("updateEvent", calEvent);
+
+                   start = new Date(calEvent.start);
+                   end = new Date(calEvent.end);
+
+                   var data = {
+                                date:              start.getDate(),
+                                time_start:        start.getHours() + ":" + start.getMinutes(),
+                                time_end:          end.getHours() + ":" + end.getMinutes()
+
+                              };
+
+                   $.get("{% url app.timetracking.views.ajaxAddCalendar %}", data);
+
+
                   $dialogContent.dialog("close");
                },
                cancel : function() {

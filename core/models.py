@@ -40,10 +40,11 @@ class PersistentModel(models.Model):
 
     def save(self, **kwargs):
         if not self.id:
-            self.creator = get_current_user()
-            self.company = get_current_user().get_profile().company
+            #self.creator = get_current_user()
+            #self.company = get_current_user().get_profile().company
+            print "K"
 
-        self.editor = get_current_user()
+        #self.editor = get_current_user()
         self.date_edited = datetime.now()
 
         super(PersistentModel, self).save()

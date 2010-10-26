@@ -38,7 +38,6 @@ class Timetracking(PersistentModel):
         if re.match("\d:\d\d", self.time_start):
             self.time_start = "0"+self.time_start
 
-
         if re.match("\d\d:\d$", self.time_end):
             self.time_end = self.time_end + "0"
 

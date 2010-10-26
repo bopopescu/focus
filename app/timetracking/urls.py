@@ -14,6 +14,8 @@ urlpatterns = patterns('app.timetracking.views',
 
         url(r'^ajaxResizeCalendar/$', 'ajaxResizeCalendar'),
 
+        url(r'^ajaxAddCalendar/$', 'ajaxAddCalendar'),
+
 
 
 
