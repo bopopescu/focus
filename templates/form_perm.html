@@ -12,20 +12,20 @@
     }
     </script>
 
+
 <form enctype="multipart/form-data" action="" method="post">
 	
 			{{ form_perm.management_form }}
-		
-					
+            {{ PermGroupSet.management_form }}
+
 				<table class="tablesorter">
 					<thead> 
 						<tr> 
-							<th>Bruker</th>
-							<th>Medlemmer av</th>
-							<th>Kan se</th>
-							<th>Kan endre</th>
-							<th>Kan slette</th>
-							<th>Negativ rettighet</th>
+							<th width="200px">Bruker</th>
+							<th width="80px">Kan se</th>
+							<th width="80px">Kan endre</th>
+							<th width="80px">Kan slette</th>
+							<th width="150px">Negativ rettighet</th>
 							<th>Slett denne</th>
 						</tr> 
 					</thead>
@@ -40,8 +40,7 @@
             	
 		            	<tr> 
 								<td>{{ forms.user }}</td> 
-								<td>{{ forms.membership }}</td> 
-								<td>{{ forms.can_view }}</td> 
+								<td>{{ forms.can_view }}</td>
 								<td>{{ forms.can_change }}</td> 
 								<td>{{ forms.can_delete }}</td> 
 								<td>{{ forms.negative }}</td> 			
@@ -50,10 +49,46 @@
     	
     				{% endfor %}		
 					</tbody>
-				</table>	
+				</table>
+
+
+				<table class="tablesorter">
+					<thead>
+						<tr>
+							<th width="200px">Medlemmer av</th>
+							<th width="80px">Kan se</th>
+							<th width="80px">Kan endre</th>
+							<th width="80px">Kan slette</th>
+                            <th>Slett denne</th>
+
+						</tr>
+
+					</thead>
+
+                    <tbody>
+
+					{% for forms in PermGroupSet.forms %}
+
+		 				{# Include the hidden fields in the form #}
+			                {% for hidden in forms.hidden_fields %}
+			                	{{ hidden }}
+			                {% endfor %}
+
+		            	<tr>
+								<td>{{ forms.membership }}</td>
+								<td>{{ forms.can_view }}</td>
+								<td>{{ forms.can_change }}</td>
+								<td>{{ forms.can_delete }}</td>
+								<td onclick="giveWarning(this);">{{ forms.deleted }}</td>
+						</tr>
+
+    				{% endfor %}
+					</tbody>
+				</table>
+
 
   <div class="submit-row" style="overflow: auto;">
       <input type="submit" value="Lagre" class="default" name="_save" />
   </div>
   
-{% endblock %}	
+{% endblock %}

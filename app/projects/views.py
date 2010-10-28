@@ -5,7 +5,7 @@ from django.utils.html import escape
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout, standardError
+from core.views import form_perm, updateTimeout
 
 @login_required
 def overview(request):
@@ -59,11 +59,6 @@ def add(request):
 
 @require_perm('change', Project)
 def edit(request, id):
-
-    #Check if deleted, print error message
-    #if Project.objects.get(id=id).deleted:
-    #    return standardError(request, ("Prosjektet er slettet, gjennopprett om du vil endre.."))
-
     return form(request, id)
 
 @require_perm('delete', Project)
@@ -82,7 +77,7 @@ def permissions(request, id):
 def form (request, id = False):
 
     if id:
-        instance = get_object_or_error(request, Project, id = id, deleted=False)
+        instance = get_object_or_404(Project, id = id, deleted=False)
         msg = "Velykket endret prosjekt"
     else:
         instance = Project()

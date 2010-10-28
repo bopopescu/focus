@@ -4,35 +4,7 @@ from core.views import updateTimeout, form_perm
 from core.decorators import *
 from django.contrib.auth.decorators import login_required
 from app.files.models import File, Folder
-
-
-@login_required
-def overview(request):
-
-    folders = Folder.objects.for_user().filter(parent=None)
-    files = File.objects.for_user().filter(folder=None)
-
-    updateTimeout(request)
-
-    return render_with_request(request, 'files/list.html', {'title':'Filer',
-                                                            'files':files,
-                                                            'folders':folders,
-                                                            })
-
-
-def folder(request, folderID):
-
-    folder = Folder.objects.get(id=folderID)
-
-    folders = Folder.objects.get(parent=folder)
-
-    files = File.objects.get(folder=folder)
-
-    return render_with_request(request, 'files/list.html', {'title':'Mapper',
-                                                            'files':files,
-                                                            'folders':folders,
-                                                         })
-
+from app.files.files.views import overview
 
 @login_required
 def add(request, folderID = None):
@@ -56,6 +28,8 @@ def view(request, id):
                                                              'file':file,
                                                              'whoCanSeeThis':whoCanSeeThis})
 
+
+"""
 @login_required
 def permissions(request, id):
     type = Folder
@@ -68,6 +42,7 @@ def permissions(request, id):
 
     message = "Vellykket endret tilgang for mappe: %s" % type.objects.get(pk=id)
     return form_perm(request, type, id, url, message)
+"""
 
 
 @login_required
@@ -98,8 +73,7 @@ def form (request, id=False, folderID = None):
             o.save()
             form.save_m2m()
             messages.success(request, msg)
-            if not id:
-                return redirect(permissions, o.id)
+
             return redirect(overview)
 
     else:

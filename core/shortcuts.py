@@ -24,16 +24,3 @@ def standardError(request, msg=""):
         msg = "Det du leter etter er slettet eller så har du ikke tilgang!"
 
     return render_with_request(request, 'deletedOrNoPermission.html', {'msg':msg, })
-
-
-def get_object_or_error(request, klass, *args, **kwargs):
-
-    """
-    if get_k(klass, *args, **kwargs):
-        return HttpResponse("OK")
-    else:
-    """
-    standardError(request)
-
-    raise ExH(request)
-    #return Project.objects.get(id=4)

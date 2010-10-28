@@ -14,9 +14,15 @@
 
 <div id="inner">
 
-	{{user.first_name}} {{user.last_name}}
+	Navn: {{user.first_name}} {{user.last_name}}
 	<br>
-	<br><br>
+    Epost: {{ user.email }}
+    <br>
+    Firma: {{ user.get_profile.company }}
+
+
+
+    <br><br>
 	<table style="text-align:center">
 		
 		<tr>

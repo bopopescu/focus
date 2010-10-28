@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{%block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+{% block maincontent %}
+
+<div id="inner">
+
+  {% for log in logs %}
+
+    <b>{{log.message}}
+        <div id="datepublished">{{log.creator.first_name}}, {{log.date|date:"d.m.Y H:i"}}</div>
+    </b>
+
+    {{announcement.text}}
+
+  {% endfor %}
+
+
+</div>
+
+
+
+{% endblock %}

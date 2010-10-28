@@ -18,4 +18,4 @@ class PermissionForm(ModelForm):
         self.fields['user'].widget.attrs['class'] = "small"
         self.fields['membership'].widget.attrs['class'] = "small"
         
-PermFormSet = modelformset_factory(ObjectPermission, extra=12, form=PermissionForm)
+PermFormSet = modelformset_factory(ObjectPermission, extra=3, form=PermissionForm)

@@ -18,6 +18,31 @@ class Company(models.Model):
 
 
 """
+Class for logs, saves user in action and reference to object logged
+"""
+class Log(models.Model):
+    date         = models.DateTimeField()
+    creator      = models.ForeignKey(User, related_name="logs")
+    content_type = models.ForeignKey(ContentType, null=True)
+    object_id    = models.PositiveIntegerField(null=True)
+    message      = models.TextField()
+    company      = models.ForeignKey(Company, related_name="logs", null=True)
+
+    def __unicode__(self):
+        return "%s endret: %s: ' %s '" % (self.creator, self.content_type, self.message)
+
+    def save(self, *args, **kwargs):
+        self.date = datetime.now()
+        self.company = get_current_company()
+        print kwargs
+        if 'user' in kwargs:
+            self.creator = kwargs['user']
+        else:
+            self.creator = get_current_user()
+
+        super(Log, self).save()
+
+"""
 The "all mighty" model, all other models inherit from this one. 
 Contains all the useful fields like who created and edited the object, and when it was done.
 It also automatically saves the information about the user interaction with the object.
@@ -39,15 +64,22 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
+
         if not self.id:
-            #self.creator = get_current_user()
-            #self.company = get_current_user().get_profile().company
-            print "K"
+            self.creator = get_current_user()
+            self.company = get_current_user().get_profile().company
 
         #self.editor = get_current_user()
         self.date_edited = datetime.now()
-
         super(PersistentModel, self).save()
+
+        if 'nolog' not in kwargs:
+            #Save log entry , if not chosen not to do so
+            Log(message = "%s endret %s" % (get_current_user(), self),
+                object_id = self.id,
+                content_type = ContentType.objects.get_for_model(self.__class__)
+            ).save()
+
 
     def delete(self, **kwargs):
         self.deleted = True
@@ -167,12 +199,18 @@ def initial_data ():
     comp = Company(name="Focus AS")
     comp.save()
 
-    a, created = User.objects.get_or_create(username="superadmin", first_name="SuperAdmin", last_name="",
-                                            is_superuser=True, is_staff=True, is_active=True)
+    a, created = User.objects.get_or_create(username="superadmin",
+                                            first_name="SuperAdmin",
+                                            last_name="",
+                                            is_superuser=True,
+                                            is_staff=True,
+                                            is_active=True)
     a.set_password("superpassord")
     a.save()
 
-    u, created = User.objects.get_or_create(username="bjarte", first_name="Bjarte", last_name="Hatlenes",
+    u, created = User.objects.get_or_create(username="bjarte",
+                                            first_name="Bjarte",
+                                            last_name="Hatlenes",
                                             is_active=True)
     u.set_password("superpassord")
     u.save()

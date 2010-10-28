@@ -40,6 +40,10 @@ admin.site.register(Membership, ModelAdmin)
 #Roles
 admin.site.register(Role, ModelAdmin)
 
+
+#Log
+admin.site.register(Log, ModelAdmin)
+
 #Objectpermissions
 admin.site.register(ObjectPermission, ModelAdmin)
 

@@ -22,14 +22,30 @@ def form_perm(request, type, id, url, message, popup=False):
     error = False
 
     if request.method == 'POST':
-        formset = PermFormSet(request.POST)
+
+        formset = PermFormSet(request.POST, prefix="users")
         if formset.is_valid():
             instances = formset.save(commit=False)
             for o in instances:
                 o.content_type = content_type
                 o.object_id = id
 
-                if o.user is None or o.membership is None:
+                if o.user is not None:
+                #if not Permission.exists() or o.id is None:
+                    o.save()
+                    messages.success(request, message)
+
+                else:
+                    error = True
+
+        formset = PermFormSet(request.POST, prefix="memberships")
+        if formset.is_valid():
+            instances = formset.save(commit=False)
+            for o in instances:
+                o.content_type = content_type
+                o.object_id = id
+
+                if o.membership is not None:
                 #if not Permission.exists() or o.id is None:
                     o.save()
                     messages.success(request, message)
@@ -54,15 +70,17 @@ def form_perm(request, type, id, url, message, popup=False):
     else:
         if ObjectPermission.objects.filter(content_type=content_type,
                                            object_id=id).count() == 0 and object.creator == request.user:
+
             k = ObjectPermission(content_type=content_type, object_id=id, user=request.user, can_view=True,
                                  can_change=True, can_delete=True)
             k.save()
 
-        PermSet = PermFormSet(queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id))
+        PermSet           = PermFormSet(queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id, membership = None), prefix="users")
+        PermGroupSet      = PermFormSet(queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id, user = None), prefix="memberships")
 
         if popup:
             return render_with_request(request, "form_perm_simple.html",
-                                       {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet})
+                                       {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet, 'PermGroupSet': PermGroupSet})
 
         return render_with_request(request, "form_perm.html",
-                                   {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet})
+                                   {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet, 'PermGroupSet': PermGroupSet})

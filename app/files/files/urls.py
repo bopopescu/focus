@@ -8,7 +8,7 @@ urlpatterns = patterns('app.files.files.views',
         url(r'^view/(\d+)/?$', 'view'),
         url(r'^delete/(\d+)$', 'delete'),
         url(r'^folder/(\d+)$', 'folder'),
-        url(r'^permissions/(\d+)/?', 'permissions'),
+        #url(r'^permissions/(\d+)/?', 'permissions'),
 
         url(r'^moveFile/$', 'moveFile'),
         url(r'^moveFolder/$', 'moveFolder'),

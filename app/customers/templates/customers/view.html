@@ -14,8 +14,12 @@
 
     <div id="inner">
 
-        {{ customer.name }}
+        Navn: {{ customer.name }}
         <br>
+        Hjemmeside: <a href="{{ customer.website }}" target="_blank">{{ customer.website }}</a>
+        <br>
+        Adresse: {{ customer.address }}
+
 
         <br><br>
         <b>Tilhørende prosjekter og ordrer</b>

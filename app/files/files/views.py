@@ -8,10 +8,10 @@ from app.files.models import File, Folder
 
 @login_required
 def overview(request):
-
-    folders = Folder.objects.for_user().filter(parent=None)
-
-    files = File.objects.for_user().filter(folder=None)
+    print "OK"
+    folders = Folder.objects.filter(parent=None, creator=get_current_user())
+    print folders
+    files = File.objects.filter(folder=None, creator=get_current_user())
 
     updateTimeout(request)
 
@@ -20,14 +20,13 @@ def overview(request):
                                                             'folders':folders,
                                                             })
 
-
 def folder(request, folderID):
 
-    folder = Folder.objects.get(id=folderID)
+    folder = Folder.objects.get(id=folderID, creator=get_current_user())
 
-    folders = Folder.objects.filter(parent=folder)
+    folders = Folder.objects.filter(parent=folder, creator=get_current_user())
 
-    files = File.objects.filter(folder=folder)
+    files = File.objects.filter(folder=folder, creator=get_current_user())
 
     return render_with_request(request, 'files/list.html', {'title':'Filer',
                                                             'folder':folder,
@@ -84,7 +83,7 @@ def view(request, id):
     return render_with_request(request, 'files/view.html', {'title':'Ordre: %s' % file.name,
                                                              'file':file,
                                                              'whoCanSeeThis':whoCanSeeThis})
-
+"""
 @login_required
 def permissions(request, id):
     type = File
@@ -97,7 +96,7 @@ def permissions(request, id):
 
     message = "Vellykket endret tilgang for ordre: %s" % file
     return form_perm(request, type, id, url, message)
-
+"""
 
 @login_required
 def form (request, id=False, folderID = None):
@@ -121,16 +120,14 @@ def form (request, id=False, folderID = None):
         form = FileForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
-            o.owner = request.user
 
             if folder:
                 o.folder = folder
 
             o.save()
             form.save_m2m()
+
             messages.success(request, msg)
-            if not id:
-                return redirect(permissions, o.id)
 
             return redirect(overview)
 

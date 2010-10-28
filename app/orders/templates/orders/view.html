@@ -15,9 +15,14 @@
   {% if order.project %}
     Ordrer ligger under prosjektet: <a href="{% url app.projects.views.view order.project.id %}">{{order.project}}</a>
   {% endif %}
+
+  State: {{ order.get_state_display }}
+
+
+
   <br><br><br>
   <b>Beskrivelse</b><br>	
-	 {{description}}
+	 {{order.description}}
   <br><br><br>
   
   <b>Hvem som kan se denne ordren</b>
