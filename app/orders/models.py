@@ -17,6 +17,7 @@ class Order(PersistentModel):
 
     oid                     = models.IntegerField("Ordrenr")
     order_name              = models.CharField("Ordrenavn", max_length=80)
+    customer                = models.ForeignKey(Customer, related_name="orders", verbose_name="Kunde", null=True)
     project                 = models.ForeignKey(Project, related_name="orders", verbose_name="Prosjekt", blank=True, null=True)
     responsible             = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name="Ansvarlig")
 

@@ -1,14 +1,53 @@
+# -*- coding: utf-8 -*-
+
 from forms import *
 from core.shortcuts import *
 from core.views import updateTimeout, form_perm
 from core.decorators import *
 
+@login_required
+def overviewOffers(request):
+    orders = Order.objects.for_user().filter(state="T")
+    updateTimeout(request)
+    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
 @login_required
 def overview(request):
-    orders = Order.objects.for_user()
+    orders = Order.objects.for_user().filter(state="O")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+
+@login_required
+def overviewReadyForInvoice(request):
+    orders = Order.objects.for_user().filter(state="F")
+    updateTimeout(request)
+    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+
+@login_required
+def overviewArchive(request):
+    orders = Order.objects.for_user().filter(state="A")
+    updateTimeout(request)
+    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+
+@login_required
+def changeStatus(request, orderID):
+    order = Order.objects.get(id=orderID)
+    if order.state == "T":
+        order.state = "O"
+    elif order.state == "O":
+        order.state = "F"
+    elif order.state == "F":
+        order.state = "A"
+    else:
+        messages.error(request, "Du kan ikke endre state til denne ordren.")
+        return redirect(view, orderID)
+
+    order.save()
+    return redirect(view, orderID)
+
+@login_required
+def addOffer(request):
+    return form(request, offer=True)
 
 @login_required
 def add(request):
@@ -60,13 +99,32 @@ def addPop(request):
     return render_with_request(request, "simpleform.html", {'title':'Ordre', 'form': form})
 
 @login_required
-def form (request, id=False):
+def form (request, id=False, *args, **kwargs):
+
+    title = "Ordre"
+    if 'offer' in kwargs:
+        title = "Tilbud"
+
     if id:
         instance = get_object_or_404(Order, id=id, deleted=False)
         msg = "Velykket endret ordre"
+
+        #Sets title in template
+        if instance.state == "T":
+            title = "Tilbud"
+
     else:
         instance = Order()
         msg = "Velykket lagt til nytt ordre"
+
+
+    #checks if order is to invoice og archived, if so, no edit is allowed
+    if instance.state == "F":
+        messages.error(request, "Ordren er til fakturering og kan ikke endres.")
+        return redirect(overview)
+    if instance.state == "A":
+        messages.error(request, "Ordren er arkivert og kan ikke endres")
+        return redirect(overview)
 
 
     #Save and set to active, require valid form
@@ -74,6 +132,13 @@ def form (request, id=False):
         form = OrderForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
+
+            if not o.id:
+                if 'offer' in kwargs:
+                    o.state = "T"
+                else:
+                    o.state = "O"
+
             o.owner = request.user
             o.save()
             form.save_m2m()
@@ -85,4 +150,4 @@ def form (request, id=False):
     else:
         form = OrderForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Ordre', 'form': form})
+    return render_with_request(request, "form.html", {'title':title, 'form': form})
