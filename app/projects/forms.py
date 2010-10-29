@@ -17,5 +17,3 @@ class ProjectForm(ModelForm):
         super(ProjectForm,self).__init__(*args,**kwrds)
         self.fields['customer'].widget = SelectWithPop()
         self.fields['customer'].queryset=Customer.objects.for_company()
-
-
