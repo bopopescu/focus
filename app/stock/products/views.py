@@ -6,12 +6,13 @@ from core.shortcuts import *
 from core.decorators import *
 from core.views import form_perm, updateTimeout
 from app.stock.forms import ProductForm
+from app.stock.models import Product
 
 @login_required
 def overview(request):
     updateTimeout(request)
     projects = Project.objects.for_user()
-    return render_with_request(request, 'projects/list.html', {'title':'Prosjekter', 'projects':projects})
+    return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'projects':projects})
 
 @login_required
 def add(request):
@@ -33,7 +34,7 @@ def form (request, id = False):
         instance = get_object_or_404(Project, id = id, deleted=False)
         msg = "Velykket endret produkt"
     else:
-        instance = Project()
+        instance = Product()
         msg = "Velykket lagt til nytt produkt"
 
     #Save and set to active, require valid form

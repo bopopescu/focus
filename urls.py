@@ -40,7 +40,11 @@ urlpatterns = patterns('',
 
 
     #Stock
-    (r'^products/',                  include('app.stock.products.urls')),
+    (r'^stock/products/',             include('app.stock.products.urls')),
+    (r'^stock/productgroups/',        include('app.stock.productgroups.urls')),
+
+    #Suppliers
+    (r'^suppliers/',                include('app.suppliers.urls')),
 
 
     #Directlink for use of popup

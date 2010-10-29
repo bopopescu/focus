@@ -23,15 +23,16 @@ class ProductGroup(PersistentModel):
 
 class Product(PersistentModel):
     name = models.CharField(max_length=100)
-    countOfAvailableInStock = models.CharField("Lager", max_length=10)
+    countOfAvailableInStock = models.CharField("Lagerstatus", max_length=10)
 
-    group = models.ForeignKey(ProductGroup, related_name="products")
 
     size = models.CharField(max_length=100)
-    unitForSize = models.ForeignKey(UnitsForSizes)
+    unitForSize = models.ForeignKey(UnitsForSizes, verbose_name="Enhet")
 
-    price = models.CharField(max_length=100)
-    priceVal = models.ForeignKey(Valuta, related_name="products")
+    price = models.CharField("Pris", max_length=100)
+    priceVal = models.ForeignKey(Valuta, related_name="products", verbose_name="Valuta")
+
+    group = models.ForeignKey(ProductGroup, related_name="products")
 
     def __unicode__(self):
         return self.name

@@ -7,4 +7,10 @@ from models import *
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields= ('name','countOfAvailableInStock','group','size','unitForSize','price','priceVal',)
+        fields= ('name','group','countOfAvailableInStock','size','price','unitForSize','priceVal',)
+
+
+class ProductGroupForm(ModelForm):
+    class Meta:
+        model = Product
+        fields= ('name',)
