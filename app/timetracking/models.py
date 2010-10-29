@@ -12,7 +12,7 @@ class TypeOfTimeTracking(PersistentModel):
     
 class Timetracking(PersistentModel):
 
-    date = models.DateField(default=datetime.now())
+    date = models.DateField()
     order = models.ForeignKey(Order)
     typeOfWork = models.ForeignKey(TypeOfTimeTracking)
     time_start = models.CharField(max_length=5)

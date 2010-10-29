@@ -95,13 +95,16 @@ $(document).ready(function() {
                    end = new Date(calEvent.end);
 
                    var data = {
-                                date:              start.getDate(),
+                                date:              $calendar.weekCalendar("formatDate", calEvent.start),
                                 time_start:        start.getHours() + ":" + start.getMinutes(),
                                 time_end:          end.getHours() + ":" + end.getMinutes()
 
                               };
 
-                   $.get("{% url app.timetracking.views.ajaxAddCalendar %}", data);
+
+                   $.getJSON("{% url app.timetracking.views.ajaxEditCalendar %}", data, function(json){
+                       calEvent.id = json["id"];
+                    });
 
 
                   $dialogContent.dialog("close");
@@ -122,13 +125,13 @@ $(document).ready(function() {
           end = new Date(calEvent.end);
 
           var data = { timeTrackingID:    calEvent.id,
-                       date:              start.getDate(),
+                        date:              $calendar.weekCalendar("formatDate", calEvent.start),
                        time_start:        start.getHours() + ":" + start.getMinutes(),
                        time_end:          end.getHours() + ":" + end.getMinutes()
 
                      };
 
-          $.get("{% url app.timetracking.views.ajaxResizeCalendar %}", data);
+          $.get("{% url app.timetracking.views.ajaxEditCalendar %}", data);
 
 
       },
@@ -139,13 +142,13 @@ $(document).ready(function() {
 
 
           var data = { timeTrackingID:    calEvent.id,
-                       date:              start.getDate(),
+                        date:              $calendar.weekCalendar("formatDate", calEvent.start),
                        time_start:        start.getHours() + ":" + start.getMinutes(),
                        time_end:          end.getHours() + ":" + end.getMinutes()
 
                      };
 
-          $.get("{% url app.timetracking.views.ajaxResizeCalendar %}", data);
+          $.get("{% url app.timetracking.views.ajaxEditCalendar %}", data);
 
 
       },

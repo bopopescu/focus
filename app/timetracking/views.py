@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.utils.html import escape 
 from core.views import updateTimeout
 import time
+from datetime import date
 
 @login_required
 def overview(request):
@@ -71,7 +72,7 @@ def calculateHoursWorked(request, start, end):
         messages.error(request, mg)
 
     diff = str(diff/3600)
-
+    print diff
 
     return diff
 
@@ -85,29 +86,42 @@ def calendar(request):
 
 
 @login_required
-def ajaxResizeCalendar(request):
+def ajaxEditCalendar(request):
+
+    from django.utils import simplejson
 
     timeTrackingID          = request.GET.get("timeTrackingID")
 
-    TimeTracking            = Timetracking.objects.get(id=timeTrackingID)
+    if timeTrackingID:
+        t = Timetracking.objects.get(id=timeTrackingID)
+    else:
+        t = Timetracking()
+
+
+    o = Order.objects.get(id=1)
+    b = TypeOfTimeTracking.objects.get(id=1)
 
     time_start = "%s" % request.GET.get("time_start")
     time_stop = "%s" % request.GET.get("time_end")
 
-    TimeTracking.time_start = time_start
-    TimeTracking.time_end   = time_stop
+    datAe = request.GET.get("date")
+    tempDate = time.strptime(datAe,"%d.%m.%Y")
+    k = date(tempDate[0], tempDate[1], tempDate[2])
 
-    TimeTracking.save()
-    return HttpResponse("OK")
+    t.hours_worked = 1
+    t.typeOfWork=b
+    t.order = o
+    t.date = k
+    t.time_start = time_start
+    t.time_end   = time_stop
 
-@login_required
-def ajaxAddCalendar(request):
+    t.save()
 
-    o = Order.objects.get(id=1)
+    data = simplejson.dumps({'id':t.id})
 
-    Timetracking(hours_worked=1, order=o).save()
 
-    return HttpResponse("OK")
+    return HttpResponse(data)
+
 
 @login_required
 def form (request, id = False):
@@ -126,11 +140,11 @@ def form (request, id = False):
         form = TimetrackingForm(request.POST, instance=instance)       
         
         clockValid = True
-        hoursWorked = calculateHoursWorked(request, request.POST['time_start'], request.POST['time_end']) == 0
+        hoursWorked = calculateHoursWorked(request, request.POST['time_start'], request.POST['time_end'])
         if hoursWorked == 0:
             clockValid = False
-            
-        if form.is_valid() and clockValid:    
+
+        if form.is_valid() and clockValid:
             o = form.save(commit=False)
             o.hours_worked = hoursWorked
             o.save()

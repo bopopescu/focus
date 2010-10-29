@@ -7,8 +7,9 @@ from django.contrib.admin import widgets
 from core.widgets import *
 
 class TimetrackingForm(ModelForm):    
-    order = forms.ModelChoiceField(Order.objects.for_company(), widget=SelectWithPop()) 
-    typeOfWork = forms.ModelChoiceField(TypeOfTimeTracking.objects.for_company(), widget=SelectWithPop()) 
+    date        = forms.DateField(required=True,input_formats=["%d.%m.%Y"])
+    order       = forms.ModelChoiceField(Order.objects.for_company(), widget=SelectWithPop())
+    typeOfWork  = forms.ModelChoiceField(TypeOfTimeTracking.objects.for_company(), widget=SelectWithPop())
     
     class Meta:
         model = Timetracking
