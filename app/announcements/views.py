@@ -8,7 +8,7 @@ from core.views import *
 
 @login_required
 def overview(request):
-    announcements = Announcement.objects.all()    
+    announcements = Announcement.objects.for_company()
     return render_with_request(request, 'announcements/list.html', {'title':'Oppslag', 'announcements':announcements})
 
 @login_required
