@@ -103,7 +103,9 @@ def ajaxResizeCalendar(request):
 @login_required
 def ajaxAddCalendar(request):
 
-    Timetracking(hours_worked=1).save()
+    o = Order.objects.get(id=1)
+
+    Timetracking(hours_worked=1, order=o).save()
 
     return HttpResponse("OK")
 
