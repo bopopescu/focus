@@ -27,7 +27,9 @@ urlpatterns = patterns('',
 
     (r'^orders/',                   include('app.orders.urls')),
 
+
     (r'^timetracking/',             include('app.timetracking.urls')),
+
     (r'^typeOfWorks/addPop/?$',     'app.timetracking.views.addTypeOfWork'),
     
     (r'^announcements/',            include('app.announcements.urls')),
@@ -35,6 +37,10 @@ urlpatterns = patterns('',
     #settings for admin
     (r'^useradmin/',                include('app.admin.users.urls')),
     (r'^groupadmin/',               include('app.admin.memberships.urls')),
+
+
+    #Stock
+    (r'^products/',                  include('app.stock.products.urls')),
 
 
     #Directlink for use of popup

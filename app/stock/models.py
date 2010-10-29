@@ -23,7 +23,7 @@ class ProductGroup(PersistentModel):
 
 class Product(PersistentModel):
     name = models.CharField(max_length=100)
-    countOfAvailableInStock = models.CharField(max_length=10)
+    countOfAvailableInStock = models.CharField("Lager", max_length=10)
 
     group = models.ForeignKey(ProductGroup, related_name="products")
 
@@ -35,4 +35,3 @@ class Product(PersistentModel):
 
     def __unicode__(self):
         return self.name
-
