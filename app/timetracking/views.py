@@ -91,7 +91,6 @@ def ajaxResizeCalendar(request):
 
     TimeTracking            = Timetracking.objects.get(id=timeTrackingID)
 
-
     time_start = "%s" % request.GET.get("time_start")
     time_stop = "%s" % request.GET.get("time_end")
 
@@ -104,25 +103,7 @@ def ajaxResizeCalendar(request):
 @login_required
 def ajaxAddCalendar(request):
 
-
-    n = Timetracking()
-    """
-    #time_start = "%s" % request.GET.get("time_start")
-    #time_stop = "%s" % request.GET.get("time_end")
-
-    orderen = Order.objects.get(id=1)
-    from datetime import date
-
-    n.hours_worked   = "1"
-    n.time_start     = "12:30"
-    n.time_end       = "14:00"
-    n.description    = "BESKRIVELSEN"
-    n.date           = date.today()
-    n.order          = orderen
-    """
-    n.hours_worked = 1
-    n.save()
-
+    Timetracking(hours_worked=1).save()
 
     return HttpResponse("OK")
 

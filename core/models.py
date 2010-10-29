@@ -29,9 +29,12 @@ class Log(models.Model):
     company      = models.ForeignKey(Company, related_name="logs", null=True)
 
     def __unicode__(self):
-        return "%s endret: %s: ' %s '" % (self.creator, self.content_type, self.message)
+        s = "%s endret: %s: %s " % ((self.creator), self.content_type, self.message)
+        return s.decode("utf-8")
+
 
     def save(self, *args, **kwargs):
+
         self.date = datetime.now()
         self.company = get_current_company()
         print kwargs
@@ -41,6 +44,7 @@ class Log(models.Model):
             self.creator = get_current_user()
 
         super(Log, self).save()
+
 
 """
 The "all mighty" model, all other models inherit from this one. 

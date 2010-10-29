@@ -25,4 +25,4 @@ def overview(request):
 def logs(request):
 
     logs = Log.objects.filter(company=get_current_company())
-    return render_with_request(request, 'dashboard/listLog.html', {'logs': logs} )
+    return render_with_request(request, 'dashboard/listLog.html', {'title':'Siste 30 hendelser', 'logs': logs[1:30][::-1]} )

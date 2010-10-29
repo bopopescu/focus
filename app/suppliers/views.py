@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
@@ -14,25 +14,25 @@ def overview(request):
 
 @login_required
 def overview_deleted(request):
-    contacts = Supplier.objects.for_company(deleted=True)
-    return render_with_request(request, 'suppliers/list.html', {'title':'Slettede leverandører', 'contacts':contacts})
+    suppliers = Supplier.objects.for_company(deleted=True)
+    return render_with_request(request, 'suppliers/list.html', {'title':'Slettede leverandører', 'suppliers':suppliers})
 
 @login_required
 def overview_all(request):
-    contacts = Supplier.objects.for_company()
-    return render_with_request(request, 'suppliers/list.html', {'title':'Alle aktive leverandører', 'contacts':contacts})
+    suppliers = Supplier.objects.for_company()
+    return render_with_request(request, 'suppliers/list.html', {'title':'Alle aktive leverandører', 'suppliers':suppliers})
 
 @login_required
 def add(request):
     return form(request)
 
-@require_perm('change', Contact)
+@require_perm('change', Supplier)
 def edit(request, id):
     return form(request, id)
 
 @login_required
 def addPop(request):
-    instance = Contact()
+    instance = Supplier()
 
     if request.method == "POST":
         form = SupplierForm(request.POST, instance=instance)
@@ -49,9 +49,9 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title':'Kontakt', 'form': form })
 
-@require_perm('delete', Contact)
+@require_perm('delete', Supplier)
 def delete(request, id):
-    Contact.objects.get(id=id).delete()
+    Supplier.objects.get(id=id).delete()
     return redirect(overview)
 
 def permissions(request, id):

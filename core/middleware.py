@@ -12,15 +12,24 @@ This is useful.
 _thread_locals = threading.local()
 
 def get_current_user():
-    return getattr(_thread_locals, 'user', None)
+    try:
+        return getattr(_thread_locals, 'user', None)
+    except:
+        return None
 
 def get_current_company():
-    return get_current_user().get_profile().company
+    try:
+        return get_current_user().get_profile().company
+    except:
+        return None
 
-def get_company_users(): 
-    company = get_current_user().get_profile().company
-    users = User.objects.filter(userprofile__company = company)
-    return users
+def get_company_users():
+    try:
+        company = get_current_user().get_profile().company
+        users = User.objects.filter(userprofile__company = company)
+        return users
+    except:
+        return None
 
 class ThreadLocals(object):
     """Middleware that gets various objects from the
