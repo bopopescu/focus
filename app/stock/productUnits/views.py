@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import login_required
-from django.utils.html import escape
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
-from app.stock.forms import ProductGroupForm
-from app.stock.models import ProductGroup
+from core.views import  updateTimeout
+from app.stock.forms import UnitsForSizesForm
+from app.stock.models import UnitsForSizes
 
 @login_required
 def overview(request):
     updateTimeout(request)
-    productgroups = ProductGroup.objects.for_user()
-    return render_with_request(request, 'projects/list.html', {'title':'Produktgrupper', 'productgroups':productgroups})
+    units = UnitsForSizes.objects.for_user()
+    return render_with_request(request, 'stock/productUnits/list.html', {'title':'Enheter', 'units':units})
 
 @login_required
 def add(request):
@@ -30,10 +29,10 @@ def delete(request, id):
 
 @login_required
 def addPop(request):
-    instance = ProductGroup()
+    instance = UnitsForSizes()
 
     if request.method == "POST":
-        form = ProductGroupForm(request.POST, instance=instance)
+        form = UnitsForSizesForm(request.POST, instance=instance)
 
         if form.is_valid():
             o = form.save(commit=False)
@@ -43,25 +42,22 @@ def addPop(request):
             return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
                             ((o._get_pk_val()), (o)))
     else:
-        form = ProductGroupForm(instance=instance)
+        form = UnitsForSizesForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Produktgruppe', 'form': form })
-
+    return render_with_request(request, "simpleform.html", {'title':'Enhet', 'form': form })
 
 @login_required
-def form (request, id = False):
-
+def form (request, id=False):
     if id:
-        instance = get_object_or_404(ProductGroup, id = id, deleted=False)
-        msg = "Velykket endret produktgruppen"
+        instance = get_object_or_404(UnitsForSizes, id=id, deleted=False)
+        msg = "Velykket endret enhet"
     else:
-        instance = ProductGroup()
-        msg = "Velykket lagt til ny produktgruppe"
+        instance = UnitsForSizes()
+        msg = "Velykket lagt til ny enhet"
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-
-        form = ProductGroupForm(request.POST, instance=instance)
+        form = UnitsForSizesForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
             o.owner = request.user
@@ -71,6 +67,6 @@ def form (request, id = False):
             return redirect(overview)
 
     else:
-        form = ProductGroupForm(instance=instance)
+        form = UnitsForSizesForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Produktgruppe', 'form': form })
+    return render_with_request(request, "form.html", {'title':'Enhet', 'form': form})

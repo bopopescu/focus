@@ -17,6 +17,43 @@ class Company(models.Model):
         return self.name
 
 
+
+
+class Notification(models.Model):
+    recipient     = models.ForeignKey(User, related_name="notifications")
+    text          = models.TextField()
+    read          = models.BooleanField(default=False)
+    date          = models.DateTimeField()
+    content_type  = models.ForeignKey(ContentType, null=True)
+    object_id     = models.PositiveIntegerField(null=True)
+    company       = models.ForeignKey(Company, related_name="notifications", null=True)
+    creator       = models.ForeignKey(User, related_name = "createdNotifications", null=True)
+
+    #If true, add note to daily-mail updates
+    sendEmail = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.text
+
+    def getObject(self, *args, **kwargs):
+        o = ContentType.objects.get(model = self.content_type)
+        k = o.get_object_for_this_type(id=self.object_id)
+        return k
+
+    def save(self, *args, **kwargs):
+
+        self.date = datetime.now()
+        self.company = get_current_company()
+
+        if 'user' in kwargs:
+            self.creator = kwargs['user']
+        else:
+            self.creator = get_current_user()
+
+        super(Notification, self).save()
+
+
+
 """
 Class for logs, saves user in action and reference to object logged
 """
@@ -36,7 +73,6 @@ class Log(models.Model):
     def getObject(self, *args, **kwargs):
         o = ContentType.objects.get(model = self.content_type)
         k = o.get_object_for_this_type(id=self.object_id)
-        print k
         return k
 
     def save(self, *args, **kwargs):
@@ -83,13 +119,22 @@ class PersistentModel(models.Model):
         self.date_edited = datetime.now()
         super(PersistentModel, self).save()
 
-        if 'nolog' not in kwargs:
+        if 'noLog' not in kwargs:
             #Save log entry , if not chosen not to do so
             Log(message = "%s endret %s" % (get_current_user(), self),
                 object_id = self.id,
                 content_type = ContentType.objects.get_for_model(self.__class__)
             ).save()
 
+        if 'noNotification' not in kwargs:
+            for us in self.whoHasPermissionTo('view'):
+                if us == get_current_user():
+                    continue
+                Notification(text = "Dette er en test",
+                             recipient=us,
+                             object_id = self.id,
+                             content_type = ContentType.objects.get_for_model(self.__class__)
+                             ).save()
 
     def delete(self, **kwargs):
         self.deleted = True
@@ -180,9 +225,11 @@ class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
 
+    def notifications(self):
+        return self.user.notifications.filter(read=False)
+
     def __unicode__(self):
         return "Profile for: %s" % self.user
-
 
 """
 Keeping users and their userprofile in sync, when creating a user, a userprofile is createad as well.

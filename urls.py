@@ -40,8 +40,11 @@ urlpatterns = patterns('',
 
 
     #Stock
-    (r'^stock/products/',             include('app.stock.products.urls')),
-    (r'^stock/productgroups/',        include('app.stock.productgroups.urls')),
+    (r'^stock/products/',           include('app.stock.products.urls')),
+    (r'^stock/productgroups/',      include('app.stock.productgroups.urls')),
+    (r'^stock/currencies/',         include('app.stock.currencies.urls')),
+    (r'^stock/productunits/',       include('app.stock.productUnits.urls')),
+
 
     #Suppliers
     (r'^suppliers/',                include('app.suppliers.urls')),
@@ -51,6 +54,12 @@ urlpatterns = patterns('',
         #For adding users
         (r'participants/addPop/$',      'app.admin.users.views.addPop'),
         (r'users/addPop/$',             'app.admin.users.views.addPop'),
+
+        #for adding currency
+        (r'unitForSizes/addPop/$',     'app.stock.productUnits.views.addPop'),
+        (r'priceVals/addPop/$',        'app.stock.currencies.views.addPop'),
+        (r'productGroups/addPop/$',     'app.stock.productgroups.views.addPop'),
+
  
     #media
     (r'^media/(?P<path>.*)', 'django.views.static.serve', {'document_root': os.path.join(settings.BASE_PATH, 'media')}),

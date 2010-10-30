@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block submenu %}
+    <a href="add"><span>Oprett ny kunde</span></a>
+{% endblock %}
+
+
+{% block maincontent %}
+
+    <table class="tablesorter hover">
+        <thead>
+        <tr>
+            <th width="100px">Dato</th>
+            <th width="100px">Mottaker</th>
+            <th width="100px">Kategori</th>
+            <th>Objekt</th>
+            <th>Melding</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for notification in notifications %}
+            <tr>
+                <td>{{ notification.date|date:"d.m.y H:i" }}</td>
+                <td>{{ notification.recipient }}</td>
+                <td>{{ notification.content_type }}</td>
+                <td>{{ notification.getObject }}</td>
+                <td>{{ notification.text }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

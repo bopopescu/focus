@@ -36,9 +36,6 @@ class Order(PersistentModel):
     def get_url(self):
         return urlresolvers.reverse('app.orders.views.edit', args=("%s"%self.id,))
 
-
-
-
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")
     text  = models.TextField("Oppgave")

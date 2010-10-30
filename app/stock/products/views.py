@@ -11,8 +11,8 @@ from app.stock.models import Product
 @login_required
 def overview(request):
     updateTimeout(request)
-    projects = Project.objects.for_user()
-    return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'projects':projects})
+    products = Product.objects.for_user()
+    return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'products':products})
 
 @login_required
 def add(request):
@@ -31,7 +31,7 @@ def delete(request, id):
 def form (request, id = False):
 
     if id:
-        instance = get_object_or_404(Project, id = id, deleted=False)
+        instance = get_object_or_404(Product, id = id, deleted=False)
         msg = "Velykket endret produkt"
     else:
         instance = Product()
