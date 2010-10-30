@@ -34,7 +34,7 @@
             Godkjenn tilbudet
         {% endif %}
 
-        {% if order.state == "O" %}
+        {% if order.state == "O" and order.haveCompletedAllTasks %}
             Gjør ordren klar for fakturering
         {% endif %}
 
@@ -63,7 +63,50 @@
       </tr>
     {% endfor %}
   </table>
-  
+   <br><br>
+
+    <b>Oppgaver</b>
+
+    <br> <br>
+
+    <table>
+      <tr>
+        <th>Beskrivelse</th>
+      </tr>
+      {% for task in order.tasks.all %}
+        <tr>
+          {% if task.done %}
+              <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img src="/media/images/icons/checked.png" style="vertical-align:middle">{{task}}</a> </td>
+          {% else %}
+              <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{task}}</a> </td>
+          {% endif %}
+
+        </tr>
+
+      {% endfor %}
+    </table>
+    <form enctype="multipart/form-data" action="{% url app.orders.views.addTask order.id %}" method="post">
+        <fieldset class="module aligned ">
+
+            {% for field in taskForm %}
+                <div class="form-row">
+                     <div>
+
+                            {{ field.label_tag }}
+
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <span style="color:red">{{error}}</span>
+                            {% endfor %}
+
+
+                        </div>
+               </div>
+            {% endfor %}
+
+          </fieldset>
+        <input type="submit" value="Lagre" class="default" name="_save" />
+    </form>
   
 </div>	
    

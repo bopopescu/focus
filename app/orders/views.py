@@ -34,10 +34,42 @@ def overviewArchive(request):
 def view(request, id):
     order = Order.objects.for_company().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
+
+    taskForm = TaskForm()
+
     return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,
                                                              'order':order,
+                                                             'taskForm':taskForm,
                                                              'whoCanSeeThis':whoCanSeeThis})
 
+
+@login_required
+def addTask(request, orderID):
+    if request.method == "POST":
+            order = Order.objects.for_user().get(id=orderID)
+            form = TaskForm(request.POST, instance=Task())
+            if form.is_valid():
+                o = form.save(commit=False)
+                o.order = order
+                o.save()
+                form.save_m2m()
+            else:
+                messages.error(request, "Ugyldig format")
+    else:
+        messages.error(request, "Du må skrive noe i feltet")
+
+    return redirect(view, orderID)
+
+@login_required
+def changeStatusTask(request, taskID):
+    try:
+        task = Task.objects.for_company().get(id=taskID)
+        task.done = not task.done
+        task.save()
+    except:
+        return redirect(overview)
+
+    return redirect(view, task.order.id)
 
 @login_required
 def changeStatus(request, orderID):

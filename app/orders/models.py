@@ -36,9 +36,21 @@ class Order(PersistentModel):
     def get_url(self):
         return urlresolvers.reverse('app.orders.views.edit', args=("%s"%self.id,))
 
+    def haveCompletedAllTasks(self):
+
+        tasks = self.tasks
+
+        for t in tasks.all():
+            if not t.done:
+                return False
+
+        return True
+
+
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")
-    text  = models.TextField("Oppgave")
+    text  = models.TextField("Ny oppgave")
+    done  = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.text
@@ -50,3 +62,4 @@ class OrderModelAdmin(VersionAdmin):
 
 from reversion.admin import VersionAdmin
 admin.site.register(Order, OrderModelAdmin)
+admin.site.register(Task, OrderModelAdmin)

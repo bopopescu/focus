@@ -28,3 +28,9 @@ class OrderFormSimple(ModelForm):
         model = Order
         exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company','contacts',
                    'participant')
+
+class TaskForm(ModelForm):
+
+    class Meta:
+        model = Task
+        fields = ('text',)
