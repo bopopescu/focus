@@ -57,7 +57,7 @@ def changeStatus(request, orderID):
 
     order.save()
 
-    return redirect(view, order.id)
+    return redirect(overview)
 
 @login_required
 def addOffer(request):
