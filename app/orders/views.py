@@ -29,6 +29,16 @@ def overviewArchive(request):
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
+
+@require_perm('view', Order)
+def view(request, id):
+    order = Order.objects.for_company().get(id=id)
+    whoCanSeeThis = order.whoHasPermissionTo('view')
+    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,
+                                                             'order':order,
+                                                             'whoCanSeeThis':whoCanSeeThis})
+
+
 @login_required
 def changeStatus(request, orderID):
 
@@ -42,7 +52,7 @@ def changeStatus(request, orderID):
     elif order.state == "F":
         order.state = "A"
     else:
-        messages.error(request, "Du kan ikke endre state til denne ordren.")
+        messages.error(request, "Ordren er arkivert og kan ikke forandres.")
         return redirect(overview)
 
     order.save()
@@ -65,14 +75,6 @@ def edit(request, id):
 def delete(request, id):
     return form(request, id)
 
-
-@require_perm('view', Order)
-def view(request, id):
-    order = Order.objects.for_company().get(id=id)
-    whoCanSeeThis = order.whoHasPermissionTo('view')
-    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,
-                                                             'order':order,
-                                                             'whoCanSeeThis':whoCanSeeThis})
 
 @login_required
 def permissions(request, id):
