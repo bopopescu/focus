@@ -642,7 +642,8 @@ div.notification{
 	position: relative;
 	margin-left:35%;
 	margin-top:6px;
-	min-width: 30%
+	min-width: 300px;
+    height:20px;
 }
 
 

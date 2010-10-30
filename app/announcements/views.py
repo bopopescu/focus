@@ -43,7 +43,7 @@ def form (request, id = False):
     #Save and set to active, require valid form
     if request.method == 'POST':
         
-        form = AnnouncementForm(request.POST, instance=instance)       
+        form = AnnouncementForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():    
             o = form.save(commit=False)
             o.owner = request.user

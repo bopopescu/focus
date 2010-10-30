@@ -1,30 +1,34 @@
 {% extends "base.html" %}
-
-{%block extrahead %}
-
-{% endblock %}
-
 {% block submenu %}
-
+    <a href="add"><span>Oprett ny kunde</span></a>
 {% endblock %}
+
 
 {% block maincontent %}
 
-<div id="inner">
+    <table class="tablesorter hover">
+        <thead>
+        <tr>
+            <th width="100px">Dato</th>
+            <th width="100px">Bruker</th>
+            <th width="100px">Kategori</th>
+            <th>Objekt</th>
+            <th>Melding</th>
+        </tr>
+        </thead>
 
-  {% for log in logs %}
-
-    <b>{{log.message}}
-        <div id="datepublished">{{log.creator.first_name}}, {{log.date|date:"d.m.Y H:i"}}</div>
-    </b>
-
-    {{announcement.text}}
-
-  {% endfor %}
-
-
-</div>
-
+        <tbody>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.date|date:"d.m.y H:i" }}</td>
+                <td>{{ log.creator }}</td>
+                <td>{{ log.content_type }}</td>
+                <td>{{ log.getObject }}</td>
+                <td>{{ log.message }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 
 {% endblock %}

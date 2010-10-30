@@ -65,10 +65,10 @@ def form (request, id = False):
 
     if id:
         instance = get_object_or_404(Supplier, id = id, deleted=False)
-        msg = "Velykket endret leverandør"
+        msg = "Vellykket endret leverandør"
     else:
         instance = Supplier()
-        msg = "Velykket lagt til ny leverandlr"
+        msg = "Vellykket lagt til ny leverandør"
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -86,6 +86,6 @@ def form (request, id = False):
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "form.html", {  'title':'Kontakt',
+    return render_with_request(request, "form.html", {  'title':'Leverandør',
                                                         'form': form,
                                                     })

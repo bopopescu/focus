@@ -31,7 +31,9 @@ def overviewArchive(request):
 
 @login_required
 def changeStatus(request, orderID):
+
     order = Order.objects.get(id=orderID)
+
     if order.state == "T":
         order.state = "O"
     elif order.state == "O":

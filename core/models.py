@@ -33,11 +33,17 @@ class Log(models.Model):
         return s.decode("utf-8")
 
 
+    def getObject(self, *args, **kwargs):
+        o = ContentType.objects.get(model = self.content_type)
+        k = o.get_object_for_this_type(id=self.object_id)
+        print k
+        return k
+
     def save(self, *args, **kwargs):
 
         self.date = datetime.now()
         self.company = get_current_company()
-        print kwargs
+
         if 'user' in kwargs:
             self.creator = kwargs['user']
         else:

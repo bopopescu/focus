@@ -6,6 +6,8 @@ from models import *
 from django.contrib.auth.decorators import login_required, permission_required
 
 class OrderForm(ModelForm):
+    delivery_date           = forms.DateField(required=False,input_formats=["%d.%m.%Y"])
+    delivery_date_deadline  = forms.DateField(required=False,input_formats=["%d.%m.%Y"])
 
     def __init__(self,*args,**kwrds):
         super(OrderForm,self).__init__(*args,**kwrds)
