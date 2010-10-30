@@ -32,6 +32,7 @@ def overviewArchive(request):
 @login_required
 def changeStatus(request, orderID):
 
+
     order = Order.objects.get(id=orderID)
 
     if order.state == "T":
@@ -42,9 +43,10 @@ def changeStatus(request, orderID):
         order.state = "A"
     else:
         messages.error(request, "Du kan ikke endre state til denne ordren.")
-        return redirect(view, orderID)
+        return redirect(overview)
 
     order.save()
+
     return redirect(view, orderID)
 
 @login_required
