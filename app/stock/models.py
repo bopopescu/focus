@@ -33,26 +33,17 @@ class Currency(PersistentModel):
 class Product(PersistentModel):
 
     pid = models.IntegerField("Varenr", null=True)
-
     name = models.CharField(max_length=100)
-
     description = models.TextField(null=True)
-
     price = models.CharField("Pris", max_length=100, null=True)
-
     price_out = models.CharField("Pris ut", max_length=100, null=True)
-
     max_discount = models.CharField("Maks prosentavslag", max_length=5, null=True)
-
     countOfAvailableInStock = models.CharField("Lagerstatus", max_length=10)
-
     supplier = models.ForeignKey(Supplier, related_name="products", null=True)
-
     size = models.CharField(max_length=100)
     unitForSize = models.ForeignKey(UnitsForSizes, verbose_name="Enhet")
-
     priceVal = models.ForeignKey(Currency, related_name="products", verbose_name="Valuta")
-
+    normalDeliveryTime = models.CharField("Normal leveringstid", max_length=10, null=True)
     productGroup = models.ForeignKey(ProductGroup, related_name="products", null=True)
 
     def __unicode__(self):

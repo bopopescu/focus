@@ -11,9 +11,10 @@ from app.customers.models import *
 class ProjectForm(ModelForm):    
     class Meta:
         model = Project
-        fields = ('project_name','customer','description')
+        fields = ('project_name','customer','description','deliveryAddress','responsible','deliveryDate','deliveryDateDeadline')
         
     def __init__(self,*args,**kwrds):
         super(ProjectForm,self).__init__(*args,**kwrds)
         self.fields['customer'].widget = SelectWithPop()
         self.fields['customer'].queryset=Customer.objects.for_company()
+        self.fields['responsible'].queryset = get_company_users()
