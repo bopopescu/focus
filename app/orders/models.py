@@ -19,7 +19,7 @@ class Order(PersistentModel):
     order_name              = models.CharField("Navn", max_length=80)
     customer                = models.ForeignKey(Customer, related_name="orders", verbose_name="Kunde", blank=True, null=True)
     project                 = models.ForeignKey(Project, related_name="orders", verbose_name="Prosjekt", blank=True, null=True)
-    deliveryAddress          = models.CharField(max_length=150)
+    deliveryAddress          = models.CharField(max_length=150, null=True)
     responsible             = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name="Ansvarlig")
     delivery_date           = models.DateField(verbose_name="Leveringsdato", null=True, blank=True)
     delivery_date_deadline  = models.DateField(verbose_name="Leveringsfrist", null=True, blank=True)
