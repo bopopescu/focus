@@ -340,6 +340,27 @@ $(document).ready(function() {
 
   <div id='calendar'></div>
   <div id="event_edit_container">
+
+      {% for field in form %}
+
+
+
+        <div class="form-row">
+			 <div>
+
+					{{ field.label_tag }}
+
+					{{ field }}
+            		{% for error in field.errors %}
+						<span style="color:red">{{error}}</span>
+             		{% endfor %}
+
+
+                </div>
+       </div>
+    {% endfor %}
+
+
     <form>
       <input type="hidden" />
 

@@ -82,7 +82,9 @@ def calculateHoursWorked(request, start, end):
 def calendar(request):
     timetrackings = Timetracking.objects.for_user()
 
-    return render_with_request(request, "timetracking/calendar.html", {'title':'Timeregistrering','timetrackings':timetrackings })
+    return render_with_request(request, "timetracking/calendar.html", {'title':'Timeregistrering',
+                                                                       'timetrackings':timetrackings,
+                                                                       'form':form,})
 
 
 @login_required
