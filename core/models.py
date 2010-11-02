@@ -120,7 +120,6 @@ class PersistentModel(models.Model):
         super(PersistentModel, self).save()
 
         if 'noLog' not in kwargs:
-            #Save log entry , if not chosen not to do so
             Log(message = "%s endret %s" % (get_current_user(), self),
                 object_id = self.id,
                 content_type = ContentType.objects.get_for_model(self.__class__)
