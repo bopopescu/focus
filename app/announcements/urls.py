@@ -8,8 +8,14 @@ urlpatterns = patterns('app.announcements.views',
     # Example:
     # (r'^iceonweb/', include('iceonweb.foo.urls')),
         url(r'^$', 'overview'), 
-        url(r'^add/$', 'add'), 
-        url(r'^edit/(\d+)/?$', 'edit'), 
+
+        url(r'^deleted/$', 'overview_deleted'),
+
+        url(r'^add/$', 'add'),
+        url(r'^edit/(\d+)/?$', 'edit'),
+        url(r'^recover/(\d+)/?$', 'recover'),
+        url(r'^delete/(\d+)/?$', 'delete'),
+
         url(r'^permissions/(\d+)/?$', 'permissions'),
         url(r'^delete/(\d+)$', 'delete'), 
                 

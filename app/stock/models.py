@@ -1,6 +1,8 @@
 from django.db import models
 from core.models import PersistentModel
 from app.suppliers.models import Supplier
+import settings
+from django.core import urlresolvers
 
 class UnitsForSizes(PersistentModel):
     name = models.CharField(max_length=100)
@@ -17,21 +19,24 @@ class ProductCategory(PersistentModel):
 
 class ProductGroup(PersistentModel):
     name = models.CharField("Navn", max_length=100)
-    category = models.ForeignKey(ProductCategory, verbose_name = "Kategori", related_name="productgroups", null=True)
+    category = models.ForeignKey(ProductCategory, verbose_name="Kategori", related_name="productgroups", null=True)
 
     def __unicode__(self):
         return self.name
 
+    def getViewUrl(self):
+        return urlresolvers.reverse('app.stock.productgroups.views.edit', args=("%s" % self.id,))
+
+
 class Currency(PersistentModel):
     name = models.CharField("Navn", max_length=100)
     sign = models.CharField("Tegn ($, kr) osv", max_length=10)
-    value= models.CharField("Verdi", max_length=100)
+    value = models.CharField("Verdi", max_length=100)
 
     def __unicode__(self):
         return self.name
 
 class Product(PersistentModel):
-
     pid = models.IntegerField("Varenr", null=True)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
@@ -48,3 +53,15 @@ class Product(PersistentModel):
 
     def __unicode__(self):
         return self.name
+
+    def getViewUrl(self):
+        return urlresolvers.reverse('app.stock.products.views.view', args=("%s" % self.id,))
+
+    def getEditUrl(self):
+        return urlresolvers.reverse('app.stock.products.views.edit', args=("%s" % self.id,))
+
+    def getDeleteUrl(self):
+        return urlresolvers.reverse('app.stock.products.views.delete', args=("%s" % self.id,))
+
+    def getRecoverUrl(self):
+        return urlresolvers.reverse('app.stock.products.views.recover', args=("%s" % self.id,))

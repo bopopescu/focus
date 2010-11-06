@@ -12,6 +12,11 @@ def overview(request):
     return render_with_request(request, 'announcements/list.html', {'title':'Oppslag', 'announcements':announcements})
 
 @login_required
+def overview_deleted(request):
+    announcements = Announcement.objects.for_company(deleted=True)
+    return render_with_request(request, 'announcements/list.html', {'title':'Oppslag', 'announcements':announcements})
+
+@login_required
 def add(request):
     return form(request)
 
@@ -21,7 +26,13 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
-    return form(request, id)
+    Announcement.objects.for_company().get(id=id).delete()
+    return redirect(overview)
+
+@login_required
+def recover(request, id):
+    Announcement.objects.for_company(deleted=True).get(id=id).recover()
+    return redirect(overview)
 
 @login_required
 def permissions(request, id):

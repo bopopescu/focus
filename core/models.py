@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from managers import PersistentManager
@@ -64,10 +65,11 @@ class Log(models.Model):
     object_id    = models.PositiveIntegerField(null=True)
     message      = models.TextField()
     company      = models.ForeignKey(Company, related_name="logs", null=True)
+    action       = models.CharField(max_length=10,null=True)
 
     def __unicode__(self):
-        s = "%s endret: %s: %s " % ((self.creator), self.content_type, self.message)
-        return s.decode("utf-8")
+        s = "%s, %s, %s:" % (self.date, (self.creator), self.content_type)
+        return s
 
 
     def getObject(self, *args, **kwargs):
@@ -78,12 +80,16 @@ class Log(models.Model):
     def save(self, *args, **kwargs):
 
         self.date = datetime.now()
-        self.company = get_current_company()
 
         if 'user' in kwargs:
             self.creator = kwargs['user']
         else:
             self.creator = get_current_user()
+
+        print self.creator
+        print self.creator.get_profile().company
+
+        self.company = self.creator.get_profile().company
 
         super(Log, self).save()
 
@@ -110,8 +116,9 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
-
+        action = "EDIT"
         if not self.id:
+            action = "ADD"
             self.creator = get_current_user()
             self.company = get_current_user().get_profile().company
 
@@ -122,7 +129,8 @@ class PersistentModel(models.Model):
         if 'noLog' not in kwargs:
             Log(message = "%s endret %s" % (get_current_user(), self),
                 object_id = self.id,
-                content_type = ContentType.objects.get_for_model(self.__class__)
+                content_type = ContentType.objects.get_for_model(self.__class__),
+                action = action,
             ).save()
 
         if 'noNotification' not in kwargs:
@@ -139,6 +147,9 @@ class PersistentModel(models.Model):
         self.deleted = True
         super(PersistentModel, self).save()
 
+    def recover(self, *args, **kwargs):
+        self.deleted = False
+        super(PersistentModel, self).save()
 
     """
     whoHasPermissionTo

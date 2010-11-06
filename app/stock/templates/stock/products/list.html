@@ -1,29 +1,38 @@
 {% extends "base.html" %}
 
-		{% block submenu %}
-			<a href="add"><span>Oprett nytt produkt</span></a>
-		{% endblock %}
+{% block submenu %}
+    <a href="add"><span>Oprett nytt produkt</span></a>
+{% endblock %}
 
-		{% block maincontent %}
-				<table class="tablesorter">
-					<thead>
-						<tr>
-							<th>Produkt</th>
-							<th>#</th>
-						</tr>
-					</thead>
-					<tbody>
+{% block maincontent %}
+    <table class="tablesorter">
+        <thead>
+        <tr>
+            <th>Produkt</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
 
-						{% for p in products %}
-							<tr>
-								<td><a href="{% url app.stock.products.views.edit p.id %}">{{p}}</a></td>
-								<td>
-									<a href="{% url app.stock.products.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
-									<a href="{% url app.stock.products.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
+        {% for p in products %}
+            <tr>
+                <td><a href="{{ p.getViewUrl }}">{{ p }}</a></td>
+                <td>
+                    <a href="{{ p.getEditUrl }}" class="edit admintool"><img
+                            src="/media/images/icons/user_edit.png" alt=""></a>
 
-				</table>
+                    {% if p.deleted %}
+                        <a href="{{ p.getRecoverUrl }}" class="edit admintool"><img
+                                src="/media/images/icons/cog_go.png" alt=""></a>
+                    {% else %}
+                        <a href="{{ p.getDeleteUrl }}" class="edit admintool"><img
+                                src="/media/images/icons/user_delete.png" alt=""></a>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
 {% endblock %}

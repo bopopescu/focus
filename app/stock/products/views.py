@@ -11,21 +11,37 @@ from app.stock.models import Product
 @login_required
 def overview(request):
     updateTimeout(request)
-    products = Product.objects.for_user()
+    products = Product.objects.for_company()
+
+    return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'products':products})
+
+@login_required
+def overview_deleted(request):
+    updateTimeout(request)
+    products = Product.objects.for_company(deleted=True)
     return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'products':products})
 
 @login_required
 def add(request):
     return form(request)
 
-@require_perm('change', Project)
+@require_perm('change', Product)
 def edit(request, id):
     return form(request, id)
 
-@require_perm('delete', Project)
+@require_perm('delete', Product)
 def delete(request, id):
-    Project.objects.get(id=id).delete()
+    Product.objects.get(id=id).delete()
     return redirect(overview)
+
+@require_perm('delete', Product)
+def recover(request, id):
+    Product.objects.get(id=id).recover()
+    return redirect(overview)
+
+def view(request, id):
+    product = Product.objects.get(id=id)
+    return render_with_request(request, 'stock/products/view.html', {'title':'Produkt', 'product':product})
 
 @login_required
 def form (request, id = False):

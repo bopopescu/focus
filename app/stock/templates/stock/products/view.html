@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+{% block maincontent %}
+
+    <div id="inner">
+
+        <table>
+
+            <tr>
+                <th>Detaljer</th>
+                <th></th>
+            </tr>
+
+            <tr>
+                <td>Varenr</td>
+                <td>{{ product.pid }}</td>
+            </tr>
+
+            <tr>
+                <td>Pris inn</td>
+                <td>{{ product.price }}</td>
+            </tr>
+
+            <tr>
+                <td>Utpris</td>
+                <td>{{ product.price_out }}</td>
+            </tr>
+            <tr>
+                <td>Maks avslag</td>
+                <td>{{ product.max_discount }}</td>
+            </tr>
+            <tr>
+                <td>Inne på lager</td>
+                <td>{{ product.countOfAvailableInStock }}</td>
+            </tr>
+            <tr>
+                <td>Leverandør</td>
+                <td>{{ product.supplier }}</td>
+            </tr>
+            <tr>
+                <td>Størrelse</td>
+                <td>{{ product.size }}</td>
+            </tr>
+
+            <tr>
+                <td>Enhet</td>
+                <td>{{ product.unitForSize }}</td>
+            </tr>
+
+            <tr>
+                <td>Valuta</td>
+                <td>{{ product.priceVal }}</td>
+            </tr>
+
+            <tr>
+                <td>Normal leveringstid</td>
+                <td>{{ product.normalDeliveryTime }}</td>
+            </tr>
+
+            <tr>
+                <td>Produktgruppe</td>
+                <td><a href="{{ product.productGroup.getViewUrl }}">{{ product.productGroup }}</a></td>
+            </tr>
+
+
+        </table>
+
+
+        <br><br>
+        <b>Brukt i følgende ordrer</b>
+        <br><br>
+        <table>
+
+            <tr>
+                <th>Ordrer</th>
+            </tr>
+
+            {% for project in product.orders %}
+                <tr>
+                    <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+{% endblock %}

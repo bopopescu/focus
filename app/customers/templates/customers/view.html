@@ -14,11 +14,38 @@
 
     <div id="inner">
 
-        Navn: {{ customer.name }}
-        <br>
-        Hjemmeside: <a href="{{ customer.website }}" target="_blank">{{ customer.website }}</a>
-        <br>
-        Adresse: {{ customer.address }}
+        <table>
+
+            <tr>
+                <th>Prosjekt</th>
+                <th>Ordrer</th>
+            </tr>
+
+            <tr>
+                <td>Navn</td>
+                <td>{{ customer.full_name }}</td>
+            </tr>
+
+            <tr>
+                <td>Epostadresse</td>
+                <td>{{ customer.email }}</td>
+            </tr>
+
+            <tr>
+                <td>Hjemmeside</td>
+                <td><a href="{{ customer.website }}" target="_blank">{{ customer.website }}</td>
+            </tr>
+            <tr>
+                <td>Adresse</td>
+                <td> {{ customer.address }}, {{ customer.zip }} {{ customer.city }}</td>
+            </tr>
+            <tr>
+                <td>Altearntiv adresse</td>
+                <td>{{ customer.alternative_address }}</td>
+            </tr>
+
+
+        </table>
 
 
         <br><br>

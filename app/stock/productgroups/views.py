@@ -12,19 +12,19 @@ from app.stock.models import ProductGroup
 def overview(request):
     updateTimeout(request)
     productgroups = ProductGroup.objects.for_user()
-    return render_with_request(request, 'projects/list.html', {'title':'Produktgrupper', 'productgroups':productgroups})
+    return render_with_request(request, 'productgroups/list.html', {'title':'Produktgrupper', 'productgroups':productgroups})
 
 @login_required
 def add(request):
     return form(request)
 
-@require_perm('change', Project)
+@require_perm('change', ProductGroup)
 def edit(request, id):
     return form(request, id)
 
-@require_perm('delete', Project)
+@require_perm('delete', ProductGroup)
 def delete(request, id):
-    Project.objects.get(id=id).delete()
+    ProductGroup.objects.get(id=id).delete()
     return redirect(overview)
 
 

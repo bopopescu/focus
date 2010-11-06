@@ -12,7 +12,6 @@ def updateTimeout(request):
     return
 
 
-
 @login_required
 def form_perm(request, type, id, url, message, popup=False):
     object = type.objects.get(pk=id)
