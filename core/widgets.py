@@ -28,3 +28,10 @@ class MultipleSelectWithPop(forms.SelectMultiple):
             
             popupplus = render_to_string("popupplus.html", {'field': name, 'field_id': name_id})
             return html+popupplus
+
+
+class DatePickerField(forms.DateInput):
+      def render(self, name, *args, **kwargs):
+            html = super(DatePickerField, self).render(name, *args, **kwargs)
+            datepicker = render_to_string("datepicker.html", {'field': name})
+            return html+datepicker
