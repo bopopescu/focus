@@ -29,6 +29,12 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
+def editProfile(request):
+
+
+
+
+
 def sendGeneratedPassword(request, userID):
 
     user = get_object_or_404(User, id = userID, userprofile__company = request.user.get_profile().company)
@@ -55,6 +61,9 @@ def sendGeneratedPassword(request, userID):
 
     send_mail('Nytt passord', 'Nytt passord er: %s' % ret, 'FocusTime',
         ["%s"%user.email], fail_silently=True)
+
+    user.set_password("%s"%ret)
+    user.save()
 
     messages.success(request, "Velykket sendt nytt passord til epost")
 
