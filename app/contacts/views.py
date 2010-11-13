@@ -34,6 +34,16 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
+
+@login_required
+def view(request, id):
+
+    contact = get_object_or_404(Contact, id=id)
+
+    return render_with_request(request, 'contacts/view.html', {'title':'Kontakt', 'contact':contact})
+
+
+
 @login_required
 def addPop(request):
     instance = Contact()

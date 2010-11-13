@@ -118,16 +118,8 @@
 
 
         <li class="{% active request "^/files/" %}{% active request "^/folders/" %}">
-            <a href=""><img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">Filer</a>
-            <ul>
-                <li><a href="{% url app.files.files.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
-                    til ny fil</a></li>
-                <li><a href="{% url app.files.folders.views.add %}"><img src="/media/images/icons/folder_add.png"
-                                                                         alt="">Legg til ny mappe</a></li>
-                <li><a href="{% url app.files.files.views.overview %}"><img width="12px" height="12px"
-                                                                            src="/media/images/icons/fileIcon.png"
-                                                                            alt="">Oversikt</a></li>
-            </ul>
+            <a href="{% url app.files.files.views.overview %}"><img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">Dine filer</a>
+
         </li>
 
 

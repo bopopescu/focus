@@ -16,9 +16,12 @@ class Contact(PersistentModel):
     def __unicode__(self):
         return "%s" % unicode(self.full_name)
     
-    def get_url(self):
+    def getViewUrl(self):
+        return urlresolvers.reverse('app.contacts.views.view', args=("%s"%self.id,))
+
+    def getEditUrl(self):
         return urlresolvers.reverse('app.contacts.views.edit', args=("%s"%self.id,))
-    
+
     
 from reversion.admin import VersionAdmin
 class ContactModelAdmin(VersionAdmin):

@@ -20,10 +20,13 @@
 								<td>{{p.id}}</td> 
 								<td><a href="{% url app.orders.views.view p.id %}">{{p.order_name}}</a></td> 
 								<td>
+							        {% if p.state == "O" or p.state == "T" %}
 									<a href="{% url app.orders.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
 									<a href="{% url app.orders.views.permissions p.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
 									<a href="{% url app.orders.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
+                                    {% endif %}
 								</td>
+
 							</tr>
 						{% endfor %}		
 					</tbody>

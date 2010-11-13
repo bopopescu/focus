@@ -275,11 +275,21 @@ def initial_data ():
     a.set_password("superpassord")
     a.save()
 
-    u, created = User.objects.get_or_create(username="bjarte",
-                                            first_name="Bjarte",
-                                            last_name="Hatlenes",
+    u, created = User.objects.get_or_create(username="test",
+                                            first_name="Test",
+                                            last_name="User",
                                             is_active=True)
-    u.set_password("superpassord")
+    u.set_password("test")
+    u.save()
+    u.get_profile().company = comp
+    u.get_profile().save()
+
+
+    u, created = User.objects.get_or_create(username="test2",
+                                            first_name="Test2",
+                                            last_name="User2",
+                                            is_active=True)
+    u.set_password("test2")
     u.save()
     u.get_profile().company = comp
     u.get_profile().save()

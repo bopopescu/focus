@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+
+
+{% block maincontent %}
+
+    <div id="inner">
+
+        <table>
+
+            <tr>
+                <th>Kontakt</th>
+                <th>Detaljer</th>
+            </tr>
+
+            <tr>
+                <td>Navn</td>
+                <td>{{ contact.full_name }}</td>
+            </tr>
+
+            <tr>
+                <td>Epostadresse</td>
+                <td>{{ contact.email }}</td>
+            </tr>
+
+            <tr>
+                <td>Adresse</td>
+                <td> {{ contact.address }}</td>
+            </tr>
+
+
+        </table>
+
+    </div>
+
+{% endblock %}

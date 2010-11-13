@@ -1,136 +1,141 @@
 {% extends "base.html" %}
 
+{% block maincontent %}
+
+    <style>
+        #draggable {
+            width: 100px;
+            height: 100px;
+            padding: 0.5em;
+            float: left;
+            margin: 10px 10px 10px 0;
+        }
+
+        #droppable {
+            background-color:blue;
+
+        }
+
+        .dragging {
+            background-color:red;
+        }
+
+        .button {
+            background-color: #efefef;
+            border: 1px solid #dfdfdf;
+            width: 100px;
+            float: left;
+            margin-left: 20px;
+            text-align: center;
+            padding-top: 3px;
+
+        }
+
+        .button a {
+            text-decoration: None;
+        }
+
+        .item {
+            margin: 10px;
+            padding: 5px;
+            border: 1px solid #9bafd5;
+            background-color: #e3e8ee;
+        }
+
+    </style>
 
 
-		{% block maincontent %}
+    <script>
+        $(function() {
+            $(".draggable").draggable({ revert: "invalid"});
 
-            <script src="/media/js/jquery-ui.js"></script>
+            $(".droppable").droppable({
 
-              <style>
+                accept: ".draggable",
+                activeClass: 'dragging',
+                
+                drop: function(event, ui) {
 
-              .itemHover { background-color:#d6ffc8; border: 1px solid #e6e6e6; greedy: true; }
-              .itemActive { background-color:#f0f0f0; border: 1px solid #e6e6e6; }
+                    kind = (ui.draggable).attr("kind");
 
-              </style>
+                    if (kind == "file") {
+                        var data = { fileID:     ui.draggable.attr("id"),
+                            folderID:   this.id
+                        };
 
+                        $.get("{% url app.files.files.views.moveFile %}", data);
 
-            <link rel="stylesheet" href="../demos.css">
+                        (ui.draggable).fadeOut();
+                    }
+                    else if (kind == "folder") {
 
-            <style>
-            #draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; }
-            #droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; }
-            </style>
+                        var data = { folderID:     ui.draggable.attr("id"),
+                            parentID:     this.id
+                        };
 
+                        $.get("{% url app.files.files.views.moveFolder %}", data);
 
-            <script>
-                $(function() {
-                    $( ".draggable" ).draggable({ revert: "invalid"});
+                        (ui.draggable).fadeOut();
 
-                    $( ".droppable" ).droppable({
-
-
-			            drop: function( event, ui ) {
-
-                           kind = (ui.draggable).attr("kind");
-
-                           if(kind == "file") {
-                               var data = { fileID:     ui.draggable.attr("id"),
-                                            folderID:   this.id
-                                          };
-
-                                $.get("{% url app.files.files.views.moveFile %}", data);
-
-                               (ui.draggable).fadeOut();
-                           }
-                           else if(kind == "folder") {
-
-                               var data = { folderID:     ui.draggable.attr("id"),
-                                            parentID:     this.id
-                                          };
-
-                               $.get("{% url app.files.files.views.moveFolder %}", data);
-
-                               (ui.draggable).fadeOut();
-
-                           }
-
-                        }
-		            });
-
-                });
-                </script>
-
-                <style>
-
-
-                .button {
-                    background-color:#efefef;
-                    border:1px solid #dfdfdf;
-                    width:100px;
-                    float:left;
-                    margin-left:20px;
-                    text-align:center;
-                    padding-top:3px;
+                    }
 
                 }
+            });
 
-                .button a {
-                    text-decoration:None;
-                }
+        });
+    </script>
 
-                </style>
+    <div style="padding:10px; width:500px;">
 
-                <div style="padding:10px; width:500px;">
+        <div class="button">
+            <a href="{% url app.files.files.views.add folder.id %}">
+                <img src="/media/images/icons/add.png">Ny fil</a>
+        </div>
 
-                    <div class="button">
-                        <a href="{% url app.files.files.views.add folder.id %}">
-                        <img src="/media/images/icons/add.png">Ny fil</a>
-                    </div>
+        <div class="button">
+            <a href="{% url app.files.folders.views.add folder.id %}">
+                <img src="/media/images/icons/folder_add.png">Ny mappe</a>
+        </div>
 
-                    <div class="button">
-                        <a href="{% url app.files.folders.views.add folder.id %}">
-                        <img src="/media/images/icons/folder_add.png">Ny mappe</a>
-                    </div>
-
-                </div>
+    </div>
 
 
-                <br><br>
+    <br><br>
 
-                    {% if folder %}
+    {% if folder %}
 
-                        {% if folder.parent %}
-                            <div class="item droppable" id="{{ folder.parent.id }}" kind="folder">
-                                        <img width="16px" height="16" src="/media/images/icons/arrow_up.png" alt="">
-                                        <a href="{% url app.files.files.views.folder folder.parent.id %}">Parent folder</a>
-                            </div>
-                        {% endif %}
+        {% if folder.parent %}
+            <div class="item droppable" id="{{ folder.parent.id }}" kind="folder">
+                <img width="16px" height="16" src="/media/images/icons/arrow_up.png" alt="">
+                <a href="{% url app.files.files.views.folder folder.parent.id %}">Parent folder</a>
+            </div>
+        {% endif %}
 
-                        {% if folder.parent == None %}
-                                <div class="item droppable" id="root" kind="folder">
-                                            <img width="16px" height="16" src="/media/images/icons/arrow_up.png" alt="">
-                                            <a href="{% url app.files.files.views.overview %}">Parent folder</a>
-                                </div>
-                        {% endif %}
-                    {% endif %}
+        {% if folder.parent == None %}
+            <div class="item droppable" id="root" kind="folder">
+                <img width="16px" height="16" src="/media/images/icons/arrow_up.png" alt="">
+                <a href="{% url app.files.files.views.overview %}">Parent folder</a>
+            </div>
+        {% endif %}
+    {% endif %}
 
 
-                        {% for p in folders %}
-                               <div class="item draggable droppable" id="{{ p.id }}" kind="folder">
-							        <img width="16px" height="16" src="/media/images/icons/folder.png" alt="">
-                                    <a href="{% url app.files.files.views.folder p.id %}">{{p.name}}</a>
-							   </div>
-						{% endfor %}
+    {% for p in folders %}
+        <div class="item draggable droppable" id="{{ p.id }}" kind="folder">
+            <img width="16px" height="16" src="/media/images/icons/folder.png" alt="">
+            <a href="{% url app.files.files.views.folder p.id %}">{{ p.name }}</a>
+        </div>
+    {% endfor %}
 
-						{% for p in files %}
+    {% for p in files %}
 
-                            <div class="item draggable" id="{{ p.id }}" kind="file">
-							    <img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">
-                                <a href="{% url app.files.files.views.view p.id %}">{{p.name}}</a>
-                            </div>
+        <div class="item draggable" id="{{ p.id }}" kind="file">
+            <img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">
+            <a href="{% url app.files.files.views.view p.id %}">{{ p.name }}</a>
+        </div>
 
-						{% endfor %}
-					</tbody>
-				</table>
+    {% endfor %}
+    </tbody>
+    </table>
 
 {% endblock %}

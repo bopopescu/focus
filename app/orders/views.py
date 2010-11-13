@@ -46,15 +46,15 @@ def view(request, id):
 @login_required
 def addTask(request, orderID):
     if request.method == "POST":
-            order = Order.objects.for_user().get(id=orderID)
-            form = TaskForm(request.POST, instance=Task())
-            if form.is_valid():
-                o = form.save(commit=False)
-                o.order = order
-                o.save()
-                form.save_m2m()
-            else:
-                messages.error(request, "Ugyldig format")
+        order = Order.objects.for_user().get(id=orderID)
+        form = TaskForm(request.POST, instance=Task())
+        if form.is_valid():
+            o = form.save(commit=False)
+            o.order = order
+            o.save()
+            form.save_m2m()
+        else:
+            messages.error(request, "Ugyldig format")
     else:
         messages.error(request, "Du må skrive noe i feltet")
 
@@ -73,8 +73,6 @@ def changeStatusTask(request, taskID):
 
 @login_required
 def changeStatus(request, orderID):
-
-
     order = Order.objects.get(id=orderID)
 
     if order.state == "T":
@@ -138,7 +136,6 @@ def addPop(request):
 
 @login_required
 def form (request, id=False, *args, **kwargs):
-
     title = "Ordre"
     if 'offer' in kwargs:
         title = "Tilbud"

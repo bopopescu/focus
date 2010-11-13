@@ -33,6 +33,7 @@ def notifications(request):
 
     #Get all notifactions
     notifications = Notification.objects.filter(recipient=get_current_user(), read=False)
+    oldNotifications = Notification.objects.filter(recipient=get_current_user(), read=True)
 
     newNotifications = []
 
@@ -42,5 +43,7 @@ def notifications(request):
     #Set to read, so they wont bother the user anymore.
     Notification.objects.filter(recipient=get_current_user()).update(read=True)
 
+
     return render_with_request(request, 'dashboard/notifications.html', {'title':'Siste 30 hendelser',
-                                                                         'notifications': newNotifications} )
+                                                                         'notifications': newNotifications,
+                                                                         'oldNotifications': oldNotifications} )

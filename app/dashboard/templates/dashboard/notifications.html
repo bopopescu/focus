@@ -27,6 +27,17 @@
                 <td>{{ notification.text }}</td>
             </tr>
         {% endfor %}
+
+        {% for notification in oldNotifications %}
+            <tr style="color:grey;">
+                <td>{{ notification.date|date:"d.m.y H:i" }}</td>
+                <td>{{ notification.recipient }}</td>
+                <td>{{ notification.content_type }}</td>
+                <td><a href="{{ notification.getObject.getViewUrl }}">{{ notification.getObject }}</a></td>
+                <td>{{ notification.text }}</td>
+            </tr>
+        {% endfor %}
+
         </tbody>
     </table>
 

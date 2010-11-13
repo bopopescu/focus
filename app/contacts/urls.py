@@ -15,7 +15,8 @@ urlpatterns = patterns('app.contacts.views',
         url(r'^add/$', 'add'), 
         url(r'^addPop/$', 'addPop'), 
         url(r'^edit/(\d+)$', 'edit'), 
-        url(r'^permissions/(\d+)$', 'permissions'), 
+        url(r'^view/(\d+)$', 'view'),
+        url(r'^permissions/(\d+)$', 'permissions'),
         url(r'^delete/(\d+)$', 'delete'), 
                 
      # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 

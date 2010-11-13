@@ -14,7 +14,9 @@
         </thead>
         <tbody>
 
+
         {% for p in products %}
+
             <tr>
                 <td><a href="{{ p.getViewUrl }}">{{ p }}</a></td>
                 <td>
@@ -31,7 +33,10 @@
 
                 </td>
             </tr>
+
         {% endfor %}
+
+
         </tbody>
 
     </table>

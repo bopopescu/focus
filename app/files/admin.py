@@ -1,6 +1,7 @@
 from django.contrib import admin
 from models import *
 
+
 """
 For auto-version of objects
 """
