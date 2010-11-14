@@ -29,6 +29,12 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
+def editProfile(request):
+
+
+
+
+
 def sendGeneratedPassword(request, userID):
 
     user = get_object_or_404(User, id = userID, userprofile__company = request.user.get_profile().company)
@@ -40,6 +46,7 @@ def sendGeneratedPassword(request, userID):
     consonants = [a for a in string.ascii_lowercase if a not in vowels]
     ret = ''
     slen = 8
+
     for i in range(slen):
         if i%2 ==0:
             randid = random.randint(0,20) #number of consonants
@@ -55,7 +62,12 @@ def sendGeneratedPassword(request, userID):
     send_mail('Nytt passord', 'Nytt passord er: %s' % ret, 'FocusTime',
         ["%s"%user.email], fail_silently=True)
 
-    return user
+    user.set_password("%s"%ret)
+    user.save()
+
+    messages.success(request, "Velykket sendt nytt passord til epost")
+
+    return redirect(overview)
 
 def get_permissions(user):
     Permissions = ObjectPermission.objects.filter(
@@ -77,8 +89,10 @@ def addPop(request):
     instance = User()
     
     if request.method == "POST": 
+
         form = UserForm(request.POST, instance=instance)
-        if form.is_valid():        
+
+        if form.is_valid():
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
@@ -95,7 +109,6 @@ def addPop(request):
 @login_required
 def view(request, id):
     user = User.objects.get(id=id)
-
     Permissions = get_permissions(user)
     
     return render_with_request(request, 'admin/users/view.html', {'title':'Bruker',
@@ -116,11 +129,12 @@ def form (request, id = False):
     else:
         instance = User()
         msg = "Velykket lagt til ny bruker"
-        
+
     #Save and set to active, require valid form
     if request.method == 'POST':
         
-        form = UserForm(request.POST, instance=instance)       
+        form = UserForm(request.POST, instance=instance)
+
         if form.is_valid():    
             o = form.save(commit=False)
 
@@ -139,6 +153,6 @@ def form (request, id = False):
     else:
         form = UserForm(instance=instance)
 
-    print sendGeneratedPassword(request, 10)
+    #print sendGeneratedPassword(request, 10)
 
     return render_with_request(request, "form.html", {'title':'Bruker', 'form': form })

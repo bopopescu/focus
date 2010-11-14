@@ -26,7 +26,8 @@
 				<td>
 				<a href="{% url app.admin.users.views.edit u.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
 				<a href="{% url app.admin.users.views.delete u.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
-				</td>
+                <a href="{% url app.admin.users.views.sendGeneratedPassword u.id %}" class="edit admintool"><img src="/media/images/icons/passkey.png" alt=""></a>
+                </td>
 			</tr>
 		{% endfor %}	
 		</tbody>			
