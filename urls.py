@@ -27,6 +27,8 @@ urlpatterns = patterns('',
 
     (r'^orders/',                   include('app.orders.urls')),
 
+    (r'^search/',                   include('app.search.urls')),
+
 
     (r'^timetracking/',             include('app.timetracking.urls')),
 

@@ -19,9 +19,11 @@ class Project(PersistentModel):
     def __unicode__(self):
         return self.project_name
 
-    def get_url(self):
+    def getViewUrl(self):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 
+    def searchIndexes(self):
+        return ['project_name']
 
 class ProjectFolder(PersistentModel):
     project_id = models.ForeignKey(Project, related_name="folders")

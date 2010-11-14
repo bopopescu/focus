@@ -25,9 +25,13 @@
     <img id="logo" src="/media/images/logo.png" alt="">
 
     <h1>FocusTime - {{ user.get_profile.company }}</h1>
+
+
+
     <p>
         <strong>
             {% if user.is_authenticated %}
+
 
                 {% if user.get_profile.notifications.count %}
                     <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
@@ -35,6 +39,9 @@
                 {% endif %}
                 Logget inn som <a
                     href="{% url app.admin.users.views.view user.id %}">{{ user.first_name }} {{ user.last_name }}</a>
+
+
+
             {% endif %}
 
         </strong>
@@ -118,7 +125,9 @@
 
 
         <li class="{% active request "^/files/" %}{% active request "^/folders/" %}">
-            <a href="{% url app.files.files.views.overview %}"><img width="16px" height="16" src="/media/images/icons/fileIcon.png" alt="">Dine filer</a>
+            <a href="{% url app.files.files.views.overview %}"><img width="16px" height="16"
+                                                                    src="/media/images/icons/fileIcon.png" alt="">Dine
+                filer</a>
 
         </li>
 
@@ -169,8 +178,9 @@
                                                                                alt="">Ny produktgruppe</a></li>
 
                 <li><a href="{% url app.stock.products.views.overview_deleted %}"><img width="16px" height="16px"
-                                                                               src="/media/images/icons/products.png"
-                                                                               alt="">Slettede produkter</a></li>
+                                                                                       src="/media/images/icons/products.png"
+                                                                                       alt="">Slettede produkter</a>
+                </li>
 
             </ul>
         </li>
@@ -235,8 +245,19 @@
 <!-- Subheader -->
 <div id="subheader" class="clearfix">
     <h2>{{ title }}</h2>
+
+    <div class=""style="margin-left:700px; padding-top:8px;">
+        <form action="{% url app.search.views.search %}" method="GET">
+            <input class = "" type="text" name="s" style="width:200px;">
+            <input type="submit" value="Søk">
+        </form>
+
+    </div>
+
     {% block submenu %}
     {% endblock %}
+
+
 </div>
 
 <!-- /End Subheader -->

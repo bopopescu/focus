@@ -22,7 +22,6 @@ class Contact(PersistentModel):
     def getEditUrl(self):
         return urlresolvers.reverse('app.contacts.views.edit', args=("%s"%self.id,))
 
-    
 from reversion.admin import VersionAdmin
 class ContactModelAdmin(VersionAdmin):
     """Admin settings go here."""

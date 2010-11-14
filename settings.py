@@ -141,6 +141,7 @@ INSTALLED_APPS = (
 'app.dashboard',
 'app.stock',
 'app.suppliers',
+'app.search',
 
 #Other
 'south',
