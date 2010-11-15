@@ -29,12 +29,11 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
+@login_required
 def editProfile(request):
+    pass
 
-
-
-
-
+@login_required
 def sendGeneratedPassword(request, userID):
 
     user = get_object_or_404(User, id = userID, userprofile__company = request.user.get_profile().company)

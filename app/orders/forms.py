@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
-from django import forms
 from core.widgets import *
 from models import *
-
-from django.contrib.auth.decorators import login_required, permission_required
 
 class OrderForm(ModelForm):
     delivery_date = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
@@ -26,12 +23,11 @@ class OrderForm(ModelForm):
         model = Order
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'state', 'oid')
 
-
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
-                   'participant')
+                   'participant',)
 
 class TaskForm(ModelForm):
     class Meta:

@@ -4,6 +4,7 @@ from forms import *
 from core.shortcuts import *
 from core.views import updateTimeout, form_perm
 from core.decorators import *
+from django.contrib.auth.decorators import login_required, login_required
 
 @login_required
 def overviewOffers(request):

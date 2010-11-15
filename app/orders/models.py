@@ -5,7 +5,6 @@ from app.projects.models import *
 from app.contacts.models import *
 from django.core import urlresolvers
 
-
 STATE_CHOICES = (
 ('T', 'Tilbud'),
 ('O', 'Ordre'),
@@ -29,16 +28,16 @@ class Order(PersistentModel):
     def __unicode__(self):
         return self.order_name
 
-    def get_url(self):
-        return urlresolvers.reverse('app.orders.views.edit', args=("%s" % self.id,))
+    def getViewUrl(self):
+        return urlresolvers.reverse('app.orders.views.view', args=("%s" % self.id,))
 
     def haveCompletedAllTasks(self):
-        tasks = self.tasks
+        tasks = self.tasks        
 
         for t in tasks.all():
             if not t.done:
                 return False
-
+            
         return True
 
 class Task(PersistentModel):
