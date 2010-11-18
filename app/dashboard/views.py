@@ -29,12 +29,18 @@ def notifications(request):
 
     #Get all notifactions
     notifications = Notification.objects.filter(recipient=get_current_user(), read=False)
-    oldNotifications = Notification.objects.filter(recipient=get_current_user(), read=True)
+    oldNotificationsS = Notification.objects.filter(recipient=get_current_user(), read=True)
 
     newNotifications = []
+    oldNotifications = []
+
+
 
     for i in notifications:
         newNotifications.append(i)
+
+    for i in oldNotificationsS:
+        oldNotifications.append(i)
 
     #Set to read, so they wont bother the user anymore.
     Notification.objects.filter(recipient=get_current_user()).update(read=True)

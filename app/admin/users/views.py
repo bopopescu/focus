@@ -93,9 +93,15 @@ def addPop(request):
 
         if form.is_valid():
             o = form.save(commit=False)
-            o.owner = request.user
             o.save()
-            
+
+            form.save_m2m()
+
+            if not o.get_profile().company:
+                o.get_profile().company = request.user.get_profile().company
+                o.get_profile().save()
+                sendGeneratedPassword(request, o.id)
+
             return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
                             ((o._get_pk_val()), (o)))
             
@@ -143,6 +149,7 @@ def form (request, id = False):
             if not o.get_profile().company:
                 o.get_profile().company = request.user.get_profile().company
                 o.get_profile().save()
+                sendGeneratedPassword(request, o.id)
 
             messages.success(request, msg)
 

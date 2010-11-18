@@ -104,6 +104,7 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
+    messages.error(request, "Det er ikke mulig å slette ordrer.")
     return form(request, id)
 
 
