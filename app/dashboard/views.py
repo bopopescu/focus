@@ -22,8 +22,8 @@ def overview(request):
 
 def logs(request):
     logs = Log.objects.filter(company=get_current_company())
-    return render_with_request(request, 'dashboard/listLog.html', {'title': 'Siste 30 hendelser',
-                                                                   'logs': logs[::-1][0:30]})
+    return render_with_request(request, 'dashboard/listLog.html', {'title': 'Siste hendelser',
+                                                                   'logs': logs[::-1][0:150]})
 
 def notifications(request):
 
@@ -45,7 +45,7 @@ def notifications(request):
     #Set to read, so they wont bother the user anymore.
     Notification.objects.filter(recipient=get_current_user()).update(read=True)
 
-    return render_with_request(request, 'dashboard/notifications.html', {'title':'Siste hendelser',
+    return render_with_request(request, 'dashboard/notifications.html', {'title':'Oppdateringer',
                                                                          'notifications': newNotifications,
                                                                          'oldNotifications': oldNotifications[::-1][
                                                                                              0:150]})
