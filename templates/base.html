@@ -1,283 +1,487 @@
-{% load i18n %}
-
-<!DOCTYPE html>
-<html>
-<meta charset="utf-8"/>
-<title>{% block title %}{% trans "FocusTime" %}{% endblock %}</title>
-<link rel="stylesheet" href="/media/css/styles.css"/>
-<link rel="stylesheet" href="/media/css/misc.css"/>
-
-<!-- Load Jquery -->
-<script src="/media/js/jquery.js"></script>
-<script src="/media/js/custom.jquery.js"></script>
-<script type='text/javascript' src='/media/calendar/libs/jquery-ui-1.8.min.js'></script>
-
-<!-- /End Jquery -->
-
-{% block extrahead %}{% endblock %}{{ form_media }}
-
-<body class="blue">
-
-<!-- Header -->
-{% include "messages.html" %}
-
-<div id="header">
-    <img id="logo" src="/media/images/logo.png" alt="">
-
-    <h1>FocusTime - {{ user.get_profile.company }}</h1>
-
-
-
-    <p>
-        <strong>
-            {% if user.is_authenticated %}
-
-
-                {% if user.get_profile.notifications.count %}
-                    <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
-                        oppdateringer siden sist</a> |
-                {% endif %}
-                Logget inn som <a
-                    href="{% url app.admin.users.views.view user.id %}">{{ user.first_name }} {{ user.last_name }}</a>
-
-
-
-            {% endif %}
-
-        </strong>
-
-        <a href="/accounts/logout">Logg ut</a>
-    </p>
-</div>
-<!-- /End Header -->
-
-<!-- Main Area Container -->
-<div id="container">
-
-{% load menu_tags %}
-
-<div id="sidebar">
-
-    <a class="menu" href=""></a>
-
-    <ul id="menu">
-        <li><a href="start">Start</a></li>
-        <li><a href="innstillinger">Innstillinger</a></li>
-    </ul>
-
-    <ul class="navigation" id="start">
-
-        <li class="{% active request "^/dashboard/" %}">
-            <a href="{% url app.dashboard.views.overview %}"><img src="/media/images/icons/note.png" alt="">Oppslagstavle</a>
-            <ul>
-                <li><a href="{% url app.dashboard.views.overview %}"><img src="/media/images/icons/note.png" alt="">Oppslagstavle</a>
-                </li>
-                <li><a href="{% url app.dashboard.views.logs %}"><img src="/media/images/icons/book.png" alt="">Logoversikt</a>
-                </li>
-                <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
-            </ul>
-
-        </li>
-
-        <li class="{% active request "^/customers/" %}">
-            <a href=""><img src="/media/images/icons/user.png" alt="">Kunder</a>
-            <ul>
-                <li><a href="{% url app.customers.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
-                    til ny kunde</a></li>
-                <li><a href="{% url app.customers.views.overview %}"><img src="/media/images/icons/user.png" alt="">Oversikt</a>
-                </li>
-                <li><a href="{% url app.customers.views.overview_deleted %}"><img src="/media/images/icons/user.png"
-                                                                                  alt="">Slettede kunder</a></li>
-                <li><a href="{% url app.customers.views.overview_all %}"><img src="/media/images/icons/user.png"
-                                                                              alt="">Alle kunder</a></li>
-            </ul>
-        </li>
-
-        <li class="{% active request "^/contacts/" %}">
-            <a href=""><img src="/media/images/icons/vcard.png" alt="">Kontakter</a>
-            <ul>
-                <li><a href="{% url app.contacts.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
-                    til ny kontakt</a></li>
-                <li><a href="{% url app.contacts.views.overview %}"><img src="/media/images/icons/vcard.png" alt="">Dine
-                    kontakter</a></li>
-                <li><a href="{% url app.contacts.views.overview_all %}"><img src="/media/images/icons/vcard.png"
-                                                                             alt="">Alle kontakter</a></li>
-                <li><a href="{% url app.contacts.views.overview_deleted %}"><img src="/media/images/icons/vcard.png"
-                                                                                 alt="">Slettede kontakter</a></li>
-                <li></li>
-            </ul>
-        </li>
-
-        <li class="{% active request "^/projects/" %}">
-            <a href=""><img src="/media/images/icons/book.png" alt="">Prosjekter</a>
-            <ul>
-                <li><a href="{% url app.projects.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
-                    til nytt prosjekt</a></li>
-                <li><a href="{% url app.projects.views.overview %}"><img src="/media/images/icons/book.png" alt="">Dine
-                    prosjekter</a></li>
-                <li><a href="{% url app.projects.views.overview_all %}"><img src="/media/images/icons/book.png"
-                                                                             alt="">Alle aktive prosjekter</a></li>
-                <li><a href="{% url app.projects.views.overview_deleted %}"><img src="/media/images/icons/book.png"
-                                                                                 alt="">Alle slettede prosjekter</a>
-                </li>
-            </ul>
-        </li>
-
-
-        <li class="{% active request "^/files/" %}{% active request "^/folders/" %}">
-            <a href="{% url app.files.files.views.overview %}"><img width="16px" height="16"
-                                                                    src="/media/images/icons/fileIcon.png" alt="">Dine
-                filer</a>
-
-        </li>
-
-
-        <li class="{% active request "^/orders/" %}">
-            <a href=""><img src="/media/images/icons/basket.png" alt="">Ordrer</a>
-            <ul>
-                <li><a href="{% url app.orders.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg til
-                    ny ordre</a></li>
-                <li><a href="{% url app.orders.views.overview %}"><img src="/media/images/icons/basket.png" alt="">Ordrer</a>
-                </li>
-                <li><a href="{% url app.orders.views.addOffer %}"><img src="/media/images/icons/add.png" alt="">Nytt
-                    tilbud</a></li>
-                <li><a href="{% url app.orders.views.overviewOffers %}"><img width="16px" height="16px"
-                                                                             src="/media/images/icons/offer.png"
-                                                                             alt="">Tilbud</a></li>
-                <li><a href="{% url app.orders.views.overviewReadyForInvoice %}"><img
-                        src="/media/images/icons/coins.png" alt="">Klar til fakturing</a></li>
-                <li><a href="{% url app.orders.views.overviewArchive %}"><img width="16px" height="16px"
-                                                                              src="/media/images/icons/archive.png"
-                                                                              alt="">Arkiv</a></li>
-            </ul>
-        </li>
-
-
-        <li class="{% active request "^/timetracking/" %}">
-            <a href=""><img src="/media/images/icons/clock.png" alt="">Timeregistrering</a>
-            <ul>
-                <li><a href="{% url app.timetracking.views.calendar %}"><img src="/media/images/icons/add.png"
-                                                                             alt="">Timeføring</a></li>
-                <li><a href="{% url app.timetracking.views.overview %}"><img src="/media/images/icons/clock.png"
-                                                                             alt="">Oversikt</a></li>
-                <li><a href="{% url app.timetracking.views.add %}"><img src="/media/images/icons/add.png" alt="">Registrer
-                    manuelt</a></li>
-            </ul>
-        </li>
-
-        <li class="{% active request "^/stock" %}">
-            <a href=""><img width="18px" height="18px" src="/media/images/icons/products.png" alt="">Produkter</a>
-            <ul>
-                <li><a href="{% url app.stock.products.views.overview %}"><img width="16px" height="16px"
-                                                                               src="/media/images/icons/products.png"
-                                                                               alt="">Produktoversikt</a></li>
-                <li><a href="{% url app.stock.products.views.add %}"><img src="/media/images/icons/add.png  "
-                                                                          alt="">Nytt produkt</a></li>
-
-                <li><a href="{% url app.stock.productgroups.views.add %}"><img src="/media/images/icons/add.png  "
-                                                                               alt="">Ny produktgruppe</a></li>
-
-                <li><a href="{% url app.stock.products.views.overview_deleted %}"><img width="16px" height="16px"
-                                                                                       src="/media/images/icons/products.png"
-                                                                                       alt="">Slettede produkter</a>
-                </li>
-
-            </ul>
-        </li>
-
-        <li class="{% active request "^/suppliers" %}">
-            <a href=""><img width="18px" height="18px" src="/media/images/icons/suppliers.png"
-                            alt="">Leverandører</a>
-            <ul>
-                <li><a href="{% url app.suppliers.views.overview %}"><img width="16px" height="16px"
-                                                                          src="/media/images/icons/suppliers.png"
-                                                                          alt="">Leverandøroversikt</a></li>
-                <li><a href="{% url app.suppliers.views.add %}"><img src="/media/images/icons/add.png  " alt="">Ny
-                    leverandør</a></li>
-            </ul>
-        </li>
-
-
-        <li class="{% active request "^/announcements/" %}">
-            <a href=""><img src="/media/images/icons/layout.png" alt="">Oppslag</a>
-            <ul>
-                <li><a href="{% url app.announcements.views.add %}"><img src="/media/images/icons/add.png  " alt="">Legg
-                    til nytt oppslag</a></li>
-                <li><a href="{% url app.announcements.views.overview %}"><img src="/media/images/icons/layout.png"
-                                                                              alt="">Oversikt</a></li>
-                <li><a href="{% url app.announcements.views.overview_deleted %}"><img
-                        src="/media/images/icons/layout.png" alt="">Slettede oppslag</a></li>
-            </ul>
-        </li>
-
-    </ul>
-
-    <ul class="navigation" id="innstillinger">
-        <li class="{% active request "^/useradmin/" %}">
-            <a href=""><img src="/media/images/icons/layout.png" alt="">Brukeradministrasjon</a>
-            <ul>
-                <li><a href="{% url app.admin.users.views.overview %}"><img src="/media/images/icons/layout.png"
-                                                                            alt="">Oversikt</a></li>
-                <li><a href="{% url app.admin.users.views.add %}"><img src="/media/images/icons/layout_add.png  "
-                                                                       alt="">Legg til ny bruker</a></li>
-            </ul>
-        </li>
-
-
-        <li class="{% active request "^/groupadmin/" %}">
-            <a href=""><img src="/media/images/icons/layout.png" alt="">Gruppeadministrasjon</a>
-            <ul>
-                <li><a href="{% url app.admin.memberships.views.overview %}"><img
-                        src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
-                <li><a href="{% url app.admin.memberships.views.add %}"><img
-                        src="/media/images/icons/layout_add.png  " alt="">Legg til ny gruppe</a></li>
-            </ul>
-        </li>
-
-
-    </ul>
-
-    <!-- /End Settings Navigation -->
-
-</div>
-<!-- /End Sidebar -->
-
-<!-- Subheader -->
-<div id="subheader" class="clearfix">
-    <h2>{{ title }}</h2>
-
-    <div class=""style="margin-left:700px; padding-top:8px;">
-        <form action="{% url app.search.views.search %}" method="GET">
-            <input class = "" type="text" name="s" style="width:200px;">
-            <input type="submit" value="Søk">
-        </form>
-
-    </div>
-
-    {% block submenu %}
-    {% endblock %}
-
-
-</div>
-
-<!-- /End Subheader -->
-
-<!-- Main Content Area -->
-<div id="content">
-
-    {% block maincontent %}
-    {% endblock %}
-
-</div>
-<!-- /End Content Area -->
-
-</div>
-<!-- End Main Area Container -->
-
-
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>FocusTime</title>	
+	
+	<link rel="stylesheet" href="/media/css/screen.css" type="text/css" media="screen" title="no title" charset="utf-8" />	
+	<link rel="stylesheet" href="/media/css/plugin.css" type="text/css" media="screen" title="no title" charset="utf-8" />	
+	<link rel="stylesheet" href="/media/css/custom.css" type="text/css" media="screen" title="no title" charset="utf-8" />		
+	
+	<style type="text/css" media="screen">
+		
+	</style>
+
+</head>
+
+<body>
+	
+<div id="wrapper" class="clearfix">
+	
+	<div id="top">
+		<div id="header">
+			<h1><a href="index2.html">FocusTime</a></h1>
+			
+			<div id="info">
+				<h4>{{ user.first_name }} {{ user.last_name }}</h4>
+				
+				<p>
+					<a href="/accounts/logout">Logg ut</a>
+			        
+					<br />
+	
+					{% if user.get_profile.notifications.count %}
+	                    <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
+	                        oppdateringer siden sist</a> |
+	                {% endif %}
+	
+				</p>
+				
+				<img src="/media/images/avatar.jpg" alt="avatar" />
+			</div> <!-- #info -->
+					
+		</div> <!-- #header -->	
+		
+		
+		<div id="nav">	
+	
+			<ul class="mega-container mega-grey">
+	
+				<li class="mega mega-current">
+					<a href="index2.html" class="mega-link">Dashboard</a>	
+				</li>
+		
+				<li class="mega">				
+					<a href="javascript:;" class="mega-tab">
+						Sample Pages
+					</a>
+					
+					<div class="mega-content mega-menu ">
+						<ul>
+							<li><a href="sample_gallery.html">Image Gallery</a></li>
+							<li><a href="sample_reports.html">Reports</a></li>			
+							<li><a href="sample_faq.html">FAQ</a></li>				
+							<li><a href="sample_invoice.html">Invoice</a></li>	
+							<li><a href="sample_calendar.html">Calendar</a></li>		
+							<li><a href="sample_people.html">People Listing</a></li>	
+							<li><a href="sample_details.html">Support Request</a></li>	
+						</ul>
+					</div>						
+				</li>
+		
+				<li class="mega">				
+					<a href="javascript:;" class="mega-tab hasSub">Page Elements</a>	
+					
+					<div class="mega-content mega-menu ">						
+								
+						<ul>
+							<li><a href="text.html">Buttons &amp; Text</a></li>	
+							<li><a href="grid.html">Grid Layout</a></li>	
+							<li><a href="tables.html">Tables</a></li>	
+							<li><a href="forms.html">Forms</a></li>	
+							<li><a href="charts.html">Charts</a></li>						
+						</ul>
+					</div>				
+				</li>
+				
+				<li class="mega">				
+					<a href="widgets.html" class="mega-link">Widgets</a>			
+				</li>							
+				
+				<li class="mega">
+					<a href="javascript:;" class="mega-tab hasSub">Multi-level menu</a>
+					<div class="mega-content mega-menu ">
+						
+								
+						<ul>
+							<li><a href="javascript:;">Demonstration</a></li>
+							<li><a href="javascript:;">Purposes</a></li>
+							<li>
+								<a href="javascript:;" class="hasSub">Only</a>
+								
+								<ul>
+									<li><a href="javascript:;">Fake Item #1</a></li>
+									<li><a href="javascript:;">Fake Item #2</a></li>
+									<li><a href="javascript:;">Fake Item #3</a></li>
+								</ul>
+							</li>
+						
+						</ul>
+					</div>						
+				</li>
+			</ul>
+		</div> <!-- #nav -->
+	</div> <!-- #top -->
+	
+	<div id="content" class="xfluid">
+		
+		<div class="portlet x3" style="min-height: 300px;">
+			
+			<div class="portlet-header">
+				<h4>Quick Info</h4>
+			</div> <!-- .portlet-header -->
+			
+			<div class="portlet-content">
+				<table cellspacing="0" class="info_table">
+					<tbody>
+						<tr>
+							<td class="value">789</td>
+							<td class="full">Visits Today</td>
+						</tr>
+						<tr>
+							<td class="value">634</td>
+							<td class="full">Unique Visits</td>
+						</tr>
+						<tr>
+							<td class="value">56</td>
+							<td class="full">Posts</td>
+						</tr>
+						<tr>
+							<td class="value">425</td>
+							<td class="full">Total Comments</td>
+						</tr>
+						<tr>
+							<td class="value">13</td>
+							<td class="full">Pending Comments</td>
+						</tr>
+						<tr>
+							<td class="value">17</td>
+							<td class="full">Support Requests</td>
+						</tr>
+					</tbody>
+				</table>
+			</div> <!-- .portlet-content -->			
+		</div> <!-- .portlet -->
+		
+		<div id="dash_chart" class="portlet x9">
+			
+			<div class="portlet-header">
+				<h4>Charting</h4>
+				
+				<ul class="portlet-tab-nav">
+					<li class="portlet-tab-nav-active"><a href="#tab1" rel="tooltip" title="Visitors over last 48 hours.">Visitors </a></li>				
+					<li class=""><a href="#tab2" rel="tooltip" title="Sales over last 48 hours.">Sales </a></li>
+				</ul>
+			</div> <!-- .portlet-header -->
+			
+			<div class="portlet-content">				
+				<div id="tab1" class="portlet-tab-content portlet-tab-content-active">
+					<table class="stats" title="area" width="100%" cellpadding="0" cellspacing="0">
+						<caption>2009/2010 Visitors by Industry (Million)</caption>
+						<thead>
+							<tr>
+								<td>&nbsp;</td>
+								<th>Banking</th>
+								<th>Beauty</th>
+								<th>Insurance</th>
+								<th>Internet</th>
+								<th>Media</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<tr>
+								<th>2010</th>
+								<td>12</td>
+								<td>15</td>
+								<td>13</td>
+								<td>11</td>
+								<td>13</td>
+							</tr>
+														
+							<tr>
+								<th>2009</th>
+								<td>5</td>
+								<td>6</td>
+								<td>4</td>
+								<td>7</td>
+								<td>9</td>								
+							</tr>							
+						</tbody>
+					</table>
+
+				</div> <!-- .portlet-tab-content -->
+				
+				<div id="tab2" class="portlet-tab-content">
+					
+					<table class="stats" title="bar" width="100%" cellpadding="0" cellspacing="0">
+						<caption>2009/2010 Sales by industry (Million)</caption>
+						<thead>
+							<tr>
+								<td>&nbsp;</td>
+								<th>Banking</th>
+								<th>Beauty</th>
+								<th>Insurance</th>
+								<th>Internet</th>
+								<th>Media</th>
+							</tr>
+
+						</thead>
+						
+						<tbody>
+							<tr>
+								<th>2009</th>
+								<td>5</td>
+								<td>6</td>
+								<td>4</td>
+								<td>7</td>
+								<td>9</td>
+							</tr>
+							
+							<tr>
+								<th>2010</th>
+								<td>12</td>
+								<td>15</td>
+								<td>13</td>
+								<td>11</td>
+								<td>13</td>
+							</tr>							
+						</tbody>
+					</table>
+				</div> <!-- .portlet-tab-content -->
+			</div> <!-- .portlet-content -->			
+		</div> <!-- .portlet -->
+		
+		<div class="xbreak"></div> <!-- .xbreak -->
+		
+		<div class="portlet x6">			
+			<div class="portlet-header">
+				<h4>Support Requests</h4>
+				
+				<ul class="portlet-tab-nav">
+					<li class="portlet-tab-nav-active"><a href="#allreq" rel="tooltip" title="All support requests.">All</a></li>						
+					<li class=""><a href="#openreq" rel="tooltip" title="Recently opened to request.">Open</a></li>
+					<li class=""><a href="#respreq" rel="tooltip" title="Recently responded to request.">Responded</a></li>
+				</ul>
+			</div> <!-- .portlet-header -->
+			
+			<div class="portlet-content">
+				
+				<div id="openreq" class="portlet-tab-content">
+					<table class="support_table" cellspacing="0">
+						<tbody>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a></td>
+							<td class="who">Posted by Peter</td>
+						</tr>
+	
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Consectetur adipiscing</a></td>
+							
+							<td class="who">Posted by Carla</td>
+						</tr>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Sed in porta lectus maecenas</a></td>
+							<td class="who">Posted by Bruce</td>
+						</tr>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+	
+							<td class="full"><a href="#">Dignissim enim</a></td>
+							<td class="who">Posted by Jane</td>
+						</tr>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+							
+	
+							<td class="who">Posted by Asterix</td>
+						</tr>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Maecenas id velit et elit</a></td>
+	
+							
+							<td class="who">Posted by Killer</td>
+						</tr>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+							
+	
+							<td class="who">Posted by Asterix</td>
+						</tr>
+						</tbody>
+					</table>
+				</div> <!-- .portlet-tab-content -->
+				
+				<div id="allreq" class="portlet-tab-content">
+					<table class="support_table" cellspacing="0">
+						<tbody>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a></td>
+							
+							<td class="who">Posted by Peter</td>
+						</tr>
+	
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Consectetur adipiscing</a></td>
+							<td class="who">Posted by Carla</td>
+						</tr>
+						<tr>
+							<td><span class="ticket open">Open</span></td>
+							<td class="full"><a href="#">Sed in porta lectus maecenas</a></td>
+							
+							<td class="who">Posted by Bruce</td>
+						</tr>
+						<tr>
+							<td><span class="ticket closed">Closed</span></td>
+	
+							<td class="full"><a href="#">Dignissim enim</a></td>
+							
+							<td class="who">Posted by Jane</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+
+	
+							<td class="who">Posted by Asterix</td>
+						</tr>
+						<tr>
+							<td><span class="ticket closed">Closed</span></td>
+							<td class="full"><a href="#">Maecenas id velit et elit</a></td>
+	
+							
+							<td class="who">Posted by Killer</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+
+	
+							<td class="who">Posted by Asterix</td>
+						</tr>
+						</tbody>
+					</table>
+				</div> <!-- .portlet-tab-content -->
+				
+				<div id="respreq" class="portlet-tab-content">
+					<table class="support_table" cellspacing="0">
+						<tbody>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a></td>
+							
+							<td class="who">Posted by Peter</td>
+						</tr>
+	
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Consectetur adipiscing</a></td>
+
+							<td class="who">Posted by Carla</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Sed in porta lectus maecenas</a></td>
+							
+							<td class="who">Posted by Bruce</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+	
+							<td class="full"><a href="#">Dignissim enim</a></td>
+							
+							<td class="who">Posted by Jane</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+							
+	
+							<td class="who">Posted by Asterix</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Maecenas id velit et elit</a></td>
+	
+							
+							<td class="who">Posted by Killer</td>
+						</tr>
+						<tr>
+							<td><span class="ticket responded">Responded</span></td>
+							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+							
+	
+							<td class="who">Posted by Asterix</td>
+						</tr>
+						</tbody>
+					</table>
+				</div> <!-- .portlet-tab-content -->
+
+			</div> <!-- .portlet-content -->			
+		</div>  <!-- .portlet -->
+		
+		
+		<div class="portlet x6">
+			
+			<div class="portlet-header">
+				<h4>Inbox</h4>
+			</div> <!-- .portlet-header -->
+			
+			<div class="portlet-content">
+				<table cellspacing="0" class="inbox_table">
+					<tbody>
+						<tr>
+							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
+							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna al</td>
+							<td class="who">Sent by Peter</td>
+						</tr>
+	
+						<tr>
+							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
+							<td class="full"><a href="#">Consectetur adipiscing</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exerc.</td>
+							<td class="who">Sent by Carla</td>
+						</tr>
+						<tr>
+							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
+							<td class="full"><a href="#">Sed in porta lectus maecenas</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</td>
+							<td class="who">Sent by Bruce</td>
+						</tr>
+						<tr>
+							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
+	
+							<td class="full"><a href="#">Dignissim enim</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
+							<td class="who">Sent by Jane</td>
+						</tr>					
+					</tbody>
+				</table>
+			</div> <!-- .portlet-content -->			
+		</div> <!-- .portlet -->
+		
+	</div> <!-- #content -->
+	
+	<div id="footer">
+		
+		<p>Copyright &copy; 2010 <a href="javascript:;">MadeByAmp</a>, all rights reserved.</p>
+		
+	</div> <!-- #footer -->
+	
+</div> <!-- #wrapper -->
+
+<script  type="text/javascript" src="/media/js/jquery/jquery.1.4.2.min.js"></script>
+<script  type="text/javascript" src="/media/js/slate/slate.js"></script>
+<script  type="text/javascript" src="/media/js/slate/slate.portlet.js"></script>
+<script  type="text/javascript" src="/media/js/plugin.js"></script>
+
+
+<script type="text/javascript" charset="utf-8">
+$(function () 
+{
+	slate.init ();
+	slate.portlet.init ();	
+});
+</script>
+	
 </body>
-
-
 
 </html>

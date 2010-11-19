@@ -1,0 +1,283 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8"/>
+<title>{% block title %}{% trans "FocusTime" %}{% endblock %}</title>
+<link rel="stylesheet" href="/media/css/styles.css"/>
+<link rel="stylesheet" href="/media/css/misc.css"/>
+
+<!-- Load Jquery -->
+<script src="/media/js/jquery.js"></script>
+<script src="/media/js/custom.jquery.js"></script>
+<script type='text/javascript' src='/media/calendar/libs/jquery-ui-1.8.min.js'></script>
+
+<!-- /End Jquery -->
+
+{% block extrahead %}{% endblock %}{{ form_media }}
+
+<body class="blue">
+
+<!-- Header -->
+{% include "messages.html" %}
+
+<div id="header">
+    <img id="logo" src="/media/images/logo.png" alt="">
+
+    <h1>FocusTime - {{ user.get_profile.company }}</h1>
+
+
+
+    <p>
+        <strong>
+            {% if user.is_authenticated %}
+
+
+                {% if user.get_profile.notifications.count %}
+                    <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
+                        oppdateringer siden sist</a> |
+                {% endif %}
+                Logget inn som <a
+                    href="{% url app.admin.users.views.view user.id %}">{{ user.first_name }} {{ user.last_name }}</a>
+
+
+
+            {% endif %}
+
+        </strong>
+
+        <a href="/accounts/logout">Logg ut</a>
+    </p>
+</div>
+<!-- /End Header -->
+
+<!-- Main Area Container -->
+<div id="container">
+
+{% load menu_tags %}
+
+<div id="sidebar">
+
+    <a class="menu" href=""></a>
+
+    <ul id="menu">
+        <li><a href="start">Start</a></li>
+        <li><a href="innstillinger">Innstillinger</a></li>
+    </ul>
+
+    <ul class="navigation" id="start">
+
+        <li class="{% active request "^/dashboard/" %}">
+            <a href="{% url app.dashboard.views.overview %}"><img src="/media/images/icons/note.png" alt="">Oppslagstavle</a>
+            <ul>
+                <li><a href="{% url app.dashboard.views.overview %}"><img src="/media/images/icons/note.png" alt="">Oppslagstavle</a>
+                </li>
+                <li><a href="{% url app.dashboard.views.logs %}"><img src="/media/images/icons/book.png" alt="">Logoversikt</a>
+                </li>
+                <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
+            </ul>
+
+        </li>
+
+        <li class="{% active request "^/customers/" %}">
+            <a href=""><img src="/media/images/icons/user.png" alt="">Kunder</a>
+            <ul>
+                <li><a href="{% url app.customers.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
+                    til ny kunde</a></li>
+                <li><a href="{% url app.customers.views.overview %}"><img src="/media/images/icons/user.png" alt="">Oversikt</a>
+                </li>
+                <li><a href="{% url app.customers.views.overview_deleted %}"><img src="/media/images/icons/user.png"
+                                                                                  alt="">Slettede kunder</a></li>
+                <li><a href="{% url app.customers.views.overview_all %}"><img src="/media/images/icons/user.png"
+                                                                              alt="">Alle kunder</a></li>
+            </ul>
+        </li>
+
+        <li class="{% active request "^/contacts/" %}">
+            <a href=""><img src="/media/images/icons/vcard.png" alt="">Kontakter</a>
+            <ul>
+                <li><a href="{% url app.contacts.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
+                    til ny kontakt</a></li>
+                <li><a href="{% url app.contacts.views.overview %}"><img src="/media/images/icons/vcard.png" alt="">Dine
+                    kontakter</a></li>
+                <li><a href="{% url app.contacts.views.overview_all %}"><img src="/media/images/icons/vcard.png"
+                                                                             alt="">Alle kontakter</a></li>
+                <li><a href="{% url app.contacts.views.overview_deleted %}"><img src="/media/images/icons/vcard.png"
+                                                                                 alt="">Slettede kontakter</a></li>
+                <li></li>
+            </ul>
+        </li>
+
+        <li class="{% active request "^/projects/" %}">
+            <a href=""><img src="/media/images/icons/book.png" alt="">Prosjekter</a>
+            <ul>
+                <li><a href="{% url app.projects.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
+                    til nytt prosjekt</a></li>
+                <li><a href="{% url app.projects.views.overview %}"><img src="/media/images/icons/book.png" alt="">Dine
+                    prosjekter</a></li>
+                <li><a href="{% url app.projects.views.overview_all %}"><img src="/media/images/icons/book.png"
+                                                                             alt="">Alle aktive prosjekter</a></li>
+                <li><a href="{% url app.projects.views.overview_deleted %}"><img src="/media/images/icons/book.png"
+                                                                                 alt="">Alle slettede prosjekter</a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="{% active request "^/files/" %}{% active request "^/folders/" %}">
+            <a href="{% url app.files.files.views.overview %}"><img width="16px" height="16"
+                                                                    src="/media/images/icons/fileIcon.png" alt="">Dine
+                filer</a>
+
+        </li>
+
+
+        <li class="{% active request "^/orders/" %}">
+            <a href=""><img src="/media/images/icons/basket.png" alt="">Ordrer</a>
+            <ul>
+                <li><a href="{% url app.orders.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg til
+                    ny ordre</a></li>
+                <li><a href="{% url app.orders.views.overview %}"><img src="/media/images/icons/basket.png" alt="">Ordrer</a>
+                </li>
+                <li><a href="{% url app.orders.views.addOffer %}"><img src="/media/images/icons/add.png" alt="">Nytt
+                    tilbud</a></li>
+                <li><a href="{% url app.orders.views.overviewOffers %}"><img width="16px" height="16px"
+                                                                             src="/media/images/icons/offer.png"
+                                                                             alt="">Tilbud</a></li>
+                <li><a href="{% url app.orders.views.overviewReadyForInvoice %}"><img
+                        src="/media/images/icons/coins.png" alt="">Klar til fakturing</a></li>
+                <li><a href="{% url app.orders.views.overviewArchive %}"><img width="16px" height="16px"
+                                                                              src="/media/images/icons/archive.png"
+                                                                              alt="">Arkiv</a></li>
+            </ul>
+        </li>
+
+
+        <li class="{% active request "^/timetracking/" %}">
+            <a href=""><img src="/media/images/icons/clock.png" alt="">Timeregistrering</a>
+            <ul>
+                <li><a href="{% url app.timetracking.views.calendar %}"><img src="/media/images/icons/add.png"
+                                                                             alt="">Timeføring</a></li>
+                <li><a href="{% url app.timetracking.views.overview %}"><img src="/media/images/icons/clock.png"
+                                                                             alt="">Oversikt</a></li>
+                <li><a href="{% url app.timetracking.views.add %}"><img src="/media/images/icons/add.png" alt="">Registrer
+                    manuelt</a></li>
+            </ul>
+        </li>
+
+        <li class="{% active request "^/stock" %}">
+            <a href=""><img width="18px" height="18px" src="/media/images/icons/products.png" alt="">Produkter</a>
+            <ul>
+                <li><a href="{% url app.stock.products.views.overview %}"><img width="16px" height="16px"
+                                                                               src="/media/images/icons/products.png"
+                                                                               alt="">Produktoversikt</a></li>
+                <li><a href="{% url app.stock.products.views.add %}"><img src="/media/images/icons/add.png  "
+                                                                          alt="">Nytt produkt</a></li>
+
+                <li><a href="{% url app.stock.productgroups.views.add %}"><img src="/media/images/icons/add.png  "
+                                                                               alt="">Ny produktgruppe</a></li>
+
+                <li><a href="{% url app.stock.products.views.overview_deleted %}"><img width="16px" height="16px"
+                                                                                       src="/media/images/icons/products.png"
+                                                                                       alt="">Slettede produkter</a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li class="{% active request "^/suppliers" %}">
+            <a href=""><img width="18px" height="18px" src="/media/images/icons/suppliers.png"
+                            alt="">Leverandører</a>
+            <ul>
+                <li><a href="{% url app.suppliers.views.overview %}"><img width="16px" height="16px"
+                                                                          src="/media/images/icons/suppliers.png"
+                                                                          alt="">Leverandøroversikt</a></li>
+                <li><a href="{% url app.suppliers.views.add %}"><img src="/media/images/icons/add.png  " alt="">Ny
+                    leverandør</a></li>
+            </ul>
+        </li>
+
+
+        <li class="{% active request "^/announcements/" %}">
+            <a href=""><img src="/media/images/icons/layout.png" alt="">Oppslag</a>
+            <ul>
+                <li><a href="{% url app.announcements.views.add %}"><img src="/media/images/icons/add.png  " alt="">Legg
+                    til nytt oppslag</a></li>
+                <li><a href="{% url app.announcements.views.overview %}"><img src="/media/images/icons/layout.png"
+                                                                              alt="">Oversikt</a></li>
+                <li><a href="{% url app.announcements.views.overview_deleted %}"><img
+                        src="/media/images/icons/layout.png" alt="">Slettede oppslag</a></li>
+            </ul>
+        </li>
+
+    </ul>
+
+    <ul class="navigation" id="innstillinger">
+        <li class="{% active request "^/useradmin/" %}">
+            <a href=""><img src="/media/images/icons/layout.png" alt="">Brukeradministrasjon</a>
+            <ul>
+                <li><a href="{% url app.admin.users.views.overview %}"><img src="/media/images/icons/layout.png"
+                                                                            alt="">Oversikt</a></li>
+                <li><a href="{% url app.admin.users.views.add %}"><img src="/media/images/icons/layout_add.png  "
+                                                                       alt="">Legg til ny bruker</a></li>
+            </ul>
+        </li>
+
+
+        <li class="{% active request "^/groupadmin/" %}">
+            <a href=""><img src="/media/images/icons/layout.png" alt="">Gruppeadministrasjon</a>
+            <ul>
+                <li><a href="{% url app.admin.memberships.views.overview %}"><img
+                        src="/media/images/icons/layout.png" alt="">Oversikt</a></li>
+                <li><a href="{% url app.admin.memberships.views.add %}"><img
+                        src="/media/images/icons/layout_add.png  " alt="">Legg til ny gruppe</a></li>
+            </ul>
+        </li>
+
+
+    </ul>
+
+    <!-- /End Settings Navigation -->
+
+</div>
+<!-- /End Sidebar -->
+
+<!-- Subheader -->
+<div id="subheader" class="clearfix">
+    <h2>{{ title }}</h2>
+
+    <div class=""style="margin-left:700px; padding-top:8px;">
+        <form action="{% url app.search.views.search %}" method="GET">
+            <input class = "" type="text" name="s" style="width:200px;">
+            <input type="submit" value="Søk">
+        </form>
+
+    </div>
+
+    {% block submenu %}
+    {% endblock %}
+
+
+</div>
+
+<!-- /End Subheader -->
+
+<!-- Main Content Area -->
+<div id="content">
+
+    {% block maincontent %}
+    {% endblock %}
+
+</div>
+<!-- /End Content Area -->
+
+</div>
+<!-- End Main Area Container -->
+
+
+
+</body>
+
+
+
+</html>
