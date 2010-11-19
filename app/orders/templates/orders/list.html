@@ -17,7 +17,7 @@
 					
 						{% for p in orders %}
 							<tr> 
-								<td>{{p.id}}</td> 
+								<td>{{p.oid}}</td>
 								<td><a href="{% url app.orders.views.view p.id %}">{{p.order_name}}</a></td> 
 								<td>
 							        {% if p.state == "O" or p.state == "T" %}

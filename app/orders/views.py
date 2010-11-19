@@ -162,8 +162,7 @@ def form (request, id=False, *args, **kwargs):
     if instance.state == "A":
         messages.error(request, "Ordren er arkivert og kan ikke endres")
         return redirect(overview)
-
-
+	
     #Save and set to active, require valid form
     if request.method == 'POST':
         form = OrderForm(request.POST, instance=instance)
