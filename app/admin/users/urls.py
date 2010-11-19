@@ -1,12 +1,13 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('app.admin.users.views',
-        url(r'^$',                  'overview'),
-        url(r'^add/$',              'add'),
-        url(r'^edit/(\d+)/?$',      'edit'),
-        url(r'^view/(\d+)/?$',      'view'),
-        url(r'^delete/(\d+)/?$',    'delete'),
+                       url(r'^$', 'overview'),
+                       url(r'^add/$', 'add'),
+                       url(r'^edit/(\d+)/?$', 'edit'),
+                       url(r'^view/(\d+)/?$', 'view'),
+                       url(r'^delete/(\d+)/?$', 'delete'),
+                       url(r'^changeCanLogin/(\d+)/?$', 'changeCanLogin'),
 
-        url(r'^sendNewPassword/(\d+)/?', 'sendGeneratedPassword'),
+                       url(r'^sendNewPassword/(\d+)/?', 'sendGeneratedPassword'),
 
-)
+                       )

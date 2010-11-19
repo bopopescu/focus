@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, login_required
 def overviewOffers(request):
     orders = Order.objects.for_user().filter(state="T")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title':'Tilbud', 'orders':orders})
 
 @login_required
 def overview(request):
@@ -22,13 +22,13 @@ def overview(request):
 def overviewReadyForInvoice(request):
     orders = Order.objects.for_user().filter(state="F")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title':'Til fakturering', 'orders':orders})
 
 @login_required
 def overviewArchive(request):
     orders = Order.objects.for_user().filter(state="A")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title':'Arkiv', 'orders':orders})
 
 
 @require_perm('view', Order)

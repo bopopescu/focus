@@ -20,6 +20,13 @@ def overview_deleted(request):
 def add(request):
     return form(request)
 
+
+@login_required
+def view(request, id):
+    announcement = get_object_or_404(Announcement, id = id, deleted=False)
+    return render_with_request(request, 'announcements/view.html', {'title':'Oppslag',
+                                                                    'announcement':announcement})
+
 @login_required
 def edit(request, id):
     return form(request, id)
@@ -37,7 +44,7 @@ def recover(request, id):
 @login_required
 def permissions(request, id):
     type = Announcement
-    url = "announcements/edit/%s" % id
+    url = "announcements/view/%s" % id
     message = "Vellykket endret tilgang for oppslaget: %s" % type.objects.get(pk=id)
     return form_perm(request, type, id, url, message)
 
@@ -63,7 +70,7 @@ def form (request, id = False):
             messages.success(request, msg)        
             if not id:      
                 return redirect(permissions, o.id)  
-            return redirect(overview)
+            return redirect(view, o.id)
              
     else:
         form = AnnouncementForm(instance=instance)

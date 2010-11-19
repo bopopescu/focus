@@ -3,10 +3,10 @@ from django.forms import ModelForm
 
 from models import *
 from app.contacts.models import Contact
-
 from core.widgets import *
 
 class CustomerForm(ModelForm):
+
     class Meta:
         model = Customer
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
@@ -15,6 +15,17 @@ class CustomerForm(ModelForm):
         super(CustomerForm, self).__init__(*args, **kwrds)
         self.fields['contacts'].widget = MultipleSelectWithPop()
         self.fields['contacts'].queryset = Contact.objects.for_company()
+
+    def clean_cid(self):
+        cid = self.cleaned_data['cid']
+
+        customers = Customer.objects.for_company()
+        for i in customers:
+            if i.cid == cid:
+                raise forms.ValidationError("Det kreves unikt kundenr")
+
+        return cid
+
 
 class CustomerFormSimple(ModelForm):
     class Meta:

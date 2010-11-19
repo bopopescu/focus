@@ -14,11 +14,14 @@ def login(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-                auth_login(request, user)
-                if not redirect_to:
-                    return HttpResponseRedirect("/dashboard/")  
-                return HttpResponseRedirect('%s' % redirect_to)
 
+                if user.get_profile().canLogin:
+                    auth_login(request, user)
+                    if not redirect_to:
+                        return HttpResponseRedirect("/dashboard/")
+                    return HttpResponseRedirect('%s' % redirect_to)
+                Log(message = "%s forsøkte å logge inn, men er sperret!" % user).save(user=user)
+                return render_to_response('login.html')
         try:
             user  = User.objects.get(username=username)
             Log(message = "%s forsøkte å logge inn" % user).save(user=user)

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+
+
+{% block maincontent %}
+
+    <div id="inner">
+
+
+    <h2>{{announcement.title}}
+        <div id="datepublished">Skrevet av {{announcement.creator.first_name}}, {{announcement.date_created|date:"d.m.Y H:i"}}</div>
+    </h2>
+
+    {{announcement.text}}
+     <br><br>
+    {% if announcement.attachment %}
+     <img src="/media/images/icons/downloadBox.png" style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank" href="/media/{{announcement.attachment}}">Last ned vedlegg</a>
+    {% endif %}
+     <br><br>
+
+
+
+    </div>
+
+{% endblock %}

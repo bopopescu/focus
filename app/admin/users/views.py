@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -32,6 +34,20 @@ def edit(request, id):
 @login_required
 def editProfile(request):
     pass
+
+@login_required
+def changeCanLogin(request, userID):
+
+    u = User.objects.get(id=userID)
+    p = u.get_profile()
+
+    if u == request.user:
+        messages.error(request, "Du kan ikke endre status på deg selv.")
+        return redirect(view, userID)
+
+    p.canLogin = not p.canLogin
+    p.save()
+    return redirect(view, userID)
 
 @login_required
 def sendGeneratedPassword(request, userID):

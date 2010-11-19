@@ -19,8 +19,9 @@
     Epost: {{ user.email }}
     <br>
     Firma: {{ user.get_profile.company }}
-
-
+    <br><br>
+    <a href="{% url app.admin.users.views.changeCanLogin user.id %}">Kan logge inn: <b>{{ user.get_profile.canLogin }}</b></a>
+    <br>
 
     <br><br>
 	<table style="text-align:center">

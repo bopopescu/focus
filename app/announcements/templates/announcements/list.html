@@ -23,8 +23,6 @@
                             src="/media/images/icons/user_edit.png" alt=""></a>
                     <a href="{% url app.announcements.views.permissions a.id %}" class="edit admintool"><img
                             src="/media/images/icons/lock_edit.png" alt=""></a>
-
-
                     {% if a.deleted %}
                         <a href="{% url app.announcements.views.recover a.id %}" class="edit admintool"><img
                                 src="/media/images/icons/cog_go.png" alt=""></a>

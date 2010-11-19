@@ -86,9 +86,6 @@ class Log(models.Model):
         else:
             self.creator = get_current_user()
 
-        print self.creator
-        print self.creator.get_profile().company
-
         self.company = self.creator.get_profile().company
 
         super(Log, self).save()
@@ -127,7 +124,12 @@ class PersistentModel(models.Model):
         super(PersistentModel, self).save()
 
         if 'noLog' not in kwargs:
-            Log(message = "%s endret %s" % (get_current_user(), self),
+
+            msg = "endret"
+            if action =="ADD":
+                msg = "opprettet"
+
+            Log(message = "%s %s %s" % (get_current_user(), msg, self),
                 object_id = self.id,
                 content_type = ContentType.objects.get_for_model(self.__class__),
                 action = action,
@@ -234,6 +236,8 @@ class UserProfile(models.Model):
 # This is the only required field
     user = models.ForeignKey(User, unique=True)
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
+
+    canLogin = models.BooleanField(default=True)
 
     def notifications(self):
         return self.user.notifications.filter(read=False)
