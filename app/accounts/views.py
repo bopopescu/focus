@@ -17,6 +17,7 @@ def login(request):
 
                 if user.get_profile().canLogin:
                     auth_login(request, user)
+                    Log(message = "%s logget inn.." % user).save(user=user)
                     if not redirect_to:
                         return HttpResponseRedirect("/dashboard/")
                     return HttpResponseRedirect('%s' % redirect_to)
@@ -24,7 +25,7 @@ def login(request):
                 return render_to_response('login.html')
         try:
             user  = User.objects.get(username=username)
-            Log(message = "%s forsøkte å logge inn" % user).save(user=user)
+            Log(message = "%s forsøkte å logge inn, men bruke felt passord." % user).save(user=user)
         except:
             pass
 

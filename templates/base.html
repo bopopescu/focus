@@ -44,7 +44,7 @@
     <h1><a href="/">TIME | {{ user.get_profile.company }}</a></h1>
 
     <div id="info">
-        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+        <h4><a href="{% url app.admin.users.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
 
         <p>
             <a href="/accounts/logout">Logg ut</a>
@@ -58,7 +58,10 @@
 
         </p>
 
-        <img src="/media/images/avatar.jpg" alt="avatar"/>
+        <img width="30px" height="70px" src="{{ user.get_profile.getProfileImage }}" alt="avatar"/>
+
+
+
     </div> <!-- #info -->
 
 </div> <!-- #header -->
@@ -115,7 +118,7 @@
         </li>
 
         <li class="mega {% active request "^/projects/" %}">
-            <a class="mega-tab" href="{% url app.contacts.views.overview %}">Prosjekter</a>
+            <a class="mega-tab" href="{% url app.projects.views.overview %}">Prosjekter</a>
 
             <div class="mega-content mega-menu ">
                 <ul>

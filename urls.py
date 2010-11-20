@@ -40,6 +40,7 @@ urlpatterns = patterns('',
     (r'^useradmin/',                include('app.admin.users.urls')),
     (r'^groupadmin/',               include('app.admin.memberships.urls')),
 
+    (r'^profile/$',                'app.admin.users.profile.edit'),
 
     #Stock
     (r'^stock/products/',           include('app.stock.products.urls')),

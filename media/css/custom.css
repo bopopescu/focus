@@ -36,7 +36,7 @@
 
 img.avatar_img
 {
-	width: 60px; 
+    height:60px;
 	padding: 1px;
 	border: 1px solid #CCC; 
 	-moz-border-radius: 4px; 
@@ -475,6 +475,43 @@ h2.calendar_header { font-size: 56px; text-align: center; line-height: 48px; mar
 	
 }
 .user-card .avatar { width: 75px; float: left; }
+.user-card .avatar img {width:70px; height:80px;}
 .user-card .details { width: 115px; float: right; }
 
 #add-user-form { width: 270px; margin: 0 auto; }
+
+.tool {
+    height:40px;
+}
+
+.editChoice {
+    background: url("/media/icons/edit.gif") no-repeat 0 0;
+    padding-left:30px;
+}
+
+.editPerm {
+    background: url("/media/icons/32/lock_edit.png") no-repeat 0 0;
+    padding-left:30px;
+}
+
+.deleteChoice {
+    background: url("/media/icons/delete.png") no-repeat 0 0;
+    padding-left:30px;
+}
+
+
+.recoverChoice {
+    background: url("/media/icons/accept.gif") no-repeat 0 0;
+    padding-left:30px;
+}
+
+
+.tool a{
+    text-decoration:none;
+}
+
+.tool img{
+    vertical-align:middle;
+    width:20px;
+    height:20px;
+}

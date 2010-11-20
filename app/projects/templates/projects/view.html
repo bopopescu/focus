@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%block extrahead %}
+{% block extrahead %}
 
 {% endblock %}
 
@@ -11,48 +11,72 @@
 
 {% block maincontent %}
 
-<div id="inner">	
-	
-	<b>Beskrivelse</b><br> 
-	{{description}}
-	<br><br>
-	<b>Hvem som kan se dette prosjektet</b>
-  <br><br>
-  <table>
-    <tr>
-      <th>Fullt navn</th>
-    </tr>
-    {% for user in whoCanSeeThis %}
-      <tr>
-        <td><a href="{% url app.admin.users.views.view user.id %}">{{user.first_name}} {{user.last_name}}</a></td>
-      </tr>
-    {% endfor %}
-  </table>
-  
-  
-	<b>Tilhørende ordrer</b>
-	<br><br>
-	<table>
-		<tr>
-			<th>Ordre</th>
-			<th>Registrert</th>
-			<th>Sist endret</th>
-			<th>Sist endret av</th>
-			<th>Opprettet av</th>
-		</tr>
-		{% for order in project.orders.all %}
-			<tr>
-				<td><a href="{% url app.orders.views.view order.id %}">{{order}}</a></td>
-				<td>{{order.date_created|date:"d.m.Y"}}</td>
-				<td>{{order.date_edited|date:"d.m.Y"}}</td>
-				<td>{{order.editor}}</td>
-				<td>{{order.creator}}</td>
+    <div class="portlet x9">
 
-			</tr>
-		{% endfor %}
-	</table>
-	
-			
-</div>	
-   
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+        <div class="portlet-content">
+            <b>Beskrivelse</b><br>
+            {{ description }}
+            <br><br>
+            <b>Hvem som kan se dette prosjektet</b>
+            <br><br>
+            <table>
+                <tr>
+                    <th>Fullt navn</th>
+                </tr>
+                {% for user in whoCanSeeThis %}
+                    <tr>
+                        <td>
+                            <a href="{% url app.admin.users.views.view user.id %}">{{ user.first_name }} {{ user.last_name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+
+            <b>Tilhørende ordrer</b>
+            <br><br>
+            <table>
+                <tr>
+                    <th>Ordre</th>
+                    <th>Registrert</th>
+                    <th>Sist endret</th>
+                    <th>Sist endret av</th>
+                    <th>Opprettet av</th>
+                </tr>
+                {% for order in project.orders.all %}
+                    <tr>
+                        <td><a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
+                        <td>{{ order.date_created|date:"d.m.Y" }}</td>
+                        <td>{{ order.date_edited|date:"d.m.Y" }}</td>
+                        <td>{{ order.editor }}</td>
+                        <td>{{ order.creator }}</td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+
+
+        </div>    </div>
+
+    <div class="portlet x3">
+
+        <div class="portlet-header"><h4>Valg</h4></div>
+
+        <div class="portlet-content">
+
+            <div class="tool editChoice">
+                <a href="{% url app.projects.views.permissions project.id %}">Endre prosjekt</a>
+            </div>
+            <div class="tool editPerm">
+                <a href="{% url app.projects.views.permissions project.id %}">Endre rettigheter</a>
+            </div>
+            <div class="tool deleteChoice">
+                <a href="{% url app.projects.views.delete project.id %}">Slett prosjektet</a>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}	

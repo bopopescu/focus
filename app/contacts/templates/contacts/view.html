@@ -12,7 +12,7 @@
 
 {% block maincontent %}
 
-    <div class="portlet x12">
+    <div class="portlet x9">
 
            <div class="portlet-header"><h4>{{ title }}</h4></div>
 
@@ -44,5 +44,21 @@
         </table>
 
     </div></div>
+      <div class="portlet x3">
 
+        <div class="portlet-header"><h4>Valg</h4></div>
+
+        <div class="portlet-content">
+
+            <div class="tool editChoice">
+                <a href="{% url app.contacts.views.edit contact.id %}">Endre kontakt</a>
+            </div>
+            <div class="tool editPerm">
+                <a href="{% url app.contacts.views.permissions contact.id %}">Endre rettigheter</a>
+            </div>
+            <div class="tool deleteChoice">
+                <a href="{% url app.contacts.views.delete contact.id %}">Slett kontakt</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

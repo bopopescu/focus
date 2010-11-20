@@ -236,11 +236,17 @@ class UserProfile(models.Model):
 # This is the only required field
     user = models.ForeignKey(User, unique=True)
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
-
     canLogin = models.BooleanField(default=True)
+    profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
 
     def notifications(self):
         return self.user.notifications.filter(read=False)
+
+    def getProfileImage(self):
+        if self.profileImage:
+            return "/media/%s" % self.profileImage
+
+        return "/media/images/avatar.jpg"
 
     def __unicode__(self):
         return "Profile for: %s" % self.user

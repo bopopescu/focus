@@ -10,9 +10,13 @@ from core.widgets import *
 
 class UserForm(ModelForm):
     class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
-        
+        model = UserProfile
+
+class UserProfileForm(ModelForm):
+     class Meta:
+        model = UserProfile
+        fields = ('profileImage',)
+
 class MembershipForm(ModelForm):
     class Meta:
         model = Membership

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%block extrahead %}
+{% block extrahead %}
 
 {% endblock %}
 
@@ -10,132 +10,171 @@
 
 {% block maincontent %}
 
-<div id="inner">
+    <div class="portlet x9">
 
- 
-	<table>
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-      <tr>
-          <th>Ordre</th>
-          <th>Detaljer</th>
-      </tr>
+        <div class="portlet-content">
 
-      <tr>
-          <td>Kunde</td>
-          <td>{{ order.customer }}</td>
-      </tr>
-	  {% if order.project %}
+            <table>
 
-	<tr>
-		<td> Prosjekt</td>
-		<td><a href="{% url app.projects.views.view order.project.id %}">{{order.project}}</a></td>	
-	</tr>
-	{% endif %}
-	
-	
-      <tr>
-          <td>Status</td>
-          <td>{{ order.get_state_display }}</td>
-      </tr>
-      <tr>
-          <td>Leveringsdato</td>
-          <td>{{order.delivery_date|date:"d.m.Y"}}</td>
-      </tr>
-      <tr>
-          <td>Leveringsfrist</td>
-          <td>{{order.delivery_date_deadline|date:"d.m.Y"}}</td>
-      </tr>
-     
+                <tr>
+                    <th>Ordre</th>
+                    <th>Detaljer</th>
+                </tr>
 
-  </table>
+                <tr>
+                    <td>Kunde</td>
+                    <td>{{ order.customer }}</td>
+                </tr>
+                {% if order.project %}
 
-  <br><br><br>
-  <b>Beskrivelse</b><br>	
-	 {{order.description}}				
-  <br><br><br>
-
-    {% if order.state != "A" %}
-
-    <a href="{% url app.orders.views.changeStatus order.id %}">
-
-        {% if order.state == "T" %}
-            Godkjenn tilbudet
-        {% endif %}
-
-        {% if order.state == "O" and order.haveCompletedAllTasks %}
-            Gjør ordren klar for fakturering
-        {% endif %}
-
-        {% if order.state == "F" %}
-            Arkiver ordren
-        {% endif %}
-
-    </a>
-
-    {% endif %}
+                    <tr>
+                        <td> Prosjekt</td>
+                        <td><a href="{% url app.projects.views.view order.project.id %}">{{ order.project }}</a></td>
+                    </tr>
+                {% endif %}
 
 
-    <br><br><br>
-
-  <b>Hvem som kan se denne ordren</b>
-
-  <br> <br>
-
-  <table>
-    <tr>
-      <th>Fullt navn</th>
-    </tr>
-    {% for user in whoCanSeeThis %}
-      <tr>
-        <td><a href="{% url app.admin.users.views.view user.id %}">{{user.first_name}} {{user.last_name}}</a></td>
-      </tr>
-    {% endfor %}
-  </table>
-   <br><br>
-
-    <b>Oppgaver</b>
-
-    <br> <br>
-
-    <table>
-      <tr>
-        <th>Beskrivelse</th>
-      </tr>
-      {% for task in order.tasks.all %}
-        <tr>
-          {% if task.done %}
-              <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img src="/media/images/icons/checked.png" style="vertical-align:middle">{{task}}</a> </td>
-          {% else %}
-              <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{task}}</a> </td>
-          {% endif %}
-
-        </tr>
-
-      {% endfor %}
-    </table>
-    <form enctype="multipart/form-data" action="{% url app.orders.views.addTask order.id %}" method="post">
-        <fieldset class="module aligned ">
-
-            {% for field in taskForm %}
-                <div class="form-row">
-                     <div>
-
-                            {{ field.label_tag }}
-
-                            {{ field }}
-                            {% for error in field.errors %}
-                                <span style="color:red">{{error}}</span>
-                            {% endfor %}
+                <tr>
+                    <td>Status</td>
+                    <td>{{ order.get_state_display }}</td>
+                </tr>
+                <tr>
+                    <td>Leveringsdato</td>
+                    <td>{{ order.delivery_date|date:"d.m.Y" }}</td>
+                </tr>
+                <tr>
+                    <td>Leveringsfrist</td>
+                    <td>{{ order.delivery_date_deadline|date:"d.m.Y" }}</td>
+                </tr>
 
 
+            </table>
+
+
+            <div class="">
+
+                <h2>Beskrivelse</h2>
+            {{ order.description }}
+
+            </div>
+
+            <br><br><br>
+
+            <div class="department">
+
+                <h2>Deltagere</h2>
+                {% for user in whoCanSeeThis %}
+
+                <div class="user-card">
+
+                    <div class="avatar">
+                        <img src="{{ user.get_profile.getProfileImage }}" title="User" alt="" />
+                    </div> <!-- .user-card-avatar -->
+
+                    <div class="details">
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br />
+                            {{ user.phone }}<br />
+
+                           <a href="{% url app.admin.users.views.view user.id %}">Flere detaljer</a></p>
+                    </div> <!-- .user-card-content -->
+
+                </div> <!-- .user-card -->
+                {% endfor %}
+
+
+            </div> <!-- .department -->
+
+
+            <br> <br>
+
+            <table>
+                <tr>
+                    <th>Beskrivelse</th>
+                </tr>
+                {% for task in order.tasks.all %}
+                    <tr>
+                        {% if task.done %}
+                            <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
+                                    src="/media/images/icons/checked.png" style="vertical-align:middle">{{ task }}</a>
+                            </td>
+                        {% else %}
+                            <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
+                                    src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{ task }}</a>
+                            </td>
+                        {% endif %}
+
+                    </tr>
+
+                {% endfor %}
+            </table>
+            <form enctype="multipart/form-data" action="{% url app.orders.views.addTask order.id %}" method="post">
+                <fieldset class="module aligned ">
+
+                    {% for field in taskForm %}
+                        <div class="form-row">
+                            <div>
+
+                                {{ field.label_tag }}
+
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <span style="color:red">{{ error }}</span>
+                                {% endfor %}
+
+
+                            </div>
                         </div>
-               </div>
-            {% endfor %}
+                    {% endfor %}
 
-          </fieldset>
-        <input type="submit" value="Lagre ny oppgave" class="default" name="_save" />
-    </form>
-  
-</div>	
-   
+                </fieldset>
+                <input type="submit" value="Lagre ny oppgave" class="default" name="_save"/>
+            </form>
+
+        </div>    </div>
+
+
+       <div class="portlet x3">
+
+        <div class="portlet-header"><h4>Valg</h4></div>
+
+        <div class="portlet-content">
+
+            <div class="tool editChoice">
+                <a href="{% url app.orders.views.edit order.id %}">Endre ordre</a>
+            </div>
+            <div class="tool editPerm">
+                <a href="{% url app.orders.views.permissions order.id %}">Endre rettigheter</a>
+            </div>
+            <div class="tool deleteChoice">
+                <a href="{% url app.orders.views.delete order.id %}">Slett ordren</a>
+            </div>
+
+
+            {% if order.state != "A" %}
+
+                <a href="{% url app.orders.views.changeStatus order.id %}">
+
+                    {% if order.state == "T" %}
+                        Godkjenn tilbudet
+                    {% endif %}
+
+                    {% if order.state == "O" and order.haveCompletedAllTasks %}
+                        Gjør ordren klar for fakturering
+                    {% endif %}
+
+                    {% if order.state == "F" %}
+                        Arkiver ordren
+                    {% endif %}
+
+                </a>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+
+
 {% endblock %}	

@@ -1,4 +1,3 @@
-
 Required packages for FOCUS
 
 MySQL
@@ -10,7 +9,7 @@ python-mysql
 django-storages (bruk for opp-nedlastning av filer)
 django-reversion (logging/backup av endring av objekter)
 South (migreringsverktøy)
-
+PIL
 
 KANSKJE
 python-dateutil
