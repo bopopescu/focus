@@ -19,23 +19,31 @@
             <b>Beskrivelse</b><br>
             {{ description }}
             <br><br>
-            <b>Hvem som kan se dette prosjektet</b>
-            <br><br>
-            <table>
-                <tr>
-                    <th>Fullt navn</th>
-                </tr>
+            <div class="department">
+
+                <h2>Deltagere</h2>
                 {% for user in whoCanSeeThis %}
-                    <tr>
-                        <td>
-                            <a href="{% url app.admin.users.views.view user.id %}">{{ user.first_name }} {{ user.last_name }}</a>
-                        </td>
-                    </tr>
+
+                <div class="user-card">
+
+                    <div class="avatar">
+                        <img src="{{ user.get_profile.getProfileImage }}" title="User" alt="" />
+                    </div> <!-- .user-card-avatar -->
+
+                    <div class="details">
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br />
+                            {{ user.phone }}<br />
+
+                           <a href="{% url app.admin.users.views.view user.id %}">Flere detaljer</a></p>
+                    </div> <!-- .user-card-content -->
+
+                </div> <!-- .user-card -->
                 {% endfor %}
-            </table>
 
 
-            <b>Tilhørende ordrer</b>
+            </div> <!-- .department -->
+
+
             <br><br>
             <table>
                 <tr>
