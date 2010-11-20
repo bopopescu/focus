@@ -1,487 +1,251 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title>FocusTime</title>	
-	
-	<link rel="stylesheet" href="/media/css/screen.css" type="text/css" media="screen" title="no title" charset="utf-8" />	
-	<link rel="stylesheet" href="/media/css/plugin.css" type="text/css" media="screen" title="no title" charset="utf-8" />	
-	<link rel="stylesheet" href="/media/css/custom.css" type="text/css" media="screen" title="no title" charset="utf-8" />		
-	
-	<style type="text/css" media="screen">
-		
-	</style>
+    {% load i18n %}
+
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>FocusTime</title>
+
+    <link rel="stylesheet" href="/media/css/screen.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+    <link rel="stylesheet" href="/media/css/plugin.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+    <link rel="stylesheet" href="/media/css/custom.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+
+    <style type="text/css" media="screen">
+
+    </style>
 
 </head>
 
 <body>
-	
+
+{% load menu_tags %}
+
+
 <div id="wrapper" class="clearfix">
-	
-	<div id="top">
-		<div id="header">
-			<h1><a href="index2.html">FocusTime</a></h1>
-			
-			<div id="info">
-				<h4>{{ user.first_name }} {{ user.last_name }}</h4>
-				
-				<p>
-					<a href="/accounts/logout">Logg ut</a>
-			        
-					<br />
-	
-					{% if user.get_profile.notifications.count %}
-	                    <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
-	                        oppdateringer siden sist</a> |
-	                {% endif %}
-	
-				</p>
-				
-				<img src="/media/images/avatar.jpg" alt="avatar" />
-			</div> <!-- #info -->
-					
-		</div> <!-- #header -->	
-		
-		
-		<div id="nav">	
-	
-			<ul class="mega-container mega-grey">
-	
-				<li class="mega mega-current">
-					<a href="index2.html" class="mega-link">Dashboard</a>	
-				</li>
-		
-				<li class="mega">				
-					<a href="javascript:;" class="mega-tab">
-						Sample Pages
-					</a>
-					
-					<div class="mega-content mega-menu ">
-						<ul>
-							<li><a href="sample_gallery.html">Image Gallery</a></li>
-							<li><a href="sample_reports.html">Reports</a></li>			
-							<li><a href="sample_faq.html">FAQ</a></li>				
-							<li><a href="sample_invoice.html">Invoice</a></li>	
-							<li><a href="sample_calendar.html">Calendar</a></li>		
-							<li><a href="sample_people.html">People Listing</a></li>	
-							<li><a href="sample_details.html">Support Request</a></li>	
-						</ul>
-					</div>						
-				</li>
-		
-				<li class="mega">				
-					<a href="javascript:;" class="mega-tab hasSub">Page Elements</a>	
-					
-					<div class="mega-content mega-menu ">						
-								
-						<ul>
-							<li><a href="text.html">Buttons &amp; Text</a></li>	
-							<li><a href="grid.html">Grid Layout</a></li>	
-							<li><a href="tables.html">Tables</a></li>	
-							<li><a href="forms.html">Forms</a></li>	
-							<li><a href="charts.html">Charts</a></li>						
-						</ul>
-					</div>				
-				</li>
-				
-				<li class="mega">				
-					<a href="widgets.html" class="mega-link">Widgets</a>			
-				</li>							
-				
-				<li class="mega">
-					<a href="javascript:;" class="mega-tab hasSub">Multi-level menu</a>
-					<div class="mega-content mega-menu ">
-						
-								
-						<ul>
-							<li><a href="javascript:;">Demonstration</a></li>
-							<li><a href="javascript:;">Purposes</a></li>
-							<li>
-								<a href="javascript:;" class="hasSub">Only</a>
-								
-								<ul>
-									<li><a href="javascript:;">Fake Item #1</a></li>
-									<li><a href="javascript:;">Fake Item #2</a></li>
-									<li><a href="javascript:;">Fake Item #3</a></li>
-								</ul>
-							</li>
-						
-						</ul>
-					</div>						
-				</li>
-			</ul>
-		</div> <!-- #nav -->
-	</div> <!-- #top -->
-	
-	<div id="content" class="xfluid">
-		
-		<div class="portlet x3" style="min-height: 300px;">
-			
-			<div class="portlet-header">
-				<h4>Quick Info</h4>
-			</div> <!-- .portlet-header -->
-			
-			<div class="portlet-content">
-				<table cellspacing="0" class="info_table">
-					<tbody>
-						<tr>
-							<td class="value">789</td>
-							<td class="full">Visits Today</td>
-						</tr>
-						<tr>
-							<td class="value">634</td>
-							<td class="full">Unique Visits</td>
-						</tr>
-						<tr>
-							<td class="value">56</td>
-							<td class="full">Posts</td>
-						</tr>
-						<tr>
-							<td class="value">425</td>
-							<td class="full">Total Comments</td>
-						</tr>
-						<tr>
-							<td class="value">13</td>
-							<td class="full">Pending Comments</td>
-						</tr>
-						<tr>
-							<td class="value">17</td>
-							<td class="full">Support Requests</td>
-						</tr>
-					</tbody>
-				</table>
-			</div> <!-- .portlet-content -->			
-		</div> <!-- .portlet -->
-		
-		<div id="dash_chart" class="portlet x9">
-			
-			<div class="portlet-header">
-				<h4>Charting</h4>
-				
-				<ul class="portlet-tab-nav">
-					<li class="portlet-tab-nav-active"><a href="#tab1" rel="tooltip" title="Visitors over last 48 hours.">Visitors </a></li>				
-					<li class=""><a href="#tab2" rel="tooltip" title="Sales over last 48 hours.">Sales </a></li>
-				</ul>
-			</div> <!-- .portlet-header -->
-			
-			<div class="portlet-content">				
-				<div id="tab1" class="portlet-tab-content portlet-tab-content-active">
-					<table class="stats" title="area" width="100%" cellpadding="0" cellspacing="0">
-						<caption>2009/2010 Visitors by Industry (Million)</caption>
-						<thead>
-							<tr>
-								<td>&nbsp;</td>
-								<th>Banking</th>
-								<th>Beauty</th>
-								<th>Insurance</th>
-								<th>Internet</th>
-								<th>Media</th>
-							</tr>
-						</thead>
-						
-						<tbody>
-							<tr>
-								<th>2010</th>
-								<td>12</td>
-								<td>15</td>
-								<td>13</td>
-								<td>11</td>
-								<td>13</td>
-							</tr>
-														
-							<tr>
-								<th>2009</th>
-								<td>5</td>
-								<td>6</td>
-								<td>4</td>
-								<td>7</td>
-								<td>9</td>								
-							</tr>							
-						</tbody>
-					</table>
 
-				</div> <!-- .portlet-tab-content -->
-				
-				<div id="tab2" class="portlet-tab-content">
-					
-					<table class="stats" title="bar" width="100%" cellpadding="0" cellspacing="0">
-						<caption>2009/2010 Sales by industry (Million)</caption>
-						<thead>
-							<tr>
-								<td>&nbsp;</td>
-								<th>Banking</th>
-								<th>Beauty</th>
-								<th>Insurance</th>
-								<th>Internet</th>
-								<th>Media</th>
-							</tr>
+<div id="top">
+<div id="header">
+    <h1><a href="/">TIME | {{ user.get_profile.company }}</a></h1>
 
-						</thead>
-						
-						<tbody>
-							<tr>
-								<th>2009</th>
-								<td>5</td>
-								<td>6</td>
-								<td>4</td>
-								<td>7</td>
-								<td>9</td>
-							</tr>
-							
-							<tr>
-								<th>2010</th>
-								<td>12</td>
-								<td>15</td>
-								<td>13</td>
-								<td>11</td>
-								<td>13</td>
-							</tr>							
-						</tbody>
-					</table>
-				</div> <!-- .portlet-tab-content -->
-			</div> <!-- .portlet-content -->			
-		</div> <!-- .portlet -->
-		
-		<div class="xbreak"></div> <!-- .xbreak -->
-		
-		<div class="portlet x6">			
-			<div class="portlet-header">
-				<h4>Support Requests</h4>
-				
-				<ul class="portlet-tab-nav">
-					<li class="portlet-tab-nav-active"><a href="#allreq" rel="tooltip" title="All support requests.">All</a></li>						
-					<li class=""><a href="#openreq" rel="tooltip" title="Recently opened to request.">Open</a></li>
-					<li class=""><a href="#respreq" rel="tooltip" title="Recently responded to request.">Responded</a></li>
-				</ul>
-			</div> <!-- .portlet-header -->
-			
-			<div class="portlet-content">
-				
-				<div id="openreq" class="portlet-tab-content">
-					<table class="support_table" cellspacing="0">
-						<tbody>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a></td>
-							<td class="who">Posted by Peter</td>
-						</tr>
-	
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Consectetur adipiscing</a></td>
-							
-							<td class="who">Posted by Carla</td>
-						</tr>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Sed in porta lectus maecenas</a></td>
-							<td class="who">Posted by Bruce</td>
-						</tr>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-	
-							<td class="full"><a href="#">Dignissim enim</a></td>
-							<td class="who">Posted by Jane</td>
-						</tr>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
-							
-	
-							<td class="who">Posted by Asterix</td>
-						</tr>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Maecenas id velit et elit</a></td>
-	
-							
-							<td class="who">Posted by Killer</td>
-						</tr>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
-							
-	
-							<td class="who">Posted by Asterix</td>
-						</tr>
-						</tbody>
-					</table>
-				</div> <!-- .portlet-tab-content -->
-				
-				<div id="allreq" class="portlet-tab-content">
-					<table class="support_table" cellspacing="0">
-						<tbody>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a></td>
-							
-							<td class="who">Posted by Peter</td>
-						</tr>
-	
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Consectetur adipiscing</a></td>
-							<td class="who">Posted by Carla</td>
-						</tr>
-						<tr>
-							<td><span class="ticket open">Open</span></td>
-							<td class="full"><a href="#">Sed in porta lectus maecenas</a></td>
-							
-							<td class="who">Posted by Bruce</td>
-						</tr>
-						<tr>
-							<td><span class="ticket closed">Closed</span></td>
-	
-							<td class="full"><a href="#">Dignissim enim</a></td>
-							
-							<td class="who">Posted by Jane</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+    <div id="info">
+        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
 
-	
-							<td class="who">Posted by Asterix</td>
-						</tr>
-						<tr>
-							<td><span class="ticket closed">Closed</span></td>
-							<td class="full"><a href="#">Maecenas id velit et elit</a></td>
-	
-							
-							<td class="who">Posted by Killer</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
+        <p>
+            <a href="/accounts/logout">Logg ut</a>
 
-	
-							<td class="who">Posted by Asterix</td>
-						</tr>
-						</tbody>
-					</table>
-				</div> <!-- .portlet-tab-content -->
-				
-				<div id="respreq" class="portlet-tab-content">
-					<table class="support_table" cellspacing="0">
-						<tbody>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a></td>
-							
-							<td class="who">Posted by Peter</td>
-						</tr>
-	
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Consectetur adipiscing</a></td>
+            <br/>
 
-							<td class="who">Posted by Carla</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Sed in porta lectus maecenas</a></td>
-							
-							<td class="who">Posted by Bruce</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-	
-							<td class="full"><a href="#">Dignissim enim</a></td>
-							
-							<td class="who">Posted by Jane</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
-							
-	
-							<td class="who">Posted by Asterix</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Maecenas id velit et elit</a></td>
-	
-							
-							<td class="who">Posted by Killer</td>
-						</tr>
-						<tr>
-							<td><span class="ticket responded">Responded</span></td>
-							<td class="full"><a href="#">Duis nec rutrum lorem</a></td>
-							
-	
-							<td class="who">Posted by Asterix</td>
-						</tr>
-						</tbody>
-					</table>
-				</div> <!-- .portlet-tab-content -->
+            {% if user.get_profile.notifications.count %}
+                <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
+                    oppdateringer siden sist</a> |
+            {% endif %}
 
-			</div> <!-- .portlet-content -->			
-		</div>  <!-- .portlet -->
-		
-		
-		<div class="portlet x6">
-			
-			<div class="portlet-header">
-				<h4>Inbox</h4>
-			</div> <!-- .portlet-header -->
-			
-			<div class="portlet-content">
-				<table cellspacing="0" class="inbox_table">
-					<tbody>
-						<tr>
-							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
-							<td class="full"><a href="#">Lorem ipsum dolor sit amet</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna al</td>
-							<td class="who">Sent by Peter</td>
-						</tr>
-	
-						<tr>
-							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
-							<td class="full"><a href="#">Consectetur adipiscing</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exerc.</td>
-							<td class="who">Sent by Carla</td>
-						</tr>
-						<tr>
-							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
-							<td class="full"><a href="#">Sed in porta lectus maecenas</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</td>
-							<td class="who">Sent by Bruce</td>
-						</tr>
-						<tr>
-							<td class="avatar"><img src="/media/images/avatar.jpg" width="55" alt="avatar" class="avatar_img" /></td>
-	
-							<td class="full"><a href="#">Dignissim enim</a><br />Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</td>
-							<td class="who">Sent by Jane</td>
-						</tr>					
-					</tbody>
-				</table>
-			</div> <!-- .portlet-content -->			
-		</div> <!-- .portlet -->
-		
-	</div> <!-- #content -->
-	
-	<div id="footer">
-		
-		<p>Copyright &copy; 2010 <a href="javascript:;">MadeByAmp</a>, all rights reserved.</p>
-		
-	</div> <!-- #footer -->
-	
+        </p>
+
+        <img src="/media/images/avatar.jpg" alt="avatar"/>
+    </div> <!-- #info -->
+
+</div> <!-- #header -->
+
+
+<div id="nav">
+
+    <ul class="mega-container mega-grey">
+
+
+        <li class="mega {% active request "^/dashboard/" %}">
+            <a class="mega-tab" href="{% url app.dashboard.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Oppslagstavle</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.dashboard.views.overview %}">Oppslagstavle</a></li>
+                    <li><a href="{% url app.dashboard.views.logs %}">Logoversikt</a></li>
+                    <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
+                    <li><a href="{% url app.announcements.views.add %}"><img src="/media/images/icons/add.png  " alt="">Legg
+                        til nytt oppslag</a></li>
+                    <li><a href="{% url app.announcements.views.overview %}">Oversikt</a></li>
+                    <li><a href="{% url app.announcements.views.overview_deleted %}">Slettede oppslag</a></li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="mega {% active request "^/customers/" %}">
+            <a class="mega-tab" href="{% url app.customers.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Kunder</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.customers.views.add %}">Legg
+                        til ny kunde</a></li>
+                    <li><a href="{% url app.customers.views.overview %}">Oversikt</a>
+                    </li>
+                    <li><a href="{% url app.customers.views.overview_deleted %}">Slettede kunder</a></li>
+                    <li><a href="{% url app.customers.views.overview_all %}">Alle kunder</a></li>
+                </ul>
+            </div>
+        </li>
+
+
+        <li class="mega {% active request "^/contacts/" %}">
+            <a class="mega-tab" href="{% url app.contacts.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Kontakter</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.contacts.views.add %}">Legg til ny kontakt</a></li>
+                    <li><a href="{% url app.contacts.views.overview %}">Dine kontakter</a></li>
+                    <li><a href="{% url app.contacts.views.overview_all %}">Alle kontakter</a></li>
+                    <li><a href="{% url app.contacts.views.overview_deleted %}">Slettede kontakter</a></li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="mega {% active request "^/projects/" %}">
+            <a class="mega-tab" href="{% url app.contacts.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Prosjekter</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.projects.views.add %}">Legg til nytt prosjekt</a></li>
+                    <li><a href="{% url app.projects.views.overview %}">Dine prosjekter</a></li>
+                    <li><a href="{% url app.projects.views.overview_all %}">Alle aktive prosjekter</a></li>
+                    <li><a href="{% url app.projects.views.overview_deleted %}">Alle slettede prosjekter</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="mega tab{% active request "^/files/" %}">
+            <a class="mega-tab" href="{% url app.files.files.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Dine filer</a>
+
+        </li>
+
+        <li class="mega {% active request "^/orders/" %}">
+            <a class="mega-tab" href="{% url app.contacts.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Ordrer</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.orders.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
+                        til
+                        ny ordre</a></li>
+                    <li><a href="{% url app.orders.views.overview %}">Ordrer</a>
+                    </li>
+                    <li><a href="{% url app.orders.views.addOffer %}">Nytt
+                        tilbud</a></li>
+                    <li><a href="{% url app.orders.views.overviewOffers %}">Tilbud</a></li>
+                    <li><a href="{% url app.orders.views.overviewReadyForInvoice %}"><img
+                            src="/media/images/icons/coins.png" alt="">Klar til fakturing</a></li>
+                    <li><a href="{% url app.orders.views.overviewArchive %}">Arkiv</a></li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="mega {% active request "^/timetracking/" %}">
+            <a class="mega-tab" href="{% url app.timetracking.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Timeregistrering</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.timetracking.views.calendar %}"><img
+                            src="/media/images/icons/add.png"
+                            alt="">Timeføring</a></li>
+                    <li><a href="{% url app.timetracking.views.overview %}"><img
+                            src="/media/images/icons/clock.png"
+                            alt="">Oversikt</a></li>
+                    <li><a href="{% url app.timetracking.views.add %}">Registrer
+                        manuelt</a></li>
+                </ul>
+            </div>
+        </li>
+
+
+        <li class="mega {% active request "^/stock/" %}">
+            <a class="mega-tab" href="{% url app.stock.products.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Lager</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.stock.products.views.overview %}">Produktoversikt</a>
+                    </li>
+                    <li><a href="{% url app.stock.products.views.add %}"><img
+                            src="/media/images/icons/add.png  "
+                            alt="">Nytt produkt</a></li>
+
+                    <li><a href="{% url app.stock.productgroups.views.add %}"><img
+                            src="/media/images/icons/add.png  "
+                            alt="">Ny produktgruppe</a></li>
+
+                    <li><a href="{% url app.stock.products.views.overview_deleted %}">Slettede
+                        produkter</a>
+                    </li>
+                    .
+                    <ul>
+                        <li><a href="{% url app.suppliers.views.overview %}">Leverandøroversikt</a></li>
+                        <li><a href="{% url app.suppliers.views.add %}">Ny
+                            leverandør</a></li>
+                    </ul>
+
+                </ul>
+            </div>
+        </li>
+
+        <li class="mega {% active request "^/timetracking/" %}">
+            <a class="mega-tab" href="{% url app.timetracking.views.overview %}"><img
+                    src="/media/images/icons/note.png" alt="">Admin</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    <li><a href="{% url app.admin.users.views.overview %}">Legg til ny bruker</a></li>
+                    <li><a href="{% url app.admin.memberships.views.overview %}">Gruppeoversikt</a></li>
+                    <li><a href="{% url app.admin.memberships.views.add %}">Legg til ny gruppe</a></li>
+
+                </ul>
+            </div>
+        </li>
+
+
+    </ul>
+</div>
+<!-- #nav -->
+</div> <!-- #top -->
+
+<div id="content" class="xfluid">
+    {% block maincontent %}
+
+    {% endblock %}
+
+</div> <!-- #content -->
+
+<div id="footer">
+
+    <p>Focus Security AS.</p>
+
+</div>
+<!-- #footer -->
+
 </div> <!-- #wrapper -->
 
-<script  type="text/javascript" src="/media/js/jquery/jquery.1.4.2.min.js"></script>
-<script  type="text/javascript" src="/media/js/slate/slate.js"></script>
-<script  type="text/javascript" src="/media/js/slate/slate.portlet.js"></script>
-<script  type="text/javascript" src="/media/js/plugin.js"></script>
+<script type="text/javascript" src="/media/js/jquery/jquery.1.4.2.min.js"></script>
+<script type="text/javascript" src="/media/js/slate/slate.js"></script>
+<script type="text/javascript" src="/media/js/slate/slate.portlet.js"></script>
+<script type="text/javascript" src="/media/js/plugin.js"></script>
 
 
 <script type="text/javascript" charset="utf-8">
-$(function () 
-{
-	slate.init ();
-	slate.portlet.init ();	
-});
+    $(function () {
+        slate.init();
+        slate.portlet.init();
+    });
 </script>
-	
+
 </body>
 
 </html>

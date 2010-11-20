@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%block extrahead %}
+{% block extrahead %}
 
 {% endblock %}
 
@@ -10,46 +10,145 @@
 
 {% block maincontent %}
 
-<div id="inner">
-  
-  <div id="leftbar">
-  {% for announcement in announcements %}
+    <div class="portlet x3" style="min-height: 300px;">
 
-    <h2>{{announcement.title}}
-        <div id="datepublished">Skrevet av {{announcement.creator.first_name}}, {{announcement.date_created|date:"d.m.Y H:i"}}</div>
-    </h2>   
-   
-    {{announcement.text}}
-     <br><br>
-    {% if announcement.attachment %}
-     <img src="/media/images/icons/downloadBox.png" style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank" href="/media/{{announcement.attachment}}">Last ned vedlegg</a>
-    {% endif %}
-     <br><br>
-  {% endfor %}
-  </div>
-  
-  <div id="rightbar">
-    <h6> <img src="/media/images/icons/book.png" alt=""> Dine prosjekter </h6> 
-    <div id="textInRightBar">
-      {% for project in projects %}
-        - <a href="{% url app.projects.views.view project.id %}">{{project}}</a><br> 
-      {% endfor %}
-    </div>
-  
-  </div>
-  
-  <div id="rightbar">
-    <h6> <img src="/media/images/icons/basket.png" alt=""> Dine ordrer </h6> 
-    <div id="textInRightBar">
-      {% for order in orders %}
-         - <a href="{% url app.orders.views.view order.id %}">{{order}}</a><br>
-      {% endfor %}
-    </div>
-  </div>
-  
-  
-</div>
+        <div class="portlet-header">
+            <h4>Quick Info</h4>
+        </div>
+        <!-- .portlet-header -->
 
+        <div class="portlet-content">
+            <table cellspacing="0" class="info_table">
+                <tbody>
+                <tr>
+                    <td class="value">125</td>
+                    <td class="full">Ordrer</td>
+                </tr>
+                <tr>
+                    <td class="value">13</td>
+                    <td class="full">Prosjekter</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- .portlet-content -->
+    </div> <!-- .portlet -->
+
+    <div class="portlet x9">
+        <div class="portlet-header">
+            <h4>Dine prosjekter og ordrer</h4>
+
+            <ul class="portlet-tab-nav">
+                <li class="portlet-tab-nav-active"><a href="#allreq" rel="tooltip"
+                                                      title="Alle prosjekter og ordrer">Alt</a>
+                </li>
+                <li class=""><a href="#openreq" rel="tooltip" title="Dine ordrer">Ordrer</a></li>
+                <li class=""><a href="#respreq" rel="tooltip" title="Dine prosjekter">Prosjekter</a></li>
+            </ul>
+        </div>
+        <!-- .portlet-header -->
+
+        <div class="portlet-content">
+
+            <div id="openreq" class="portlet-tab-content">
+                <table class="support_table" cellspacing="0">
+                    <tbody>
+                    {% for order in orders %}
+
+                        <tr>
+                            <td><span class="ticket open">Ordre</span></td>
+
+                            <td>
+                                <a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- .portlet-tab-content -->
+
+            <div id="allreq" class="portlet-tab-content">
+                <table class="support_table" cellspacing="0">
+                    <tbody>
+                    {% for order in orders %}
+
+                        <tr>
+                            <td><span class="ticket open">Ordre</span></td>
+
+                            <td>
+                                <a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    {% for project in projects %}
+                        <tr>
+                            <td><span class="ticket open">Prosjekt</span></td>
+
+                            <td><a href="{% url app.projects.views.view project.id %}">{{ project }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- .portlet-tab-content -->
+
+            <div id="respreq" class="portlet-tab-content">
+                <table class="support_table" cellspacing="0">
+                    <tbody>
+
+                    {% for project in projects %}
+                        <tr>
+                            <td><span class="ticket open">Prosjekt</span></td>
+
+                            <td><a href="{% url app.projects.views.view project.id %}">{{ project }}</a></td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- .portlet-tab-content -->
+
+        </div>
+        <!-- .portlet-content -->
+    </div>  <!-- .portlet -->
+
+
+    <div class="portlet x9">
+
+        <div class="portlet-header">
+            <h4>Oppslagstavle</h4>
+        </div>
+        <!-- .portlet-header -->
+
+        <div class="portlet-content">
+            <table cellspacing="0" class="inbox_table">
+                <tbody>
+
+                {% for announcement in announcements %}
+                    <tr>
+                    <h5>{{ announcement.title }}
+                        <div id="datepublished">
+                    </h5>
+                    Skrevet av {{ announcement.creator.first_name }}, {{ announcement.date_created|date:"d.m.Y H:i" }}
+                    </div>
+
+                    <br><br>{{ announcement.text }}
+                    <br><br>
+                    {% if announcement.attachment %}
+                        <img src="/media/images/icons/downloadBox.png"
+                             style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank"
+                                                                                         href="/media/{{announcement.attachment}}">Last
+                        ned vedlegg</a>
+                        </tr>
+                    {% endif %}
+
+                {% endfor %}
+
+        </tbody>
+        </table>
+    </div> <!-- .portlet-content -->
+    </div> <!-- .portlet -->
 
 
 {% endblock %}  

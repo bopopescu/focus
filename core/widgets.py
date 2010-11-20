@@ -14,6 +14,7 @@ class SelectWithPop(forms.Select):
                 name+="s"
         
             popupplus = render_to_string("popupplus.html", {'field': name, 'field_id': name_id})
+
             return html+popupplus
         
 class MultipleSelectWithPop(forms.SelectMultiple):

@@ -12,7 +12,12 @@
 
 {% block maincontent %}
 
-<div id="inner">
+    <div class="portlet x12">
+
+           <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+           <div class="portlet-content">
+
 
 	Navn: {{user.first_name}} {{user.last_name}}
 	<br>
@@ -100,6 +105,6 @@
 		
 	</table>
 			
-</div>	
+</div>
    
 {% endblock %}	

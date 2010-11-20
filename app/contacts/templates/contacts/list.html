@@ -1,38 +1,54 @@
 {% extends "base.html" %}
 {% block submenu %}
-	<a href="add"><span>Oprett ny kunde</span></a>
+    <a href="add"><span>Oprett ny kunde</span></a>
 {% endblock %}
 
 
-{% block maincontent %}	
+{% block maincontent %}
 
-				<table class="tablesorter hover">
-					<thead> 
-						<tr> 
-							<th>Navn</th> 
-							<th>Adresse</th> 
-							<th>Telefon</th> 
-							<th>Epostadresse</th> 
-							<th>#</th> 				 
-						</tr> 
-					</thead>
-					
-		<tbody>
-		{% for contact in contacts %}
-			<tr> 
-				<td>{{contact.full_name}}</td> 
-				<td>{{contact.address}}</td>
-				<td>{{contact.phone}}</td> 
-				<td>{{contact.email}}</td> 
-				<td>
-				<a href="{% url app.contacts.views.edit contact.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
-				<a href="{% url app.contacts.views.permissions contact.id %}" class="edit admintool"><img src="/media/images/icons/lock_edit.png" alt=""></a>
-				<a href="{% url app.contacts.views.delete contact.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
-				</td>
-			</tr>
-		{% endfor %}	
-		</tbody>			
-	</table>
-	
+
+    <div class="portlet x12">
+
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+        <div class="portlet-content">
+
+
+
+            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
+                <thead>
+                <tr>
+                    <th>Navn</th>
+                    <th>Adresse</th>
+                    <th>Telefon</th>
+                    <th>Epostadresse</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for contact in contacts %}
+                    <tr>
+                        <td><a href="{{ contact.getViewUrl }}">{{ contact.full_name }}</a></td>
+                        <td>{{ contact.address }}</td>
+                        <td>{{ contact.phone }}</td>
+                        <td>{{ contact.email }}</td>
+                        <td>
+                            <a href="{% url app.contacts.views.edit contact.id %}" class="edit admintool"><img
+                                    src="/media/images/icons/user_edit.png" alt=""></a>
+                            <a href="{% url app.contacts.views.permissions contact.id %}" class="edit admintool"><img
+                                    src="/media/images/icons/lock_edit.png" alt=""></a>
+                            <a href="{% url app.contacts.views.delete contact.id %}" class="edit admintool"><img
+                                    src="/media/images/icons/user_delete.png" alt=""></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
 
 {% endblock %}

@@ -13,13 +13,24 @@
     </script>
 
 
+
+            <div class="portlet x12">
+
+                <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+                <div class="portlet-content">
+
+
+
+
+
 <form enctype="multipart/form-data" action="" method="post">
 	
 			{{ form_perm.management_form }}
             {{ PermGroupSet.management_form }}
 
-				<table class="tablesorter">
-					<thead> 
+    <table cellpadding="0" cellspacing="0" border="0" class="display">
+					<thead>
 						<tr> 
 							<th width="200px">Bruker</th>
 							<th width="80px">Kan se</th>
@@ -87,8 +98,8 @@
 				</table>
 
 
-  <div class="submit-row" style="overflow: auto;">
-      <input type="submit" value="Lagre" class="default" name="_save" />
-  </div>
-  
+      <input type="submit" value="Lagre" class="btn" name="_save" />
+
+      </div></div>
+
 {% endblock %}

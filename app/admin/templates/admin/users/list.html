@@ -4,9 +4,16 @@
 
 
 {% block maincontent %}	
+    <div class="portlet x12">
 
-				<table class="tablesorter hover">
-					<thead> 
+           <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+           <div class="portlet-content">
+
+
+
+            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
+					<thead>
 						<tr> 
 							<th>Navn</th> 
 							<th>Epostadresse</th> 
@@ -32,6 +39,6 @@
 		{% endfor %}	
 		</tbody>			
 	</table>
-	
+	      </div></div>
 
 {% endblock %}

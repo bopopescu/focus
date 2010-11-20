@@ -153,18 +153,20 @@ body
 
 	#header h1
 	{
-		background: url(../images/title.png) no-repeat 0 0;
-		width: 159px;
+        width: 359px;
 		height: 27px;
-		line-height: 500px;
-		overflow: hidden;
-		color: #FFF;		font-size: 32px;
+		color: #FFF;
+        font-size: 32px;
 		position: absolute;
 		top: 40px;
 		left: 10px;
 	}
+
+    #header h1 a {
+        color:white;
+        text-decoration:none;
+    }
 	
-		#header h1 a { display: block; }
 
 #info
 {
@@ -371,12 +373,12 @@ FORM
 .form { padding: 0; margin: 0; }
 .form .field { width: 100%; float: left; }
 .form .field_help { margin-left: 145px; font-size: 90%; color: #777; }
-.form label, 
+.form label,
 .form span.label { color: #444; margin-right: 10px; padding-right: 10px; width: 125px; display: block; float: left;  font-weight: bold; text-align: right; position: relative; }
-.form label em, 
+.form label em,
 .form span.label em { position: absolute; right: 0; font-size: 120%; font-style: normal; color: #C00; }
 .form input:focus,
-.form input.error:focus, 
+.form input.error:focus,
 .form textarea:focus {	background-color: #FFC; border-color: #FC6; }
 .form .upload { margin-bottom: -5em;}
 
@@ -411,7 +413,7 @@ FORM
 .label-top .buttonrow { margin-left: 0; }
 .label-top .selector { width: 100%; display: block; float: left; }
 
-.form div.controlset label, 
+.form div.controlset label,
 .form div.controlset input { display: inline; float: none; }
 .form .controlset label {font-size: 11px; font-weight: normal !important; }
 .controlset { margin-bottom: 2.5em; float: left; }

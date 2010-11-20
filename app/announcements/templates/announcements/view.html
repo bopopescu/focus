@@ -12,12 +12,16 @@
 
 {% block maincontent %}
 
-    <div id="inner">
+    <div class="portlet x12">
+
+             <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+             <div class="portlet-content">
 
 
-    <h2>{{announcement.title}}
+    <h2>{{announcement.title}}</h2>
         <div id="datepublished">Skrevet av {{announcement.creator.first_name}}, {{announcement.date_created|date:"d.m.Y H:i"}}</div>
-    </h2>
+
 
     {{announcement.text}}
      <br><br>
@@ -28,6 +32,6 @@
 
 
 
-    </div>
+    </div> </div>
 
 {% endblock %}

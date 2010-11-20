@@ -12,17 +12,18 @@ class Contact(PersistentModel):
     address = models.CharField("Adresse", max_length=80)
     email = models.EmailField("Epostadresse", max_length=80)
     phone = models.CharField("Telefon", max_length=20)
-    
+
     def __unicode__(self):
         return "%s" % unicode(self.full_name)
-    
+
     def getViewUrl(self):
-        return urlresolvers.reverse('app.contacts.views.view', args=("%s"%self.id,))
+        return urlresolvers.reverse('app.contacts.views.view', args=("%s" % self.id,))
 
     def getEditUrl(self):
-        return urlresolvers.reverse('app.contacts.views.edit', args=("%s"%self.id,))
+        return urlresolvers.reverse('app.contacts.views.edit', args=("%s" % self.id,))
 
 from reversion.admin import VersionAdmin
+
 class ContactModelAdmin(VersionAdmin):
     """Admin settings go here."""
 
