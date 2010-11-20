@@ -13,8 +13,8 @@ class OrderForm(ModelForm):
         model = Order
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'state')
 
-    def __init__(self, *args, **kwrds):
-        super(OrderForm, self).__init__(*args, **kwrds)
+    def __init__(self, *args, **kwargs):
+        super(OrderForm, self).__init__(*args, **kwargs)
         self.fields['project'].widget = SelectWithPop()
         self.fields['project'].queryset = Project.objects.for_company()
         self.fields['contacts'].widget = MultipleSelectWithPop()
@@ -22,6 +22,9 @@ class OrderForm(ModelForm):
         self.fields['customer'].widget = SelectWithPop()
         self.fields['customer'].queryset = Customer.objects.for_company()
         self.fields['responsible'].queryset = get_company_users()
+
+        if 'instance' in kwargs:
+            self.id = kwargs['instance'].id
 
     def clean_delivery_date_deadline(self):
         delivery_date = self.cleaned_data['delivery_date']
@@ -37,6 +40,9 @@ class OrderForm(ModelForm):
 
          orders = Order.objects.for_company()
          for i in orders:
+             if self.id == i.id:
+                 continue
+
              if i.oid == oid:
                  raise forms.ValidationError("Det kreves unikt ordrenr")
 

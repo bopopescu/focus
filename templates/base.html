@@ -26,6 +26,17 @@
 {% load menu_tags %}
 
 
+<style>
+
+    .imageIconMenu {
+        width:20px;
+        height:20px;
+        vertical-align:middle;
+
+    }
+
+</style>
+
 <div id="wrapper" class="clearfix">
 
 <div id="top">
@@ -59,8 +70,7 @@
 
 
         <li class="mega {% active request "^/dashboard/" %}">
-            <a class="mega-tab" href="{% url app.dashboard.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Oppslagstavle</a>
+            <a class="mega-tab" href="{% url app.dashboard.views.overview %}">Oppslagstavle</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
@@ -76,8 +86,7 @@
         </li>
 
         <li class="mega {% active request "^/customers/" %}">
-            <a class="mega-tab" href="{% url app.customers.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Kunder</a>
+            <a class="mega-tab" href="{% url app.customers.views.overview %}">Kunder</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
@@ -93,8 +102,7 @@
 
 
         <li class="mega {% active request "^/contacts/" %}">
-            <a class="mega-tab" href="{% url app.contacts.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Kontakter</a>
+            <a class="mega-tab" href="{% url app.contacts.views.overview %}">Kontakter</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
@@ -107,8 +115,7 @@
         </li>
 
         <li class="mega {% active request "^/projects/" %}">
-            <a class="mega-tab" href="{% url app.contacts.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Prosjekter</a>
+            <a class="mega-tab" href="{% url app.contacts.views.overview %}">Prosjekter</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
@@ -122,21 +129,19 @@
         </li>
 
         <li class="mega tab{% active request "^/files/" %}">
-            <a class="mega-tab" href="{% url app.files.files.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Dine filer</a>
+            <a class="mega-tab" href="{% url app.files.files.views.overview %}">Dine filer</a>
 
         </li>
 
         <li class="mega {% active request "^/orders/" %}">
-            <a class="mega-tab" href="{% url app.contacts.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Ordrer</a>
+            <a class="mega-tab" href="{% url app.contacts.views.overview %}">Ordrer</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
-                    <li><a href="{% url app.orders.views.add %}"><img src="/media/images/icons/add.png" alt="">Legg
+                    <li><a href="{% url app.orders.views.add %}"><img class="imageIconMenu" src="/media/icons/32/add.png" alt=""> Legg
                         til
                         ny ordre</a></li>
-                    <li><a href="{% url app.orders.views.overview %}">Ordrer</a>
+                    <li><a href="{% url app.orders.views.overview %}"><img class="imageIconMenu" src="/media/icons/32/report.png" alt=""> Ordrer</a>
                     </li>
                     <li><a href="{% url app.orders.views.addOffer %}">Nytt
                         tilbud</a></li>
@@ -149,8 +154,7 @@
         </li>
 
         <li class="mega {% active request "^/timetracking/" %}">
-            <a class="mega-tab" href="{% url app.timetracking.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Timeregistrering</a>
+            <a class="mega-tab" href="{% url app.timetracking.views.overview %}">Timeregistrering</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
@@ -168,8 +172,7 @@
 
 
         <li class="mega {% active request "^/stock/" %}">
-            <a class="mega-tab" href="{% url app.stock.products.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Lager</a>
+            <a class="mega-tab" href="{% url app.stock.products.views.overview %}">Lager</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
@@ -198,8 +201,7 @@
         </li>
 
         <li class="mega {% active request "^/timetracking/" %}">
-            <a class="mega-tab" href="{% url app.timetracking.views.overview %}"><img
-                    src="/media/images/icons/note.png" alt="">Admin</a>
+            <a class="mega-tab" href="{% url app.timetracking.views.overview %}">Admin</a>
 
             <div class="mega-content mega-menu ">
                 <ul>

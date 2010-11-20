@@ -17,8 +17,24 @@ class ProjectForm(ModelForm):
         model = Project
         fields = ('pid','project_name','customer','description','deliveryAddress','responsible','deliveryDate','deliveryDateDeadline',)
         
-    def __init__(self,*args,**kwrds):
-        super(ProjectForm,self).__init__(*args,**kwrds)
+    def __init__(self,*args,**kwargs):
+        super(ProjectForm,self).__init__(*args,**kwargs)
         self.fields['customer'].widget = SelectWithPop()
         self.fields['customer'].queryset=Customer.objects.for_company()
         self.fields['responsible'].queryset = get_company_users()
+
+        if 'instance' in kwargs:
+            self.id = kwargs['instance'].id
+
+    def clean_pid(self):
+         pid = self.cleaned_data['pid']
+
+         projects = Project.objects.for_company()
+         for i in projects:
+             if self.id == i.id:
+                 continue
+
+             if i.pid == pid:
+                 raise forms.ValidationError("Det kreves unikt prosjektnr")
+
+         return pid
