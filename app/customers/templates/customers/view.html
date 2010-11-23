@@ -12,103 +12,67 @@
 
 {% block maincontent %}
 
-    <div class="portlet x9">
+    <div id="inner">
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+        <table>
 
-        <div class="portlet-content">
+            <tr>
+                <th>Prosjekt</th>
+                <th>Ordrer</th>
+            </tr>
 
-            <table>
+            <tr>
+                <td>Navn</td>
+                <td>{{ customer.full_name }}</td>
+            </tr>
 
+            <tr>
+                <td>Epostadresse</td>
+                <td>{{ customer.email }}</td>
+            </tr>
+
+            <tr>
+                <td>Hjemmeside</td>
+                <td><a href="{{ customer.website }}" target="_blank">{{ customer.website }}</td>
+            </tr>
+            <tr>
+                <td>Adresse</td>
+                <td> {{ customer.address }}, {{ customer.zip }} {{ customer.city }}</td>
+            </tr>
+            <tr>
+                <td>Altearntiv adresse</td>
+                <td>{{ customer.alternative_address }}</td>
+            </tr>
+
+
+        </table>
+
+
+        <br><br>
+        <b>Tilhørende prosjekter og ordrer</b>
+        <br><br>
+        <table>
+
+            <tr>
+                <th>Prosjekt</th>
+                <th>Ordrer</th>
+            </tr>
+
+            {% for project in customer.projects.for_user %}
                 <tr>
-                    <th>Prosjekt</th>
-                    <th>Ordrer</th>
+                    <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
+                    <td></td>
                 </tr>
 
-                <tr>
-                    <td>Navn</td>
-                    <td>{{ customer.full_name }}</td>
-                </tr>
-
-                <tr>
-                    <td>Epostadresse</td>
-                    <td>{{ customer.email }}</td>
-                </tr>
-
-                <tr>
-                    <td>Hjemmeside</td>
-                    <td><a href="http://{{ customer.website }}" target="_blank">{{ customer.website }}</td>
-                </tr>
-                <tr>
-                    <td>Adresse</td>
-                    <td> {{ customer.address }}, {{ customer.zip }} {{ customer.city }}</td>
-                </tr>
-                <tr>
-                    <td>Altearntiv adresse</td>
-                    <td>{{ customer.alternative_address }}</td>
-                </tr>
-
-
-            </table>
-
-
-            <br><br>
-            <b>Tilhørende prosjekter og ordrer</b>
-            <br><br>
-            <table>
-
-                <tr>
-                    <th>Prosjekt</th>
-                    <th>Ordrer</th>
-                </tr>
-
-                {% for project in customer.projects.for_user %}
+                {% for order in project.orders.for_user %}
                     <tr>
-                        <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
                         <td></td>
+                        <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
                     </tr>
-
-                    {% for order in project.orders.for_user %}
-                        <tr>
-                            <td></td>
-                            <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
-                        </tr>
-                    {% endfor %}
                 {% endfor %}
-            </table>
+            {% endfor %}
+        </table>
 
-        </div>  </div>
-    <div class="portlet x3">
-
-        <div class="portlet-header"><h4>Valg</h4></div>
-
-        <div class="portlet-content">
-
-            <div class="tool editChoice">
-                <a href="{% url app.customers.views.edit customer.id %}">Endre kunde</a>
-            </div>
-            <div class="tool editPerm">
-                <a href="{% url app.customers.views.permissions customer.id %}">Endre rettigheter</a>
-            </div>
-
-            {% if not customer.deleted %}
-                <div class="tool deleteChoice">
-                    <a href="{% url app.customers.views.delete customer.id %}">Slett kunde</a>
-                </div>
-            {% endif %}
-
-            {% if customer.deleted %}
-
-                <div class="tool recoverChoice">
-                    {% if customer.deleted %}
-                        <a href="{% url app.customers.views.recover customer.id %}">Gjenopprett kunde</a>
-                    {% endif %}
-                </div>
-            {% endif %}
-
-
-
-
-        </div>
     </div>
+
 {% endblock %}	
