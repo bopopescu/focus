@@ -28,5 +28,5 @@ background-image: url('/media/icons/notice/warning.png');
 .error {
 color: #D8000C;
 background-color: #FFBABA;
-background-image: url('/media/icons/notice/illegal.png');
+background-image: url('/media/icons/notice/error.png');
 }

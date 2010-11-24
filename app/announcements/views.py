@@ -41,7 +41,7 @@ def recover(request, id):
     Announcement.objects.for_company(deleted=True).get(id=id).recover()
     return redirect(overview)
 
-@require_perm('modify_permissions', Announcement)
+@require_perm('modifyPermissions', Announcement)
 def permissions(request, id):
     type = Announcement
     url = "announcements/view/%s" % id

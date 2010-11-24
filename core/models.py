@@ -198,7 +198,6 @@ class Role(models.Model):
     def __unicode__(self):
         return unicode(self.content_type)
 
-
 """
 Adding object permissins to object, using a content_type for binding with all kinds of objects
 """
@@ -212,7 +211,7 @@ class ObjectPermission(models.Model):
     can_view = models.BooleanField()
     can_change = models.BooleanField()
     can_delete = models.BooleanField()
-    can_modify_permissions = models.BooleanField()
+    can_modifyPermissions = models.BooleanField()
     negative = models.BooleanField()
 
     content_type = models.ForeignKey(ContentType)
