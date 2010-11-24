@@ -36,6 +36,7 @@
 							<th width="80px">Kan se</th>
 							<th width="80px">Kan endre</th>
 							<th width="80px">Kan slette</th>
+                            <th width="80px">Kan endre rettigheter</th>
 							<th width="150px">Negativ rettighet</th>
 							<th>Slett denne</th>
 						</tr> 
@@ -54,7 +55,8 @@
 								<td>{{ forms.can_view }}</td>
 								<td>{{ forms.can_change }}</td> 
 								<td>{{ forms.can_delete }}</td> 
-								<td>{{ forms.negative }}</td> 			
+								<td>{{ forms.can_modify_permissions }}</td>
+								<td>{{ forms.negative }}</td>
 								<td onclick="giveWarning(this);">{{ forms.deleted }}</td> 			
 						</tr>  			
     	
@@ -70,6 +72,7 @@
 							<th width="80px">Kan se</th>
 							<th width="80px">Kan endre</th>
 							<th width="80px">Kan slette</th>
+							<th width="80px">Kan endre rettigheter</th>
                             <th>Slett denne</th>
 
 						</tr>
@@ -90,6 +93,7 @@
 								<td>{{ forms.can_view }}</td>
 								<td>{{ forms.can_change }}</td>
 								<td>{{ forms.can_delete }}</td>
+								<td>{{ forms.can_modify_permissions }}</td>
 								<td onclick="giveWarning(this);">{{ forms.deleted }}</td>
 						</tr>
 

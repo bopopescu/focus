@@ -17,9 +17,6 @@ class Company(models.Model):
     def __unicode__(self):
         return self.name
 
-
-
-
 class Notification(models.Model):
     recipient     = models.ForeignKey(User, related_name="notifications")
     text          = models.TextField()
@@ -215,7 +212,7 @@ class ObjectPermission(models.Model):
     can_view = models.BooleanField()
     can_change = models.BooleanField()
     can_delete = models.BooleanField()
-
+    can_modify_permissions = models.BooleanField()
     negative = models.BooleanField()
 
     content_type = models.ForeignKey(ContentType)

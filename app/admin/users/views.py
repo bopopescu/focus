@@ -15,7 +15,7 @@ from django.db.models import Q
 def overview(request):
     updateTimeout(request)
     Company = request.user.get_profile().company
-    Users = User.objects.filter(userprofile__company=Company)
+    Users = User.objects.filter(userprofile__company=Company, is_active=True)
     return render_with_request(request, 'admin/users/list.html', {'title':'Brukere', 'users':Users})
 
 @login_required
@@ -138,7 +138,10 @@ def view(request, id):
                                                                   })
 @login_required
 def delete(request, id):
-    messages.success(request, "Velykket slettet bruker")        
+    u = User.objects.get(id=id)
+    u.is_active = False
+    u.save()
+    messages.success(request, "Velykket slettet bruker")
     return redirect(overview)
 
 @login_required
@@ -155,20 +158,20 @@ def form (request, id = False):
     if request.method == 'POST':
         
         form = UserForm(request.POST, instance=instance)
-
         if form.is_valid():    
             o = form.save(commit=False)
-
             o.save()
             form.save_m2m()
 
             if not o.get_profile().company:
                 o.get_profile().company = request.user.get_profile().company
                 o.get_profile().save()
+
+            if not id:
                 sendGeneratedPassword(request, o.id)
 
             messages.success(request, msg)
-
+            
             #Redirects after save for direct editing
             return redirect(overview)   
 

@@ -32,7 +32,7 @@ def view(request, id):
 def edit(request, id):
     return form(request, id)
 
-@login_required
+@require_perm('delete', Announcement)
 def delete(request, id):
     Announcement.objects.for_company().get(id=id).delete()
     return redirect(overview)

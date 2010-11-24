@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/media/css/custom.css" type="text/css" media="screen" title="no title"
           charset="utf-8"/>
 
+    <link rel="stylesheet" href="/media/css/noticeui.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+
     <style type="text/css" media="screen">
 
     </style>
@@ -24,7 +27,6 @@
 <body>
 
 {% load menu_tags %}
-
 
 <style>
 
@@ -212,6 +214,9 @@
     </div> <!-- #top -->
 
     <div id="content" class="xfluid">
+
+    {% include "messages.html" %}
+	
         {% block maincontent %}
 
         {% endblock %}
@@ -242,8 +247,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        $("#message").click(function () {
+          $(this).fadeOut();
+          return true;
+        });
     }
-            );
+);
 
 </script>
 
