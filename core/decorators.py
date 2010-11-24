@@ -16,7 +16,7 @@ def require_perm(perm, model):
             if request.user.has_perm(perm, obj):
                 return func(request, *args, **kwargs)
             else:
-                messages.error(request, "Ingen tilgang")
+                messages.error(request, "Ingen tilgang!")
                 return HttpResponseRedirect("/")
         
         return wraps(func)(inner_decorator)

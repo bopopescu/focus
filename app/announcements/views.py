@@ -23,7 +23,6 @@ def add(request):
 
 
 @require_perm('view', Announcement)
-@login_required
 def view(request, id):
     announcement = get_object_or_404(Announcement, id = id)
     return render_with_request(request, 'announcements/view.html', {'title':'Oppslag',
@@ -37,12 +36,12 @@ def delete(request, id):
     Announcement.objects.for_company().get(id=id).delete()
     return redirect(overview)
 
-@login_required
+@require_perm('delete', Announcement)
 def recover(request, id):
     Announcement.objects.for_company(deleted=True).get(id=id).recover()
     return redirect(overview)
 
-@login_required
+@require_perm('modify_permissions', Announcement)
 def permissions(request, id):
     type = Announcement
     url = "announcements/view/%s" % id

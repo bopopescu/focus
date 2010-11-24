@@ -21,7 +21,6 @@ def form_perm(request, type, id, url, message, popup=False):
     error = False
 
     if request.method == 'POST':
-
         formset = PermFormSet(request.POST, prefix="users")
         if formset.is_valid():
             instances = formset.save(commit=False)
