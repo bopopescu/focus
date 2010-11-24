@@ -17,10 +17,16 @@
 						{% for p in units %}
 							<tr>
 								<td><a href="{% url app.stock.productUnits.views.edit p.id %}">{{p}}</a></td>
-								<td>
-									<a href="{% url app.stock.productUnits.views.edit p.id %}" class="edit admintool"><img src="/media/images/icons/user_edit.png" alt=""></a>
-									<a href="{% url app.stock.productUnits.views.delete p.id %}" class="edit admintool"><img src="/media/images/icons/user_delete.png" alt=""></a>
-								</td>
+								 <td>
+                            <div class="tool">
+                                <a href="{% url  app.stock.productUnits.views.edit p.id  %}"><img
+                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
+                            </div>
+
+
+                        </td>
+
+                                
 							</tr>
 						{% endfor %}
 					</tbody>

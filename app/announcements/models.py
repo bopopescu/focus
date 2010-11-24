@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib import admin
 
 from core.models import PersistentModel
 from django.core import urlresolvers
@@ -12,15 +11,8 @@ class Announcement(PersistentModel):
     def __unicode__(self):
         return self.title
 
-
     def getViewUrl(self):
         return urlresolvers.reverse('app.announcements.views.view', args=("%s" % self.id,))
 
-
-from reversion.admin import VersionAdmin
-
-class ModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-
-
-admin.site.register(Announcement, ModelAdmin)
+    def getEditUrl(self):
+        return urlresolvers.reverse('app.announcements.views.edit', args=("%s" % self.id,))

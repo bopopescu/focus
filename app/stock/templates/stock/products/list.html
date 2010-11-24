@@ -5,6 +5,15 @@
 {% endblock %}
 
 {% block maincontent %}
+
+    <div class="portlet x12">
+
+    <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+    <div class="portlet-content">
+
+
+
     <table class="tablesorter">
         <thead>
         <tr>
@@ -19,19 +28,18 @@
 
             <tr>
                 <td><a href="{{ p.getViewUrl }}">{{ p }}</a></td>
-                <td>
-                    <a href="{{ p.getEditUrl }}" class="edit admintool"><img
-                            src="/media/images/icons/user_edit.png" alt=""></a>
 
-                    {% if p.deleted %}
-                        <a href="{{ p.getRecoverUrl }}" class="edit admintool"><img
-                                src="/media/images/icons/cog_go.png" alt=""></a>
-                    {% else %}
-                        <a href="{{ p.getDeleteUrl }}" class="edit admintool"><img
-                                src="/media/images/icons/user_delete.png" alt=""></a>
-                    {% endif %}
+                <td>
+
+                    <div class="tool">
+                        <a href="{{ p.getEditUrl }}"><img
+                                class="tool" src="/media/icons/edit.gif" alt=""></a>
+                    </div>
+
 
                 </td>
+
+
             </tr>
 
         {% endfor %}

@@ -12,26 +12,59 @@
 
 {% block maincontent %}
 
-    <div class="portlet x12">
 
-             <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <div class="portlet x9">
 
-             <div class="portlet-content">
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-
-    <h2>{{announcement.title}}</h2>
-        <div id="datepublished">Skrevet av {{announcement.creator.first_name}}, {{announcement.date_created|date:"d.m.Y H:i"}}</div>
+        <div class="portlet-content">
 
 
-    {{announcement.text}}
-     <br><br>
-    {% if announcement.attachment %}
-     <img src="/media/images/icons/downloadBox.png" style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank" href="/media/{{announcement.attachment}}">Last ned vedlegg</a>
-    {% endif %}
-     <br><br>
+            <h2>{{ announcement.title }}</h2>
+
+            <div id="datepublished">Skrevet
+                av {{ announcement.creator.first_name }}, {{ announcement.date_created|date:"d.m.Y H:i" }}</div>
+
+
+            {{ announcement.text }}
+            <br><br>
+            {% if announcement.attachment %}
+                <img src="/media/images/icons/downloadBox.png" style="width:30px; height:30px; vertical-align:middle;">
+                <a target="_blank" href="/media/{{announcement.attachment}}">Last ned vedlegg</a>
+            {% endif %}
+            <br><br>
 
 
 
-    </div> </div>
+        </div>
+    </div>
+
+    <div class="portlet x3">
+
+        <div class="portlet-header"><h4>Valg</h4></div>
+
+        <div class="portlet-content">
+
+            <div class="tool editChoice">
+
+                <a href="{{ announcement.getEditUrl }}}" class="edit admintool">Endre</a>
+            </div>
+
+            {% if announcement.deleted %}
+
+                <div class="tool editChoice">
+
+                    <a href="{% url app.announcements.views.recover announcement.id %}"  class="edit admintool">Gjennopprett</a>
+                </div>
+            {% else %}
+                <div class="tool deleteChoice">
+                    <a href="{% url app.announcements.views.delete announcement.id %}"  class="edit admintool">Slett</a>
+                </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+
 
 {% endblock %}

@@ -28,10 +28,12 @@
                 <td>{{ p.date|date:"d.m.Y" }}</td>
                 <td>{{ p.hours_worked }}</td>
                 <td>
-                    <a href="{% url app.timetracking.views.edit p.id %}" class="edit admintool"><img
-                            src="/media/images/icons/user_edit.png" alt=""></a>
-                    <a href="{% url app.timetracking.views.delete p.id %}" class="edit admintool"><img
-                            src="/media/images/icons/user_delete.png" alt=""></a>
+                    <div class="tool">
+                                                   <a href="{% url app.timetracking.views.edit p.id %}"><img
+                                                           class="tool" src="/media/icons/edit.gif" alt=""></a>
+                                               </div>
+
+                    
                 </td>
             </tr>
 

@@ -80,7 +80,7 @@
                     <li><a href="{% url app.dashboard.views.overview %}">Oppslagstavle</a></li>
                     <li><a href="{% url app.dashboard.views.logs %}">Logoversikt</a></li>
                     <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
-                    <li><a href="{% url app.announcements.views.add %}"><img src="/media/images/icons/add.png  " alt="">Legg
+                    <li><a href="{% url app.announcements.views.add %}">Legg
                         til nytt oppslag</a></li>
                     <li><a href="{% url app.announcements.views.overview %}">Oversikt</a></li>
                     <li><a href="{% url app.announcements.views.overview_deleted %}">Slettede oppslag</a></li>
@@ -141,16 +141,15 @@
 
             <div class="mega-content mega-menu ">
                 <ul>
-                    <li><a href="{% url app.orders.views.add %}"><img class="imageIconMenu" src="/media/icons/32/add.png" alt=""> Legg
+                    <li><a href="{% url app.orders.views.add %}">Legg
                         til
                         ny ordre</a></li>
-                    <li><a href="{% url app.orders.views.overview %}"><img class="imageIconMenu" src="/media/icons/32/report.png" alt=""> Ordrer</a>
+                    <li><a href="{% url app.orders.views.overview %}">Ordrer</a>
                     </li>
                     <li><a href="{% url app.orders.views.addOffer %}">Nytt
                         tilbud</a></li>
                     <li><a href="{% url app.orders.views.overviewOffers %}">Tilbud</a></li>
-                    <li><a href="{% url app.orders.views.overviewReadyForInvoice %}"><img
-                            src="/media/images/icons/coins.png" alt="">Klar til fakturing</a></li>
+                    <li><a href="{% url app.orders.views.overviewReadyForInvoice %}">Klar til fakturing</a></li>
                     <li><a href="{% url app.orders.views.overviewArchive %}">Arkiv</a></li>
                 </ul>
             </div>
@@ -161,14 +160,9 @@
 
             <div class="mega-content mega-menu ">
                 <ul>
-                    <li><a href="{% url app.timetracking.views.calendar %}"><img
-                            src="/media/images/icons/add.png"
-                            alt="">Timeføring</a></li>
-                    <li><a href="{% url app.timetracking.views.overview %}"><img
-                            src="/media/images/icons/clock.png"
-                            alt="">Oversikt</a></li>
-                    <li><a href="{% url app.timetracking.views.add %}">Registrer
-                        manuelt</a></li>
+                    <li><a href="{% url app.timetracking.views.calendar %}">Timeføring</a></li>
+                    <li><a href="{% url app.timetracking.views.overview %}">Oversikt</a></li>
+                    <li><a href="{% url app.timetracking.views.add %}">Registrer manuelt</a></li>
                 </ul>
             </div>
         </li>
@@ -181,22 +175,16 @@
                 <ul>
                     <li><a href="{% url app.stock.products.views.overview %}">Produktoversikt</a>
                     </li>
-                    <li><a href="{% url app.stock.products.views.add %}"><img
-                            src="/media/images/icons/add.png  "
-                            alt="">Nytt produkt</a></li>
+                    <li><a href="{% url app.stock.products.views.add %}">Nytt produkt</a></li>
 
-                    <li><a href="{% url app.stock.productgroups.views.add %}"><img
-                            src="/media/images/icons/add.png  "
-                            alt="">Ny produktgruppe</a></li>
+                    <li><a href="{% url app.stock.productgroups.views.add %}">Ny produktgruppe</a></li>
 
-                    <li><a href="{% url app.stock.products.views.overview_deleted %}">Slettede
-                        produkter</a>
+                    <li><a href="{% url app.stock.products.views.overview_deleted %}">Slettede produkter</a>
                     </li>
                     .
                     <ul>
                         <li><a href="{% url app.suppliers.views.overview %}">Leverandøroversikt</a></li>
-                        <li><a href="{% url app.suppliers.views.add %}">Ny
-                            leverandør</a></li>
+                        <li><a href="{% url app.suppliers.views.add %}">Ny leverandør</a></li>
                     </ul>
 
                 </ul>
@@ -250,6 +238,15 @@
         slate.portlet.init();
     });
 </script>
+
+<script type="text/javascript">
+$(document).ready(function()
+    {
+    }
+);
+
+</script>
+
 
 </body>
 

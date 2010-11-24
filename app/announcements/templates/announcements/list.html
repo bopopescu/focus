@@ -6,38 +6,44 @@
 
 {% block maincontent %}
 
-    <table class="tablesorter hover">
-        <thead>
-        <tr>
-            <th>Tittel</th>
-            <th>#</th>
-        </tr>
-        </thead>
 
-        <tbody>
-        {% for a in announcements %}
-            <tr>
-                <td>{{ a.title }}</td>
-                <td>
-                    <a href="{% url app.announcements.views.edit a.id %}" class="edit admintool"><img
-                            src="/media/images/icons/user_edit.png" alt=""></a>
-                    <a href="{% url app.announcements.views.permissions a.id %}" class="edit admintool"><img
-                            src="/media/images/icons/lock_edit.png" alt=""></a>
-                    {% if a.deleted %}
-                        <a href="{% url app.announcements.views.recover a.id %}" class="edit admintool"><img
-                                src="/media/images/icons/cog_go.png" alt=""></a>
-                    {% else %}
-                        <a href="{% url app.announcements.views.delete a.id %}" class="edit admintool"><img
-                                src="/media/images/icons/user_delete.png" alt=""></a>
-                    {% endif %}
+    <div class="portlet x12">
 
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
+
+        <div class="portlet-content">
 
 
-    </table>
 
+            <table class="tablesorter hover">
+                <thead>
+                <tr>
+                    <th>Tittel</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for a in announcements %}
+                    <tr>
+                        <td><a href="{{ a.getViewUrl }}">{{ a.title }}</a></td>
+                        <td>
+                            {% if not a.deleted %}
+                            <div class="tool">
+                                <a href="{% url app.announcements.views.edit a.id  %}"><img
+                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
+                            </div>
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+
+            </table>
+
+        </div>
+    </div>
 
 {% endblock %}

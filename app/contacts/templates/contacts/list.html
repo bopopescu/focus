@@ -33,14 +33,16 @@
                         <td>{{ contact.address }}</td>
                         <td>{{ contact.phone }}</td>
                         <td>{{ contact.email }}</td>
+
                         <td>
-                            <a href="{% url app.contacts.views.edit contact.id %}" class="edit admintool"><img
-                                    src="/media/images/icons/user_edit.png" alt=""></a>
-                            <a href="{% url app.contacts.views.permissions contact.id %}" class="edit admintool"><img
-                                    src="/media/images/icons/lock_edit.png" alt=""></a>
-                            <a href="{% url app.contacts.views.delete contact.id %}" class="edit admintool"><img
-                                    src="/media/images/icons/user_delete.png" alt=""></a>
+                            <div class="tool">
+                                <a href="{% url app.contacts.views.edit contact.id  %}"><img
+                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
+                            </div>
+
+
                         </td>
+                      
                     </tr>
                 {% endfor %}
                 </tbody>

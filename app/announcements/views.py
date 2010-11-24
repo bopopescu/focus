@@ -23,10 +23,9 @@ def add(request):
 
 @login_required
 def view(request, id):
-    announcement = get_object_or_404(Announcement, id = id, deleted=False)
+    announcement = get_object_or_404(Announcement, id = id)
     return render_with_request(request, 'announcements/view.html', {'title':'Oppslag',
                                                                     'announcement':announcement})
-
 @login_required
 def edit(request, id):
     return form(request, id)
