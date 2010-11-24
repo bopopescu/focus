@@ -25,7 +25,7 @@ def overview_all(request):
     return render_with_request(request, 'customers/list.html', {'title':'Alle aktive kunder',
                                                                 'customers':customers})
 
-@require_perm('view', Customer)
+@require_perm('view', Customer,'id')
 def view(request, id):
     customer = Customer.objects.for_user(deleted=None).get(id=id)
     return render_with_request(request, 'customers/view.html', {'title':'Kunde: %s' % customer.full_name,

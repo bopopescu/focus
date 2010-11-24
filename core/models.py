@@ -183,20 +183,37 @@ class Membership(PersistentModel):
     def __unicode__(self):
         return self.name
 
+"""
+Actions("ADD","EDIT","VIEW"..)
+"""
+class Action(models.Model):
+    action = models.CharField(max_length=40)
+    verb = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
 
 """
-ROLES
+ROLES ("Leader", "Member"..)
 """
 class Role(models.Model):
     name = models.CharField(max_length=200)
-    permission = models.CharField(max_length=50, default="")
-    user = models.ForeignKey(User, blank=True, null=True, related_name="roles")
-    membership = models.ForeignKey(Membership, blank=True, null=True, related_name='roles')
-
-    content_type = models.ForeignKey(ContentType)
+    description = models.CharField(max_length=250)
+    actions = models.ForeignKey(Action, related_name="role")
 
     def __unicode__(self):
         return unicode(self.content_type)
+
+
+class Permission(models.Model):
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+
+    user = models.ForeignKey(User, blank=True, null=True, related_name="permission")
+    membership = models.ForeignKey(Membership, blank=True, null=True, related_name='permission')
+
+    actions = models.ManyToManyField(Action)
+
+    def __unicode__(self):
+         return unicode(self.content_type)
 
 """
 Adding object permissins to object, using a content_type for binding with all kinds of objects

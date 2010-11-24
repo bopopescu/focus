@@ -4,17 +4,20 @@ from django.contrib import messages
 from django.http import Http404
 
 #Require permission in views
-def require_perm(perm, model):    
+def require_perm(perm, model, objID=False):    
     def decorator(func):
 
         def inner_decorator(request, *args, **kwargs):
             if not len(args):
                 return HttpResponseRedirect("/")
+
             
-            obj = model.objects.get(pk=args[0])
-                        
-            if request.user.has_perm(perm, obj):
-                return func(request, *args, **kwargs)
+            if objID:
+                obj = model.objects.get(objID=args[0])
+
+                if request.user.has_perm(perm, obj):
+                    return func(request, *args, **kwargs)
+
             else:
                 messages.error(request, "Ingen tilgang!")
                 return HttpResponseRedirect("/")
