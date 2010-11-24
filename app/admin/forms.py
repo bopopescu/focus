@@ -10,7 +10,8 @@ from core.widgets import *
 
 class UserForm(ModelForm):
     class Meta:
-        model = UserProfile
+        model = User
+        fields = ('username','first_name','last_name','email',)
 
 class UserProfileForm(ModelForm):
      class Meta:

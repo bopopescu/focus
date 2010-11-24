@@ -46,20 +46,25 @@
         <div class="portlet-content">
 
             <div class="tool editChoice">
+                <a href="{{ announcement.getEditUrl }}" class="edit admintool">Endre</a>
+            </div>
 
-                <a href="{{ announcement.getEditUrl }}}" class="edit admintool">Endre</a>
+            <div class="tool editPerm">
+                <a href="{% url app.announcements.views.permissions announcement.id %}">Endre rettigheter</a>
             </div>
 
             {% if announcement.deleted %}
 
                 <div class="tool editChoice">
+                    <a href="{% url app.announcements.views.recover announcement.id %}" class="edit admintool">Gjennopprett</a>
+                </div>
 
-                    <a href="{% url app.announcements.views.recover announcement.id %}"  class="edit admintool">Gjennopprett</a>
-                </div>
             {% else %}
+
                 <div class="tool deleteChoice">
-                    <a href="{% url app.announcements.views.delete announcement.id %}"  class="edit admintool">Slett</a>
+                    <a href="{% url app.announcements.views.delete announcement.id %}" class="edit admintool">Slett</a>
                 </div>
+
             {% endif %}
 
 

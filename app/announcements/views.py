@@ -5,6 +5,7 @@ from models import *
 from forms import *
 from core.shortcuts import *
 from core.views import *
+from core.decorators import require_perm
 
 @login_required
 def overview(request):
@@ -21,12 +22,13 @@ def add(request):
     return form(request)
 
 
+@require_perm('view', Announcement)
 @login_required
 def view(request, id):
     announcement = get_object_or_404(Announcement, id = id)
     return render_with_request(request, 'announcements/view.html', {'title':'Oppslag',
                                                                     'announcement':announcement})
-@login_required
+@require_perm('edit', Announcement)
 def edit(request, id):
     return form(request, id)
 

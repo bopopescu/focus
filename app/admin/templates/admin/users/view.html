@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{%block extrahead %}
+{% block extrahead %}
 
 {% endblock %}
 
@@ -12,99 +12,127 @@
 
 {% block maincontent %}
 
-    <div class="portlet x12">
+    <div class="portlet x9">
 
-           <div class="portlet-header"><h4>{{ title }}</h4></div>
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-           <div class="portlet-content">
-
-
-	Navn: {{user.first_name}} {{user.last_name}}
-	<br>
-    Epost: {{ user.email }}
-    <br>
-    Firma: {{ user.get_profile.company }}
-    <br><br>
-    <a href="{% url app.admin.users.views.changeCanLogin user.id %}">Kan logge inn: <b>{{ user.get_profile.canLogin }}</b></a>
-    <br>
-
-    <br><br>
-	<table style="text-align:center">
-		
-		<tr>
-		  <th>Medlem i gruppene</th>
-		</tr>
-		
-		{% for member in user.memberships.all %}
-		
-			<tr>
-				<td><a href="{% url app.admin.memberships.views.view member.id %}">{{member}}</a></td>
-			</tr>
-		
-		{% endfor %}
-		
-	</table>
-	
-	{% regroup permissions by content_type as Permissions %}
+        <div class="portlet-content">
 
 
-	
-	<br><br>
-	<b>Rettigheter</b>
-	<br><br>
-	<table style="text-align:center">
-	
-		<tr>
-			<th></th>
-			<th>Objekt</th>
-			<th>Kan se</th>
-			<th>Kan endre</th>
-			<th>Kan slette</th>
-			<th>Negativ rettighet</th>
-			<th></th>
-		</tr>
-	
-		
-			
-	{% for type in Permissions %}
-	
-			<tr><td style="text-align:left;"><b>{{type.grouper}}</b></td><td colspan=5></td></tr>
-			
-			{% for perm in type.list %}
+            Navn: {{ user.first_name }} {{ user.last_name }}
+            <br>
+            Epost: {{ user.email }}
+            <br>
+            Firma: {{ user.get_profile.company }}
+            <br><br>
+            <a href="{% url app.admin.users.views.changeCanLogin user.id %}">Kan logge inn:
+                <b>{{ user.get_profile.canLogin }}</b></a>
+            <br>
 
-			<tr>
-				<td></td>
-				<td style="text-align:left;"><a href='{{perm.get_object.get_url}}'>{{perm.get_object}}</a></td>
-				<td>{% if perm.can_view %}
-    					X
-    				{% endif %}
-				</td>
-				<td>{% if perm.can_change %}
-    					X
-    				{% endif %}
-				</td>
-				<td>{% if perm.can_delete %}
-    					X
-    				{% endif %}
-				</td>
-				<td>{% if perm.negative %}
-    					X
-    				{% endif %}
-				</td>
-				
-				<td>{% if perm.membership %}
-    					Gjennom gruppen <a href="{% url app.admin.memberships.views.view perm.membership.id %}">{{ perm.membership }}</a>
-    				{% endif %}
-				</td>
-				
-			</tr>
-		{% endfor %}
-		</tr>
-		
-		{% endfor %}
-		
-	</table>
-			
-</div>
-   
+            <br><br>
+            <table style="text-align:center">
+
+                <tr>
+                    <th>Medlem i gruppene</th>
+                </tr>
+
+                {% for member in user.memberships.all %}
+
+                    <tr>
+                        <td><a href="{% url app.admin.memberships.views.view member.id %}">{{ member }}</a></td>
+                    </tr>
+
+                {% endfor %}
+
+            </table>
+
+            {% regroup permissions by content_type as Permissions %}
+
+
+            <br><br>
+            <b>Rettigheter</b>
+            <br><br>
+            <table style="text-align:center">
+
+                <tr>
+                    <th></th>
+                    <th>Objekt</th>
+                    <th>Kan se</th>
+                    <th>Kan endre</th>
+                    <th>Kan slette</th>
+                    <th>Negativ rettighet</th>
+                    <th></th>
+                </tr>
+
+
+
+                {% for type in Permissions %}
+
+                    <tr>
+                        <td style="text-align:left;"><b>{{ type.grouper }}</b></td>
+                        <td colspan=5></td>
+                    </tr>
+
+                    {% for perm in type.list %}
+
+                        <tr>
+                            <td></td>
+                            <td style="text-align:left;"><a href='{{perm.get_object.get_url}}'>{{ perm.get_object }}</a>
+                            </td>
+                            <td>{% if perm.can_view %}
+                                X
+                            {% endif %}
+                            </td>
+                            <td>{% if perm.can_change %}
+                                X
+                            {% endif %}
+                            </td>
+                            <td>{% if perm.can_delete %}
+                                X
+                            {% endif %}
+                            </td>
+                            <td>{% if perm.negative %}
+                                X
+                            {% endif %}
+                            </td>
+
+                            <td>{% if perm.membership %}
+                                Gjennom gruppen <a
+                                        href="{% url app.admin.memberships.views.view perm.membership.id %}">{{  perm.membership }}</a>
+                            {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+    </div>
+
+    <div class="portlet x3">
+
+        <div class="portlet-header"><h4>Valg</h4></div>
+
+        <div class="portlet-content">
+
+            <div class="tool editChoice">
+                <a href="{% url app.admin.users.views.edit user.id %}" class="edit admintool">Endre</a>
+            </div>
+
+            <div class="tool editChoice">
+                <a href="{% url app.admin.users.views.sendGeneratedPassword user.id %}" class="edit admintool">Send nytt
+                    passord</a>
+            </div>
+
+            <div class="tool deleteChoice">
+                <a href="{% url app.admin.users.views.delete user.id %}" class="edit admintool">Slett</a>
+            </div>
+
+        </div>
+    </div>
+
 {% endblock %}	
