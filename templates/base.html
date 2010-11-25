@@ -139,7 +139,7 @@
                 </li>
 
                 <li class="mega {% active request "^/orders/" %}">
-                    <a class="mega-tab" href="{% url app.contacts.views.overview %}">Ordrer</a>
+                    <a class="mega-tab" href="{% url app.orders.views.overview %}">Ordrer</a>
 
                     <div class="mega-content mega-menu ">
                         <ul>
@@ -194,7 +194,7 @@
                 </li>
 
                 <li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
-                    <a class="mega-tab" href="{% url app.timetracking.views.overview %}">Admin</a>
+                    <a class="mega-tab" href="{% url app.admin.users.views.overview %}">Admin</a>
 
                     <div class="mega-content mega-menu ">
                         <ul>

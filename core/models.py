@@ -191,13 +191,16 @@ class Action(models.Model):
     verb = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
 
+    def __unicode__(self):
+        return self.action
+
 """
 ROLES ("Leader", "Member"..)
 """
 class Role(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=250)
-    actions = models.ForeignKey(Action, related_name="role")
+    actions = models.ManyToManyField(Action, related_name="role")
 
     def __unicode__(self):
         return unicode(self.content_type)
@@ -206,11 +209,8 @@ class Role(models.Model):
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-
-    user = models.ForeignKey(User, blank=True, null=True, related_name="permission")
-    membership = models.ForeignKey(Membership, blank=True, null=True, related_name='permission')
-
-    actions = models.ManyToManyField(Action)
+    user = models.ForeignKey("User",User, blank=True, null=True, related_name="permission")
+    membership = models.ForeignKey("Group", Membership, blank=True, null=True, related_name='permission')
 
     def __unicode__(self):
          return unicode(self.content_type)
