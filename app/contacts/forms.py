@@ -10,12 +10,3 @@ class ContactForm(ModelForm):
     class Meta:
         model = Contact
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor','company')
-        
-class ContactPermissions(ModelForm):
-    class Meta:
-        model = ObjectPermission  
-        exclude = ('content_type', 'object_id')      
-    
-
-
-ContactPermissionFormSet = formset_factory(ContactPermissions, extra=3)

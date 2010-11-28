@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 
 
-from core.models import ObjectPermission
+from core.models import Permission
 
 class ObjectPermBackend(object):
     
@@ -30,8 +30,7 @@ class ObjectPermBackend(object):
         except IndexError:
             return False
 
-
-        p = ObjectPermission.objects.filter(content_type=ct,
+        p = Permission.objects.filter(content_type=ct,
                                             object_id=obj.id,
                                             user=user_obj)
         
@@ -40,9 +39,10 @@ class ObjectPermBackend(object):
 
         if(self.check_users_membership_for_permissions(user_obj, perm, obj)):
             return True
-             
+
         return p.filter(**{'can_%s' % perm: True}).exists()
-            
+
+
     def check_users_membership_for_permissions(self, user, perm, obj = None):
         for membership in user.memberships.all():
             if self.membership_has_perm(membership, perm, obj):
@@ -62,7 +62,7 @@ class ObjectPermBackend(object):
         except Exception:
             return False
 
-        p = ObjectPermission.objects.filter(content_type=ct,
+        p = Permission.objects.filter(content_type=ct,
                                             object_id=obj.id,
                                             membership=membership_obj)
                 

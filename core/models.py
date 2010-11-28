@@ -57,7 +57,7 @@ Class for logs, saves user in action and reference to object logged
 """
 class Log(models.Model):
     date         = models.DateTimeField()
-    creator      = models.ForeignKey(User, related_name="logs")
+    creator      = models.ForeignKey(User, related_name="logs",null=True)
     content_type = models.ForeignKey(ContentType, null=True)
     object_id    = models.PositiveIntegerField(null=True)
     message      = models.TextField()
@@ -113,8 +113,9 @@ class PersistentModel(models.Model):
         action = "EDIT"
         if not self.id:
             action = "ADD"
+
             self.creator = get_current_user()
-            self.company = get_current_user().get_profile().company
+            self.company = get_current_company()
 
         #self.editor = get_current_user()
         self.date_edited = datetime.now()
@@ -161,7 +162,7 @@ class PersistentModel(models.Model):
             id = self.id
             users = []
 
-            for u in ObjectPermission.objects.filter(content_type=content_type, negative=False, object_id=id,
+            for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id,
                                                      **{'can_%s' % perm: True}):
                 if u.user and u.user not in users:
                     users.append(u.user)
@@ -207,41 +208,20 @@ class Role(models.Model):
 
 
 class Permission(models.Model):
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
     object_id = models.PositiveIntegerField()
-    user = models.ForeignKey("User",User, blank=True, null=True, related_name="permission")
-    membership = models.ForeignKey("Group", Membership, blank=True, null=True, related_name='permission')
+    user = models.ForeignKey(User, blank=True, null=True, related_name="permissions")
+    membership = models.ForeignKey(Membership, blank=True, null=True, related_name='permissions')
+    role = models.ForeignKey(Role, blank=True, null=True, related_name="permissions")
+    deleted = models.BooleanField()
 
     def __unicode__(self):
          return unicode(self.content_type)
-
-"""
-Adding object permissins to object, using a content_type for binding with all kinds of objects
-"""
-class ObjectPermission(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, related_name="permissions")
-    membership = models.ForeignKey(Membership, blank=True, null=True, related_name='permissions')
-
-    deleted = models.BooleanField()
-
-    #General permissions
-    can_view = models.BooleanField()
-    can_change = models.BooleanField()
-    can_delete = models.BooleanField()
-    can_modifyPermissions = models.BooleanField()
-    negative = models.BooleanField()
-
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-
-    def __unicode__(self):
-        return unicode(self.get_object())
 
     def get_object(self):
         return self.content_type.get_object_for_this_type(id=self.object_id)
 
 from django.db.models.signals import post_save
-
 """
 Userprofiles, for adding additional informartion about the user
 """
@@ -273,7 +253,7 @@ def create_profile(sender, **kw):
     if kw["created"]:
         up = UserProfile(user=user)
         try:
-            up.company = get_current_user().get_profile()
+            up.company = get_current_company()
         except:
             up.save()
 
@@ -289,7 +269,7 @@ def initial_data ():
     comp = Company(name="Focus AS")
     comp.save()
 
-    a, created = User.objects.get_or_create(username="superadmin",
+    a, created = User.objects.all().get_or_create(username="superadmin",
                                             first_name="SuperAdmin",
                                             last_name="",
                                             is_superuser=True,
@@ -298,7 +278,7 @@ def initial_data ():
     a.set_password("superpassord")
     a.save()
 
-    u, created = User.objects.get_or_create(username="test",
+    u, created = User.objects.all().get_or_create(username="testgdfg",
                                             first_name="Test",
                                             last_name="User",
                                             is_active=True)
@@ -308,7 +288,7 @@ def initial_data ():
     u.get_profile().save()
 
 
-    u, created = User.objects.get_or_create(username="test2",
+    u, created = User.objects.all().get_or_create(username="test2fdgdf",
                                             first_name="Test2",
                                             last_name="User2",
                                             is_active=True)

@@ -13,13 +13,20 @@ _thread_locals = threading.local()
 
 def get_current_user():
     try:
-        return getattr(_thread_locals, 'user', None)
+        user = getattr(_thread_locals, 'user', None)
+        if user.is_anonymous():
+            return None
+        else:
+            return user
     except:
         return None
 
 def get_current_company():
     try:
-        return get_current_user().get_profile().company
+        if get_current_user():
+            return get_current_user().get_profile().company
+        else:
+            return None
     except:
         return None
 

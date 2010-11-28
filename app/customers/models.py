@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.generic import GenericTabularInline
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.admin import FlatPageAdmin as FPAdmin
-from core.models import ObjectPermission, PersistentModel
+from core.models import PersistentModel
 from django.core import urlresolvers
 
 class Customer(PersistentModel):
@@ -28,24 +28,9 @@ class Customer(PersistentModel):
     def getViewUrl(self):
         return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
 
-
-class ObjectPermissionInline(GenericTabularInline):
-    model = ObjectPermission
-    raw_id_fields = ['user']
-
-class ObjectPermissionMixin(object):
-    def has_change_permission(self, request, obj=None):
-        opts = self.opts
-        return request.user.has_perm(opts.app_label + '.' + opts.get_change_permission(), obj)
-
-    def has_delete_permission(self, request, obj=None):
-        opts = self.opts
-        return request.user.has_perm(opts.app_label + '.' + opts.get_delete_permission(), obj)
-
 from reversion.admin import VersionAdmin
 
-class CustomerAdmin(VersionAdmin, admin.ModelAdmin, ObjectPermissionMixin):
-    inlines = [ObjectPermissionInline]
+class ContactModelAdmin(VersionAdmin):
+    """Admin settings go here."""
 
-admin.site.register(Customer, CustomerAdmin)
-
+admin.site.register(Customer, ContactModelAdmin)
