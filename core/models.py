@@ -284,6 +284,9 @@ def initial_data ():
                                             is_active=True)
     u.set_password("test")
     u.save()
+
+    print u.get_profile()
+
     u.get_profile().company = comp
     u.get_profile().save()
 
