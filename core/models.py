@@ -285,10 +285,8 @@ def initial_data ():
     u.set_password("test")
     u.save()
 
-    print u.get_profile()
-
-    u.get_profile().company = comp
-    u.get_profile().save()
+    #u.get_profile().company = comp
+    #u.get_profile().save()
 
 
     u, created = User.objects.all().get_or_create(username="test2fdgdf",
@@ -297,5 +295,5 @@ def initial_data ():
                                             is_active=True)
     u.set_password("test2")
     u.save()
-    u.get_profile().company = comp
-    u.get_profile().save()
+    #u.get_profile().company = comp
+    #u.get_profile().save()
