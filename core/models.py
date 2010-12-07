@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from managers import PersistentManager
 from core.middleware import *
 from datetime import datetime
+from django.utils.encoding import smart_str
 
 """
 The Company class.
@@ -16,6 +17,149 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+def get_hexdigest(algorithm, salt, raw_password):
+    """
+    Returns a string of the hexdigest of the given plaintext password and salt
+    using the given algorithm ('md5', 'sha1' or 'crypt').
+    """
+    raw_password, salt = smart_str(raw_password), smart_str(salt)
+    if algorithm == 'crypt':
+        try:
+            import crypt
+        except ImportError:
+            raise ValueError('"crypt" password algorithm not supported in this environment')
+        return crypt.crypt(raw_password, salt)
+
+    if algorithm == 'md5':
+        return md5_constructor(salt + raw_password).hexdigest()
+    elif algorithm == 'sha1':
+        return sha_constructor(salt + raw_password).hexdigest()
+    raise ValueError("Got unknown password algorithm type in password.")
+
+def check_password(raw_password, enc_password):
+    """
+    Returns a boolean of whether the raw_password was correct. Handles
+    encryption formats behind the scenes.
+    """
+    algo, salt, hsh = enc_password.split('$')
+    return hsh == get_hexdigest(algo, salt, raw_password)
+
+
+class User(models.Model):
+    """
+    Users within the Django authentication system are represented by this model.
+
+    Username and password are required. Other fields are optional.
+    """
+    username = models.CharField(_('username'), max_length=30, unique=True, help_text=_("Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    email = models.EmailField(_('e-mail address'), blank=True)
+    password = models.CharField(_('password'), max_length=128, help_text=_("Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
+    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_("Designates whether the user can log into this admin site."))
+    is_active = models.BooleanField(_('active'), default=True, help_text=_("Designates whether this user should be treated as active. Unselect this instead of deleting accounts."))
+    is_superuser = models.BooleanField(_('superuser status'), default=False, help_text=_("Designates that this user has all permissions without explicitly assigning them."))
+    last_login = models.DateTimeField(_('last login'), default=datetime.datetime.now)
+    date_joined = models.DateTimeField(_('date joined'), default=datetime.datetime.now)
+    groups = models.ManyToManyField(Group, verbose_name=_('groups'), blank=True,
+        help_text=_("In addition to the permissions manually assigned, this user will also get all permissions granted to each group he/she is in."))
+
+    objects = UserManager()
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+    def __unicode__(self):
+        return self.username
+
+    def is_authenticated(self):
+        """
+        Always return True. This is a way to tell if the user has been
+        authenticated in templates.
+        """
+        return True
+
+    def get_full_name(self):
+        "Returns the first_name plus the last_name, with a space in between."
+        full_name = u'%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def set_password(self, raw_password):
+        import random
+        algo = 'sha1'
+        salt = get_hexdigest(algo, str(random.random()), str(random.random()))[:5]
+        hsh = get_hexdigest(algo, salt, raw_password)
+        self.password = '%s$%s$%s' % (algo, salt, hsh)
+
+    def check_password(self, raw_password):
+        """
+        Returns a boolean of whether the raw_password was correct. Handles
+        encryption formats behind the scenes.
+        """
+        # Backwards-compatibility check. Older passwords won't include the
+        # algorithm or salt.
+        if '$' not in self.password:
+            is_correct = (self.password == get_hexdigest('md5', '', raw_password))
+            if is_correct:
+                # Convert the password to the new, more secure format.
+                self.set_password(raw_password)
+                self.save()
+            return is_correct
+        return check_password(raw_password, self.password)
+
+    def set_unusable_password(self):
+        # Sets a value that will never be a valid hash
+        self.password = UNUSABLE_PASSWORD
+
+    def has_usable_password(self):
+        return self.password != UNUSABLE_PASSWORD
+
+    def get_and_delete_messages(self):
+        messages = []
+        for m in self.message_set.all():
+            messages.append(m.message)
+            m.delete()
+        return messages
+
+    def email_user(self, subject, message, from_email=None):
+        "Sends an e-mail to this User."
+        from django.core.mail import send_mail
+        send_mail(subject, message, from_email, [self.email])
+
+    def _get_message_set(self):
+        import warnings
+        warnings.warn('The user messaging API is deprecated. Please update'
+                      ' your code to use the new messages framework.',
+                      category=PendingDeprecationWarning)
+        return self._message_set
+    message_set = property(_get_message_set)
+
+
+
+
+"""
+Userprofiles, for adding additional informartion about the user
+"""
+class UserProfile(User):
+    company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
+    canLogin = models.BooleanField(default=True)
+    profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
+
+    def notifications(self):
+        return self.user.notifications.filter(read=False)
+
+    def getProfileImage(self):
+        if self.profileImage:
+            return "/media/%s" % self.profileImage
+
+        return "/media/images/avatar.jpg"
+
+    def __unicode__(self):
+        return "Profile for: %s" % self.user
+
 
 class Notification(models.Model):
     recipient     = models.ForeignKey(User, related_name="notifications")
@@ -179,7 +323,8 @@ Memberships, user can be members of memberships, which can have permissions for 
 """
 class Membership(PersistentModel):
     name = models.CharField(max_length=50)
-    users = models.ManyToManyField(User, related_name="memberships")
+    parent = models.ForeignKey('Membership', related_name="children", null=True)
+    members = models.ManyToManyField(UserProfile, related_name="memberships")
 
     def __unicode__(self):
         return self.name
@@ -221,55 +366,16 @@ class Permission(models.Model):
     def get_object(self):
         return self.content_type.get_object_for_this_type(id=self.object_id)
 
-from django.db.models.signals import post_save
-"""
-Userprofiles, for adding additional informartion about the user
-"""
-class UserProfile(models.Model):
-# This is the only required field
-    user = models.ForeignKey(User, unique=True)
-    company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
-    canLogin = models.BooleanField(default=True)
-    profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
-
-    def notifications(self):
-        return self.user.notifications.filter(read=False)
-
-    def getProfileImage(self):
-        if self.profileImage:
-            return "/media/%s" % self.profileImage
-
-        return "/media/images/avatar.jpg"
-
-    def __unicode__(self):
-        return "Profile for: %s" % self.user
-
-"""
-Keeping users and their userprofile in sync, when creating a user, a userprofile is createad as well.
-"""
-
-def create_profile(sender, **kw):
-    user = kw["instance"]
-    if kw["created"]:
-        up = UserProfile(user=user)
-        try:
-            up.company = get_current_company()
-        except:
-            up.save()
-
-post_save.connect(create_profile, sender=User)
 
 """
 Adding some initial data to the model when run syncdb
 """
 
-from app.timetracking.models import *
-
 def initial_data ():
     comp = Company(name="Focus AS")
     comp.save()
 
-    a, created = User.objects.all().get_or_create(username="superadmin",
+    a, created = UserProfile.objects.all().get_or_create(username="superadmin",
                                             first_name="SuperAdmin",
                                             last_name="",
                                             is_superuser=True,
@@ -278,7 +384,7 @@ def initial_data ():
     a.set_password("superpassord")
     a.save()
 
-    u, created = User.objects.all().get_or_create(username="testgdfg",
+    u, created = UserProfile.objects.all().get_or_create(username="testgdfg",
                                             first_name="Test",
                                             last_name="User",
                                             is_active=True)
@@ -289,7 +395,7 @@ def initial_data ():
     #u.get_profile().save()
 
 
-    u, created = User.objects.all().get_or_create(username="test2fdgdf",
+    u, created = UserProfile.objects.all().get_or_create(username="test2fdgdf",
                                             first_name="Test2",
                                             last_name="User2",
                                             is_active=True)

@@ -116,7 +116,7 @@ BASE_PATH + '/templates/',
 )
 
 INSTALLED_APPS = (
-'django.contrib.auth',
+#'django.contrib.auth',
 'django.contrib.contenttypes',
 'django.contrib.sessions',
 'django.contrib.sites',
@@ -145,7 +145,6 @@ INSTALLED_APPS = (
 
 #Other
 'south',
-'reversion',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

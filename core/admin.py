@@ -1,33 +1,22 @@
 from django.contrib import admin
 from django.contrib.contenttypes.generic import GenericTabularInline
 from django.contrib.flatpages.models import FlatPage
-from django.contrib.flatpages.admin import FlatPageAdmin as FPAdmin
 from core.models import *
 
-"""
-For auto-version of objects
-"""
-from reversion.admin import VersionAdmin
-class ModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-
-admin.site.unregister(FlatPage)
-
 #Company
-admin.site.register(Company, ModelAdmin)
+admin.site.register(Company)
 
 #Membership (groups)
-admin.site.register(Membership, ModelAdmin)
+admin.site.register(Membership)
 
 #Roles
-admin.site.register(Role, ModelAdmin)
-
+admin.site.register(Role)
 
 #Log
-admin.site.register(Log, ModelAdmin)
+admin.site.register(Log)
 
 #Objectpermissions
-admin.site.register(Permission, ModelAdmin)
+admin.site.register(Permission)
 
 #Profile for users, extending the user
 admin.site.register(UserProfile)
