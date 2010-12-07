@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.db.models import signals, Q
 from django.template import RequestContext
 from django.conf import settings
+from core.models import User
 
 
 class Core:
@@ -57,14 +58,19 @@ class Core:
     @staticmethod
     def authenticate (username, password):
         """
-        return True if combination of username and password exsist
+        Returns True if the user/password combination exists
         """
 
         try:
-            user = User.objects.get(username=username, password=password)
-            return user
+            user = User.objects.get(username = username)
+            if user.check_password(password):
+                return user
+            else:
+                return False
+
         except:
             return False
+
 
     @staticmethod
     def login(request, username, password):

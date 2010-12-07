@@ -8,58 +8,36 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Log'
-        db.create_table('core_log', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='logs', to=orm['auth.User'])),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('message', self.gf('django.db.models.fields.TextField')()),
+        # Adding field 'Membership.parent'
+        db.add_column('core_membership', 'parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', null=True, to=orm['core.Membership']), keep_default=False)
+
+        # Removing M2M table for field users on 'Membership'
+        db.delete_table('core_membership_users')
+
+        # Adding M2M table for field members on 'Membership'
+        db.create_table('core_membership_members', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('membership', models.ForeignKey(orm['core.membership'], null=False)),
+            ('userprofile', models.ForeignKey(orm['core.userprofile'], null=False))
         ))
-        db.send_create_signal('core', ['Log'])
-
-        # Changing field 'ObjectPermission.can_delete'
-        db.alter_column('core_objectpermission', 'can_delete', self.gf('django.db.models.fields.BooleanField')())
-
-        # Changing field 'ObjectPermission.deleted'
-        db.alter_column('core_objectpermission', 'deleted', self.gf('django.db.models.fields.BooleanField')())
-
-        # Changing field 'ObjectPermission.can_change'
-        db.alter_column('core_objectpermission', 'can_change', self.gf('django.db.models.fields.BooleanField')())
-
-        # Changing field 'ObjectPermission.negative'
-        db.alter_column('core_objectpermission', 'negative', self.gf('django.db.models.fields.BooleanField')())
-
-        # Changing field 'ObjectPermission.can_view'
-        db.alter_column('core_objectpermission', 'can_view', self.gf('django.db.models.fields.BooleanField')())
-
-        # Changing field 'Membership.deleted'
-        db.alter_column('core_membership', 'deleted', self.gf('django.db.models.fields.BooleanField')())
+        db.create_unique('core_membership_members', ['membership_id', 'userprofile_id'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Log'
-        db.delete_table('core_log')
+        # Deleting field 'Membership.parent'
+        db.delete_column('core_membership', 'parent_id')
 
-        # Changing field 'ObjectPermission.can_delete'
-        db.alter_column('core_objectpermission', 'can_delete', self.gf('django.db.models.fields.BooleanField')(blank=True))
+        # Adding M2M table for field users on 'Membership'
+        db.create_table('core_membership_users', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('membership', models.ForeignKey(orm['core.membership'], null=False)),
+            ('user', models.ForeignKey(orm['auth.user'], null=False))
+        ))
+        db.create_unique('core_membership_users', ['membership_id', 'user_id'])
 
-        # Changing field 'ObjectPermission.deleted'
-        db.alter_column('core_objectpermission', 'deleted', self.gf('django.db.models.fields.BooleanField')(blank=True))
-
-        # Changing field 'ObjectPermission.can_change'
-        db.alter_column('core_objectpermission', 'can_change', self.gf('django.db.models.fields.BooleanField')(blank=True))
-
-        # Changing field 'ObjectPermission.negative'
-        db.alter_column('core_objectpermission', 'negative', self.gf('django.db.models.fields.BooleanField')(blank=True))
-
-        # Changing field 'ObjectPermission.can_view'
-        db.alter_column('core_objectpermission', 'can_view', self.gf('django.db.models.fields.BooleanField')(blank=True))
-
-        # Changing field 'Membership.deleted'
-        db.alter_column('core_membership', 'deleted', self.gf('django.db.models.fields.BooleanField')(blank=True))
+        # Removing M2M table for field members on 'Membership'
+        db.delete_table('core_membership_members')
 
 
     models = {
@@ -99,6 +77,13 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'core.action': {
+            'Meta': {'object_name': 'Action'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'verb': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
         'core.company': {
             'Meta': {'object_name': 'Company'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -106,52 +91,64 @@ class Migration(SchemaMigration):
         },
         'core.log': {
             'Meta': {'object_name': 'Log'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'to': "orm['auth.User']"}),
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'null': 'True', 'to': "orm['core.Company']"}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'null': 'True', 'to': "orm['auth.User']"}),
             'date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'message': ('django.db.models.fields.TextField', [], {}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {})
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'})
         },
         'core.membership': {
             'Meta': {'object_name': 'Membership'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_created'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 28, 21, 13, 24, 517496)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 10, 28, 21, 13, 24, 517534)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 7, 22, 54, 1, 570560)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 7, 22, 54, 1, 570598)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'members': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'memberships'", 'symmetrical': 'False', 'to': "orm['core.UserProfile']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'users': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'memberships'", 'symmetrical': 'False', 'to': "orm['auth.User']"})
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'null': 'True', 'to': "orm['core.Membership']"})
         },
-        'core.objectpermission': {
-            'Meta': {'object_name': 'ObjectPermission'},
-            'can_change': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'can_delete': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'can_view': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+        'core.notification': {
+            'Meta': {'object_name': 'Notification'},
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'notifications'", 'null': 'True', 'to': "orm['core.Company']"}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'createdNotifications'", 'null': 'True', 'to': "orm['auth.User']"}),
+            'date': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'}),
+            'read': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'recipient': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'notifications'", 'to': "orm['auth.User']"}),
+            'sendEmail': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'text': ('django.db.models.fields.TextField', [], {})
+        },
+        'core.permission': {
+            'Meta': {'object_name': 'Permission'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'membership': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Membership']"}),
-            'negative': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'role': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Role']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['auth.User']"})
         },
         'core.role': {
             'Meta': {'object_name': 'Role'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'actions': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'role'", 'symmetrical': 'False', 'to': "orm['core.Action']"}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'membership': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'roles'", 'null': 'True', 'to': "orm['core.Membership']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'permission': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'roles'", 'null': 'True', 'to': "orm['auth.User']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         'core.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
+            'Meta': {'object_name': 'UserProfile', '_ormbases': ['auth.User']},
+            'canLogin': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'core_userprofile_users'", 'null': 'True', 'to': "orm['core.Company']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'unique': 'True'})
+            'profileImage': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         }
     }
 
