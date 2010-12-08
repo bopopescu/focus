@@ -1,8 +1,7 @@
+"""
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-
-
 from core.models import Permission
 
 class ObjectPermBackend(object):
@@ -66,4 +65,6 @@ class ObjectPermBackend(object):
                                             object_id=obj.id,
                                             membership=membership_obj)
                 
-        return p.filter(**{'can_%s' % perm: True}).exists()        
+        return p.filter(**{'can_%s' % perm: True}).exists()
+
+"""

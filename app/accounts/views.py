@@ -2,7 +2,6 @@
 from django.contrib.auth import authenticate, logout, login as auth_login
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
-from core.middleware import get_current_user
 from core.models import Log
 from django.contrib.auth.models import User
 from core import Core
@@ -39,7 +38,6 @@ def logout_view(request):
     return HttpResponseRedirect("/accounts/login/")
 
 """
-
 
 
 def login (request):

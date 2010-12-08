@@ -2,9 +2,12 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from managers import PersistentManager
-from core.middleware import *
+#from core.middleware import *
 from datetime import datetime
 from django.utils.encoding import smart_str
+
+import core
+
 
 """
 The Company class.
@@ -53,24 +56,27 @@ class User(models.Model):
 
     Username and password are required. Other fields are optional.
     """
-    username = models.CharField(_('username'), max_length=30, unique=True, help_text=_("Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    email = models.EmailField(_('e-mail address'), blank=True)
-    password = models.CharField(_('password'), max_length=128, help_text=_("Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
-    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_("Designates whether the user can log into this admin site."))
-    is_active = models.BooleanField(_('active'), default=True, help_text=_("Designates whether this user should be treated as active. Unselect this instead of deleting accounts."))
-    is_superuser = models.BooleanField(_('superuser status'), default=False, help_text=_("Designates that this user has all permissions without explicitly assigning them."))
-    last_login = models.DateTimeField(_('last login'), default=datetime.datetime.now)
-    date_joined = models.DateTimeField(_('date joined'), default=datetime.datetime.now)
-    groups = models.ManyToManyField(Group, verbose_name=_('groups'), blank=True,
-        help_text=_("In addition to the permissions manually assigned, this user will also get all permissions granted to each group he/she is in."))
+    username = models.CharField(('username'), max_length=30, unique=True, help_text=(
+    "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
+    first_name = models.CharField(('first name'), max_length=30, blank=True)
+    last_name = models.CharField(('last name'), max_length=30, blank=True)
+    email = models.EmailField(('e-mail address'), blank=True)
+    password = models.CharField(('password'), max_length=128, help_text=(
+    "Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
+    is_staff = models.BooleanField(('staff status'), default=False,
+                                   help_text=("Designates whether the user can log into this admin site."))
+    is_active = models.BooleanField(('active'), default=True, help_text=(
+    "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."))
+    is_superuser = models.BooleanField(('superuser status'), default=False, help_text=(
+    "Designates that this user has all permissions without explicitly assigning them."))
+    last_login = models.DateTimeField(('last login'), default=datetime.now)
+    date_joined = models.DateTimeField(('date joined'), default=datetime.now)
 
-    objects = UserManager()
+    #objects = UserManager()
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = ('user')
+        verbose_name_plural = ('users')
 
     def __unicode__(self):
         return self.username
@@ -89,6 +95,7 @@ class User(models.Model):
 
     def set_password(self, raw_password):
         import random
+
         algo = 'sha1'
         salt = get_hexdigest(algo, str(random.random()), str(random.random()))[:5]
         hsh = get_hexdigest(algo, salt, raw_password)
@@ -104,14 +111,14 @@ class User(models.Model):
         if '$' not in self.password:
             is_correct = (self.password == get_hexdigest('md5', '', raw_password))
             if is_correct:
-                # Convert the password to the new, more secure format.
+            # Convert the password to the new, more secure format.
                 self.set_password(raw_password)
                 self.save()
             return is_correct
         return check_password(raw_password, self.password)
 
     def set_unusable_password(self):
-        # Sets a value that will never be a valid hash
+    # Sets a value that will never be a valid hash
         self.password = UNUSABLE_PASSWORD
 
     def has_usable_password(self):
@@ -127,22 +134,23 @@ class User(models.Model):
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
         from django.core.mail import send_mail
+
         send_mail(subject, message, from_email, [self.email])
 
     def _get_message_set(self):
         import warnings
+
         warnings.warn('The user messaging API is deprecated. Please update'
                       ' your code to use the new messages framework.',
                       category=PendingDeprecationWarning)
         return self._message_set
+
     message_set = property(_get_message_set)
-
-
 
 
 """
 Userprofiles, for adding additional informartion about the user
-"""
+
 class UserProfile(User):
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
@@ -159,17 +167,17 @@ class UserProfile(User):
 
     def __unicode__(self):
         return "Profile for: %s" % self.user
-
+"""
 
 class Notification(models.Model):
-    recipient     = models.ForeignKey(User, related_name="notifications")
-    text          = models.TextField()
-    read          = models.BooleanField(default=False)
-    date          = models.DateTimeField()
-    content_type  = models.ForeignKey(ContentType, null=True)
-    object_id     = models.PositiveIntegerField(null=True)
-    company       = models.ForeignKey(Company, related_name="notifications", null=True)
-    creator       = models.ForeignKey(User, related_name = "createdNotifications", null=True)
+    recipient = models.ForeignKey(User, related_name="notifications")
+    text = models.TextField()
+    read = models.BooleanField(default=False)
+    date = models.DateTimeField()
+    content_type = models.ForeignKey(ContentType, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    company = models.ForeignKey(Company, related_name="notifications", null=True)
+    creator = models.ForeignKey(User, related_name="createdNotifications", null=True)
 
     #If true, add note to daily-mail updates
     sendEmail = models.BooleanField(default=False)
@@ -178,35 +186,33 @@ class Notification(models.Model):
         return self.text
 
     def getObject(self, *args, **kwargs):
-        o = ContentType.objects.get(model = self.content_type)
+        o = ContentType.objects.get(model=self.content_type)
         k = o.get_object_for_this_type(id=self.object_id)
         return k
 
     def save(self, *args, **kwargs):
-
         self.date = datetime.now()
-        self.company = get_current_company()
+        #self.company = get_current_company()
 
         if 'user' in kwargs:
             self.creator = kwargs['user']
         else:
-            self.creator = get_current_user()
+            self.creator = core.Core.curret_user()
 
         super(Notification, self).save()
-
 
 
 """
 Class for logs, saves user in action and reference to object logged
 """
 class Log(models.Model):
-    date         = models.DateTimeField()
-    creator      = models.ForeignKey(User, related_name="logs",null=True)
+    date = models.DateTimeField()
+    creator = models.ForeignKey(User, related_name="logs", null=True)
     content_type = models.ForeignKey(ContentType, null=True)
-    object_id    = models.PositiveIntegerField(null=True)
-    message      = models.TextField()
-    company      = models.ForeignKey(Company, related_name="logs", null=True)
-    action       = models.CharField(max_length=10,null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    message = models.TextField()
+    company = models.ForeignKey(Company, related_name="logs", null=True)
+    action = models.CharField(max_length=10, null=True)
 
     def __unicode__(self):
         s = "%s, %s, %s:" % (self.date, (self.creator), self.content_type)
@@ -214,20 +220,19 @@ class Log(models.Model):
 
 
     def getObject(self, *args, **kwargs):
-        o = ContentType.objects.get(model = self.content_type)
+        o = ContentType.objects.get(model=self.content_type)
         k = o.get_object_for_this_type(id=self.object_id)
         return k
 
     def save(self, *args, **kwargs):
-
         self.date = datetime.now()
 
         if 'user' in kwargs:
             self.creator = kwargs['user']
         else:
-            self.creator = get_current_user()
+            self.creator = core.Core.curret_user()
 
-        self.company = self.creator.get_profile().company
+        #self.company = self.creator.get_profile().company
 
         super(Log, self).save()
 
@@ -258,33 +263,32 @@ class PersistentModel(models.Model):
         if not self.id:
             action = "ADD"
 
-            self.creator = get_current_user()
-            self.company = get_current_company()
+            self.creator = core.Core.curret_user()
+        #self.company = get_current_company()
 
         #self.editor = get_current_user()
         self.date_edited = datetime.now()
         super(PersistentModel, self).save()
 
         if 'noLog' not in kwargs:
-
             msg = "endret"
-            if action =="ADD":
+            if action == "ADD":
                 msg = "opprettet"
 
-            Log(message = "%s %s %s" % (get_current_user(), msg, self),
-                object_id = self.id,
-                content_type = ContentType.objects.get_for_model(self.__class__),
-                action = action,
-            ).save()
+            Log(message="%s %s %s" % (Core.curret_user(), msg, self),
+                object_id=self.id,
+                content_type=ContentType.objects.get_for_model(self.__class__),
+                action=action,
+                ).save()
 
         if 'noNotification' not in kwargs:
             for us in self.whoHasPermissionTo('view'):
-                if us == get_current_user():
+                if us == Core.curret_user():
                     continue
-                Notification(text = "Dette er en test",
+                Notification(text="Dette er en test",
                              recipient=us,
-                             object_id = self.id,
-                             content_type = ContentType.objects.get_for_model(self.__class__)
+                             object_id=self.id,
+                             content_type=ContentType.objects.get_for_model(self.__class__)
                              ).save()
 
     def delete(self, **kwargs):
@@ -307,7 +311,7 @@ class PersistentModel(models.Model):
             users = []
 
             for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id,
-                                                     **{'can_%s' % perm: True}):
+                                               **{'can_%s' % perm: True}):
                 if u.user and u.user not in users:
                     users.append(u.user)
                 if u.membership:
@@ -324,7 +328,7 @@ Memberships, user can be members of memberships, which can have permissions for 
 class Membership(PersistentModel):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('Membership', related_name="children", null=True)
-    members = models.ManyToManyField(UserProfile, related_name="memberships")
+    members = models.ManyToManyField(User, related_name="memberships")
 
     def __unicode__(self):
         return self.name
@@ -361,7 +365,7 @@ class Permission(models.Model):
     deleted = models.BooleanField()
 
     def __unicode__(self):
-         return unicode(self.content_type)
+        return unicode(self.content_type)
 
     def get_object(self):
         return self.content_type.get_object_for_this_type(id=self.object_id)
@@ -375,29 +379,28 @@ def initial_data ():
     comp = Company(name="Focus AS")
     comp.save()
 
-    a, created = UserProfile.objects.all().get_or_create(username="superadmin",
-                                            first_name="SuperAdmin",
-                                            last_name="",
-                                            is_superuser=True,
-                                            is_staff=True,
-                                            is_active=True)
+    a, created = User.objects.all().get_or_create(username="superadmin",
+                                                  first_name="SuperAdmin",
+                                                  last_name="",
+                                                  is_superuser=True,
+                                                  is_staff=True,
+                                                  is_active=True)
     a.set_password("superpassord")
     a.save()
 
-    u, created = UserProfile.objects.all().get_or_create(username="testgdfg",
-                                            first_name="Test",
-                                            last_name="User",
-                                            is_active=True)
+    u, created = User.objects.all().get_or_create(username="testgdfg",
+                                                  first_name="Test",
+                                                  last_name="User",
+                                                  is_active=True)
     u.set_password("test")
     u.save()
     u.get_profile().company = comp
     u.get_profile().save()
 
-
-    u, created = UserProfile.objects.all().get_or_create(username="test2fdgdf",
-                                            first_name="Test2",
-                                            last_name="User2",
-                                            is_active=True)
+    u, created = User.objects.all().get_or_create(username="test2fdgdf",
+                                                  first_name="Test2",
+                                                  last_name="User2",
+                                                  is_active=True)
     u.set_password("test2")
     u.save()
     u.get_profile().company = comp
