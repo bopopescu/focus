@@ -36,8 +36,6 @@ def notifications(request):
     newNotifications = []
     oldNotifications = []
 
-
-
     for i in notifications:
         newNotifications.append(i)
 

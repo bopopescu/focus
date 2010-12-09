@@ -110,6 +110,12 @@ class User(models.Model):
         self.password = '%s$%s$%s' % (algo, salt, hsh)
         self.save()
 
+	def has_perms(self, perm_list, obj=None):
+	    return True
+
+	def has_module_perms(self, app_label):
+		return True
+
     def check_password(self, raw_password):
         """
         Returns a boolean of whether the raw_password was correct. Handles
@@ -262,7 +268,6 @@ class PersistentModel(models.Model):
         action = "EDIT"
         if not self.id:
             action = "ADD"
-
             self.creator = Core.current_user()
         #self.company = get_current_company()
 
@@ -382,6 +387,7 @@ def initial_data ():
     a, created = User.objects.all().get_or_create(username="superadmin",
                                                   first_name="SuperAdmin",
                                                   last_name="",
+												  canLogin=True,
                                                   is_superuser=True,
                                                   is_staff=True,
                                                   is_active=True)

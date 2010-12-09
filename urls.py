@@ -7,7 +7,7 @@ import settings
 
 urlpatterns = patterns('',
                        
-    #('^adminO/',                    include(admin.site.urls)),
+    ('^adminO/',                    include(admin.site.urls)),
 
     (r'^$',                         include('app.dashboard.urls')),
     

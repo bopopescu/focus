@@ -82,6 +82,9 @@ BASE_PATH + '/templates/',
 )
 
 INSTALLED_APPS = (
+'django.contrib.admin',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
 
 'app.admin',
 
@@ -107,6 +110,7 @@ INSTALLED_APPS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
 'django.core.context_processors.request',
 'django.core.context_processors.i18n',
+'django.contrib.auth.context_processors.auth',
 'core.context_processors.message',
 'core.context_processors.user',
 
