@@ -15,6 +15,12 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('core', ['Company'])
 
+        # Adding model 'AnonymousUser'
+        db.create_table('core_anonymoususer', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal('core', ['AnonymousUser'])
+
         # Adding model 'User'
         db.create_table('core_user', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -28,6 +34,9 @@ class Migration(SchemaMigration):
             ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
             ('date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='core_user_users', null=True, to=orm['core.Company'])),
+            ('canLogin', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('profileImage', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
         ))
         db.send_create_signal('core', ['User'])
 
@@ -63,8 +72,8 @@ class Migration(SchemaMigration):
         db.create_table('core_membership', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 12, 8, 0, 50, 37, 750957))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 12, 8, 0, 50, 37, 750990))),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 12, 9, 2, 0, 21, 74012))),
+            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 12, 9, 2, 0, 21, 74049))),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='membership_created', null=True, blank=True, to=orm['core.User'])),
             ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='membership_edited', null=True, blank=True, to=orm['core.User'])),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='membership_edited', null=True, blank=True, to=orm['core.Company'])),
@@ -124,6 +133,9 @@ class Migration(SchemaMigration):
         # Deleting model 'Company'
         db.delete_table('core_company')
 
+        # Deleting model 'AnonymousUser'
+        db.delete_table('core_anonymoususer')
+
         # Deleting model 'User'
         db.delete_table('core_user')
 
@@ -167,6 +179,10 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'verb': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
+        'core.anonymoususer': {
+            'Meta': {'object_name': 'AnonymousUser'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
         'core.company': {
             'Meta': {'object_name': 'Company'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -187,8 +203,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Membership'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 8, 0, 50, 37, 750957)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 8, 0, 50, 37, 750990)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 9, 2, 0, 21, 74012)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 9, 2, 0, 21, 74049)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -228,6 +244,8 @@ class Migration(SchemaMigration):
         },
         'core.user': {
             'Meta': {'object_name': 'User'},
+            'canLogin': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'core_user_users'", 'null': 'True', 'to': "orm['core.Company']"}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
@@ -238,6 +256,7 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'profileImage': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         }
     }
