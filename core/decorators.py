@@ -1,10 +1,13 @@
+
 from functools import wraps
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.http import Http404
 
 #Require permission in views
-def require_perm(perm, model, objID=False):    
+from app.dashboard.views import overview
+
+def require_perm(perm, model, objID=False):
     def decorator(func):
 
         def inner_decorator(request, *args, **kwargs):
@@ -19,9 +22,10 @@ def require_perm(perm, model, objID=False):
                     return func(request, *args, **kwargs)
 
             else:
-                messages.error(request, "Ingen tilgang!")
-                return HttpResponseRedirect("/")
-        
+                request.message_error("Ingen tilgang!")
+
+                return overview(request)
+
         return wraps(func)(inner_decorator)
     
     return decorator

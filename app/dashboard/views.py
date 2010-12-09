@@ -5,15 +5,16 @@ from core.views import updateTimeout
 from app.orders.models import Order
 from app.projects.models import Project, Project
 from core.models import Log, Notification
-from core.middleware import get_current_company, get_current_user
+#from core.middleware import get_current_company, get_current_user
+from core import Core
 
 
-@login_required
 def overview(request):
+
     updateTimeout(request)
-    announcements = Announcement.objects.for_user()[::-1]
-    your_projects = Project.objects.for_user()
-    your_orders = Order.objects.for_user().filter(state="O")[::-1]
+    announcements = Announcement.objects.all()[::-1]
+    your_projects = Project.objects.all()
+    your_orders = Order.objects.all().filter(state="O")[::-1]
 
     return render_with_request(request, 'dashboard/dashboard.html', {'title':'Oppslagstavle',
                                                                      'announcements':announcements,
@@ -21,15 +22,16 @@ def overview(request):
                                                                      'projects':your_projects})
 
 def logs(request):
-    logs = Log.objects.filter(company=get_current_company())
+    #logs = Log.objects.filter(company=get_current_company())
+    logs = Log.objects.all()
     return render_with_request(request, 'dashboard/listLog.html', {'title': 'Siste hendelser',
                                                                    'logs': logs[::-1][0:150]})
 
 def notifications(request):
 
     #Get all notifactions
-    notifications = Notification.objects.filter(recipient=get_current_user(), read=False)
-    oldNotificationsS = Notification.objects.filter(recipient=get_current_user(), read=True)
+    notifications = Notification.objects.filter(recipient=Core.current_user(), read=False)
+    oldNotificationsS = Notification.objects.filter(recipient=Core.current_user(), read=True)
 
     newNotifications = []
     oldNotifications = []
@@ -43,7 +45,7 @@ def notifications(request):
         oldNotifications.append(i)
 
     #Set to read, so they wont bother the user anymore.
-    Notification.objects.filter(recipient=get_current_user()).update(read=True)
+    Notification.objects.filter(recipient=Core.current_user()).update(read=True)
 
     return render_with_request(request, 'dashboard/notifications.html', {'title':'Oppdateringer',
                                                                          'notifications': newNotifications,

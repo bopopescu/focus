@@ -5,7 +5,6 @@ from datetime import datetime
 
 from django.db.models import signals
 from django.conf import settings
-from core.models import User
 
 class Core:
     """
@@ -42,7 +41,7 @@ class Core:
             if thread in cls.users:
                 return cls.users[thread]
 
-        return None
+        return AnonymousUser()
 
     @classmethod
     def attach_user (cls, request):
@@ -72,10 +71,9 @@ class Core:
         """
         Returns True if the user/password combination exists
         """
-
         try:
-        #    user = User.objects.get(username = username, password = hashlib.sha1(password).hexdigest())
             user = User.objects.get(username=username)
+
             if user.check_password(password):
                 return user
             else:
@@ -96,9 +94,8 @@ class Core:
         if user:
             request.session['user_id'] = user.pk
             request.user = user
-
             Core.attach_user(request)
-
+            
             # Remember me if I tell you to!
             if remember:
                 key, created = UserLoginKey.objects.get_or_create(user=user,
@@ -156,7 +153,7 @@ class Core:
         try:
             user = User.objects.get(pk=request.session['user_id'])
         except User.DoesNotExist:
-            user = None
+            user = AnonymousUser()
 
         return user
 
@@ -180,3 +177,5 @@ def load_initial_data(app, sender, **kwargs):
             origin.__name__, sender.__name__, origin.__name__)
 
 signals.post_syncdb.connect(load_initial_data)
+
+from core.models import User, AnonymousUser

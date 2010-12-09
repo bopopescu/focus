@@ -13,11 +13,6 @@ class UserForm(ModelForm):
         model = User
         fields = ('username','first_name','last_name','email',)
 
-class UserProfileForm(ModelForm):
-     class Meta:
-        model = UserProfile
-        fields = ('profileImage',)
-
 class MembershipForm(ModelForm):
     class Meta:
         model = Membership

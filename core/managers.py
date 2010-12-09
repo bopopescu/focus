@@ -3,10 +3,22 @@ from datetime import datetime, timedelta
 from django.db import models  
 from django.conf import settings
 from django.http import Http404
-from core.middleware import *
+
+from . import Core
 
 class PersistentManager(models.Manager):
-    
+
+    def get_query_set(self):
+        return super(PersistentManager, self).get_query_set().filter(deleted = False)
+
+    def for_user(self):
+        return super(PersistentManager, self).get_query_set().filter(deleted = False)
+
+    def for_company(self):
+        return super(PersistentManager, self).get_query_set().filter(deleted = False)
+
+
+"""
     def for_company(self, *args, **kwargs):
         
         if 'deleted' in kwargs:
@@ -15,12 +27,12 @@ class PersistentManager(models.Manager):
             deleted = False
         
         try:
-            u = get_current_user()
+            u = Core.current_user()
             
-            if u.is_anonymous():
+            if not u:
                 HttpResponseRedirect("/accounts/")
       
-            company = get_current_user().get_profile().company
+            company = Core.current_user().company
                      
             if deleted == None:
                 qs = self.get_query_set().filter(company = company)
@@ -29,13 +41,14 @@ class PersistentManager(models.Manager):
 
             return qs 
             
-        except:    
+        except:
+            print "INGEN"
             raise Http404
         
     def for_user(self, *args, **kwargs):
-        u = get_current_user()
-        
-        if u.is_anonymous():
+        u = Core.current_user()
+
+        if not u:
             HttpResponseRedirect("/accounts/")
         
         permitted = []       
@@ -43,7 +56,7 @@ class PersistentManager(models.Manager):
         try:
             qs = self.for_company(*args, **kwargs)
             for l in qs.all():
-                if get_current_user().has_perm('view', l):
+                if Core.current_user().has_perm('view', l):
                     permitted.append(l.id)
         except:   
             raise Http404
@@ -51,3 +64,4 @@ class PersistentManager(models.Manager):
         qs = self.get_query_set().filter(id__in=permitted)
         
         return qs
+"""

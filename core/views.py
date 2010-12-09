@@ -5,12 +5,12 @@ from django.contrib.auth.decorators import login_required
 from forms import *
 from core.shortcuts import *
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 @login_required
 def updateTimeout(request):
     request.session.set_expiry(1800)
     return
-
 
 @login_required
 def form_perm(request, type, id, url, message, popup=False):

@@ -2,7 +2,6 @@
 
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib import messages
 
 from models import *
 from forms import *
@@ -41,8 +40,6 @@ def view(request, id):
     contact = get_object_or_404(Contact, id=id)
 
     return render_with_request(request, 'contacts/view.html', {'title':'Kontakt', 'contact':contact})
-
-
 
 @login_required
 def addPop(request):
@@ -93,9 +90,8 @@ def form (request, id = False):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            messages.success(request, msg)        
-            if not id:      
-                return redirect(permissions, o.id)  
+            request.message_success(msg)        
+
             return redirect(overview)
     else:
         form = ContactForm(instance=instance)

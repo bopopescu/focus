@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from managers import PersistentManager
+#from managers import PersistentManager
 #from core.middleware import *
 from datetime import datetime
 from django.utils.encoding import smart_str
-
-import core
-
+from django.utils.hashcompat import md5_constructor, sha_constructor
+from core.managers import PersistentManager
+from . import Core
 
 """
 The Company class.
@@ -50,6 +50,10 @@ def check_password(raw_password, enc_password):
     return hsh == get_hexdigest(algo, salt, raw_password)
 
 
+class AnonymousUser(models.Model):
+    def is_authenticated(self):
+        return False
+
 class User(models.Model):
     """
     Users within the Django authentication system are represented by this model.
@@ -71,6 +75,10 @@ class User(models.Model):
     "Designates that this user has all permissions without explicitly assigning them."))
     last_login = models.DateTimeField(('last login'), default=datetime.now)
     date_joined = models.DateTimeField(('date joined'), default=datetime.now)
+
+    company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
+    canLogin = models.BooleanField(default=True)
+    profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
 
     #objects = UserManager()
 
@@ -100,6 +108,7 @@ class User(models.Model):
         salt = get_hexdigest(algo, str(random.random()), str(random.random()))[:5]
         hsh = get_hexdigest(algo, salt, raw_password)
         self.password = '%s$%s$%s' % (algo, salt, hsh)
+        self.save()
 
     def check_password(self, raw_password):
         """
@@ -136,16 +145,6 @@ class User(models.Model):
         from django.core.mail import send_mail
 
         send_mail(subject, message, from_email, [self.email])
-
-    def _get_message_set(self):
-        import warnings
-
-        warnings.warn('The user messaging API is deprecated. Please update'
-                      ' your code to use the new messages framework.',
-                      category=PendingDeprecationWarning)
-        return self._message_set
-
-    message_set = property(_get_message_set)
 
 
 """
@@ -197,7 +196,7 @@ class Notification(models.Model):
         if 'user' in kwargs:
             self.creator = kwargs['user']
         else:
-            self.creator = core.Core.curret_user()
+            self.creator = Core.current_user()
 
         super(Notification, self).save()
 
@@ -230,7 +229,7 @@ class Log(models.Model):
         if 'user' in kwargs:
             self.creator = kwargs['user']
         else:
-            self.creator = core.Core.curret_user()
+            self.creator = Core.current_user()
 
         #self.company = self.creator.get_profile().company
 
@@ -253,6 +252,7 @@ class PersistentModel(models.Model):
     company = models.ForeignKey(Company, blank=True, null=True, default=None, related_name="%(class)s_edited")
 
     objects = PersistentManager()
+    #objects = models.Manager()
     all_objects = models.Manager()
 
     class Meta:
@@ -263,7 +263,7 @@ class PersistentModel(models.Model):
         if not self.id:
             action = "ADD"
 
-            self.creator = core.Core.curret_user()
+            self.creator = Core.current_user()
         #self.company = get_current_company()
 
         #self.editor = get_current_user()
@@ -275,7 +275,7 @@ class PersistentModel(models.Model):
             if action == "ADD":
                 msg = "opprettet"
 
-            Log(message="%s %s %s" % (Core.curret_user(), msg, self),
+            Log(message="%s %s %s" % (Core.current_user(), msg, self),
                 object_id=self.id,
                 content_type=ContentType.objects.get_for_model(self.__class__),
                 action=action,
@@ -283,7 +283,7 @@ class PersistentModel(models.Model):
 
         if 'noNotification' not in kwargs:
             for us in self.whoHasPermissionTo('view'):
-                if us == Core.curret_user():
+                if us == Core.current_user():
                     continue
                 Notification(text="Dette er en test",
                              recipient=us,
@@ -404,5 +404,6 @@ def initial_data ():
                                                   is_active=True)
     u.set_password("test2")
     u.save()
-    #u.get_profile().company = comp
-    #u.get_profile().save()
+
+#u.get_profile().company = comp
+#u.get_profile().save()

@@ -3,11 +3,11 @@ from django.contrib import admin
 import os
 import settings
 
-admin.autodiscover()
+#admin.autodiscover()
 
 urlpatterns = patterns('',
                        
-    ('^adminO/',                    include(admin.site.urls)),
+    #('^adminO/',                    include(admin.site.urls)),
 
     (r'^$',                         include('app.dashboard.urls')),
     
