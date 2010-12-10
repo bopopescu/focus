@@ -8,7 +8,7 @@ BASE_PATH = os.path.dirname(__file__)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-SERVER_EMAIL = 'fredrik@fncit.no'
+SERVER_EMAIL = 'fredrik+django@fncit.no'
 
 ADMINS = (
 (u'Fredrik Nygård Carlsen', 'fredrik@fncit.no'),
@@ -82,7 +82,6 @@ BASE_PATH + '/templates/',
 )
 
 INSTALLED_APPS = (
-'django.contrib.admin',
 'django.contrib.contenttypes',
 'django.contrib.sessions',
 

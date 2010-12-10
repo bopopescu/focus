@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth import authenticate, logout, login as auth_login
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from core.models import Log, User

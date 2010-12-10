@@ -1,36 +1,34 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.decorators import login_required
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import form_perm, updateTimeout
 
-@login_required
+@login_required()
 def overview(request):
     updateTimeout(request)
     suppliers = Supplier.objects.for_user()
     return render_with_request(request, 'suppliers/list.html', {'title':'Leverandører', 'suppliers':suppliers})
 
-@login_required
+@login_required()
 def overview_deleted(request):
     suppliers = Supplier.objects.for_company(deleted=True)
     return render_with_request(request, 'suppliers/list.html', {'title':'Slettede leverandører', 'suppliers':suppliers})
 
-@login_required
+@login_required()
 def overview_all(request):
     suppliers = Supplier.objects.for_company()
     return render_with_request(request, 'suppliers/list.html', {'title':'Alle aktive leverandører', 'suppliers':suppliers})
 
-@login_required
+@login_required()
 def add(request):
     return form(request)
 
-@require_perm('change', Supplier)
 def edit(request, id):
     return form(request, id)
 
-@login_required
+@login_required()
 def addPop(request):
     instance = Supplier()
 
@@ -49,7 +47,6 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title':'Kontakt', 'form': form })
 
-@require_perm('delete', Supplier)
 def delete(request, id):
     Supplier.objects.get(id=id).delete()
     return redirect(overview)
@@ -60,7 +57,7 @@ def permissions(request, id):
     message = "Vellykket endret tilgang for leverandøren: %s" % type.objects.get(pk=id)
     return form_perm(request, type, id, url, message)
 
-@login_required
+@login_required()
 def form (request, id = False):
 
     if id:

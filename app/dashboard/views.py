@@ -1,14 +1,14 @@
-from django.contrib.auth.decorators import login_required
 from core.shortcuts import *
 from app.announcements.models import *
 from core.views import updateTimeout
 from app.orders.models import Order
 from app.projects.models import Project, Project
 from core.models import Log, Notification
-#from core.middleware import get_current_company, get_current_user
 from core import Core
+from core.decorators import require_permission
 
 
+@require_permission('VIEW','This')
 def overview(request):
 
     updateTimeout(request)

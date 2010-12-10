@@ -4,34 +4,32 @@ from forms import *
 from core.shortcuts import *
 from core.views import updateTimeout, form_perm
 from core.decorators import *
-from django.contrib.auth.decorators import login_required, login_required
 
-@login_required
+@login_required()
 def overviewOffers(request):
     orders = Order.objects.for_user().filter(state="T")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Tilbud', 'orders':orders})
 
-@login_required
+@login_required()
 def overview(request):
     orders = Order.objects.for_user().filter(state="O")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
 
-@login_required
+@login_required()
 def overviewReadyForInvoice(request):
     orders = Order.objects.for_user().filter(state="F")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Til fakturering', 'orders':orders})
 
-@login_required
+@login_required()
 def overviewArchive(request):
     orders = Order.objects.for_user().filter(state="A")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title':'Arkiv', 'orders':orders})
 
 
-@require_perm('view', Order)
 def view(request, id):
     order = Order.objects.for_company().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
@@ -44,7 +42,7 @@ def view(request, id):
                                                              'whoCanSeeThis':whoCanSeeThis})
 
 
-@login_required
+@login_required()
 def addTask(request, orderID):
     if request.method == "POST":
         order = Order.objects.for_user().get(id=orderID)
@@ -61,7 +59,7 @@ def addTask(request, orderID):
 
     return redirect(view, orderID)
 
-@login_required
+@login_required()
 def changeStatusTask(request, taskID):
     try:
         task = Task.objects.for_company().get(id=taskID)
@@ -72,7 +70,7 @@ def changeStatusTask(request, taskID):
 
     return redirect(view, task.order.id)
 
-@login_required
+@login_required()
 def changeStatus(request, orderID):
     order = Order.objects.get(id=orderID)
 
@@ -90,25 +88,25 @@ def changeStatus(request, orderID):
 
     return redirect(view, order.id)
 
-@login_required
+@login_required()
 def addOffer(request):
     return form(request, offer=True)
 
-@login_required
+@login_required()
 def add(request):
     return form(request)
 
-@login_required
+@login_required()
 def edit(request, id):
     return form(request, id)
 
-@login_required
+@login_required()
 def delete(request, id):
     messages.error(request, "Det er ikke mulig å slette ordrer.")
     return form(request, id)
 
 
-@login_required
+@login_required()
 def permissions(request, id):
     type = Order
     url = "orders/edit/%s" % id
@@ -116,7 +114,7 @@ def permissions(request, id):
     return form_perm(request, type, id, url, message)
 
 
-@login_required
+@login_required()
 def addPop(request):
     instance = Order()
 
@@ -136,7 +134,7 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title':'Ordre', 'form': form})
 
-@login_required
+@login_required()
 def form (request, id=False, *args, **kwargs):
     title = "Ordre"
     if 'offer' in kwargs:

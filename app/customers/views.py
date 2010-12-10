@@ -1,11 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import form_perm, updateTimeout
 
 
-@login_required
+@login_required()
 def overview(request):
     updateTimeout(request)
     customers = Customer.objects.for_user()
@@ -13,26 +12,23 @@ def overview(request):
     return render_with_request(request, 'customers/list.html', {'title':'Kunder',
                                                                 'customers':customers})
 
-@login_required
+
 def overview_deleted(request):
     customers = Customer.objects.for_company(deleted=True)
     return render_with_request(request, 'customers/list.html', {'title':'Slettede kunder',
                                                                 'customers':customers})
 
-@login_required
 def overview_all(request):
     customers = Customer.objects.for_company()
     return render_with_request(request, 'customers/list.html', {'title':'Alle aktive kunder',
                                                                 'customers':customers})
 
-@require_perm('view', Customer,'id')
 def view(request, id):
     customer = Customer.objects.for_user(deleted=None).get(id=id)
     return render_with_request(request, 'customers/view.html', {'title':'Kunde: %s' % customer.full_name,
                                                                 'customer':customer})
 
 
-@login_required
 def addPop(request):
     instance = Customer()
 
@@ -53,21 +49,16 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title':'Kunde', 'form': form})
 
-
-@login_required
 def add(request):
     return form(request)
 
-@require_perm("change", Customer)
 def edit(request, id):
     return form(request, id)
 
-@require_perm("delete", Customer)
 def delete(request, id):
     Customer.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required
 def recover(request, id):
     c = Customer.objects.get(id=id)
     c.deleted = not c.deleted
@@ -75,7 +66,6 @@ def recover(request, id):
 
     return redirect(overview)
 
-@login_required
 def permissions(request, id, popup=False):
     type = Customer
     url = "customers/edit/%s" % id

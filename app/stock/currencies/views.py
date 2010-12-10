@@ -8,26 +8,24 @@ from core.views import form_perm, updateTimeout
 from app.stock.forms import CurrencyForm
 from app.stock.models import Currency
 
-@login_required
+@login_required()
 def overview(request):
     updateTimeout(request)
     currencies = Currency.objects.for_user()
     return render_with_request(request, 'stock/currencies/list.html', {'title':'Produkter', 'currencies':currencies})
 
-@login_required
+@login_required()
 def add(request):
     return form(request)
 
-@require_perm('change', Project)
 def edit(request, id):
     return form(request, id)
 
-@require_perm('delete', Project)
 def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required
+@login_required()
 def addPop(request):
     instance = Currency()
 
@@ -46,7 +44,7 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title':'Valuta', 'form': form })
 
-@login_required
+@login_required()
 def form (request, id = False):
 
     if id:

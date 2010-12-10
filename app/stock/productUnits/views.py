@@ -7,27 +7,25 @@ from core.views import  updateTimeout
 from app.stock.forms import UnitsForSizesForm
 from app.stock.models import UnitsForSizes
 
-@login_required
+@login_required()
 def overview(request):
     updateTimeout(request)
     units = UnitsForSizes.objects.for_user()
     return render_with_request(request, 'stock/productUnits/list.html', {'title':'Enheter', 'units':units})
 
-@login_required
+@login_required()
 def add(request):
     return form(request)
 
-@require_perm('change', Project)
 def edit(request, id):
     return form(request, id)
 
-@require_perm('delete', Project)
 def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
 
 
-@login_required
+@login_required()
 def addPop(request):
     instance = UnitsForSizes()
 
@@ -46,7 +44,7 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title':'Enhet', 'form': form })
 
-@login_required
+@login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(UnitsForSizes, id=id, deleted=False)

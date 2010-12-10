@@ -11,7 +11,6 @@ from app.customers.models import *
 
 """
 Tests for core
-"""
 
 class PermissionsTesting(TestCase):
 
@@ -66,3 +65,4 @@ class PermissionsTesting(TestCase):
         #Check if another us don't got the permissions..
         self.assertFalse(user2.has_perm('delete', page))
         self.assertFalse(user2.has_perm('view', page))
+"""
