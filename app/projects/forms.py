@@ -1,11 +1,9 @@
  # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from django import forms
-
 from models import *
 from core.models import *
 from core.widgets import *
-
 from app.customers.models import *
 
 class ProjectForm(ModelForm):
@@ -19,9 +17,9 @@ class ProjectForm(ModelForm):
         
     def __init__(self,*args,**kwargs):
         super(ProjectForm,self).__init__(*args,**kwargs)
-        self.fields['customer'].widget = SelectWithPop()
-        self.fields['customer'].queryset=Customer.objects.for_company()
-        self.fields['responsible'].queryset = get_company_users()
+        #self.fields['customer'].widget = SelectWithPop()
+        #self.fields['customer'].queryset=Customer.objects.for_company()
+        #self.fields['responsible'].queryset = get_company_users()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id

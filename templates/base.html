@@ -60,9 +60,7 @@
 
                 </p>
 
-                <img width="30px" height="70px" src="{{ user.get_profile.getProfileImage }}" alt="avatar"/>
-
-
+                <img width="30px" height="70px" src="{{ user.getProfileImage }}" alt="avatar"/>
 
             </div> <!-- #info -->
 
@@ -215,8 +213,8 @@
 
     <div id="content" class="xfluid">
 
-    {% include "messages.html" %}
-	
+        {% include "messages.html" %}
+
         {% block maincontent %}
 
         {% endblock %}
@@ -247,13 +245,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#message").click(function () {
-          $(this).fadeOut();
-          return true;
-        });
-    }
-);
-
+            $("#message").click(function () {
+                $(this).fadeOut();
+                return true;
+            });
+        }
+    );
 </script>
 
 

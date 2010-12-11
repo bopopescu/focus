@@ -14,12 +14,9 @@ class login_required:
     def __call__(self, func):
 
         def check_login (request, *args, **kwargs):
-            try:
-                if request.user:
-                    return func(request, *args, **kwargs)
-                else:
-                    return redirect(login)
-            except:
+            if request.user:
+                 return func(request, *args, **kwargs)
+            else:
                 return redirect(login)
 
         update_wrapper(check_login, func)

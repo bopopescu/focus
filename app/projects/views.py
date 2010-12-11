@@ -87,10 +87,8 @@ def form (request, id=False):
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
-            messages.success(request, msg)
-            #Redirects after save for direct editing
-            if not id:
-                return redirect(permissions, o.id)
+            request.message_success(msg)
+
             return redirect(overview)
 
     else:

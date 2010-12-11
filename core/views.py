@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import HttpResponse, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from forms import *
 from core.shortcuts import *
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from core.decorators import login_required
 
-@login_required
+
+@login_required()
 def updateTimeout(request):
     request.session.set_expiry(1800)
     return
 
-@login_required
+@login_required()
 def form_perm(request, type, id, url, message, popup=False):
     object = type.objects.get(pk=id)
     content_type = ContentType.objects.get_for_model(type)

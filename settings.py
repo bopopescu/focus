@@ -61,7 +61,6 @@ SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 TEMPLATE_LOADERS = (
 'django.template.loaders.filesystem.load_template_source',
 'django.template.loaders.app_directories.load_template_source',
-#   'django.template.loaders.eggs.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -72,7 +71,6 @@ MIDDLEWARE_CLASSES = (
 
 'core.middleware.AuthenticationMiddleware',
 'core.middleware.MessageMiddleware',
-
 )
 
 ROOT_URLCONF = 'focus.urls'
@@ -109,8 +107,6 @@ INSTALLED_APPS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
 'django.core.context_processors.request',
 'django.core.context_processors.i18n',
-'django.contrib.auth.context_processors.auth',
 'core.context_processors.message',
 'core.context_processors.user',
-
 )

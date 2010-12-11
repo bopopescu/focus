@@ -8,5 +8,4 @@ urlpatterns = patterns('app.admin.users.views',
                        url(r'^delete/(\d+)/?$', 'delete'),
                        url(r'^changeCanLogin/(\d+)/?$', 'changeCanLogin'),
                        url(r'^sendNewPassword/(\d+)/?', 'sendGeneratedPassword'),
-
-                       )
+                    )

@@ -1,17 +1,18 @@
  # -*- coding: utf-8 -*-
-from django.forms import ModelForm
-from django import forms
-from django.contrib.admin import widgets                                       
 from core.models import *
-from django.contrib.auth.models import *
-
 from core.widgets import *
-
+from django.forms.models import ModelForm
 
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email',)
+        fields = ('username','first_name','last_name','email','canLogin','profileImage',)
+
+
+class UserProfileForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('profileImage',)
 
 class MembershipForm(ModelForm):
     class Meta:

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from core.widgets import *
+from core.shortcuts import get_company_users
 from models import *
 
 class OrderForm(ModelForm):

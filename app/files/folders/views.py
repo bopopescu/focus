@@ -2,24 +2,23 @@ from app.files.forms import *
 from core.shortcuts import *
 from core.views import updateTimeout, form_perm
 from core.decorators import *
-from django.contrib.auth.decorators import login_required
 from app.files.models import File, Folder
 from app.files.files.views import overview
 
-@login_required
+@login_required()
 def add(request, folderID = None):
     return form(request, False, folderID)
 
-@login_required
+@login_required()
 def edit(request, id):
     return form(request, id)
 
-@login_required
+@login_required()
 def delete(request, id):
     return form(request, id)
 
 
-@login_required
+@login_required()
 def view(request, id):
     file = File.objects.for_company().get(id=id)
 
@@ -28,9 +27,8 @@ def view(request, id):
                                                              'file':file,
                                                              'whoCanSeeThis':whoCanSeeThis})
 
-
 """
-@login_required
+@login_required()
 def permissions(request, id):
     type = Folder
     folder = type.objects.get(pk=id)
@@ -44,8 +42,7 @@ def permissions(request, id):
     return form_perm(request, type, id, url, message)
 """
 
-
-@login_required
+@login_required()
 def form (request, id=False, folderID = None):
     if id:
         instance = get_object_or_404(Folder, id=id, deleted=False)
@@ -72,7 +69,7 @@ def form (request, id=False, folderID = None):
 
             o.save()
             form.save_m2m()
-            messages.success(request, msg)
+            request.message_success(msg)
 
             return redirect(overview)
 

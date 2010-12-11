@@ -25,18 +25,15 @@ def login(request):
         else:
             try:
                 user  = User.objects.get(username=username)
-                Log(message = "%s forsøkte å logge inn, men bruke felt passord." % user).save(user=user)
+                Log(message = "%s forsøkte å logge inn, men bruke feil passord." % user).save(user=user)
             except:
                 pass
 
     return render_to_response('login.html')
 
-
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/accounts/login/")
-
 
 """
 def login (request):
@@ -66,8 +63,5 @@ def login (request):
 """
 
 def logout (request):
-
     Core.logout(request)
-    request.message_success('Du er nå logget ut!')
-
     return redirect('/')

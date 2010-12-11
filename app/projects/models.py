@@ -1,8 +1,7 @@
 from django.db import models
-from core.models import PersistentModel
+from core.models import *
 from app.customers.models import Customer
 from django.core import urlresolvers
-from django.contrib.auth.models import User
 
 class Project(PersistentModel):
     pid = models.IntegerField("Prosjektnr", null=True)

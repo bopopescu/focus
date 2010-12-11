@@ -1,41 +1,39 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required, permission_required
-
-from core.models import *
 from app.admin.forms import *
 from core.shortcuts import *
 from core.views import updateTimeout
-from django.contrib import messages
-
 from django.db.models import Q
+from core.decorators import *
+from core.models import User
 
-@login_required
+@login_required()
 def overview(request):
     updateTimeout(request)
-    Company = request.user.get_profile().company
-    Users = User.objects.filter(userprofile__company=Company, is_active=True)
+    Company = request.user.company
+    Users = User.objects.filter(company=Company, is_active=True)
     return render_with_request(request, 'admin/users/list.html', {'title':'Brukere', 'users':Users})
 
-@login_required
+@login_required()
 def grant_permissions(request):
     Users = User.objects.all()    
     Permissions = Permission.objects.all()
     return render_with_request(request, 'admin/users/grant_permssions.html', {'title':'Brukere', 'users':Users, 'permissions':Permissions })
 
+@login_required()
 def add(request):
     return form(request)
 
-@login_required
+@login_required()
 def edit(request, id):
     return form(request, id)
 
-@login_required
+@login_required()
 def editProfile(request):
     pass
 
-@login_required
+@login_required() 
 def changeCanLogin(request, userID):
 
     u = User.objects.get(id=userID)
@@ -49,7 +47,7 @@ def changeCanLogin(request, userID):
     p.save()
     return redirect(view, userID)
 
-@login_required
+@login_required()
 def sendGeneratedPassword(request, userID):
 
     user = get_object_or_404(User, id = userID, userprofile__company = request.user.get_profile().company)
@@ -99,7 +97,7 @@ def get_permissions(user):
     return Permissions
     
 
-@login_required
+@login_required()
 def addPop(request):
     instance = User()
     
@@ -127,7 +125,7 @@ def addPop(request):
     return render_with_request(request, "simpleform.html", {'title':'Bruker', 'form': form })
   
   
-@login_required
+@login_required()
 def view(request, id):
     user = User.objects.get(id=id)
     Permissions = get_permissions(user)
@@ -136,7 +134,7 @@ def view(request, id):
                                                                   'user':user,
                                                                   'permissions':Permissions,
                                                                   })
-@login_required
+@login_required()
 def delete(request, id):
     u = User.objects.get(id=id)
     u.is_active = False
@@ -144,11 +142,11 @@ def delete(request, id):
     messages.success(request, "Velykket slettet bruker")
     return redirect(overview)
 
-@login_required
-def form (request, id = False):        
+@login_required()
+def form (request, id = False):
 
     if id:
-        instance = get_object_or_404(User, id = id, userprofile__company = request.user.get_profile().company)
+        instance = get_object_or_404(User, id = id, company = request.user.company)
         msg = "Velykket endret bruker"
     else:
         instance = User()
@@ -177,7 +175,5 @@ def form (request, id = False):
 
     else:
         form = UserForm(instance=instance)
-
-    #print sendGeneratedPassword(request, 10)
 
     return render_with_request(request, "form.html", {'title':'Bruker', 'form': form })

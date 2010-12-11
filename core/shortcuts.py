@@ -6,21 +6,16 @@ from django.shortcuts import _get_queryset, render_to_response, get_object_or_40
 from django.core.context_processors import request
 from django.http import HttpResponse, Http404
 from app.projects.models import Project
+from core.models import User
+from core import Core
 
 def render_with_request(request, template, values={}, *args, **kwargs):
-    """
-    Shortcut for render_to_response with context_instance = RequestContext(request))
-    Puts things like messages and the user variable in the template
-    See also: Django RequestContexts
-    """
-
     context_instance = RequestContext(request)
     return render_to_response(template, values, context_instance, *args, **kwargs)
 
 
-def standardError(request, msg=""):
-
-    if msg == "":
-        msg = "Det du leter etter er slettet eller så har du ikke tilgang!"
-
-    return render_with_request(request, 'deletedOrNoPermission.html', {'msg':msg, })
+"""
+Returns users in the same company as the current user
+"""
+def get_company_users():
+    return User.objects.filter(company = Core.current_user())

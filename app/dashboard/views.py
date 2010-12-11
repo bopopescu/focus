@@ -5,10 +5,10 @@ from app.orders.models import Order
 from app.projects.models import Project, Project
 from core.models import Log, Notification
 from core import Core
-from core.decorators import require_permission
+from core.decorators import *
 
 
-@require_permission('VIEW','This')
+@login_required()
 def overview(request):
 
     updateTimeout(request)

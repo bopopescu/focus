@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-#from managers import PersistentManager
-#from core.middleware import *
 from datetime import datetime
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor, sha_constructor
@@ -80,12 +78,6 @@ class User(models.Model):
     canLogin = models.BooleanField(default=True)
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
 
-    #objects = UserManager()
-
-    class Meta:
-        verbose_name = ('user')
-        verbose_name_plural = ('users')
-
     def __unicode__(self):
         return self.username
 
@@ -116,6 +108,12 @@ class User(models.Model):
 	def has_module_perms(self, app_label):
 		return True
 
+    def getProfileImage(self):
+        if self.profileImage:
+            return "/media/%s" % self.profileImage
+
+        return "/media/images/avatar.jpg"
+
     def check_password(self, raw_password):
         """
         Returns a boolean of whether the raw_password was correct. Handles
@@ -138,19 +136,6 @@ class User(models.Model):
 
     def has_usable_password(self):
         return self.password != UNUSABLE_PASSWORD
-
-    def get_and_delete_messages(self):
-        messages = []
-        for m in self.message_set.all():
-            messages.append(m.message)
-            m.delete()
-        return messages
-
-    def email_user(self, subject, message, from_email=None):
-        "Sends an e-mail to this User."
-        from django.core.mail import send_mail
-
-        send_mail(subject, message, from_email, [self.email])
 
 
 """
@@ -387,7 +372,7 @@ def initial_data ():
     a, created = User.objects.all().get_or_create(username="superadmin",
                                                   first_name="SuperAdmin",
                                                   last_name="",
-												  canLogin=True,
+                                                  canLogin=True,
                                                   is_superuser=True,
                                                   is_staff=True,
                                                   is_active=True)

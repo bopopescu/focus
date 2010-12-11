@@ -2,16 +2,14 @@ from app.files.forms import *
 from core.shortcuts import *
 from core.views import updateTimeout, form_perm
 from core.decorators import *
-from django.contrib.auth.decorators import login_required
 from app.files.models import File, Folder
 
 
-@login_required
+@login_required()
 def overview(request):
-    print "OK"
-    folders = Folder.objects.filter(parent=None, creator=get_current_user())
+    folders = Folder.objects.filter(parent=None, creator=Core.current_user())
     print folders
-    files = File.objects.filter(folder=None, creator=get_current_user())
+    files = File.objects.filter(folder=None, creator=Core.current_user())
 
     updateTimeout(request)
 
@@ -22,11 +20,11 @@ def overview(request):
 
 def folder(request, folderID):
 
-    folder = Folder.objects.get(id=folderID, creator=get_current_user())
+    folder = Folder.objects.get(id=folderID, creator=Core.current_user())
 
-    folders = Folder.objects.filter(parent=folder, creator=get_current_user())
+    folders = Folder.objects.filter(parent=folder, creator=Core.current_user())
 
-    files = File.objects.filter(folder=folder, creator=get_current_user())
+    files = File.objects.filter(folder=folder, creator=Core.current_user())
 
     return render_with_request(request, 'files/list.html', {'title':'Filer',
                                                             'folder':folder,
@@ -62,20 +60,20 @@ def moveFolder(request):
     return
 
 
-@login_required
+@login_required()
 def add(request, folderID = None):
     return form(request, False, folderID)
 
-@login_required
+@login_required()
 def edit(request, id):
     return form(request, id)
 
-@login_required
+@login_required()
 def delete(request, id):
     return form(request, id)
 
 
-@login_required
+@login_required()
 def view(request, id):
     file = File.objects.for_company().get(id=id)
 
@@ -84,7 +82,7 @@ def view(request, id):
                                                              'file':file,
                                                              'whoCanSeeThis':whoCanSeeThis})
 """
-@login_required
+@login_required()
 def permissions(request, id):
     type = File
     file = type.objects.get(pk=id)
@@ -98,7 +96,7 @@ def permissions(request, id):
     return form_perm(request, type, id, url, message)
 """
 
-@login_required
+@login_required()
 def form (request, id=False, folderID = None):
 
     if id:
@@ -127,7 +125,7 @@ def form (request, id=False, folderID = None):
             o.save()
             form.save_m2m()
 
-            messages.success(request, msg)
+            request.message_success(msg)
 
             return redirect(overview)
 

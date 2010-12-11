@@ -1,8 +1,8 @@
 from django.forms.models import modelformset_factory
 from django.forms import ModelForm
 from models import *
-from django.contrib.auth.models import User, UserManager
 from core.middleware import *
+from core.models import *
 
 class PermissionForm(ModelForm):    
     class Meta:
