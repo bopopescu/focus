@@ -2,9 +2,9 @@
 
 import threading, inspect
 from datetime import datetime
-
 from django.db.models import signals
 from django.conf import settings
+from core.user import AnonymousUser
 
 class Core:
     """
@@ -95,7 +95,7 @@ class Core:
             request.session['user_id'] = user.pk
             request.user = user
             Core.attach_user(request)
-            
+
             # Remember me if I tell you to!
             if remember:
                 key, created = UserLoginKey.objects.get_or_create(user=user,
