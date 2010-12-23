@@ -2,10 +2,6 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
-from django.utils.encoding import smart_str
-from django.utils.hashcompat import md5_constructor, sha_constructor
-from core.managers import PersistentManager
-from . import Core
 from core.user import User
 from core.models import Company
 

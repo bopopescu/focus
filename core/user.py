@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor, sha_constructor
-from core.managers import PersistentManager
-from . import Core
-from core.models import PersistentModel
 
 """
 The Company class.
@@ -19,7 +15,7 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.name
-    
+
 def get_hexdigest(algorithm, salt, raw_password):
     """
     Returns a string of the hexdigest of the given plaintext password and salt
@@ -138,11 +134,10 @@ class User(models.Model):
         return self.password != UNUSABLE_PASSWORD
 
 
-
 """
 Memberships, user can be members of memberships, which can have permissions for instance
 """
-class Membership(PersistentModel):
+class Membership(models.Model):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('Membership', related_name="children", null=True)
     members = models.ManyToManyField(User, related_name="memberships")

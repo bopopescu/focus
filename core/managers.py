@@ -1,21 +1,14 @@
-from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
-from datetime import datetime, timedelta   
-from django.db import models  
-from django.conf import settings
-from django.http import Http404
-
-from . import Core
+from django.db import models
 
 class PersistentManager(models.Manager):
-
     def get_query_set(self):
-        return super(PersistentManager, self).get_query_set().filter(deleted = False)
+        return super(PersistentManager, self).get_query_set().filter(deleted=False)
 
     def for_user(self):
-        return super(PersistentManager, self).get_query_set().filter(deleted = False)
+        return super(PersistentManager, self).get_query_set().filter(deleted=False)
 
     def for_company(self):
-        return super(PersistentManager, self).get_query_set().filter(deleted = False)
+        return super(PersistentManager, self).get_query_set().filter(deleted=False)
 
 
 """

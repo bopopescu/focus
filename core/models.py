@@ -3,9 +3,9 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
 from core.managers import PersistentManager
-from . import Core
 from core.user import Company, User
 from core.log import Log
+from core import Core
 
 """
 The "all mighty" model, all other models inherit from this one. 
