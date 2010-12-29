@@ -1,9 +1,9 @@
+from django.http import HttpResponse
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import form_perm, updateTimeout
 
-@login_required()
 def overview(request):
     updateTimeout(request)
     customers = Customer.objects.for_user()
@@ -25,7 +25,6 @@ def view(request, id):
     customer = Customer.objects.for_user(deleted=None).get(id=id)
     return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
                                                                 'customer': customer})
-
 
 def addPop(request):
     instance = Customer()

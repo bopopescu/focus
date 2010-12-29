@@ -2,7 +2,7 @@
 from core.shortcuts import get_company_users
 from core.widgets import *
 from django.forms.models import ModelForm
-from core.models import User
+from core.models import User, Group
 
 class UserForm(ModelForm):
     class Meta:
@@ -16,7 +16,7 @@ class UserProfileForm(ModelForm):
 
 class MembershipForm(ModelForm):
     class Meta:
-        model = Membership
+        model = Group
         fields = ('name', 'users',)
 
     def __init__(self, *args, **kwrds):

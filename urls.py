@@ -3,8 +3,6 @@ from django.conf.urls.defaults import *
 import os
 import settings
 
-#admin.autodiscover()
-
 urlpatterns = patterns('',
 
                        (r'^$', include('app.dashboard.urls')),

@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-
 import threading, inspect
 from datetime import datetime
 from django.db.models import signals
 from django.conf import settings
-from core.models import AnonymousUser
 
 class Core:
     """
@@ -12,7 +10,7 @@ class Core:
 
     Authentication, login and logout, should be pretty self-explanatory
 
-    Attaching and detaching users is done to make NERD thread-safe; it associates
+    Attaching and detaching users is done to make it thread-safe; it associates
     the current user to the thread it's in, making sure users aren't mistaken for each other.
     The middleware is responsible for attaching and detaching every request.
     """
