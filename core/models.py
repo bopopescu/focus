@@ -197,7 +197,7 @@ class Log(models.Model):
 Actions("ADD","EDIT","VIEW"..)
 """
 class Action(models.Model):
-    action = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)
     verb = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
 
@@ -214,7 +214,6 @@ class Role(models.Model):
 
     def __unicode__(self):
         return unicode(self.content_type)
-
 
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
@@ -322,6 +321,26 @@ Adding some initial data to the model when run syncdb
 """
 
 def initial_data ():
+
+    Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
+    Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
+    Action.objects.get_or_create(name='DELETE', verb='deleted', description='delete an object')
+    Action.objects.get_or_create(name='VIEW', verb='viewed', description='view an object')
+    Action.objects.get_or_create(name='APPROVE', verb='approved', description='approve an object')
+    Action.objects.get_or_create(name='RATE', verb='rated', description='rate an object')
+    Action.objects.get_or_create(name='LIST', verb='listed', description='list instances of an object')
+    Action.objects.get_or_create(name='REGISTER', verb='registered for', description='register for something (event, committee, etc)')
+    Action.objects.get_or_create(name='UNREGISTER', verb='unregistered from', description='unregister from something (event, etc)')
+    Action.objects.get_or_create(name='FAVORITE', verb='favorited', description='favorite/star something (event etc)')
+    Action.objects.get_or_create(name='MANAGE', verb='managed', description='manage something (companies etc)')
+
+    #Generates som standard roles
+
+    Role.objects.create(name="Leader", description="Typisk leder, kan gjøre alt")
+    Role.objects.create(name="Responsible", description="Ansvarlig, kan se,endre")
+    Role.objects.create(name="Member", description="Typisk medlem, kan se")
+
+    #Other default objects
     comp = Company(name="Focus AS")
     comp.save()
 
