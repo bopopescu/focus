@@ -10,25 +10,25 @@ from core.views import form_perm, updateTimeout
 def overview(request):
     updateTimeout(request)
     projects = Project.objects.for_user()
-    return render_with_request(request, 'projects/list.html', {'title':'Prosjekter', 'projects':projects})
+    return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
 @login_required()
 def overview_deleted(request):
     projects = Project.objects.for_company(deleted=True)
-    return render_with_request(request, 'projects/list.html', {'title':'Slettede prosjekter', 'projects':projects})
+    return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
 @login_required()
 def overview_all(request):
     projects = Project.objects.for_company()
-    return render_with_request(request, 'projects/list.html', {'title':'Alle prosjekter', 'projects':projects})
+    return render_with_request(request, 'projects/list.html', {'title': 'Alle prosjekter', 'projects': projects})
 
 
 def view(request, id):
     project = Project.objects.for_company(deleted=None).get(id=id)
     whoCanSeeThis = project.whoHasPermissionTo('view')
-    return render_with_request(request, 'projects/view.html', {'title':'Prosjekt: %s' % project,
-                                                               'project':project,
-                                                               'whoCanSeeThis':whoCanSeeThis,
+    return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
+                                                               'project': project,
+                                                               'whoCanSeeThis': whoCanSeeThis,
                                                                })
 
 @login_required()
@@ -50,7 +50,7 @@ def addPop(request):
     else:
         form = ProjectForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Prosjekt', 'form': form})
+    return render_with_request(request, "simpleform.html", {'title': 'Prosjekt', 'form': form})
 
 
 @login_required()
@@ -94,4 +94,4 @@ def form (request, id=False):
     else:
         form = ProjectForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Prosjekt', 'form': form})
+    return render_with_request(request, "form.html", {'title': 'Prosjekt', 'form': form})

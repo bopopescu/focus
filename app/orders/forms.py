@@ -31,25 +31,25 @@ class OrderForm(ModelForm):
         delivery_date = self.cleaned_data['delivery_date']
         delivery_date_deadline = self.cleaned_data['delivery_date_deadline']
 
-        if delivery_date_deadline<delivery_date:
+        if delivery_date_deadline < delivery_date:
             raise forms.ValidationError(u"Tidsfristen må være etter leveringsdato")
 
         return delivery_date
 
     def clean_oid(self):
-         oid = self.cleaned_data['oid']
+        oid = self.cleaned_data['oid']
 
-         orders = Order.objects.for_company()
-         for i in orders:
-             if self.id == i.id:
-                 continue
+        orders = Order.objects.for_company()
+        for i in orders:
+            if self.id == i.id:
+                continue
 
-             if i.oid == oid:
-                 raise forms.ValidationError("Det kreves unikt ordrenr")
+            if i.oid == oid:
+                raise forms.ValidationError("Det kreves unikt ordrenr")
 
-         return oid
+        return oid
 
-    
+
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order

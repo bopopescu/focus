@@ -9,7 +9,6 @@ def message (request):
 
     return {'messages': MessageMiddleware.get_messages(request)}
 
-
 def user (request):
     """
     Puts the currently logged in user and the login form in the

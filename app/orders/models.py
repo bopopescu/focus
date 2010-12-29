@@ -1,15 +1,13 @@
-from django.db import models
-from django.contrib import admin
-from core.models import *
 from app.projects.models import *
 from app.contacts.models import *
 from django.core import urlresolvers
+from core.models import User
 
 STATE_CHOICES = (
-('T', 'Tilbud'),
-('O', 'Ordre'),
-('F', 'Til fakturering'),
-('A', 'Arkivert'),
+    ('T', 'Tilbud'),
+    ('O', 'Ordre'),
+    ('F', 'Til fakturering'),
+    ('A', 'Arkivert'),
 )
 
 class Order(PersistentModel):
@@ -32,12 +30,12 @@ class Order(PersistentModel):
         return urlresolvers.reverse('app.orders.views.view', args=("%s" % self.id,))
 
     def haveCompletedAllTasks(self):
-        tasks = self.tasks        
+        tasks = self.tasks
 
         for t in tasks.all():
             if not t.done:
                 return False
-            
+
         return True
 
 class Task(PersistentModel):

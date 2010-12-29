@@ -6,7 +6,6 @@ from app.contacts.models import Contact
 from core.widgets import *
 
 class CustomerForm(ModelForm):
-
     class Meta:
         model = Customer
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
@@ -25,7 +24,6 @@ class CustomerForm(ModelForm):
         customers = Customer.objects.for_company()
 
         for i in customers:
-
             if self.id == i.id:
                 continue
 

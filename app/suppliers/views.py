@@ -9,17 +9,19 @@ from core.views import form_perm, updateTimeout
 def overview(request):
     updateTimeout(request)
     suppliers = Supplier.objects.for_user()
-    return render_with_request(request, 'suppliers/list.html', {'title':'Leverandører', 'suppliers':suppliers})
+    return render_with_request(request, 'suppliers/list.html', {'title': 'Leverandører', 'suppliers': suppliers})
 
 @login_required()
 def overview_deleted(request):
     suppliers = Supplier.objects.for_company(deleted=True)
-    return render_with_request(request, 'suppliers/list.html', {'title':'Slettede leverandører', 'suppliers':suppliers})
+    return render_with_request(request, 'suppliers/list.html',
+                               {'title': 'Slettede leverandører', 'suppliers': suppliers})
 
 @login_required()
 def overview_all(request):
     suppliers = Supplier.objects.for_company()
-    return render_with_request(request, 'suppliers/list.html', {'title':'Alle aktive leverandører', 'suppliers':suppliers})
+    return render_with_request(request, 'suppliers/list.html',
+                               {'title': 'Alle aktive leverandører', 'suppliers': suppliers})
 
 @login_required()
 def add(request):
@@ -40,12 +42,13 @@ def addPop(request):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-                            ((o._get_pk_val()), (o)))
+            return HttpResponse(
+                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
+                    ((o._get_pk_val()), (o)))
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Kontakt', 'form': form })
+    return render_with_request(request, "simpleform.html", {'title': 'Kontakt', 'form': form})
 
 def delete(request, id):
     Supplier.objects.get(id=id).delete()
@@ -58,10 +61,9 @@ def permissions(request, id):
     return form_perm(request, type, id, url, message)
 
 @login_required()
-def form (request, id = False):
-
+def form (request, id=False):
     if id:
-        instance = get_object_or_404(Supplier, id = id, deleted=False)
+        instance = get_object_or_404(Supplier, id=id, deleted=False)
         msg = "Vellykket endret leverandør"
     else:
         instance = Supplier()
@@ -69,7 +71,6 @@ def form (request, id = False):
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-
         form = SupplierForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
@@ -83,6 +84,6 @@ def form (request, id = False):
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "form.html", {  'title':'Leverandør',
-                                                        'form': form,
-                                                    })
+    return render_with_request(request, "form.html", {'title': 'Leverandør',
+                                                      'form': form,
+                                                      })

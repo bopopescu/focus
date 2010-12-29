@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.html import escape
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
+from core.views import  updateTimeout
 from app.stock.forms import ProductGroupForm
 from app.stock.models import ProductGroup
-
 
 @login_required()
 def overview(request):
     updateTimeout(request)
     productgroups = ProductGroup.objects.for_user()
-    return render_with_request(request, 'productgroups/list.html', {'title':'Produktgrupper', 'productgroups':productgroups})
+    return render_with_request(request, 'productgroups/list.html',
+                               {'title': 'Produktgrupper', 'productgroups': productgroups})
 
 @login_required()
 def add(request):
@@ -24,7 +23,6 @@ def edit(request, id):
 def delete(request, id):
     ProductGroup.objects.get(id=id).delete()
     return redirect(overview)
-
 
 @login_required()
 def addPop(request):
@@ -38,19 +36,19 @@ def addPop(request):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-                            ((o._get_pk_val()), (o)))
+            return HttpResponse(
+                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
+                    ((o._get_pk_val()), (o)))
     else:
         form = ProductGroupForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Produktgruppe', 'form': form })
+    return render_with_request(request, "simpleform.html", {'title': 'Produktgruppe', 'form': form})
 
 
 @login_required()
-def form (request, id = False):
-
+def form (request, id=False):
     if id:
-        instance = get_object_or_404(ProductGroup, id = id, deleted=False)
+        instance = get_object_or_404(ProductGroup, id=id, deleted=False)
         msg = "Velykket endret produktgruppen"
     else:
         instance = ProductGroup()
@@ -58,7 +56,6 @@ def form (request, id = False):
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-
         form = ProductGroupForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
@@ -71,4 +68,4 @@ def form (request, id = False):
     else:
         form = ProductGroupForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Produktgruppe', 'form': form })
+    return render_with_request(request, "form.html", {'title': 'Produktgruppe', 'form': form})

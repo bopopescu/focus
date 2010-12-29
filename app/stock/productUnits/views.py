@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-from django.contrib.auth.decorators import login_required
+from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
 from core.views import  updateTimeout
@@ -11,7 +10,7 @@ from app.stock.models import UnitsForSizes
 def overview(request):
     updateTimeout(request)
     units = UnitsForSizes.objects.for_user()
-    return render_with_request(request, 'stock/productUnits/list.html', {'title':'Enheter', 'units':units})
+    return render_with_request(request, 'stock/productUnits/list.html', {'title': 'Enheter', 'units': units})
 
 @login_required()
 def add(request):
@@ -37,12 +36,13 @@ def addPop(request):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-                            ((o._get_pk_val()), (o)))
+            return HttpResponse(
+                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
+                    ((o._get_pk_val()), (o)))
     else:
         form = UnitsForSizesForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Enhet', 'form': form })
+    return render_with_request(request, "simpleform.html", {'title': 'Enhet', 'form': form})
 
 @login_required()
 def form (request, id=False):
@@ -67,4 +67,4 @@ def form (request, id=False):
     else:
         form = UnitsForSizesForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Enhet', 'form': form})
+    return render_with_request(request, "form.html", {'title': 'Enhet', 'form': form})

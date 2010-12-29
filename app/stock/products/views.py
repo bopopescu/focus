@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.html import escape
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
+from core.views import  updateTimeout
 from app.stock.forms import ProductForm
 from app.stock.models import Product
 
@@ -12,13 +11,13 @@ def overview(request):
     updateTimeout(request)
     products = Product.objects.for_company()
 
-    return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'products':products})
+    return render_with_request(request, 'stock/products/list.html', {'title': 'Produkter', 'products': products})
 
 @login_required()
 def overview_deleted(request):
     updateTimeout(request)
     products = Product.objects.for_company(deleted=True)
-    return render_with_request(request, 'stock/products/list.html', {'title':'Produkter', 'products':products})
+    return render_with_request(request, 'stock/products/list.html', {'title': 'Produkter', 'products': products})
 
 @login_required()
 def add(request):
@@ -37,13 +36,12 @@ def recover(request, id):
 
 def view(request, id):
     product = Product.objects.get(id=id)
-    return render_with_request(request, 'stock/products/view.html', {'title':'Produkt', 'product':product})
+    return render_with_request(request, 'stock/products/view.html', {'title': 'Produkt', 'product': product})
 
 @login_required()
-def form (request, id = False):
-
+def form (request, id=False):
     if id:
-        instance = get_object_or_404(Product, id = id, deleted=False)
+        instance = get_object_or_404(Product, id=id, deleted=False)
         msg = "Velykket endret produkt"
     else:
         instance = Product()
@@ -51,7 +49,6 @@ def form (request, id = False):
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-
         form = ProductForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
@@ -64,4 +61,4 @@ def form (request, id = False):
     else:
         form = ProductForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Produkt', 'form': form })
+    return render_with_request(request, "form.html", {'title': 'Produkt', 'form': form})

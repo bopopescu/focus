@@ -1,25 +1,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="" >
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-<title>Opprett gruppe | Django administrasjonsside</title>
-<link rel="stylesheet" type="text/css" href="/media/admin/css/base.css" />
-<link rel="stylesheet" type="text/css" href="/media/admin/css/forms.css" />
-<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/media/admin/css/ie.css" /><![endif]-->
+    <title>Opprett gruppe | Django administrasjonsside</title>
+    <link rel="stylesheet" type="text/css" href="/media/admin/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="/media/admin/css/forms.css"/>
+    <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="/media/admin/css/ie.css" /><![endif]-->
 
-<script type="text/javascript">window.__admin_media_prefix__ = "/media/admin/";</script>
+    <script type="text/javascript">window.__admin_media_prefix__ = "/media/admin/";</script>
 
 
-<script type="text/javascript" src="/admin/jsi18n/"></script>
-<script type="text/javascript" src="/media/admin/js/core.js"></script>
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <script type="text/javascript" src="/media/admin/js/core.js"></script>
 
-<script type="text/javascript" src="/media/admin/js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="/media/admin/js/jquery.min.js"></script>
-<script type="text/javascript" src="/media/admin/js/jquery.init.js"></script>
-<script type="text/javascript" src="/media/admin/js/actions.min.js"></script>
-<script type="text/javascript" src="/media/admin/js/SelectBox.js"></script>
-<script type="text/javascript" src="/media/admin/js/SelectFilter2.js"></script>
+    <script type="text/javascript" src="/media/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="/media/admin/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/media/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/media/admin/js/actions.min.js"></script>
+    <script type="text/javascript" src="/media/admin/js/SelectBox.js"></script>
+    <script type="text/javascript" src="/media/admin/js/SelectFilter2.js"></script>
 
-<meta name="robots" content="NONE,NOARCHIVE" />
+    <meta name="robots" content="NONE,NOARCHIVE"/>
 </head>
 
 
@@ -28,104 +28,104 @@
 <!-- Container -->
 <div id="container">
 
-    
 
-        
+
+
 
     <!-- Content -->
     <div id="content" class="colM">
-        
+
         <h1>Opprett gruppe</h1>
         <div id="content-main">
 
 
 
-<form enctype="multipart/form-data" action="" method="post" id="group_form"><div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='9541c7c902b45a257c4125ef3af18883' /></div>
-<div>
-<input type="hidden" name="_popup" value="1" />
-  <fieldset class="module aligned ">
-    
-    
-    
-        <div class="form-row name">
-            
-            
+            <form enctype="multipart/form-data" action="" method="post" id="group_form">
+                <div style='display:none'><input type='hidden' name='csrfmiddlewaretoken'
+                                                 value='9541c7c902b45a257c4125ef3af18883'/></div>
                 <div>
-                    
-                        <label for="id_name" class="required">Navn:</label>
-                        
-                            <input id="id_name" type="text" class="vTextField" name="name" maxlength="80" />
+                    <input type="hidden" name="_popup" value="1"/>
+                    <fieldset class="module aligned ">
 
-                        
-                    
-                    
+
+
+                        <div class="form-row name">
+
+
+                            <div>
+
+                                <label for="id_name" class="required">Navn:</label>
+
+                                <input id="id_name" type="text" class="vTextField" name="name" maxlength="80"/>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-row permissions">
+
+
+                            <div>
+
+                                <label for="id_permissions">Rettigheter:</label>
+
+                                <select multiple="multiple" class="selectfilter" name="permissions" id="id_permissions">
+
+                                    <option value="69">timetracking | timetracking | Can delete timetracking</option>
+
+                                    {% for p in permissions %}
+                                        <option value="{{p.id}}">timetracking | timetracking | Can delete timetracking
+                                        </option>
+                                    {% endfor %}
+
+                                </select>
+                                <script type="text/javascript">addEvent(window, "load", function(e) {
+                                    SelectFilter.init("id_permissions", "rettigheter", 0, "/media/admin/");
+                                });</script>
+
+
+                                <p class="help"> Hold nede "Control", eller "Command" på en Mac, for å velge mer enn
+                                    en.</p>
+
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+
+
+
+
+
+
+
+
+                    <div class="submit-row" style="overflow: auto;">
+                        <input type="submit" value="Lagre" class="default" name="_save"/>
+
+
+                    </div>
+
+
+                    <script type="text/javascript">document.getElementById("id_name").focus();</script>
+
+
+                    <script type="text/javascript">
+                        (function($) {
+                            var field = null;
+
+
+                        })(django.jQuery);
+                    </script>
+
+
                 </div>
-            
-        </div>
-    
-        <div class="form-row permissions">
-            
-            
-                <div>
-                    
-                        <label for="id_permissions">Rettigheter:</label>
-                        
-                            <select multiple="multiple" class="selectfilter" name="permissions" id="id_permissions">
-
-<option value="69">timetracking | timetracking | Can delete timetracking</option>
-
-{% for p in permissions %}
-<option value="{{p.id}}">timetracking | timetracking | Can delete timetracking</option>
-{% endfor %}
-
-</select><script type="text/javascript">addEvent(window, "load", function(e) {SelectFilter.init("id_permissions", "rettigheter", 0, "/media/admin/"); });</script>
-
-                        
-                    
-                    
-                        <p class="help"> Hold nede "Control", eller "Command" på en Mac, for å velge mer enn en.</p>
-                    
-                </div>
-            
-        </div>
-    
-</fieldset>
+            </form></div>
 
 
-
-
-
-
-
-
-
-<div class="submit-row" style="overflow: auto;">
-<input type="submit" value="Lagre" class="default" name="_save" />
-
-
-
-
-</div>
-
-
-
-   <script type="text/javascript">document.getElementById("id_name").focus();</script>
-
-
-<script type="text/javascript">
-(function($) {
-    var field = null;
-
-
-})(django.jQuery);
-</script>
-
-
-</div>
-</form></div>
-
-        
-        <br class="clear" />
+        <br class="clear"/>
     </div>
     <!-- END Content -->
 

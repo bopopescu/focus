@@ -1,8 +1,12 @@
+"""
 from django.forms.models import modelformset_factory
 from django.forms import ModelForm
 from models import *
 from core.middleware import *
 from core.models import *
+
+
+Not in use for now
 
 class PermissionForm(ModelForm):    
     class Meta:
@@ -19,3 +23,5 @@ class PermissionForm(ModelForm):
         self.fields['membership'].widget.attrs['class'] = "small"
         
 PermFormSet = modelformset_factory(Permission, extra=3, form=PermissionForm)
+
+"""

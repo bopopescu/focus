@@ -1,6 +1,7 @@
-from app.orders.models import *
 import re
-
+from app.orders.models import Order
+from core.models import PersistentModel
+from django.db import models
 
 class TypeOfTimeTracking(PersistentModel):
     name = models.CharField(max_length=100)

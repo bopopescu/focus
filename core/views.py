@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-
-from django.shortcuts import HttpResponse, get_object_or_404
-from forms import *
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import HttpResponse
 from core.shortcuts import *
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from core.decorators import login_required
-
 
 @login_required()
 def updateTimeout(request):
@@ -69,17 +67,22 @@ def form_perm(request, type, id, url, message, popup=False):
     else:
         if ObjectPermission.objects.filter(content_type=content_type,
                                            object_id=id).count() == 0 and object.creator == request.user:
-
             k = ObjectPermission(content_type=content_type, object_id=id, user=request.user, can_view=True,
                                  can_change=True, can_delete=True)
             k.save()
 
-        PermSet           = PermFormSet(queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id, membership = None), prefix="users")
-        PermGroupSet      = PermFormSet(queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id, user = None), prefix="memberships")
+        PermSet = PermFormSet(
+                queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id, membership=None),
+                prefix="users")
+        PermGroupSet = PermFormSet(
+                queryset=ObjectPermission.objects.filter(content_type=content_type, object_id=id, user=None),
+                prefix="memberships")
 
         if popup:
             return render_with_request(request, "form_perm_simple.html",
-                                       {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet, 'PermGroupSet': PermGroupSet})
+                                       {'title': 'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet,
+                                        'PermGroupSet': PermGroupSet})
 
         return render_with_request(request, "form_perm.html",
-                                   {'title':'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet, 'PermGroupSet': PermGroupSet})
+                                   {'title': 'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet,
+                                    'PermGroupSet': PermGroupSet})

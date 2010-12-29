@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
-from app.admin.forms import *
+from django.shortcuts import get_object_or_404, HttpResponse
+from django.db.models import Q
 from core.shortcuts import *
 from core.views import updateTimeout
-from django.db.models import Q
 from core.decorators import *
 from core.models import User
+from app.admin.forms import *
 
 @login_required()
 def overview(request):
     updateTimeout(request)
     Company = request.user.company
     Users = User.objects.filter(company=Company, is_active=True)
-    return render_with_request(request, 'admin/users/list.html', {'title':'Brukere', 'users':Users})
+    return render_with_request(request, 'admin/users/list.html', {'title': 'Brukere', 'users': Users})
 
 @login_required()
 def grant_permissions(request):
-    Users = User.objects.all()    
+    Users = User.objects.all()
     Permissions = Permission.objects.all()
-    return render_with_request(request, 'admin/users/grant_permssions.html', {'title':'Brukere', 'users':Users, 'permissions':Permissions })
+    return render_with_request(request, 'admin/users/grant_permssions.html',
+                               {'title': 'Brukere', 'users': Users, 'permissions': Permissions})
 
 @login_required()
 def add(request):
@@ -33,14 +34,13 @@ def edit(request, id):
 def editProfile(request):
     pass
 
-@login_required() 
+@login_required()
 def changeCanLogin(request, userID):
-
     u = User.objects.get(id=userID)
     p = u.get_profile()
 
     if u == request.user:
-        messages.error(request, "Du kan ikke endre status på deg selv.")
+        request.messages_error("Du kan ikke endre status på deg selv.")
         return redirect(view, userID)
 
     p.canLogin = not p.canLogin
@@ -49,60 +49,58 @@ def changeCanLogin(request, userID):
 
 @login_required()
 def sendGeneratedPassword(request, userID):
-
-    user = get_object_or_404(User, id = userID, userprofile__company = request.user.get_profile().company)
+    user = get_object_or_404(User, id=userID, userprofile__company=request.user.get_profile().company)
 
     import string
     import random
 
-    vowels = ['a','e','i','o','u']
+    vowels = ['a', 'e', 'i', 'o', 'u']
     consonants = [a for a in string.ascii_lowercase if a not in vowels]
     ret = ''
     slen = 8
 
     for i in range(slen):
-        if i%2 ==0:
-            randid = random.randint(0,20) #number of consonants
+        if i % 2 == 0:
+            randid = random.randint(0, 20) #number of consonants
             ret += consonants[randid]
         else:
-            randid = random.randint(0,4) #number of vowels
+            randid = random.randint(0, 4) #number of vowels
             ret += vowels[randid]
 
-    ret += "%s" % random.randint(20,99)
+    ret += "%s" % random.randint(20, 99)
 
     from django.core.mail import send_mail
 
     send_mail('Nytt passord', 'Nytt passord er: %s' % ret, 'FocusTime',
-        ["%s"%user.email], fail_silently=True)
+              ["%s" % user.email], fail_silently=True)
 
-    user.set_password("%s"%ret)
+    user.set_password("%s" % ret)
     user.save()
 
-    messages.success(request, "Velykket sendt nytt passord til epost")
+    request.messages_success("Velykket sendt nytt passord til epost")
 
     return redirect(overview)
 
 def get_permissions(user):
     Permissions = ObjectPermission.objects.filter(
-                                                  (
-                                                   
-                                                   #Q(content_type__fabelf="K") &
-                                                   
-                                                   (
-                                                    Q(user=user) 
-                                                    |
-                                                    Q(membership__in=user.memberships.all))
-                                                  )
-                                                ).order_by('content_type')
+            (
+
+            #Q(content_type__fabelf="K") &
+
+            (
+            Q(user=user)
+            |
+            Q(membership__in=user.memberships.all))
+            )
+            ).order_by('content_type')
     return Permissions
-    
+
 
 @login_required()
 def addPop(request):
     instance = User()
-    
-    if request.method == "POST": 
 
+    if request.method == "POST":
         form = UserForm(request.POST, instance=instance)
 
         if form.is_valid():
@@ -116,37 +114,38 @@ def addPop(request):
                 o.get_profile().save()
                 sendGeneratedPassword(request, o.id)
 
-            return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-                            ((o._get_pk_val()), (o)))
-            
+            return HttpResponse(
+                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
+                    ((o._get_pk_val()), (o)))
+
     else:
         form = UserForm(instance=instance)
-    
-    return render_with_request(request, "simpleform.html", {'title':'Bruker', 'form': form })
-  
-  
+
+    return render_with_request(request, "simpleform.html", {'title': 'Bruker', 'form': form})
+
+
 @login_required()
 def view(request, id):
     user = User.objects.get(id=id)
     Permissions = get_permissions(user)
-    
-    return render_with_request(request, 'admin/users/view.html', {'title':'Bruker',
-                                                                  'user':user,
-                                                                  'permissions':Permissions,
+
+    return render_with_request(request, 'admin/users/view.html', {'title': 'Bruker',
+                                                                  'user': user,
+                                                                  'permissions': Permissions,
                                                                   })
+
 @login_required()
 def delete(request, id):
     u = User.objects.get(id=id)
     u.is_active = False
     u.save()
-    messages.success(request, "Velykket slettet bruker")
+    request.messages_success("Velykket slettet bruker")
     return redirect(overview)
 
 @login_required()
-def form (request, id = False):
-
+def form (request, id=False):
     if id:
-        instance = get_object_or_404(User, id = id, company = request.user.company)
+        instance = get_object_or_404(User, id=id, company=request.user.company)
         msg = "Velykket endret bruker"
     else:
         instance = User()
@@ -154,9 +153,8 @@ def form (request, id = False):
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-        
         form = UserForm(request.POST, instance=instance)
-        if form.is_valid():    
+        if form.is_valid():
             o = form.save(commit=False)
             o.save()
             form.save_m2m()
@@ -168,12 +166,12 @@ def form (request, id = False):
             if not id:
                 sendGeneratedPassword(request, o.id)
 
-            messages.success(request, msg)
-            
+            request.messages_success(msg)
+
             #Redirects after save for direct editing
-            return redirect(overview)   
+            return redirect(overview)
 
     else:
         form = UserForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Bruker', 'form': form })
+    return render_with_request(request, "form.html", {'title': 'Bruker', 'form': form})

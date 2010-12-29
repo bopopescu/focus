@@ -1,21 +1,18 @@
-from functools import wraps,update_wrapper
-from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect, HttpResponse
-from django.contrib import messages
+from functools import  update_wrapper
+from django.shortcuts import  redirect
 from django.http import Http404
 
 #Require permission in views
 from app.accounts.views import login
 
 class login_required:
-
     def __init__(self):
         pass
 
     def __call__(self, func):
-
         def check_login (request, *args, **kwargs):
             if request.user:
-                 return func(request, *args, **kwargs)
+                return func(request, *args, **kwargs)
             else:
                 return redirect(login)
 
@@ -60,7 +57,7 @@ class require_permission:
     field_db = None
     any = False
 
-    def __init__(self, action, model, field = False, field_db = False, any = False):
+    def __init__(self, action, model, field=False, field_db=False, any=False):
         """
         Used for decorator permission checking
         Called when python finds a decorator
@@ -78,7 +75,8 @@ class require_permission:
         # Then we change it, if it's not
         if field_db:
             if not field:
-                raise Exception("A database field was defined without a corrosponding view function field. See core.require_permission for more info")
+                raise Exception(
+                        "A database field was defined without a corrosponding view function field. See core.require_permission for more info")
 
             self.field_db = field_db
 
@@ -89,15 +87,15 @@ class require_permission:
         """
 
         def check_permission (request, *args, **kwargs):
-
-            if 3>2:
+            if 3 > 2:
                 return redirect(login)
 
             # If the identifier is defined, get the object instance
             if self.field:
                 if not self.field in kwargs:
                     print "KWARGS: %s" % kwargs
-                    raise Exception("The specified field '%s' in the require_permission decorator did not match a input argument." % self.field)
+                    raise Exception(
+                            "The specified field '%s' in the require_permission decorator did not match a input argument." % self.field)
 
                 # Get the object instance, or 404 if it does not exist
                 try:
@@ -111,7 +109,7 @@ class require_permission:
                 object = self.model
 
             # If the user has permission to use this view, go ahead and use it! :)
-            if request.user.has_permission_to(self.action, object, any = any):
+            if request.user.has_permission_to(self.action, object, any=any):
                 return func(request, *args, **kwargs)
 
             # Else, if the user isn't logged in, suggest doing so

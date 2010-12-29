@@ -1,12 +1,8 @@
 from django.db import models
-from django.contrib import admin
 from app.contacts.models import Contact
-from django.contrib.auth.models import User
-from django.contrib.contenttypes.generic import GenericTabularInline
-from django.contrib.flatpages.models import FlatPage
-from django.contrib.flatpages.admin import FlatPageAdmin as FPAdmin
 from core.models import PersistentModel
 from django.core import urlresolvers
+from core.models import User
 
 class Customer(PersistentModel):
     cid = models.IntegerField("Kundenr")
@@ -26,10 +22,3 @@ class Customer(PersistentModel):
 
     def getViewUrl(self):
         return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
-
-from reversion.admin import VersionAdmin
-
-class ContactModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-
-admin.site.register(Customer, ContactModelAdmin)

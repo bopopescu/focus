@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from core.models import PersistentModel
 from app.suppliers.models import Supplier
-import settings
 from django.core import urlresolvers
 
 class UnitsForSizes(PersistentModel):
@@ -9,7 +10,6 @@ class UnitsForSizes(PersistentModel):
 
     def __unicode__(self):
         return self.name
-
 
 class ProductCategory(PersistentModel):
     name = models.CharField("Navn", max_length=100)
@@ -26,7 +26,6 @@ class ProductGroup(PersistentModel):
 
     def getViewUrl(self):
         return urlresolvers.reverse('app.stock.productgroups.views.edit', args=("%s" % self.id,))
-
 
 class Currency(PersistentModel):
     name = models.CharField("Navn", max_length=100)

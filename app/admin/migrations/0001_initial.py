@@ -5,7 +5,6 @@ from south.v2 import SchemaMigration
 from django.db import models
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         pass
 
@@ -15,7 +14,7 @@ class Migration(SchemaMigration):
 
 
     models = {
-        
+
     }
 
     complete_apps = ['admin']

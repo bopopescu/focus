@@ -1,15 +1,14 @@
 from app.customers.models import Customer
 from app.projects.models import Project
-from django.http import HttpResponse
 from app.contacts.models import Contact
+from core.decorators import login_required
 from core.shortcuts import render_with_request
 from app.orders.models import Order
 from app.suppliers.models import Supplier
 from app.stock.models import Product
-from django.contrib.auth.decorators import login_required
 from app.announcements.models import Announcement
 
-@login_required
+@login_required()
 def search(request):
     term = request.GET.get('s')
 
@@ -41,5 +40,5 @@ def search(request):
     for i in result:
         v.append(i[0])
 
-    return render_with_request(request, 'search/list.html', {'title':'Resultat',
-                                                             'objects':v})
+    return render_with_request(request, 'search/list.html', {'title': 'Resultat',
+                                                             'objects': v})

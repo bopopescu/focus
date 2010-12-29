@@ -8,7 +8,7 @@ from core.views import updateTimeout
 from django.contrib import messages
 from django.db.models import Q
 from core.decorators import login_required, login_required
-from core.models import User
+from core.user import User
 
 #@login_required()
 def edit(request):

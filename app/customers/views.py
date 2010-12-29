@@ -3,30 +3,28 @@ from core.shortcuts import *
 from core.decorators import *
 from core.views import form_perm, updateTimeout
 
-
 @login_required()
 def overview(request):
     updateTimeout(request)
     customers = Customer.objects.for_user()
 
-    return render_with_request(request, 'customers/list.html', {'title':'Kunder',
-                                                                'customers':customers})
-
+    return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
+                                                                'customers': customers})
 
 def overview_deleted(request):
     customers = Customer.objects.for_company(deleted=True)
-    return render_with_request(request, 'customers/list.html', {'title':'Slettede kunder',
-                                                                'customers':customers})
+    return render_with_request(request, 'customers/list.html', {'title': 'Slettede kunder',
+                                                                'customers': customers})
 
 def overview_all(request):
     customers = Customer.objects.for_company()
-    return render_with_request(request, 'customers/list.html', {'title':'Alle aktive kunder',
-                                                                'customers':customers})
+    return render_with_request(request, 'customers/list.html', {'title': 'Alle aktive kunder',
+                                                                'customers': customers})
 
 def view(request, id):
     customer = Customer.objects.for_user(deleted=None).get(id=id)
-    return render_with_request(request, 'customers/view.html', {'title':'Kunde: %s' % customer.full_name,
-                                                                'customer':customer})
+    return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
+                                                                'customer': customer})
 
 
 def addPop(request):
@@ -47,7 +45,7 @@ def addPop(request):
     else:
         form = CustomerFormSimple(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Kunde', 'form': form})
+    return render_with_request(request, "simpleform.html", {'title': 'Kunde', 'form': form})
 
 def add(request):
     return form(request)
@@ -96,4 +94,4 @@ def form (request, id=False):
     else:
         form = CustomerForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Kunde', 'form': form})
+    return render_with_request(request, "form.html", {'title': 'Kunde', 'form': form})

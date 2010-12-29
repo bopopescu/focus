@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response, redirect, get_object_or_404, HttpResponseRedirect
-from django.contrib.contenttypes.models import ContentType
-from core.models import Log, User
+from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from core import Core
-from core.shortcuts import render_with_request
+from core.models import Log, User
 
 def login(request):
     if request.method == 'POST':
@@ -12,23 +10,22 @@ def login(request):
         redirect_to = request.REQUEST.get('next', '')
 
         if Core.login(request, username, password):
-
-            user  = User.objects.get(username=username)
+            user = User.objects.get(username=username)
 
             if user.canLogin:
                 if not redirect_to:
                     return HttpResponseRedirect("/dashboard/")
                 return HttpResponseRedirect('%s' % redirect_to)
-            Log(message = "%s forsøkte å logge inn, men er sperret!" % user).save(user=user)
+            Log(message="%s forsøkte å logge inn, men er sperret!" % user).save(user=user)
             return render_to_response('login.html')
-
+        
         else:
             try:
-                user  = User.objects.get(username=username)
-                Log(message = "%s forsøkte å logge inn, men bruke feil passord." % user).save(user=user)
+                user = User.objects.get(username=username)
+                Log(message="%s forsøkte å logge inn, men brukte feil passord." % user).save(user=user)
             except:
                 pass
-
+            
     return render_to_response('login.html')
 
 def logout_view(request):

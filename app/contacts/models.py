@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.contrib import admin
 from core.models import PersistentModel
-
 from django.core import urlresolvers
-
 
 class Contact(PersistentModel):
     full_name = models.CharField("Fullt navn", max_length=80)
@@ -21,10 +18,3 @@ class Contact(PersistentModel):
 
     def getEditUrl(self):
         return urlresolvers.reverse('app.contacts.views.edit', args=("%s" % self.id,))
-
-from reversion.admin import VersionAdmin
-
-class ContactModelAdmin(VersionAdmin):
-    """Admin settings go here."""
-
-admin.site.register(Contact, ContactModelAdmin)

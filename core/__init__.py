@@ -4,7 +4,7 @@ import threading, inspect
 from datetime import datetime
 from django.db.models import signals
 from django.conf import settings
-from core.user import AnonymousUser
+from core.models import AnonymousUser
 
 class Core:
     """

@@ -9,25 +9,25 @@ from core.decorators import *
 def overviewOffers(request):
     orders = Order.objects.for_user().filter(state="T")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Tilbud', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
 @login_required()
 def overview(request):
     orders = Order.objects.for_user().filter(state="O")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Ordrer', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
 @login_required()
 def overviewReadyForInvoice(request):
     orders = Order.objects.for_user().filter(state="F")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Til fakturering', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
 @login_required()
 def overviewArchive(request):
     orders = Order.objects.for_user().filter(state="A")
     updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title':'Arkiv', 'orders':orders})
+    return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
 
 def view(request, id):
@@ -36,10 +36,10 @@ def view(request, id):
 
     taskForm = TaskForm()
 
-    return render_with_request(request, 'orders/view.html', {'title':'Ordre: %s' % order.order_name,
-                                                             'order':order,
-                                                             'taskForm':taskForm,
-                                                             'whoCanSeeThis':whoCanSeeThis})
+    return render_with_request(request, 'orders/view.html', {'title': 'Ordre: %s' % order.order_name,
+                                                             'order': order,
+                                                             'taskForm': taskForm,
+                                                             'whoCanSeeThis': whoCanSeeThis})
 
 
 @login_required()
@@ -132,7 +132,7 @@ def addPop(request):
     else:
         form = OrderFormSimple(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Ordre', 'form': form})
+    return render_with_request(request, "simpleform.html", {'title': 'Ordre', 'form': form})
 
 @login_required()
 def form (request, id=False, *args, **kwargs):
@@ -160,7 +160,7 @@ def form (request, id=False, *args, **kwargs):
     if instance.state == "A":
         messages.error(request, "Ordren er arkivert og kan ikke endres")
         return redirect(overview)
-	
+
     #Save and set to active, require valid form
     if request.method == 'POST':
         form = OrderForm(request.POST, instance=instance)
@@ -184,4 +184,4 @@ def form (request, id=False, *args, **kwargs):
     else:
         form = OrderForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':title, 'form': form})
+    return render_with_request(request, "form.html", {'title': title, 'form': form})

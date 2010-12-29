@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.shortcuts import  redirect
 from django.contrib.auth.decorators import login_required
 from forms import *
@@ -15,7 +14,7 @@ def overview(request):
     updateTimeout(request)
     timetrackings = Timetracking.objects.for_user()
     return render_with_request(request, 'timetracking/list.html',
-                               {'title':'Timeføringer', 'timetrackings':timetrackings})
+                               {'title': 'Timeføringer', 'timetrackings': timetrackings})
 
 @login_required
 def add(request):
@@ -55,7 +54,7 @@ def addTypeOfWork(request):
     else:
         form = TypeOfTimeTrackingForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title':'Typer arbeid', 'form': form})
+    return render_with_request(request, "simpleform.html", {'title': 'Typer arbeid', 'form': form})
 
 
 @login_required
@@ -81,9 +80,9 @@ def calendar(request):
     instance = Timetracking()
     form = TimetrackingForm(request.POST, instance=instance)
 
-    return render_with_request(request, "timetracking/calendar.html", {'title':'Timeregistrering',
-                                                                       'timetrackings':timetrackings,
-                                                                       'form':form, })
+    return render_with_request(request, "timetracking/calendar.html", {'title': 'Timeregistrering',
+                                                                       'timetrackings': timetrackings,
+                                                                       'form': form, })
 
 @login_required
 def ajaxEditCalendar(request):
@@ -115,7 +114,7 @@ def ajaxEditCalendar(request):
 
     t.save()
 
-    data = simplejson.dumps({'id':t.id})
+    data = simplejson.dumps({'id': t.id})
 
     return HttpResponse(data)
 
@@ -155,4 +154,4 @@ def form (request, id=False):
     else:
         form = TimetrackingForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Timeføring', 'form': form})
+    return render_with_request(request, "form.html", {'title': 'Timeføring', 'form': form})

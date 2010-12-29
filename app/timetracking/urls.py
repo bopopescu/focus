@@ -2,14 +2,14 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('app.timetracking.views',
 
-        url(r'^$', 'overview'),
-        url(r'^add/$', 'add'), 
-        url(r'^edit/(\d+)/?$', 'edit'),
-        url(r'^delete/(\d+)/?$', 'delete'),
-        url(r'^calendar/',      'calendar'),
+                       url(r'^$', 'overview'),
+                       url(r'^add/$', 'add'),
+                       url(r'^edit/(\d+)/?$', 'edit'),
+                       url(r'^delete/(\d+)/?$', 'delete'),
+                       url(r'^calendar/', 'calendar'),
 
-        #Ajax
+                       #Ajax
 
-        url(r'^ajaxEditCalendar/$', 'ajaxEditCalendar'),
+                       url(r'^ajaxEditCalendar/$', 'ajaxEditCalendar'),
 
-)
+                       )

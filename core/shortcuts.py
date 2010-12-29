@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.template import RequestContext
 from django.shortcuts import  render_to_response
-from core.models import User
+from core.user import User
 from core import Core
 
 def render_with_request(request, template, values={}, *args, **kwargs):

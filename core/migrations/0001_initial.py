@@ -40,6 +40,22 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('core', ['User'])
 
+        # Adding model 'Group'
+        db.create_table('core_group', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', null=True, to=orm['core.Group'])),
+        ))
+        db.send_create_signal('core', ['Group'])
+
+        # Adding M2M table for field members on 'Group'
+        db.create_table('core_group_members', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('group', models.ForeignKey(orm['core.group'], null=False)),
+            ('user', models.ForeignKey(orm['core.user'], null=False))
+        ))
+        db.create_unique('core_group_members', ['group_id', 'user_id'])
+
         # Adding model 'Notification'
         db.create_table('core_notification', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -67,28 +83,6 @@ class Migration(SchemaMigration):
             ('action', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
         ))
         db.send_create_signal('core', ['Log'])
-
-        # Adding model 'Membership'
-        db.create_table('core_membership', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 12, 23, 3, 51, 21, 956310))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2010, 12, 23, 3, 51, 21, 956357))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='membership_created', null=True, blank=True, to=orm['core.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='membership_edited', null=True, blank=True, to=orm['core.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='membership_edited', null=True, blank=True, to=orm['core.Company'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', null=True, to=orm['core.Membership'])),
-        ))
-        db.send_create_signal('core', ['Membership'])
-
-        # Adding M2M table for field members on 'Membership'
-        db.create_table('core_membership_members', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('membership', models.ForeignKey(orm['core.membership'], null=False)),
-            ('user', models.ForeignKey(orm['core.user'], null=False))
-        ))
-        db.create_unique('core_membership_members', ['membership_id', 'user_id'])
 
         # Adding model 'Action'
         db.create_table('core_action', (
@@ -121,7 +115,7 @@ class Migration(SchemaMigration):
             ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['contenttypes.ContentType'])),
             ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['core.User'])),
-            ('membership', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['core.Membership'])),
+            ('group', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['core.Group'])),
             ('role', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['core.Role'])),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
         ))
@@ -139,17 +133,17 @@ class Migration(SchemaMigration):
         # Deleting model 'User'
         db.delete_table('core_user')
 
+        # Deleting model 'Group'
+        db.delete_table('core_group')
+
+        # Removing M2M table for field members on 'Group'
+        db.delete_table('core_group_members')
+
         # Deleting model 'Notification'
         db.delete_table('core_notification')
 
         # Deleting model 'Log'
         db.delete_table('core_log')
-
-        # Deleting model 'Membership'
-        db.delete_table('core_membership')
-
-        # Removing M2M table for field members on 'Membership'
-        db.delete_table('core_membership_members')
 
         # Deleting model 'Action'
         db.delete_table('core_action')
@@ -188,6 +182,13 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'})
         },
+        'core.group': {
+            'Meta': {'object_name': 'Group'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'members': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'memberships'", 'symmetrical': 'False', 'to': "orm['core.User']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'null': 'True', 'to': "orm['core.Group']"})
+        },
         'core.log': {
             'Meta': {'object_name': 'Log'},
             'action': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'}),
@@ -198,19 +199,6 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'message': ('django.db.models.fields.TextField', [], {}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'})
-        },
-        'core.membership': {
-            'Meta': {'object_name': 'Membership'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 23, 3, 51, 21, 956310)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2010, 12, 23, 3, 51, 21, 956357)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'membership_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'members': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'memberships'", 'symmetrical': 'False', 'to': "orm['core.User']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'null': 'True', 'to': "orm['core.Membership']"})
         },
         'core.notification': {
             'Meta': {'object_name': 'Notification'},
@@ -229,8 +217,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Permission'},
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'group': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Group']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'membership': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Membership']"}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'role': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Role']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.User']"})

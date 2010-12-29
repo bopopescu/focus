@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from app.files.forms import *
 from core.shortcuts import *
-from core.views import updateTimeout, form_perm
+from core.views import updateTimeout
 from core.decorators import *
 from app.files.models import File, Folder
-
 
 @login_required()
 def overview(request):
@@ -13,41 +14,39 @@ def overview(request):
 
     updateTimeout(request)
 
-    return render_with_request(request, 'files/list.html', {'title':'Filer',
-                                                            'files':files,
-                                                            'folders':folders,
+    return render_with_request(request, 'files/list.html', {'title': 'Filer',
+                                                            'files': files,
+                                                            'folders': folders,
                                                             })
 
 def folder(request, folderID):
-
     folder = Folder.objects.get(id=folderID, creator=Core.current_user())
 
     folders = Folder.objects.filter(parent=folder, creator=Core.current_user())
 
     files = File.objects.filter(folder=folder, creator=Core.current_user())
 
-    return render_with_request(request, 'files/list.html', {'title':'Filer',
-                                                            'folder':folder,
-                                                            'files':files,
-                                                            'folders':folders,
-                                                         })
+    return render_with_request(request, 'files/list.html', {'title': 'Filer',
+                                                            'folder': folder,
+                                                            'files': files,
+                                                            'folders': folders,
+                                                            })
 
 def moveFile(request):
-    fileID      = request.GET.get("fileID")
-    toFolder    = request.GET.get("folderID")
+    fileID = request.GET.get("fileID")
+    toFolder = request.GET.get("folderID")
 
-    file        = File.objects.get(id=fileID)
+    file = File.objects.get(id=fileID)
     file.folder = Folder.objects.get(id=toFolder)
     file.save()
 
     return
 
 def moveFolder(request):
-    folderID    = request.GET.get("folderID")
-    parentID    = request.GET.get("parentID")
+    folderID = request.GET.get("folderID")
+    parentID = request.GET.get("parentID")
 
-
-    folder        = Folder.objects.get(id=folderID)
+    folder = Folder.objects.get(id=folderID)
 
     if parentID == "root":
         folder.parent = None
@@ -61,7 +60,7 @@ def moveFolder(request):
 
 
 @login_required()
-def add(request, folderID = None):
+def add(request, folderID=None):
     return form(request, False, folderID)
 
 @login_required()
@@ -78,9 +77,10 @@ def view(request, id):
     file = File.objects.for_company().get(id=id)
 
     whoCanSeeThis = file.whoHasPermissionTo('view')
-    return render_with_request(request, 'files/view.html', {'title':'Ordre: %s' % file.name,
-                                                             'file':file,
-                                                             'whoCanSeeThis':whoCanSeeThis})
+    return render_with_request(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
+                                                            'file': file,
+                                                            'whoCanSeeThis': whoCanSeeThis})
+
 """
 @login_required()
 def permissions(request, id):
@@ -97,8 +97,7 @@ def permissions(request, id):
 """
 
 @login_required()
-def form (request, id=False, folderID = None):
-
+def form (request, id=False, folderID=None):
     if id:
         instance = get_object_or_404(File, id=id, deleted=False)
         msg = "Velykket endret fil"
@@ -114,7 +113,6 @@ def form (request, id=False, folderID = None):
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-
         form = FileForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
@@ -133,6 +131,6 @@ def form (request, id=False, folderID = None):
     else:
         form = FileForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title':'Fil',
+    return render_with_request(request, "form.html", {'title': 'Fil',
                                                       'form': form,
-                                                      'folder':folder})
+                                                      'folder': folder})
