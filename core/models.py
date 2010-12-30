@@ -5,6 +5,7 @@ from django.utils.encoding import  smart_str
 from core.managers import PersistentManager
 from django.db import models
 from widgets import get_hexdigest, check_password
+from . import Core
 
 """
 The Company class.
@@ -17,10 +18,6 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.name
-
-class AnonymousUser(models.Model):
-    def is_authenticated(self):
-        return False
 
 class User(models.Model):
     """
@@ -94,18 +91,73 @@ class User(models.Model):
             return is_correct
         return check_password(raw_password, self.password)
 
+    def grant_role(self, role, object):
+
+        #Get info about the object
+        object_id = object.id
+        content_type = ContentType.objects.get_for_model(object)
+
+        act = Role.objects.get(name = role)
+
+        perm = Permission(
+                          role = act,
+                          user=self,
+                          content_type=content_type,
+                          object_id=object_id
+                         )
+        perm.save()
+
+
+    def grant_permissions (self, actions, object):
+
+        #Get info about the object
+        object_id = object.id
+        content_type = ContentType.objects.get_for_model(object)
+
+        if(isinstance(actions, str)):
+            act = Action.objects.filter(name = actions)
+        else:
+            act = Action.objects.filter(name__in = actions)
+
+        perm = Permission(
+                          user=self,
+                          content_type=content_type,
+                          object_id=object_id
+                         )
+        perm.save()
+
+        for p in act:
+            perm.actions.add(p)
+
+        perm.save()
+
+        
     def has_permission_to (self, action, object, id=None, any=False):
+
         if isinstance(object, str):
             raise Exception(
                     'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
+        #if isinstance(action, str):
+        #   action = [action]
+
         content_type = ContentType.objects.get_for_model(object)
         object_id = object.id
 
-        return Permission.objects.filter(content_type=content_type,
-                                         object_id=object_id,
-                                         user=Core.current_user())
+        action = Action.objects.get(name=action)
 
+        #Checks if the user is permitted manually
+        perms = Permission.objects.filter(content_type=content_type,
+                                         object_id=object_id,
+                                         user=self,
+                                        )
+        for perm in perms:
+            if action in perm.get_actions():
+                return True
+
+        return False
+
+    
     def getPermittedObjects(self, action, model):
         content_type = ContentType.objects.get_for_model(object)
 
@@ -116,6 +168,38 @@ class User(models.Model):
                 permittedObjects.exclude(id=obj.id)
 
         return permittedObjects
+
+class AnonymousUser(User):
+
+    id = 0
+    user_ptr_id = 0
+
+    class Meta:
+        proxy = True
+
+    # This is probably an ugly hack...
+    # but it got it working with django 1.2, anyway, its just for testing
+    class State:
+        db = "default"
+
+    _state = State
+
+    def __init__ (self):
+        self.id = 0
+        self.username = 'anonymous'
+        self.name = 'Not'
+        self.surname = 'logged in'
+
+    def __unicode__(self):
+        return "AnonymousUser"
+
+    def logged_in (self):
+        """ Anonymous users are never logged in, duh! :) """
+        return False
+
+
+    def is_authenticated(self):
+        return False
 
 """
 Memberships, user can be members of memberships, which can have permissions for instance
@@ -202,10 +286,19 @@ class Action(models.Model):
     description = models.CharField(max_length=200)
 
     def __unicode__(self):
-        return self.action
+        return self.name
 
 """
 ROLES ("Leader", "Member"..)
+You can grant a user role on objects by doing:
+
+    user.grant_role("Member", object)
+
+You can add actions to a Role by doing
+
+    Role.grant_actions("DELETE")
+or
+    Role.grant_actions(['DELETE','EDIT'])
 """
 class Role(models.Model):
     name = models.CharField(max_length=200)
@@ -213,7 +306,20 @@ class Role(models.Model):
     actions = models.ManyToManyField(Action, related_name="role")
 
     def __unicode__(self):
-        return unicode(self.content_type)
+        return unicode(self.name)
+
+    def grant_actions (self, actions):
+
+       if(isinstance(actions, str)):
+           act = Action.objects.filter(name = actions)
+       else:
+           act = Action.objects.filter(name__in = actions)
+
+       for p in act:
+           self.actions.add(p)
+
+       self.save()
+
 
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
@@ -222,9 +328,16 @@ class Permission(models.Model):
     group = models.ForeignKey(Group, blank=True, null=True, related_name='permissions')
     role = models.ForeignKey(Role, blank=True, null=True, related_name="permissions")
     deleted = models.BooleanField()
+    actions = models.ManyToManyField(Action)
 
     def __unicode__(self):
         return unicode(self.content_type)
+
+    def get_actions(self):
+        actions = []
+        actions.extend(self.actions.all())
+        actions.extend(self.role.actions.all())
+        return actions
 
     def get_object(self):
         return self.content_type.get_object_for_this_type(id=self.object_id)
@@ -327,7 +440,6 @@ def initial_data ():
     Action.objects.get_or_create(name='DELETE', verb='deleted', description='delete an object')
     Action.objects.get_or_create(name='VIEW', verb='viewed', description='view an object')
     Action.objects.get_or_create(name='APPROVE', verb='approved', description='approve an object')
-    Action.objects.get_or_create(name='RATE', verb='rated', description='rate an object')
     Action.objects.get_or_create(name='LIST', verb='listed', description='list instances of an object')
     Action.objects.get_or_create(name='REGISTER', verb='registered for', description='register for something (event, committee, etc)')
     Action.objects.get_or_create(name='UNREGISTER', verb='unregistered from', description='unregister from something (event, etc)')
@@ -335,10 +447,12 @@ def initial_data ():
     Action.objects.get_or_create(name='MANAGE', verb='managed', description='manage something (companies etc)')
 
     #Generates som standard roles
-
     Role.objects.create(name="Leader", description="Typisk leder, kan gjøre alt")
     Role.objects.create(name="Responsible", description="Ansvarlig, kan se,endre")
     Role.objects.create(name="Member", description="Typisk medlem, kan se")
+
+    leader = Role.objects.get(name="Leader")
+    leader.grant_actions(["CREATE","EDIT"])
 
     #Other default objects
     comp = Company(name="Focus AS")
@@ -369,6 +483,7 @@ def initial_data ():
                                                   company=comp,
                                                   last_name="user",
                                                   is_active=True)
+    
     u.set_password("test2")
     u.save()
 
@@ -378,5 +493,6 @@ def initial_data ():
                                                   company=comp,
                                                   last_name="user",
                                                   is_active=True)
+
     u.set_password("test3")
     u.save()
