@@ -6,6 +6,7 @@ from core.managers import PersistentManager
 from django.db import models
 from widgets import get_hexdigest, check_password
 from . import Core
+from inspect import isclass
 
 """
 The Company class.
@@ -110,8 +111,11 @@ class User(models.Model):
 
     def grant_permissions (self, actions, object):
 
+        object_id = 0
+        if not isclass(object):
+            object_id = object.id
+
         #Get info about the object
-        object_id = object.id
         content_type = ContentType.objects.get_for_model(object)
 
         if(isinstance(actions, str)):
@@ -142,7 +146,10 @@ class User(models.Model):
         #   action = [action]
 
         content_type = ContentType.objects.get_for_model(object)
-        object_id = object.id
+
+        object_id = 0
+        if not isclass(object):
+            object_id = object.id
 
         action = Action.objects.get(name=action)
 
@@ -335,8 +342,10 @@ class Permission(models.Model):
 
     def get_actions(self):
         actions = []
-        actions.extend(self.actions.all())
-        actions.extend(self.role.actions.all())
+        if self.actions:
+            actions.extend(self.actions.all())
+        if self.role:
+            actions.extend(self.role.actions.all())
         return actions
 
     def get_object(self):
