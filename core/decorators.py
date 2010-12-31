@@ -1,4 +1,4 @@
-from functools import  update_wrapper
+import functools
 from django.shortcuts import  redirect
 from django.http import Http404
 
@@ -16,7 +16,7 @@ class login_required:
             else:
                 return redirect(login)
 
-        update_wrapper(check_login, func)
+        functools.update_wrapper(check_login, func)
 
         return check_login
 
@@ -87,9 +87,7 @@ class require_permission:
         """
 
         def check_permission (request, *args, **kwargs):
-            if 3 > 2:
-                return redirect(login)
-
+          
             # If the identifier is defined, get the object instance
             if self.field:
                 if not self.field in kwargs:
@@ -118,10 +116,11 @@ class require_permission:
 
             # Else, we just have to tell the user he just can't do this
             else:
-                return views.permission_denied(request)
+                request.message_error("Ingen tilgang")
+                return overview(request)
 
-        # Update the function so it still reports correct to inspect and pydoc
-        update_wrapper(check_permission, func)
+         # Update the function so it still reports correct to inspect and pydoc
+        functools.update_wrapper(check_permission, func)
 
         # Add some info about us to the function, so other decorators can use this
         # If more decorators want to add info, generalize this! (with a decorator?)
@@ -139,3 +138,5 @@ class require_permission:
         object = self.model.objects.get(**query)
 
         return object
+
+from app.dashboard.views import overview

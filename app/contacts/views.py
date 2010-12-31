@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 from forms import *
 from core.shortcuts import *
@@ -25,14 +27,14 @@ def overview_all(request):
 def add(request):
     return form(request)
 
+@require_permission("EDIT", Contact, "id")
 def edit(request, id):
     return form(request, id)
 
 
-@login_required()
+@require_permission("VIEW", Contact, "id")
 def view(request, id):
     contact = get_object_or_404(Contact, id=id)
-
     return render_with_request(request, 'contacts/view.html', {'title': 'Kontakt', 'contact': contact})
 
 @login_required()

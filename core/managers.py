@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.db import models
+from django.db.models.query_utils import Q
 
 class PersistentManager(models.Manager):
     def get_query_set(self):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.contenttypes.models import ContentType
-from datetime import datetime
-from django.utils.encoding import  smart_str
+from datetime import datetime, timedelta
+from django.db.models.query_utils import Q
 from core.managers import PersistentManager
 from django.db import models
 from widgets import get_hexdigest, check_password
@@ -70,6 +70,9 @@ class User(models.Model):
         self.password = '%s$%s$%s' % (algo, salt, hsh)
         self.save()
 
+    def logged_in(self):
+        return True
+    
     def getProfileImage(self):
         if self.profileImage:
             return "/media/%s" % self.profileImage
@@ -93,41 +96,67 @@ class User(models.Model):
         return check_password(raw_password, self.password)
 
     def grant_role(self, role, object):
-
         #Get info about the object
         object_id = object.id
         content_type = ContentType.objects.get_for_model(object)
 
-        act = Role.objects.get(name = role)
+        act = Role.objects.get(name=role)
 
         perm = Permission(
-                          role = act,
-                          user=self,
-                          content_type=content_type,
-                          object_id=object_id
-                         )
+                role=act,
+                user=self,
+                content_type=content_type,
+                object_id=object_id
+                )
         perm.save()
 
 
-    def grant_permissions (self, actions, object):
+    def grant_permissions (self, actions, object, **kwargs):
+        from_date = None
+        to_date = None
+        negative = False
 
+        """
+        Set time limits, if set in func-call
+        """
+        if 'from_date' in kwargs:
+            from_date = kwargs['from_date']
+        if 'to_date' in kwargs:
+            to_date = kwargs['to_date']
+
+        """
+        Set negative to negative value in kwargs
+        """
+        if 'negative' in kwargs:
+            negative = True
+
+        """
+        Make it possible to set permissions for classes
+        """
         object_id = 0
         if not isclass(object):
             object_id = object.id
 
+        """
+        For making it possible to give both list and string for permission adding.
+        """
+        if(isinstance(actions, str)):
+            act = Action.objects.filter(name=actions)
+        else:
+            act = Action.objects.filter(name__in=actions)
+
+
         #Get info about the object
         content_type = ContentType.objects.get_for_model(object)
 
-        if(isinstance(actions, str)):
-            act = Action.objects.filter(name = actions)
-        else:
-            act = Action.objects.filter(name__in = actions)
-
         perm = Permission(
-                          user=self,
-                          content_type=content_type,
-                          object_id=object_id
-                         )
+                user=self,
+                content_type=content_type,
+                object_id=object_id,
+                from_date=from_date,
+                to_date=to_date,
+                negative=negative,
+                )
         perm.save()
 
         for p in act:
@@ -135,9 +164,7 @@ class User(models.Model):
 
         perm.save()
 
-        
     def has_permission_to (self, action, object, id=None, any=False):
-
         if isinstance(object, str):
             raise Exception(
                     'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
@@ -153,18 +180,43 @@ class User(models.Model):
 
         action = Action.objects.get(name=action)
 
+        #Check for negative permissions, if negative permission granted, deny
+        negativePerms = Permission.objects.filter(content_type=content_type,
+                                                  object_id=object_id,
+                                                  user=self,
+                                                  negative=True,
+                                                  )
+
+        negativePerms = negativePerms.filter(Q(from_date=None, to_date=None) |
+                                        Q(from_date=None, to_date__gt=datetime.now()) |
+                                        Q(from_date__lte=datetime.now(), to_date=None) |
+                                        Q(from_date__lte=datetime.now(), to_date__gt=datetime.now()))
+
+        if negativePerms:
+            return False
+
         #Checks if the user is permitted manually
         perms = Permission.objects.filter(content_type=content_type,
-                                         object_id=object_id,
-                                         user=self,
-                                        )
+                                          object_id=object_id,
+                                          user=self,
+                                          negative=False,
+                                          )
+
+        perms = perms.filter(Q(from_date=None, to_date=None) |
+                                        Q(from_date=None, to_date__gt=datetime.now()) |
+                                        Q(from_date__lte=datetime.now(), to_date=None) |
+                                        Q(from_date__lte=datetime.now(), to_date__gt=datetime.now()))
+
         for perm in perms:
-            if action in perm.get_actions():
+            if action in perm.get_valid_actions():
+                return True
+
+        for group in self.groups.all():
+            if group.has_permission_to(action, object, id=id, any=any):
                 return True
 
         return False
 
-    
     def getPermittedObjects(self, action, model):
         content_type = ContentType.objects.get_for_model(object)
 
@@ -177,7 +229,6 @@ class User(models.Model):
         return permittedObjects
 
 class AnonymousUser(User):
-
     id = 0
     user_ptr_id = 0
 
@@ -214,10 +265,117 @@ Memberships, user can be members of memberships, which can have permissions for 
 class Group(models.Model):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('Group', related_name="children", null=True)
-    members = models.ManyToManyField(User, related_name="memberships")
+    members = models.ManyToManyField(User, related_name="groups")
 
     def __unicode__(self):
         return self.name
+
+    def addMember(self, user):
+        self.members.add(user)
+        self.save()
+
+    def grant_role(self, role, object):
+      #Get info about the object
+      object_id = object.id
+      content_type = ContentType.objects.get_for_model(object)
+
+      act = Role.objects.get(name=role)
+
+      perm = Permission(
+              role=act,
+              group=self,
+              content_type=content_type,
+              object_id=object_id
+              )
+
+      perm.save()
+
+    def grant_permissions (self, actions, object, **kwargs):
+        from_date = None
+        to_date = None
+        negative = False
+
+        """
+        Set time limits, if set in func-call
+        """
+        if 'from_date' in kwargs:
+            from_date = kwargs['from_date']
+        if 'to_date' in kwargs:
+            to_date = kwargs['to_date']
+
+        """
+        Set negative to negative value in kwargs
+        """
+        if 'negative' in kwargs:
+            negative = True
+
+        """
+        Make it possible to set permissions for classes
+        """
+        object_id = 0
+        if not isclass(object):
+            object_id = object.id
+
+        """
+        For making it possible to give both list and string for permission adding.
+        """
+        if(isinstance(actions, str)):
+            act = Action.objects.filter(name=actions)
+        else:
+            act = Action.objects.filter(name__in=actions)
+
+
+        #Get info about the object
+        content_type = ContentType.objects.get_for_model(object)
+
+        perm = Permission(
+                group=self,
+                content_type=content_type,
+                object_id=object_id,
+                from_date=from_date,
+                to_date=to_date,
+                negative=negative,
+                )
+        perm.save()
+
+        for p in act:
+            perm.actions.add(p)
+
+        perm.save()
+
+    def has_permission_to (self, action, object, id=None, any=False):
+        if isinstance(object, str):
+            raise Exception(
+                    'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
+
+        content_type = ContentType.objects.get_for_model(object)
+
+        object_id = 0
+        if not isclass(object):
+            object_id = object.id
+
+        action = Action.objects.get(name=action)
+
+        #Checks if the group is permitted
+        perms = Permission.objects.filter(content_type=content_type,
+                                          object_id=object_id,
+                                          group=self,
+                                          negative=False,
+                                          )
+
+        perms = perms.filter(Q(from_date=None, to_date=None) |
+                                        Q(from_date=None, to_date__gt=datetime.now()) |
+                                        Q(from_date__lte=datetime.now(), to_date=None) |
+                                        Q(from_date__lte=datetime.now(), to_date__gt=datetime.now()))
+
+        for perm in perms:
+            if action in perm.get_valid_actions():
+                return True
+
+        if self.parent:
+            return self.parent.has_permission_to(action, object, id=id, any=any)
+
+        return False
 
 
 class Notification(models.Model):
@@ -316,16 +474,15 @@ class Role(models.Model):
         return unicode(self.name)
 
     def grant_actions (self, actions):
+        if(isinstance(actions, str)):
+            act = Action.objects.filter(name=actions)
+        else:
+            act = Action.objects.filter(name__in=actions)
 
-       if(isinstance(actions, str)):
-           act = Action.objects.filter(name = actions)
-       else:
-           act = Action.objects.filter(name__in = actions)
+        for p in act:
+            self.actions.add(p)
 
-       for p in act:
-           self.actions.add(p)
-
-       self.save()
+        self.save()
 
 
 class Permission(models.Model):
@@ -337,6 +494,10 @@ class Permission(models.Model):
     deleted = models.BooleanField()
     actions = models.ManyToManyField(Action)
 
+    negative = models.BooleanField()
+    from_date = models.DateTimeField(null=True, blank=True)
+    to_date = models.DateTimeField(null=True, blank=True)
+
     def __unicode__(self):
         return unicode(self.content_type)
 
@@ -347,6 +508,20 @@ class Permission(models.Model):
         if self.role:
             actions.extend(self.role.actions.all())
         return actions
+
+    def get_valid_actions(self):
+        actions = self.get_actions()
+        today = datetime.today()
+
+        if not self.from_date:
+            self.from_date = today - timedelta(days=1)
+        if not self.to_date:
+            self.to_date = today + timedelta(days=1)
+
+        if today > self.from_date and today < self.to_date:
+            return actions
+        return []
+
 
     def get_object(self):
         return self.content_type.get_object_for_this_type(id=self.object_id)
@@ -443,15 +618,16 @@ Adding some initial data to the model when run syncdb
 """
 
 def initial_data ():
-
     Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
     Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
     Action.objects.get_or_create(name='DELETE', verb='deleted', description='delete an object')
     Action.objects.get_or_create(name='VIEW', verb='viewed', description='view an object')
     Action.objects.get_or_create(name='APPROVE', verb='approved', description='approve an object')
     Action.objects.get_or_create(name='LIST', verb='listed', description='list instances of an object')
-    Action.objects.get_or_create(name='REGISTER', verb='registered for', description='register for something (event, committee, etc)')
-    Action.objects.get_or_create(name='UNREGISTER', verb='unregistered from', description='unregister from something (event, etc)')
+    Action.objects.get_or_create(name='REGISTER', verb='registered for',
+                                 description='register for something (event, committee, etc)')
+    Action.objects.get_or_create(name='UNREGISTER', verb='unregistered from',
+                                 description='unregister from something (event, etc)')
     Action.objects.get_or_create(name='FAVORITE', verb='favorited', description='favorite/star something (event etc)')
     Action.objects.get_or_create(name='MANAGE', verb='managed', description='manage something (companies etc)')
 
@@ -461,7 +637,7 @@ def initial_data ():
     Role.objects.create(name="Member", description="Typisk medlem, kan se")
 
     leader = Role.objects.get(name="Leader")
-    leader.grant_actions(["CREATE","EDIT"])
+    leader.grant_actions(["CREATE", "EDIT"])
 
     #Other default objects
     comp = Company(name="Focus AS")
@@ -492,7 +668,7 @@ def initial_data ():
                                                   company=comp,
                                                   last_name="user",
                                                   is_active=True)
-    
+
     u.set_password("test2")
     u.save()
 

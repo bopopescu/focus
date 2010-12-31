@@ -4,6 +4,7 @@ from core.shortcuts import *
 from core.decorators import *
 from core.views import form_perm, updateTimeout
 
+@require_permission("LIST", Customer)
 def overview(request):
     updateTimeout(request)
     customers = Customer.objects.for_user()
@@ -46,6 +47,7 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title': 'Kunde', 'form': form})
 
+@require_permission("CREATE", Customer)
 def add(request):
     return form(request)
 
@@ -71,7 +73,7 @@ def permissions(request, id, popup=False):
 
 def form (request, id=False):
     if id:
-        instance = Customer.objects.for_user(deleted=None).get(id=id)
+        instance = Customer.objects.for_user().get(id=id)
         msg = "Velykket endret kunde"
     else:
         instance = Customer()

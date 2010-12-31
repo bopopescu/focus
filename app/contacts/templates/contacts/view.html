@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load auth %}
 
 {% block extrahead %}
 
@@ -12,11 +13,11 @@
 
 {% block maincontent %}
 
-    <div class="portlet x9">
+<div class="portlet x9">
 
-           <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-           <div class="portlet-content">
+    <div class="portlet-content">
 
         <table>
 
@@ -43,22 +44,26 @@
 
         </table>
 
-    </div></div>
-      <div class="portlet x3">
-
-        <div class="portlet-header"><h4>Valg</h4></div>
-
-        <div class="portlet-content">
-
-            <div class="tool editChoice">
-                <a href="{% url app.contacts.views.edit contact.id %}">Endre kontakt</a>
-            </div>
-            <div class="tool editPerm">
-                <a href="{% url app.contacts.views.permissions contact.id %}">Endre rettigheter</a>
-            </div>
-            <div class="tool deleteChoice">
-                <a href="{% url app.contacts.views.delete contact.id %}">Slett kontakt</a>
-            </div>
-        </div>
     </div>
+</div>
+<div class="portlet x3">
+
+    <div class="portlet-header"><h4>Valg</h4></div>
+
+    <div class="portlet-content">
+
+        {% require_permission EDIT contact %}
+        <div class="tool editChoice">
+            <a href="{% url app.contacts.views.edit contact.id %}">Endre kontakt</a>
+        </div>
+        {% end_require %}
+
+        {% require_permission DELETE contact %}
+        <div class="tool deleteChoice">
+            <a href="{% url app.contacts.views.delete contact.id %}">Slett kontakt</a>
+        </div>
+        {% end_require %}
+
+    </div>
+</div>
 {% endblock %}
