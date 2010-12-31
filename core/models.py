@@ -72,7 +72,12 @@ class User(models.Model):
 
     def logged_in(self):
         return True
-    
+
+    def get_new_notifications(self):
+        notifications = self.notifications
+        return notifications.filter(read=False)
+
+
     def getProfileImage(self):
         if self.profileImage:
             return "/media/%s" % self.profileImage
@@ -178,7 +183,7 @@ class User(models.Model):
         if not isclass(object):
             object_id = object.id
 
-        action = Action.objects.get(name=action)
+        action = Action.objects.get(name=action.upper())
 
         #Check for negative permissions, if negative permission granted, deny
         negativePerms = Permission.objects.filter(content_type=content_type,
@@ -187,13 +192,9 @@ class User(models.Model):
                                                   negative=True,
                                                   )
 
-        negativePerms = negativePerms.filter(Q(from_date=None, to_date=None) |
-                                        Q(from_date=None, to_date__gt=datetime.now()) |
-                                        Q(from_date__lte=datetime.now(), to_date=None) |
-                                        Q(from_date__lte=datetime.now(), to_date__gt=datetime.now()))
-
-        if negativePerms:
-            return False
+        for perm in negativePerms:
+            if action in perm.get_valid_actions():
+                return False
 
         #Checks if the user is permitted manually
         perms = Permission.objects.filter(content_type=content_type,
@@ -201,11 +202,6 @@ class User(models.Model):
                                           user=self,
                                           negative=False,
                                           )
-
-        perms = perms.filter(Q(from_date=None, to_date=None) |
-                                        Q(from_date=None, to_date__gt=datetime.now()) |
-                                        Q(from_date__lte=datetime.now(), to_date=None) |
-                                        Q(from_date__lte=datetime.now(), to_date__gt=datetime.now()))
 
         for perm in perms:
             if action in perm.get_valid_actions():
@@ -362,12 +358,7 @@ class Group(models.Model):
                                           group=self,
                                           negative=False,
                                           )
-
-        perms = perms.filter(Q(from_date=None, to_date=None) |
-                                        Q(from_date=None, to_date__gt=datetime.now()) |
-                                        Q(from_date__lte=datetime.now(), to_date=None) |
-                                        Q(from_date__lte=datetime.now(), to_date__gt=datetime.now()))
-
+        
         for perm in perms:
             if action in perm.get_valid_actions():
                 return True
@@ -436,8 +427,6 @@ class Log(models.Model):
             self.creator = kwargs['user']
         else:
             self.creator = Core.current_user()
-
-        #self.company = self.creator.get_profile().company
 
         super(Log, self).save()
 
@@ -572,7 +561,7 @@ class PersistentModel(models.Model):
                 ).save()
 
         if 'noNotification' not in kwargs:
-            for us in self.whoHasPermissionTo('view'):
+            for us in self.whoHasPermissionTo('VIEW'):
                 if us == Core.current_user():
                     continue
                 Notification(text="Dette er en test",
@@ -600,14 +589,21 @@ class PersistentModel(models.Model):
             id = self.id
             users = []
 
-            for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id,
-                                               **{'can_%s' % perm: True}):
-                if u.user and u.user not in users:
-                    users.append(u.user)
-                if u.membership:
-                    for user in u.membership.users.all():
-                        if user and user not in users:
-                            users.append(user)
+            object = content_type.get_object_for_this_type(id=id)
+
+            perm = Action.objects.get(name=perm.upper())
+
+            for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id):
+
+                if perm in u.get_valid_actions():
+                    if u.user and u.user not in users:
+                        users.append(u.user)
+
+                    if u.group:
+                        for user in u.group.members.all():
+                            if user and user not in users:
+                                users.append(user)
+                                
             return users
         except:
             return []

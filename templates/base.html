@@ -53,8 +53,8 @@
 
                     <br/>
 
-                    {% if user.get_profile.notifications.count %}
-                        <a href="{% url app.dashboard.views.notifications %}">{{ user.get_profile.notifications.count }}
+                    {% if user.get_new_notifications.count %}
+                        <a href="{% url app.dashboard.views.notifications %}">{{ user.get_new_notifications.count }}
                             oppdateringer siden sist</a> |
                     {% endif %}
 

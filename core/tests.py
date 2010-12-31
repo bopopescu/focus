@@ -175,3 +175,26 @@ class PermissionsTesting(TestCase):
                                      to_date=datetime.today() + timedelta(1))
 
         self.assertEqual(self.user2.has_permission_to("LIST", Customer), True, "The user should have this perm")
+
+
+    def testWhoHasPermissionToDoSomething(self):
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+
+        self.group2.grant_role("Member", self.customer1)
+        self.group2.grant_role("Leader", self.customer1)
+
+        self.group2.addMember(self.user1)
+        self.group2.addMember(self.user2)
+
+        self.assertEqual(self.user1 in self.customer1.whoHasPermissionTo("FAVORITE"), False)
+        self.group2.grant_permissions("FAVORITE", self.customer1)
+        self.assertEqual(self.user1 in self.customer1.whoHasPermissionTo("FAVORITE"), True)
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True, "The user should have this perm")
+        self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), False, "The user should not have this perm")
+
+        self.assertEqual(self.user1 in self.customer1.whoHasPermissionTo("EDIT"), True)
+        self.assertEqual(self.user2 in self.customer1.whoHasPermissionTo("EDIT"), True)
+        self.assertEqual(self.user2 in self.customer1.whoHasPermissionTo("VIEW"), False)
