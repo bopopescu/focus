@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
+from core.views import updateTimeout
 
 @require_permission("LIST", Customer)
 def overview(request):

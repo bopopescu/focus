@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
 
 from django.utils.html import escape
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
+from core.views import updateTimeout
 
 @login_required()
 def overview(request):

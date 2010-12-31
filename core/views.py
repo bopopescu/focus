@@ -11,6 +11,7 @@ def updateTimeout(request):
     request.session.set_expiry(1800)
     return
 
+"""
 @login_required()
 def form_perm(request, type, id, url, message, popup=False):
     object = type.objects.get(pk=id)
@@ -86,3 +87,5 @@ def form_perm(request, type, id, url, message, popup=False):
         return render_with_request(request, "form_perm.html",
                                    {'title': 'Tildel rettigheter for: %s' % (object), 'form_perm': PermSet,
                                     'PermGroupSet': PermGroupSet})
+
+"""

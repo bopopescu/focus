@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import form_perm, updateTimeout
+from core.views import updateTimeout
 
 @login_required()
 def overview(request):
@@ -60,12 +60,6 @@ def addPop(request):
 def delete(request, id):
     Contact.objects.get(id=id).delete()
     return redirect(overview)
-
-def permissions(request, id):
-    type = Contact
-    url = "contacts/edit/%s" % id
-    message = "Vellykket endret tilgang for kontakten: %s" % type.objects.get(pk=id)
-    return form_perm(request, type, id, url, message)
 
 @login_required()
 def form (request, id=False):

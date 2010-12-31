@@ -2,7 +2,7 @@
 
 from forms import *
 from core.shortcuts import *
-from core.views import updateTimeout, form_perm
+from core.views import updateTimeout
 from core.decorators import *
 
 @login_required()

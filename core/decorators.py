@@ -62,7 +62,7 @@ class require_permission:
         Used for decorator permission checking
         Called when python finds a decorator
         """
-
+        
         self.action = action
         self.model = model
         self.any = any
@@ -87,7 +87,7 @@ class require_permission:
         """
 
         def check_permission (request, *args, **kwargs):
-          
+
             # If the identifier is defined, get the object instance
             if self.field:
                 if not self.field in kwargs:
