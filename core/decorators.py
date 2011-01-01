@@ -1,9 +1,7 @@
 import functools
-from django.shortcuts import redirect
 from django.http import Http404
-
-#Require permission in views
-from app.accounts.views import login
+from django.core import urlresolvers
+from django.shortcuts import redirect
 
 class login_required:
     def __init__(self):
@@ -118,8 +116,8 @@ class require_permission:
             # Else, we just have to tell the user he just can't do this
             else:
                 request.message_error("Ingen tilgang")
-                return overview(request)
-
+                return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
+                
          # Update the function so it still reports correct to inspect and pydoc
         functools.update_wrapper(check_permission, func)
 
@@ -139,5 +137,3 @@ class require_permission:
         object = self.model.objects.get(**query)
 
         return object
-
-from app.dashboard.views import overview

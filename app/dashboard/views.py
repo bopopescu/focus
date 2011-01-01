@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
+
+from app.announcements.models import Announcement
+from app.orders.models import Order
+from app.projects.models import Project
+from core import Core
 from core.decorators import login_required
 from core.models import Log, Notification
 from core.shortcuts import render_with_request
-from core import Core
-
-from app.announcements.models import *
-from app.orders.models import Order
-from app.projects.models import Project
 
 @login_required()
 def overview(request):
-
     announcements = Announcement.objects.all()[::-1]
     your_projects = Project.objects.all()
     your_orders = Order.objects.all().filter(state="O")[::-1]

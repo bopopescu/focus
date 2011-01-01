@@ -1,6 +1,8 @@
 from django.test import TestCase
 from models import *
 from app.customers.models import *
+from views import grant_role, grant_permission
+from django.test.client import Client
 
 class PermissionsTesting(TestCase):
     def setUp(self):
@@ -29,6 +31,35 @@ class PermissionsTesting(TestCase):
 
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
+
+    def testGiveRoleOnClasses(self):
+        self.assertEqual(self.user1.has_permission_to("EDIT", Customer), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), False)
+
+        self.user1.grant_role("Member", Customer)
+        self.user1.grant_role("Admin", Customer)
+        self.role2.grant_actions("DELETE")
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", Customer), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
+
+    def testGiveRoleOnClassesToGroups(self):
+
+        self.group1.addMember(self.user1)
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", Customer), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), False)
+
+        self.group1.grant_role("Member", Customer)
+
+        self.assertEqual(self.user1.has_permission_to("VIEW", Customer), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), False)
+
+        self.group1.grant_role("Admin", Customer)
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", Customer), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
+
 
     def testGivePermToClasses(self):
         self.assertEqual(self.user2.has_permission_to("CREATE", Customer), False, "The user should not have this perm")
@@ -229,3 +260,89 @@ class PermissionsTesting(TestCase):
         self.assertEqual(self.user1 in self.customer1.whoHasPermissionTo("VIEW"), True)
         self.assertEqual(self.user2 in self.customer1.whoHasPermissionTo("EDIT"), True)
         self.assertEqual(self.user2 in self.customer1.whoHasPermissionTo("VIEW"), True)
+
+
+    def testGrantRoleByUrls(self):
+        c = Client()
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+
+        c.get('/grant/role/Member/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), True)
+        
+        c.get('/grant/role/Admin/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
+
+    def testGrantRoleByUrlsToGroups(self):
+        c = Client()
+
+        self.group1.addMember(self.user1)
+        
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+
+        c.get('/grant/role/Member/group/%s/customers/customer/%s/' % (self.group1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), True)
+
+        c.get('/grant/role/Admin/group/%s/customers/customer/%s/' % (self.group1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
+
+
+    def testGrantPermissionByUrls(self):
+        c = Client()
+
+        #Give permission for objects
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+
+        c.get('/grant/permission/view/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), True)
+
+        c.get('/grant/permission/edit/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+        c.get('/grant/permission/delete/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
+
+        #Give permission for classes
+        c.get('/grant/permission/delete/user/%s/customers/customer/%s/' % (self.user1.id, "any"))
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
+
+    def testGrantPermissionByUrlsToGroups(self):
+        c = Client()
+
+        self.group1.addMember(self.user1)
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+
+        c.get('/grant/permission/VIEW/group/%s/customers/customer/%s/' % (self.group1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
+        self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), True)
+
+        c.get('/grant/permission/edit/group/%s/customers/customer/%s/' % (self.group1.id, self.customer1.id))
+        c.get('/grant/permission/DELETE/group/%s/customers/customer/%s/' % (self.group1.id, self.customer1.id))
+
+        self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
+        self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
+
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), False)
+
+        #Give a group, a permissionon a class
+        c.get('/grant/permission/delete/group/%s/customers/customer/%s/' % (self.group1.id, "any"))
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
+
+        #Give a group, a role on a class
+        c.get('/grant/role/Admin/group/%s/customers/customer/%s/' % (self.group1.id, "any"))
+        self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)

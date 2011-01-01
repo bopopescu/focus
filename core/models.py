@@ -127,7 +127,14 @@ class User(models.Model):
 
     def grant_role(self, role, object):
         #Get info about the object
-        object_id = object.id
+
+        """
+        Make it possible to set permissions for classes
+        """
+        object_id = 0
+        if not isclass(object):
+            object_id = object.id
+
         content_type = ContentType.objects.get_for_model(object)
 
         act = Role.objects.get(name=role)
@@ -175,7 +182,6 @@ class User(models.Model):
         else:
             act = Action.objects.filter(name__in=actions)
 
-
         #Get info about the object
         content_type = ContentType.objects.get_for_model(object)
 
@@ -193,6 +199,8 @@ class User(models.Model):
             perm.actions.add(p)
 
         perm.save()
+
+        return perm
 
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):
@@ -323,20 +331,27 @@ class Group(models.Model):
         self.save()
 
     def grant_role(self, role, object):
-      #Get info about the object
-      object_id = object.id
-      content_type = ContentType.objects.get_for_model(object)
+        #Get info about the object
 
-      act = Role.objects.get(name=role)
+        """
+        Make it possible to set permissions for classes
+        """
+        object_id = 0
+        if not isclass(object):
+            object_id = object.id
 
-      perm = Permission(
+        content_type = ContentType.objects.get_for_model(object)
+
+        act = Role.objects.get(name=role)
+
+        perm = Permission(
               role=act,
               group=self,
               content_type=content_type,
               object_id=object_id
               )
 
-      perm.save()
+        perm.save()
 
 
     def save(self, *args, **kwargs):
@@ -562,9 +577,6 @@ class Permission(models.Model):
     from_date = models.DateTimeField(null=True, blank=True)
     to_date = models.DateTimeField(null=True, blank=True)
 
-    def __unicode__(self):
-        return unicode(self.content_type)
-
     def get_actions(self):
         actions = []
         if self.actions:
@@ -729,7 +741,7 @@ def initial_data ():
     owner.grant_actions(["EDIT", "VIEW", "DELETE"])
 
     member = Role.objects.get(name="Member")
-    member.grant_actions(["VIEW"])
+    member.grant_actions(["VIEW", "LIST"])
 
     #Other default objects
     comp = Company(name="Focus AS")

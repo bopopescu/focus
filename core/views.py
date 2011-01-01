@@ -1,10 +1,77 @@
 # -*- coding: utf-8 -*-
+from django.contrib.contenttypes.models import ContentType
 from core.decorators import login_required
+from core.models import User, Group
+from django.core import urlresolvers
+from django.shortcuts import redirect
 
 @login_required()
 def updateTimeout(request):
     request.session.set_expiry(1800)
     return
+
+"""
+
+For granting permission on-site
+
+Use like this: /grant/role/Admin/user/user_id/customers/customer/customer_id/
+
+"""
+
+def grant_role(request, role, userorgroup, user_id, app, model, object_id):
+
+    object_type = ContentType.objects.get(app_label=app, model=model)
+
+    if userorgroup.upper() == 'USER':
+        obj = User.objects.get(id=user_id)
+    elif userorgroup.upper() == 'GROUP':
+        obj = Group.objects.get(id=user_id)
+    else:
+        request.message_error("An error occoured")
+        return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
+
+    if object_id == "any":
+        obj.grant_role(role, object_type.model_class())
+    else:
+        object = object_type.get_object_for_this_type(id=object_id)
+        obj.grant_role(role, object)
+
+
+    request.message_success("Role granted")
+    return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
+
+"""
+
+For granting permission on-site
+
+Use like this: /grant/permission/ADD/user/user_id/customers/customer/customer_id/
+
+"""
+
+def grant_permission(request, perm, userorgroup, user_id, app, model, object_id):
+
+    object_type = ContentType.objects.get(app_label=app, model=model)
+    list = []
+    list.append(perm.upper())
+
+    if userorgroup.upper() == 'USER':
+        obj = User.objects.get(id=user_id)
+    elif userorgroup.upper() == 'GROUP':
+        obj = Group.objects.get(id=user_id)
+    else:
+        request.message_error("An error occoured")
+        return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
+
+    if object_id == "any":
+        obj.grant_permissions(list, object_type.model_class())
+    else:
+        object = object_type.get_object_for_this_type(id=object_id)
+        obj.grant_permissions(list, object)
+
+    request.message_success("Permission granted")
+    return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
+
+
 
 """
 @login_required()

@@ -17,12 +17,13 @@ class Contact(PersistentModel):
     def save(self, *args, **kwargs):
 
         new = False
-        if not id:
+        if not self.id:
             new = True
 
         super(Contact, self).save()
 
         #Give the user who created this ALL permissions on object
+
         if new:
             Core.current_user().grant_role("Owner", self)
             adminGroup = Core.current_user().get_company_admingroup()
