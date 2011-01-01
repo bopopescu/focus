@@ -17,7 +17,7 @@ A user can only see objects within the same company.
 """
 class Company(models.Model):
     name = models.CharField(max_length=80)
-    adminGroup = models.ForeignKey("Group", null=True, blank=True)
+    adminGroup = models.ForeignKey("Group", related_name="companiesWhereAdmin", null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -248,6 +248,17 @@ class User(models.Model):
 
         return False
 
+    def get_permissions(self):
+        permissions = []
+
+        permissions.extend(Permission.objects.filter(user = self))
+
+        for group in self.groups.all():
+            permissions.extend(Permission.objects.filter(user = self))
+
+        return set(permissions)
+
+
     def getPermittedObjects(self, action, model):
         content_type = ContentType.objects.get_for_model(object)
 
@@ -298,6 +309,11 @@ class Group(models.Model):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('Group', related_name="children", null=True)
     members = models.ManyToManyField(User, related_name="groups")
+    company = models.ForeignKey(Company, related_name="groups", null=True)
+    deleted = models.BooleanField()
+
+    objects = PersistentManager()
+    all_objects = models.Manager()
 
     def __unicode__(self):
         return self.name
@@ -321,6 +337,23 @@ class Group(models.Model):
               )
 
       perm.save()
+
+
+    def save(self, *args, **kwargs):
+        new = False
+        if not id:
+            new = True
+
+        super(Group, self).save()
+
+        #Give the user who created this ALL permissions on object, if new
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
+
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None

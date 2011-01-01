@@ -19,14 +19,14 @@
         <div class="portlet-content">
 
 
-            Navn: {{ user.first_name }} {{ user.last_name }}
+            Navn: {{ userCard.first_name }} {{ userCard.last_name }}
             <br>
-            Epost: {{ user.email }}
+            Epost: {{ userCard.email }}
             <br>
-            Firma: {{ user.get_profile.company }}
+            Firma: {{ userCard.get_profile.company }}
             <br><br>
-            <a href="{% url app.admin.users.views.changeCanLogin user.id %}">Kan logge inn:
-                <b>{{ user.get_profile.canLogin }}</b></a>
+            <a href="{% url app.admin.users.views.changeCanLogin userCard.id %}">Kan logge inn:
+                <b>{{ userCard.canLogin }}</b></a>
             <br>
 
             <br><br>
@@ -36,10 +36,10 @@
                     <th>Medlem i gruppene</th>
                 </tr>
 
-                {% for member in user.memberships.all %}
+                {% for member in userCard.groups.all %}
 
                     <tr>
-                        <td><a href="{% url app.admin.memberships.views.view member.id %}">{{ member }}</a></td>
+                        <td><a href="{% url app.admin.groups.views.view member.id %}">{{ member }}</a></td>
                     </tr>
 
                 {% endfor %}
@@ -57,11 +57,8 @@
                 <tr>
                     <th></th>
                     <th>Objekt</th>
-                    <th>Kan se</th>
-                    <th>Kan endre</th>
-                    <th>Kan slette</th>
-                    <th>Negativ rettighet</th>
-                    <th></th>
+                    <th>Rettigheter</th>
+                    <th>Gruppe</th>
                 </tr>
 
 
@@ -77,28 +74,22 @@
 
                         <tr>
                             <td></td>
-                            <td style="text-align:left;"><a href='{{perm.get_object.get_url}}'>{{ perm.get_object }}</a>
+                            <td style="text-align:left;">{{ perm.id }} | <a
+                                    href='{{perm.get_object.getViewUrl}}'>{{ perm.get_object }}</a>
                             </td>
-                            <td>{% if perm.can_view %}
-                                X
-                            {% endif %}
-                            </td>
-                            <td>{% if perm.can_change %}
-                                X
-                            {% endif %}
-                            </td>
-                            <td>{% if perm.can_delete %}
-                                X
-                            {% endif %}
-                            </td>
-                            <td>{% if perm.negative %}
-                                X
-                            {% endif %}
+                            <td>
+
+                                {% for action in perm.get_valid_actions %}
+
+                                    {{ action }}
+
+                                {% endfor %}
+
                             </td>
 
-                            <td>{% if perm.membership %}
+                            <td>{% if perm.group %}
                                 Gjennom gruppen <a
-                                        href="{% url app.admin.memberships.views.view perm.membership.id %}">{{  perm.membership }}</a>
+                                        href="{% url app.admin.groups.views.view perm.membership.id %}">{{  perm.group }}</a>
                             {% endif %}
                             </td>
 
@@ -114,16 +105,17 @@
         <div class="portlet-header"><h4>Valg</h4></div>
         <div class="portlet-content">
             <div class="tool editChoice">
-                <a href="{% url app.admin.users.views.edit user.id %}" class="edit admintool">Endre</a>
+                <a href="{% url app.admin.users.views.edit userCard.id %}" class="edit admintool">Endre</a>
             </div>
 
             <div class="tool editChoice">
-                <a href="{% url app.admin.users.views.sendGeneratedPassword user.id %}" class="edit admintool">Send nytt
+                <a href="{% url app.admin.users.views.sendGeneratedPassword userCard.id %}" class="edit admintool">Send
+                    nytt
                     passord</a>
             </div>
 
             <div class="tool deleteChoice">
-                <a href="{% url app.admin.users.views.delete user.id %}" class="edit admintool">Slett</a>
+                <a href="{% url app.admin.users.views.delete userCard.id %}" class="edit admintool">Slett</a>
             </div>
         </div>
     </div>

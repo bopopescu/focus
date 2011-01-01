@@ -79,21 +79,6 @@ def sendGeneratedPassword(request, userID):
 
     return redirect(overview)
 
-def get_permissions(user):
-    Permissions = ObjectPermission.objects.filter(
-            (
-
-            #Q(content_type__fabelf="K") &
-
-            (
-            Q(user=user)
-            |
-            Q(membership__in=user.memberships.all))
-            )
-            ).order_by('content_type')
-    return Permissions
-
-
 @login_required()
 def addPop(request):
     instance = User()
@@ -125,10 +110,10 @@ def addPop(request):
 @login_required()
 def view(request, id):
     user = User.objects.get(id=id)
-    Permissions = get_permissions(user)
+    Permissions = user.get_permissions()
 
     return render_with_request(request, 'admin/users/view.html', {'title': 'Bruker',
-                                                                  'user': user,
+                                                                  'userCard': user,
                                                                   'permissions': Permissions,
                                                                   })
 

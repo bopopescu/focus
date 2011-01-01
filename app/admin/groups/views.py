@@ -9,8 +9,8 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-    Groups = Group.objects.all()
-    return render_with_request(request, 'admin/Groups/list.html', {'title': 'Grupper', 'Groups': Groups})
+    groups = Group.objects.inCompany()
+    return render_with_request(request, 'admin/groups/list.html', {'title': 'Grupper', 'groups': groups})
 
 def add(request):
     return form(request)
@@ -18,18 +18,6 @@ def add(request):
 @login_required()
 def edit(request, id):
     return form(request, id)
-
-def get_permissions(Group):
-    """Permissions = ObjectPermission.objects.filter(
-            (
-
-            Q(Group=Group)
-
-            )
-            ).order_by('content_type')
-    return Permissions
-    """
-    pass
 
 @login_required()
 def addPop(request):
@@ -54,13 +42,11 @@ def addPop(request):
 
 @login_required()
 def view(request, id):
-    Group = Group.objects.get(id=id)
 
-    Permissions = get_permissions(Group)
-
+    group = Group.objects.get(id=id)
+    
     return render_with_request(request, 'admin/Groups/view.html', {'title': 'Gruppe',
-                                                                        'Group': Group,
-                                                                        'permissions': Permissions,
+                                                                        'group': group,
                                                                         })
 
 @login_required()
@@ -82,13 +68,12 @@ def form (request, id=False):
         form = GroupForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
+            o.company = Core.current_user().get_company()
             o.save()
             form.save_m2m()
 
-            request.messages_success(msg)
-            #Redirects after save for direct editing
+            request.message_success(msg)
             return redirect(overview)
-
 
     else:
         form = GroupForm(instance=instance)

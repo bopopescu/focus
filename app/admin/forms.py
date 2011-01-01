@@ -19,12 +19,12 @@ class UserProfileForm(ModelForm):
         model = User
         fields = ('profileImage',)
 
-class MembershipForm(ModelForm):
+class GroupForm(ModelForm):
     class Meta:
         model = Group
-        fields = ('name', 'users',)
+        fields = ('name', 'members',)
 
     def __init__(self, *args, **kwrds):
-        super(MembershipForm, self).__init__(*args, **kwrds)
-        self.fields['users'].widget = MultipleSelectWithPop()
-        self.fields['users'].queryset = get_company_users()
+        super(GroupForm, self).__init__(*args, **kwrds)
+        self.fields['members'].widget = MultipleSelectWithPop()
+        self.fields['members'].queryset = User.objects.inCompany()

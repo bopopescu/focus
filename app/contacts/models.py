@@ -16,14 +16,19 @@ class Contact(PersistentModel):
 
     def save(self, *args, **kwargs):
 
-        #Give the user who created this ALL permissions on object
+        new = False
+        if not id:
+            new = True
+
         super(Contact, self).save()
-        Core.current_user().grant_role("Owner", self)
 
-        adminGroup = Core.current_user().get_company_admingroup()
+        #Give the user who created this ALL permissions on object
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
 
-        if adminGroup:
-            adminGroup.grant_role("Admin", self)
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
 
 
     def getViewUrl(self):
