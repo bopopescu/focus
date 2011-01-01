@@ -9,8 +9,8 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-    Memberships = Group.objects.for_company()
-    return render_with_request(request, 'admin/memberships/list.html', {'title': 'Grupper', 'memberships': Memberships})
+    Groups = Group.objects.all()
+    return render_with_request(request, 'admin/Groups/list.html', {'title': 'Grupper', 'Groups': Groups})
 
 def add(request):
     return form(request)
@@ -19,11 +19,11 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
-def get_permissions(membership):
+def get_permissions(Group):
     """Permissions = ObjectPermission.objects.filter(
             (
 
-            Q(membership=membership)
+            Q(Group=Group)
 
             )
             ).order_by('content_type')
@@ -36,7 +36,7 @@ def addPop(request):
     instance = User()
 
     if request.method == "POST":
-        form = MembershipForm(request.POST, instance=instance)
+        form = GroupForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
             o.owner = request.user
@@ -47,19 +47,19 @@ def addPop(request):
                     ((o._get_pk_val()), (o)))
 
     else:
-        form = MembershipForm(instance=instance)
+        form = GroupForm(instance=instance)
 
     return render_with_request(request, "simpleform.html", {'title': 'Bruker', 'form': form})
 
 
 @login_required()
 def view(request, id):
-    membership = Membership.objects.get(id=id)
+    Group = Group.objects.get(id=id)
 
-    Permissions = get_permissions(membership)
+    Permissions = get_permissions(Group)
 
-    return render_with_request(request, 'admin/memberships/view.html', {'title': 'Gruppe',
-                                                                        'membership': membership,
+    return render_with_request(request, 'admin/Groups/view.html', {'title': 'Gruppe',
+                                                                        'Group': Group,
                                                                         'permissions': Permissions,
                                                                         })
 
@@ -71,15 +71,15 @@ def delete(request, id):
 @login_required()
 def form (request, id=False):
     if id:
-        instance = get_object_or_404(Membership, id=id)
+        instance = get_object_or_404(Group, id=id)
         msg = "Velykket endret gruppe"
     else:
-        instance = Membership()
+        instance = Group()
         msg = "Velykket lagt til ny gruppe"
 
     #Save and set to active, require valid form
     if request.method == 'POST':
-        form = MembershipForm(request.POST, instance=instance)
+        form = GroupForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
             o.save()
@@ -91,6 +91,6 @@ def form (request, id=False):
 
 
     else:
-        form = MembershipForm(instance=instance)
+        form = GroupForm(instance=instance)
 
     return render_with_request(request, "form.html", {'title': 'Gruppe', 'form': form})

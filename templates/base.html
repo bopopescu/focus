@@ -3,7 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+
     {% load i18n %}
+    {% load auth %}
 
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>FocusTime</title>
@@ -41,192 +43,206 @@
 
 <div id="wrapper" class="clearfix">
 
-    <div id="top">
-        <div id="header">
-            <h1><a href="/">TIME | {{ user.get_profile.company }}</a></h1>
+<div id="top">
+    <div id="header">
+        <h1><a href="/">TIME | {{ user.get_profile.company }}</a></h1>
 
-            <div id="info">
-                <h4><a href="{% url app.admin.users.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
+        <div id="info">
+            <h4><a href="{% url app.admin.users.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
 
-                <p>
-                    <a href="/accounts/logout">Logg ut</a>
+            <p>
+                <a href="/accounts/logout">Logg ut</a>
 
-                    <br/>
+                <br/>
 
-                    {% if user.get_new_notifications.count %}
-                        <a href="{% url app.dashboard.views.notifications %}">{{ user.get_new_notifications.count }}
-                            oppdateringer siden sist</a> |
-                    {% endif %}
+                {% if user.get_new_notifications.count %}
+                    <a href="{% url app.dashboard.views.notifications %}">{{ user.get_new_notifications.count }}
+                        oppdateringer siden sist</a> |
+                {% endif %}
 
-                </p>
+            </p>
 
-                <img width="30px" height="70px" src="{{ user.getProfileImage }}" alt="avatar"/>
+            <img width="30px" height="70px" src="{{ user.getProfileImage }}" alt="avatar"/>
 
-            </div> <!-- #info -->
+        </div> <!-- #info -->
 
-        </div> <!-- #header -->
-
-
-        <div id="nav">
-
-            <ul class="mega-container mega-grey">
+    </div> <!-- #header -->
 
 
-                <li class="mega {% active request "^/dashboard/" %}">
-                    <a class="mega-tab" href="{% url app.dashboard.views.overview %}">Oppslagstavle</a>
+    <div id="nav">
 
-                    <div class="mega-content mega-menu ">
+        <ul class="mega-container mega-grey">
+
+
+            <li class="mega {% active request "^/dashboard/" %}">
+                <a class="mega-tab" href="{% url app.dashboard.views.overview %}">Oppslagstavle</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.dashboard.views.overview %}">Oppslagstavle</a></li>
+                        <li><a href="{% url app.dashboard.views.logs %}">Logoversikt</a></li>
+                        <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
+                        <li><a href="{% url app.announcements.views.add %}">Legg
+                            til nytt oppslag</a></li>
+                        <li><a href="{% url app.announcements.views.overview %}">Oversikt</a></li>
+                        <li><a href="{% url app.announcements.views.overview_deleted %}">Slettede oppslag</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="mega {% active request "^/customers/" %}">
+                <a class="mega-tab" href="{% url app.customers.views.overview %}">Kunder</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+
+                        {% require_permission CREATE customers.Customer %}
+                        <li><a href="{% url app.customers.views.add %}">Leggtil ny kunde</a></li>
+                        {% end_require %}
+
+                        {% require_permission LIST customers.Customer %}
+                        <li><a href="{% url app.customers.views.overview %}">Oversikt</a></li>
+                        {% end_require %}
+
+                        {% require_permission LIST customers.Customer %}
+                        <li><a href="{% url app.customers.views.overview_deleted %}">Slettede kunder</a></li>
+                        <li><a href="{% url app.customers.views.overview_all %}">Alle kunder</a></li>
+                        {% end_require %}
+
+                    </ul>
+                </div>
+            </li>
+
+
+            <li class="mega {% active request "^/contacts/" %}">
+                <a class="mega-tab" href="{% url app.contacts.views.overview %}">Kontakter</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.contacts.views.add %}">Legg til ny kontakt</a></li>
+                        <li><a href="{% url app.contacts.views.overview %}">Dine kontakter</a></li>
+                        <li><a href="{% url app.contacts.views.overview_all %}">Alle kontakter</a></li>
+                        <li><a href="{% url app.contacts.views.overview_deleted %}">Slettede kontakter</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="mega {% active request "^/projects/" %}">
+                <a class="mega-tab" href="{% url app.projects.views.overview %}">Prosjekter</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.projects.views.add %}">Legg til nytt prosjekt</a></li>
+                        <li><a href="{% url app.projects.views.overview %}">Dine prosjekter</a></li>
+                        <li><a href="{% url app.projects.views.overview_all %}">Alle aktive prosjekter</a></li>
+                        <li><a href="{% url app.projects.views.overview_deleted %}">Alle slettede prosjekter</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="mega tab{% active request "^/files/" %}">
+                <a class="mega-tab" href="{% url app.files.files.views.overview %}">Dine filer</a>
+
+            </li>
+
+            <li class="mega {% active request "^/orders/" %}">
+                <a class="mega-tab" href="{% url app.orders.views.overview %}">Ordrer</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.orders.views.add %}">Legg
+                            til
+                            ny ordre</a></li>
+                        <li><a href="{% url app.orders.views.overview %}">Ordrer</a>
+                        </li>
+                        <li><a href="{% url app.orders.views.addOffer %}">Nytt
+                            tilbud</a></li>
+                        <li><a href="{% url app.orders.views.overviewOffers %}">Tilbud</a></li>
+                        <li><a href="{% url app.orders.views.overviewReadyForInvoice %}">Klar til fakturing</a></li>
+                        <li><a href="{% url app.orders.views.overviewArchive %}">Arkiv</a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="mega {% active request "^/timetracking/" %}">
+                <a class="mega-tab" href="{% url app.timetracking.views.overview %}">Timeregistrering</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.timetracking.views.calendar %}">Timeføring</a></li>
+                        <li><a href="{% url app.timetracking.views.overview %}">Oversikt</a></li>
+                        <li><a href="{% url app.timetracking.views.add %}">Registrer manuelt</a></li>
+                    </ul>
+                </div>
+            </li>
+
+
+            <li class="mega {% active request "^/stock/" %}">
+                <a class="mega-tab" href="{% url app.stock.products.views.overview %}">Lager</a>
+
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.stock.products.views.overview %}">Produktoversikt</a>
+                        </li>
+                        <li><a href="{% url app.stock.products.views.add %}">Nytt produkt</a></li>
+
+                        <li><a href="{% url app.stock.productgroups.views.add %}">Ny produktgruppe</a></li>
+
+                        <li><a href="{% url app.stock.products.views.overview_deleted %}">Slettede produkter</a>
+                        </li>
+                        .
                         <ul>
-                            <li><a href="{% url app.dashboard.views.overview %}">Oppslagstavle</a></li>
-                            <li><a href="{% url app.dashboard.views.logs %}">Logoversikt</a></li>
-                            <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
-                            <li><a href="{% url app.announcements.views.add %}">Legg
-                                til nytt oppslag</a></li>
-                            <li><a href="{% url app.announcements.views.overview %}">Oversikt</a></li>
-                            <li><a href="{% url app.announcements.views.overview_deleted %}">Slettede oppslag</a></li>
+                            <li><a href="{% url app.suppliers.views.overview %}">Leverandøroversikt</a></li>
+                            <li><a href="{% url app.suppliers.views.add %}">Ny leverandør</a></li>
                         </ul>
-                    </div>
-                </li>
 
-                <li class="mega {% active request "^/customers/" %}">
-                    <a class="mega-tab" href="{% url app.customers.views.overview %}">Kunder</a>
+                    </ul>
+                </div>
+            </li>
 
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.customers.views.add %}">Legg
-                                til ny kunde</a></li>
-                            <li><a href="{% url app.customers.views.overview %}">Oversikt</a>
-                            </li>
-                            <li><a href="{% url app.customers.views.overview_deleted %}">Slettede kunder</a></li>
-                            <li><a href="{% url app.customers.views.overview_all %}">Alle kunder</a></li>
-                        </ul>
-                    </div>
-                </li>
+            <li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
+                <a class="mega-tab" href="{% url app.admin.users.views.overview %}">Admin</a>
 
+                <div class="mega-content mega-menu ">
+                    <ul>
+                        <li><a href="{% url app.admin.users.views.overview %}">Oversikt</a></li>
+                        <li><a href="{% url app.admin.users.views.add %}">Legg til ny bruker</a></li>
+                        <li><a href="{% url app.admin.groups.views.overview %}">Gruppeoversikt</a></li>
+                        <li><a href="{% url app.admin.groups.views.add %}">Legg til ny gruppe</a></li>
 
-                <li class="mega {% active request "^/contacts/" %}">
-                    <a class="mega-tab" href="{% url app.contacts.views.overview %}">Kontakter</a>
+                        {% require_permission EDIT core.Company %}
 
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.contacts.views.add %}">Legg til ny kontakt</a></li>
-                            <li><a href="{% url app.contacts.views.overview %}">Dine kontakter</a></li>
-                            <li><a href="{% url app.contacts.views.overview_all %}">Alle kontakter</a></li>
-                            <li><a href="{% url app.contacts.views.overview_deleted %}">Slettede kontakter</a></li>
-                        </ul>
-                    </div>
-                </li>
+                        <li><a href="{% url app.admin.company.views.editCompany %}">Firmadetaljer</a></li>
 
-                <li class="mega {% active request "^/projects/" %}">
-                    <a class="mega-tab" href="{% url app.projects.views.overview %}">Prosjekter</a>
+                        {% end_require %}
 
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.projects.views.add %}">Legg til nytt prosjekt</a></li>
-                            <li><a href="{% url app.projects.views.overview %}">Dine prosjekter</a></li>
-                            <li><a href="{% url app.projects.views.overview_all %}">Alle aktive prosjekter</a></li>
-                            <li><a href="{% url app.projects.views.overview_deleted %}">Alle slettede prosjekter</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="mega tab{% active request "^/files/" %}">
-                    <a class="mega-tab" href="{% url app.files.files.views.overview %}">Dine filer</a>
-
-                </li>
-
-                <li class="mega {% active request "^/orders/" %}">
-                    <a class="mega-tab" href="{% url app.orders.views.overview %}">Ordrer</a>
-
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.orders.views.add %}">Legg
-                                til
-                                ny ordre</a></li>
-                            <li><a href="{% url app.orders.views.overview %}">Ordrer</a>
-                            </li>
-                            <li><a href="{% url app.orders.views.addOffer %}">Nytt
-                                tilbud</a></li>
-                            <li><a href="{% url app.orders.views.overviewOffers %}">Tilbud</a></li>
-                            <li><a href="{% url app.orders.views.overviewReadyForInvoice %}">Klar til fakturing</a></li>
-                            <li><a href="{% url app.orders.views.overviewArchive %}">Arkiv</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="mega {% active request "^/timetracking/" %}">
-                    <a class="mega-tab" href="{% url app.timetracking.views.overview %}">Timeregistrering</a>
-
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.timetracking.views.calendar %}">Timeføring</a></li>
-                            <li><a href="{% url app.timetracking.views.overview %}">Oversikt</a></li>
-                            <li><a href="{% url app.timetracking.views.add %}">Registrer manuelt</a></li>
-                        </ul>
-                    </div>
-                </li>
+                    </ul>
+                </div>
+            </li>
 
 
-                <li class="mega {% active request "^/stock/" %}">
-                    <a class="mega-tab" href="{% url app.stock.products.views.overview %}">Lager</a>
-
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.stock.products.views.overview %}">Produktoversikt</a>
-                            </li>
-                            <li><a href="{% url app.stock.products.views.add %}">Nytt produkt</a></li>
-
-                            <li><a href="{% url app.stock.productgroups.views.add %}">Ny produktgruppe</a></li>
-
-                            <li><a href="{% url app.stock.products.views.overview_deleted %}">Slettede produkter</a>
-                            </li>
-                            .
-                            <ul>
-                                <li><a href="{% url app.suppliers.views.overview %}">Leverandøroversikt</a></li>
-                                <li><a href="{% url app.suppliers.views.add %}">Ny leverandør</a></li>
-                            </ul>
-
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
-                    <a class="mega-tab" href="{% url app.admin.users.views.overview %}">Admin</a>
-
-                    <div class="mega-content mega-menu ">
-                        <ul>
-                            <li><a href="{% url app.admin.users.views.overview %}">Oversikt</a></li>
-                            <li><a href="{% url app.admin.users.views.add %}">Legg til ny bruker</a></li>
-                            <li><a href="{% url app.admin.memberships.views.overview %}">Gruppeoversikt</a></li>
-                            <li><a href="{% url app.admin.memberships.views.add %}">Legg til ny gruppe</a></li>
-
-                        </ul>
-                    </div>
-                </li>
-
-
-            </ul>
-        </div>
-        <!-- #nav -->
-    </div> <!-- #top -->
-
-    <div id="content" class="xfluid">
-
-        {% include "messages.html" %}
-
-        {% block maincontent %}
-
-        {% endblock %}
-
-    </div> <!-- #content -->
-
-    <div id="footer">
-
-        <p>Focus Security AS.</p>
-
+        </ul>
     </div>
-    <!-- #footer -->
+    <!-- #nav -->
+</div> <!-- #top -->
+
+<div id="content" class="xfluid">
+
+    {% include "messages.html" %}
+
+    {% block maincontent %}
+
+    {% endblock %}
+
+</div> <!-- #content -->
+
+<div id="footer">
+
+    <p>Focus Security AS.</p>
+
+</div>
+<!-- #footer -->
 
 </div> <!-- #wrapper -->
 
@@ -245,12 +261,12 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-            $("#message").click(function () {
-                $(this).fadeOut();
-                return true;
-            });
-        }
-    );
+        $("#message").click(function () {
+            $(this).fadeOut();
+            return true;
+        });
+    }
+            );
 </script>
 
 

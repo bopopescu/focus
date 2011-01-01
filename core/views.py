@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import HttpResponse
-from core.shortcuts import *
-from django.contrib import messages
-from django.http import HttpResponseRedirect
 from core.decorators import login_required
 
 @login_required()

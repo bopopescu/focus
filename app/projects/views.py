@@ -10,22 +10,22 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-    projects = Project.objects.for_user()
+    projects = Project.objects.all()
     return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
 @login_required()
 def overview_deleted(request):
-    projects = Project.objects.for_company(deleted=True)
+    projects = Project.objects.all(deleted=True)
     return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
 @login_required()
 def overview_all(request):
-    projects = Project.objects.for_company()
+    projects = Project.objects.all()
     return render_with_request(request, 'projects/list.html', {'title': 'Alle prosjekter', 'projects': projects})
 
 
 def view(request, id):
-    project = Project.objects.for_company(deleted=None).get(id=id)
+    project = Project.objects.all(deleted=None).get(id=id)
     whoCanSeeThis = project.whoHasPermissionTo('view')
     return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
                                                                'project': project,

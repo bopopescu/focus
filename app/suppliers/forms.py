@@ -7,7 +7,7 @@ class SupplierForm(ModelForm):
     def __init__(self, *args, **kwrds):
         super(SupplierForm, self).__init__(*args, **kwrds)
         self.fields['contacts'].widget = MultipleSelectWithPop()
-        self.fields['contacts'].queryset = Contact.objects.for_company()
+        self.fields['contacts'].queryset = Contact.objects.all()
 
     class Meta:
         model = Supplier

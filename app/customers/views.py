@@ -7,26 +7,29 @@ from core.views import updateTimeout
 @require_permission("LIST", Customer)
 def overview(request):
     updateTimeout(request)
-    customers = Customer.objects.for_user()
+    customers = Customer.objects.all()
 
     return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
                                                                 'customers': customers})
-
+@login_required()
 def overview_deleted(request):
-    customers = Customer.objects.for_company(deleted=True)
+    customers = Customer.objects.filter(deleted=True)
     return render_with_request(request, 'customers/list.html', {'title': 'Slettede kunder',
                                                                 'customers': customers})
 
+@login_required()
 def overview_all(request):
-    customers = Customer.objects.for_company()
+    customers = Customer.objects.all()
     return render_with_request(request, 'customers/list.html', {'title': 'Alle aktive kunder',
                                                                 'customers': customers})
 
+@login_required()
 def view(request, id):
-    customer = Customer.objects.for_user(deleted=None).get(id=id)
+    customer = Customer.objects.filter(deleted=None).get(id=id)
     return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
                                                                 'customer': customer})
 
+@login_required()
 def addPop(request):
     instance = Customer()
 
@@ -51,13 +54,16 @@ def addPop(request):
 def add(request):
     return form(request)
 
+@login_required()
 def edit(request, id):
     return form(request, id)
 
+@login_required()
 def delete(request, id):
     Customer.objects.get(id=id).delete()
     return redirect(overview)
 
+@login_required()
 def recover(request, id):
     c = Customer.objects.get(id=id)
     c.deleted = not c.deleted
@@ -65,15 +71,10 @@ def recover(request, id):
 
     return redirect(overview)
 
-def permissions(request, id, popup=False):
-    type = Customer
-    url = "customers/edit/%s" % id
-    message = "Vellykket endret tilgang for kunde: %s" % type.objects.get(pk=id)
-    return form_perm(request, type, id, url, message, popup)
-
+@login_required()
 def form (request, id=False):
     if id:
-        instance = Customer.objects.for_user().get(id=id)
+        instance = Customer.objects.all().get(id=id)
         msg = "Velykket endret kunde"
     else:
         instance = Customer()
@@ -87,10 +88,8 @@ def form (request, id=False):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            messages.success(request, msg)
+            request.message_success(msg)
 
-            if not id:
-                return redirect(permissions, o.id)
             return redirect(overview)
     else:
         form = CustomerForm(instance=instance)

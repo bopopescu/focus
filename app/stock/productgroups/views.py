@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
 
 from core.shortcuts import *
 from core.decorators import *
@@ -9,7 +10,7 @@ from app.stock.models import ProductGroup
 @login_required()
 def overview(request):
     updateTimeout(request)
-    productgroups = ProductGroup.objects.for_user()
+    productgroups = ProductGroup.objects.all()
     return render_with_request(request, 'productgroups/list.html',
                                {'title': 'Produktgrupper', 'productgroups': productgroups})
 
@@ -17,9 +18,11 @@ def overview(request):
 def add(request):
     return form(request)
 
+@login_required()
 def edit(request, id):
     return form(request, id)
 
+@login_required()
 def delete(request, id):
     ProductGroup.objects.get(id=id).delete()
     return redirect(overview)

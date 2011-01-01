@@ -9,7 +9,7 @@ from app.stock.models import Currency
 @login_required()
 def overview(request):
     updateTimeout(request)
-    currencies = Currency.objects.for_user()
+    currencies = Currency.objects.all()
     return render_with_request(request, 'stock/currencies/list.html', {'title': 'Produkter', 'currencies': currencies})
 
 @login_required()

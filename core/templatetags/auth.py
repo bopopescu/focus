@@ -74,6 +74,7 @@ class PermissionNode(template.Node):
 
             # Get the app and then the model name from app.modelname
             app, model = self.object.__str__().lower().split(".")
+
             content_type = ContentType.objects.get(app_label = app, model = model)
             model = content_type.model_class()
 

@@ -12,7 +12,7 @@ class CustomerForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
         self.fields['contacts'].widget = MultipleSelectWithPop()
-        self.fields['contacts'].queryset = Contact.objects.for_company()
+        self.fields['contacts'].queryset = Contact.objects.all()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -20,7 +20,7 @@ class CustomerForm(ModelForm):
     def clean_cid(self):
         cid = self.cleaned_data['cid']
 
-        customers = Customer.objects.for_company()
+        customers = Customer.objects.all()
 
         for i in customers:
             if self.id == i.id:
@@ -40,4 +40,4 @@ class CustomerFormSimple(ModelForm):
     def __init__(self, *args, **kwrds):
         super(CustomerFormSimple, self).__init__(*args, **kwrds)
         self.fields['contacts'].widget = MultipleSelectWithPop()
-        self.fields['contacts'].queryset = Contact.objects.for_company()
+        self.fields['contacts'].queryset = Contact.objects.all()

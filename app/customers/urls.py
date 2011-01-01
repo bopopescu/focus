@@ -13,7 +13,6 @@ urlpatterns = patterns('app.customers.views',
                        url(r'^edit/(\d+)/?$', 'edit'),
                        url(r'^view/(\d+)/?$', 'view'),
 
-                       url(r'^permissions/(\d+)/?$', 'permissions'),
                        url(r'^delete/(\d+)/?$', 'delete'),
 
                        url(r'^recover/(\d+)/?$', 'recover'),

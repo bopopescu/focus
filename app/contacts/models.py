@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from core import Core
 from core.models import PersistentModel
 from django.core import urlresolvers
 
@@ -12,6 +13,18 @@ class Contact(PersistentModel):
 
     def __unicode__(self):
         return "%s" % unicode(self.full_name)
+
+    def save(self, *args, **kwargs):
+
+        #Give the user who created this ALL permissions on object
+        super(Contact, self).save()
+        Core.current_user().grant_role("Owner", self)
+
+        adminGroup = Core.current_user().get_company_admingroup()
+
+        if adminGroup:
+            adminGroup.grant_role("Admin", self)
+
 
     def getViewUrl(self):
         return urlresolvers.reverse('app.contacts.views.view', args=("%s" % self.id,))

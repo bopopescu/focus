@@ -9,18 +9,18 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-    suppliers = Supplier.objects.for_user()
+    suppliers = Supplier.objects.all()
     return render_with_request(request, 'suppliers/list.html', {'title': 'Leverandører', 'suppliers': suppliers})
 
 @login_required()
 def overview_deleted(request):
-    suppliers = Supplier.objects.for_company(deleted=True)
+    suppliers = Supplier.objects.filter(deleted=True)
     return render_with_request(request, 'suppliers/list.html',
                                {'title': 'Slettede leverandører', 'suppliers': suppliers})
 
 @login_required()
 def overview_all(request):
-    suppliers = Supplier.objects.for_company()
+    suppliers = Supplier.objects.all()
     return render_with_request(request, 'suppliers/list.html',
                                {'title': 'Alle aktive leverandører', 'suppliers': suppliers})
 

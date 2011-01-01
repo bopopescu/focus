@@ -34,6 +34,8 @@ urlpatterns = patterns('',
                        #settings for admin
                        (r'^useradmin/', include('app.admin.users.urls')),
                        (r'^groupadmin/', include('app.admin.memberships.urls')),
+                       (r'^companyadmin/', include('app.admin.company.urls')),
+
 
                        (r'^profile/$', 'app.admin.users.profile.edit'),
 

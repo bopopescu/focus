@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
@@ -9,7 +11,7 @@ from app.stock.models import UnitsForSizes
 @login_required()
 def overview(request):
     updateTimeout(request)
-    units = UnitsForSizes.objects.for_user()
+    units = UnitsForSizes.objects.all()
     return render_with_request(request, 'stock/productUnits/list.html', {'title': 'Enheter', 'units': units})
 
 @login_required()

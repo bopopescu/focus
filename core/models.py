@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.db.models.query_utils import Q
 from core.managers import PersistentManager
 from django.db import models
+import settings
 from widgets import get_hexdigest, check_password
 from . import Core
 from inspect import isclass
@@ -16,6 +17,7 @@ A user can only see objects within the same company.
 """
 class Company(models.Model):
     name = models.CharField(max_length=80)
+    adminGroup = models.ForeignKey("Group", null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -45,9 +47,32 @@ class User(models.Model):
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
+    deleted = models.BooleanField()
+
+    objects = PersistentManager()
+    all_objects = models.Manager()
 
     def __unicode__(self):
         return self.username
+
+    def get_company(self):
+
+        if self.company:
+            return self.company
+        return None
+
+    def set_company(self):
+        self.company = Core.current_user().get_company()
+        self.save()
+
+    def get_company_admingroup(self):
+
+        if not self.company:
+            return None
+        if not self.company.adminGroup:
+            return None
+        
+        return self.company.adminGroup
 
     def is_authenticated(self):
         """
@@ -177,6 +202,10 @@ class User(models.Model):
         #if isinstance(action, str):
         #   action = [action]
 
+        #If in debug and superadmin user is logged in, always return true
+        if settings.DEBUG and Core.current_user().id == 1:
+            return True
+
         content_type = ContentType.objects.get_for_model(object)
 
         object_id = 0
@@ -184,6 +213,7 @@ class User(models.Model):
             object_id = object.id
 
         action = Action.objects.get(name=action.upper())
+        allAction = Action.objects.get(name="ALL")
 
         #Check for negative permissions, if negative permission granted, deny
         negativePerms = Permission.objects.filter(content_type=content_type,
@@ -195,7 +225,9 @@ class User(models.Model):
         for perm in negativePerms:
             if action in perm.get_valid_actions():
                 return False
-
+            if allAction in perm.get_valid_actions():
+                return False
+            
         #Checks if the user is permitted manually
         perms = Permission.objects.filter(content_type=content_type,
                                           object_id=object_id,
@@ -205,6 +237,9 @@ class User(models.Model):
 
         for perm in perms:
             if action in perm.get_valid_actions():
+                return True
+
+            if allAction in perm.get_valid_actions():
                 return True
 
         for group in self.groups.all():
@@ -243,6 +278,7 @@ class AnonymousUser(User):
         self.username = 'anonymous'
         self.name = 'Not'
         self.surname = 'logged in'
+        self.company = None
 
     def __unicode__(self):
         return "AnonymousUser"
@@ -351,6 +387,8 @@ class Group(models.Model):
             object_id = object.id
 
         action = Action.objects.get(name=action)
+        allAction = Action.objects.get(name="ALL")
+
 
         #Checks if the group is permitted
         perms = Permission.objects.filter(content_type=content_type,
@@ -360,9 +398,13 @@ class Group(models.Model):
                                           )
         
         for perm in perms:
+
             if action in perm.get_valid_actions():
                 return True
 
+            if allAction in perm.get_valid_actions():
+                return True
+            
         if self.parent:
             return self.parent.has_permission_to(action, object, id=id, any=any)
 
@@ -543,11 +585,13 @@ class PersistentModel(models.Model):
         if not self.id:
             action = "ADD"
             self.creator = Core.current_user()
-            #self.company = get_current_company()
+            self.company = Core.current_user().company
 
         #self.editor = get_current_user()
         self.date_edited = datetime.now()
         super(PersistentModel, self).save()
+
+
 
         if 'noLog' not in kwargs:
             msg = "endret"
@@ -592,7 +636,8 @@ class PersistentModel(models.Model):
             object = content_type.get_object_for_this_type(id=id)
 
             perm = Action.objects.get(name=perm.upper())
-
+            adminPerm = Action.objects.get(name="ALL")
+            
             for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id):
 
                 if perm in u.get_valid_actions():
@@ -603,6 +648,16 @@ class PersistentModel(models.Model):
                         for user in u.group.members.all():
                             if user and user not in users:
                                 users.append(user)
+
+                if adminPerm in u.get_valid_actions():
+                    if u.user and u.user not in users:
+                        users.append(u.user)
+
+                    if u.group:
+                        for user in u.group.members.all():
+                            if user and user not in users:
+                                users.append(user)
+
                                 
             return users
         except:
@@ -614,6 +669,7 @@ Adding some initial data to the model when run syncdb
 """
 
 def initial_data ():
+    Action.objects.get_or_create(name='ALL', verb='all', description='all actions on an object')
     Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
     Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
     Action.objects.get_or_create(name='DELETE', verb='deleted', description='delete an object')
@@ -628,12 +684,19 @@ def initial_data ():
     Action.objects.get_or_create(name='MANAGE', verb='managed', description='manage something (companies etc)')
 
     #Generates som standard roles
-    Role.objects.create(name="Leader", description="Typisk leder, kan gjøre alt")
+    Role.objects.create(name="Admin", description="Typisk leder, kan gjøre alt")
     Role.objects.create(name="Responsible", description="Ansvarlig, kan se,endre")
     Role.objects.create(name="Member", description="Typisk medlem, kan se")
+    Role.objects.create(name="Owner", description="Typisk den som opprettet objektet")
 
-    leader = Role.objects.get(name="Leader")
-    leader.grant_actions(["CREATE", "EDIT"])
+    leader = Role.objects.get(name="Admin")
+    leader.grant_actions(["ALL"])
+
+    owner = Role.objects.get(name="Owner")
+    owner.grant_actions(["EDIT", "VIEW", "DELETE"])
+
+    member = Role.objects.get(name="Member")
+    member.grant_actions(["VIEW"])
 
     #Other default objects
     comp = Company(name="Focus AS")

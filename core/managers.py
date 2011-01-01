@@ -1,16 +1,12 @@
-from datetime import datetime
 from django.db import models
-from django.db.models.query_utils import Q
+from core import Core
 
 class PersistentManager(models.Manager):
     def get_query_set(self):
         return super(PersistentManager, self).get_query_set().filter(deleted=False)
 
-    def for_user(self):
-        return super(PersistentManager, self).get_query_set().filter(deleted=False)
-
-    def for_company(self):
-        return super(PersistentManager, self).get_query_set().filter(deleted=False)
+    def inCompany(self):
+        return super(PersistentManager, self).get_query_set().filter(deleted=False, company = Core.current_user().get_company())
 
 
 """

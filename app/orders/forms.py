@@ -17,11 +17,11 @@ class OrderForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.fields['project'].widget = SelectWithPop()
-        self.fields['project'].queryset = Project.objects.for_company()
+        self.fields['project'].queryset = Project.objects.all()
         self.fields['contacts'].widget = MultipleSelectWithPop()
-        self.fields['contacts'].queryset = Contact.objects.for_company()
+        self.fields['contacts'].queryset = Contact.objects.all()
         self.fields['customer'].widget = SelectWithPop()
-        self.fields['customer'].queryset = Customer.objects.for_company()
+        self.fields['customer'].queryset = Customer.objects.all()
         self.fields['responsible'].queryset = get_company_users()
 
         if 'instance' in kwargs:
@@ -39,7 +39,7 @@ class OrderForm(ModelForm):
     def clean_oid(self):
         oid = self.cleaned_data['oid']
 
-        orders = Order.objects.for_company()
+        orders = Order.objects.all()
         for i in orders:
             if self.id == i.id:
                 continue

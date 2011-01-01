@@ -1,5 +1,5 @@
 import functools
-from django.shortcuts import  redirect
+from django.shortcuts import redirect
 from django.http import Http404
 
 #Require permission in views
@@ -11,15 +11,13 @@ class login_required:
 
     def __call__(self, func):
         def check_login (request, *args, **kwargs):
-            if request.user:
+
+            if request.user and request.user.logged_in():
                 return func(request, *args, **kwargs)
-            else:
-                return redirect(login)
+            return redirect("/accounts/login/?next=%s" % (request.path))
 
         functools.update_wrapper(check_login, func)
-
         return check_login
-
 
 class require_permission:
     """
@@ -62,7 +60,7 @@ class require_permission:
         Used for decorator permission checking
         Called when python finds a decorator
         """
-        
+
         self.action = action
         self.model = model
         self.any = any

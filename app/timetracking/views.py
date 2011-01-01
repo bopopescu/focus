@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import  redirect
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from forms import *
 from core.shortcuts import *
@@ -12,7 +13,7 @@ from datetime import date
 @login_required
 def overview(request):
     updateTimeout(request)
-    timetrackings = Timetracking.objects.for_user()
+    timetrackings = Timetracking.objects.all()
     return render_with_request(request, 'timetracking/list.html',
                                {'title': 'Timeføringer', 'timetrackings': timetrackings})
 
@@ -45,7 +46,7 @@ def addTypeOfWork(request):
         if form.is_valid():
             o = form.save(commit=False)
             o.save()
-            messages.success(request, msg)
+            request.message_success(request, msg)
 
             #Redirects after save for direct editing
             return HttpResponse(
@@ -75,7 +76,7 @@ def calculateHoursWorked(request, start, end):
 
 @login_required
 def calendar(request):
-    timetrackings = Timetracking.objects.for_user()
+    timetrackings = Timetracking.objects.all()
 
     instance = Timetracking()
     form = TimetrackingForm(request.POST, instance=instance)

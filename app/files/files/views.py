@@ -74,7 +74,7 @@ def delete(request, id):
 
 @login_required()
 def view(request, id):
-    file = File.objects.for_company().get(id=id)
+    file = File.objects.filter().get(id=id)
 
     whoCanSeeThis = file.whoHasPermissionTo('view')
     return render_with_request(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,

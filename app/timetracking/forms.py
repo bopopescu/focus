@@ -10,8 +10,8 @@ def validateClock(value):
 
 class TimetrackingForm(ModelForm):
     date = forms.DateField(required=True, input_formats=["%d.%m.%Y"], widget=DatePickerField(format="%d.%m.%Y"))
-    order = forms.ModelChoiceField(Order.objects.for_company(), widget=SelectWithPop())
-    typeOfWork = forms.ModelChoiceField(TypeOfTimeTracking.objects.for_company(), widget=SelectWithPop())
+    order = forms.ModelChoiceField(Order.objects.all(), widget=SelectWithPop())
+    typeOfWork = forms.ModelChoiceField(TypeOfTimeTracking.objects.all(), widget=SelectWithPop())
     time_start = forms.CharField(validators=[validateClock])
     time_end = forms.CharField(validators=[validateClock])
 

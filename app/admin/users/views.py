@@ -5,14 +5,13 @@ from django.db.models import Q
 from core.shortcuts import *
 from core.views import updateTimeout
 from core.decorators import *
-from core.models import User
+from core.models import User, Permission
 from app.admin.forms import *
 
 @login_required()
 def overview(request):
     updateTimeout(request)
-    Company = request.user.company
-    Users = User.objects.filter(company=Company, is_active=True)
+    Users = User.objects.inCompany().filter(is_active=True)
     return render_with_request(request, 'admin/users/list.html', {'title': 'Brukere', 'users': Users})
 
 @login_required()
@@ -37,19 +36,18 @@ def editProfile(request):
 @login_required()
 def changeCanLogin(request, userID):
     u = User.objects.get(id=userID)
-    p = u.get_profile()
 
     if u == request.user:
         request.messages_error("Du kan ikke endre status på deg selv.")
         return redirect(view, userID)
 
-    p.canLogin = not p.canLogin
-    p.save()
+    u.canLogin = not u.canLogin
+    u.save()
     return redirect(view, userID)
 
 @login_required()
 def sendGeneratedPassword(request, userID):
-    user = get_object_or_404(User, id=userID, userprofile__company=request.user.get_profile().company)
+    user = get_object_or_404(User, id=userID, company=request.user.get_company())
 
     import string
     import random
@@ -77,7 +75,7 @@ def sendGeneratedPassword(request, userID):
     user.set_password("%s" % ret)
     user.save()
 
-    request.messages_success("Velykket sendt nytt passord til epost")
+    request.message_success("Velykket sendt nytt passord til epost")
 
     return redirect(overview)
 
@@ -139,7 +137,7 @@ def delete(request, id):
     u = User.objects.get(id=id)
     u.is_active = False
     u.save()
-    request.messages_success("Velykket slettet bruker")
+    request.message_success("Velykket slettet bruker")
     return redirect(overview)
 
 @login_required()
@@ -159,14 +157,13 @@ def form (request, id=False):
             o.save()
             form.save_m2m()
 
-            if not o.get_profile().company:
-                o.get_profile().company = request.user.get_profile().company
-                o.get_profile().save()
+            if not o.get_company():
+                o.set_company()
 
             if not id:
                 sendGeneratedPassword(request, o.id)
 
-            request.messages_success(msg)
+            request.message_success(msg)
 
             #Redirects after save for direct editing
             return redirect(overview)

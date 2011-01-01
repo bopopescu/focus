@@ -7,31 +7,31 @@ from core.decorators import *
 
 @login_required()
 def overviewOffers(request):
-    orders = Order.objects.for_user().filter(state="T")
+    orders = Order.objects.all().filter(state="T")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
 @login_required()
 def overview(request):
-    orders = Order.objects.for_user().filter(state="O")
+    orders = Order.objects.all().filter(state="O")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
 @login_required()
 def overviewReadyForInvoice(request):
-    orders = Order.objects.for_user().filter(state="F")
+    orders = Order.objects.all().filter(state="F")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
 @login_required()
 def overviewArchive(request):
-    orders = Order.objects.for_user().filter(state="A")
+    orders = Order.objects.all().filter(state="A")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
 
 def view(request, id):
-    order = Order.objects.for_company().get(id=id)
+    order = Order.objects.all().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
 
     taskForm = TaskForm()
@@ -45,7 +45,7 @@ def view(request, id):
 @login_required()
 def addTask(request, orderID):
     if request.method == "POST":
-        order = Order.objects.for_user().get(id=orderID)
+        order = Order.objects.all().get(id=orderID)
         form = TaskForm(request.POST, instance=Task())
         if form.is_valid():
             o = form.save(commit=False)
@@ -62,7 +62,7 @@ def addTask(request, orderID):
 @login_required()
 def changeStatusTask(request, taskID):
     try:
-        task = Task.objects.for_company().get(id=taskID)
+        task = Task.objects.all().get(id=taskID)
         task.done = not task.done
         task.save()
     except:

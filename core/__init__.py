@@ -39,6 +39,7 @@ class Core:
             if thread in cls.users:
                 return cls.users[thread]
 
+
         return AnonymousUser()
 
     @classmethod

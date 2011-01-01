@@ -2,12 +2,17 @@
 from core.shortcuts import get_company_users
 from core.widgets import *
 from django.forms.models import ModelForm
-from core.models import User, Group
+from core.models import User, Group, Company
 
 class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'canLogin', 'profileImage',)
+
+class CompanyForm(ModelForm):
+    class Meta:
+        model = Company
+
 
 class UserProfileForm(ModelForm):
     class Meta:

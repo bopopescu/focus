@@ -9,14 +9,14 @@ from app.stock.models import Product
 @login_required()
 def overview(request):
     updateTimeout(request)
-    products = Product.objects.for_company()
+    products = Product.objects.all()
 
     return render_with_request(request, 'stock/products/list.html', {'title': 'Produkter', 'products': products})
 
 @login_required()
 def overview_deleted(request):
     updateTimeout(request)
-    products = Product.objects.for_company(deleted=True)
+    products = Product.objects.filter(deleted=True)
     return render_with_request(request, 'stock/products/list.html', {'title': 'Produkter', 'products': products})
 
 @login_required()
