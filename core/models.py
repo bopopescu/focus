@@ -18,6 +18,7 @@ A user can only see objects within the same company.
 class Company(models.Model):
     name = models.CharField(max_length=80)
     adminGroup = models.ForeignKey("Group", related_name="companiesWhereAdmin", null=True, blank=True)
+    allEmployeesGroup = models.ForeignKey("Group", related_name="companiesWhereAllEmployeed", null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -73,6 +74,15 @@ class User(models.Model):
             return None
         
         return self.company.adminGroup
+
+    def get_company_allemployeesgroup(self):
+
+        if not self.company:
+            return None
+        if not self.company.allEmployeesGroup:
+            return None
+
+        return self.company.allEmployeesGroup
 
     def is_authenticated(self):
         """

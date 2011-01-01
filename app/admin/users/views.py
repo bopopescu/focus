@@ -139,14 +139,24 @@ def form (request, id=False):
         form = UserForm(request.POST, instance=instance)
         if form.is_valid():
             o = form.save(commit=False)
+
+            new = False
+            if not o.id:
+                new = True
+
             o.save()
             form.save_m2m()
 
             if not o.get_company():
                 o.set_company()
 
-            if not id:
+            if new:
+                #send new generated password to the new user
                 sendGeneratedPassword(request, o.id)
+
+                #Add the new user to allemployee group of the company
+                if Core.current_user().get_company_allemployeesgroup():
+                    Core.current_user().get_company_allemployeesgroup().addMember(o)
 
             request.message_success(msg)
 
