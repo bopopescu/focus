@@ -3,7 +3,7 @@
 from django.shortcuts import get_object_or_404
 from core.shortcuts import *
 from core.decorators import *
-from app.admin.forms import *
+from app.company.forms import *
 
 @require_permission("EDIT", Company)
 def editCompany(request):

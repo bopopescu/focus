@@ -87,6 +87,7 @@ INSTALLED_APPS = (
 
 #All the applicaitons
 'core',
+'app.company',
 'app.announcements',
 'app.timetracking',
 'app.accounts',

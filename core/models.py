@@ -363,6 +363,9 @@ class Group(models.Model):
 
         perm.save()
 
+    def saveWithoutCreatePermissions(self):
+        super(Group, self).save()
+
 
     def save(self, *args, **kwargs):
         new = False

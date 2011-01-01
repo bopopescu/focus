@@ -9,11 +9,6 @@ class UserForm(ModelForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'canLogin', 'profileImage',)
 
-class CompanyForm(ModelForm):
-    class Meta:
-        model = Company
-
-
 class UserProfileForm(ModelForm):
     class Meta:
         model = User
