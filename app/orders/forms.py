@@ -10,6 +10,7 @@ class OrderForm(ModelForm):
     delivery_date_deadline = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
                                              widget=DatePickerField(format="%d.%m.%Y"))
 
+
     class Meta:
         model = Order
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'state')
@@ -18,8 +19,8 @@ class OrderForm(ModelForm):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.fields['project'].widget = SelectWithPop()
         self.fields['project'].queryset = Project.objects.all()
-        self.fields['contacts'].widget = MultipleSelectWithPop()
-        self.fields['contacts'].queryset = Contact.objects.all()
+        #self.fields['contacts'].widget = MultiSelectField()
+        #self.fields['contacts'].queryset = Contact.objects.all()
         self.fields['customer'].widget = SelectWithPop()
         self.fields['customer'].queryset = Customer.objects.all()
         self.fields['responsible'].queryset = get_company_users()

@@ -8,14 +8,19 @@ from django.contrib import messages
 from django.utils.html import escape
 from core.views import updateTimeout
 import time
-from datetime import date
+from datetime import date, datetime
 
 @require_permission("LIST", Timetracking)
 def overview(request):
     updateTimeout(request)
-    timetrackings = Timetracking.objects.all()
+    timetrackings = Timetracking.objects.filter(creator=Core.current_user())
+
+    sumHours = 0
+    for time in timetrackings:
+        sumHours += time.hours_worked
+
     return render_with_request(request, 'timetracking/list.html',
-                               {'title': 'Timeføringer', 'timetrackings': timetrackings})
+                               {'title': 'Timeføringer', 'timetrackings': timetrackings, 'sumHours':sumHours})
 
 @require_permission("CREATE", Timetracking)
 def add(request):
@@ -61,13 +66,12 @@ def addTypeOfWork(request):
 @login_required()
 def calculateHoursWorked(request, start, end):
     diff = 0
-    start = time.strptime("2010 " + start, "%Y %H:%M")
-    end = time.strptime("2010 " + end, "%Y %H:%M")
-    diff = time.mktime(end) - time.mktime(start)
+
+    diff = end - start
 
     if diff < 1:
         mg = "Sjekk klokkeslettene en gang til"
-        messages.error(request, mg)
+        request.message_success(mg)
 
     diff = str(diff / 3600)
 
@@ -133,13 +137,25 @@ def form (request, id=False):
     if request.method == 'POST':
         form = TimetrackingForm(request.POST, instance=instance)
 
-        if request.POST['time_start'] > request.POST['time_end']:
-            messages.error(request, "Du kan ikke slutte før du begynte")
+        if form.is_valid():
 
-        elif form.is_valid():
+            date = request.POST['date']
+
+            start = time.strptime("%s %s"%(date,request.POST['time_start']),"%d.%m.%Y  %H:%M")
+            end = time.strptime("%s %s"%(date,request.POST['time_end']),"%d.%m.%Y  %H:%M")
+
+            start_t = time.mktime(start)
+            end_t = time.mktime(end)
+
             clockValid = True
-            hoursWorked = calculateHoursWorked(request, request.POST['time_start'], request.POST['time_end'])
-            if hoursWorked == 0:
+
+            if start_t > end_t:
+                request.message_error("Du kan ikke slutte før du begynte")
+                clockValid = False
+
+            hoursWorked = calculateHoursWorked(request, start_t, end_t)
+
+            if hoursWorked <= 0:
                 clockValid = False
 
             if clockValid:

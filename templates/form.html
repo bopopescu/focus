@@ -33,6 +33,16 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="/media/js/multiselect.js"></script>
+    <link rel="stylesheet" type="text/css" href="/media/css/multiselect.css" media="all">
+
+    <script>
+        $(document).ready(function() {
+            $("select[multiple]").asmSelect();
+    });
+
+    </script>
+    
     {% block extra %}
     {% endblock %}
 
