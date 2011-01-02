@@ -77,3 +77,8 @@ class Timetracking(PersistentModel):
 
             if adminGroup:
                 adminGroup.grant_role("Admin", self)
+
+def initial_data ():
+    #Create default time tracking types
+    TypeOfTimeTracking.objects.get_or_create(name="Kontorarbeid")
+    TypeOfTimeTracking.objects.get_or_create(name="Montering")

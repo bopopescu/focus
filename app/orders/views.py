@@ -43,7 +43,7 @@ def view(request, id):
                                                              'whoCanSeeThis': whoCanSeeThis})
 
 
-@login_required()
+@require_permission("VIEW", Order, "id")
 def addTask(request, orderID):
     if request.method == "POST":
         order = Order.objects.all().get(id=orderID)

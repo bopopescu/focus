@@ -227,7 +227,6 @@
 
         <li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
             <a class="mega-tab" href="{% url app.admin.users.views.overview %}">Admin</a>
-
             <div class="mega-content mega-menu ">
                 <ul>
                     {% require_permission LIST core.User %}
@@ -245,12 +244,9 @@
                     {% require_permission CONFIGURE core.Company %}
                     <li><a href="{% url app.admin.company.views.editCompany %}">Firmadetaljer</a></li>
                     {% end_require %}
-
                 </ul>
             </div>
         </li>
-
-
     </ul>
 </div>
 <!-- #nav -->

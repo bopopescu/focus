@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta
-from django.db.models.query_utils import Q
 from core.managers import PersistentManager
 from django.db import models
 import settings

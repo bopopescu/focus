@@ -4,8 +4,8 @@ urlpatterns = patterns('app.timetracking.views',
 
                        url(r'^$', 'overview'),
                        url(r'^add/$', 'add'),
-                       url(r'^edit/(\d+)/?$', 'edit'),
-                       url(r'^delete/(\d+)/?$', 'delete'),
+                       url(r'^(?P<id>\d+)/edit/?$', 'edit'),
+                       url(r'^(?P<id>\d+)/delete/?$', 'delete'),
                        url(r'^calendar/', 'calendar'),
 
                        #Ajax

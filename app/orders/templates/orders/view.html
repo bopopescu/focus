@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load auth %}
 {% block extrahead %}
 
 {% endblock %}
@@ -62,7 +62,6 @@
 
             <br><br><br>
 
-            <div class="department">
 
                 <h2>Deltagere</h2>
                 {% for user in whoCanSeeThis %}
@@ -82,9 +81,6 @@
 
                 </div> <!-- .user-card -->
                 {% endfor %}
-
-
-            </div> <!-- .department -->
 
 
             <br> <br>
@@ -141,15 +137,16 @@
 
         <div class="portlet-content">
 
+            {% require_permission EDIT order %}
             <div class="tool editChoice">
                 <a href="{% url app.orders.views.edit order.id %}">Endre ordre</a>
             </div>
-            <div class="tool editPerm">
-                <a href="{% url app.orders.views.permissions order.id %}">Endre rettigheter</a>
-            </div>
+            {% end_require %}
+            {% require_permission DELETE order %}
             <div class="tool deleteChoice">
                 <a href="{% url app.orders.views.delete order.id %}">Slett ordren</a>
             </div>
+            {% end_require %}
 
 
             {% if order.state != "A" %}

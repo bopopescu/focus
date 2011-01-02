@@ -12,14 +12,14 @@ urlpatterns = patterns('app.orders.views',
                        url(r'^addOffer/$', 'addOffer'),
                        url(r'^addPop/?$', 'addPop'),
 
-                       url(r'^edit/(\d+)/?$', 'edit'),
-                       url(r'^view/(\d+)/?$', 'view'),
-                       url(r'^delete/(\d+)$', 'delete'),
+                       url(r'^(?P<id>\d+)/edit/?$', 'edit'),
+                       url(r'^(?P<id>\d+)/view/?$', 'view'),
+                       url(r'^(?P<id>\d+)/delete/$', 'delete'),
 
-                       url(r'^changeStatus/(\d+)$', 'changeStatus'),
+                       url(r'^(?P<id>\d+)/changeStatus/$', 'changeStatus'),
 
                        #TASKS
-                       url(r'^addTask/(\d+)$', 'addTask'),
-                       url(r'^changeStatusTask/(\d+)$', 'changeStatusTask'),
+                       url(r'^(?P<id>\d+)/addTask/$', 'addTask'),
+                       url(r'^(?P<id>\d+)/changeStatusTask/$', 'changeStatusTask'),
 
                        )

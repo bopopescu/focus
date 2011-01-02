@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
+from core.decorators import require_permission, login_required
 from forms import *
 from core.shortcuts import *
 from django.contrib import messages
@@ -10,24 +10,24 @@ from core.views import updateTimeout
 import time
 from datetime import date
 
-@login_required
+@require_permission("LIST", Timetracking)
 def overview(request):
     updateTimeout(request)
     timetrackings = Timetracking.objects.all()
     return render_with_request(request, 'timetracking/list.html',
                                {'title': 'Timeføringer', 'timetrackings': timetrackings})
 
-@login_required
+@require_permission("CREATE", Timetracking)
 def add(request):
     return form(request)
 
 
-@login_required
+@require_permission("EDIT", Timetracking, "id")
 def edit(request, id):
     return form(request, id)
 
 
-@login_required
+@require_permission("DELETE", Timetracking, "id")
 def delete(request, id):
     Timetracking.objects.get(id=id).delete()
     return redirect(overview)
@@ -35,7 +35,7 @@ def delete(request, id):
 def addAjax(request):
     return
 
-@login_required
+@require_permission("CREATE", Timetracking)
 def addTypeOfWork(request):
     instance = TypeOfTimeTracking()
     msg = "Velykket lagt til ny type arbeid"
@@ -58,7 +58,7 @@ def addTypeOfWork(request):
     return render_with_request(request, "simpleform.html", {'title': 'Typer arbeid', 'form': form})
 
 
-@login_required
+@login_required()
 def calculateHoursWorked(request, start, end):
     diff = 0
     start = time.strptime("2010 " + start, "%Y %H:%M")
@@ -74,7 +74,7 @@ def calculateHoursWorked(request, start, end):
     return diff
 
 
-@login_required
+@require_permission("LIST", Timetracking)
 def calendar(request):
     timetrackings = Timetracking.objects.all()
 
@@ -85,7 +85,7 @@ def calendar(request):
                                                                        'timetrackings': timetrackings,
                                                                        'form': form, })
 
-@login_required
+@login_required()
 def ajaxEditCalendar(request):
     from django.utils import simplejson
 
@@ -120,7 +120,7 @@ def ajaxEditCalendar(request):
     return HttpResponse(data)
 
 
-@login_required
+@login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Timetracking, id=id, deleted=False)
@@ -146,7 +146,7 @@ def form (request, id=False):
                 o = form.save(commit=False)
                 o.hours_worked = hoursWorked
                 o.save()
-                messages.success(request, msg)
+                request.message_success(msg)
 
                 #Redirects after save for direct editing
                 return overview(request)

@@ -9,7 +9,6 @@ class login_required:
 
     def __call__(self, func):
         def check_login (request, *args, **kwargs):
-
             if request.user and request.user.logged_in():
                 return func(request, *args, **kwargs)
             return redirect("/accounts/login/?next=%s" % (request.path))
@@ -83,7 +82,6 @@ class require_permission:
         """
 
         def check_permission (request, *args, **kwargs):
-
             # If the identifier is defined, get the object instance
             if self.field:
                 if not self.field in kwargs:
@@ -117,8 +115,9 @@ class require_permission:
             else:
                 request.message_error("Ingen tilgang")
                 return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
-                
-         # Update the function so it still reports correct to inspect and pydoc
+
+                # Update the function so it still reports correct to inspect and pydoc
+
         functools.update_wrapper(check_permission, func)
 
         # Add some info about us to the function, so other decorators can use this

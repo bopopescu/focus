@@ -44,7 +44,7 @@ class Order(PersistentModel):
         if not self.id:
             new = True
 
-        super(Contact, self).save()
+        super(Order, self).save()
 
         #Give the user who created this ALL permissions on object
 
