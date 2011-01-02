@@ -14,9 +14,20 @@ class CompanyForm(ModelForm):
         self.fields['allEmployeesGroup'].queryset = Group.objects.inCompany()
 
 class newCompanyForm(forms.Form):
-    name                = forms.CharField()
-    adminGroup          = forms.CharField()
-    allEmployeesGroup   = forms.CharField()
-    adminuserName       = forms.CharField()
-    adminuserUsername   = forms.CharField()
-    adminuserPassword   = forms.CharField()
+    name                = forms.CharField(label="Firmanavn")
+    adminGroup          = forms.CharField(label="Gruppenavn admin")
+    allEmployeesGroup   = forms.CharField(label="Gruppenavn ansatte")
+    adminuserName       = forms.CharField(label="Fullt navn admin")
+    adminuserUsername   = forms.CharField(label="Brukernavn for admin")
+    adminuserPassword   = forms.CharField(label="Passord for admin")
+
+    def clean_name(self):
+       name = self.cleaned_data['name']
+
+       companies = Company.objects.all()
+
+       for i in companies:
+           if i.name == name:
+               raise forms.ValidationError("Det kreves unikt firmanavn")
+
+       return name

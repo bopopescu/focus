@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
@@ -59,7 +61,7 @@ def form (request, id=False):
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
-            messages.success(request, msg)
+            request.message_success(msg)
 
             return redirect(overview)
 

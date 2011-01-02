@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-
+from django.shortcuts import get_object_or_404
 from django.utils.html import escape
+from app.contacts.models import Contact
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
 
-@login_required()
+@require_permission("LIST", Project)
 def overview(request):
     updateTimeout(request)
-    projects = Project.objects.all()
+    projects = Core.current_user().getPermittedObjects("VIEW", Project)
     return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
-@login_required()
+@require_permission("LIST", Project)
 def overview_deleted(request):
     projects = Project.objects.all(deleted=True)
     return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
-@login_required()
+@require_permission("LIST", Project)
 def overview_all(request):
     projects = Project.objects.all()
     return render_with_request(request, 'projects/list.html', {'title': 'Alle prosjekter', 'projects': projects})
 
-
+@require_permission("VIEW", Project, 'id')
 def view(request, id):
-    project = Project.objects.all(deleted=None).get(id=id)
+    project = Project.objects.get(id=id)
     whoCanSeeThis = project.whoHasPermissionTo('view')
     return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
                                                                'project': project,
@@ -54,32 +55,26 @@ def addPop(request):
     return render_with_request(request, "simpleform.html", {'title': 'Prosjekt', 'form': form})
 
 
-@login_required()
+@require_permission("CREATE", Project)
 def add(request):
     return form(request)
 
+@require_permission("EDIT", Project, 'id')
 def edit(request, id):
     return form(request, id)
 
+@require_permission("DELETE", Project, 'id')
 def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required()
-def permissions(request, id):
-    type = Project
-    url = "projects/edit/%s" % id
-    message = "Vellykket endret tilgang for prosjektet: %s" % type.objects.get(pk=id)
-    return form_perm(request, type, id, url, message)
-
-@login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Project, id=id, deleted=False)
-        msg = "Velykket endret prosjekt"
+        msg = "Vellykket endret prosjekt"
     else:
         instance = Project()
-        msg = "Velykket lagt til nytt prosjekt"
+        msg = "Vellykket lagt til nytt prosjekt"
 
     #Save and set to active, require valid form
     if request.method == 'POST':

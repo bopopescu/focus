@@ -5,31 +5,32 @@ from core.shortcuts import *
 from core.views import updateTimeout
 from core.decorators import *
 
-@login_required()
+@require_permission("LIST", Order)
 def overviewOffers(request):
-    orders = Order.objects.all().filter(state="T")
+    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="T")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
-@login_required()
+@require_permission("LIST", Order)
 def overview(request):
     orders = Order.objects.all().filter(state="O")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
-@login_required()
+@require_permission("LISTARCHIVE", Order)
 def overviewReadyForInvoice(request):
     orders = Order.objects.all().filter(state="F")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
-@login_required()
+@require_permission("LISTREADYINVOICE", Order)
 def overviewArchive(request):
     orders = Order.objects.all().filter(state="A")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
 
+@require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.all().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
@@ -70,7 +71,7 @@ def changeStatusTask(request, taskID):
 
     return redirect(view, task.order.id)
 
-@login_required()
+@require_permission("EDIT", Order, "id")
 def changeStatus(request, orderID):
     order = Order.objects.get(id=orderID)
 
@@ -88,31 +89,22 @@ def changeStatus(request, orderID):
 
     return redirect(view, order.id)
 
-@login_required()
+@require_permission("CREATE", Order)
 def addOffer(request):
     return form(request, offer=True)
 
-@login_required()
+@require_permission("CREATE", Order)
 def add(request):
     return form(request)
 
-@login_required()
+@require_permission("EDIT", Order, "id")
 def edit(request, id):
     return form(request, id)
 
-@login_required()
+@require_permission("DELETE", Order, "id")
 def delete(request, id):
     messages.error(request, "Det er ikke mulig å slette ordrer.")
     return form(request, id)
-
-
-@login_required()
-def permissions(request, id):
-    type = Order
-    url = "orders/edit/%s" % id
-    message = "Vellykket endret tilgang for ordre: %s" % type.objects.get(pk=id)
-    return form_perm(request, type, id, url, message)
-
 
 @login_required()
 def addPop(request):
@@ -157,6 +149,7 @@ def form (request, id=False, *args, **kwargs):
     if instance.state == "F":
         messages.error(request, "Ordren er til fakturering og kan ikke endres.")
         return redirect(overview)
+
     if instance.state == "A":
         messages.error(request, "Ordren er arkivert og kan ikke endres")
         return redirect(overview)
@@ -176,9 +169,8 @@ def form (request, id=False, *args, **kwargs):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            messages.success(request, msg)
-            if not id:
-                return redirect(permissions, o.id)
+            request.message_success(msg)
+
             return redirect(overview)
 
     else:

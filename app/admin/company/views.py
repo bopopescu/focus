@@ -5,7 +5,7 @@ from core.shortcuts import *
 from core.decorators import *
 from app.company.forms import *
 
-@require_permission("EDIT", Company)
+@require_permission("CONFIGURE", Company)
 def editCompany(request):
     id = Core.current_user().get_company().id
 

@@ -16,8 +16,8 @@ class ProjectForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
         #self.fields['customer'].widget = SelectWithPop()
-        #self.fields['customer'].queryset=Customer.objects.for_company()
-        #self.fields['responsible'].queryset = get_company_users()
+        self.fields['customer'].queryset=Customer.objects.inCompany()
+        self.fields['responsible'].queryset = User.objects.inCompany()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -25,7 +25,7 @@ class ProjectForm(ModelForm):
     def clean_pid(self):
         pid = self.cleaned_data['pid']
 
-        projects = Project.objects.for_company()
+        projects = Project.objects.inCompany()
         for i in projects:
             if self.id == i.id:
                 continue

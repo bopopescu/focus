@@ -1,5 +1,6 @@
 import re
 from app.orders.models import Order
+from core import Core
 from core.models import PersistentModel
 from django.db import models
 
@@ -9,6 +10,28 @@ class TypeOfTimeTracking(PersistentModel):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+
+        new = False
+        if not self.id:
+            new = True
+
+        super(TypeOfTimeTracking, self).save()
+
+        #Give the user who created this ALL permissions on object
+
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
+
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
+
+            if allemployeesgroup:
+                allemployeesgroup.grant_role("Member", self)
+
 
 class Timetracking(PersistentModel):
     date = models.DateField()
@@ -41,4 +64,16 @@ class Timetracking(PersistentModel):
         if re.match("\d:\d\d", self.time_end):
             self.time_end = "0" + self.time_end
 
+        new = False
+        if not self.id:
+            new = True
+
         super(Timetracking, self).save()
+
+        #Give the user who created this ALL permissions on object
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)

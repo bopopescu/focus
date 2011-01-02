@@ -18,9 +18,6 @@ urlpatterns = patterns('app.orders.views',
 
                        url(r'^changeStatus/(\d+)$', 'changeStatus'),
 
-                       url(r'^permissions/(\d+)/?', 'permissions'),
-
-
                        #TASKS
                        url(r'^addTask/(\d+)$', 'addTask'),
                        url(r'^changeStatusTask/(\d+)$', 'changeStatusTask'),

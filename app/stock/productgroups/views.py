@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 from core.shortcuts import *
 from core.decorators import *
@@ -11,7 +12,7 @@ from app.stock.models import ProductGroup
 def overview(request):
     updateTimeout(request)
     productgroups = ProductGroup.objects.all()
-    return render_with_request(request, 'productgroups/list.html',
+    return render_with_request(request, 'stock/productgroups/list.html',
                                {'title': 'Produktgrupper', 'productgroups': productgroups})
 
 @login_required()
@@ -64,7 +65,7 @@ def form (request, id=False):
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
-            messages.success(request, msg)
+            request.message_success(msg)
 
             return redirect(overview)
 

@@ -10,9 +10,9 @@ from core.shortcuts import render_with_request
 
 @login_required()
 def overview(request):
-    announcements = Announcement.objects.all()[::-1]
-    your_projects = Project.objects.all()
-    your_orders = Order.objects.all().filter(state="O")[::-1]
+    announcements = Core.current_user().getPermittedObjects("VIEW",Announcement)[::-1]
+    your_projects = Core.current_user().getPermittedObjects("VIEW",Project)
+    your_orders = Core.current_user().getPermittedObjects("VIEW",Order).filter(state="O")[::-1]
 
     return render_with_request(request, 'dashboard/dashboard.html', {'title': 'Oppslagstavle',
                                                                      'announcements': announcements,

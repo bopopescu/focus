@@ -10,7 +10,10 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-    contacts = Contact.objects.all()
+
+    #contacts = Contact.objects.all()
+    contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
+
     return render_with_request(request, 'contacts/list.html', {'title': 'Kontakter', 'contacts': contacts})
 
 @login_required()
@@ -30,7 +33,6 @@ def add(request):
 @require_permission("EDIT", Contact, "id")
 def edit(request, id):
     return form(request, id)
-
 
 @require_permission("VIEW", Contact, "id")
 def view(request, id):
@@ -57,6 +59,7 @@ def addPop(request):
 
     return render_with_request(request, "simpleform.html", {'title': 'Kontakt', 'form': form})
 
+@require_permission("DELETE", Contact, "id")
 def delete(request, id):
     Contact.objects.get(id=id).delete()
     return redirect(overview)

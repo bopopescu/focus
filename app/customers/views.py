@@ -7,23 +7,23 @@ from core.views import updateTimeout
 @require_permission("LIST", Customer)
 def overview(request):
     updateTimeout(request)
-    customers = Customer.objects.all()
+    customers = Core.current_user().getPermittedObjects("VIEW", Customer)
 
     return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
                                                                 'customers': customers})
-@login_required()
+@require_permission("LISTDELETED", Customer)
 def overview_deleted(request):
     customers = Customer.objects.filter(deleted=True)
     return render_with_request(request, 'customers/list.html', {'title': 'Slettede kunder',
                                                                 'customers': customers})
 
-@login_required()
+@require_permission("LISTALL", Customer)
 def overview_all(request):
     customers = Customer.objects.all()
     return render_with_request(request, 'customers/list.html', {'title': 'Alle aktive kunder',
                                                                 'customers': customers})
 
-@login_required()
+@require_permission("VIEW", Customer, 'id')
 def view(request, id):
     customer = Customer.objects.filter(deleted=None).get(id=id)
     return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
@@ -54,16 +54,16 @@ def addPop(request):
 def add(request):
     return form(request)
 
-@login_required()
+@require_permission("EDIT", Customer, "id")
 def edit(request, id):
     return form(request, id)
 
-@login_required()
+@require_permission("DELETE", Customer, "id")
 def delete(request, id):
     Customer.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required()
+@require_permission("DELETE", Customer, "id")
 def recover(request, id):
     c = Customer.objects.get(id=id)
     c.deleted = not c.deleted

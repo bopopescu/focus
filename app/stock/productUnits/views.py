@@ -62,7 +62,7 @@ def form (request, id=False):
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
-            messages.success(request, msg)
+            request.message_success(msg)
 
             return redirect(overview)
 

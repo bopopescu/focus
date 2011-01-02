@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from core import Core
 from core.models import PersistentModel
 from django.core import urlresolvers
 
@@ -16,3 +17,24 @@ class Announcement(PersistentModel):
 
     def getEditUrl(self):
         return urlresolvers.reverse('app.announcements.views.edit', args=("%s" % self.id,))
+
+    def save(self, *args, **kwargs):
+
+        new = False
+        if not self.id:
+            new = True
+
+        super(Announcement, self).save()
+
+        #Give the user who created this ALL permissions on object
+
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
+
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
+
+            if allemployeesgroup:
+                allemployeesgroup.grant_role("Member", self)

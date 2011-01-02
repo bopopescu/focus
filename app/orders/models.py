@@ -38,6 +38,23 @@ class Order(PersistentModel):
 
         return True
 
+    def save(self, *args, **kwargs):
+
+        new = False
+        if not self.id:
+            new = True
+
+        super(Contact, self).save()
+
+        #Give the user who created this ALL permissions on object
+
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
+                
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")
     text = models.TextField("Ny oppgave")

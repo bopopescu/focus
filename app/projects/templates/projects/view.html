@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load auth %}
 {% block extrahead %}
 
 {% endblock %}
@@ -11,80 +11,82 @@
 
 {% block maincontent %}
 
-    <div class="portlet x9">
+<div class="portlet x9">
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-        <div class="portlet-content">
-            <b>Beskrivelse</b><br>
-            {{ description }}
-            <br><br>
-            <div class="department">
+    <div class="portlet-content">
+        <b>Beskrivelse</b><br>
+        {{ description }}
+        <br><br>
 
-                <h2>Deltagere</h2>
-                {% for user in whoCanSeeThis %}
+        <h2>Deltagere</h2>
+        {% for user in whoCanSeeThis %}
 
-                <div class="user-card">
+            <div class="user-card">
 
-                    <div class="avatar">
-                        <img src="{{ user.get_profile.getProfileImage }}" title="User" alt="" />
-                    </div> <!-- .user-card-avatar -->
+                <div class="avatar">
+                    <img src="{{ user.getProfileImage }}" title="User" alt=""/>
+                </div>
+                <!-- .user-card-avatar -->
 
-                    <div class="details">
-                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br />
-                            {{ user.phone }}<br />
+                <div class="details">
+                    <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
+                        {{ user.phone }}<br/>
 
-                           <a href="{% url app.admin.users.views.view user.id %}">Flere detaljer</a></p>
-                    </div> <!-- .user-card-content -->
+                        <a href="{% url app.admin.users.views.view user.id %}">Flere detaljer</a></p>
+                </div>
+                <!-- .user-card-content -->
 
-                </div> <!-- .user-card -->
-                {% endfor %}
-
-
-            </div> <!-- .department -->
+            </div> <!-- .user-card -->
+        {% endfor %}
 
 
-            <br><br>
-            <table>
+
+        <br><br>
+        <table>
+            <tr>
+                <th>Ordre</th>
+                <th>Registrert</th>
+                <th>Sist endret</th>
+                <th>Sist endret av</th>
+                <th>Opprettet av</th>
+            </tr>
+            {% for order in project.orders.all %}
                 <tr>
-                    <th>Ordre</th>
-                    <th>Registrert</th>
-                    <th>Sist endret</th>
-                    <th>Sist endret av</th>
-                    <th>Opprettet av</th>
+                    <td><a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
+                    <td>{{ order.date_created|date:"d.m.Y" }}</td>
+                    <td>{{ order.date_edited|date:"d.m.Y" }}</td>
+                    <td>{{ order.editor }}</td>
+                    <td>{{ order.creator }}</td>
+
                 </tr>
-                {% for order in project.orders.all %}
-                    <tr>
-                        <td><a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
-                        <td>{{ order.date_created|date:"d.m.Y" }}</td>
-                        <td>{{ order.date_edited|date:"d.m.Y" }}</td>
-                        <td>{{ order.editor }}</td>
-                        <td>{{ order.creator }}</td>
-
-                    </tr>
-                {% endfor %}
-            </table>
+            {% endfor %}
+        </table>
 
 
-        </div>    </div>
+    </div>    </div>
 
-    <div class="portlet x3">
+<div class="portlet x3">
 
-        <div class="portlet-header"><h4>Valg</h4></div>
+    <div class="portlet-header"><h4>Valg</h4></div>
 
-        <div class="portlet-content">
+    <div class="portlet-content">
 
-            <div class="tool editChoice">
-                <a href="{% url app.projects.views.permissions project.id %}">Endre prosjekt</a>
-            </div>
-            <div class="tool editPerm">
-                <a href="{% url app.projects.views.permissions project.id %}">Endre rettigheter</a>
-            </div>
-            <div class="tool deleteChoice">
-                <a href="{% url app.projects.views.delete project.id %}">Slett prosjektet</a>
-            </div>
+        {% require_permission EDIT project %}
+        <div class="tool editChoice">
+            <a href="{% url app.projects.views.edit project.id %}">Endre prosjekt</a>
         </div>
+        {% end_require %}
+
+        {% require_permission DELETE project %}
+        <div class="tool deleteChoice">
+            <a href="{% url app.projects.views.delete project.id %}">Slett prosjektet</a>
+        </div>
+        {% end_require %}
+
     </div>
+</div>
 
 
 {% endblock %}	

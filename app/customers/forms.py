@@ -20,7 +20,7 @@ class CustomerForm(ModelForm):
     def clean_cid(self):
         cid = self.cleaned_data['cid']
 
-        customers = Customer.objects.all()
+        customers = Customer.objects.inCompany()
 
         for i in customers:
             if self.id == i.id:

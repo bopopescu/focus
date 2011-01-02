@@ -346,3 +346,18 @@ class PermissionsTesting(TestCase):
         #Give a group, a role on a class
         c.get('/grant/role/Admin/group/%s/customers/customer/%s/' % (self.group1.id, "any"))
         self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
+
+
+    def testPermittedObjects(self):
+
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW",Customer), False)
+        self.user1.grant_role("Member", self.customer1)
+        self.group1.addMember(self.user1)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW",Customer), True)
+        self.assertEqual(self.customer2 in self.user1.getPermittedObjects("VIEW",Customer), False)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("DELETE",Customer), False)
+        self.role2.grant_actions("DELETE")
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("DELETE",Customer), True)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("EDIT",Customer), False)
+        self.user1.grant_role("Admin", self.customer1)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("EDIT",Customer), True)

@@ -25,6 +25,23 @@ class Project(PersistentModel):
     def searchIndexes(self):
         return ['project_name']
 
+    def save(self, *args, **kwargs):
+
+     new = False
+     if not self.id:
+         new = True
+
+     super(Project, self).save()
+
+     #Give the user who created this ALL permissions on object
+     if new:
+         Core.current_user().grant_role("Owner", self)
+         adminGroup = Core.current_user().get_company_admingroup()
+
+         if adminGroup:
+             adminGroup.grant_role("Admin", self)
+
+
 class ProjectFolder(PersistentModel):
     project_id = models.ForeignKey(Project, related_name="folders")
     name = models.CharField(max_length=100)

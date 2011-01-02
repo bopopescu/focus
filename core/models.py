@@ -57,7 +57,6 @@ class User(models.Model):
         return self.username
 
     def get_company(self):
-
         if self.company:
             return self.company
         return None
@@ -67,16 +66,14 @@ class User(models.Model):
         self.save()
 
     def get_company_admingroup(self):
-
         if not self.company:
             return None
         if not self.company.adminGroup:
             return None
-        
+
         return self.company.adminGroup
 
     def get_company_allemployeesgroup(self):
-
         if not self.company:
             return None
         if not self.company.allEmployeesGroup:
@@ -221,7 +218,7 @@ class User(models.Model):
         #   action = [action]
 
         #If in debug and superadmin user is logged in, always return true
-        if settings.DEBUG and Core.current_user().id == 1:
+        if settings.DEBUG and Core.current_user().is_superuser:
             return True
 
         content_type = ContentType.objects.get_for_model(object)
@@ -245,7 +242,7 @@ class User(models.Model):
                 return False
             if allAction in perm.get_valid_actions():
                 return False
-            
+
         #Checks if the user is permitted manually
         perms = Permission.objects.filter(content_type=content_type,
                                           object_id=object_id,
@@ -269,24 +266,20 @@ class User(models.Model):
     def get_permissions(self):
         permissions = []
 
-        permissions.extend(Permission.objects.filter(user = self))
+        permissions.extend(Permission.objects.filter(user=self))
 
         for group in self.groups.all():
-            permissions.extend(Permission.objects.filter(user = self))
+            permissions.extend(Permission.objects.filter(user=self))
 
         return set(permissions)
 
 
     def getPermittedObjects(self, action, model):
-        content_type = ContentType.objects.get_for_model(object)
-
-        permittedObjects = content_type.objects.all()
-
-        for obj in content_type.objects.all():
+        unwanted = []
+        for obj in model.objects.all():
             if not self.has_permission_to(action, obj):
-                permittedObjects.exclude(id=obj.id)
-
-        return permittedObjects
+                unwanted.append(obj.id)
+        return model.objects.all().exclude(id__in=unwanted)
 
 class AnonymousUser(User):
     id = 0
@@ -355,11 +348,11 @@ class Group(models.Model):
         act = Role.objects.get(name=role)
 
         perm = Permission(
-              role=act,
-              group=self,
-              content_type=content_type,
-              object_id=object_id
-              )
+                role=act,
+                group=self,
+                content_type=content_type,
+                object_id=object_id
+                )
 
         perm.save()
 
@@ -457,15 +450,14 @@ class Group(models.Model):
                                           group=self,
                                           negative=False,
                                           )
-        
-        for perm in perms:
 
+        for perm in perms:
             if action in perm.get_valid_actions():
                 return True
 
             if allAction in perm.get_valid_actions():
                 return True
-            
+
         if self.parent:
             return self.parent.has_permission_to(action, object, id=id, any=any)
 
@@ -649,8 +641,6 @@ class PersistentModel(models.Model):
         self.date_edited = datetime.now()
         super(PersistentModel, self).save()
 
-
-
         if 'noLog' not in kwargs:
             msg = "endret"
             if action == "ADD":
@@ -695,9 +685,8 @@ class PersistentModel(models.Model):
 
             perm = Action.objects.get(name=perm.upper())
             adminPerm = Action.objects.get(name="ALL")
-            
-            for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id):
 
+            for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id):
                 if perm in u.get_valid_actions():
                     if u.user and u.user not in users:
                         users.append(u.user)
@@ -716,7 +705,6 @@ class PersistentModel(models.Model):
                             if user and user not in users:
                                 users.append(user)
 
-                                
             return users
         except:
             return []
@@ -730,16 +718,14 @@ def initial_data ():
     Action.objects.get_or_create(name='ALL', verb='all', description='all actions on an object')
     Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
     Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
+    Action.objects.get_or_create(name='CONFIGURE', verb='edited', description='edit an object')
     Action.objects.get_or_create(name='DELETE', verb='deleted', description='delete an object')
     Action.objects.get_or_create(name='VIEW', verb='viewed', description='view an object')
-    Action.objects.get_or_create(name='APPROVE', verb='approved', description='approve an object')
     Action.objects.get_or_create(name='LIST', verb='listed', description='list instances of an object')
-    Action.objects.get_or_create(name='REGISTER', verb='registered for',
-                                 description='register for something (event, committee, etc)')
-    Action.objects.get_or_create(name='UNREGISTER', verb='unregistered from',
-                                 description='unregister from something (event, etc)')
-    Action.objects.get_or_create(name='FAVORITE', verb='favorited', description='favorite/star something (event etc)')
-    Action.objects.get_or_create(name='MANAGE', verb='managed', description='manage something (companies etc)')
+    Action.objects.get_or_create(name='LISTALL', verb='listed all', description='list of all objects')
+    Action.objects.get_or_create(name='LISTDELETED', verb='listed deleted', description='list deleted')
+    Action.objects.get_or_create(name='LISTARCHIVE', verb='listed deleted', description='list deleted')
+    Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
 
     #Generates som standard roles
     Role.objects.create(name="Admin", description="Typisk leder, kan gjøre alt")
