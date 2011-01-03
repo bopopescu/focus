@@ -1,3 +1,5 @@
+from datetime import datetime
+from django.forms.widgets import Input
 from django.template.loader import render_to_string
 import django.forms as forms
 from django.utils.encoding import smart_str
@@ -34,10 +36,43 @@ class MultipleSelectWithPop(forms.SelectMultiple):
         return html
 
 class DatePickerField(forms.DateInput):
+
+    def __init__(self, *args, **kwargs):
+
+        self.from_date = None
+        self.to_date = None
+
+        if 'from_date' in kwargs:
+            self.from_date = datetime.strptime(kwargs['from_date'], "%d.%m.%Y")
+            del kwargs['from_date']
+
+        if 'to_date' in kwargs:
+            self.to_date = datetime.strptime(kwargs['to_date'], "%d.%m.%Y")
+            del kwargs['to_date']
+            
+        super(DatePickerField, self).__init__(*args, **kwargs)
+
     def render(self, name, *args, **kwargs):
         html = super(DatePickerField, self).render(name, *args, **kwargs)
-        datepicker = render_to_string("datepicker.html", {'field': name})
+        datepicker = render_to_string("datepicker.html", {'field': name,'from_date': self.from_date, 'to_date': self.to_date})
         return html + datepicker
+
+class MaskedField(Input):
+
+    def __init__(self, *args, **kwargs):
+
+        self.format = None
+
+        if 'format' in kwargs:
+            self.format = kwargs['format']
+            del kwargs['format']
+
+        super(MaskedField, self).__init__(*args, **kwargs)
+
+    def render(self, name, *args, **kwargs):
+        html = super(MaskedField, self).render(name, *args, **kwargs)
+        masked = render_to_string("masked.html", {'field': name,'maskedFormat': self.format})
+        return html + masked
 
 def get_hexdigest(algorithm, salt, raw_password):
     """

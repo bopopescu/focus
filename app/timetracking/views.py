@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
+from app.timetracking.helpers import calculateHoursWorked
 from core.decorators import require_permission, login_required
 from forms import *
 from core.shortcuts import *
@@ -61,22 +62,6 @@ def addTypeOfWork(request):
         form = TypeOfTimeTrackingForm(instance=instance)
 
     return render_with_request(request, "simpleform.html", {'title': 'Typer arbeid', 'form': form})
-
-
-@login_required()
-def calculateHoursWorked(request, start, end):
-    diff = 0
-
-    diff = end - start
-
-    if diff < 1:
-        mg = "Sjekk klokkeslettene en gang til"
-        request.message_success(mg)
-
-    diff = str(diff / 3600)
-
-    return diff
-
 
 @require_permission("LIST", Timetracking)
 def calendar(request):

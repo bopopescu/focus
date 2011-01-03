@@ -1,17 +1,35 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 from django.forms import ModelForm
+from app.timetracking.helpers import generateValidPeriode, validForEdit
 from models import *
-
 from core.widgets import *
 
 class TimetrackingForm(ModelForm):
-    date = forms.DateField(required=True, input_formats=["%d.%m.%Y"], widget=DatePickerField(format="%d.%m.%Y"))
     #order = forms.ModelChoiceField(Order.objects.all(), widget=SelectWithPop())
     #typeOfWork = forms.ModelChoiceField(TypeOfTimeTracking.objects.all(), widget=SelectWithPop())
-    
+
     class Meta:
         model = Timetracking
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'hours_worked')
+
+    def __init__(self, *args, **kwargs):
+        super(TimetrackingForm, self).__init__(*args, **kwargs)
+        self.fields['date'].required = True
+        self.fields['date'].widget = DatePickerField(format="%d.%m.%Y", from_date=generateValidPeriode()[0],
+                                                     to_date=generateValidPeriode()[1])
+        self.fields['date'].input_formats = ["%d.%m.%Y"]
+
+        self.fields['time_start'].widget = MaskedField(format="99:99")
+        self.fields['time_end'].widget = MaskedField(format="99:99")
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+
+        if not validForEdit(date.strftime("%d.%m.%Y")):
+            raise forms.ValidationError(u"Du kan ikke velge denne datoen, den er utenfor aktiv periode.")
+
+        return date
 
     def clean_time_start(self):
         time = self.cleaned_data['time_start']

@@ -1,18 +1,62 @@
 <link rel="stylesheet" href="/media/ui-lightness/jquery-ui-1.8.6.custom.css">
+<script type="text/javascript" src="/media/js/jquery/datepickerNO.js"></script>
 
-	<link rel="stylesheet" href="../demos.css">
+<script>
+    $(function() {
 
-	<script>
-	$(function() {
-		$( "#id_{{ field }}" ).datepicker(
 
+        {% if from_date and to_date %}
+
+        $("#id_{{ field }}").datepicker(
         {
-            showOn: "button",
+            buttonImage: "/media/icons/16/calendar.png",
+            buttonImageOnly: true,
+            dateFormat: 'dd.mm.yy',
+            maxDate: new Date({{ to_date|date:"Y" }}, {{ to_date|date:"m" }}-1, {{ to_date|date:"d" }}),
+            minDate: new Date({{ from_date|date:"Y" }}, {{ from_date|date:"m" }}-1, {{ from_date|date:"d" }}),
+        }
+                );
+
+        {% else %}{% if from_date %}
+
+        $("#id_{{ field }}").datepicker(
+        {
+            buttonImage: "/media/icons/16/calendar.png",
+            buttonImageOnly: true,
+            dateFormat: 'dd.mm.yy',
+            minDate: new Date({{ from_date|date:"Y" }}, {{ from_date|date:"m" }}-1, {{ from_date|date:"d" }}),
+        }
+                );
+
+        {% else %}{% if to_date %}
+
+
+        $("#id_{{ field }}").datepicker(
+        {
+            buttonImage: "/media/icons/16/calendar.png",
+            buttonImageOnly: true,
+            dateFormat: 'dd.mm.yy',
+            maxDate: new Date({{ to_date|date:"Y" }}, {{ to_date|date:"m" }}-1, {{ to_date|date:"d" }}),
+
+        }
+                );
+
+        {% else %}
+
+
+        $("#id_{{ field }}").datepicker(
+        {
             buttonImage: "/media/icons/16/calendar.png",
             buttonImageOnly: true,
             dateFormat: 'dd.mm.yy',
         }
-
                 );
-	});
-	</script>
+
+        {% endif %}{% endif %}{% endif %}
+
+    });
+
+</script>
+
+
+

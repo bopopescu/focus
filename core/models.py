@@ -18,6 +18,7 @@ class Company(models.Model):
     name = models.CharField(max_length=80)
     adminGroup = models.ForeignKey("Group", related_name="companiesWhereAdmin", null=True, blank=True)
     allEmployeesGroup = models.ForeignKey("Group", related_name="companiesWhereAllEmployeed", null=True, blank=True)
+    daysIntoNextMonthTimetracking = models.IntegerField(null=True)
 
     def __unicode__(self):
         return self.name
@@ -48,6 +49,7 @@ class User(models.Model):
     canLogin = models.BooleanField(default=True)
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
     deleted = models.BooleanField()
+    daysIntoNextMonthTimetracking = models.IntegerField(null=True)
 
     objects = PersistentManager()
     all_objects = models.Manager()
@@ -59,6 +61,16 @@ class User(models.Model):
         if self.company:
             return self.company
         return None
+
+    def get_daysIntoNextMonthTimetracking(self):
+
+        if self.daysIntoNextMonthTimetracking and self.daysIntoNextMonthTimetracking > 0:
+            return self.daysIntoNextMonthTimetracking
+
+        if self.company and self.company.daysIntoNextMonthTimetracking and self.company.daysIntoNextMonthTimetracking>0:
+            return self.company.daysIntoNextMonthTimetracking
+            
+        return 0
 
     def set_company(self):
         self.company = Core.current_user().get_company()
