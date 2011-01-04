@@ -11,7 +11,9 @@ class TimetrackingForm(ModelForm):
 
     class Meta:
         model = Timetracking
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'hours_worked')
+        exclude = (
+        'deleted', 'date_created', 'date_edited', 'owner', 'creator', 'hourly_rate', 'percent_cover', 'editor',
+        'company', 'hours_worked')
 
     def __init__(self, *args, **kwargs):
         super(TimetrackingForm, self).__init__(*args, **kwargs)

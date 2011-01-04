@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, date
 import time
 from core import Core
-import calendar
 
 def calculateHoursWorked(request, start, end):
     diff = 0

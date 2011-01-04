@@ -52,6 +52,9 @@ class User(models.Model):
     daysIntoNextMonthTimetracking = models.IntegerField(null=True)
     daysIntoNextMonthTimetrackingExpire = models.DateField(null=True)
 
+    hourly_rate = models.IntegerField(null=True)
+    percent_cover = models.IntegerField(null=True)
+
     objects = PersistentManager()
     all_objects = models.Manager()
 
@@ -778,6 +781,8 @@ def initial_data ():
                                                   canLogin=True,
                                                   is_superuser=True,
                                                   is_staff=True,
+                                                  hourly_rate = 120,
+                                                  percent_cover = 20,
                                                   is_active=True)
     a.set_password("superpassord")
     a.save()

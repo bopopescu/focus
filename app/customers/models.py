@@ -15,7 +15,6 @@ class Customer(PersistentModel):
     city = models.CharField("By", max_length=20, blank=True)
     website = models.CharField("Hjemmeside", max_length=150, blank=True, null=True)
     alternative_address = models.CharField("Alternativ adresse", max_length=20, blank=True)
-    owner = models.ForeignKey(User, blank=True, related_name="UsersContacts");
     contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name="Kontakter")
 
     def __unicode__(self):

@@ -8,44 +8,48 @@
 
     <div class="portlet x12">
 
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-    <div class="portlet-content">
-
-
-
-    <table class="tablesorter">
-        <thead>
-        <tr>
-            <th>Produkt</th>
-            <th>#</th>
-        </tr>
-        </thead>
-        <tbody>
+        <div class="portlet-content">
 
 
-        {% for p in products %}
 
-            <tr>
-                <td><a href="{{ p.getViewUrl }}">{{ p }}</a></td>
-
-                <td>
-
-                    <div class="tool">
-                        <a href="{{ p.getEditUrl }}"><img
-                                class="tool" src="/media/icons/edit.gif" alt=""></a>
-                    </div>
+            <table class="tablesorter">
+                <thead>
+                <tr>
+                    <th>Produkt</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
 
 
-                </td>
+                {% for p in products %}
+
+                    <tr>
+                        <td><a href="{{ p.getViewUrl }}">{{ p }}</a></td>
+
+                        <td>
+
+                            <div class="tool">
+                                <a href="{{ p.getEditUrl }}"><img
+                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
+                            </div>
 
 
-            </tr>
-
-        {% endfor %}
+                        </td>
 
 
-        </tbody>
+                    </tr>
 
-    </table>
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
 {% endblock %}

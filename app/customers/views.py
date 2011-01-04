@@ -25,7 +25,7 @@ def overview_all(request):
 
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
-    customer = Customer.objects.filter(deleted=None).get(id=id)
+    customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
     return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
                                                                 'customer': customer})
 

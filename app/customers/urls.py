@@ -10,8 +10,8 @@ urlpatterns = patterns('app.customers.views',
                        url(r'^add/?$', 'add'),
                        url(r'^addPop/?$', 'addPop'),
 
-                       url(r'^(?P<id>\d+)edit/?$', 'edit'),
-                       url(r'^(?P<id>\d+)view/?$', 'view'),
-                       url(r'^(?P<id>\d+)delete/?$', 'delete'),
+                       url(r'^(?P<id>\d+)/edit/?$', 'edit'),
+                       url(r'^(?P<id>\d+)/view/?$', 'view'),
+                       url(r'^(?P<id>\d+)/delete/?$', 'delete'),
                        url(r'^(?P<id>\d+)/recover/?$', 'recover'),
                    )

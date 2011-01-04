@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 from forms import *
 from core.shortcuts import *
@@ -55,12 +56,6 @@ def delete(request, id):
     Supplier.objects.get(id=id).delete()
     return redirect(overview)
 
-def permissions(request, id):
-    type = Supplier
-    url = "suppliers/edit/%s" % id
-    message = "Vellykket endret tilgang for leverandøren: %s" % type.objects.get(pk=id)
-    return form_perm(request, type, id, url, message)
-
 @login_required()
 def form (request, id=False):
     if id:
@@ -78,9 +73,7 @@ def form (request, id=False):
             o.owner = request.user
             o.save()
             form.save_m2m()
-            messages.success(request, msg)
-            if not id:
-                return redirect(permissions, o.id)
+            request.message_success(msg)
             return redirect(overview)
     else:
         form = SupplierForm(instance=instance)

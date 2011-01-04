@@ -195,14 +195,18 @@
             <div class="mega-content mega-menu ">
                 <ul>
                     {% require_permission LIST timetracking.Timetracking %}
-                    <li><a href="{% url app.timetracking.views.calendar %}">Timeføring</a></li>
+                    <li><a href="{% url app.timetracking.views.overview %}">Aktiv timeliste</a></li>
                     {% end_require %}
-                    {% require_permission LIST timetracking.Timetracking %}
-                    <li><a href="{% url app.timetracking.views.overview %}">Oversikt</a></li>
+                    {% require_permission LISTARCHIVE timetracking.Timetracking %}
+                    <li><a href="{% url app.timetracking.views.your_archive %}">Arkiv</a></li>
                     {% end_require %}
                     {% require_permission CREATE timetracking.Timetracking %}
                     <li><a href="{% url app.timetracking.views.add %}">Registrer manuelt</a></li>
                     {% end_require %}
+                    {% require_permission LIST timetracking.Timetracking %}
+                    <li><a href="{% url app.timetracking.views.calendar %}">Kalender</a></li>
+                    {% end_require %}
+
                 </ul>
             </div>
         </li>
@@ -227,6 +231,7 @@
 
         <li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
             <a class="mega-tab" href="{% url app.admin.users.views.overview %}">Admin</a>
+
             <div class="mega-content mega-menu ">
                 <ul>
                     {% require_permission LIST core.User %}

@@ -12,67 +12,75 @@
 
 {% block maincontent %}
 
-    <div id="inner">
+    <div class="portlet x7">
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-        <table>
+        <div class="portlet-content">
 
-            <tr>
-                <th>Prosjekt</th>
-                <th>Ordrer</th>
-            </tr>
+            <table>
 
-            <tr>
-                <td>Navn</td>
-                <td>{{ customer.full_name }}</td>
-            </tr>
-
-            <tr>
-                <td>Epostadresse</td>
-                <td>{{ customer.email }}</td>
-            </tr>
-
-            <tr>
-                <td>Hjemmeside</td>
-                <td><a href="{{ customer.website }}" target="_blank">{{ customer.website }}</td>
-            </tr>
-            <tr>
-                <td>Adresse</td>
-                <td> {{ customer.address }}, {{ customer.zip }} {{ customer.city }}</td>
-            </tr>
-            <tr>
-                <td>Altearntiv adresse</td>
-                <td>{{ customer.alternative_address }}</td>
-            </tr>
-
-
-        </table>
-
-
-        <br><br>
-        <b>Tilhørende prosjekter og ordrer</b>
-        <br><br>
-        <table>
-
-            <tr>
-                <th>Prosjekt</th>
-                <th>Ordrer</th>
-            </tr>
-
-            {% for project in customer.projects.for_user %}
                 <tr>
-                    <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
-                    <td></td>
+                    <td width="100px">Navn</td>
+                    <td>{{ customer.full_name }}</td>
                 </tr>
 
-                {% for order in project.orders.for_user %}
-                    <tr>
-                        <td></td>
-                        <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
-                    </tr>
-                {% endfor %}
-            {% endfor %}
-        </table>
+                <tr>
+                    <td>Epostadresse</td>
+                    <td>{{ customer.email }}</td>
+                </tr>
 
+                <tr>
+                    <td>Hjemmeside</td>
+                    <td><a href="{{ customer.website }}" target="_blank">{{ customer.website }}</td>
+                </tr>
+                <tr>
+                    <td>Adresse</td>
+                    <td> {{ customer.address }}, {{ customer.zip }} {{ customer.city }}</td>
+                </tr>
+                <tr>
+                    <td>Altearntiv adresse</td>
+                    <td>{{ customer.alternative_address }}</td>
+                </tr>
+
+
+            </table>
+
+
+        </div>
     </div>
+
+
+    <div class="portlet x5">
+        <div class="portlet-header"><h4>Prosjekter og ordrer</h4></div>
+
+        <div class="portlet-content">
+
+
+            <table>
+
+                <tr>
+                    <th>Prosjekt</th>
+                    <th>Ordrer</th>
+                </tr>
+
+                {% for project in customer.projects.all %}
+                    <tr>
+                        <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
+                        <td></td>
+                    </tr>
+
+                    {% for order in project.orders.all %}
+                        <tr>
+                            <td></td>
+                            <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
+
+
 
 {% endblock %}	
