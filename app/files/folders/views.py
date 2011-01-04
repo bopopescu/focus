@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.shortcuts import get_object_or_404
 
 from app.files.forms import *
 from core.shortcuts import *
@@ -18,7 +19,6 @@ def edit(request, id):
 def delete(request, id):
     return form(request, id)
 
-
 @login_required()
 def view(request, id):
     file = File.objects.filter().get(id=id)
@@ -27,21 +27,6 @@ def view(request, id):
     return render_with_request(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
                                                             'file': file,
                                                             'whoCanSeeThis': whoCanSeeThis})
-
-"""
-@login_required()
-def permissions(request, id):
-    type = Folder
-    folder = type.objects.get(pk=id)
-
-    url = "files/"
-
-    if folder.parent:
-        url = "files/folder/%s" % folder.parent.id
-
-    message = "Vellykket endret tilgang for mappe: %s" % type.objects.get(pk=id)
-    return form_perm(request, type, id, url, message)
-"""
 
 @login_required()
 def form (request, id=False, folderID=None):

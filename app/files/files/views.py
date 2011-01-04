@@ -9,7 +9,6 @@ from app.files.models import File, Folder
 @login_required()
 def overview(request):
     folders = Folder.objects.filter(parent=None, creator=Core.current_user())
-    print folders
     files = File.objects.filter(folder=None, creator=Core.current_user())
 
     updateTimeout(request)

@@ -44,7 +44,7 @@ class Timetracking(PersistentModel):
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
     hours_worked = models.DecimalField(decimal_places=3, max_digits=5)
-    
+
     def __unicode__(self):
         return unicode(self.date)
 
@@ -87,6 +87,8 @@ class Timetracking(PersistentModel):
                 adminGroup.grant_role("Admin", self)
 
 def initial_data ():
+
+
     #Create default time tracking types
     TypeOfTimeTracking.objects.get_or_create(name="Kontorarbeid")
     TypeOfTimeTracking.objects.get_or_create(name="Montering")
@@ -97,9 +99,10 @@ def initial_data ():
                                                   canLogin=True,
                                                   is_superuser=True,
                                                   is_staff=True,
-                                                  hourly_rate = 120,
-                                                  percent_cover = 20,
+                                                  hourly_rate=120,
+                                                  percent_cover=20,
                                                   is_active=True)
+    Core.set_test_user(a)
 
     testCustomer, created = Customer.objects.get_or_create(cid="100", full_name="Per", email="test@test.com")
     testOrder, created = Order.objects.get_or_create(oid="100", order_name="TestOrdre", customer=testCustomer)
@@ -133,55 +136,55 @@ def initial_data ():
     a.grant_role("Owner", t)
 
     t = Timetracking.objects.create(date=datetime.strptime("10.5.2010", "%d.%m.%Y"),
-                                order=testOrder,
-                                time_start="20:10",
-                                time_end="22:10",
-                                description="Dette er en test")
+                                    order=testOrder,
+                                    time_start="20:10",
+                                    time_end="22:10",
+                                    description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
 
     t = Timetracking.objects.create(date=datetime.strptime("15.5.2010", "%d.%m.%Y"),
-                                order=testOrder,
-                                time_start="20:10",
-                                time_end="22:10",
-                                description="Dette er en test")
+                                    order=testOrder,
+                                    time_start="20:10",
+                                    time_end="22:10",
+                                    description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
 
     t = Timetracking.objects.create(date=datetime.strptime("1.5.2010", "%d.%m.%Y"),
-                                order=testOrder,
-                                time_start="20:10",
-                                time_end="22:10",
-                                description="Dette er en test")
+                                    order=testOrder,
+                                    time_start="20:10",
+                                    time_end="22:10",
+                                    description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
 
     t = Timetracking.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
-                                order=testOrder,
-                                time_start="20:10",
-                                time_end="22:10",
-                                description="Dette er en test")
+                                    order=testOrder,
+                                    time_start="20:10",
+                                    time_end="22:10",
+                                    description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
 
     t = Timetracking.objects.create(date=datetime.strptime("4.08.2009", "%d.%m.%Y"),
-                                order=testOrder,
-                                time_start="20:10",
-                                time_end="22:10",
-                                description="Dette er en test")
+                                    order=testOrder,
+                                    time_start="20:10",
+                                    time_end="22:10",
+                                    description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
 
     t = Timetracking.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
-                                order=testOrder,
-                                time_start="20:10",
-                                time_end="22:10",
-                                description="Dette er en test")
+                                    order=testOrder,
+                                    time_start="20:10",
+                                    time_end="22:10",
+                                    description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
