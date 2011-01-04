@@ -4,7 +4,7 @@ from app.contacts.models import Contact
 from app.customers.models import Customer
 from app.orders.models import Order
 from app.projects.models import Project
-from app.timetracking.models import Timetracking
+from app.hourregistrations.models import HourRegistration
 from forms import *
 from core.models import Company, Group, Log, Notification
 from core.shortcuts import *
@@ -97,7 +97,7 @@ def newForm(request):
             adminGroup.grant_role("Admin", Customer)
             adminGroup.grant_role("Admin", Contact)
             adminGroup.grant_role("Admin", Order)
-            adminGroup.grant_role("Admin", Timetracking)
+            adminGroup.grant_role("Admin", HourRegistration)
             adminGroup.grant_role("Admin", Announcement)
             adminGroup.grant_role("Admin", Log)
             adminGroup.grant_role("Admin", Notification)
@@ -109,7 +109,7 @@ def newForm(request):
             allEmployeesGroup.grant_role("Member", Project)
             allEmployeesGroup.grant_role("Member", Customer)
             allEmployeesGroup.grant_role("Member", Contact)
-            allEmployeesGroup.grant_role("Member", Timetracking)
+            allEmployeesGroup.grant_role("Member", HourRegistration)
             allEmployeesGroup.grant_role("Member", Order)
             allEmployeesGroup.grant_role("Member", Announcement)
             allEmployeesGroup.grant_role("Member", Log)

@@ -96,7 +96,7 @@ INSTALLED_APPS = (
 'app.contacts',
 'app.files',
 'app.dashboard',
-'app.timetracking',
+'app.hourregistrations',
 'app.stock',
 'app.suppliers',
 'app.search',

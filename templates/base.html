@@ -184,22 +184,22 @@
             </div>
         </li>
 
-        <li class="mega {% active request "^/timetracking/" %}">
-            <a class="mega-tab" href="{% url app.timetracking.views.overview %}">Timeregistrering</a>
+        <li class="mega {% active request "^/hourregistrations/" %}">
+            <a class="mega-tab" href="{% url app.hourregistrations.views.overview %}">Timeregistrering</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
-                    {% require_permission LIST timetracking.Timetracking %}
-                    <li><a href="{% url app.timetracking.views.overview %}">Aktiv timeliste</a></li>
+                    {% require_permission LIST hourregistrations.HourRegistration %}
+                    <li><a href="{% url app.hourregistrations.views.overview %}">Aktiv timeliste</a></li>
                     {% end_require %}
-                    {% require_permission LISTARCHIVE timetracking.Timetracking %}
-                    <li><a href="{% url app.timetracking.views.your_archive %}">Arkiv</a></li>
+                    {% require_permission LISTARCHIVE hourregistrations.HourRegistration %}
+                    <li><a href="{% url app.hourregistrations.views.your_archive %}">Arkiv</a></li>
                     {% end_require %}
-                    {% require_permission CREATE timetracking.Timetracking %}
-                    <li><a href="{% url app.timetracking.views.add %}">Registrer manuelt</a></li>
+                    {% require_permission CREATE hourregistrations.HourRegistration %}
+                    <li><a href="{% url app.hourregistrations.views.add %}">Registrer manuelt</a></li>
                     {% end_require %}
-                    {% require_permission LIST timetracking.Timetracking %}
-                    <li><a href="{% url app.timetracking.views.calendar %}">Kalender</a></li>
+                    {% require_permission LIST hourregistrations.HourRegistration %}
+                    <li><a href="{% url app.hourregistrations.views.calendar %}">Kalender</a></li>
                     {% end_require %}
 
                 </ul>

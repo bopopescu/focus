@@ -1,6 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from app.timetracking.helpers import validForEdit
+from app.hourregistrations.helpers import validForEdit
 from django.core import urlresolvers
 
 register = template.Library()
@@ -94,7 +94,7 @@ class linksForArchivedMonth(template.Node):
                           'November', 'Desember']
 
                 string += " <a href='%s'>%s</a>" % (
-                urlresolvers.reverse('app.timetracking.views.viewArchivedMonth', args=("%s" % year, "%s" % month)),
+                urlresolvers.reverse('app.hourregistrations.views.viewArchivedMonth', args=("%s" % year, "%s" % month)),
                 monthNames[month - 1])
 
             return string

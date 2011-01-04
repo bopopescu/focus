@@ -18,7 +18,7 @@ class Company(models.Model):
     name = models.CharField(max_length=80)
     adminGroup = models.ForeignKey("Group", related_name="companiesWhereAdmin", null=True, blank=True)
     allEmployeesGroup = models.ForeignKey("Group", related_name="companiesWhereAllEmployeed", null=True, blank=True)
-    daysIntoNextMonthTimetracking = models.IntegerField(null=True)
+    daysIntoNextMonthTypeOfHourRegistration = models.IntegerField(null=True)
 
     def __unicode__(self):
         return self.name
@@ -49,8 +49,8 @@ class User(models.Model):
     canLogin = models.BooleanField(default=True)
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
     deleted = models.BooleanField()
-    daysIntoNextMonthTimetracking = models.IntegerField(null=True)
-    daysIntoNextMonthTimetrackingExpire = models.DateField(null=True)
+    daysIntoNextMonthTypeOfHourRegistration = models.IntegerField(null=True)
+    daysIntoNextMonthTypeOfHourRegistrationExpire = models.DateField(null=True)
 
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
@@ -66,27 +66,27 @@ class User(models.Model):
             return self.company
         return None
 
-    def set_daysIntoNextMonthTimetracking(self, days, **kwargs):
-        self.daysIntoNextMonthTimetracking = days
+    def set_daysIntoNextMonthHourRegistration(self, days, **kwargs):
+        self.daysIntoNextMonthTypeOfHourRegistration = days
         if 'expireDate' in kwargs:
-            self.daysIntoNextMonthTimetrackingExpire = datetime.strptime(kwargs['expireDate'], "%d.%m.%Y")
+            self.daysIntoNextMonthTypeOfHourRegistrationExpire = datetime.strptime(kwargs['expireDate'], "%d.%m.%Y")
         self.save()
 
-    def get_daysIntoNextMonthTimetracking(self, **kwargs):
-        if self.daysIntoNextMonthTimetracking and self.daysIntoNextMonthTimetracking > 0:
+    def get_daysIntoNextMonthTypeOfHourRegistration(self, **kwargs):
+        if self.daysIntoNextMonthTypeOfHourRegistration and self.daysIntoNextMonthTypeOfHourRegistration > 0:
             today = datetime.today()
 
             if 'today' in kwargs:
                 today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
 
-            if self.daysIntoNextMonthTimetrackingExpire:
-                if today <= self.daysIntoNextMonthTimetrackingExpire:
-                    return self.daysIntoNextMonthTimetracking
+            if self.daysIntoNextMonthTypeOfHourRegistrationExpire:
+                if today <= self.daysIntoNextMonthTypeOfHourRegistrationExpire:
+                    return self.daysIntoNextMonthTypeOfHourRegistration
             else:
-                return self.daysIntoNextMonthTimetracking
+                return self.daysIntoNextMonthTypeOfHourRegistration
 
-        if self.company and self.company.daysIntoNextMonthTimetracking and self.company.daysIntoNextMonthTimetracking > 0:
-            return self.company.daysIntoNextMonthTimetracking
+        if self.company and self.company.daysIntoNextMonthTypeOfHourRegistration and self.company.daysIntoNextMonthTypeOfHourRegistration > 0:
+            return self.company.daysIntoNextMonthTypeOfHourRegistration
 
         return 0
 

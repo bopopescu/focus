@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('app.timetracking.views',
+urlpatterns = patterns('app.hourregistrations.views',
 
                        url(r'^$', 'overview'),
                        url(r'^add/$', 'add'),

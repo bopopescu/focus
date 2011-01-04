@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from datetime import date
 from django.forms import ModelForm
-from app.timetracking.helpers import generateValidPeriode, validForEdit
+from app.hourregistrations.helpers import generateValidPeriode, validForEdit
 from models import *
 from core.widgets import *
 
-class TimetrackingForm(ModelForm):
+class HourRegistrationForm(ModelForm):
     #order = forms.ModelChoiceField(Order.objects.all(), widget=SelectWithPop())
     #typeOfWork = forms.ModelChoiceField(TypeOfTimeTracking.objects.all(), widget=SelectWithPop())
 
     class Meta:
-        model = Timetracking
+        model = HourRegistration
         exclude = (
         'deleted', 'date_created', 'date_edited', 'owner', 'creator', 'hourly_rate', 'percent_cover', 'editor',
         'company', 'hours_worked')
@@ -49,7 +49,7 @@ class TimetrackingForm(ModelForm):
 
         return time
 
-class TypeOfTimeTrackingForm(ModelForm):
+class TypeOfHourRegistrationForm(ModelForm):
     class Meta:
-        model = TypeOfTimeTracking
+        model = TypeOfHourRegistration
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')

@@ -1,7 +1,7 @@
 import calendar
 from datetime import datetime, timedelta, date
 from django.test import TestCase
-from app.timetracking.helpers import generateValidPeriode
+from app.hourregistrations.helpers import generateValidPeriode
 from core import Core
 from core.models import User
 from helpers import validForEdit
@@ -27,7 +27,7 @@ class TimeTrackingTesting(TestCase):
         self.assertEqual("01.01.2011", p[0])
         self.assertEqual("01.01.2011", p[1])
 
-        self.user3.set_daysIntoNextMonthTimetracking(3)
+        self.user3.set_daysIntoNextMonthHourRegistration(3)
         self.user3.save()
         
         p = generateValidPeriode(today=todayDate)
@@ -76,21 +76,21 @@ class TimeTrackingTesting(TestCase):
 
         #Test expiring daysIntoNextMonth on users
         
-        self.user3.set_daysIntoNextMonthTimetracking(3, expireDate = "01.03.2020")
+        self.user3.set_daysIntoNextMonthHourRegistration(3, expireDate = "01.03.2020")
 
         todayDate="3.6.2020"
         p = generateValidPeriode(today=todayDate)
         self.assertEqual("01.06.2020", p[0])
         self.assertEqual("03.06.2020", p[1])
 
-        self.user3.set_daysIntoNextMonthTimetracking(3, expireDate = "03.06.2020")
+        self.user3.set_daysIntoNextMonthHourRegistration(3, expireDate = "03.06.2020")
 
         todayDate="3.6.2020"
         p = generateValidPeriode(today=todayDate)
         self.assertEqual("01.05.2020", p[0])
         self.assertEqual("03.06.2020", p[1])
 
-        self.user3.set_daysIntoNextMonthTimetracking(3, expireDate = "03.01.2020")
+        self.user3.set_daysIntoNextMonthHourRegistration(3, expireDate = "03.01.2020")
 
         todayDate="22.12.2019"
         p = generateValidPeriode(today=todayDate)
@@ -112,7 +112,7 @@ class TimeTrackingTesting(TestCase):
         self.assertEqual(validForEdit("12.1.2011", today="12.1.2011"), True)
         self.assertEqual(validForEdit("5.10.2005", today="1.1.2011"), False)
 
-        self.user3.set_daysIntoNextMonthTimetracking(3)
+        self.user3.set_daysIntoNextMonthHourRegistration(3)
         self.user3.save()
 
         self.assertEqual(validForEdit("10.11.2011", today="10.11.2011"), True)
