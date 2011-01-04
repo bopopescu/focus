@@ -71,11 +71,10 @@ class PermissionNode(template.Node):
         # Else, the object is just a string. We find the model corrosponding to that string,
         # and check if the user has permission to do something with all of those objects
         except template.VariableDoesNotExist:
-
             # Get the app and then the model name from app.modelname
             app, model = self.object.__str__().lower().split(".")
 
-            content_type = ContentType.objects.get(app_label = app, model = model)
+            content_type = ContentType.objects.get(app_label=app, model=model)
             model = content_type.model_class()
 
             if context['user'].has_permission_to(self.action, model):

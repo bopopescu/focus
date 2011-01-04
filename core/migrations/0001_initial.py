@@ -12,6 +12,9 @@ class Migration(SchemaMigration):
         db.create_table('core_company', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=80)),
+            ('adminGroup', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='companiesWhereAdmin', null=True, to=orm['core.Group'])),
+            ('allEmployeesGroup', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='companiesWhereAllEmployeed', null=True, to=orm['core.Group'])),
+            ('daysIntoNextMonthTypeOfHourRegistration', self.gf('django.db.models.fields.IntegerField')(null=True)),
         ))
         db.send_create_signal('core', ['Company'])
 
@@ -31,20 +34,21 @@ class Migration(SchemaMigration):
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='core_user_users', null=True, to=orm['core.Company'])),
             ('canLogin', self.gf('django.db.models.fields.BooleanField')(default=True, blank=True)),
             ('profileImage', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
+            ('daysIntoNextMonthTypeOfHourRegistration', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('daysIntoNextMonthTypeOfHourRegistrationExpire', self.gf('django.db.models.fields.DateField')(null=True)),
+            ('hourly_rate', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('percent_cover', self.gf('django.db.models.fields.IntegerField')(null=True)),
         ))
         db.send_create_signal('core', ['User'])
-
-        # Adding model 'AnonymousUser'
-        db.create_table('core_anonymoususer', (
-            ('user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['core.User'], unique=True, primary_key=True)),
-        ))
-        db.send_create_signal('core', ['AnonymousUser'])
 
         # Adding model 'Group'
         db.create_table('core_group', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', null=True, to=orm['core.Group'])),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(related_name='groups', null=True, to=orm['core.Company'])),
+            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
         ))
         db.send_create_signal('core', ['Group'])
 
@@ -118,6 +122,9 @@ class Migration(SchemaMigration):
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['core.Group'])),
             ('role', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='permissions', null=True, to=orm['core.Role'])),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
+            ('negative', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
+            ('from_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('to_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
         ))
         db.send_create_signal('core', ['Permission'])
 
@@ -137,9 +144,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'User'
         db.delete_table('core_user')
-
-        # Deleting model 'AnonymousUser'
-        db.delete_table('core_anonymoususer')
 
         # Deleting model 'Group'
         db.delete_table('core_group')
@@ -184,19 +188,20 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
             'verb': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'core.anonymoususer': {
-            'Meta': {'object_name': 'AnonymousUser', '_ormbases': ['core.User']},
-            'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['core.User']", 'unique': 'True', 'primary_key': 'True'})
-        },
         'core.company': {
             'Meta': {'object_name': 'Company'},
+            'adminGroup': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAdmin'", 'null': 'True', 'to': "orm['core.Group']"}),
+            'allEmployeesGroup': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAllEmployeed'", 'null': 'True', 'to': "orm['core.Group']"}),
+            'daysIntoNextMonthTypeOfHourRegistration': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'})
         },
         'core.group': {
             'Meta': {'object_name': 'Group'},
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'groups'", 'null': 'True', 'to': "orm['core.Company']"}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'members': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'memberships'", 'symmetrical': 'False', 'to': "orm['core.User']"}),
+            'members': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'groups'", 'symmetrical': 'False', 'to': "orm['core.User']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'null': 'True', 'to': "orm['core.Group']"})
         },
@@ -229,10 +234,13 @@ class Migration(SchemaMigration):
             'actions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Action']", 'symmetrical': 'False'}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
+            'from_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'group': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Group']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'negative': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'role': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.Role']"}),
+            'to_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'permissions'", 'null': 'True', 'to': "orm['core.User']"})
         },
         'core.role': {
@@ -247,8 +255,12 @@ class Migration(SchemaMigration):
             'canLogin': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'core_user_users'", 'null': 'True', 'to': "orm['core.Company']"}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'daysIntoNextMonthTypeOfHourRegistration': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
+            'daysIntoNextMonthTypeOfHourRegistrationExpire': ('django.db.models.fields.DateField', [], {'null': 'True'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'hourly_rate': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True', 'blank': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
@@ -256,6 +268,7 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'percent_cover': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'profileImage': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         }

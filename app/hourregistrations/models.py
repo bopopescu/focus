@@ -50,7 +50,6 @@ class HourRegistration(PersistentModel):
     def __unicode__(self):
         return unicode(self.date)
 
-
     def save(self, *args, **kwargs):
         """
        Checks length of H:i, if in need of extend to a complete clock
@@ -74,7 +73,7 @@ class HourRegistration(PersistentModel):
 
         if self.time_start and self.time_end:
             start = time.strptime("%s %s" % (self.date.strftime("%d.%m.%Y"), self.time_start), "%d.%m.%Y  %H:%M")
-            end = time.strptime("%s %s" % (self.date.strftime("%d.%m.%Y"), self.time_end),  "%d.%m.%Y  %H:%M")
+            end = time.strptime("%s %s" % (self.date.strftime("%d.%m.%Y"), self.time_end), "%d.%m.%Y  %H:%M")
 
             start_t = time.mktime(start)
             end_t = time.mktime(end)
@@ -83,11 +82,11 @@ class HourRegistration(PersistentModel):
 
         super(HourRegistration, self).save()
 
+        #Have to wait to set this, because creator is not set before first save
         if self.creator:
             self.hourly_rate = self.creator.hourly_rate
             self.percent_cover = self.creator.percent_cover
-
-
+            #Save again
         super(HourRegistration, self).save()
 
         #Give the user who created this ALL permissions on object
@@ -114,7 +113,6 @@ class Disbursement(PersistentModel):
 def initial_data ():
     #Create default time tracking types
     type = TypeOfHourRegistration.objects.get_or_create(name="Kontorarbeid")[0]
-    TypeOfHourRegistration.objects.get_or_create(name="Montering")
 
     a, created = User.objects.all().get_or_create(username="superadmin",
                                                   first_name="SuperAdmin",

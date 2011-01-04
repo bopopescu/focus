@@ -21,7 +21,6 @@ class Customer(PersistentModel):
         return self.full_name
 
     def save(self, *args, **kwargs):
-
         new = False
         if not self.id:
             new = True

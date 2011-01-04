@@ -72,7 +72,7 @@ class User(models.Model):
             self.daysIntoNextMonthTypeOfHourRegistrationExpire = datetime.strptime(kwargs['expireDate'], "%d.%m.%Y")
         self.save()
 
-    def get_daysIntoNextMonthTypeOfHourRegistration(self, **kwargs):
+    def get_daysIntoNextMonthHourRegistration(self, **kwargs):
         if self.daysIntoNextMonthTypeOfHourRegistration and self.daysIntoNextMonthTypeOfHourRegistration > 0:
             today = datetime.today()
 
@@ -289,7 +289,7 @@ class User(models.Model):
         for group in self.groups.all():
             if group.has_permission_to(action, object, id=id, any=any):
                 return True
-
+            
         return False
 
     def get_permissions(self):
@@ -781,8 +781,8 @@ def initial_data ():
                                                   canLogin=True,
                                                   is_superuser=True,
                                                   is_staff=True,
-                                                  hourly_rate = 120,
-                                                  percent_cover = 20,
+                                                  hourly_rate=120,
+                                                  percent_cover=20,
                                                   is_active=True)
     a.set_password("superpassord")
     a.save()

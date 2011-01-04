@@ -9,11 +9,11 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding model 'TypeOfHourRegistration'
-        db.create_table('hourregisrations_typeofhourregistration', (
+        db.create_table('hourregistrations_typeofhourregistration', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460733))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460780))),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19084))),
+            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19137))),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='typeofhourregistration_created', null=True, blank=True, to=orm['core.User'])),
             ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='typeofhourregistration_edited', null=True, blank=True, to=orm['core.User'])),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='typeofhourregistration_edited', null=True, blank=True, to=orm['core.Company'])),
@@ -23,11 +23,11 @@ class Migration(SchemaMigration):
         db.send_create_signal('hourregistrations', ['TypeOfHourRegistration'])
 
         # Adding model 'HourRegistration'
-        db.create_table('hourregisrations_hourregistration', (
+        db.create_table('hourregistrations_hourregistration', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460733))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460780))),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19084))),
+            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19137))),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='hourregistration_created', null=True, blank=True, to=orm['core.User'])),
             ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='hourregistration_edited', null=True, blank=True, to=orm['core.User'])),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='hourregistration_edited', null=True, blank=True, to=orm['core.Company'])),
@@ -44,11 +44,11 @@ class Migration(SchemaMigration):
         db.send_create_signal('hourregistrations', ['HourRegistration'])
 
         # Adding model 'HourRegisrationImage'
-        db.create_table('hourregisrations_hourregisrationimage', (
+        db.create_table('hourregistrations_hourregisrationimage', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460733))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460780))),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19084))),
+            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19137))),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='hourregisrationimage_created', null=True, blank=True, to=orm['core.User'])),
             ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='hourregisrationimage_edited', null=True, blank=True, to=orm['core.User'])),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='hourregisrationimage_edited', null=True, blank=True, to=orm['core.Company'])),
@@ -56,11 +56,11 @@ class Migration(SchemaMigration):
         db.send_create_signal('hourregistrations', ['HourRegisrationImage'])
 
         # Adding model 'Disbursement'
-        db.create_table('hourregisrations_disbursement', (
+        db.create_table('hourregistrations_disbursement', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False, blank=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460733))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 20, 25, 47, 460780))),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19084))),
+            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 4, 21, 7, 5, 19137))),
             ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='disbursement_created', null=True, blank=True, to=orm['core.User'])),
             ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='disbursement_edited', null=True, blank=True, to=orm['core.User'])),
             ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='disbursement_edited', null=True, blank=True, to=orm['core.Company'])),
@@ -75,16 +75,16 @@ class Migration(SchemaMigration):
     def backwards(self, orm):
         
         # Deleting model 'TypeOfHourRegistration'
-        db.delete_table('hourregisrations_typeofhourregistration')
+        db.delete_table('hourregistrations_typeofhourregistration')
 
         # Deleting model 'HourRegistration'
-        db.delete_table('hourregisrations_hourregistration')
+        db.delete_table('hourregistrations_hourregistration')
 
         # Deleting model 'HourRegisrationImage'
-        db.delete_table('hourregisrations_hourregisrationimage')
+        db.delete_table('hourregistrations_hourregisrationimage')
 
         # Deleting model 'Disbursement'
-        db.delete_table('hourregisrations_disbursement')
+        db.delete_table('hourregistrations_disbursement')
 
 
     models = {
@@ -93,8 +93,8 @@ class Migration(SchemaMigration):
             'address': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'contact_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'contact_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'contact_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '80'}),
@@ -150,8 +150,8 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'customer_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'contacts': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'customers'", 'blank': 'True', 'to': "orm['contacts.Contact']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'customer_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'customer_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '80'}),
@@ -166,8 +166,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Disbursement'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'disbursement_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'disbursement_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'disbursement_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
@@ -179,8 +179,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'HourRegisrationImage'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'hourregisrationimage_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'hourregisrationimage_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'hourregisrationimage_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
@@ -190,8 +190,8 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'hourregistration_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'hourregistration_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'date': ('django.db.models.fields.DateTimeField', [], {}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'hourregistration_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
@@ -208,8 +208,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'TypeOfHourRegistration'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'typeofhourregistration_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'typeofhourregistration_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'typeofhourregistration_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
@@ -222,8 +222,8 @@ class Migration(SchemaMigration):
             'contacts': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'orders'", 'blank': 'True', 'to': "orm['contacts.Contact']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'order_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'customer': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'orders'", 'null': 'True', 'to': "orm['customers.Customer']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'deliveryAddress': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True'}),
             'delivery_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
@@ -242,8 +242,8 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'project_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'project_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'customer': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'projects'", 'null': 'True', 'to': "orm['customers.Customer']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460733)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 20, 25, 47, 460780)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19084)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 4, 21, 7, 5, 19137)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'blank': 'True'}),
             'deliveryAddress': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True'}),
             'deliveryDate': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
