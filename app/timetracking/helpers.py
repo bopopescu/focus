@@ -23,7 +23,7 @@ def generateValidPeriode(*args, **kwargs):
     if 'today' in kwargs:
         now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
     
-    daysIntoNextMonthTimetracking = Core.current_user().get_daysIntoNextMonthTimetracking()
+    daysIntoNextMonthTimetracking = Core.current_user().get_daysIntoNextMonthTimetracking(**kwargs)
 
     #If true, user can still edit last month
     if daysIntoNextMonthTimetracking >= now.day:

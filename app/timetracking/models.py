@@ -32,7 +32,6 @@ class TypeOfTimeTracking(PersistentModel):
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
 
-
 class Timetracking(PersistentModel):
     date = models.DateField()
     order = models.ForeignKey(Order)

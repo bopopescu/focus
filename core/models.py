@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.contenttypes.models import ContentType
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from core.managers import PersistentManager
 from django.db import models
 import settings
@@ -50,6 +50,7 @@ class User(models.Model):
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
     deleted = models.BooleanField()
     daysIntoNextMonthTimetracking = models.IntegerField(null=True)
+    daysIntoNextMonthTimetrackingExpire = models.DateField(null=True)
 
     objects = PersistentManager()
     all_objects = models.Manager()
@@ -62,14 +63,28 @@ class User(models.Model):
             return self.company
         return None
 
-    def get_daysIntoNextMonthTimetracking(self):
+    def set_daysIntoNextMonthTimetracking(self, days, **kwargs):
+        self.daysIntoNextMonthTimetracking = days
+        if 'expireDate' in kwargs:
+            self.daysIntoNextMonthTimetrackingExpire = datetime.strptime(kwargs['expireDate'], "%d.%m.%Y")
+        self.save()
 
+    def get_daysIntoNextMonthTimetracking(self, **kwargs):
         if self.daysIntoNextMonthTimetracking and self.daysIntoNextMonthTimetracking > 0:
-            return self.daysIntoNextMonthTimetracking
+            today = datetime.today()
 
-        if self.company and self.company.daysIntoNextMonthTimetracking and self.company.daysIntoNextMonthTimetracking>0:
+            if 'today' in kwargs:
+                today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
+
+            if self.daysIntoNextMonthTimetrackingExpire:
+                if today <= self.daysIntoNextMonthTimetrackingExpire:
+                    return self.daysIntoNextMonthTimetracking
+            else:
+                return self.daysIntoNextMonthTimetracking
+
+        if self.company and self.company.daysIntoNextMonthTimetracking and self.company.daysIntoNextMonthTimetracking > 0:
             return self.company.daysIntoNextMonthTimetracking
-            
+
         return 0
 
     def set_company(self):
