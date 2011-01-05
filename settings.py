@@ -52,6 +52,8 @@ MEDIA_ROOT = BASE_PATH + '/media'
 
 LOGIN_URL = "/accounts/login"
 
+FORCE_SCRIPT_NAME = ""
+
 MEDIA_URL = '/media/'
 
 ADMIN_MEDIA_PREFIX = '/media/admin/'
