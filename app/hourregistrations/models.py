@@ -120,6 +120,7 @@ class DrivingRegistration(PersistentModel):
 def __unicode__(self):
     return "DrivingRegistration for %s" % self.HourRegistration
 
+"""
 def initial_data ():
     #Create default time tracking types
     type = TypeOfHourRegistration.objects.get_or_create(name="Kontorarbeid")[0]
@@ -228,3 +229,4 @@ def initial_data ():
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
+"""
