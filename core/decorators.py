@@ -4,17 +4,11 @@ from django.core import urlresolvers
 from django.shortcuts import redirect
 
 class login_required:
-    def __init__(self):
-        pass
-
     def __call__(self, func):
-        def check_login (request, *args, **kwargs):
-            if request.user and request.user.logged_in():
-                return func(request, *args, **kwargs)
+        if not request.user:
             return redirect("/accounts/login/?next=%s" % (request.path))
 
-        functools.update_wrapper(check_login, func)
-        return check_login
+        return func(request, *args, **kwargs)
 
 class require_permission:
     """
