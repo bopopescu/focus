@@ -26,7 +26,7 @@ def overview_all(request):
     contacts = Contact.objects.all()
     return render_with_request(request, 'contacts/list.html', {'title': 'Alle aktive kontakter', 'contacts': contacts})
 
-@login_required()
+@require_permission("CREATE", Contact)
 def add(request):
     return form(request)
 
