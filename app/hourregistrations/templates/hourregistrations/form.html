@@ -18,22 +18,42 @@
             });
         });
 
-        function newInputElement(num, field) {
-            return "<input type='text' value=''maxalength='255' name='disbursement-" + num + "-" + field + "' id='id_disbursement-" + num + "-" + field + "'";
+        $(document).ready(function () {
+            $('#add_new_driving').click(function() {
+                addXtraFieldsDriving();
+            });
+        });
+
+        function newInputElement(num, type, field) {
+            return "<input type='text' value=''maxalength='255' name='" + type + " - " + num + "-" + field + "' id='id_" + type + "-" + num + "-" + field + "'";
         }
-        function newChecboxElement(num) {
-            return "<input type='checkbox' name='disbursement-'+num+'-DELETE' id='id_disbursement-'+num+'-DELETE' />";
+        
+        function newChecboxElement(num, type) {
+            return "<input type='checkbox' name='" + type + "-" + num + "-DELETE' id='id_" + type + "-" + num + "-DELETE' />";
         }
 
         function addXtraFields() {
             var newFieldNum = parseInt($('#id_disbursement-TOTAL_FORMS').val());
             var newli = '';
             $('#id_disbursement-TOTAL_FORMS').val(newFieldNum + 1);
-            input = newInputElement(newFieldNum, "description");
-            pris = newInputElement(newFieldNum, "price");
-            del = newChecboxElement(newFieldNum);
+            input = newInputElement(newFieldNum, "disbursement", "description");
+            pris = newInputElement(newFieldNum, "disbursement", "price");
+            del = newChecboxElement(newFieldNum, "disbursement");
             $('#disbursmentlist > tbody:last').append('<tr><td>' + input + '</td><td>' + pris + '</td><td>' + del + '</td></tr>');
         }
+
+        function addXtraFieldsDriving() {
+            var newFieldNum = parseInt($('#id_driving-TOTAL_FORMS').val());
+            var newli = '';
+            $('#id_driving-TOTAL_FORMS').val(newFieldNum + 1);
+            description = newInputElement(newFieldNum, "driving", "description");
+            time_start = newInputElement(newFieldNum, "driving", "time_start");
+            kilometres = newInputElement(newFieldNum, "driving", "kilometres");
+            time_end = newInputElement(newFieldNum, "driving", "time_end");
+            del = newChecboxElement(newFieldNum, "driving");
+            $('#drivingList > tbody:last').append('<tr><td>' + description + '</td><td>' + kilometres + '</td><td>' + time_start + '</td><td>' + time_end + '</td><td>' + del + '</td></tr>');
+        }
+
     </script>
 
 
@@ -76,7 +96,7 @@
                         </tr>
                     {% endfor %}
 
-                    <a href="#" id="add_new">Legg til ny</a>
+                    <p id="add_new">Legg til nytt utlegg</p>
 
                 </table>
 
@@ -90,7 +110,7 @@
             <div class="portlet-content">
                 {{ DrivingRegistrationFormSet.management_form }}
 
-                <table id="disbursmentlist">
+                <table id="drivingList">
                     <thead>
 
                     <th>Beskrivelse</th>
@@ -112,15 +132,14 @@
                         </tr>
                     {% endfor %}
 
-                    <a href="#" id="add_new">Legg til ny</a>
+                    <p id="add_new_driving">Legg til ny</p>
 
                 </table>
 
-                <br>
             </div>
+
         </div>
-
-
+    
     </form>
 
 
