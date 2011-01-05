@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.db import models
 from core.models import *
 from app.customers.models import Customer
@@ -26,20 +25,19 @@ class Project(PersistentModel):
         return ['project_name']
 
     def save(self, *args, **kwargs):
+        new = False
+        if not self.id:
+            new = True
 
-     new = False
-     if not self.id:
-         new = True
+        super(Project, self).save()
 
-     super(Project, self).save()
+        #Give the user who created this ALL permissions on object
+        if new:
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
 
-     #Give the user who created this ALL permissions on object
-     if new:
-         Core.current_user().grant_role("Owner", self)
-         adminGroup = Core.current_user().get_company_admingroup()
-
-         if adminGroup:
-             adminGroup.grant_role("Admin", self)
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
 
 
 class ProjectFolder(PersistentModel):

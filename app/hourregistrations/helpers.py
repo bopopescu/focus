@@ -20,12 +20,12 @@ def generateValidPeriode(*args, **kwargs):
 
     if 'today' in kwargs:
         now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
-    
+
     daysIntoNextMonthTimetracking = Core.current_user().get_daysIntoNextMonthHourRegistration(**kwargs)
 
     #If true, user can still edit last month
     if daysIntoNextMonthTimetracking >= now.day:
-        
+
         #If January, the user should be able to edit December last year
         if now.month == 1:
             from_date = date(now.year-1, 12, 1)

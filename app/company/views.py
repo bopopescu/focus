@@ -4,7 +4,7 @@ from app.contacts.models import Contact
 from app.customers.models import Customer
 from app.orders.models import Order
 from app.projects.models import Project
-from app.hourregistrations.models import HourRegistration
+from app.hourregistrationsOLD.models import HourRegistration
 from forms import *
 from core.models import Company, Group, Log, Notification
 from core.shortcuts import *

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import date
 from django.forms import ModelForm
-from app.hourregistrations.helpers import generateValidPeriode, validForEdit
+from app.hourregistrationsOLD.helpers import generateValidPeriode, validForEdit
 from models import *
 from core.widgets import *
 

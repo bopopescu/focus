@@ -15,7 +15,7 @@ urlpatterns = patterns('',
                        (r'^folders/', include('app.files.folders.urls')),
                        (r'^orders/', include('app.orders.urls')),
                        (r'^search/', include('app.search.urls')),
-                       (r'^hourregistrations/', include('app.hourregistrations.urls')),
+                       (r'^hourregistrationsOLD/', include('app.hourregistrations.urls')),
                        (r'^typeOfWorks/addPop/?$', 'app.hourregistrations.views.addTypeOfWork'),
                        (r'^announcements/', include('app.announcements.urls')),
                        #settings for admin
