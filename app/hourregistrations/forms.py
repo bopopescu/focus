@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import date
 from django.forms import ModelForm
-from app.hourregistrationsOLD.helpers import generateValidPeriode, validForEdit
+from django.forms.models import inlineformset_factory
+from helpers import generateValidPeriode, validForEdit
 from models import *
 from core.widgets import *
 
@@ -16,7 +17,7 @@ class HourRegistrationForm(ModelForm):
         'company', 'hours_worked')
 
     def __init__(self, *args, **kwargs):
-        super(TimetrackingForm, self).__init__(*args, **kwargs)
+        super(HourRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['date'].required = True
         self.fields['date'].widget = DatePickerField(format="%d.%m.%Y", from_date=generateValidPeriode()[0],
                                                      to_date=generateValidPeriode()[1])
@@ -53,3 +54,23 @@ class TypeOfHourRegistrationForm(ModelForm):
     class Meta:
         model = TypeOfHourRegistration
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
+
+class DisbursementForm(ModelForm):
+    class Meta:
+        model = Disbursement
+        fields = ('price', 'description')
+
+class DrivingRegistrationForm(ModelForm):
+    class Meta:
+        model = DrivingRegistration
+        fields = ('time_start', 'time_end', 'kilometres', 'description')
+
+    def __init__(self, *args, **kwargs):
+        super(DrivingRegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['time_start'].widget = MaskedField(format="99:99")
+        self.fields['time_end'].widget = MaskedField(format="99:99")
+
+HourRegistrationDisbursementFormSet = inlineformset_factory(HourRegistration, Disbursement, form=DisbursementForm,
+                                                            extra=1)
+HourRegistrationDrivingRegistrationFormSet = inlineformset_factory(HourRegistration, DrivingRegistration,
+                                                                   form=DrivingRegistrationForm, extra=1)

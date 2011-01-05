@@ -1,7 +1,7 @@
 import calendar
 from datetime import datetime, timedelta, date
 from django.test import TestCase
-from app.hourregistrationsOLD.helpers import generateValidPeriode
+from helpers import generateValidPeriode
 from core import Core
 from core.models import User
 from helpers import validForEdit

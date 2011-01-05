@@ -105,7 +105,7 @@
                             };
 
 
-                            $.getJSON("{% url app.timetracking.views.ajaxEditCalendar %}", data, function(json) {
+                            $.getJSON("{% url app.hourregistrations.views.ajaxEditCalendar %}", data, function(json) {
                                 calEvent.id = json["id"];
                             });
 
@@ -134,7 +134,7 @@
 
                 };
 
-                $.get("{% url app.timetracking.views.ajaxEditCalendar %}", data);
+                $.get("{% url app.hourregistrations.views.ajaxEditCalendar %}", data);
 
 
             },
@@ -151,7 +151,7 @@
 
                 };
 
-                $.get("{% url app.timetracking.views.ajaxEditCalendar %}", data);
+                $.get("{% url app.hourregistrations.views.ajaxEditCalendar %}", data);
 
 
             },
@@ -314,7 +314,7 @@
 
             events : [
 
-                {% for p in timetrackings %}
+                {% for p in hourregistrations %}
 
                     {
                         "id":{{ p.id }},

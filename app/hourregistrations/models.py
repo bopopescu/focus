@@ -2,7 +2,7 @@ from datetime import datetime, date
 import time
 import re
 from app.customers.models import Customer
-from app.hourregistrationsOLD.helpers import calculateHoursWorked
+from helpers import calculateHoursWorked
 from app.orders.models import Order
 from core import Core
 from core.models import PersistentModel, User
@@ -103,12 +103,22 @@ class HourRegisrationImage(PersistentModel):
 
 class Disbursement(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="disbursements")
-    description = models.TextField()
+    description = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to="uploads/disbursements/")
 
     def __unicode__(self):
         return "Disbusment for %s" % self.HourRegistration
+
+class DrivingRegistration(PersistentModel):
+    HourRegistration = models.ForeignKey(HourRegistration, related_name="drivingregistration")
+    time_start = models.CharField(max_length=5)
+    time_end = models.CharField(max_length=5)
+    kilometres = models.IntegerField()
+    description = models.CharField(max_length=100)
+
+def __unicode__(self):
+    return "DrivingRegistration for %s" % self.HourRegistration
 
 def initial_data ():
     #Create default time tracking types

@@ -45,9 +45,9 @@ def view(request, id):
 
 
 @require_permission("VIEW", Order, "id")
-def addTask(request, orderID):
+def addTask(request, id):
     if request.method == "POST":
-        order = Order.objects.all().get(id=orderID)
+        order = Order.objects.all().get(id=id)
         form = TaskForm(request.POST, instance=Task())
         if form.is_valid():
             o = form.save(commit=False)
@@ -55,16 +55,16 @@ def addTask(request, orderID):
             o.save()
             form.save_m2m()
         else:
-            messages.error(request, "Ugyldig format")
+            request.message_error("Ugyldig format")
     else:
-        messages.error(request, "Du må skrive noe i feltet")
+        request.message_error("Du må skrive noe i feltet")
 
-    return redirect(view, orderID)
+    return redirect(view, id)
 
 @login_required()
-def changeStatusTask(request, taskID):
+def changeStatusTask(request, id):
     try:
-        task = Task.objects.all().get(id=taskID)
+        task = Task.objects.all().get(id=id)
         task.done = not task.done
         task.save()
     except:
@@ -73,17 +73,17 @@ def changeStatusTask(request, taskID):
     return redirect(view, task.order.id)
 
 @require_permission("EDIT", Order, "id")
-def changeStatus(request, orderID):
-    order = Order.objects.get(id=orderID)
+def changeStatus(request, id):
+    order = Order.objects.get(id=id)
 
-    if order.state == "T":
+    if order.is_offer():
         order.state = "O"
-    elif order.state == "O":
+    elif order.is_order():
         order.state = "F"
-    elif order.state == "F":
+    elif order.is_ready_for_invoice():
         order.state = "A"
     else:
-        messages.error(request, "Ordren er arkivert og kan ikke forandres.")
+        request.message_error("Ordren er arkivert og kan ikke forandres.")
         return redirect(overview)
 
     order.save()
@@ -100,12 +100,32 @@ def add(request):
 
 @require_permission("EDIT", Order, "id")
 def edit(request, id):
+
+    order = Order.objects.get(id=id)
+
+    if not order.is_valid_for_edit():
+       if order.is_archived():
+           request.message_error("Ordren er arkivert og kan ikke forandres.")
+       if order.is_ready_for_invoice():
+           request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
+       return redirect(overview)
+
     return form(request, id)
 
 @require_permission("DELETE", Order, "id")
 def delete(request, id):
-    messages.error(request, "Det er ikke mulig å slette ordrer.")
-    return form(request, id)
+    order = Order.objects.get(id=id)
+
+    if not order.is_valid_for_edit():
+       if order.is_archived():
+           request.message_error("Ordren er arkivert og kan ikke forandres.")
+       if order.is_ready_for_invoice():
+           request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
+       return redirect(overview)
+
+    request.message_error("Det er ikke mulig å slette ordrer.")
+
+    return view(request, id)
 
 @login_required()
 def addPop(request):
@@ -148,11 +168,11 @@ def form (request, id=False, *args, **kwargs):
 
     #checks if order is to invoice og archived, if so, no edit is allowed
     if instance.state == "F":
-        messages.error(request, "Ordren er til fakturering og kan ikke endres.")
+        request.message_error("Ordren er til fakturering og kan ikke endres.")
         return redirect(overview)
 
     if instance.state == "A":
-        messages.error(request, "Ordren er arkivert og kan ikke endres")
+        request.message_error("Ordren er arkivert og kan ikke endres")
         return redirect(overview)
 
     #Save and set to active, require valid form

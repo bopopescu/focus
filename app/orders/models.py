@@ -26,6 +26,30 @@ class Order(PersistentModel):
     def __unicode__(self):
         return self.order_name
 
+    def is_archived(self):
+        if self.state == "A":
+            return True
+        return False
+    def is_ready_for_invoice(self):
+        if self.state == "F":
+            return True
+        return False
+    def is_offer(self):
+        if self.state == "T":
+            return True
+        return False
+    def is_order(self):
+        if self.state == "O":
+            return True
+        return False
+
+    def is_valid_for_edit(self):
+        if self.is_offer():
+            return True
+        if self.is_order():
+            return True
+        return False
+
     def getViewUrl(self):
         return urlresolvers.reverse('app.orders.views.view', args=("%s" % self.id,))
 

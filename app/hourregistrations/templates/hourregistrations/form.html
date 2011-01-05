@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+{% block maincontent %}
+
+    <script>
+
+        $(document).ready(function () {
+            $('#add_new').click(function() {
+                addXtraFields();
+            });
+        });
+
+        function newInputElement(num, field) {
+            return "<input type='text' value=''maxalength='255' name='disbursement-" + num + "-" + field + "' id='id_disbursement-" + num + "-" + field + "'";
+        }
+        function newChecboxElement(num) {
+            return "<input type='checkbox' name='disbursement-'+num+'-DELETE' id='id_disbursement-'+num+'-DELETE' />";
+        }
+
+        function addXtraFields() {
+            var newFieldNum = parseInt($('#id_disbursement-TOTAL_FORMS').val());
+            var newli = '';
+            $('#id_disbursement-TOTAL_FORMS').val(newFieldNum + 1);
+            input = newInputElement(newFieldNum, "description");
+            pris = newInputElement(newFieldNum, "price");
+            del = newChecboxElement(newFieldNum);
+            $('#disbursmentlist > tbody:last').append('<tr><td>' + input + '</td><td>' + pris + '</td><td>' + del + '</td></tr>');
+        }
+    </script>
+
+
+
+    <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+
+        <div class="portlet x6">
+            <div class="portlet-header"><h4>{{ title }}</h4></div>
+            <div class="portlet-content">
+
+                {% for field in form %}
+                    <div class="field">
+                        {{ field.label_tag }}
+
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <span class="errorlist">{{ error }}  </span>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {{ form.media }}
+                <input type="submit" value="Lagre" class="btn" name="save"/>
+            </div>
+        </div>
+
+
+        <div class="portlet x6">
+            <div class="portlet-header"><h4>Utlegg</h4></div>
+            <div class="portlet-content">
+                {{ DisbursementFormSet.management_form }}
+
+                <table id="disbursmentlist">
+                    {% for forms in DisbursementFormSet.forms %}
+                        {{ forms.id }}
+                        <tr>
+                            <td>{{ forms.description }} </td>
+                            <td>{{ forms.price }}</td>
+                            <td>{{ forms.DELETE }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    <a href="#" id="add_new">Legg til ny</a>
+
+                </table>
+
+                <br>
+
+            </div>
+        </div>
+
+        <div class="portlet x12">
+            <div class="portlet-header"><h4>Kjøring</h4></div>
+            <div class="portlet-content">
+                {{ DrivingRegistrationFormSet.management_form }}
+
+                <table id="disbursmentlist">
+                    <thead>
+
+                    <th>Beskrivelse</th>
+                    <th>Tidspunkt start</th>
+                    <th>Tidspunkt destinasjon</th>
+                    <th>Antall km</th>
+                    <th>Slette</th>
+
+                    </thead>
+
+                    {% for forms in DrivingRegistrationFormSet.forms %}
+                        {{ forms.id }}
+                        <tr>
+                            <td>{{ forms.description }} </td>
+                            <td>{{ forms.time_start }}</td>
+                            <td>{{ forms.time_end }}</td>
+                            <td>{{ forms.kilometres }}</td>
+                            <td>{{ forms.DELETE }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    <a href="#" id="add_new">Legg til ny</a>
+
+                </table>
+
+                <br>
+            </div>
+        </div>
+
+
+    </form>
+
+
+
+    {% block extra %}
+    {% endblock %}
+
+{% endblock %}
+
