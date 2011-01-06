@@ -10,26 +10,26 @@
 
 {% block maincontent %}
 
+    {{ form.media }}
 
     <div class="portlet x12">
         <div class="portlet-header"><h4>{{ title }}</h4></div>
-            <div class="portlet-content">
-                <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+        <div class="portlet-content">
 
-                    {% for field in form %}
-                        <div class="field">
-                            {{ field.label_tag }}
+            <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
-                            {{ field }}
+                {% for field in form %}
+                    <div class="field {% if field.errors %} fielderror {% endif %}">
+                        {{ field.label_tag }}
+                        {{ field }}
 
-                            {% for error in field.errors %}
-                                <span class="errorlist">{{ error }}  </span>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                    {{ form.media }}
-                    <input type="submit" value="Lagre" class="btn" name="save"/>
-                </form>
+                    </div>
+
+                {% endfor %}
+
+                <input type="submit" value="Lagre" class="btn" name="save"/>
+
+            </form>
         </div>
     </div>
 
@@ -39,10 +39,9 @@
     <script>
         $(document).ready(function() {
             $("select[multiple]").asmSelect();
-    });
-
+        });
     </script>
-    
+
     {% block extra %}
     {% endblock %}
 

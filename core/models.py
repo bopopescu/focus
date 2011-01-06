@@ -138,7 +138,6 @@ class User(models.Model):
         notifications = self.notifications
         return notifications.filter(read=False)
 
-
     def getProfileImage(self):
         if self.profileImage:
             return "/media/%s" % self.profileImage
@@ -289,7 +288,7 @@ class User(models.Model):
         for group in self.groups.all():
             if group.has_permission_to(action, object, id=id, any=any):
                 return True
-            
+
         return False
 
     def get_permissions(self):
@@ -772,7 +771,7 @@ def initial_data ():
     member.grant_actions(["VIEW", "LIST"])
 
     #Other default objects
-    comp = Company(name="Focus AS")
+    comp = Company(name="FNCIT AS")
     comp.save()
 
     a, created = User.objects.all().get_or_create(username="superadmin",
@@ -794,24 +793,4 @@ def initial_data ():
                                                   company=comp,
                                                   is_active=True)
     u.set_password("test")
-    u.save()
-
-    u, created = User.objects.all().get_or_create(username="test2",
-                                                  first_name="Test2",
-                                                  canLogin=True,
-                                                  company=comp,
-                                                  last_name="user",
-                                                  is_active=True)
-
-    u.set_password("test2")
-    u.save()
-
-    u, created = User.objects.all().get_or_create(username="test3",
-                                                  first_name="Test3",
-                                                  canLogin=True,
-                                                  company=comp,
-                                                  last_name="user",
-                                                  is_active=True)
-
-    u.set_password("test3")
     u.save()

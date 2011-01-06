@@ -89,6 +89,7 @@ INSTALLED_APPS = (
 
 #All the applicaitons
 'core',
+'core.django_cron',
 'app.company',
 'app.announcements',
 'app.accounts',

@@ -397,6 +397,27 @@ FORM
 	-webkit-border-radius: 3px;
 }
 
+form .fielderror {
+
+border: 1px solid;
+margin-left:15px;
+margin-right:150px;
+margin-top:10px;
+margin-bottom:10px;
+
+padding-left:70px;
+padding-top:20px;
+background-repeat: no-repeat;
+background-position: 10px center;
+
+color: #D8000C;
+background-color: #FFBABA;
+background-image: url('/media/icons/notice/error.png');
+}
+
+
+
+
 .form .phone_field input { margin-right: 0; }
 /*
 .form .xsmall { width: 50px; }

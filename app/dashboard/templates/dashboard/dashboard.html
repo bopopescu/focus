@@ -10,7 +10,7 @@
 
 {% block maincontent %}
 
- <div class="portlet x3">
+    <div class="portlet x3">
         <div class="portlet-header">
             <h4>Dine</h4>
 
@@ -88,7 +88,7 @@
         <!-- .portlet-content -->
     </div>  <!-- .portlet -->
 
-     <div class="portlet x9">
+    <div class="portlet x9">
 
         <div class="portlet-header">
             <h4>Oppslagstavle</h4>
@@ -101,9 +101,7 @@
 
                 {% for announcement in announcements %}
                     <tr>
-                    <h5>{{ announcement.title }}
-                        <div id="datepublished">
-                    </h5>
+                    <h2>{{ announcement.title }}</h2>
                     Skrevet av {{ announcement.creator.first_name }}, {{ announcement.date_created|date:"d.m.Y H:i" }}
                     </div>
 

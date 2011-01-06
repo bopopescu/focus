@@ -6,10 +6,9 @@ gettext
 Django >= 1.2
 python-mysql
 
-django-storages (bruk for opp-nedlastning av filer)
-django-reversion (logging/backup av endring av objekter)
 South (migreringsverktøy)
 PIL
+django-cron
 
 KANSKJE
 python-dateutil

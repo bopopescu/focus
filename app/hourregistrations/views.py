@@ -65,7 +65,7 @@ def listHourRegistrations(request, user, from_date, to_date):
             sumEarned += Decimal(t.hours_worked) * Decimal(t.hourly_rate)
         if t.disbursements:
             for disb in t.disbursements.all():
-                sumDisbursements+= disb.price
+                sumDisbursements += disb.price
         if t.drivingregistration:
             for driving in t.drivingregistration.all():
                 sumKilometers += driving.kilometres
@@ -83,8 +83,8 @@ def listHourRegistrations(request, user, from_date, to_date):
                                 'sumEarned': round(sumEarned, 2),
                                 'sumCover': round(sumCover, 2),
                                 'sumTotalEarned': round(sumTotalEarned, 2),
-                                'sumDisbursements':round(sumDisbursements,2),
-                                'sumKilometers':round(sumKilometers,2)})
+                                'sumDisbursements': round(sumDisbursements, 2),
+                                'sumKilometers': round(sumKilometers, 2)})
 
 def your_archive(request):
     return archive(request)
@@ -221,6 +221,12 @@ def form (request, id=False):
     if request.method == 'POST':
         form = HourRegistrationForm(request.POST, instance=instance)
 
+        DisbursementFormSet = HourRegistrationDisbursementFormSet(request.POST, request.FILES, prefix='disbursement',
+                                                                  instance=instance)
+
+        DrivingRegistrationFormSet = HourRegistrationDrivingRegistrationFormSet(request.POST, request.FILES,
+                                                                                prefix='driving', instance=instance)
+
         if form.is_valid():
             date = request.POST['date']
 
@@ -238,27 +244,20 @@ def form (request, id=False):
 
             hoursWorked = calculateHoursWorked(start_t, end_t)
 
-            disbursmentsFormset = HourRegistrationDisbursementFormSet(request.POST, request.FILES, prefix='disbursement',
-                                                                      instance=instance)
-
-            drivingFormset = HourRegistrationDrivingRegistrationFormSet(request.POST, request.FILES, prefix='driving',
-                                                                      instance=instance)
             if hoursWorked <= 0:
                 clockValid = False
 
-            if clockValid and disbursmentsFormset.is_valid() and drivingFormset.is_valid():
+            if clockValid and DisbursementFormSet.is_valid() and DrivingRegistrationFormSet.is_valid():
                 o = form.save(commit=False)
                 o.save()
-                disbursmentsFormset.save()
-                drivingFormset.save()
+                DisbursementFormSet.save()
+                DrivingRegistrationFormSet.save()
                 request.message_success(msg)
 
                 #Redirects after save for direct editing
                 return overview(request)
 
             request.message_error("Du må fylle ut korrekt")
-            DisbursementFormSet = HourRegistrationDisbursementFormSet(instance=instance, prefix='disbursement')
-            DrivingRegistrationFormSet = HourRegistrationDrivingRegistrationFormSet(instance=instance, prefix='driving')
 
     else:
         form = HourRegistrationForm(instance=instance)
@@ -268,4 +267,5 @@ def form (request, id=False):
     return render_with_request(request, "hourregistrations/form.html", {'title': 'Timeføring',
                                                                         'form': form,
                                                                         'DisbursementFormSet': DisbursementFormSet,
-                                                                        'DrivingRegistrationFormSet':DrivingRegistrationFormSet,})
+                                                                        'DrivingRegistrationFormSet': DrivingRegistrationFormSet
+                                                                        , })

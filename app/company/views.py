@@ -79,7 +79,6 @@ def newForm(request):
             user.save()
 
             #Manually give permission to the admin group
-
             adminGroup.grant_permissions("ALL", adminGroup)
             adminGroup.grant_permissions("ALL", allEmployeesGroup)
 
@@ -115,6 +114,10 @@ def newForm(request):
             allEmployeesGroup.grant_role("Member", Log)
             allEmployeesGroup.grant_role("Member", Notification)
 
+            #Manually give som other permissions
+            allEmployeesGroup.grant_permissions("CREATE", HourRegistration)
+            #Manually give som other permissions
+            allEmployeesGroup.grant_permissions("CREATE", Contact)
 
             return redirect(overview)
     else:

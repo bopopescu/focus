@@ -25,11 +25,11 @@
         });
 
         function newInputElement(num, type, field) {
-            return "<input type='text' value=''maxalength='255' name='" + type + " - " + num + "-" + field + "' id='id_" + type + "-" + num + "-" + field + "'";
+            return "<div class='field'><input type='text' value='' maxalength='255' name='" + type + "-" + num + "-" + field + "' id='id_" + type + "-" + num + "-" + field + "'></div>";
         }
-        
+
         function newChecboxElement(num, type) {
-            return "<input type='checkbox' name='" + type + "-" + num + "-DELETE' id='id_" + type + "-" + num + "-DELETE' />";
+            return "<div class='field'><input type='checkbox' name='" + type + "-" + num + "-DELETE' id='id_" + type + "-" + num + "-DELETE'></div>";
         }
 
         function addXtraFields() {
@@ -51,7 +51,7 @@
             kilometres = newInputElement(newFieldNum, "driving", "kilometres");
             time_end = newInputElement(newFieldNum, "driving", "time_end");
             del = newChecboxElement(newFieldNum, "driving");
-            $('#drivingList > tbody:last').append('<tr><td>' + description + '</td><td>' + kilometres + '</td><td>' + time_start + '</td><td>' + time_end + '</td><td>' + del + '</td></tr>');
+            $('#drivingList > tbody:last').append('<tr><td>' + description + '</td><td>' + time_start + '</td><td>' + time_end + '</td><td>' + kilometres + '</td><td>' + del + '</td></tr>');
         }
 
     </script>
@@ -90,9 +90,15 @@
                     {% for forms in DisbursementFormSet.forms %}
                         {{ forms.id }}
                         <tr>
-                            <td>{{ forms.description }} </td>
-                            <td>{{ forms.price }}</td>
-                            <td>{{ forms.DELETE }}</td>
+                            <td>
+                                <div class="field">{{ forms.description }}</div>
+                            </td>
+                            <td>
+                                <div class="field">{{ forms.price }}</div>
+                            </td>
+                            <td>
+                                {{ forms.DELETE }}
+                            </td>
                         </tr>
                     {% endfor %}
 
@@ -124,26 +130,30 @@
                     {% for forms in DrivingRegistrationFormSet.forms %}
                         {{ forms.id }}
                         <tr>
-                            <td>{{ forms.description }} </td>
-                            <td>{{ forms.time_start }}</td>
-                            <td>{{ forms.time_end }}</td>
-                            <td>{{ forms.kilometres }}</td>
-                            <td>{{ forms.DELETE }}</td>
+                            <td>
+                                <div class="field">{{ forms.description }}</div>
+                            </td>
+                            <td>
+                                <div class="field">{{ forms.time_start }}</div>
+                            </td>
+                            <td>
+                                <div class="field">{{ forms.time_end }}</div>
+                            </td>
+                            <td>
+                                <div class="field">{{ forms.kilometres }}</div>
+                            </td>
+                            <td>
+                                {{ forms.DELETE }}
+                            </td>
                         </tr>
                     {% endfor %}
 
                     <p id="add_new_driving">Legg til ny</p>
 
                 </table>
-
             </div>
-
         </div>
-    
     </form>
-
-
-
     {% block extra %}
     {% endblock %}
 
