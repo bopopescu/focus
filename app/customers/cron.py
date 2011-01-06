@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 
 
 class CheckMail(Job):
-        run_every = 3600
+        run_every = 400
 
         def job(self):
                 # This will be executed every 5 minutes
