@@ -103,6 +103,7 @@ INSTALLED_APPS = (
 'app.stock',
 'app.suppliers',
 'app.search',
+'app.mail',
 
 #Other
 'south',
