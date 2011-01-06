@@ -7,8 +7,8 @@ from django.template.loader import render_to_string
 class CheckMail(Job):
         run_every = 400
 
-        k = render_to_string('mail/dailyNotifications.html')
         def job(self):
+                k = render_to_string('mail/dailyNotifications.html')
                 # This will be executed every 5 minutes
                 send_mail('Oppdateringer', k, ['fredrik@fncit.no'], fail_silently=False)
 
