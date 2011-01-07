@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from forms import *
 from core.shortcuts import *
@@ -9,8 +10,23 @@ def overview(request):
     updateTimeout(request)
     customers = Core.current_user().getPermittedObjects("VIEW", Customer)
 
+    print  Core.current_user().get_new_notifications()
+    k = render_to_string('mail/dailyNotifications.html', {'companyName': 'Firma',
+                                                          'notifications': Core.current_user().get_new_notifications()
+                                                          })
+
+    from django.core.mail import EmailMultiAlternatives
+
+    subject, from_email, to = 'hello', 'frecarlsen@gmail.com', 'fredrik@fncit.no'
+    text_content = 'This is an important message.'
+    html_content = k
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
     return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
                                                                 'customers': customers})
+
 @require_permission("LISTDELETED", Customer)
 def overview_deleted(request):
     customers = Customer.objects.filter(deleted=True)
