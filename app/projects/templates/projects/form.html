@@ -1,0 +1,48 @@
+{% extends "form.html" %}
+{% load auth %}
+
+{% block extraPortlet %}
+
+
+    <div class="portlet x6">
+
+        <div class="portlet-header"><h4>Prosjekter</h4></div>
+
+        <div class="portlet-content">
+
+
+
+            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
+
+                <thead>
+                <tr>
+                    <th>Prosjektnr</th>
+                    <th>Prosjektnavn</th>
+                    <th>Leveringsdato</th>
+                    <th>Ansvarlig</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in projects %}
+                    <tr>
+                        <td>{{ p.pid }}</td>
+                        <td><a href="{% url app.projects.views.view p.id %}">{{ p }}</a></td>
+                        <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
+                        <td>{{ p.responsible }}</td>
+                        <td>
+                            <div class="tool">
+                                <a href="{% url app.projects.views.edit p.id %}"><img
+                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+{% endblock %}

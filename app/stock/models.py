@@ -13,7 +13,6 @@ class UnitsForSizes(PersistentModel):
         return self.name
 
     def save(self, *args, **kwargs):
-
         new = False
         if not self.id:
             new = True
@@ -40,7 +39,6 @@ class ProductCategory(PersistentModel):
         return self.name
 
     def save(self, *args, **kwargs):
-
         new = False
         if not self.id:
             new = True
@@ -61,7 +59,6 @@ class ProductCategory(PersistentModel):
                 allemployeesgroup.grant_role("Member", self)
 
 
-
 class ProductGroup(PersistentModel):
     name = models.CharField("Navn", max_length=100)
     category = models.ForeignKey(ProductCategory, verbose_name="Kategori", related_name="productgroups", null=True)
@@ -73,7 +70,6 @@ class ProductGroup(PersistentModel):
         return urlresolvers.reverse('app.stock.productgroups.views.edit', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
-
         new = False
         if not self.id:
             new = True
@@ -133,7 +129,6 @@ class Product(PersistentModel):
         return urlresolvers.reverse('app.stock.products.views.recover', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
-
         new = False
         if not self.id:
             new = True
@@ -152,3 +147,11 @@ class Product(PersistentModel):
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
+
+class ProductFile(PersistentModel):
+    product = models.ForeignKey(Product, related_name="files")
+    name = models.CharField(max_length=200)
+    file = models.FileField(upload_to="uploads/products")
+
+    def getFile(self):
+        return "/media/%s" % self.file

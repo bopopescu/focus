@@ -9,4 +9,6 @@ urlpatterns = patterns('app.stock.products.views',
                        url(r'^(?P<id>\d+)/recover/?$', 'recover'),
                        url(r'^(?P<id>\d+)/view//?$', 'view'),
                        url(r'^(?P<id>\d+)/delete/?$', 'delete'),
+                       url(r'^(?P<id>\d+)/addfile/?$', 'addFile'),
+                       url(r'^(?P<id>\d+)/deletefile/(?P<fileID>\d+)?$', 'deleteFile'),
                        )

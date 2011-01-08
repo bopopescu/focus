@@ -12,6 +12,7 @@ STATE_CHOICES = (
 
 class Order(PersistentModel):
     oid = models.IntegerField("Ordrenr", null=True, blank=True)
+    POnumber = models.CharField("PO-number", max_length=150, blank=True, null=True)
     order_name = models.CharField("Navn", max_length=80)
     customer = models.ForeignKey(Customer, related_name="orders", verbose_name="Kunde", blank=True, null=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name="Prosjekt", blank=True, null=True)

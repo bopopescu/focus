@@ -10,20 +10,6 @@ def overview(request):
     updateTimeout(request)
     customers = Core.current_user().getPermittedObjects("VIEW", Customer)
 
-    print  Core.current_user().get_new_notifications()
-    k = render_to_string('mail/dailyNotifications.html', {'companyName': 'Firma',
-                                                          'notifications': Core.current_user().get_new_notifications()
-                                                          })
-
-    from django.core.mail import EmailMultiAlternatives
-
-    subject, from_email, to = 'hello', 'frecarlsen@gmail.com', 'fredrik@fncit.no'
-    text_content = 'This is an important message.'
-    html_content = k
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
-
     return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
                                                                 'customers': customers})
 
@@ -91,10 +77,12 @@ def recover(request, id):
 def form (request, id=False):
     if id:
         instance = Customer.objects.all().get(id=id)
-        msg = "Velykket endret kunde"
+        msg = "Vellykket endret kunde"
+        title = "Endre kunde"
     else:
         instance = Customer()
-        msg = "Velykket lagt til ny kunde"
+        msg = "Vellykket lagt til ny kunde"
+        title = "Ny kunde"
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -106,8 +94,10 @@ def form (request, id=False):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(edit, o.id)
     else:
         form = CustomerForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Kunde', 'form': form})
+    customers = Core.current_user().getPermittedObjects("VIEW", Customer)
+
+    return render_with_request(request, "customers/form.html", {'title': title, 'customers':customers, 'form': form})

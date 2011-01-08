@@ -1,6 +1,9 @@
 import calendar
 from datetime import datetime, timedelta, date
 from django.test import TestCase
+from app.customers.models import Customer
+from app.hourregistrations.models import HourRegistration, TypeOfHourRegistration
+from app.orders.models import Order
 from helpers import generateValidPeriode
 from core import Core
 from core.models import User
@@ -100,6 +103,18 @@ class TimeTrackingTesting(TestCase):
         self.assertEqual("01.12.2019", p[0])
         self.assertEqual("02.01.2020", p[1])
 
+        self.user3.set_validEditBackToDate("1.1.2010", expireDate="03.01.2020")
+        todayDate = "08.01.2020"
+        p = generateValidPeriode(today=todayDate)
+        self.assertEqual("01.12.2019", p[0])
+        self.assertEqual("02.01.2020", p[1])
+
+
+        self.user3.set_validEditBackToDate("1.1.2010", expireDate="04.01.2020")
+        todayDate = "03.01.2020"
+        p = generateValidPeriode(today=todayDate)
+        self.assertEqual("01.01.2010", p[0])
+        self.assertEqual("03.01.2020", p[1])
 
     def testvalidForEdit(self):
         self.assertEqual(validForEdit("1.1.2011", today="1.1.2011"), True)
@@ -120,3 +135,21 @@ class TimeTrackingTesting(TestCase):
         self.assertEqual(validForEdit("12.12.2011", today="1.1.2011"), False)
         self.assertEqual(validForEdit("11.2.2011", today="3.3.2011"), True)
         self.assertEqual(validForEdit("31.12.2010", today="28.12.2010"), False)
+
+
+    def testSavedHoursAndUsedOfSaved(self):
+        todayDate = "1.1.2011"
+        now = datetime.strptime(todayDate, "%d.%m.%Y")
+
+        testTypeHour = TypeOfHourRegistration.objects.create(name="Arbeid", description="test")
+        testCustomer = Customer.objects.create(cid="10432", full_name="testKunde", email="test@test.com")
+        testOrder = Order.objects.create(oid="2342", order_name="test", customer = testCustomer)
+        hourRegistration = HourRegistration.objects.create(date = now,
+                                                           order=testOrder,
+                                                           typeOfWork=testTypeHour,
+                                                           time_start="15:00",
+                                                           time_end="16:00",
+                                                           description="testTime",
+                                                           pause="0",
+                                                           )
+

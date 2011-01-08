@@ -11,27 +11,35 @@
 {% block maincontent %}
 
     {{ form.media }}
+    <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
-    <div class="portlet x12">
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
-        <div class="portlet-content">
 
-            <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+        {% block extraPortlet %}
+
+        {% endblock %}
+
+        <div class="portlet x6">
+            <div class="portlet-header"><h4>{{ title }}</h4></div>
+            <div class="portlet-content">
+
 
                 {% for field in form %}
                     <div class="field {% if field.errors %} fielderror {% endif %}">
                         {{ field.label_tag }}
                         {{ field }}
-
                     </div>
 
                 {% endfor %}
 
                 <input type="submit" value="Lagre" class="btn" name="save"/>
 
-            </form>
+            </div>
         </div>
-    </div>
+
+
+
+    </form>
+
 
     <script type="text/javascript" src="/media/js/multiselect.js"></script>
     <link rel="stylesheet" type="text/css" href="/media/css/multiselect.css" media="all">

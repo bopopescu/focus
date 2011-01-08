@@ -1,0 +1,54 @@
+{% extends "form.html" %}
+{% load auth %}
+
+{% block extraPortlet %}
+
+
+<div class="portlet x6">
+
+    <div class="portlet-header"><h4>Kontakter</h4></div>
+
+    <div class="portlet-content">
+
+
+        <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Adresse</th>
+                <th>Telefon</th>
+                <th>Epostadresse</th>
+                <th>#</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for contact in contacts %}
+            <tr>
+                <td><a href="{{ contact.getViewUrl }}">{{ contact.full_name }}</a></td>
+                <td>{{ contact.address }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>{{ contact.email }}</td>
+
+                <td>
+                    {% require_permission EDIT contact %}
+
+                    <div class="tool">
+                        <a href="{% url app.contacts.views.edit contact.id  %}"><img
+                                class="tool" src="/media/icons/edit.gif" alt=""></a>
+                    </div>
+                    {% end_require %}
+
+
+                </td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+{% endblock %}

@@ -83,10 +83,13 @@ def form (request, id=False):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(edit, o.id)
     else:
         form = ContactForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Kontakt',
+    contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
+
+    return render_with_request(request, "contacts/form.html", {'title': 'Kontakt',
                                                       'form': form,
+                                                      'contacts':contacts,
                                                       })

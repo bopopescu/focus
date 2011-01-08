@@ -71,10 +71,12 @@ def delete(request, id):
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Project, id=id, deleted=False)
+        title = "Endre prosjekt"
         msg = "Vellykket endret prosjekt"
     else:
         instance = Project()
         msg = "Vellykket lagt til nytt prosjekt"
+        title = "Nytt prosjekt"
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -90,4 +92,4 @@ def form (request, id=False):
     else:
         form = ProjectForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Prosjekt', 'form': form})
+    return render_with_request(request, "projects/form.html", {'title': title, 'form': form})

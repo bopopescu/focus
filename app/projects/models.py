@@ -6,6 +6,7 @@ from django.core import urlresolvers
 
 class Project(PersistentModel):
     pid = models.IntegerField("Prosjektnr", null=True)
+    POnumber = models.CharField("PO-number", max_length=150, blank=True, null=True)
     customer = models.ForeignKey(Customer, verbose_name="Kunde", related_name="projects", default=None, null=True)
     project_name = models.CharField("Prosjektnavn", max_length=80)
     description = models.TextField()
@@ -39,6 +40,13 @@ class Project(PersistentModel):
             if adminGroup:
                 adminGroup.grant_role("Admin", self)
 
+class Milestone(PersistentModel):
+    project = models.ForeignKey(Project, related_name="milestones")
+    name = models.CharField(max_length=150)
+    description = models.TextField()
+
+    def __unicode__(self):
+        return "Milestone %s for project %s" % (self.name, self.project)
 
 class ProjectFolder(PersistentModel):
     project_id = models.ForeignKey(Project, related_name="folders")
@@ -46,6 +54,7 @@ class ProjectFolder(PersistentModel):
 
     def __unicode__(self):
         return "Prosjektmappe: %s" % self.name
+
 
 class ProjectFile(PersistentModel):
     project_id = models.ForeignKey(Project, related_name="files")

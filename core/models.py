@@ -14,11 +14,21 @@ All users belong to a company, therefore all objects belongs to a company, like 
 A user can only see objects within the same company.
  * An exception to this, if the user is a guest in another companys project.
 """
+
 class Company(models.Model):
+
+    PERIODE_CHOICES = (
+        ('w', 'Ukentlig'),
+        ('m', 'Månedlig'),
+    )
+
     name = models.CharField(max_length=80)
-    adminGroup = models.ForeignKey("Group", related_name="companiesWhereAdmin", null=True, blank=True)
-    allEmployeesGroup = models.ForeignKey("Group", related_name="companiesWhereAllEmployeed", null=True, blank=True)
-    daysIntoNextMonthTypeOfHourRegistration = models.IntegerField(null=True)
+    adminGroup = models.ForeignKey("Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True, blank=True)
+    allEmployeesGroup = models.ForeignKey("Group", verbose_name="Ansattegruppe",  related_name="companiesWhereAllEmployeed", null=True, blank=True)
+    daysIntoNextMonthTypeOfHourRegistration = models.IntegerField("Leveringsfrist", default = 3)
+    hoursNeededFor50overtimePay = models.IntegerField("Timer før 50%", default=160)
+    hoursNeededFor100overtimePay = models.IntegerField("Timer før 100%", default=240)
+    periodeHourRegistrations = models.CharField("Periode", max_length=1, choices=PERIODE_CHOICES, default="m")
 
     def __unicode__(self):
         return self.name
@@ -49,8 +59,14 @@ class User(models.Model):
     canLogin = models.BooleanField(default=True)
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
     deleted = models.BooleanField()
+
+
+    #HourRegistrations
     daysIntoNextMonthTypeOfHourRegistration = models.IntegerField(null=True)
     daysIntoNextMonthTypeOfHourRegistrationExpire = models.DateField(null=True)
+
+    validEditBackToDate = models.DateField(null=True)
+    validEditBackToDateExpire = models.DateField(null=True)
 
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
@@ -64,6 +80,26 @@ class User(models.Model):
     def get_company(self):
         if self.company:
             return self.company
+        return None
+
+    def set_validEditBackToDate(self, date, expireDate):
+        self.validEditBackToDateExpire = datetime.strptime(expireDate, "%d.%m.%Y")
+        self.validEditBackToDate = datetime.strptime(date, "%d.%m.%Y")
+        self.save()
+
+    def get_validEditBackToDate(self, **kwargs):
+        today = datetime.today()
+
+        if 'today' in kwargs:
+            today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
+
+        if self.validEditBackToDate:
+            if self.validEditBackToDateExpire:
+                if today < self.validEditBackToDateExpire:
+                    return self.validEditBackToDate
+            else:
+                return self.validEditBackToDate
+            
         return None
 
     def set_daysIntoNextMonthHourRegistration(self, days, **kwargs):

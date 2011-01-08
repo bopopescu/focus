@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from decimal import Decimal
 import time
 import re
 from app.customers.models import Customer
@@ -43,9 +44,13 @@ class HourRegistration(PersistentModel):
     time_end = models.CharField(max_length=5)
     description = models.TextField()
 
-    hourly_rate = models.IntegerField(null=True)
-    percent_cover = models.IntegerField(null=True)
+    pause = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.5"))
+    hourly_rate = models.DecimalField(null=True, decimal_places=3, max_digits=5)
+    percent_cover = models.DecimalField(null=True, decimal_places=3, max_digits=5)
     hours_worked = models.DecimalField(decimal_places=3, max_digits=5)
+
+    savedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
+    usedOfSavedHours = models.DecimalField(decimal_places=3, max_digits=5, default = Decimal("0.0"))
 
     def __unicode__(self):
         return unicode(self.date)
@@ -79,6 +84,7 @@ class HourRegistration(PersistentModel):
             end_t = time.mktime(end)
 
             self.hours_worked = calculateHoursWorked(start_t, end_t)
+            #self.hours_worked = calculateHoursWorked(start_t, end_t)-self.pause-(self.savedHours - self.usedOfSavedHours)
 
         super(HourRegistration, self).save()
 

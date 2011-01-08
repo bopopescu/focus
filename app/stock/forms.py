@@ -34,3 +34,7 @@ class UnitsForSizesForm(ModelForm):
         model = UnitsForSizes
         fields = ('name',)
 
+class ProductFileForm(ModelForm):
+    class Meta:
+           model = ProductFile
+           fields = ('name','file')

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load auth %}
 {% block extrahead %}
 
 {% endblock %}
@@ -10,112 +10,136 @@
 
 {% block maincontent %}
 
-    <div class="portlet x9">
+<div class="portlet x6">
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-        <div class="portlet-content">
+    <div class="portlet-content">
 
+        <table class="tablesorter">
 
+            <tbody>
 
+            <tr>
+                <td>Varenr</td>
+                <td>{{ product.pid }}</td>
+            </tr>
 
-            <div id="inner">
+            <tr>
+                <td>Pris inn</td>
+                <td>{{ product.price }}</td>
+            </tr>
 
-                <table>
+            <tr>
+                <td>Utpris</td>
+                <td>{{ product.price_out }}</td>
+            </tr>
+            <tr>
+                <td>Maks avslag</td>
+                <td>{{ product.max_discount }}</td>
+            </tr>
+            <tr>
+                <td>Inne på lager</td>
+                <td>{{ product.countOfAvailableInStock }}</td>
+            </tr>
+            <tr>
+                <td>Leverandør</td>
+                <td>{{ product.supplier }}</td>
+            </tr>
+            <tr>
+                <td>Størrelse</td>
+                <td>{{ product.size }}</td>
+            </tr>
 
-                    <tr>
-                        <th>Detaljer</th>
-                        <th></th>
-                    </tr>
+            <tr>
+                <td>Enhet</td>
+                <td>{{ product.unitForSize }}</td>
+            </tr>
 
-                    <tr>
-                        <td>Varenr</td>
-                        <td>{{ product.pid }}</td>
-                    </tr>
+            <tr>
+                <td>Valuta</td>
+                <td>{{ product.priceVal }}</td>
+            </tr>
 
-                    <tr>
-                        <td>Pris inn</td>
-                        <td>{{ product.price }}</td>
-                    </tr>
+            <tr>
+                <td>Normal leveringstid</td>
+                <td>{{ product.normalDeliveryTime }}</td>
+            </tr>
 
-                    <tr>
-                        <td>Utpris</td>
-                        <td>{{ product.price_out }}</td>
-                    </tr>
-                    <tr>
-                        <td>Maks avslag</td>
-                        <td>{{ product.max_discount }}</td>
-                    </tr>
-                    <tr>
-                        <td>Inne på lager</td>
-                        <td>{{ product.countOfAvailableInStock }}</td>
-                    </tr>
-                    <tr>
-                        <td>Leverandør</td>
-                        <td>{{ product.supplier }}</td>
-                    </tr>
-                    <tr>
-                        <td>Størrelse</td>
-                        <td>{{ product.size }}</td>
-                    </tr>
+            <tr>
+                <td>Produktgruppe</td>
+                <td><a href="{{ product.productGroup.getViewUrl }}">{{ product.productGroup }}</a></td>
+            </tr>
 
-                    <tr>
-                        <td>Enhet</td>
-                        <td>{{ product.unitForSize }}</td>
-                    </tr>
+            </tbody>
+        </table>
 
-                    <tr>
-                        <td>Valuta</td>
-                        <td>{{ product.priceVal }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Normal leveringstid</td>
-                        <td>{{ product.normalDeliveryTime }}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Produktgruppe</td>
-                        <td><a href="{{ product.productGroup.getViewUrl }}">{{ product.productGroup }}</a></td>
-                    </tr>
-
-
-                </table>
-
-
-                <br><br>
-                <b>Brukt i følgende ordrer</b>
-                <br><br>
-                <table>
-
-                    <tr>
-                        <th>Ordrer</th>
-                    </tr>
-
-                    {% for project in product.orders %}
-                        <tr>
-                            <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a>
-                            </td>
-                            <td></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-
-            </div>
-</div>
     </div>
-            <div class="portlet x3">
+</div>
+<div class="portlet x6">
 
-                <div class="portlet-header"><h4>Valg</h4></div>
+    <div class="portlet-header"><h4>Valg</h4></div>
 
-                <div class="portlet-content">
+    <div class="portlet-content">
 
 
-                    <div class="tool editChoice">
-                        <a href="{{ product.getEditUrl }}">Endre produkt</a>
-                    </div>
+        <div class="tool editChoice">
+            <a href="{{ product.getEditUrl }}">Endre produkt</a>
+        </div>
 
-                </div>
-            </div>
+    </div>
+</div>
+
+<div class="portlet x6">
+
+    <div class="portlet-header"><h4>Filer</h4></div>
+
+    <div class="portlet-content">
+
+        <form action="{% url app.stock.products.views.addFile product.id %}" method="POST"
+              enctype="multipart/form-data">
+            {{ productFileForm }} <input type="submit" value="Last opp" class="btn" name="save"/>
+        </form>
+        <br>
+        <table class="tablesorter">
+
+            <tbody>
+
+            {% for file in product.files.all %}
+            <tr>
+                <td>{{ file.name }}</td>
+                <td><a target="_blank" href="{{ file.getFile }}">Last ned fil</a></td>
+                <td>
+                    {% require_permission EDIT product %}
+                    <a href="{% url app.stock.products.views.deleteFile product.id file.id %}">Slett fil</a>
+                    {% end_require %}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="portlet x6">
+
+    <div class="portlet-header"><h4>Brukt i følgende ordrer</h4></div>
+
+    <div class="portlet-content">
+
+        <table class="tablesorter">
+
+            {% for order in product.orders.all %}
+                <tr>
+                    <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 
 {% endblock %}
