@@ -2,9 +2,9 @@ from django.test import TestCase
 from models import *
 from app.customers.models import *
 from views import grant_role, grant_permission
-from django.test.client import Client
 
 class PermissionsTesting(TestCase):
+
     def setUp(self):
         self.user1 = User.objects.get_or_create(username="test")[0]
         self.user2 = User.objects.get_or_create(username="test2")[0]
@@ -20,6 +20,12 @@ class PermissionsTesting(TestCase):
         self.role2 = Role.objects.get_or_create(name="Member")[0]
 
         Core.set_test_user(self.user3)
+
+    def tearDown(self):
+
+        self.user1.delete()
+        self.user2.delete()
+        self.user3.delete()
 
     def testUserPerm(self):
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
@@ -44,7 +50,6 @@ class PermissionsTesting(TestCase):
         self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
 
     def testGiveRoleOnClassesToGroups(self):
-
         self.group1.addMember(self.user1)
 
         self.assertEqual(self.user1.has_permission_to("EDIT", Customer), False)
@@ -263,7 +268,7 @@ class PermissionsTesting(TestCase):
 
 
     def testGrantRoleByUrls(self):
-        c = Client()
+        c = self.client
 
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
@@ -271,17 +276,17 @@ class PermissionsTesting(TestCase):
         c.get('/grant/role/Member/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), True)
-        
+
         c.get('/grant/role/Admin/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
 
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
 
     def testGrantRoleByUrlsToGroups(self):
-        c = Client()
+        c = self.client
 
         self.group1.addMember(self.user1)
-        
+
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
 
@@ -297,7 +302,7 @@ class PermissionsTesting(TestCase):
 
 
     def testGrantPermissionByUrls(self):
-        c = Client()
+        c = self.client
 
         #Give permission for objects
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
@@ -319,8 +324,8 @@ class PermissionsTesting(TestCase):
         self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
 
     def testGrantPermissionByUrlsToGroups(self):
-        c = Client()
-
+        c = self.client
+        
         self.group1.addMember(self.user1)
 
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
@@ -349,15 +354,14 @@ class PermissionsTesting(TestCase):
 
 
     def testPermittedObjects(self):
-
-        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW",Customer), False)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW", Customer), False)
         self.user1.grant_role("Member", self.customer1)
         self.group1.addMember(self.user1)
-        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW",Customer), True)
-        self.assertEqual(self.customer2 in self.user1.getPermittedObjects("VIEW",Customer), False)
-        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("DELETE",Customer), False)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW", Customer), True)
+        self.assertEqual(self.customer2 in self.user1.getPermittedObjects("VIEW", Customer), False)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("DELETE", Customer), False)
         self.role2.grant_actions("DELETE")
-        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("DELETE",Customer), True)
-        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("EDIT",Customer), False)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("DELETE", Customer), True)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("EDIT", Customer), False)
         self.user1.grant_role("Admin", self.customer1)
-        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("EDIT",Customer), True)
+        self.assertEqual(self.customer1 in self.user1.getPermittedObjects("EDIT", Customer), True)

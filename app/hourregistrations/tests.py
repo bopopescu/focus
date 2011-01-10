@@ -106,9 +106,8 @@ class TimeTrackingTesting(TestCase):
         self.user3.set_validEditBackToDate("1.1.2010", expireDate="03.01.2020")
         todayDate = "08.01.2020"
         p = generateValidPeriode(today=todayDate)
-        self.assertEqual("01.12.2019", p[0])
-        self.assertEqual("02.01.2020", p[1])
-
+        self.assertEqual("01.01.2020", p[0])
+        self.assertEqual("08.01.2020", p[1])
 
         self.user3.set_validEditBackToDate("1.1.2010", expireDate="04.01.2020")
         todayDate = "03.01.2020"

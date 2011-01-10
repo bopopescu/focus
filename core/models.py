@@ -43,7 +43,7 @@ class User(models.Model):
     "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
     first_name = models.CharField(('first name'), max_length=30, blank=True)
     last_name = models.CharField(('last name'), max_length=30, blank=True)
-    email = models.EmailField(('e-mail address'), blank=True)
+    email = models.EmailFi eld(('e-mail address'), blank=True)
     password = models.CharField(('password'), max_length=128, help_text=(
     "Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
     is_staff = models.BooleanField(('staff status'), default=False,
