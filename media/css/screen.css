@@ -1,5 +1,5 @@
 
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Reset
 -------------------------------------------------------------- */
 html, body, div, span, object, iframe,
@@ -7,7 +7,7 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, code, sup,
 del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td 
+table, caption, tbody, tfoot, thead, tr, th, td
 {
 font-weight: inherit;
 font-style: inherit;
@@ -25,7 +25,7 @@ vertical-align: baseline
 
 
 
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Text
 -------------------------------------------------------------- */
 h1,h2,h3,
@@ -52,7 +52,7 @@ dl          	{ margin: 0 0 1.5em 0 }
 dl dt       	{ font-weight: bold }
 dd          	{ margin-left: 1.5em }
 
-abbr, 
+abbr,
 acronym     	{ border-bottom: 1px dotted #666 }
 address     	{ margin-top: 1.5em; font-style: italic }
 del         	{ color:#666 }
@@ -60,7 +60,7 @@ sup				{ font-size: 9px; vertical-align:top; }
 
 a				{ color: #358; text-decoration: underline }
 a:visited		{ color: #667 }
-a:focus, 
+a:focus,
 a:hover     	{ color: #933 }
 
 blockquote  	{ margin: 1.5em; color: #666; font-style: italic }
@@ -68,7 +68,7 @@ strong      	{ font-weight: bold }
 em,dfn      	{ font-style: italic; background: #ffc }
 dfn         	{ font-weight: bold }
 pre,code    	{ margin: 1.5em 0; white-space: pre }
-pre,code,tt 	{ font: 12px 'andale mono', 'monotype.com', 'lucida console', monospace; line-height: 1.5 } 
+pre,code,tt 	{ font: 12px 'andale mono', 'monotype.com', 'lucida console', monospace; line-height: 1.5 }
 tt         		{ display: block; margin: 1.5em 0; line-height: 1.5 }
 
 
@@ -82,24 +82,24 @@ table { width: 100%; border: 0; margin-bottom: 2em;  }
 		font-weight: bold;
 		text-align: left;
 		padding: 10px;
-		
+
 		background-color: #263849 !important;
-		
+
 		color: #FFF;
-		
+
 		border-top: 1px solid #ccc;
 		border-bottom: 1px solid #ccc;
-	}		
-	
+	}
+
 	table td { vertical-align: top; }
-	
+
 	table tbody tr td { background: #FFF; border-bottom: 1px dotted #DDD; }
 
 	table th { padding: 10px 0; }
 	table tbody td { padding: 10px; }
-	
+
 	table tr.even td { background: #F9F9F9; }
-	
+
 	tr:nth-child(odd) { background-color:#F9F9F9; }
 	tr:nth-child(even) { background-color:#FFF; }
 
@@ -114,15 +114,15 @@ table { width: 100%; border: 0; margin-bottom: 2em;  }
 	line-height: 0;
 	height: 0;
 }
- 
+
 .clearfix {
 	display: inline-block;
 }
- 
+
 html[xmlns] .clearfix {
 	display: block;
 }
- 
+
 * html .clearfix {
 	height: 1%;
 }
@@ -137,7 +137,7 @@ html[xmlns] .clearfix {
 
 
 
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Layout
 -------------------------------------------------------------- */
 body
@@ -166,14 +166,14 @@ body
         color:white;
         text-decoration:none;
     }
-	
+
 
 #info
 {
 	width: 215px;
 	font-size: 11px;
 	font-weight: bold;
-	
+
 	color: #DDD;
 	text-align: right;
 	position: absolute;
@@ -185,38 +185,38 @@ body
 	#info h4 { font-size: 16px; color: #DDD; margin-bottom: .6em; }
 
 	#info a { color: #F90; }
-	
-	#info img 
-	{ 
-		width: 60px; 
-		border: 3px solid #FFF; 
-		-moz-border-radius: 4px; 
-		-webkit-border-radius: 4px; 
-		border-radius: 4px; 
-		position: absolute; 
-		top: 0; 
-		right: 0; 
+
+	#info img
+	{
+		width: 60px;
+		border: 3px solid #FFF;
+		-moz-border-radius: 4px;
+		-webkit-border-radius: 4px;
+		border-radius: 4px;
+		position: absolute;
+		top: 0;
+		right: 0;
 	}
 
 
-#nav 
-{ 
+#nav
+{
 	background: #263849;
-	width: 93%; 
-	height: 47px; 
-	
+	width: 93%;
+	height: 47px;
+
 	margin: 0 auto 20px;
-	
+
 	position: relative;
 	z-index: 100;
-	
+
 	-webkit-border-bottom-right-radius: 8px;
 	-webkit-border-bottom-left-radius: 8px;
 	-moz-border-radius-bottomright: 8px;
 	-moz-border-radius-bottomleft: 8px;
 	border-bottom-right-radius: 8px;
 	border-bottom-left-radius: 8px;
-	
+
 	-moz-box-shadow: 1px 1px 3px rgba(0,0,0,.35);
 	-webkit-box-shadow: 1px 1px 3px rgba(0,0,0,.35);
 	box-shadow: 1px 1px 3px rgba(0,0,0,.35);
@@ -239,21 +239,21 @@ body
 
 .portlet
 {
-	background: #FFF;	
+	background: #FFF;
 	margin-bottom: 1.5em;
 	position: relative;
 	border: 1px solid #CCC;
-	
+
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
-	
+
 	-moz-box-shadow: 1px 1px 2px rgba(0,0,0,.10);
 	-webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.10);
 	box-shadow: 1px 1px 2px rgba(0,0,0,.10);
-	
+
 }
-	
+
 	.portlet-header
 	{
 		background: #F0F0F0 url(../images/portlet-header-bg.png) repeat-x 0 0;
@@ -261,7 +261,7 @@ body
 		text-align: left;
 		padding: 15px 0 15px 0;
 		width: 100%;
-		cursor: pointer;		
+		cursor: pointer;
 		position: relative;
 		overflow: hidden;
 		border-bottom: 1px solid #CCC;
@@ -275,24 +275,24 @@ body
 	}
 
 		.portlet-state-closed .portlet-header { padding-bottom: 10px; }
-	
+
 		.portlet-header h4
 		{
-			font-size: 14px;			
+			font-size: 14px;
 			font-style: normal;
 			font-weight: bold;
 			color: #263849;
 			padding: 0 0 0 10px;
 			margin: 0;
 		}
-		
+
 		.portlet-state-closed .portlet-header { -moz-border-radius: 6px; -webkit-border-radius: 6px; }
-		
-	.portlet-content { 	padding: 20px 15px 35px; position: relative; }	
-	
+
+	.portlet-content { 	padding: 20px 15px 35px; position: relative; }
+
 	.portlet-state-closed .portlet-content { display: none; }
 	.portlet-state-closed h4 { border: none; }
-	
+
 		.portlet-toggle-icon
 		{
 			background: url(../images/portlet/portlet-arrow-close.png) no-repeat 0 0 !important;
@@ -303,9 +303,9 @@ body
 			right: 15px;
 			top: 16px;
 		}
-	
+
 		.portlet-state-closed .portlet-toggle-icon { background: url(../images/portlet/portlet-arrow-open.png) no-repeat 0 0 !important; }
-		
+
 	.portlet-tab-nav
 	{
 		padding: 0;
@@ -314,7 +314,7 @@ body
 		top: 11px;
 		right: 10px;
 	}
-	
+
 	.portlet-state-closed .portlet-tab-nav { display: none; }
 
 		.portlet-tab-nav li
@@ -329,9 +329,9 @@ body
 			-moz-box-shadow: 1px 1px 1px rgba(0,0,0,.1);
 			-webkit-box-shadow: 1px 1px 1px rgba(0,0,0,.1);
 			box-shadow: 1px 1px 1px rgba(0,0,0,.1);
-			
+
 		}
-		
+
 			.portlet-tab-nav li:hover { background: #DDD; }
 
 			.portlet-tab-nav li a
@@ -343,22 +343,22 @@ body
 				padding: 5px 8px;
 				outline: none !important;
 			}
-			
+
 				.portlet-tab-nav li a:hover {  }
-							
+
 		.portlet-tab-content { display: block; }
-		
+
 		.portlet-tab-nav .portlet-tab-nav-active
 		{
 			background-color: #263849 !important;
 			border: 1px solid transparent;
 		}
-		
+
 			.portlet-tab-nav-active a { color: #FFF !important; }
-			
+
 			.portlet-tab-nav-active a:hover { text-decoration: none !important; }
-		
-		.portlet-tab-content-active { display: block !imporant; }		
+
+		.portlet-tab-content-active { display: block !imporant; }
 			.portlet-tab-nav .portlet-tab-nav-active  a { color: #0B66B9; text-decoration: none; }
 
 
@@ -450,7 +450,7 @@ background-image: url('/media/icons/notice/error.png');
 
 
 
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Grid
 -------------------------------------------------------------- */
 
@@ -482,7 +482,7 @@ background-image: url('/media/icons/notice/error.png');
 	.a10		{ padding-right: 800px; }
 	.a11		{ padding-right: 880px; }
 	.a12		{ padding-right: 960px; }
-	
+
 	.p1			{ padding-left: 80px; }
 	.p2			{ padding-left: 160px; }
 	.p3			{ padding-left: 240px; }
@@ -509,7 +509,7 @@ background-image: url('/media/icons/notice/error.png');
 .xfluid .x10 		{ width: 81.33%; }
 .xfluid .x11 		{ width: 89.67%; }
 .xfluid .x12 		{ width: 98%; }
-	
+
 	.xfluid .a1			{ padding-right: 8.33%; }
 	.xfluid .a2			{ padding-right: 16.66%; }
 	.xfluid .a3			{ padding-right: 25%; }
@@ -522,7 +522,7 @@ background-image: url('/media/icons/notice/error.png');
 	.xfluid .a10		{ padding-right: 83.33%; }
 	.xfluid .a11		{ padding-right: 91.67%; }
 	.xfluid .a12		{ padding-right: 100%; }
-		
+
 	.xfluid .p1			{ padding-left: 8.33%; }
 	.xfluid .p2			{ padding-left: 16.66%; }
 	.xfluid .p3			{ padding-left: 25%; }
@@ -535,19 +535,19 @@ background-image: url('/media/icons/notice/error.png');
 	.xfluid .p10		{ padding-left: 83.33%; }
 	.xfluid .p11		{ padding-left: 91.67%; }
 	.xfluid .p12		{ padding-left: 100%; }
-	
-.x1, .x2, .x3, .x4, 
-.x5, .x6, .x7, .x8, 
-.x9, .x10, .x11,  .x12 
+
+.x1, .x2, .x3, .x4,
+.x5, .x6, .x7, .x8,
+.x9, .x10, .x11,  .x12
 {
 	margin: 0 10px 1.5em;
 	float: left;
 }
 
-.xfluid .x1, .xfluid .x2, .xfluid .x3, 
-.xfluid .x4, .xfluid .x5, .xfluid .x6, 
-.xfluid .x7, .xfluid .x8, .xfluid .x9, 
-.xfluid .x10, .xfluid .x11,  .xfluid .x12 
+.xfluid .x1, .xfluid .x2, .xfluid .x3,
+.xfluid .x4, .xfluid .x5, .xfluid .x6,
+.xfluid .x7, .xfluid .x8, .xfluid .x9,
+.xfluid .x10, .xfluid .x11,  .xfluid .x12
 {
 	margin: 0 .85% 2em;
 }
@@ -564,12 +564,7 @@ height: 0;
 }
 
 
-
-
-
-
-
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Menu
 -------------------------------------------------------------- */
 
@@ -589,7 +584,7 @@ height: 0;
 	float: left;
 	position: relative;
 	z-index: 10;
-	padding-left: 10px; 
+	padding-left: 10px;
 	margin: 8px 0 10px 0;
 	list-style-type: none !important;
 }
@@ -600,29 +595,29 @@ height: 0;
 	*:first-child+html .mega:hover { zoom: 1 !important;  }
 
 
-/* Menu tab styling */	
+/* Menu tab styling */
 
 .mega .mega-tab,
 .mega .mega-link,
 .mega-current .mega-tab,
 .mega-current .mega-link
 {
-	background: url(../images/button-gradient.png) repeat-x right -200px;	
+	background: url(../images/button-gradient.png) repeat-x right -200px;
 	font-weight: bold;
-	color: #222;	
+	color: #222;
 	font-size: 12px;
 	text-decoration: none;
-	line-height: 0;	
+	line-height: 0;
 	display: block;
-	padding: 15px 35px 15px 10px;	
+	padding: 15px 35px 15px 10px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
-	border-radius: 4px;	
-	cursor: pointer;	
-	position: relative;	
-	z-index: 2;	
+	border-radius: 4px;
+	cursor: pointer;
+	position: relative;
+	z-index: 2;
 	border: 1px solid transparent;
-	
+
 	text-shadow: 1px 1px 3px rgba(0,0,0,.35);
 }
 
@@ -632,11 +627,11 @@ height: 0;
 
 .mega-link:hover,
 .mega-current .mega-link
-{ 
-	background-position: right -100px !important;		
+{
+	background-position: right -100px !important;
 	-webkit-border-radius: 4px !important;
 	-moz-border-radius: 4px !important;
-	border-radius: 4px !important;	
+	border-radius: 4px !important;
 }
 
 
@@ -647,7 +642,7 @@ height: 0;
 
 	.mega:hover .mega-tab
 	{
-		background-position: right -100px; 
+		background-position: right -100px;
 		background-color: #AAA;
 		-webkit-border-bottom-right-radius: 0;
 		-webkit-border-bottom-left-radius: 0;
@@ -657,22 +652,22 @@ height: 0;
 		border-bottom-left-radius: 0;
 	}
 
-	
-/* Content container styling */	
 
-.mega-content 
-{ 
+/* Content container styling */
+
+.mega-content
+{
 	width: 175px;
-	display: none; 
+	display: none;
 	-webkit-border-radius: 4px;
 	-webkit-border-top-left-radius: 0;
 	-moz-border-radius: 4px;
 	-moz-border-radius-topleft: 0;
 	border-radius: 4px;
-	border-top-left-radius: 0;	
+	border-top-left-radius: 0;
 	padding: 10px;
 	position: absolute;
-	top: 98%;	
+	top: 98%;
 	left: 10px;
 	border: 4px solid #aaa;
 	text-align: left;
@@ -683,11 +678,11 @@ height: 0;
 }
 
 	.mega .mega-content li { background-image: none; }
-	.mega:hover .mega-content { display: block; border-color: #aaa; }	
+	.mega:hover .mega-content { display: block; border-color: #aaa; }
 
 	*+html .mega-content { padding-bottom: 5px !important; } /* Fix padding in IE7 */
 	*+html .mega-menu li > ul { padding-top: 5px !important; padding-bottom: 10px !important; }
-	
+
 
 
 /* Drop Menu Styling */
@@ -695,30 +690,30 @@ height: 0;
 .mega-menu { background: #aaa; filter: none !important; padding: 5px 5px 0 !important; z-index: 10000 !important; }
 
 .mega-menu ul { list-style-type: none; margin: 0; }
-	
+
 	.mega-menu li { margin-bottom: .5em; }
-	
+
 		.mega-menu li a
-		{			 
-			background-color: #F9F9F9;  
+		{
+			background-color: #F9F9F9;
 			display: block;
 			padding: 5px 10px 5px 10px;
 			color: #358;
 			text-decoration: none;
 			font-weight: bold;
-			-moz-border-radius: 4px; 
-			-webkit-border-radius: 4px; 
+			-moz-border-radius: 4px;
+			-webkit-border-radius: 4px;
 			border-radius: 4px;
 		}
-		
+
 		.mega-menu li a.hasSub { background-image:  url(../images/link-menu-arrow.png); background-repeat: no-repeat; background-position: 95% 50% ;}
 
-		
+
 			.mega-menu li a:hover { background-color: #DDD; }
 
 		.mega-menu li { position: relative; }
 			.mega-menu li:hover > ul { display: block !important; }
-			
+
 		.mega-menu li > ul { background: #689C29; width: 175px; padding: 10px 10px 5px;  -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; z-index: 1000; position: absolute; left: 100%; top: 0; display: none; }
 
 
@@ -727,14 +722,14 @@ height: 0;
 .mega-left { left: 0; }
 .mega-right { left: auto; right: 0; }
 
-	.mega-right 
-	{ 
+	.mega-right
+	{
 		-webkit-border-radius: 4px;
 		-webkit-border-top-right-radius: 0;
 		-moz-border-radius: 4px;
 		-moz-border-radius-topright: 0;
 		border-radius: 4px;
-		border-top-right-radius: 0;	
+		border-top-right-radius: 0;
 	}
 
 
@@ -757,7 +752,7 @@ height: 0;
 
 
 
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Buttons
 -------------------------------------------------------------- */
 .btn,
@@ -765,9 +760,9 @@ height: 0;
 .btn-mini
 {
 	background-repeat: repeat-x;
-	color: #FFF;	
+	color: #FFF;
 	font-weight: bold;
-	display: inline-block;	
+	display: inline-block;
 	text-decoration: none;
 	border-width: 1px;
 	border-style: solid;
@@ -782,7 +777,7 @@ height: 0;
 	cursor: pointer;
 	position: relative;
 }
-	
+
 	/* Active/Click state */
 	.btn:active, .btn-icon:active, .btn-mini:active { top: 1px; }
 
@@ -796,7 +791,7 @@ height: 0;
 	a.btn, a.btn-icon { height: 32px; line-height: 32px; padding-bottom: 0; }
 	a.btn.btn-small, a.btn-icon.btn-small { line-height: 26px; padding-bottom: 0; }
 	a.btn.btn-large, a.btn-icon.btn-large { line-height: 42px; padding-bottom: 0; }
-	
+
 
 /* Fix the button in IE7 :-( */
 *+html .btn, *+html .btn-icon { border-color: none ; border: 1px solid transparent; }
@@ -810,7 +805,7 @@ height: 0;
 .btn:hover, .btn-icon:hover, .btn-mini:hover { background-color: #16222C; color: #FFF; }
 
 
-/* Colors */	
+/* Colors */
 .btn-pink,
 .btn-pink:visited { background-color: #FF0066; border-color: #DA0C59; }
 .btn-pink:hover { background-color: #DA0C59; }
@@ -881,38 +876,38 @@ height: 0;
 
 .btn-icon span
 {
-	background-image: url(../images/amp-btn-icon-sprite.png); 
-	background-repeat: no-repeat; 
-	background-position: 0 0; 
-	width: 16px; 
-	height: 16px; 
-	position: absolute; 
-	left: 6px; 
+	background-image: url(../images/amp-btn-icon-sprite.png);
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 6px;
 	top: 6px;
 }
 
 	.btn-icon.btn-small span { top: 4px; }
 	.btn-icon.btn-large span { top: 12px; }
-	@-moz-document url-prefix() { .btn-icon span { left: -24px; top: 0px; } .btn-icon.btn-small span { top: -1px; } .btn-icon.btn-large span { top: 4px; } } 
+	@-moz-document url-prefix() { .btn-icon span { left: -24px; top: 0px; } .btn-icon.btn-small span { top: -1px; } .btn-icon.btn-large span { top: 4px; } }
 
 
 /* Mini Buttons */
-.btn-mini 
-{ 
-	background-position: 0 0; 
-	width: 32px; 
-	height: 26px !important; 
-	line-height: 500px !important; 
+.btn-mini
+{
+	background-position: 0 0;
+	width: 32px;
+	height: 26px !important;
+	line-height: 500px !important;
 	overflow: hidden;
-	padding: 0; 
+	padding: 0;
 }
 
-	.btn-mini span 
-	{ 
-		background-image: url(../images/amp-btn-icon-sprite.png); 
-		background-repeat: no-repeat; 
+	.btn-mini span
+	{
+		background-image: url(../images/amp-btn-icon-sprite.png);
+		background-repeat: no-repeat;
 		display: block;
-		width: 16px; 
+		width: 16px;
 		height: 16px;
 		line-height: 0;
 		position: absolute;
@@ -921,8 +916,8 @@ height: 0;
 		margin-left: -8px;
 		margin-top: -8px;
 	}
-	
-	
+
+
 /* Icon Classes */
 .btn-arrow-down span { background-position: -48px 0; }
 .btn-arrow-up span { background-position: -32px 0; }
@@ -942,8 +937,8 @@ height: 0;
 .btn-plus span { background-position: -80px -16px; }
 .btn-minus span { background-position: -96px -16px; }
 .btn-cross span { background-position: -112px -16px; }
-	
-	
+
+
 /* Transparent Button Styles */
 .btn-transparent, .btn-transparent:hover { background-image: url(../images/bg-lite.png); background-color: transparent; filter: none; border-color: transparent\0/; border-color: rgba(0,0,0,.4) !important; margin: 0 1em 0 0; }
 *+html .btn-transparent { border: none; }
@@ -952,7 +947,7 @@ height: 0;
 
 
 
-/* -------------------------------------------------------------- 
+/* --------------------------------------------------------------
    Tabs
 -------------------------------------------------------------- */
 .tab_container { }
@@ -968,7 +963,7 @@ ul.tabs {
 	width: 100%;
 }
 
-	ul.tabs li 
+	ul.tabs li
 	{
 		float: left;
 		margin: 0;
@@ -982,8 +977,8 @@ ul.tabs {
 		overflow: hidden;
 		position: relative;
 	}
-	
-		ul.tabs li a 
+
+		ul.tabs li a
 		{
 			text-decoration: none;
 			color: #263849;
@@ -993,16 +988,16 @@ ul.tabs {
 			border: 1px solid #fff;
 			outline: none;
 		}
-		
-			ul.tabs li a:hover { background: #ccc; }	
+
+			ul.tabs li a:hover { background: #ccc; }
 			ul.tabs li.active, ul.tabs li.active a:hover  { background: #fff; border-bottom: 1px solid #fff; }
 
-.tab_content_container 
+.tab_content_container
 {
 	border: 1px solid #CCC;
 	border-top: none;
 	clear: both;
-	float: left; 
+	float: left;
 	width: 100%;
 	background: #fff;
 	-moz-border-radius-bottomright: 5px;
@@ -1013,43 +1008,43 @@ ul.tabs {
 	-webkit-border-bottom-left-radius: 5px;
 }
 	.tab_content { font-size: 1.2em; padding: 20px 20px 10px; }
-	
-	
-	
-	
-/* -------------------------------------------------------------- 
+
+
+
+
+/* --------------------------------------------------------------
    Accordion
 -------------------------------------------------------------- */
-h2.accordion_panel 
+h2.accordion_panel
 {
 	background: url(../images/accordion_header.png) no-repeat;
 	width: 100%;
-	height: 36px;	
+	height: 36px;
 	font-size: 16px;
 	font-weight: normal;
 	line-height: 36px;
-	padding: 0;	
-	margin: 0 0 .5em 0;	
+	padding: 0;
+	margin: 0 0 .5em 0;
 	border: 1px solid #C5C5C5;
-	
+
 	cursor: pointer;
-	
+
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 }
 
-	h2.accordion_panel a 
+	h2.accordion_panel a
 	{
 		color: #263849;
 		text-decoration: none;
 		padding: 0 0 0 50px;
 	}
-	
-		h2.active {background-position: left bottom; border-color: #131C24; }	
+
+		h2.active {background-position: left bottom; border-color: #131C24; }
 			h2.active a { color: #FFF; }
-			
-.accordion_content 
+
+.accordion_content
 {
 	width: 100%;
 	font-size: 1.2em;

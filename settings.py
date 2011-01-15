@@ -38,13 +38,11 @@ else:
     DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
     DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
-
     EMAIL_USE_TLS = True
     EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = 'frecarlsen@gmail.com'
     EMAIL_HOST_PASSWORD = '76ahf6234a'
     EMAIL_PORT = 587
-    
 
 TIME_ZONE = 'Europe/Oslo'
 

@@ -10,6 +10,7 @@ from core.shortcuts import render_with_request
 
 @login_required()
 def overview(request):
+
     announcements = Core.current_user().getPermittedObjects("VIEW",Announcement)[::-1]
     your_projects = Core.current_user().getPermittedObjects("VIEW",Project)
     your_orders = Core.current_user().getPermittedObjects("VIEW",Order).filter(state="O")[::-1]

@@ -4,6 +4,7 @@ import os
 import settings
 
 import core.django_cron
+
 core.django_cron.autodiscover()
 
 urlpatterns = patterns('',
@@ -39,7 +40,6 @@ urlpatterns = patterns('',
                        (r'users/addPop/$', 'app.admin.users.views.addPop'),
 
                        (r'testtest$', 'app.mail.views.overview'),
-
 
 
                        #Grant permissions

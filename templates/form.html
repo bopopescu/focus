@@ -8,15 +8,20 @@
 
 {% endblock %}
 
+
+{% block extraHead %}
+    {{ form.media }}
+
+
+{% endblock %}
+
 {% block maincontent %}
 
-    {{ form.media }}
+    {% block extraPortlet %}
+
+    {% endblock %}
+
     <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
-
-
-        {% block extraPortlet %}
-
-        {% endblock %}
 
         <div class="portlet x6">
             <div class="portlet-header"><h4>{{ title }}</h4></div>
@@ -36,22 +41,8 @@
             </div>
         </div>
 
-
-
     </form>
 
-
-    <script type="text/javascript" src="/media/js/multiselect.js"></script>
-    <link rel="stylesheet" type="text/css" href="/media/css/multiselect.css" media="all">
-
-    <script>
-        $(document).ready(function() {
-            $("select[multiple]").asmSelect();
-        });
-    </script>
-
-    {% block extra %}
-    {% endblock %}
 
 {% endblock %}	
 

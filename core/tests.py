@@ -7,8 +7,10 @@ class PermissionsTesting(TestCase):
 
     def setUp(self):
         self.user1 = User.objects.get_or_create(username="test")[0]
-        self.user2 = User.objects.get_or_create(username="test2")[0]
-        self.user3 = User.objects.get_or_create(username="test3")[0]
+        self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
+        self.user3 = User.objects.get_or_create(username="test3", company=self.user1.get_company())[0]
+
+        Core.set_test_user(self.user3)
 
         self.customer1 = Customer.objects.get_or_create(full_name="Customer1", cid=1)[0]
         self.customer2 = Customer.objects.get_or_create(full_name="Customer2", cid=2)[0]
@@ -19,7 +21,6 @@ class PermissionsTesting(TestCase):
         self.role1 = Role.objects.get_or_create(name="Admin")[0]
         self.role2 = Role.objects.get_or_create(name="Member")[0]
 
-        Core.set_test_user(self.user3)
 
     def tearDown(self):
 
@@ -325,7 +326,7 @@ class PermissionsTesting(TestCase):
 
     def testGrantPermissionByUrlsToGroups(self):
         c = self.client
-        
+
         self.group1.addMember(self.user1)
 
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)

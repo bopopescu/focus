@@ -11,19 +11,16 @@
 
     <link rel="stylesheet" href="/media/css/screen.css" type="text/css" media="screen" title="no title"
           charset="utf-8"/>
-    <link rel="stylesheet" href="/media/css/plugin.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
-    <link rel="stylesheet" href="/media/css/custom.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
+
     <link rel="stylesheet" href="/media/css/noticeui.css" type="text/css" media="screen" title="no title"
           charset="utf-8"/>
-    <style type="text/css" media="screen"></style>
 
-    <script type="text/javascript" src="/media/js/jquery/jquery.1.4.2.min.js"></script>
-    <script type="text/javascript" src="/media/js/slate/slate.js"></script>
-    <script type="text/javascript" src="/media/js/slate/slate.portlet.js"></script>
-    <script type="text/javascript" src="/media/js/plugin.js"></script>
-    <script type="text/javascript" src="/media/js/jquery-ui-1.8.7.custom.min.js"></script>
+    <script type="text/javascript" src="/media/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/media/js/jqueryui.js"></script>
+
+
+    {% block extraHead %}
+    {% endblock %}
 
 </head>
 
@@ -269,22 +266,15 @@
 
 </div> <!-- #wrapper -->
 
-<script type="text/javascript" charset="utf-8">
-    $(function () {
-        slate.init();
-        slate.portlet.init();
-    });
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#message").click(function () {
-            $(this).fadeOut();
-            return true;
-        });
-    }
-            );
-</script>
-
 </body>
+
+
+
+{% block extraFooter %}
+
+
+{% endblock %}
+
+
+
 </html>
