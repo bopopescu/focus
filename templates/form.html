@@ -27,12 +27,20 @@
             <div class="portlet-header"><h4>{{ title }}</h4></div>
             <div class="portlet-content">
 
-
                 {% for field in form %}
-                    <div class="field {% if field.errors %} fielderror {% endif %}">
+
+                    <div class="field{% if field.errors %} fielderror {% endif %}">
+
+
                         {{ field.label_tag }}
+
                         {{ field }}
+
+                {% if field.errors %}
+                        <div style="margin-left:150px">{% for i in field.errors %}{{ i }}{% endfor %}</div>
+                {% endif %}
                     </div>
+
 
                 {% endfor %}
 
@@ -44,5 +52,5 @@
     </form>
 
 
-{% endblock %}	
+{% endblock %}
 
