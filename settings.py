@@ -18,31 +18,12 @@ MANAGERS = ADMINS
 
 import socket
 
-if socket.gethostname().startswith('FREDRIK'):
-    LIVEHOST = False
-else:
-    LIVEHOST = True
-
-if LIVEHOST:
-    DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    DATABASE_NAME = 'frecarlsen_focus'             # Or path to database file if using sqlite3.
-    DATABASE_USER = 'frecarlsen'             # Not used with sqlite3.
-    DATABASE_PASSWORD = 'XDuGEMac'         # Not used with sqlite3.
-    DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-    DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-else:
-    DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    DATABASE_NAME = 'focusDB'             # Or path to database file if using sqlite3.
-    DATABASE_USER = ''             # Not used with sqlite3.
-    DATABASE_PASSWORD = ''         # Not used with sqlite3.
-    DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-    DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
-    EMAIL_USE_TLS = True
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_HOST_USER = 'frecarlsen@gmail.com'
-    EMAIL_HOST_PASSWORD = '76ahf6234a'
-    EMAIL_PORT = 587
+DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = 'focusDB'             # Or path to database file if using sqlite3.
+DATABASE_USER = ''             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
+DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 TIME_ZONE = 'Europe/Oslo'
 
