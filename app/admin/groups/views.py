@@ -9,7 +9,8 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-    groups = Group.objects.inCompany()
+
+    groups = Core.current_user().getPermittedObjects("VIEW", Group)
     return render_with_request(request, 'admin/groups/list.html', {'title': 'Grupper', 'groups': groups})
 
 def add(request):
@@ -42,22 +43,23 @@ def addPop(request):
 
 @login_required()
 def view(request, id):
-
-    group = Group.objects.get(id=id)
-    
+    group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
     return render_with_request(request, 'admin/groups/view.html', {'title': 'Gruppe',
-                                                                        'group': group,
-                                                                        })
+                                                                   'group': group,
+                                                                   })
 
 @login_required()
 def delete(request, id):
-    request.messages_success("Velykket slettet bruker")
+    group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
+    group.delete()
+
+    request.message_success("Vellykket slettet bruker")
     return redirect(overview)
 
 @login_required()
 def form (request, id=False):
     if id:
-        instance = get_object_or_404(Group, id=id)
+        instance = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
         msg = "Velykket endret gruppe"
     else:
         instance = Group()
