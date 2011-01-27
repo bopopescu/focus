@@ -45,7 +45,7 @@ def view(request, id):
 
     group = Group.objects.get(id=id)
     
-    return render_with_request(request, 'admin/Groups/view.html', {'title': 'Gruppe',
+    return render_with_request(request, 'admin/groups/view.html', {'title': 'Gruppe',
                                                                         'group': group,
                                                                         })
 
