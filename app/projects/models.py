@@ -3,6 +3,8 @@ from django.db import models
 from core.models import *
 from app.customers.models import Customer
 from django.core import urlresolvers
+from datetime import timedelta
+import time
 
 class Project(PersistentModel):
     pid = models.IntegerField("Prosjektnr", null=True)
@@ -12,9 +14,8 @@ class Project(PersistentModel):
     description = models.TextField()
     deliveryAddress = models.CharField(max_length=150, null=True)
     responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name="Ansvarlig", null=True)
-    deliveryDate = models.DateField(verbose_name="Leveringsdato", null=True, blank=True)
-    deliveryDateDeadline = models.DateField(verbose_name="Leveringsfrist", null=True, blank=True)
-
+    deliveryDate = models.DateTimeField(verbose_name="Leveringsdato", null=True, blank=True)
+    deliveryDateDeadline = models.DateTimeField(verbose_name="Leveringsfrist", null=True, blank=True)
 
     def __unicode__(self):
         return self.project_name
@@ -24,6 +25,15 @@ class Project(PersistentModel):
 
     def searchIndexes(self):
         return ['project_name']
+
+    def percentDone(self):
+        realDiff = (time.mktime(datetime.now().timetuple()) - time.mktime(self.date_created.timetuple()))
+        estimatedDiff = (time.mktime(self.deliveryDate.timetuple()) - time.mktime(self.date_created.timetuple()))
+
+        if realDiff>estimatedDiff:
+            return 100
+
+        return (realDiff/estimatedDiff)*100
 
     def save(self, *args, **kwargs):
         new = False

@@ -141,6 +141,9 @@
                     {% require_permission LIST projects.Project %}
                     <li><a href="{% url app.projects.views.overview %}">Dine prosjekter</a></li>
                     {% end_require %}
+                    {% require_permission LIST projects.Project %}
+                    <li><a href="{% url app.projects.views.timeline %}">Tidslinje</a></li>
+                    {% end_require %}
                     {% require_permission LISTALL projects.Project %}
                     <li><a href="{% url app.projects.views.overview_all %}">Alle aktive prosjekter</a></li>
                     {% end_require %}

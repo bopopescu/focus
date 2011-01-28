@@ -18,12 +18,13 @@ MANAGERS = ADMINS
 
 import socket
 
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'focusDB'             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'focusDB'
+    }
+}
+
 
 TIME_ZONE = 'Europe/Oslo'
 
@@ -48,8 +49,8 @@ ADMIN_MEDIA_PREFIX = '/media/admin/'
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 
 TEMPLATE_LOADERS = (
-'django.template.loaders.filesystem.load_template_source',
-'django.template.loaders.app_directories.load_template_source',
+'django.template.loaders.filesystem.Loader',
+'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (

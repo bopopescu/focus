@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load auth %}
+
 
 {% block extrahead %}
 
@@ -49,6 +51,26 @@
         </div>
     </div>
 
+    <div class="portlet x5">
+
+    <div class="portlet-header"><h4>Valg</h4></div>
+
+    <div class="portlet-content">
+
+        {% require_permission EDIT customer %}
+        <div class="tool editChoice">
+            <a href="{% url app.customers.views.edit customer.id %}">Endre kunde</a>
+        </div>
+        {% end_require %}
+
+        {% require_permission DELETE customer %}
+        <div class="tool deleteChoice">
+            <a href="{% url app.customers.views.delete customer.id %}">Slett kunde</a>
+        </div>
+        {% end_require %}
+
+    </div>
+</div>
 
     <div class="portlet x5">
         <div class="portlet-header"><h4>Prosjekter og ordrer</h4></div>

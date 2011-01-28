@@ -6,6 +6,8 @@ urlpatterns = patterns('app.projects.views',
 
                        url(r'^$', 'overview'),
 
+                       url(r'^timeline/?$', 'timeline'),
+                       
                        url(r'^deleted/?$', 'overview_deleted'),
                        url(r'^all/?$', 'overview_all'),
 
