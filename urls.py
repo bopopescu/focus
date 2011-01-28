@@ -5,8 +5,6 @@ import settings
 
 import core.django_cron
 
-core.django_cron.autodiscover()
-
 urlpatterns = patterns('',
                        (r'^$', include('app.dashboard.urls')),
                        (r'^dashboard/', include('app.dashboard.urls')),
@@ -49,6 +47,9 @@ urlpatterns = patterns('',
                        (
                        r'grant/permission/(?P<perm>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
                        , 'core.views.grant_permission'),
+
+                       (r'testing', 'core.views.testing'),
+
 
                        #for adding currency
                        (r'unitForSizes/addPop/$', 'app.stock.productUnits.views.addPop'),

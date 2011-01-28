@@ -142,8 +142,8 @@ class TimeTrackingTesting(TestCase):
 
         testTypeHour = TypeOfHourRegistration.objects.create(name="Arbeid", description="test")
         testCustomer = Customer.objects.create(cid="10432", full_name="testKunde", email="test@test.com")
-        testOrder = Order.objects.create(oid="2342", order_name="test", customer = testCustomer)
-        hourRegistration = HourRegistration.objects.create(date = now,
+        testOrder = Order.objects.create(oid="2342", order_name="test", customer=testCustomer)
+        hourRegistration = HourRegistration.objects.create(date=now,
                                                            order=testOrder,
                                                            typeOfWork=testTypeHour,
                                                            time_start="15:00",

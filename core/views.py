@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponse
 from core.decorators import login_required
 from core.models import User, Group
 from django.core import urlresolvers
@@ -9,6 +10,10 @@ from django.shortcuts import redirect
 def updateTimeout(request):
     request.session.set_expiry(1800)
     return
+
+
+def testing(request):
+    return HttpResponse("OK")
 
 """
 

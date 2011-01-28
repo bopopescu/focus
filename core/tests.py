@@ -1,10 +1,10 @@
-from django.test import TestCase
+from django.core.urlresolvers import reverse
+from django.test import TestCase, Client
 from models import *
 from app.customers.models import *
-from views import grant_role, grant_permission
+from core.views import grant_role, grant_permission, testing
 
 class PermissionsTesting(TestCase):
-
     def setUp(self):
         self.user1 = User.objects.get_or_create(username="test")[0]
         self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
@@ -20,13 +20,6 @@ class PermissionsTesting(TestCase):
 
         self.role1 = Role.objects.get_or_create(name="Admin")[0]
         self.role2 = Role.objects.get_or_create(name="Member")[0]
-
-
-    def tearDown(self):
-
-        self.user1.delete()
-        self.user2.delete()
-        self.user3.delete()
 
     def testUserPerm(self):
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
@@ -269,19 +262,19 @@ class PermissionsTesting(TestCase):
 
 
     def testGrantRoleByUrls(self):
-        c = self.client
-
+        
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
 
-        c.get('/grant/role/Member/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+        self.client.get('/grant/role/Member/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("VIEW", self.customer1), True)
 
-        c.get('/grant/role/Admin/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
+        self.client.get('/grant/role/Admin/user/%s/customers/customer/%s/' % (self.user1.id, self.customer1.id))
 
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
+
 
     def testGrantRoleByUrlsToGroups(self):
         c = self.client
@@ -352,7 +345,6 @@ class PermissionsTesting(TestCase):
         #Give a group, a role on a class
         c.get('/grant/role/Admin/group/%s/customers/customer/%s/' % (self.group1.id, "any"))
         self.assertEqual(self.user1.has_permission_to("DELETE", Customer), True)
-
 
     def testPermittedObjects(self):
         self.assertEqual(self.customer1 in self.user1.getPermittedObjects("VIEW", Customer), False)

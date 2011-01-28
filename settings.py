@@ -25,7 +25,6 @@ DATABASES = {
     }
 }
 
-
 TIME_ZONE = 'Europe/Oslo'
 
 LANGUAGE_CODE = 'no-nb'
@@ -66,18 +65,17 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'focus.urls'
 
 TEMPLATE_DIRS = (
-BASE_PATH + '/templates/',
+    BASE_PATH + '/templates/',
 )
 
 INSTALLED_APPS = (
 'django.contrib.contenttypes',
 'django.contrib.sessions',
 
-'app.admin',
 
 #All the applicaitons
 'core',
-'core.django_cron',
+'app.admin',
 'app.company',
 'app.announcements',
 'app.accounts',

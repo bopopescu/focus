@@ -7,7 +7,6 @@ from core.models import User, Group, Company
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'canLogin', 'profileImage',)
 
 class UserProfileForm(ModelForm):
     class Meta:

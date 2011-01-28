@@ -60,7 +60,6 @@ class User(models.Model):
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
     deleted = models.BooleanField()
 
-
     #HourRegistrations
     daysIntoNextMonthTypeOfHourRegistration = models.IntegerField(null=True)
     daysIntoNextMonthTypeOfHourRegistrationExpire = models.DateField(null=True)

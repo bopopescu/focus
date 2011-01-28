@@ -46,8 +46,6 @@ def generateValidPeriode(*args, **kwargs):
     if Core.current_user().get_validEditBackToDate(**kwargs):
         fromDate = Core.current_user().validEditBackToDate.strftime("%d.%m.%Y")
 
-    print fromDate
-
     return [fromDate, to_date.strftime("%d.%m.%Y")]
 
 def validForEdit(date, *args,**kwargs):
