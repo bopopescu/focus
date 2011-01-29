@@ -40,13 +40,13 @@
                             <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
                                 {{ user.phone }}<br/>
 
-                                <a href="{% url app.admin.users.views.view user.id %}">Flere detaljer</a></p>
+                                <a href="{% url app.admin.views.user.view user.id %}">Flere detaljer</a></p>
                         </div>
                         <!-- .user-card-content -->
 
                     </div> <!-- .user-card -->
                 {% endfor %}
-            
+
 
             </div>
 

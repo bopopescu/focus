@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from app.announcements.models import Announcement
-from app.orders.models import Order
+from app.orders.models import Order, OrderState
 from app.projects.models import Project
 from core import Core
 from core.decorators import login_required
@@ -13,7 +13,9 @@ def overview(request):
 
     announcements = Core.current_user().getPermittedObjects("VIEW",Announcement)[::-1]
     your_projects = Core.current_user().getPermittedObjects("VIEW",Project)
-    your_orders = Core.current_user().getPermittedObjects("VIEW",Order).filter(state="O")[::-1]
+
+    orderState = OrderState.objects.get(name="Ordre")
+    your_orders = Core.current_user().getPermittedObjects("VIEW",Order).filter(state=orderState)[::-1]
 
     return render_with_request(request, 'dashboard/dashboard.html', {'title': 'Oppslagstavle',
                                                                      'announcements': announcements,

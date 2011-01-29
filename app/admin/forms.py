@@ -22,3 +22,18 @@ class GroupForm(ModelForm):
         super(GroupForm, self).__init__(*args, **kwrds)
         self.fields['members'].widget = MultipleSelectWithPop()
         self.fields['members'].queryset = User.objects.inCompany()
+
+
+class HourRegistrationManuallyForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('validEditHourRegistrationsToDate', 'validEditHourRegistrationsFromDate',)
+           
+    def __init__(self, *args, **kwargs):
+        super(HourRegistrationManuallyForm, self).__init__(*args, **kwargs)
+        self.fields['validEditHourRegistrationsToDate'].required = False
+        self.fields['validEditHourRegistrationsToDate'].widget = DatePickerField(format="%d.%m.%Y")
+        self.fields['validEditHourRegistrationsToDate'].input_formats = ["%d.%m.%Y"]
+        self.fields['validEditHourRegistrationsFromDate'].required = False
+        self.fields['validEditHourRegistrationsFromDate'].widget = DatePickerField(format="%d.%m.%Y")
+        self.fields['validEditHourRegistrationsFromDate'].input_formats = ["%d.%m.%Y"]

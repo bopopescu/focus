@@ -24,11 +24,11 @@
                 <tbody>
                 {% for u in groups %}
                     <tr>
-                        <td><a href="{% url app.admin.groups.views.view u.id %}">{{ u }}</a></td>
+                        <td><a href="{% url app.admin.views.group.view u.id %}">{{ u }}</a></td>
                         <td>
-                            <a href="{% url app.admin.groups.views.edit u.id %}" class="edit admintool"><img
+                            <a href="{% url app.admin.views.group.edit u.id %}" class="edit admintool"><img
                                     src="/media/images/icons/user_edit.png" alt=""></a>
-                            <a href="{% url app.admin.groups.views.delete u.id %}" class="edit admintool"><img
+                            <a href="{% url app.admin.views.group.delete u.id %}" class="edit admintool"><img
                                     src="/media/images/icons/user_delete.png" alt=""></a>
                         </td>
                     </tr>

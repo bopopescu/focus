@@ -25,7 +25,7 @@
             <br>
             Firma: {{ userCard.get_profile.company }}
             <br><br>
-            <a href="{% url app.admin.users.views.changeCanLogin userCard.id %}">Kan logge inn:
+            <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">Kan logge inn:
                 <b>{{ userCard.canLogin }}</b></a>
             <br>
 
@@ -39,7 +39,7 @@
                 {% for member in userCard.groups.all %}
 
                     <tr>
-                        <td><a href="{% url app.admin.groups.views.view member.id %}">{{ member }}</a></td>
+                        <td><a href="{% url app.admin.views.group.view member.id %}">{{ member }}</a></td>
                     </tr>
 
                 {% endfor %}
@@ -89,7 +89,7 @@
 
                             <td>{% if perm.group %}
                                 Gjennom gruppen <a
-                                        href="{% url app.admin.groups.views.view perm.membership.id %}">{{  perm.group }}</a>
+                                        href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
                             {% endif %}
                             </td>
 
@@ -105,17 +105,25 @@
         <div class="portlet-header"><h4>Valg</h4></div>
         <div class="portlet-content">
             <div class="tool editChoice">
-                <a href="{% url app.admin.users.views.edit userCard.id %}" class="edit admintool">Endre</a>
+                <a href="{% url app.admin.views.user.edit userCard.id %}" class="edit admintool">Endre</a>
             </div>
 
             <div class="tool editChoice">
-                <a href="{% url app.admin.users.views.sendGeneratedPassword userCard.id %}" class="edit admintool">Send
+                <a href="{% url app.admin.views.user.sendGeneratedPassword userCard.id %}" class="edit admintool">Send
                     nytt
                     passord</a>
             </div>
 
+            <div class="tool editChoice">
+                <a href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}" class="edit admintool">
+                    Sett tider timelister manuelt
+
+                    </a>
+            </div>
+
+
             <div class="tool deleteChoice">
-                <a href="{% url app.admin.users.views.delete userCard.id %}" class="edit admintool">Slett</a>
+                <a href="{% url app.admin.views.user.delete userCard.id %}" class="edit admintool">Slett</a>
             </div>
         </div>
     </div>

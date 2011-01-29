@@ -125,6 +125,31 @@ def delete(request, id):
     request.message_success("Velykket slettet bruker")
     return redirect(overview)
 
+
+@login_required()
+def setHourRegistrationLimitsManually (request, id):
+    instance = get_object_or_404(User, id=id)
+    msg = "Velykket satt tider"
+
+    if request.method == 'POST':
+        form = HourRegistrationManuallyForm(request.POST, instance=instance)
+
+        if form.is_valid():
+            o = form.save(commit=False)
+
+            o.save()
+            form.save_m2m()
+
+            request.message_success(msg)
+
+            return redirect(view, id)
+
+    else:
+        form = HourRegistrationManuallyForm(instance=instance)
+
+    return render_with_request(request, "form.html", {'title': 'Sett tider', 'form': form})
+
+
 @login_required()
 def form (request, id=False):
     if id:

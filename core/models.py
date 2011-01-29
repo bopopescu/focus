@@ -17,10 +17,6 @@ A user can only see objects within the same company.
 """
 
 class Company(models.Model):
-    PERIODE_CHOICES = (
-    ('w', 'Ukentlig'),
-    ('m', 'Månedlig'),
-    )
 
     name = models.CharField(max_length=80)
     adminGroup = models.ForeignKey("Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True,
@@ -30,7 +26,6 @@ class Company(models.Model):
     daysIntoNextMonthHourRegistration = models.IntegerField("Leveringsfrist", default=3)
     hoursNeededFor50overtimePay = models.IntegerField("Timer før 50%", default=160)
     hoursNeededFor100overtimePay = models.IntegerField("Timer før 100%", default=240)
-    periodeHourRegistrations = models.CharField("Periode", max_length=1, choices=PERIODE_CHOICES, default="m")
 
     def __unicode__(self):
         return self.name
@@ -71,8 +66,8 @@ class User(models.Model):
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
-    validEditHourRegistrationsToDate = models.DateTimeField(null=True)
-    validEditHourRegistrationsFromDate = models.DateTimeField(null=True)
+    validEditHourRegistrationsToDate = models.DateTimeField(null=True, verbose_name="From")
+    validEditHourRegistrationsFromDate = models.DateTimeField(null=True, verbose_name="To")
 
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
@@ -142,15 +137,16 @@ class User(models.Model):
 
         return [from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y")]
 
-    def canEditHourRegistration(self, hourRegistration):
+    def canEditHourRegistration(self, hourRegistration, *args, **kwargs):
         now = datetime.now()
+
         period = self.generateValidPeriode(*args, **kwargs)
 
         if 'today' in kwargs:
             now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
             period = self.generateValidPeriode(today=kwargs['today'])
 
-        date = time.mktime(time.strptime("%s"%(date),"%d.%m.%Y"))
+        date = time.mktime(time.strptime("%s"%(hourRegistration.date.strftime("%d.%m.%Y")),"%d.%m.%Y"))
         from_date = time.mktime(time.strptime("%s"%(period[0]),"%d.%m.%Y"))
         to_date = time.mktime(time.strptime("%s"%(period[1]),"%d.%m.%Y"))
 
@@ -897,10 +893,15 @@ def initial_data ():
                                                   first_name="SuperAdmin",
                                                   last_name="")
 
+    a.is_superuser = True
+    a.canLogin=True
+    a.is_staff = True
     a.set_password("superpassord")
     a.save()
 
     u, created = User.all_objects.get_or_create(username="test",
-                                                  first_name="Test1")
+                                                  first_name="Test1",
+                                                  )
+    u.company = comp
     u.set_password("test")
     u.save()

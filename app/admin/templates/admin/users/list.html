@@ -24,14 +24,14 @@
                 <tbody>
                 {% for u in users %}
                     <tr>
-                        <td><a href="{% url app.admin.users.views.view u.id %}">{{ u.first_name }} {{ u.last_name }}</a>
+                        <td><a href="{% url app.admin.views.user.view u.id %}">{{ u.first_name }} {{ u.last_name }}</a>
                         </td>
                         <td>{{ u.email }}</td>
                         <td>{{ contact.phone }}</td>
                         <td>{{ contact.email }}</td>
                         <td>
                             <div class="tool">
-                                <a href="{% url app.admin.users.views.edit u.id  %}"><img
+                                <a href="{% url app.admin.views.user.edit u.id  %}"><img
                                         class="tool" src="/media/icons/edit.gif" alt=""></a>
                             </div>
                         </td>

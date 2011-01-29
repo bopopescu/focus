@@ -19,10 +19,10 @@ urlpatterns = patterns('',
                        (r'^typeOfWorks/addPop/?$', 'app.hourregistrations.views.addTypeOfWork'),
                        (r'^announcements/', include('app.announcements.urls')),
                        #settings for admin
-                       (r'^admin/users/', include('app.admin.users.urls')),
-                       (r'^admin/groups/', include('app.admin.groups.urls')),
-                       (r'^admin/company/', include('app.admin.company.urls')),
-                       (r'^profile/$', 'app.admin.users.profile.edit'),
+                       (r'^admin/', include('app.admin.urls')),
+
+                       (r'^profile/$', 'app.admin.views.profile.edit'),
+
                        #Stock
                        (r'^stock/products/', include('app.stock.products.urls')),
                        (r'^stock/productgroups/', include('app.stock.productgroups.urls')),
@@ -32,8 +32,8 @@ urlpatterns = patterns('',
                        (r'^suppliers/', include('app.suppliers.urls')),
                        #Directlink for use of popup
                        #For adding users
-                       (r'participants/addPop/$', 'app.admin.users.views.addPop'),
-                       (r'users/addPop/$', 'app.admin.users.views.addPop'),
+                       #(r'participants/addPop/$', 'app.admin.users.views.addPop'),
+                       #(r'users/addPop/$', 'app.admin.users.views.addPop'),
 
                        (r'testtest$', 'app.mail.views.overview'),
 

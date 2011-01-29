@@ -34,7 +34,7 @@
 <div id="header">
     <h1><a href="/">TIME | {{ user.company }}</a></h1>
     <div id="info">
-        <h4><a href="{% url app.admin.users.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
+        <h4><a href="{% url app.admin.views.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
         <p>
             <a href="/accounts/logout">Logg ut</a>
             <br/>
@@ -223,24 +223,24 @@
         </li>
 
         <li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
-            <a class="mega-tab" href="{% url app.admin.users.views.overview %}">Admin</a>
+            <a class="mega-tab" href="{% url app.admin.views.user.overview %}">Admin</a>
 
             <div class="mega-content mega-menu ">
                 <ul>
                     {% require_permission LIST core.User %}
-                    <li><a href="{% url app.admin.users.views.overview %}">Oversikt</a></li>
+                    <li><a href="{% url app.admin.views.user.overview %}">Oversikt</a></li>
                     {% end_require %}
                     {% require_permission CREATE core.User %}
-                    <li><a href="{% url app.admin.users.views.add %}">Legg til ny bruker</a></li>
+                    <li><a href="{% url app.admin.views.user.add %}">Legg til ny bruker</a></li>
                     {% end_require %}
                     {% require_permission LIST core.Group %}
-                    <li><a href="{% url app.admin.groups.views.overview %}">Gruppeoversikt</a></li>
+                    <li><a href="{% url app.admin.views.group.overview %}">Gruppeoversikt</a></li>
                     {% end_require %}
                     {% require_permission CREATE core.Group %}
-                    <li><a href="{% url app.admin.groups.views.add %}">Legg til ny gruppe</a></li>
+                    <li><a href="{% url app.admin.views.group.add %}">Legg til ny gruppe</a></li>
                     {% end_require %}
                     {% require_permission CONFIGURE core.Company %}
-                    <li><a href="{% url app.admin.company.views.editCompany %}">Firmadetaljer</a></li>
+                    <li><a href="{% url app.admin.views.company.editCompany %}">Firmadetaljer</a></li>
                     {% end_require %}
                 </ul>
             </div>
