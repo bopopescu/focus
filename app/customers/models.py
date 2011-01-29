@@ -20,6 +20,16 @@ class Customer(PersistentModel):
     def __unicode__(self):
         return self.full_name
 
+
+    def canBeDeleted(self):
+        if self.orders.all().count()>0:
+            return (False, "customer has active orders")
+        
+        if self.projects.all().count()>0:
+            return (False, "customer has active projects")
+
+        return (True, "ok")
+
     def save(self, *args, **kwargs):
         new = False
         if not self.id:

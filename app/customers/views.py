@@ -62,7 +62,14 @@ def edit(request, id):
 
 @require_permission("DELETE", Customer, "id")
 def delete(request, id):
-    Customer.objects.get(id=id).delete()
+
+    customer = Customer.objects.get(id=id)
+
+    if not customer.canBeDeleted()[0]:
+        request.message_error(customer.canBeDeleted()[1])
+    else:
+        customer.delete()
+
     return redirect(overview)
 
 @require_permission("DELETE", Customer, "id")
