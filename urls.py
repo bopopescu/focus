@@ -3,8 +3,6 @@ from django.conf.urls.defaults import *
 import os
 import settings
 
-import core.django_cron
-
 urlpatterns = patterns('',
                        (r'^$', include('app.dashboard.urls')),
                        (r'^dashboard/', include('app.dashboard.urls')),

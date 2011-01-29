@@ -7,6 +7,7 @@ import settings
 from widgets import get_hexdigest, check_password
 from . import Core
 from inspect import isclass
+import time
 
 """
 The Company class.
@@ -16,22 +17,31 @@ A user can only see objects within the same company.
 """
 
 class Company(models.Model):
-
     PERIODE_CHOICES = (
-        ('w', 'Ukentlig'),
-        ('m', 'Månedlig'),
+    ('w', 'Ukentlig'),
+    ('m', 'Månedlig'),
     )
 
     name = models.CharField(max_length=80)
-    adminGroup = models.ForeignKey("Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True, blank=True)
-    allEmployeesGroup = models.ForeignKey("Group", verbose_name="Ansattegruppe",  related_name="companiesWhereAllEmployeed", null=True, blank=True)
-    daysIntoNextMonthTypeOfHourRegistration = models.IntegerField("Leveringsfrist", default = 3)
+    adminGroup = models.ForeignKey("Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True,
+                                   blank=True)
+    allEmployeesGroup = models.ForeignKey("Group", verbose_name="Ansattegruppe",
+                                          related_name="companiesWhereAllEmployeed", null=True, blank=True)
+    daysIntoNextMonthHourRegistration = models.IntegerField("Leveringsfrist", default=3)
     hoursNeededFor50overtimePay = models.IntegerField("Timer før 50%", default=160)
     hoursNeededFor100overtimePay = models.IntegerField("Timer før 100%", default=240)
     periodeHourRegistrations = models.CharField("Periode", max_length=1, choices=PERIODE_CHOICES, default="m")
 
     def __unicode__(self):
         return self.name
+
+
+    def setDaysIntoNextMonthHourRegistration(self, days):
+        self.daysIntoNextMonthHourRegistration = days
+        self.save()
+
+    def getDaysIntoNextMonthHourRegistration(self):
+        return self.daysIntoNextMonthHourRegistration
 
 class User(models.Model):
     """
@@ -60,12 +70,9 @@ class User(models.Model):
     profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
     deleted = models.BooleanField()
 
-    #HourRegistrations
-    daysIntoNextMonthTypeOfHourRegistration = models.IntegerField(null=True)
-    daysIntoNextMonthTypeOfHourRegistrationExpire = models.DateField(null=True)
-
-    validEditBackToDate = models.DateField(null=True)
-    validEditBackToDateExpire = models.DateField(null=True)
+    #HourRegistrations valid period
+    validEditHourRegistrationsToDate = models.DateTimeField(null=True)
+    validEditHourRegistrationsFromDate = models.DateTimeField(null=True)
 
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
@@ -81,6 +88,78 @@ class User(models.Model):
             return self.company
         return None
 
+    def setValidPeriodManually(self, **kwargs):
+
+        if 'toDate' in kwargs:
+            if kwargs['toDate'] == "":
+                self.validEditHourRegistrationsToDate = None
+            else:
+                self.validEditHourRegistrationsToDate = datetime.strptime(kwargs['toDate'], "%d.%m.%Y")
+
+        if 'fromDate' in kwargs:
+            if kwargs['fromDate'] == "":
+                self.validEditHourRegistrationsFromDate = None
+            else:
+                self.validEditHourRegistrationsFromDate = datetime.strptime(kwargs['fromDate'], "%d.%m.%Y")
+
+        self.save()
+
+    def generateValidPeriode(self, *args, **kwargs):
+        now = datetime.now()
+
+        if 'today' in kwargs:
+            now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
+
+        daysIntoNextMonthTimetracking = 0
+        if self.company:
+            daysIntoNextMonthTimetracking = self.company.getDaysIntoNextMonthHourRegistration()
+
+        #If true, user can still edit last month
+        if daysIntoNextMonthTimetracking >= now.day:
+
+            #If January, the user should be able to edit December last year
+            if now.month == 1:
+                from_date = datetime(now.year-1, 12, 1)
+                to_date = datetime(now.year, 1, now.day)
+
+            #If rest of the year, set last month editable
+            else:
+                from_date = datetime(now.year, now.month-1, 1)
+                to_date = datetime(now.year, now.month, now.day)
+
+        #Else, the user can edit from first this month -> today
+        else:
+            from_date = datetime(now.year, now.month, 1)
+            to_date = datetime(now.year, now.month, now.day)
+
+
+        #Check if user has extended the period
+        if self.validEditHourRegistrationsToDate and self.validEditHourRegistrationsToDate > to_date:
+            to_date = self.validEditHourRegistrationsToDate
+
+        if self.validEditHourRegistrationsFromDate and self.validEditHourRegistrationsFromDate < from_date:
+            from_date = self.validEditHourRegistrationsFromDate
+
+        return [from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y")]
+
+    def canEditHourRegistration(self, hourRegistration):
+        now = datetime.now()
+        period = self.generateValidPeriode(*args, **kwargs)
+
+        if 'today' in kwargs:
+            now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
+            period = self.generateValidPeriode(today=kwargs['today'])
+
+        date = time.mktime(time.strptime("%s"%(date),"%d.%m.%Y"))
+        from_date = time.mktime(time.strptime("%s"%(period[0]),"%d.%m.%Y"))
+        to_date = time.mktime(time.strptime("%s"%(period[1]),"%d.%m.%Y"))
+
+        if date >= from_date and date <= to_date:
+            return True
+        return False
+
+
+    """
     def set_validEditBackToDate(self, date, expireDate):
         self.validEditBackToDateExpire = datetime.strptime(expireDate, "%d.%m.%Y")
         self.validEditBackToDate = datetime.strptime(date, "%d.%m.%Y")
@@ -95,6 +174,7 @@ class User(models.Model):
         if self.validEditBackToDate:
             if self.validEditBackToDateExpire:
                 if today < self.validEditBackToDateExpire:
+                    print self.validEditBackToDate
                     return self.validEditBackToDate
             else:
                 return self.validEditBackToDate
@@ -124,6 +204,7 @@ class User(models.Model):
             return self.company.daysIntoNextMonthTypeOfHourRegistration
 
         return 0
+    """
 
     def set_company(self):
         self.company = Core.current_user().get_company()
@@ -794,10 +875,10 @@ def initial_data ():
     Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
 
     #Generates som standard roles
-    Role.objects.create(name="Admin", description="Typisk leder, kan gjøre alt")
-    Role.objects.create(name="Responsible", description="Ansvarlig, kan se,endre")
-    Role.objects.create(name="Member", description="Typisk medlem, kan se")
-    Role.objects.create(name="Owner", description="Typisk den som opprettet objektet")
+    Role.objects.get_or_create(name="Admin", description="Typisk leder, kan gjøre alt")
+    Role.objects.get_or_create(name="Responsible", description="Ansvarlig, kan se,endre")
+    Role.objects.get_or_create(name="Member", description="Typisk medlem, kan se")
+    Role.objects.get_or_create(name="Owner", description="Typisk den som opprettet objektet")
 
     leader = Role.objects.get(name="Admin")
     leader.grant_actions(["ALL"])
@@ -812,23 +893,14 @@ def initial_data ():
     comp = Company(name="FNCIT AS")
     comp.save()
 
-    a, created = User.objects.all().get_or_create(username="superadmin",
+    a, created = User.all_objects.get_or_create(username="superadmin",
                                                   first_name="SuperAdmin",
-                                                  last_name="",
-                                                  canLogin=True,
-                                                  is_superuser=True,
-                                                  is_staff=True,
-                                                  hourly_rate=120,
-                                                  percent_cover=20,
-                                                  is_active=True)
+                                                  last_name="")
+
     a.set_password("superpassord")
     a.save()
 
-    u, created = User.objects.all().get_or_create(username="test",
-                                                  first_name="Test1",
-                                                  canLogin=True,
-                                                  last_name="user",
-                                                  company=comp,
-                                                  is_active=True)
+    u, created = User.all_objects.get_or_create(username="test",
+                                                  first_name="Test1")
     u.set_password("test")
     u.save()

@@ -1,8 +1,5 @@
 from django.conf.urls.defaults import *
 
-import core.django_cron
-
-
 urlpatterns = patterns('app.customers.views',
 
                        url(r'^$', 'overview'),

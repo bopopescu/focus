@@ -2,9 +2,10 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from models import *
 from app.customers.models import *
-from core.views import grant_role, grant_permission, testing
+from core.views import grant_role, grant_permission
 
-class PermissionsTesting(TestCase):
+class FocusTest(TestCase):
+
     def setUp(self):
         self.user1 = User.objects.get_or_create(username="test")[0]
         self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
@@ -20,6 +21,8 @@ class PermissionsTesting(TestCase):
 
         self.role1 = Role.objects.get_or_create(name="Admin")[0]
         self.role2 = Role.objects.get_or_create(name="Member")[0]
+
+class PermissionsTesting(FocusTest):
 
     def testUserPerm(self):
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)

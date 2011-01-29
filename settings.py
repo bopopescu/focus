@@ -16,8 +16,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-import socket
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -65,7 +63,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'focus.urls'
 
 TEMPLATE_DIRS = (
-    BASE_PATH + '/templates/',
+BASE_PATH + '/templates/',
 )
 
 INSTALLED_APPS = (

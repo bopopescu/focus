@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from core.models import *
+from core import Core
+from core.models import PersistentModel, User
 from app.customers.models import Customer
 from django.core import urlresolvers
-from datetime import timedelta
+from datetime import timedelta, datetime
 import time
 
 class Project(PersistentModel):

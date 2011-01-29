@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import *
+from core.models import PersistentModel
 
 class Folder(PersistentModel):
     name = models.CharField(max_length=150)

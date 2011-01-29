@@ -54,7 +54,7 @@ class HourRegistration(PersistentModel):
 
     def __unicode__(self):
         return unicode(self.date)
-
+    
     def save(self, *args, **kwargs):
         """
        Checks length of H:i, if in need of extend to a complete clock

@@ -2,7 +2,7 @@
 from decimal import Decimal
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from helpers import calculateHoursWorked, generateValidPeriode
+from helpers import calculateHoursWorked
 from core.decorators import require_permission, login_required
 from forms import *
 from core.shortcuts import *
@@ -16,7 +16,8 @@ from calendar import monthrange
 def overview(request):
     updateTimeout(request)
 
-    return listHourRegistrations(request, Core.current_user(), generateValidPeriode()[0], generateValidPeriode()[1])
+    return listHourRegistrations(request, Core.current_user(), Core.current_user().generateValidPeriode()[0],
+                                 Core.current_user().generateValidPeriode()[1])
 
 def viewArchivedMonth(request, year, month, user_id=None):
     updateTimeout(request)

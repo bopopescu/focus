@@ -1,14 +1,17 @@
-from app.projects.models import *
-from app.contacts.models import *
 from django.core import urlresolvers
-from core.models import User
+from django.db import models
+from core import Core
+from app.projects.models import Project
+from app.customers.models import Customer
+from app.contacts.models import Contact
+from core.models import User, PersistentModel
 
-STATE_CHOICES = (
-    ('T', 'Tilbud'),
-    ('O', 'Ordre'),
-    ('F', 'Til fakturering'),
-    ('A', 'Arkivert'),
-)
+
+class OrderState(models.Model):
+    name = models.CharField(max_length=150)
+
+    def __unicode__(self):
+        return self.name
 
 class Order(PersistentModel):
     oid = models.IntegerField("Ordrenr", null=True, blank=True)
@@ -22,25 +25,28 @@ class Order(PersistentModel):
     delivery_date_deadline = models.DateField(verbose_name="Leveringsfrist", null=True, blank=True)
     description = models.TextField("Beskrivelse")
     contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name="Kontakter", blank=True)
-    state = models.CharField(max_length=1, choices=STATE_CHOICES)
+    state = models.ForeignKey(OrderState)
 
     def __unicode__(self):
         return self.order_name
 
     def is_archived(self):
-        if self.state == "A":
+        if self.state == "Arkivert":
             return True
         return False
+
     def is_ready_for_invoice(self):
-        if self.state == "F":
+        if self.state == "Til faktura":
             return True
         return False
+
     def is_offer(self):
-        if self.state == "T":
+        if self.state == "Tilbud":
             return True
         return False
+
     def is_order(self):
-        if self.state == "O":
+        if self.state == "Ordre":
             return True
         return False
 
@@ -64,7 +70,6 @@ class Order(PersistentModel):
         return True
 
     def save(self, *args, **kwargs):
-
         new = False
         if not self.id:
             new = True
@@ -79,7 +84,7 @@ class Order(PersistentModel):
 
             if adminGroup:
                 adminGroup.grant_role("Admin", self)
-                
+
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")
     text = models.TextField("Ny oppgave")
@@ -103,3 +108,9 @@ class OrderFile(PersistentModel):
 
     def __unicode__(self):
         return "Prosjektfil: %s" % self.name
+
+def initial_data ():
+    OrderState.objects.get_or_create(name="Tilbud")
+    OrderState.objects.get_or_create(name="Arkiv")
+    OrderState.objects.get_or_create(name="Ordre")
+    OrderState.objects.get_or_create(name="Klar for faktura")

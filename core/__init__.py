@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import threading, inspect
 from datetime import datetime
-from django.db.models import signals
+from south import signals
 from django.conf import settings
 
 class Core:
@@ -157,24 +157,26 @@ class Core:
         return user
 
 
-def load_initial_data(app, sender, **kwargs):
+def load_initial_data(app, **kwargs):
     """
     Load the initial data for all models on syncdb
     """
-    if hasattr(sender, 'initial_data'):
-        origin = inspect.getmodule(sender.initial_data)
 
-        if sender == origin:
-            print "Loading %s initial data" % sender.__name__
-            print "=" * 50
-            sender.initial_data()
-            print "=" * 50
-            print ""
+    try:
+        module = __import__('app.%s.models' % app, fromlist = 1)
+    except ImportError:
+        try:
+            module = __import__('%s.models' % app, fromlist = 1)
+        except ImportError:
+            return
 
-        else:
-            print "WARNING: The initial_data function from %s was imported by %s. Are you importing %s.* ? Stop that!" % (
-            origin.__name__, sender.__name__, origin.__name__)
+    if hasattr(module, 'initial_data'):
+        print "Loading %s initial data" % app
+        print "=" * 50
+        module.initial_data()
+        print "=" * 50
+        print ""
 
-signals.post_syncdb.connect(load_initial_data)
+signals.post_migrate.connect(load_initial_data)
 
 from core.models import User, AnonymousUser

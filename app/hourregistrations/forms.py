@@ -2,7 +2,6 @@
 from datetime import date
 from django.forms import ModelForm
 from django.forms.models import inlineformset_factory
-from helpers import generateValidPeriode, validForEdit
 from models import *
 from core.widgets import *
 
@@ -19,8 +18,8 @@ class HourRegistrationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(HourRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['date'].required = True
-        self.fields['date'].widget = DatePickerField(format="%d.%m.%Y", from_date=generateValidPeriode()[0],
-                                                     to_date=generateValidPeriode()[1])
+        self.fields['date'].widget = DatePickerField(format="%d.%m.%Y", from_date=Core.current_user().generateValidPeriode()[0],
+                                                     to_date=Core.current_user().generateValidPeriode()[1])
         self.fields['date'].input_formats = ["%d.%m.%Y"]
 
         self.fields['time_start'].widget = MaskedField(format="99:99")
