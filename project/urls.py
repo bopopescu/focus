@@ -53,6 +53,8 @@ urlpatterns = patterns('',
                        (r'unitForSizes/addPop/$', 'app.stock.productUnits.views.addPop'),
                        (r'priceVals/addPop/$', 'app.stock.currencies.views.addPop'),
                        (r'productGroups/addPop/$', 'app.stock.productgroups.views.addPop'),
+
+                       
                        #media
                        (r'^media/(?P<path>.*)', 'django.views.static.serve',
                         {'document_root': os.path.join(settings.BASE_PATH, 'media')}),
