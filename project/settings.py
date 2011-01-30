@@ -24,6 +24,8 @@ DATABASES = {
 }
 
 TIME_ZONE = 'Europe/Oslo'
+DATE_FORMAT = 'd.m.Y'
+TIME_FORMAT = 'H.i'
 
 LANGUAGE_CODE = 'no-nb'
 
@@ -61,6 +63,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'focus.urls'
+
+TEST_RUNNER = 'core.tests.FocusTestSuiteRunner'
 
 TEMPLATE_DIRS = (
 BASE_PATH + '/templates/',

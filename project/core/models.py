@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+from . import Core
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta, date
 from core.managers import PersistentManager
 from django.db import models
 import settings
 from widgets import get_hexdigest, check_password
-from . import Core
 from inspect import isclass
 import time
 
@@ -17,7 +17,6 @@ A user can only see objects within the same company.
 """
 
 class Company(models.Model):
-
     name = models.CharField(max_length=80)
     adminGroup = models.ForeignKey("Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True,
                                    blank=True)
@@ -84,7 +83,6 @@ class User(models.Model):
         return None
 
     def setValidPeriodManually(self, **kwargs):
-
         if 'toDate' in kwargs:
             if kwargs['toDate'] == "":
                 self.validEditHourRegistrationsToDate = None
@@ -111,15 +109,14 @@ class User(models.Model):
 
         #If true, user can still edit last month
         if daysIntoNextMonthTimetracking >= now.day:
-
             #If January, the user should be able to edit December last year
             if now.month == 1:
-                from_date = datetime(now.year-1, 12, 1)
+                from_date = datetime(now.year - 1, 12, 1)
                 to_date = datetime(now.year, 1, now.day)
 
             #If rest of the year, set last month editable
             else:
-                from_date = datetime(now.year, now.month-1, 1)
+                from_date = datetime(now.year, now.month - 1, 1)
                 to_date = datetime(now.year, now.month, now.day)
 
         #Else, the user can edit from first this month -> today
@@ -146,9 +143,9 @@ class User(models.Model):
             now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
             period = self.generateValidPeriode(today=kwargs['today'])
 
-        date = time.mktime(time.strptime("%s"%(hourRegistration.date.strftime("%d.%m.%Y")),"%d.%m.%Y"))
-        from_date = time.mktime(time.strptime("%s"%(period[0]),"%d.%m.%Y"))
-        to_date = time.mktime(time.strptime("%s"%(period[1]),"%d.%m.%Y"))
+        date = time.mktime(time.strptime("%s" % (hourRegistration.date.strftime("%d.%m.%Y")), "%d.%m.%Y"))
+        from_date = time.mktime(time.strptime("%s" % (period[0]), "%d.%m.%Y"))
+        to_date = time.mktime(time.strptime("%s" % (period[1]), "%d.%m.%Y"))
 
         if date >= from_date and date <= to_date:
             return True
@@ -680,18 +677,6 @@ class Action(models.Model):
     def __unicode__(self):
         return self.name
 
-"""
-ROLES ("Leader", "Member"..)
-You can grant a user role on objects by doing:
-
-    user.grant_role("Member", object)
-
-You can add actions to a Role by doing
-
-    Role.grant_actions("DELETE")
-or
-    Role.grant_actions(['DELETE','EDIT'])
-"""
 class Role(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=250)
@@ -890,18 +875,18 @@ def initial_data ():
     comp.save()
 
     a, created = User.all_objects.get_or_create(username="superadmin",
-                                                  first_name="SuperAdmin",
-                                                  last_name="")
+                                                first_name="SuperAdmin",
+                                                last_name="")
 
     a.is_superuser = True
-    a.canLogin=True
+    a.canLogin = True
     a.is_staff = True
     a.set_password("superpassord")
     a.save()
 
     u, created = User.all_objects.get_or_create(username="test",
-                                                  first_name="Test1",
-                                                  )
+                                                first_name="Test1",
+                                                )
     u.company = comp
     u.set_password("test")
     u.save()

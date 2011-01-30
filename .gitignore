@@ -1,7 +1,20 @@
+#file endings not of generated files
 *.pyc
-focusDB
+*.pyo
+*.orig
+*~
+*.egg-info
+.*
 project.db
-.project
+pickle*.txt
+#generated buildout stuff
+bin
+develop-eggs
+downloads
+eggs
+omelette
+parts
+.installed.cfg
 .settings
 .pydevproject
 media/uploads
