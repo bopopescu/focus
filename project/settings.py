@@ -19,7 +19,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'focusDB'
+        'NAME': 'project.db'
     }
 }
 
@@ -62,7 +62,7 @@ MIDDLEWARE_CLASSES = (
 'core.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'focus.urls'
+ROOT_URLCONF = 'project.urls'
 
 TEST_RUNNER = 'core.tests.FocusTestSuiteRunner'
 
