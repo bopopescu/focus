@@ -35,18 +35,15 @@ SITE_URL = "http://focus.fncit.no"
 
 USE_I18N = True
 
-MEDIA_ROOT = BASE_PATH + '/media'
-
 LOGIN_URL = "/accounts/login"
 
 FORCE_SCRIPT_NAME = ""
 
-MEDIA_URL = '/media/'
-
-ADMIN_MEDIA_PREFIX = '/media/admin/'
+STATIC_ROOT = BASE_PATH + '/static_media/'
+STATIC_URL = '/static/'
+MEDIA_ROOT = STATIC_URL
 
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
-
 
 # S3
 AWS_ACCESS_KEY_ID = 'AKIAI2RB77TS3M7HAHIA'
@@ -81,10 +78,15 @@ TEST_RUNNER = 'core.tests.FocusTestSuiteRunner'
 TEMPLATE_DIRS = (
 BASE_PATH + '/templates/',
 )
+STATICFILES_DIRS = (
+BASE_PATH + '/files/media/',
+)
+
 
 INSTALLED_APPS = (
 'django.contrib.contenttypes',
 'django.contrib.sessions',
+'django.contrib.staticfiles',
 
 
 #All the applicaitons

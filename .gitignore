@@ -18,4 +18,5 @@ parts
 .settings
 .pydevproject
 media/uploads
+static_media
 .idea
