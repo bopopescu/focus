@@ -42,7 +42,6 @@ FORCE_SCRIPT_NAME = ""
 STATIC_ROOT = BASE_PATH + '/static_media/'
 STATIC_URL = '/static/'
 
-
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 
 # S3
@@ -54,7 +53,6 @@ from S3 import CallingFormat
 AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
 
 DEFAULT_FILE_STORAGE = "libs.storages.storages.backends.s3.S3Storage"
-
 
 TEMPLATE_LOADERS = (
 'django.template.loaders.filesystem.Loader',
@@ -73,15 +71,12 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'urls'
 
-TEST_RUNNER = 'core.tests.FocusTestSuiteRunner'
-
 TEMPLATE_DIRS = (
 BASE_PATH + '/templates/',
 )
 STATICFILES_DIRS = (
 BASE_PATH + '/files/media/',
 )
-
 
 INSTALLED_APPS = (
 'django.contrib.contenttypes',

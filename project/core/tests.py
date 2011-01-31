@@ -5,23 +5,6 @@ from models import *
 from app.customers.models import *
 from core.views import grant_role, grant_permission
 
-class FocusTestSuiteRunner (DjangoTestSuiteRunner):
-
-    def run_suite (self, suite, **kwargs):
-        """
-        Removes a certain test from the suite before running it
-        """
-
-        new_suites = []
-        for test in suite._tests:
-            if not test.id().endswith('test_shortcut_view'):
-                new_suites.append(test)
-
-        suite._tests = new_suites
-
-        return super(FocusTestSuiteRunner, self).run_suite(suite, **kwargs)
-
-    
 class FocusTest(TestCase):
 
     def setUp(self):
