@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from forms import *
@@ -153,7 +154,9 @@ def addPop(request):
 
 @login_required()
 def form (request, id=False, *args, **kwargs):
+
     title = "Ordre"
+
     if 'offer' in kwargs:
         title = "Tilbud"
 

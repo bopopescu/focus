@@ -52,11 +52,11 @@ from S3 import CallingFormat
 
 AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
 
-DEFAULT_FILE_STORAGE = "libs.storages.storages.backends.s3.S3Storage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
 TEMPLATE_LOADERS = (
-'django.template.loaders.filesystem.Loader',
-'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
