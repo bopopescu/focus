@@ -8,25 +8,29 @@ from core.decorators import *
 
 @require_permission("LIST", Order)
 def overviewOffers(request):
-    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="T")
+    orderState = OrderState.objects.get(name="Tilbud")
+    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state=orderState)
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
 @require_permission("LIST", Order)
 def overview(request):
-    orders = Order.objects.all().filter(state="O")
+    orderState = OrderState.objects.get(name="Ordre")
+    orders = Order.objects.all().filter(state=orderState)
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
 @require_permission("LISTARCHIVE", Order)
 def overviewReadyForInvoice(request):
-    orders = Order.objects.all().filter(state="F")
+    orderState = OrderState.objects.get(name="Klar for faktura")
+    orders = Order.objects.all().filter(state=orderState)
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
 @require_permission("LISTREADYINVOICE", Order)
 def overviewArchive(request):
-    orders = Order.objects.all().filter(state="A")
+    orderState = OrderState.objects.get(name="Arkiv")
+    orders = Order.objects.all().filter(state=orderState)
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
