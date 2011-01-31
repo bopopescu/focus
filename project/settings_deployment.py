@@ -17,3 +17,5 @@ DATABASES = {
         'PASSWORD':DB_PASSWORD,
     }
 }
+
+STATIC_URL = 'http://static.focus.fncit.no/'

@@ -41,7 +41,7 @@ FORCE_SCRIPT_NAME = ""
 
 STATIC_ROOT = BASE_PATH + '/static_media/'
 STATIC_URL = '/static/'
-MEDIA_ROOT = STATIC_URL
+
 
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 
@@ -116,4 +116,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 'django.core.context_processors.i18n',
 'core.context_processors.message',
 'core.context_processors.user',
+'django.core.context_processors.static',
 )

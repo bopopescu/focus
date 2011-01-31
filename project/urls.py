@@ -54,9 +54,10 @@ urlpatterns = patterns('',
                        (r'priceVals/addPop/$', 'app.stock.currencies.views.addPop'),
                        (r'productGroups/addPop/$', 'app.stock.productgroups.views.addPop'),
 
-                       
-                       #media
-                       (r'^media/(?P<path>.*)', 'django.views.static.serve',
-                        {'document_root': os.path.join(settings.BASE_PATH, 'media')}),
-                       #(r'^my_admin/jsi18n', 'django.views.i18n.javascript_catalog'),
+
                        )
+
+
+if settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()
