@@ -101,6 +101,7 @@ INSTALLED_APPS = (
 'app.suppliers',
 'app.search',
 'app.mail',
+'app.tickets',
 
 #Other
 'south',
