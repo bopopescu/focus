@@ -30,7 +30,7 @@ class Order(PersistentModel):
     def __unicode__(self):
         return self.order_name
 
-    def is_archived(self):
+    def is_archived(self):  
         if self.state == "Arkivert":
             return True
         return False

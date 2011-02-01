@@ -7,10 +7,5 @@ def overview(request):
     return render_with_request(request, 'tickets/list.html', {"tickets": tickets})
 
 
-def new_ticket(request):
+def add(request):
     return overview(request)
-
-
-
-
-    

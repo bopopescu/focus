@@ -48,7 +48,6 @@ def view(request, id):
                                                              'taskForm': taskForm,
                                                              'whoCanSeeThis': whoCanSeeThis})
 
-
 @require_permission("VIEW", Order, "id")
 def addTask(request, id):
     if request.method == "POST":
@@ -82,11 +81,14 @@ def changeStatus(request, id):
     order = Order.objects.get(id=id)
 
     if order.is_offer():
-        order.state = "O"
+        pass
+        #order.state = "O"
     elif order.is_order():
-        order.state = "F"
+        pass
+        #order.state = "F"
     elif order.is_ready_for_invoice():
-        order.state = "A"
+        pass
+        # order.state = "A"
     else:
         request.message_error("Ordren er arkivert og kan ikke forandres.")
         return redirect(overview)
@@ -165,7 +167,7 @@ def form (request, id=False, *args, **kwargs):
         msg = "Velykket endret ordre"
 
         #Sets title in template
-        if instance.state == "T":
+        if instance.is_offer():
             title = "Tilbud"
 
     else:
@@ -174,11 +176,11 @@ def form (request, id=False, *args, **kwargs):
 
 
     #checks if order is to invoice og archived, if so, no edit is allowed
-    if instance.state == "F":
+    if instance.is_ready_for_invoice():
         request.message_error("Ordren er til fakturering og kan ikke endres.")
         return redirect(overview)
 
-    if instance.state == "A":
+    if instance.is_archived():
         request.message_error("Ordren er arkivert og kan ikke endres")
         return redirect(overview)
 
