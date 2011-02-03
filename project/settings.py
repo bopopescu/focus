@@ -52,16 +52,6 @@ STATIC_URL = '/static/'
 
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 
-# S3
-AWS_ACCESS_KEY_ID = 'AKIAI2RB77TS3M7HAHIA'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'fredrikfredrikfredrik'
-from S3 import CallingFormat
-
-AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
-
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
-
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',

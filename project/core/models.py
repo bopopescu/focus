@@ -202,9 +202,9 @@ class User(models.Model):
 
     def getProfileImage(self):
         if self.profileImage:
-            return "/media/%s" % self.profileImage
+            return settings.STATIC_URL+"%s" % self.profileImage
 
-        return "/media/images/avatar.jpg"
+        return settings.STATIC_URL + "images/avatar.jpg"
 
     def check_password(self, raw_password):
         """
