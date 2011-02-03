@@ -30,6 +30,7 @@ urlpatterns = patterns('',
                        (r'^stock/productunits/', include('app.stock.productUnits.urls')),
                        #Suppliers
                        (r'^suppliers/', include('app.suppliers.urls')),
+                       (r'^tickets/', include('app.tickets.urls')),
                        #Directlink for use of popup
                        #For adding users
                        #(r'participants/addPop/$', 'app.admin.users.views.addPop'),
@@ -53,10 +54,7 @@ urlpatterns = patterns('',
                        (r'unitForSizes/addPop/$', 'app.stock.productUnits.views.addPop'),
                        (r'priceVals/addPop/$', 'app.stock.currencies.views.addPop'),
                        (r'productGroups/addPop/$', 'app.stock.productgroups.views.addPop'),
-
-
                        )
-
 
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns

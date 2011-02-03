@@ -52,6 +52,12 @@
 
     <div class="portlet-content">
 
+        
+        Opprettet for {{ contact.date_created|timesince }} siden
+        <br>
+        Opprettet for {{ contact.date_edited|timesince }} siden
+        <br>
+
         {% require_permission EDIT contact %}
         <div class="tool editChoice">
             <a href="{% url app.contacts.views.edit contact.id %}">Endre kontakt</a>

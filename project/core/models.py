@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import Core
+from copy import deepcopy
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta, date
 from core.managers import PersistentManager
@@ -649,6 +650,31 @@ class Log(models.Model):
         s = "%s, %s, %s:" % (self.date, (self.creator), self.content_type)
         return s
 
+    def getChanges(self):
+        msg = ""
+
+        for k, v in eval(self.message).iteritems():
+            msg += unicode(v[1]) + "endret til " + unicode(v[0])
+
+        return msg
+
+    def changedSinceLastTime(self):
+        lastLog = self.getObject().getLogs().filter(id__lt=self.id)
+
+        if lastLog:
+            msg = ""
+            lastLog = lastLog[0]
+
+            for i,value in eval(self.message).iteritems():
+                if i=="id" or i=="date_created" or i=="date_edited":
+                    continue
+                if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
+                    msg += value[1] + " ble endret fra: %s til: %s. " % (eval(lastLog.message)[i][0],eval(self.message)[i][0])
+                    
+            return msg
+
+        return "opprettet"
+
 
     def getObject(self, *args, **kwargs):
         o = ContentType.objects.get(model=self.content_type)
@@ -742,6 +768,25 @@ Contains all the useful fields like who created and edited the object, and when 
 It also automatically saves the information about the user interaction with the object.
 """
 
+def createTuple(object):
+    oldObject = object.get_object()
+
+    data = {}
+
+    for i in object._meta.fields:
+        if i.attname.startswith('_'):
+            continue
+
+        if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
+                                                                                          (int, long, float)):
+            data[i.attname] = [getattr(object, i.attname), unicode(i.verbose_name)]
+
+        else:
+            data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]
+
+    return data
+
+
 class PersistentModel(models.Model):
     deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=datetime.now())
@@ -762,11 +807,14 @@ class PersistentModel(models.Model):
         action = "EDIT"
         if not self.id:
             action = "ADD"
+            self.date_created = datetime.now()
             self.creator = Core.current_user()
             self.company = Core.current_user().company
 
-        #self.editor = get_current_user()
+        self.editor = Core.current_user()
         self.date_edited = datetime.now()
+
+        changes = createTuple(self)
         super(PersistentModel, self).save()
 
         if 'noLog' not in kwargs:
@@ -774,7 +822,7 @@ class PersistentModel(models.Model):
             if action == "ADD":
                 msg = "opprettet"
 
-            Log(message="%s %s %s" % (Core.current_user(), msg, self),
+            Log(message=changes,
                 object_id=self.id,
                 content_type=ContentType.objects.get_for_model(self.__class__),
                 action=action,
@@ -797,6 +845,24 @@ class PersistentModel(models.Model):
     def recover(self, *args, **kwargs):
         self.deleted = False
         super(PersistentModel, self).save()
+
+    def getLogs(self):
+        return Log.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__),
+                                  object_id=self.id)
+
+    def get_object (self):
+        """
+        Gets the object even if it's deleted.
+        """
+
+        model = ContentType.objects.get_for_model(self.__class__).model_class()
+
+        try:
+            return model.all_objects.get(id=self.id)
+
+        except model.DoesNotExist:
+            return "[Object does not exist]"
+
 
     """
     whoHasPermissionTo
