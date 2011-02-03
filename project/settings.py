@@ -27,7 +27,15 @@ TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
 
-LANGUAGE_CODE = 'no-nb'
+LANGUAGE_CODE = 'en'
+
+
+_ = lambda s: s
+
+LANGUAGES = (
+  ('en', _('English')),
+  ('nb', _('Norwegian')),
+)
 
 SITE_ID = 1
 
@@ -60,13 +68,14 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-'django.middleware.common.CommonMiddleware',
 'django.contrib.sessions.middleware.SessionMiddleware',
 'django.middleware.locale.LocaleMiddleware',
+'django.middleware.common.CommonMiddleware',
 'django.middleware.doc.XViewMiddleware',
 
 'core.middleware.AuthenticationMiddleware',
 'core.middleware.MessageMiddleware',
+'core.middleware.SessionBasedLocaleMiddleware',
 )
 
 ROOT_URLCONF = 'urls'

@@ -7,9 +7,13 @@ from core import Core
 from core.decorators import login_required
 from core.models import Log, Notification
 from core.shortcuts import render_with_request
+from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
+
+    print request.LANGUAGE_CODE
+    title = _("Welcome to my site.")
 
     announcements = Core.current_user().getPermittedObjects("VIEW",Announcement)[::-1]
     your_projects = Core.current_user().getPermittedObjects("VIEW",Project)
@@ -17,7 +21,7 @@ def overview(request):
     orderState = OrderState.objects.get(name="Ordre")
     your_orders = Core.current_user().getPermittedObjects("VIEW",Order).filter(state=orderState)[::-1]
 
-    return render_with_request(request, 'dashboard/dashboard.html', {'title': 'Oppslagstavle',
+    return render_with_request(request, 'dashboard/dashboard.html', {'title': title,
                                                                      'announcements': announcements,
                                                                      'orders': your_orders,
                                                                      'projects': your_projects})
@@ -50,4 +54,4 @@ def notifications(request):
     return render_with_request(request, 'dashboard/notifications.html', {'title': 'Oppdateringer',
                                                                          'notifications': newNotifications,
                                                                          'oldNotifications': oldNotifications[::-1][
-                                                                                             0:150]})
+                                                                                        0:150]})
