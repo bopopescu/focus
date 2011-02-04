@@ -8,6 +8,8 @@ urlpatterns = patterns('app.customers.views',
                        url(r'^all/?$', 'overview_all'),
 
                        url(r'^add/?$', 'add'),
+                       url(r'^add_ajax/?$', 'add_ajax'),
+                       
                        url(r'^addPop/?$', 'addPop'),
 
                        url(r'^(?P<id>\d+)/edit/?$', 'edit'),

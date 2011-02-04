@@ -12,7 +12,7 @@ urlpatterns = patterns('app.projects.views',
                        url(r'^all/?$', 'overview_all'),
 
                        url(r'^add/$', 'add'),
-                       url(r'^addPop/$', 'addPop'),
+                       url(r'^add_ajax/$', 'add_ajax'),
 
                        url(r'^(?P<id>\d+)/edit/?$', 'edit'),
                        url(r'^(?P<id>\d+)/view/?$', 'view'),

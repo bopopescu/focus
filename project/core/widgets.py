@@ -1,12 +1,16 @@
 from datetime import datetime
 from django.forms.widgets import Input
 from django.template.loader import render_to_string
-import django.forms as forms
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import sha_constructor, md5_constructor
+import django.forms as forms
 
 
 class SelectWithPop(forms.Select):
+    def __init__(self, app, *args, **kwargs):
+        self.app = app
+        super(SelectWithPop, self).__init__(*args, **kwargs)
+
     def render(self, name, *args, **kwargs):
         html = super(SelectWithPop, self).render(name, *args, **kwargs)
 
@@ -17,10 +21,13 @@ class SelectWithPop(forms.Select):
         if str(name[len(name) - 1]) is not "s":
             name += "s"
 
-        popupplus = render_to_string("popupplus.html", {'field': name, 'field_id': name_id})
+        popupplus = render_to_string("popupplus.html", {'field': name,
+                                                        'field_id': name_id,
+                                                        'add_ajax_url': self.app.add_ajax_url(),
+                                                        'form': self.app.simpleform()})
 
-        #return html + popupplus
-        return html
+        return html + popupplus
+
 
 class MultipleSelectWithPop(forms.SelectMultiple):
     def render(self, name, *args, **kwargs):
@@ -32,13 +39,10 @@ class MultipleSelectWithPop(forms.SelectMultiple):
         name_id = name
 
         popupplus = render_to_string("popupplus.html", {'field': name, 'field_id': name_id})
-        #return html + popupplus
-        return html
+        return html + popupplus
 
 class DatePickerField(forms.DateInput):
-
     def __init__(self, *args, **kwargs):
-
         self.from_date = None
         self.to_date = None
 
@@ -49,18 +53,17 @@ class DatePickerField(forms.DateInput):
         if 'to_date' in kwargs:
             self.to_date = datetime.strptime(kwargs['to_date'], "%d.%m.%Y")
             del kwargs['to_date']
-            
+
         super(DatePickerField, self).__init__(*args, **kwargs)
 
     def render(self, name, *args, **kwargs):
         html = super(DatePickerField, self).render(name, *args, **kwargs)
-        datepicker = render_to_string("datepicker.html", {'field': name,'from_date': self.from_date, 'to_date': self.to_date})
+        datepicker = render_to_string("datepicker.html",
+                                      {'field': name, 'from_date': self.from_date, 'to_date': self.to_date})
         return html + datepicker
 
 class MaskedField(Input):
-
     def __init__(self, *args, **kwargs):
-
         self.format = None
 
         if 'format' in kwargs:
@@ -71,7 +74,7 @@ class MaskedField(Input):
 
     def render(self, name, *args, **kwargs):
         html = super(MaskedField, self).render(name, *args, **kwargs)
-        masked = render_to_string("masked.html", {'field': name,'maskedFormat': self.format})
+        masked = render_to_string("masked.html", {'field': name, 'maskedFormat': self.format})
         return html + masked
 
 def get_hexdigest(algorithm, salt, raw_password):

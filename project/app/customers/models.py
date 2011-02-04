@@ -20,15 +20,22 @@ class Customer(PersistentModel):
     def __unicode__(self):
         return self.full_name
 
-
     def canBeDeleted(self):
-        if self.orders.all().count()>0:
+        if self.orders.all().count() > 0:
             return (False, "customer has active orders")
-        
-        if self.projects.all().count()>0:
+
+        if self.projects.all().count() > 0:
             return (False, "customer has active projects")
 
         return (True, "ok")
+
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.customers.views.add_ajax')
+
+    @staticmethod
+    def simpleform():
+        return CustomerFormSimple(instance=Customer())
 
     def save(self, *args, **kwargs):
         new = False
@@ -37,6 +44,8 @@ class Customer(PersistentModel):
 
         super(Customer, self).save()
 
+        print Core.current_user()
+        
         #Give the user who created this ALL permissions on object
 
         if new:
@@ -52,3 +61,6 @@ class Customer(PersistentModel):
 
     def getViewUrl(self):
         return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
+
+
+from forms import CustomerFormSimple

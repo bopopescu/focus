@@ -100,7 +100,7 @@ INSTALLED_APPS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
 'django.core.context_processors.request',
 'django.core.context_processors.i18n',
+'django.core.context_processors.static',
 'core.context_processors.message',
 'core.context_processors.user',
-'django.core.context_processors.static',
 )

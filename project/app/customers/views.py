@@ -4,6 +4,7 @@ from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
+from django.utils import simplejson
 
 @require_permission("LIST", Customer)
 def overview(request):
@@ -53,8 +54,23 @@ def addPop(request):
     return render_with_request(request, "simpleform.html", {'title': 'Kunde', 'form': form})
 
 @require_permission("CREATE", Customer)
+def add_ajax(request):
+    form = CustomerFormSimple(request.POST, instance=Customer())
+
+    if form.is_valid():
+        a = form.save()
+        
+        return HttpResponse(simplejson.dumps({'name': a.full_name,
+                                              'id': a.id}), mimetype='application/json')
+
+    print form.errors
+
+    return HttpResponse("ERROR")
+
+@require_permission("CREATE", Customer)
 def add(request):
     return form(request)
+
 
 @require_permission("EDIT", Customer, "id")
 def edit(request, id):
@@ -62,7 +78,6 @@ def edit(request, id):
 
 @require_permission("DELETE", Customer, "id")
 def delete(request, id):
-
     customer = Customer.objects.get(id=id)
 
     if not customer.canBeDeleted()[0]:
@@ -107,4 +122,4 @@ def form (request, id=False):
 
     customers = Core.current_user().getPermittedObjects("VIEW", Customer)
 
-    return render_with_request(request, "customers/form.html", {'title': title, 'customers':customers, 'form': form})
+    return render_with_request(request, "customers/form.html", {'title': title, 'customers': customers, 'form': form})

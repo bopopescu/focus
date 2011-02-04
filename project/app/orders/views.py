@@ -1,37 +1,34 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-
+from django.utils.translation import ugettext as _
 from forms import *
 from core.shortcuts import *
 from core.views import updateTimeout
 from core.decorators import *
+from django.utils import simplejson
 
 @require_permission("LIST", Order)
 def overviewOffers(request):
-    orderState = OrderState.objects.get(name="Tilbud")
-    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state=orderState)
+    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="Offer")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
 @require_permission("LIST", Order)
 def overview(request):
-    orderState = OrderState.objects.get(name="Ordre")
-    orders = Order.objects.all().filter(state=orderState)
+    orders = Order.objects.all().filter(state="Order")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
 @require_permission("LISTARCHIVE", Order)
 def overviewReadyForInvoice(request):
-    orderState = OrderState.objects.get(name="Klar for faktura")
-    orders = Order.objects.all().filter(state=orderState)
+    orders = Order.objects.all().filter(state="Invoice")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
 @require_permission("LISTREADYINVOICE", Order)
 def overviewArchive(request):
-    orderState = OrderState.objects.get(name="Arkiv")
-    orders = Order.objects.all().filter(state=orderState)
+    orders = Order.objects.all().filter(state="Archive")
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
@@ -107,15 +104,14 @@ def add(request):
 
 @require_permission("EDIT", Order, "id")
 def edit(request, id):
-
     order = Order.objects.get(id=id)
 
     if not order.is_valid_for_edit():
-       if order.is_archived():
-           request.message_error("Ordren er arkivert og kan ikke forandres.")
-       if order.is_ready_for_invoice():
-           request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
-       return redirect(overview)
+        if order.is_archived():
+            request.message_error("Ordren er arkivert og kan ikke forandres.")
+        if order.is_ready_for_invoice():
+            request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
+        return redirect(overview)
 
     return form(request, id)
 
@@ -124,11 +120,11 @@ def delete(request, id):
     order = Order.objects.get(id=id)
 
     if not order.is_valid_for_edit():
-       if order.is_archived():
-           request.message_error("Ordren er arkivert og kan ikke forandres.")
-       if order.is_ready_for_invoice():
-           request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
-       return redirect(overview)
+        if order.is_archived():
+            request.message_error("Ordren er arkivert og kan ikke forandres.")
+        if order.is_ready_for_invoice():
+            request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
+        return redirect(overview)
 
     request.message_error("Det er ikke mulig å slette ordrer.")
 
@@ -156,7 +152,6 @@ def addPop(request):
 
 @login_required()
 def form (request, id=False, *args, **kwargs):
-
     title = "Ordre"
 
     if 'offer' in kwargs:
