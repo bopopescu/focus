@@ -152,54 +152,6 @@ class User(models.Model):
             return True
         return False
 
-
-    """
-    def set_validEditBackToDate(self, date, expireDate):
-        self.validEditBackToDateExpire = datetime.strptime(expireDate, "%d.%m.%Y")
-        self.validEditBackToDate = datetime.strptime(date, "%d.%m.%Y")
-        self.save()
-
-    def get_validEditBackToDate(self, **kwargs):
-        today = datetime.today()
-
-        if 'today' in kwargs:
-            today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
-
-        if self.validEditBackToDate:
-            if self.validEditBackToDateExpire:
-                if today < self.validEditBackToDateExpire:
-                    print self.validEditBackToDate
-                    return self.validEditBackToDate
-            else:
-                return self.validEditBackToDate
-            
-        return None
-
-    def set_daysIntoNextMonthHourRegistration(self, days, **kwargs):
-        self.daysIntoNextMonthTypeOfHourRegistration = days
-        if 'expireDate' in kwargs:
-            self.daysIntoNextMonthTypeOfHourRegistrationExpire = datetime.strptime(kwargs['expireDate'], "%d.%m.%Y")
-        self.save()
-
-    def get_daysIntoNextMonthHourRegistration(self, **kwargs):
-        if self.daysIntoNextMonthTypeOfHourRegistration and self.daysIntoNextMonthTypeOfHourRegistration > 0:
-            today = datetime.today()
-
-            if 'today' in kwargs:
-                today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
-
-            if self.daysIntoNextMonthTypeOfHourRegistrationExpire:
-                if today <= self.daysIntoNextMonthTypeOfHourRegistrationExpire:
-                    return self.daysIntoNextMonthTypeOfHourRegistration
-            else:
-                return self.daysIntoNextMonthTypeOfHourRegistration
-
-        if self.company and self.company.daysIntoNextMonthTypeOfHourRegistration and self.company.daysIntoNextMonthTypeOfHourRegistration > 0:
-            return self.company.daysIntoNextMonthTypeOfHourRegistration
-
-        return 0
-    """
-
     def set_company(self):
         self.company = Core.current_user().get_company()
         self.save()

@@ -38,7 +38,6 @@ urlpatterns = patterns('',
 
                        (r'testtest$', 'app.mail.views.overview'),
 
-
                        #Grant permissions
                        (
                        r'grant/role/(?P<role>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
