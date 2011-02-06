@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load auth %}
+{% load util %}
 
 
 {% block extrahead %}
@@ -33,16 +34,19 @@
 
             <tr>
                 <td>Hjemmeside</td>
-                <td>{{ customer.website|urlize }}</td>
+                <td>
+                    {{ customer.website|urlize|url_target_blank|safe }}
+                </td>
             </tr>
+
             <tr>
                 <td>Adresse</td>
                 <td>
                     {% if customer.address %}
                         {{ customer.address }}, {{ customer.zip }} {{ customer.city }}
-                    {% else %}{% if customer.address %}
-                        {{ customer.address }} {{ customer.zip }} {{ customer.city }}
-                    {% endif %}{% endif %}
+                        {% else %}{% if customer.address %}
+                            {{ customer.address }} {{ customer.zip }} {{ customer.city }}
+                        {% endif %}{% endif %}
                 </td>
             </tr>
             <tr>

@@ -752,10 +752,12 @@ def createTuple(object):
 
 
 class PersistentModel(models.Model):
+
+    trashed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+
     date_created = models.DateTimeField(default=datetime.now())
     date_edited = models.DateTimeField(default=datetime.now())
-
     creator = models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_created")
     editor = models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_edited")
     company = models.ForeignKey(Company, blank=True, null=True, default=None, related_name="%(class)s_edited")
@@ -768,6 +770,7 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
+
         action = "EDIT"
         if not self.id:
             action = "ADD"
@@ -802,12 +805,16 @@ class PersistentModel(models.Model):
                              content_type=ContentType.objects.get_for_model(self.__class__)
                              ).save()
 
-    def delete(self, **kwargs):
-        self.deleted = True
-        super(PersistentModel, self).save()
+    def trash(self, **kwargs):
+        self.trashed = True
+        self.save()
 
     def recover(self, *args, **kwargs):
-        self.deleted = False
+        self.trashed = False
+        super(PersistentModel, self).save()
+
+    def delete(self, **kwargs):
+        self.deleted = True
         super(PersistentModel, self).save()
 
     def getLogs(self):

@@ -63,8 +63,6 @@ def add_ajax(request):
         return HttpResponse(simplejson.dumps({'name': a.full_name,
                                               'id': a.id}), mimetype='application/json')
 
-    print form.errors
-
     return HttpResponse("ERROR")
 
 @require_permission("CREATE", Customer)
@@ -83,7 +81,7 @@ def delete(request, id):
     if not customer.canBeDeleted()[0]:
         request.message_error(customer.canBeDeleted()[1])
     else:
-        customer.delete()
+        customer.trash()
 
     return redirect(overview)
 

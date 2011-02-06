@@ -28,7 +28,6 @@ class SelectWithPop(forms.Select):
 
         return html + popupplus
 
-
 class MultipleSelectWithPop(forms.SelectMultiple):
     def render(self, name, *args, **kwargs):
         html = super(MultipleSelectWithPop, self).render(name, *args, **kwargs)
