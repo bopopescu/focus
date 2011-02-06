@@ -26,7 +26,8 @@ class Order(PersistentModel):
     delivery_date_deadline = models.DateField(verbose_name="Leveringsfrist", null=True, blank=True)
     description = models.TextField("Beskrivelse")
     contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name="Kontakter", blank=True)
-    state = models.CharField(max_length=1, choices=STATUS_CHOICES)
+
+    state = models.CharField(max_length=2, choices=STATUS_CHOICES)
 
     def __unicode__(self):
         return self.order_name
