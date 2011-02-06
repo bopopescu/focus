@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, date
 from django.test import TestCase
 from app.customers.models import Customer
 from app.hourregistrations.models import HourRegistration, TypeOfHourRegistration
-from app.orders.models import Order, OrderState
+from app.orders.models import Order
 from core import Core
 from core.models import User
 from core.tests import FocusTest
@@ -129,8 +129,7 @@ class TimeTrackingTesting(FocusTest):
 
         testTypeHour = TypeOfHourRegistration.objects.create(name="Arbeid", description="test")
         testCustomer = Customer.objects.create(cid="10432", full_name="testKunde", email="test@test.com")
-        Orderstate = OrderState.objects.get(name="Tilbud")
-        testOrder = Order.objects.create(oid="2342", order_name="test", customer=testCustomer, state=Orderstate)
+        testOrder = Order.objects.create(oid="2342", order_name="test", customer=testCustomer, state="Offer")
         hourRegistration = HourRegistration.objects.create(date=now,
                                                            order=testOrder,
                                                            typeOfWork=testTypeHour,
