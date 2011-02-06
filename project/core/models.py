@@ -15,6 +15,9 @@ from inspect import isclass
 import time
 import os
 
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
+
 """
 The Company class.
 All users belong to a company, therefore all objects belongs to a company, like projects, orders...
@@ -43,6 +46,7 @@ class Company(models.Model):
     def getDaysIntoNextMonthHourRegistration(self):
         return self.daysIntoNextMonthHourRegistration
 
+
 class User(models.Model):
     """
     Users within the Django authentication system are represented by this model.
@@ -67,7 +71,7 @@ class User(models.Model):
 
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
-    profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
+    profileImage = models.FileField(upload_to="profileImages", storage=fs, null=True, blank=True)
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
@@ -208,8 +212,9 @@ class User(models.Model):
     def getProfileImage(self):
 
         if self.profileImage:
-            if os.path.join("/file/", self.profileImage.name[8:]):
-                return os.path.join("/file/", self.profileImage.name[8:])
+            print "HER: %s" % os.path.join("/file/", self.profileImage.name)
+            if os.path.join("/file/", self.profileImage.name):
+                return os.path.join("/file/", self.profileImage.name)
 
         return settings.STATIC_URL + "images/avatar.jpg"
 

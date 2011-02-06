@@ -11,7 +11,7 @@ import django.http
 from django.core.servers.basehttp import FileWrapper
 from settings import BASE_PATH
 
-STATIC_ROOT = os.path.join(BASE_PATH,"../uploads")
+STATIC_ROOT = os.path.join(BASE_PATH,"uploads")
 
 def get_absolute_filename(filename='', safe=True):
     if not filename:
