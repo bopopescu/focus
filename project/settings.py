@@ -38,7 +38,6 @@ LANGUAGES = (
 )
 
 SITE_ID = 1
-
 SITE_URL = "http://focus.fncit.no"
 
 USE_I18N = True

@@ -16,7 +16,7 @@ def overview(request):
 
 @require_permission("LISTDELETED", Customer)
 def overview_deleted(request):
-    customers = Customer.objects.filter(deleted=True)
+    customers = Customer.all_objects.filter(deleted=True,company = Core.current_user().get_company())
     return render_with_request(request, 'customers/list.html', {'title': 'Slettede kunder',
                                                                 'customers': customers})
 

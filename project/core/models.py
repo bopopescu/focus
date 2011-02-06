@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 from . import Core
 from copy import deepcopy
+import mimetypes
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta, date
+from django.http import HttpResponse
 from core.managers import PersistentManager
 from django.db import models
+from django.utils.encoding import smart_str
+from django.core.servers.basehttp import FileWrapper
 import settings
 from widgets import get_hexdigest, check_password
 from inspect import isclass
 import time
+import os
 
 """
 The Company class.
@@ -201,8 +206,10 @@ class User(models.Model):
         return notifications.filter(read=False)
 
     def getProfileImage(self):
+
         if self.profileImage:
-            return settings.STATIC_URL+"%s" % self.profileImage
+            if os.path.join("/file/", self.profileImage.name[8:]):
+                return os.path.join("/file/", self.profileImage.name[8:])
 
         return settings.STATIC_URL + "images/avatar.jpg"
 
@@ -622,7 +629,7 @@ class Log(models.Model):
                     continue
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
                     msg += value[1] + " ble endret fra: %s til: %s. " % (eval(lastLog.message)[i][0],eval(self.message)[i][0])
-                    
+
             return msg
 
         return "opprettet"
@@ -715,7 +722,7 @@ class Permission(models.Model):
 
 
 """
-The "all mighty" model, all other models inherit from this one. 
+The "all mighty" model, all other models inherit from this one.
 Contains all the useful fields like who created and edited the object, and when it was done.
 It also automatically saves the information about the user interaction with the object.
 """

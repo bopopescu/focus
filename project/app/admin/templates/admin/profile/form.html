@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+
+{% endblock %}
+
+{% block submenu %}
+
+{% endblock %}
+
+
+{% block extraHead %}
+    {{ form.media }}
+
+
+{% endblock %}
+
+{% block maincontent %}
+
+    {% block extraPortlet %}
+
+    {% endblock %}
+
+
+    <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+
+
+        <div class="portlet x6">
+            <div class="portlet-header"><h4>{{ title }}</h4></div>
+            <div class="portlet-content">
+
+
+                <img src="{{ user.getProfileImage }}" width="200px" height="150px">
+                <br>
+
+                {% for field in form %}
+
+                    <div class="field{% if field.errors %} fielderror {% endif %}">
+
+
+                        {{ field.label_tag }}
+
+                        {{ field }}
+
+                        {% if field.errors %}
+                            <div style="margin-left:150px">{% for i in field.errors %}{{ i }}{% endfor %}</div>
+                        {% endif %}
+                    </div>
+
+
+                {% endfor %}
+
+                <input type="submit" value="Lagre" class="btn" name="save"/>
+
+            </div>
+        </div>
+
+    </form>
+
+
+{% endblock %}
+

@@ -83,7 +83,7 @@
         <ul>
 
             {% require_permission CREATE customers.Customer %}
-            <li><a href="{% url app.customers.views.add %}">Leggtil ny kunde</a></li>
+            <li><a href="{% url app.customers.views.add %}">Legg til ny kunde</a></li>
             {% end_require %}
 
             {% require_permission LIST customers.Customer %}
