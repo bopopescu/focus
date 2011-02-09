@@ -3,7 +3,11 @@ from django.db import models
 from app.customers.models import Customer
 from django.core import urlresolvers
 from core import Core
+from django.core.files.storage import FileSystemStorage
+import settings
+import os
 
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class TicketStatus(PersistentModel):
     name = models.CharField(max_length=20)
@@ -38,7 +42,7 @@ class Ticket(PersistentModel):
     estimated_time = models.IntegerField(default=0)
     customer = models.ForeignKey(Customer)
     assigned_to = models.ForeignKey(User, null=True, blank=True)
-    attachment = models.FileField(upload_to="uploads/tickets")
+    attachment = models.FileField(upload_to="tickets", storage=fs, null=True)
 
 
     def __unicode__(self):
@@ -66,6 +70,7 @@ class Ticket(PersistentModel):
 class Comment(PersistentModel):
     title = models.CharField(max_length=50)
     text = models.TextField()
+    attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
     Ticket = models.ForeignKey(Ticket, related_name="comments")
     
 
