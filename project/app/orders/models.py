@@ -5,13 +5,14 @@ from app.projects.models import Project
 from app.customers.models import Customer
 from app.contacts.models import Contact
 from core.models import User, PersistentModel
+from django.utils.translation import ugettext as _
 
-
-class OrderState(models.Model):
-    name = models.CharField(max_length=150)
-
-    def __unicode__(self):
-        return self.name
+STATUS_CHOICES = (
+('Order', _('Order')),
+('Offer', _('Offer')),
+("Invoice", _("Ready for Invoice")),
+("Archiv", _("Archived")),
+)
 
 class Order(PersistentModel):
     oid = models.IntegerField("Ordrenr", null=True, blank=True)
@@ -25,7 +26,8 @@ class Order(PersistentModel):
     delivery_date_deadline = models.DateField(verbose_name="Leveringsfrist", null=True, blank=True)
     description = models.TextField("Beskrivelse")
     contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name="Kontakter", blank=True)
-    state = models.ForeignKey(OrderState)
+
+    state = models.CharField(max_length=2, choices=STATUS_CHOICES)
 
     def __unicode__(self):
         return self.order_name
@@ -108,9 +110,3 @@ class OrderFile(PersistentModel):
 
     def __unicode__(self):
         return "Prosjektfil: %s" % self.name
-
-def initial_data ():
-    OrderState.objects.get_or_create(name="Tilbud")
-    OrderState.objects.get_or_create(name="Arkiv")
-    OrderState.objects.get_or_create(name="Ordre")
-    OrderState.objects.get_or_create(name="Klar for faktura")

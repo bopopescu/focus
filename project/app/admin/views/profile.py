@@ -24,11 +24,9 @@ def form (request):
             o = form.save(commit=False)
             o.save()
             request.message_success(msg)
-
-            #Redirects after save for direct editing
-            return redirect("/")
+            return redirect(edit)
 
     else:
-        form = UserProfileForm(instance=instance)
+        form = UserProfileForm(instance=instance, initial = {"profileImage": None})
 
-    return render_with_request(request, "form.html", {'title': 'Profil', 'form': form})
+    return render_with_request(request, "admin/profile/form.html", {'title': 'Profil', 'form': form})

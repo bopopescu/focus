@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 from . import Core
+from copy import deepcopy
+import mimetypes
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta, date
+from django.http import HttpResponse
 from core.managers import PersistentManager
 from django.db import models
+from django.utils.encoding import smart_str
+from django.core.servers.basehttp import FileWrapper
 import settings
 from widgets import get_hexdigest, check_password
 from inspect import isclass
 import time
+import os
+
+from django.core.files.storage import FileSystemStorage
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 """
 The Company class.
@@ -37,6 +46,7 @@ class Company(models.Model):
     def getDaysIntoNextMonthHourRegistration(self):
         return self.daysIntoNextMonthHourRegistration
 
+
 class User(models.Model):
     """
     Users within the Django authentication system are represented by this model.
@@ -61,7 +71,7 @@ class User(models.Model):
 
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
-    profileImage = models.FileField(upload_to="uploads/profileImages", null=True, blank=True)
+    profileImage = models.FileField(upload_to="profileImages", storage=fs, null=True, blank=True)
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
@@ -151,54 +161,6 @@ class User(models.Model):
             return True
         return False
 
-
-    """
-    def set_validEditBackToDate(self, date, expireDate):
-        self.validEditBackToDateExpire = datetime.strptime(expireDate, "%d.%m.%Y")
-        self.validEditBackToDate = datetime.strptime(date, "%d.%m.%Y")
-        self.save()
-
-    def get_validEditBackToDate(self, **kwargs):
-        today = datetime.today()
-
-        if 'today' in kwargs:
-            today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
-
-        if self.validEditBackToDate:
-            if self.validEditBackToDateExpire:
-                if today < self.validEditBackToDateExpire:
-                    print self.validEditBackToDate
-                    return self.validEditBackToDate
-            else:
-                return self.validEditBackToDate
-            
-        return None
-
-    def set_daysIntoNextMonthHourRegistration(self, days, **kwargs):
-        self.daysIntoNextMonthTypeOfHourRegistration = days
-        if 'expireDate' in kwargs:
-            self.daysIntoNextMonthTypeOfHourRegistrationExpire = datetime.strptime(kwargs['expireDate'], "%d.%m.%Y")
-        self.save()
-
-    def get_daysIntoNextMonthHourRegistration(self, **kwargs):
-        if self.daysIntoNextMonthTypeOfHourRegistration and self.daysIntoNextMonthTypeOfHourRegistration > 0:
-            today = datetime.today()
-
-            if 'today' in kwargs:
-                today = datetime.strptime(kwargs['today'], "%d.%m.%Y")
-
-            if self.daysIntoNextMonthTypeOfHourRegistrationExpire:
-                if today <= self.daysIntoNextMonthTypeOfHourRegistrationExpire:
-                    return self.daysIntoNextMonthTypeOfHourRegistration
-            else:
-                return self.daysIntoNextMonthTypeOfHourRegistration
-
-        if self.company and self.company.daysIntoNextMonthTypeOfHourRegistration and self.company.daysIntoNextMonthTypeOfHourRegistration > 0:
-            return self.company.daysIntoNextMonthTypeOfHourRegistration
-
-        return 0
-    """
-
     def set_company(self):
         self.company = Core.current_user().get_company()
         self.save()
@@ -248,10 +210,13 @@ class User(models.Model):
         return notifications.filter(read=False)
 
     def getProfileImage(self):
-        if self.profileImage:
-            return "/media/%s" % self.profileImage
 
-        return "/media/images/avatar.jpg"
+        if self.profileImage:
+            print "HER: %s" % os.path.join("/file/", self.profileImage.name)
+            if os.path.join("/file/", self.profileImage.name):
+                return os.path.join("/file/", self.profileImage.name)
+
+        return settings.STATIC_URL + "images/avatar.jpg"
 
     def check_password(self, raw_password):
         """
@@ -649,6 +614,31 @@ class Log(models.Model):
         s = "%s, %s, %s:" % (self.date, (self.creator), self.content_type)
         return s
 
+    def getChanges(self):
+        msg = ""
+
+        for k, v in eval(self.message).iteritems():
+            msg += unicode(v[1]) + "endret til " + unicode(v[0])
+
+        return msg
+
+    def changedSinceLastTime(self):
+        lastLog = self.getObject().getLogs().filter(id__lt=self.id)
+
+        if lastLog:
+            msg = ""
+            lastLog = lastLog[0]
+
+            for i,value in eval(self.message).iteritems():
+                if i=="id" or i=="date_created" or i=="date_edited":
+                    continue
+                if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
+                    msg += value[1] + " ble endret fra: %s til: %s. " % (eval(lastLog.message)[i][0],eval(self.message)[i][0])
+
+            return msg
+
+        return "opprettet"
+
 
     def getObject(self, *args, **kwargs):
         o = ContentType.objects.get(model=self.content_type)
@@ -737,16 +727,37 @@ class Permission(models.Model):
 
 
 """
-The "all mighty" model, all other models inherit from this one. 
+The "all mighty" model, all other models inherit from this one.
 Contains all the useful fields like who created and edited the object, and when it was done.
 It also automatically saves the information about the user interaction with the object.
 """
 
+def createTuple(object):
+    oldObject = object.get_object()
+
+    data = {}
+
+    for i in object._meta.fields:
+        if i.attname.startswith('_'):
+            continue
+
+        if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
+                                                                                          (int, long, float)):
+            data[i.attname] = [getattr(object, i.attname), unicode(i.verbose_name)]
+
+        else:
+            data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]
+
+    return data
+
+
 class PersistentModel(models.Model):
+
+    trashed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+
     date_created = models.DateTimeField(default=datetime.now())
     date_edited = models.DateTimeField(default=datetime.now())
-
     creator = models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_created")
     editor = models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_edited")
     company = models.ForeignKey(Company, blank=True, null=True, default=None, related_name="%(class)s_edited")
@@ -759,14 +770,18 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
+
         action = "EDIT"
         if not self.id:
             action = "ADD"
+            self.date_created = datetime.now()
             self.creator = Core.current_user()
             self.company = Core.current_user().company
 
-        #self.editor = get_current_user()
+        self.editor = Core.current_user()
         self.date_edited = datetime.now()
+
+        changes = createTuple(self)
         super(PersistentModel, self).save()
 
         if 'noLog' not in kwargs:
@@ -774,7 +789,7 @@ class PersistentModel(models.Model):
             if action == "ADD":
                 msg = "opprettet"
 
-            Log(message="%s %s %s" % (Core.current_user(), msg, self),
+            Log(message=changes,
                 object_id=self.id,
                 content_type=ContentType.objects.get_for_model(self.__class__),
                 action=action,
@@ -790,13 +805,35 @@ class PersistentModel(models.Model):
                              content_type=ContentType.objects.get_for_model(self.__class__)
                              ).save()
 
+    def trash(self, **kwargs):
+        self.trashed = True
+        self.save()
+
+    def recover(self, *args, **kwargs):
+        self.trashed = False
+        super(PersistentModel, self).save()
+
     def delete(self, **kwargs):
         self.deleted = True
         super(PersistentModel, self).save()
 
-    def recover(self, *args, **kwargs):
-        self.deleted = False
-        super(PersistentModel, self).save()
+    def getLogs(self):
+        return Log.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__),
+                                  object_id=self.id)
+
+    def get_object (self):
+        """
+        Gets the object even if it's deleted.
+        """
+
+        model = ContentType.objects.get_for_model(self.__class__).model_class()
+
+        try:
+            return model.all_objects.get(id=self.id)
+
+        except model.DoesNotExist:
+            return "[Object does not exist]"
+
 
     """
     whoHasPermissionTo

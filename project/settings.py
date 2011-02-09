@@ -27,10 +27,17 @@ TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
 
-LANGUAGE_CODE = 'no-nb'
+LANGUAGE_CODE = 'en'
+
+
+_ = lambda s: s
+
+LANGUAGES = (
+  ('en', _('English')),
+  ('nb', _('Norwegian')),
+)
 
 SITE_ID = 1
-
 SITE_URL = "http://focus.fncit.no"
 
 USE_I18N = True
@@ -44,29 +51,20 @@ STATIC_URL = '/static/'
 
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 
-# S3
-AWS_ACCESS_KEY_ID = 'AKIAI2RB77TS3M7HAHIA'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'fredrikfredrikfredrik'
-from S3 import CallingFormat
-
-AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
-
-DEFAULT_FILE_STORAGE = "libs.storages.storages.backends.s3.S3Storage"
-
 TEMPLATE_LOADERS = (
-'django.template.loaders.filesystem.Loader',
-'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
-'django.middleware.common.CommonMiddleware',
 'django.contrib.sessions.middleware.SessionMiddleware',
 'django.middleware.locale.LocaleMiddleware',
+'django.middleware.common.CommonMiddleware',
 'django.middleware.doc.XViewMiddleware',
 
 'core.middleware.AuthenticationMiddleware',
 'core.middleware.MessageMiddleware',
+'core.middleware.SessionBasedLocaleMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -110,7 +108,7 @@ INSTALLED_APPS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
 'django.core.context_processors.request',
 'django.core.context_processors.i18n',
+'django.core.context_processors.static',
 'core.context_processors.message',
 'core.context_processors.user',
-'django.core.context_processors.static',
 )

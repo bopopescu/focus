@@ -7,6 +7,7 @@ from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
+from django.utils import simplejson
 
 @require_permission("LIST", Project)
 def overview(request):
@@ -18,7 +19,8 @@ def overview(request):
 def timeline(request):
     updateTimeout(request)
     projects = Core.current_user().getPermittedObjects("VIEW", Project)
-    return render_with_request(request, 'projects/timeline.html', {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
+    return render_with_request(request, 'projects/timeline.html',
+                               {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
 @require_permission("LIST", Project)
 def overview_deleted(request):
@@ -39,26 +41,19 @@ def view(request, id):
                                                                'whoCanSeeThis': whoCanSeeThis,
                                                                })
 
-@login_required()
-def addPop(request):
-    instance = Project()
+@require_permission("CREATE", Project)
+def add_ajax(request):
+    form = ProjectFormSimple(request.POST, instance=Project())
 
-    if request.method == "POST":
-        form = ProjectForm(request.POST, instance=instance)
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
+    if form.is_valid():
+        a = form.save()
 
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    (escape(o._get_pk_val()), escape(o)))
+        return HttpResponse(simplejson.dumps({'name': a.project_name,
+                                              'id': a.id}), mimetype='application/json')
 
-    else:
-        form = ProjectForm(instance=instance)
+    print form.errors
 
-    return render_with_request(request, "simpleform.html", {'title': 'Prosjekt', 'form': form})
+    return HttpResponse("ERROR")
 
 
 @require_permission("CREATE", Project)

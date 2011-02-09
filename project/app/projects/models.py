@@ -24,9 +24,6 @@ class Project(PersistentModel):
     def getViewUrl(self):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 
-    def searchIndexes(self):
-        return ['project_name']
-
     def percentDone(self):
         realDiff = (time.mktime(datetime.now().timetuple()) - time.mktime(self.date_created.timetuple()))
         estimatedDiff = (time.mktime(self.deliveryDate.timetuple()) - time.mktime(self.date_created.timetuple()))
@@ -35,6 +32,14 @@ class Project(PersistentModel):
             return 100
 
         return (realDiff/estimatedDiff)*100
+
+    @staticmethod
+    def add_ajax_url():
+          return urlresolvers.reverse('app.projects.views.add_ajax')
+
+    @staticmethod
+    def simpleform():
+          return ProjectFormSimple(instance=Project())
 
     def save(self, *args, **kwargs):
         new = False
@@ -74,3 +79,6 @@ class ProjectFile(PersistentModel):
 
     def __unicode__(self):
         return "Prosjektfil: %s" % self.name
+
+
+from app.projects.forms import ProjectFormSimple

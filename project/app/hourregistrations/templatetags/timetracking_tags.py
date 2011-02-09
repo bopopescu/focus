@@ -1,21 +1,12 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from app.hourregistrations.helpers import validForEdit
 from django.core import urlresolvers
 
 register = template.Library()
 
 @register.tag
 def require_valid_date_for_edit(parser, token):
-    """
-    Tag that only shows its content if the user has the required permission
 
-    Usage:
-        {% require_valid_date_for_edit object %}
-
-    """
-
-    # Extract the params
     try:
         tag_name, object = token.split_contents()
 

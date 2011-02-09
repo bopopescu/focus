@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from core.shortcuts import get_company_users
 from core.widgets import *
 from django.forms.models import ModelForm
 from core.models import User, Group, Company
@@ -7,12 +6,13 @@ from core.models import User, Group, Company
 class UserForm(ModelForm):
     class Meta:
         model = User
+        fields = ("first_name","last_name","email")
 
 class UserProfileForm(ModelForm):
     class Meta:
         model = User
         fields = ('profileImage',)
-
+        
 class GroupForm(ModelForm):
     class Meta:
         model = Group

@@ -8,8 +8,6 @@
 
 {% endblock %}
 
-
-
 {% block maincontent %}
 
     <div class="portlet x9">
@@ -18,7 +16,8 @@
 
         <div class="portlet-content">
 
-
+            <img src="{{ user.profileImage }}">
+            <br>
             Navn: {{ userCard.first_name }} {{ userCard.last_name }}
             <br>
             Epost: {{ userCard.email }}
@@ -115,10 +114,11 @@
             </div>
 
             <div class="tool editChoice">
-                <a href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}" class="edit admintool">
+                <a href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"
+                   class="edit admintool">
                     Sett tider timelister manuelt
 
-                    </a>
+                </a>
             </div>
 
 

@@ -5,6 +5,30 @@ from core.decorators import login_required
 from core.models import User, Group
 from django.core import urlresolvers
 from django.shortcuts import redirect
+import os
+import django.contrib.auth.decorators as auth_decorators
+import django.http
+from django.core.servers.basehttp import FileWrapper
+from settings import BASE_PATH
+
+STATIC_ROOT = os.path.join(BASE_PATH,"uploads")
+
+def get_absolute_filename(filename='', safe=True):
+    if not filename:
+        return os.path.join(STATIC_ROOT, 'index')
+    if safe and '..' in filename.split(os.path.sep):
+        return get_absolute_filename(filename='')
+    
+    return os.path.join(STATIC_ROOT, filename)
+
+def retrieve_file(request, filename=''):
+    abs_filename = get_absolute_filename(filename)
+    print abs_filename
+    wrapper = FileWrapper(file(abs_filename))
+    response = HttpResponse(wrapper, content_type='image/jpg')
+    response['Content-Length'] = os.path.getsize(abs_filename)
+    return response
+
 
 @login_required()
 def updateTimeout(request):
@@ -24,7 +48,6 @@ Use like this: /grant/role/Admin/user/user_id/customers/customer/customer_id/
 """
 
 def grant_role(request, role, userorgroup, user_id, app, model, object_id):
-
     object_type = ContentType.objects.get(app_label=app, model=model)
 
     if userorgroup.upper() == 'USER':
@@ -41,7 +64,6 @@ def grant_role(request, role, userorgroup, user_id, app, model, object_id):
         object = object_type.get_object_for_this_type(id=object_id)
         obj.grant_role(role, object)
 
-
     request.message_success("Role granted")
     return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
 
@@ -54,7 +76,6 @@ Use like this: /grant/permission/ADD/user/user_id/customers/customer/customer_id
 """
 
 def grant_permission(request, perm, userorgroup, user_id, app, model, object_id):
-
     object_type = ContentType.objects.get(app_label=app, model=model)
     list = []
     list.append(perm.upper())
@@ -75,7 +96,6 @@ def grant_permission(request, perm, userorgroup, user_id, app, model, object_id)
 
     request.message_success("Permission granted")
     return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
-
 
 
 """
