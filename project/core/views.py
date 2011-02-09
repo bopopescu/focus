@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import mimetypes
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from core.decorators import login_required
@@ -23,9 +24,13 @@ def get_absolute_filename(filename='', safe=True):
 
 def retrieve_file(request, filename=''):
     abs_filename = get_absolute_filename(filename)
-    print abs_filename
+
+
+    mimetypes.add_type('application/vnd.openxmlformats-officedocument.wordprocessingml.document', '.docx', True)
+    mime = mimetypes.guess_type(abs_filename)
+
     wrapper = FileWrapper(file(abs_filename))
-    response = HttpResponse(wrapper, content_type='image/jpg')
+    response = HttpResponse(wrapper, content_type=mime[0])
     response['Content-Length'] = os.path.getsize(abs_filename)
     return response
 
