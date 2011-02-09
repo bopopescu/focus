@@ -14,9 +14,8 @@ from widgets import get_hexdigest, check_password
 from inspect import isclass
 import time
 import os
-
+from settings import fileStore
 from django.core.files.storage import FileSystemStorage
-fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 """
 The Company class.
@@ -71,7 +70,7 @@ class User(models.Model):
 
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
-    profileImage = models.FileField(upload_to="profileImages", storage=fs, null=True, blank=True)
+    profileImage = models.FileField(upload_to="profileImages", storage=fileStore, null=True, blank=True)
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
@@ -210,7 +209,6 @@ class User(models.Model):
         return notifications.filter(read=False)
 
     def getProfileImage(self):
-
         if self.profileImage:
             print "HER: %s" % os.path.join("/file/", self.profileImage.name)
             if os.path.join("/file/", self.profileImage.name):
@@ -623,21 +621,26 @@ class Log(models.Model):
         return msg
 
     def changedSinceLastTime(self):
-        lastLog = self.getObject().getLogs().filter(id__lt=self.id)
+        #lastLog = self.getObject().getLogs().filter(id__lt=self.id)
+
+        lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
 
         if lastLog:
             msg = ""
-            lastLog = lastLog[0]
-
-            for i,value in eval(self.message).iteritems():
-                if i=="id" or i=="date_created" or i=="date_edited":
+            lastLog = lastLog[len(lastLog)-1]
+            for i, value in eval(self.message).iteritems():
+                if i == "id" or i == "date_created" or i == "date_edited":
                     continue
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    msg += value[1] + " ble endret fra: %s til: %s. " % (eval(lastLog.message)[i][0],eval(self.message)[i][0])
+                    msg += value[1] + " ble endret fra: %s til: %s. " % (
+                    eval(lastLog.message)[i][0], eval(self.message)[i][0])
 
+            if msg =="":
+                return "Ingen endring registrert"
+            
             return msg
 
-        return "opprettet"
+        return "%s ble opprettet" % self.getObject()
 
 
     def getObject(self, *args, **kwargs):
@@ -752,7 +755,6 @@ def createTuple(object):
 
 
 class PersistentModel(models.Model):
-
     trashed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
@@ -770,7 +772,6 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
-
         action = "EDIT"
         if not self.id:
             action = "ADD"

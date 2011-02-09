@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('app.announcements.views',
                        url(r'^$', 'overview'),
-                       url(r'^deleted/$', 'overview_deleted'),
+                       url(r'^trashed/$', 'overview_trashed'),
                        url(r'^add/$', 'add'),
                        url(r'^edit/(\d+)/?$', 'edit'),
                        url(r'^view/(\d+)/?$', 'view'),

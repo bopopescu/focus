@@ -4,6 +4,7 @@ from core import Core
 from core.models import PersistentModel
 from django.core import urlresolvers
 from core.models import User
+from django.utils.translation import ugettext as _
 
 class Customer(PersistentModel):
     cid = models.IntegerField("Kundenr")
@@ -22,10 +23,10 @@ class Customer(PersistentModel):
 
     def canBeDeleted(self):
         if self.orders.all().count() > 0:
-            return (False, "customer has active orders")
+            return (False, _("Customer has active orders"))
 
         if self.projects.all().count() > 0:
-            return (False, "customer has active projects")
+            return (False, _("Customer has active projects"))
 
         return (True, "ok")
 
@@ -44,8 +45,6 @@ class Customer(PersistentModel):
 
         super(Customer, self).save()
 
-        print Core.current_user()
-        
         #Give the user who created this ALL permissions on object
 
         if new:
@@ -61,6 +60,5 @@ class Customer(PersistentModel):
 
     def getViewUrl(self):
         return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
-
 
 from forms import CustomerFormSimple
