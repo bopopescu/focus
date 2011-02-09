@@ -1,16 +1,13 @@
 {% extends "base.html" %}
 {% load auth %}
 {% load util %}
-
+{% load i18n %}
 
 {% block extrahead %}
-
 {% endblock %}
 
 {% block submenu %}
-
 {% endblock %}
-
 
 
 {% block maincontent %}
@@ -23,24 +20,23 @@
         <table>
 
             <tr>
-                <td width="100px">Navn</td>
+                <td width="100px">{% trans "Name" %}</td>
                 <td>{{ customer.full_name }}</td>
             </tr>
 
             <tr>
-                <td>Epostadresse</td>
+                <td>{% trans "E-mail" %}</td>
                 <td>{{ customer.email }}</td>
             </tr>
 
             <tr>
-                <td>Hjemmeside</td>
+                <td>{% trans "Website" %}</td>
                 <td>
                     {{ customer.website|urlize|url_target_blank|safe }}
                 </td>
             </tr>
-
             <tr>
-                <td>Adresse</td>
+                <td>{% trans "Address" %}</td>
                 <td>
                     {% if customer.address %}
                         {{ customer.address }}, {{ customer.zip }} {{ customer.city }}
@@ -50,11 +46,9 @@
                 </td>
             </tr>
             <tr>
-                <td>Altearntiv adresse</td>
+                <td>{% trans "Alternative address" %}</td>
                 <td>{{ customer.alternative_address }}</td>
             </tr>
-
-
         </table>
 
 
@@ -63,27 +57,39 @@
 
 <div class="portlet x5">
 
-    <div class="portlet-header"><h4>Valg</h4></div>
+    <div class="portlet-header"><h4>{% trans "Choices" %}</h4></div>
 
     <div class="portlet-content">
 
+        {% if not customer.trashed %}
         {% require_permission EDIT customer %}
         <div class="tool editChoice">
-            <a href="{% url app.customers.views.edit customer.id %}">Endre kunde</a>
+            <a href="{% url app.customers.views.edit customer.id %}">{% trans "Edit customer" %}</a>
         </div>
         {% end_require %}
+        {% endif %}
 
         {% require_permission DELETE customer %}
+
+        {% if customer.trashed %}
+            <div class="tool deleteChoice">
+                <a href="{% url app.customers.views.recover customer.id %}">{% trans "Recover customer" %}</a>
+            </div>
+
+        {% endif %}{% if not customer.trashed %}
         <div class="tool deleteChoice">
-            <a href="{% url app.customers.views.delete customer.id %}">Slett kunde</a>
+            <a href="{% url app.customers.views.trash customer.id %}">{% trans "Delete customer" %}</a>
         </div>
+    {% endif %}
+
+
         {% end_require %}
 
     </div>
 </div>
 
 <div class="portlet x5">
-    <div class="portlet-header"><h4>Prosjekter og ordrer</h4></div>
+    <div class="portlet-header"><h4>{% trans "Projects and orders" %}</h4></div>
 
     <div class="portlet-content">
 

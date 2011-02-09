@@ -4,12 +4,13 @@ from django.db import models
 from core import Core
 from core.models import PersistentModel
 from django.core import urlresolvers
+from django.utils.translation import ugettext as _
 
 class Contact(PersistentModel):
-    full_name = models.CharField("Fullt navn", max_length=80)
-    address = models.CharField("Adresse", max_length=80)
-    email = models.EmailField("Epostadresse", max_length=80)
-    phone = models.CharField("Telefon", max_length=20)
+    full_name = models.CharField(_("Full name"), max_length=80)
+    address = models.CharField(_("Adresse"), max_length=80)
+    email = models.EmailField(_("Epostadresse"), max_length=80)
+    phone = models.CharField(_("Telefon"), max_length=20)
 
     def __unicode__(self):
         return "%s" % unicode(self.full_name)

@@ -5,31 +5,32 @@ from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
 from django.utils import simplejson
+from django.utils.translation import ugettext as _
 
 @require_permission("LIST", Customer)
 def overview(request):
     updateTimeout(request)
     customers = Core.current_user().getPermittedObjects("VIEW", Customer).filter(trashed=False)
 
-    return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
+    return render_with_request(request, 'customers/list.html', {'title': _('Customers'),
                                                                 'customers': customers})
 
 @require_permission("LISTDELETED", Customer)
 def overview_trashed(request):
     customers = Customer.all_objects.filter(trashed=True, company=Core.current_user().get_company())
-    return render_with_request(request, 'customers/list.html', {'title': 'Slettede kunder',
+    return render_with_request(request, 'customers/list.html', {'title': _('Deleted customers'),
                                                                 'customers': customers})
 
 @require_permission("LISTALL", Customer)
 def overview_all(request):
     customers = Customer.objects.all()
-    return render_with_request(request, 'customers/list.html', {'title': 'Alle aktive kunder',
+    return render_with_request(request, 'customers/list.html', {'title': _("All active customers"),
                                                                 'customers': customers})
 
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
     customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
-    return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
+    return render_with_request(request, 'customers/view.html', {'title': _('Customer: ') + customer.full_name,
                                                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
@@ -61,27 +62,26 @@ def trash(request, id):
         request.message_error(customer.canBeDeleted()[1])
     else:
         customer.trash()
-
     return redirect(overview)
 
 @require_permission("DELETE", Customer, "id")
 def recover(request, id):
     c = Customer.objects.get(id=id)
-    c.deleted = not c.deleted
-    c.save()
+    c.recover()
 
+    print c
     return redirect(overview)
 
 @login_required()
 def form (request, id=False):
     if id:
         instance = Customer.objects.all().get(id=id)
-        msg = "Vellykket endret kunde"
-        title = "Endre kunde"
+        msg = _("Successfully edited customer")
+        title = _("Edit customer")
     else:
         instance = Customer()
-        msg = "Vellykket lagt til ny kunde"
-        title = "Ny kunde"
+        msg = _("Successfully added new customer")
+        title = _("New custmer")
 
     #Save and set to active, require valid form
     if request.method == 'POST':

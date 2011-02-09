@@ -809,7 +809,7 @@ class PersistentModel(models.Model):
 
     def trash(self, **kwargs):
         self.trashed = True
-        self.save()
+        super(PersistentModel, self).save()
 
     def recover(self, *args, **kwargs):
         self.trashed = False

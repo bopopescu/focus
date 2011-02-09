@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% load auth %}
+{% load i18n %}
 
 {% block extrahead %}
-
 {% endblock %}
 
 {% block submenu %}
-
 {% endblock %}
-
 
 
 {% block maincontent %}
@@ -22,22 +20,22 @@
         <table>
 
             <tr>
-                <th>Kontakt</th>
-                <th>Detaljer</th>
+                <th>{% trans "Contact" %}</th>
+                <th>{% trans "Details" %}</th>
             </tr>
 
             <tr>
-                <td>Navn</td>
+                <td>{% trans "Name" %}</td>
                 <td>{{ contact.full_name }}</td>
             </tr>
 
             <tr>
-                <td>Epostadresse</td>
+                <td>{% trans "E-mail" %}</td>
                 <td>{{ contact.email }}</td>
             </tr>
 
             <tr>
-                <td>Adresse</td>
+                <td>{% trans "Address" %}</td>
                 <td> {{ contact.address }}</td>
             </tr>
 
@@ -48,27 +46,36 @@
 </div>
 <div class="portlet x3">
 
-    <div class="portlet-header"><h4>Valg</h4></div>
+    <div class="portlet-header"><h4>{% trans "Choices" %}</h4></div>
 
     <div class="portlet-content">
 
+
+        {% trans "Created" %} {{ contact.date_created|timesince }} {% trans "ago" %}
+        <br>
+        {% trans "Edited" %} {{ contact.date_edited|timesince }} {% trans "ago" %}
+        <br>
+
+        {% if not contact.trashed %}
+            {% require_permission EDIT contact %}
+            <div class="tool editChoice">
+                <a href="{% url app.contacts.views.edit contact.id %}">{% trans "Edit contact" %}</a>
+            </div>
+            {% end_require %}
+            {% require_permission DELETE contact %}
+            <div class="tool deleteChoice">
+                <a href="{% url app.contacts.views.delete contact.id %}">{% trans "Delete contact" %}</a>
+            </div>
+            {% end_require %}
+        {% endif %}
         
-        Opprettet for {{ contact.date_created|timesince }} siden
-        <br>
-        Opprettet for {{ contact.date_edited|timesince }} siden
-        <br>
-
-        {% require_permission EDIT contact %}
-        <div class="tool editChoice">
-            <a href="{% url app.contacts.views.edit contact.id %}">Endre kontakt</a>
-        </div>
-        {% end_require %}
-
-        {% require_permission DELETE contact %}
-        <div class="tool deleteChoice">
-            <a href="{% url app.contacts.views.delete contact.id %}">Slett kontakt</a>
-        </div>
-        {% end_require %}
+        {% if contact.trashed %}
+            {% require_permission EDIT contact %}
+            <div class="tool editChoice">
+                <a href="{% url app.contacts.views.edit contact.id %}">{% trans "Edit contact" %}</a>
+            </div>
+            {% end_require %}
+        {% endif %}
 
     </div>
 </div>

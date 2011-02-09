@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
+
 {% block submenu %}
-    <a href="add"><span>Oprett ny kunde</span></a>
+    <a href="add"><span>{% trans "New customer" %}</span></a>
 {% endblock %}
 
 
@@ -13,17 +15,15 @@
 
         <div class="portlet-content">
 
-
-
             <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
 
                 <thead>
                 <tr>
-                    <th>Kundenr</th>
-                    <th>Navn</th>
-                    <th>Adresse</th>
-                    <th>Telefon</th>
-                    <th>Epostadresse</th>
+                    <th>{% trans "Customer number" %}</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Address" %}</th>
+                    <th>{% trans "Phone" %}</th>
+                    <th>{% trans "E-mail" %}</th>
                     <th>#</th>
                 </tr>
                 </thead>

@@ -1,9 +1,10 @@
+{% load i18n %}
+{% load auth %}
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    {% load i18n %}
-    {% load auth %}
 
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 
@@ -39,7 +40,7 @@
             <br/>
             {% if user.get_new_notifications.count %}
                 <a href="{% url app.dashboard.views.notifications %}">{{ user.get_new_notifications.count }}
-                    oppdateringer siden sist</a> |
+                    {% trans "updates since last login" %}</a> |
             {% endif %}
         </p>
         <img width="30px" height="70px" src="{{ user.getProfileImage }}" alt="avatar"/>
@@ -52,49 +53,50 @@
 
 
 <li class="mega {% active request "^/dashboard/" %}">
-    <a class="mega-tab" href="{% url app.dashboard.views.overview %}">Oppslagstavle</a>
+    <a class="mega-tab" href="{% url app.dashboard.views.overview %}">{% trans "Dashboard" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
-            <li><a href="{% url app.dashboard.views.overview %}">Oppslagstavle</a></li>
+            <li><a href="{% url app.dashboard.views.overview %}">{% trans "Dashboard" %}</a></li>
             {% require_permission LISTALL core.Log %}
-            <li><a href="{% url app.dashboard.views.logs %}">Logoversikt</a></li>
+            <li><a href="{% url app.dashboard.views.logs %}">{% trans "Log" %}</a></li>
             {% end_require %}
             {% require_permission LIST core.Notification %}
-            <li><a href="{% url app.dashboard.views.notifications %}">Notifications</a></li>
+            <li><a href="{% url app.dashboard.views.notifications %}">{% trans "Notifications" %}</a></li>
             {% end_require %}
             {% require_permission CREATE announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.add %}">Legg til nytt oppslag</a></li>
+            <li><a href="{% url app.announcements.views.add %}">{% trans "New announcement" %}</a></li>
             {% end_require %}
             {% require_permission LISTALL announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.overview %}">Oversikt</a></li>
+            <li><a href="{% url app.announcements.views.overview %}">{% trans "Announcements" %}</a></li>
             {% end_require %}
             {% require_permission LISTDELETED announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.overview_trashed %}">Slettede oppslag</a></li>
+            <li><a href="{% url app.announcements.views.overview_trashed %}">{% trans "Deleted announcements" %}</a>
+            </li>
             {% end_require %}
         </ul>
     </div>
 </li>
 
 <li class="mega {% active request "^/customers/" %}">
-    <a class="mega-tab" href="{% url app.customers.views.overview %}">Kunder</a>
+    <a class="mega-tab" href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
 
             {% require_permission CREATE customers.Customer %}
-            <li><a href="{% url app.customers.views.add %}">Legg til ny kunde</a></li>
+            <li><a href="{% url app.customers.views.add %}">{% trans "New customer" %}</a></li>
             {% end_require %}
 
             {% require_permission LIST customers.Customer %}
-            <li><a href="{% url app.customers.views.overview %}">Oversikt</a></li>
+            <li><a href="{% url app.customers.views.overview %}">{% trans "Overview" %}</a></li>
             {% end_require %}
 
             {% require_permission LISTDELETED customers.Customer %}
-            <li><a href="{% url app.customers.views.overview_trashed %}">Slettede kunder</a></li>
+            <li><a href="{% url app.customers.views.overview_trashed %}">{% trans "Deleted customers" %}</a></li>
             {% end_require %}
             {% require_permission LISTALL customers.Customer %}
-            <li><a href="{% url app.customers.views.overview_all %}">Alle kunder</a></li>
+            <li><a href="{% url app.customers.views.overview_all %}">{% trans "All customers" %}</a></li>
             {% end_require %}
 
         </ul>
@@ -103,26 +105,26 @@
 
 
 <li class="mega {% active request "^/contacts/" %}">
-    <a class="mega-tab" href="{% url app.contacts.views.overview %}">Kontakter</a>
+    <a class="mega-tab" href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
             {% require_permission CREATE contacts.Contact %}
 
-            <li><a href="{% url app.contacts.views.add %}">Legg til ny kontakt</a></li>
+            <li><a href="{% url app.contacts.views.add %}">{% trans "New contact" %}</a></li>
             {% end_require %}
 
             {% require_permission LIST contacts.Contact %}
 
-            <li><a href="{% url app.contacts.views.overview %}">Dine kontakter</a></li>
+            <li><a href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a></li>
             {% end_require %}
 
             {% require_permission LISTALL contacts.Contact %}
-            <li><a href="{% url app.contacts.views.overview_all %}">Alle kontakter</a></li>
+            <li><a href="{% url app.contacts.views.overview_all %}">{% trans "All customers" %}</a></li>
             {% end_require %}
 
             {% require_permission LISTDELETED contacts.Contact %}
-            <li><a href="{% url app.contacts.views.overview_trashed %}">Slettede kontakter</a></li>
+            <li><a href="{% url app.contacts.views.overview_trashed %}">{% trans "Deleted customer" %}</a></li>
             {% end_require %}
 
         </ul>
@@ -130,24 +132,24 @@
 </li>
 
 <li class="mega {% active request "^/projects/" %}">
-    <a class="mega-tab" href="{% url app.projects.views.overview %}">Prosjekter</a>
+    <a class="mega-tab" href="{% url app.projects.views.overview %}">{% trans "Projects" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
             {% require_permission CREATE projects.Project %}
-            <li><a href="{% url app.projects.views.add %}">Legg til nytt prosjekt</a></li>
+            <li><a href="{% url app.projects.views.add %}">{% trans "New project" %}</a></li>
             {% end_require %}
             {% require_permission LIST projects.Project %}
-            <li><a href="{% url app.projects.views.overview %}">Dine prosjekter</a></li>
+            <li><a href="{% url app.projects.views.overview %}">{% trans "Your projects" %}</a></li>
             {% end_require %}
             {% require_permission LIST projects.Project %}
-            <li><a href="{% url app.projects.views.timeline %}">Tidslinje</a></li>
+            <li><a href="{% url app.projects.views.timeline %}">{% trans "Timeline" %}</a></li>
             {% end_require %}
             {% require_permission LISTALL projects.Project %}
-            <li><a href="{% url app.projects.views.overview_all %}">Alle aktive prosjekter</a></li>
+            <li><a href="{% url app.projects.views.overview_all %}">{% trans "All active projects" %}</a></li>
             {% end_require %}
             {% require_permission LISTDELETED projects.Project %}
-            <li><a href="{% url app.projects.views.overview_trashed %}">Alle slettede prosjekter</a>
+            <li><a href="{% url app.projects.views.overview_trashed %}">{% trans "All deleted projects" %}</a>
                 {% end_require %}
             </li>
         </ul>
@@ -155,48 +157,48 @@
 </li>
 
 <li class="mega {% active request "^/orders/" %}">
-    <a class="mega-tab" href="{% url app.orders.views.overview %}">Ordrer</a>
+    <a class="mega-tab" href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
             {% require_permission CREATE orders.Order %}
-            <li><a href="{% url app.orders.views.add %}">Legg til ny ordre</a></li>
+            <li><a href="{% url app.orders.views.add %}">{% trans "New order" %}</a></li>
             {% end_require %}
             {% require_permission LIST orders.Order %}
-            <li><a href="{% url app.orders.views.overview %}">Ordrer</a></li>
+            <li><a href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a></li>
             {% end_require %}
             {% require_permission CREATE orders.Order %}
-            <li><a href="{% url app.orders.views.addOffer %}">Nytt tilbud</a></li>
+            <li><a href="{% url app.orders.views.addOffer %}">{% trans "New offer" %}</a></li>
             {% end_require %}
             {% require_permission CREATE orders.Order %}
-            <li><a href="{% url app.orders.views.overviewOffers %}">Tilbud</a></li>
+            <li><a href="{% url app.orders.views.overviewOffers %}">{% trans "Offers" %}</a></li>
             {% end_require %}
             {% require_permission LISTREADYINVOICE orders.Order %}
-            <li><a href="{% url app.orders.views.overviewReadyForInvoice %}">Klar til fakturing</a></li>
+            <li><a href="{% url app.orders.views.overviewReadyForInvoice %}">{% trans "Ready for invoice" %}</a></li>
             {% end_require %}
             {% require_permission LISTARCHIVE orders.Order %}
-            <li><a href="{% url app.orders.views.overviewArchive %}">Arkiv</a></li>
+            <li><a href="{% url app.orders.views.overviewArchive %}">{% trans "Archive" %}</a></li>
             {% end_require %}
         </ul>
     </div>
 </li>
 
 <li class="mega {% active request "^/hourregistrationsOLD/" %}">
-    <a class="mega-tab" href="{% url app.hourregistrations.views.overview %}">Timeregistrering</a>
+    <a class="mega-tab" href="{% url app.hourregistrations.views.overview %}">{% trans "Hour registrations" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
             {% require_permission LIST hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.overview %}">Aktiv timeliste</a></li>
+            <li><a href="{% url app.hourregistrations.views.overview %}">{% trans "Active timesheet" %}</a></li>
             {% end_require %}
             {% require_permission LISTARCHIVE hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.your_archive %}">Arkiv</a></li>
+            <li><a href="{% url app.hourregistrations.views.your_archive %}">{% trans "Archive" %}</a></li>
             {% end_require %}
             {% require_permission CREATE hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.add %}">Registrer manuelt</a></li>
+            <li><a href="{% url app.hourregistrations.views.add %}">{% trans "Register new" %}</a></li>
             {% end_require %}
             {% require_permission LIST hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.calendar %}">Kalender</a></li>
+            <li><a href="{% url app.hourregistrations.views.calendar %}">{% trans "Calendar" %}</a></li>
             {% end_require %}
 
         </ul>
@@ -205,17 +207,17 @@
 
 
 <li class="mega {% active request "^/stock/" %}">
-    <a class="mega-tab" href="{% url app.stock.products.views.overview %}">Lager</a>
+    <a class="mega-tab" href="{% url app.stock.products.views.overview %}">{% trans "Stock" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
-            <li><a href="{% url app.stock.products.views.overview %}">Produktoversikt</a></li>
-            <li><a href="{% url app.stock.products.views.add %}">Nytt produkt</a></li>
-            <li><a href="{% url app.stock.productgroups.views.add %}">Ny produktgruppe</a></li>
-            <li><a href="{% url app.stock.products.views.overview_trashed %}">Slettede produkter</a></li>
+            <li><a href="{% url app.stock.products.views.overview %}">{% trans "Products" %}</a></li>
+            <li><a href="{% url app.stock.products.views.add %}">{% trans "New product" %}</a></li>
+            <li><a href="{% url app.stock.productgroups.views.add %}">{% trans "New product group" %}</a></li>
+            <li><a href="{% url app.stock.products.views.overview_trashed %}">{% trans "Deleted products" %}</a></li>
             <ul>
-                <li><a href="{% url app.suppliers.views.overview %}">Leverandøroversikt</a></li>
-                <li><a href="{% url app.suppliers.views.add %}">Ny leverandør</a></li>
+                <li><a href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a></li>
+                <li><a href="{% url app.suppliers.views.add %}">{% trans "New supplier" %}</a></li>
             </ul>
         </ul>
     </div>
@@ -226,8 +228,8 @@
 
     <div class="mega-content mega-menu ">
         <ul>
-            <li><a href="{% url app.tickets.views.overview %}">Alle tickets</a></li>
-            <li><a href="{% url app.tickets.views.add %}">Ny ticket</a></li>
+            <li><a href="{% url app.tickets.views.overview %}">{% trans "All tickets" %}</a></li>
+            <li><a href="{% url app.tickets.views.add %}">{% trans "New ticket" %}</a></li>
         </ul>
     </div>
 </li>
@@ -238,19 +240,19 @@
     <div class="mega-content mega-menu ">
         <ul>
             {% require_permission LIST core.User %}
-            <li><a href="{% url app.admin.views.user.overview %}">Oversikt</a></li>
+            <li><a href="{% url app.admin.views.user.overview %}">{% trans "Overview" %}</a></li>
             {% end_require %}
             {% require_permission CREATE core.User %}
-            <li><a href="{% url app.admin.views.user.add %}">Legg til ny bruker</a></li>
+            <li><a href="{% url app.admin.views.user.add %}">{% trans "New user" %}</a></li>
             {% end_require %}
             {% require_permission LIST core.Group %}
-            <li><a href="{% url app.admin.views.group.overview %}">Gruppeoversikt</a></li>
+            <li><a href="{% url app.admin.views.group.overview %}">{% trans "Groups" %}</a></li>
             {% end_require %}
             {% require_permission CREATE core.Group %}
-            <li><a href="{% url app.admin.views.group.add %}">Legg til ny gruppe</a></li>
+            <li><a href="{% url app.admin.views.group.add %}">{% trans "New group" %}</a></li>
             {% end_require %}
             {% require_permission CONFIGURE core.Company %}
-            <li><a href="{% url app.admin.views.company.editCompany %}">Firmadetaljer</a></li>
+            <li><a href="{% url app.admin.views.company.editCompany %}">{% trans "Company" %}</a></li>
             {% end_require %}
         </ul>
     </div>
