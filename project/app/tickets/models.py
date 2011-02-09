@@ -1,4 +1,3 @@
-from settings import fileStore
 from core.models import PersistentModel, User
 from django.db import models
 from app.customers.models import Customer
