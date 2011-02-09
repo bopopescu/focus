@@ -86,18 +86,15 @@
             {% require_permission CREATE customers.Customer %}
             <li><a href="{% url app.customers.views.add %}">{% trans "New customer" %}</a></li>
             {% end_require %}
-
             {% require_permission LIST customers.Customer %}
             <li><a href="{% url app.customers.views.overview %}">{% trans "Overview" %}</a></li>
             {% end_require %}
-
             {% require_permission LISTDELETED customers.Customer %}
             <li><a href="{% url app.customers.views.overview_trashed %}">{% trans "Deleted customers" %}</a></li>
             {% end_require %}
             {% require_permission LISTALL customers.Customer %}
             <li><a href="{% url app.customers.views.overview_all %}">{% trans "All customers" %}</a></li>
             {% end_require %}
-
         </ul>
     </div>
 </li>
@@ -148,9 +145,8 @@
             <li><a href="{% url app.projects.views.overview_all %}">{% trans "All active projects" %}</a></li>
             {% end_require %}
             {% require_permission LISTDELETED projects.Project %}
-            <li><a href="{% url app.projects.views.overview_trashed %}">{% trans "All deleted projects" %}</a>
-                {% end_require %}
-            </li>
+            <li><a href="{% url app.projects.views.overview_trashed %}">{% trans "All deleted projects" %}</a></li>
+            {% end_require %}
         </ul>
     </div>
 </li>
