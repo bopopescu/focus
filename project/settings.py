@@ -2,7 +2,6 @@
 # Django settings for focus project.
 
 import os.path
-from django.core.files.storage import FileSystemStorage
 
 BASE_PATH = os.path.dirname(__file__)
 
@@ -27,8 +26,6 @@ DATABASES = {
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
-
-fileStore = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 LANGUAGE_CODE = 'en'
 
