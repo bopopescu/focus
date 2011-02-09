@@ -14,8 +14,10 @@ from widgets import get_hexdigest, check_password
 from inspect import isclass
 import time
 import os
-from settings import fileStore
+
 from django.core.files.storage import FileSystemStorage
+
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 """
 The Company class.
@@ -70,7 +72,7 @@ class User(models.Model):
 
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
-    profileImage = models.FileField(upload_to="profileImages", storage=fileStore, null=True, blank=True)
+    profileImage = models.FileField(upload_to="profileImages", storage=fs, null=True, blank=True)
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
