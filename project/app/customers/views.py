@@ -9,14 +9,14 @@ from django.utils import simplejson
 @require_permission("LIST", Customer)
 def overview(request):
     updateTimeout(request)
-    customers = Core.current_user().getPermittedObjects("VIEW", Customer)
+    customers = Core.current_user().getPermittedObjects("VIEW", Customer).filter(trashed=False)
 
     return render_with_request(request, 'customers/list.html', {'title': 'Kunder',
                                                                 'customers': customers})
 
 @require_permission("LISTDELETED", Customer)
-def overview_deleted(request):
-    customers = Customer.all_objects.filter(deleted=True,company = Core.current_user().get_company())
+def overview_trashed(request):
+    customers = Customer.all_objects.filter(trashed=True, company=Core.current_user().get_company())
     return render_with_request(request, 'customers/list.html', {'title': 'Slettede kunder',
                                                                 'customers': customers})
 
@@ -32,34 +32,13 @@ def view(request, id):
     return render_with_request(request, 'customers/view.html', {'title': 'Kunde: %s' % customer.full_name,
                                                                 'customer': customer})
 
-@login_required()
-def addPop(request):
-    instance = Customer()
-
-    if request.method == "POST":
-        form = CustomerFormSimple(request.POST, instance=instance)
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
-
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
-
-    else:
-        form = CustomerFormSimple(instance=instance)
-
-    return render_with_request(request, "simpleform.html", {'title': 'Kunde', 'form': form})
-
 @require_permission("CREATE", Customer)
 def add_ajax(request):
     form = CustomerFormSimple(request.POST, instance=Customer())
 
     if form.is_valid():
         a = form.save()
-        
+
         return HttpResponse(simplejson.dumps({'name': a.full_name,
                                               'id': a.id}), mimetype='application/json')
 
@@ -75,7 +54,7 @@ def edit(request, id):
     return form(request, id)
 
 @require_permission("DELETE", Customer, "id")
-def delete(request, id):
+def trash(request, id):
     customer = Customer.objects.get(id=id)
 
     if not customer.canBeDeleted()[0]:

@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('app.contacts.views',
                        url(r'^$', 'overview'),
 
-                       url(r'^deleted/?$', 'overview_deleted'),
+                       url(r'^trashed/?$', 'overview_trashed'),
                        url(r'^all/?$', 'overview_all'),
                        url(r'^new/$', 'add'),
                        url(r'^addPop/$', 'addPop'),

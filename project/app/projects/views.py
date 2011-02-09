@@ -12,19 +12,19 @@ from django.utils import simplejson
 @require_permission("LIST", Project)
 def overview(request):
     updateTimeout(request)
-    projects = Core.current_user().getPermittedObjects("VIEW", Project)
+    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=False)
     return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
 @require_permission("LIST", Project)
 def timeline(request):
     updateTimeout(request)
-    projects = Core.current_user().getPermittedObjects("VIEW", Project)
+    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
     return render_with_request(request, 'projects/timeline.html',
                                {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
 @require_permission("LIST", Project)
-def overview_deleted(request):
-    projects = Project.objects.all(deleted=True)
+def overview_trashed(request):
+    projects = Core.current_user().getPermittedObjects("VIEW", Project)
     return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
 @require_permission("LIST", Project)

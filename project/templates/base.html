@@ -70,7 +70,7 @@
             <li><a href="{% url app.announcements.views.overview %}">Oversikt</a></li>
             {% end_require %}
             {% require_permission LISTDELETED announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.overview_deleted %}">Slettede oppslag</a></li>
+            <li><a href="{% url app.announcements.views.overview_trashed %}">Slettede oppslag</a></li>
             {% end_require %}
         </ul>
     </div>
@@ -91,7 +91,7 @@
             {% end_require %}
 
             {% require_permission LISTDELETED customers.Customer %}
-            <li><a href="{% url app.customers.views.overview_deleted %}">Slettede kunder</a></li>
+            <li><a href="{% url app.customers.views.overview_trashed %}">Slettede kunder</a></li>
             {% end_require %}
             {% require_permission LISTALL customers.Customer %}
             <li><a href="{% url app.customers.views.overview_all %}">Alle kunder</a></li>
@@ -122,7 +122,7 @@
             {% end_require %}
 
             {% require_permission LISTDELETED contacts.Contact %}
-            <li><a href="{% url app.contacts.views.overview_deleted %}">Slettede kontakter</a></li>
+            <li><a href="{% url app.contacts.views.overview_trashed %}">Slettede kontakter</a></li>
             {% end_require %}
 
         </ul>
@@ -147,7 +147,7 @@
             <li><a href="{% url app.projects.views.overview_all %}">Alle aktive prosjekter</a></li>
             {% end_require %}
             {% require_permission LISTDELETED projects.Project %}
-            <li><a href="{% url app.projects.views.overview_deleted %}">Alle slettede prosjekter</a>
+            <li><a href="{% url app.projects.views.overview_trashed %}">Alle slettede prosjekter</a>
                 {% end_require %}
             </li>
         </ul>
@@ -212,7 +212,7 @@
             <li><a href="{% url app.stock.products.views.overview %}">Produktoversikt</a></li>
             <li><a href="{% url app.stock.products.views.add %}">Nytt produkt</a></li>
             <li><a href="{% url app.stock.productgroups.views.add %}">Ny produktgruppe</a></li>
-            <li><a href="{% url app.stock.products.views.overview_deleted %}">Slettede produkter</a></li>
+            <li><a href="{% url app.stock.products.views.overview_trashed %}">Slettede produkter</a></li>
             <ul>
                 <li><a href="{% url app.suppliers.views.overview %}">Leverandøroversikt</a></li>
                 <li><a href="{% url app.suppliers.views.add %}">Ny leverandør</a></li>

@@ -14,7 +14,7 @@ def overview(request):
     return render_with_request(request, 'stock/products/list.html', {'title': 'Produkter', 'products': products})
 
 @require_permission("LISTDELETED", Product)
-def overview_deleted(request):
+def overview_trashed(request):
     updateTimeout(request)
     products = Product.objects.filter(deleted=True)
     return render_with_request(request, 'stock/products/list.html', {'title': 'Produkter', 'products': products})

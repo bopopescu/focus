@@ -21,6 +21,12 @@ class Project(PersistentModel):
     def __unicode__(self):
         return self.project_name
 
+    def canBeDeleted(self):
+        if self.orders.all().count() > 0:
+            return (False, _("Project has active orders"))
+
+        return (True, "ok")
+
     def getViewUrl(self):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 

@@ -8,7 +8,7 @@ urlpatterns = patterns('app.projects.views',
 
                        url(r'^timeline/?$', 'timeline'),
                        
-                       url(r'^deleted/?$', 'overview_deleted'),
+                       url(r'^deleted/?$', 'overview_trashed'),
                        url(r'^all/?$', 'overview_all'),
 
                        url(r'^add/$', 'add'),

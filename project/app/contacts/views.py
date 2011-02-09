@@ -10,19 +10,17 @@ from core.views import updateTimeout
 @login_required()
 def overview(request):
     updateTimeout(request)
-
-    contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
-
+    contacts = Core.current_user().getPermittedObjects("VIEW", Contact).filter(trashed=False)
     return render_with_request(request, 'contacts/list.html', {'title': 'Kontakter', 'contacts': contacts})
 
 @login_required()
-def overview_deleted(request):
-    contacts = Contact.objects.filter(deleted=True)
+def overview_trashed(request):
+    contacts = Core.current_user().getPermittedObjects("VIEW", Contact).filter(trashed=True)
     return render_with_request(request, 'contacts/list.html', {'title': 'Slettede kontakter', 'contacts': contacts})
 
 @login_required()
 def overview_all(request):
-    contacts = Contact.objects.all()
+    contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
     return render_with_request(request, 'contacts/list.html', {'title': 'Alle aktive kontakter', 'contacts': contacts})
 
 @require_permission("CREATE", Contact)

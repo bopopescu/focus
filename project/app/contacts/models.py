@@ -14,6 +14,9 @@ class Contact(PersistentModel):
     def __unicode__(self):
         return "%s" % unicode(self.full_name)
 
+    def canBeDeleted(self):
+        return (True, "ok")
+
     def save(self, *args, **kwargs):
 
         new = False

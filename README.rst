@@ -41,7 +41,7 @@ Første installasjon
 
 For å sette opp prosjektet for første gang
 
-	git clonegit@github.com:frecarlsen/focus.git
+	git clone git@github.com:frecarlsen/focus.git
 
 	cd focus
 
