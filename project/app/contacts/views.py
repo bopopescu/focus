@@ -11,7 +11,6 @@ from core.views import updateTimeout
 def overview(request):
     updateTimeout(request)
 
-    #contacts = Contact.objects.all()
     contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
 
     return render_with_request(request, 'contacts/list.html', {'title': 'Kontakter', 'contacts': contacts})

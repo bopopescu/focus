@@ -4,7 +4,7 @@ from core.shortcuts import render_with_request
 
 def overview(request):
     tickets = Core.current_user().getPermittedObjects("VIEW", Ticket)
-    return render_with_request(request, 'tickets/list.html', {"tickets": tickets})
+    return render_with_request(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 
 def new_ticket(request):

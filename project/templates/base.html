@@ -245,6 +245,33 @@
                 </ul>
             </div>
         </li>
+
+        <li class="mega {% active request "^/tickets/" %}">
+            <a class="mega-tab" href="{% url app.tickets.views.overview %}">Tickets</a>
+
+            <div class="mega-content mega-menu ">
+                <ul>
+                    {% require_permission CREATE tickets.Ticket %}
+
+                    <li><a href="{% url app.tickets.views.new_ticket %}">Legg til ny kontakt</a></li>
+                    {% end_require %}
+
+                    {% require_permission LIST tickets.Ticket %}
+
+                    <li><a href="{% url app.contacts.views.overview %}">Dine kontakter</a></li>
+                    {% end_require %}
+
+                    {% require_permission LISTALL tickets.Ticket %}
+                    <li><a href="{% url app.contacts.views.overview_all %}">Alle kontakter</a></li>
+                    {% end_require %}
+
+                    {% require_permission LISTDELETED tickets.Ticket %}
+                    <li><a href="{% url app.contacts.views.overview_deleted %}">Slettede kontakter</a></li>
+                    {% end_require %}
+
+                </ul>
+            </div>
+        </li>
     </ul>
 </div>
 <!-- #nav -->
