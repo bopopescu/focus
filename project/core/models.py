@@ -212,7 +212,6 @@ class User(models.Model):
 
     def getProfileImage(self):
         if self.profileImage:
-            print "HER: %s" % os.path.join("/file/", self.profileImage.name)
             if os.path.join("/file/", self.profileImage.name):
                 return os.path.join("/file/", self.profileImage.name)
 
