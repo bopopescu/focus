@@ -18,7 +18,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jqueryui.js"></script>
 
-
     {% block extraHead %}
     {% endblock %}
 </head>
@@ -226,8 +225,8 @@
 
     <div class="mega-content mega-menu ">
         <ul>
-            <li><a href="{% url app.tickets.views.overview %}">Alle tickets</a></li>
-            <li><a href="{% url app.tickets.views.add %}">Ny ticket</a></li>
+            <li><a href="{% url app.tickets.views.overview %}">{% trans "All Tickets" %}</a></li>
+            <li><a href="{% url app.tickets.views.add %}">{% trans "New Ticket" %}</a></li>
         </ul>
     </div>
 </li>
