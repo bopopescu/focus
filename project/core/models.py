@@ -637,6 +637,9 @@ class Log(models.Model):
                     msg += value[1] + " ble endret fra: %s til: %s. " % (
                     eval(lastLog.message)[i][0], eval(self.message)[i][0])
 
+            if msg =="":
+                return "Ingen endring registrert"
+            
             return msg
 
         return "%s ble opprettet" % self.getObject()
