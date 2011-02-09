@@ -7,7 +7,8 @@ from core.widgets import *
 class CustomerForm(ModelForm):
     class Meta:
         model = Customer
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
+        #exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
+        fields = ("cid", "full_name","email","address","phone","zip","city","website","alternative_address","contacts")
 
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)

@@ -28,18 +28,18 @@ class Project(PersistentModel):
         realDiff = (time.mktime(datetime.now().timetuple()) - time.mktime(self.date_created.timetuple()))
         estimatedDiff = (time.mktime(self.deliveryDate.timetuple()) - time.mktime(self.date_created.timetuple()))
 
-        if realDiff>estimatedDiff:
+        if realDiff > estimatedDiff:
             return 100
 
-        return (realDiff/estimatedDiff)*100
+        return (realDiff / estimatedDiff) * 100
 
     @staticmethod
     def add_ajax_url():
-          return urlresolvers.reverse('app.projects.views.add_ajax')
+        return urlresolvers.reverse('app.projects.views.add_ajax')
 
     @staticmethod
     def simpleform():
-          return ProjectFormSimple(instance=Project())
+        return ProjectFormSimple(instance=Project())
 
     def save(self, *args, **kwargs):
         new = False

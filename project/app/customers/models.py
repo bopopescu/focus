@@ -45,7 +45,7 @@ class Customer(PersistentModel):
         super(Customer, self).save()
 
         print Core.current_user()
-        
+
         #Give the user who created this ALL permissions on object
 
         if new:
