@@ -8,6 +8,7 @@ from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
 from django.utils import simplejson
+from django.utils.translation import ugettext as _
 
 @require_permission("LIST", Project)
 def overview(request):

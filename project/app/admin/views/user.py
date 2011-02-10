@@ -7,19 +7,20 @@ from core.views import updateTimeout
 from core.decorators import *
 from core.models import User, Permission
 from app.admin.forms import *
+from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
     updateTimeout(request)
     Users = User.objects.inCompany().filter(is_active=True)
-    return render_with_request(request, 'admin/users/list.html', {'title': 'Brukere', 'users': Users})
+    return render_with_request(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
 
 @login_required()
 def grant_permissions(request):
     Users = User.objects.all()
     Permissions = Permission.objects.all()
     return render_with_request(request, 'admin/users/grant_permssions.html',
-                               {'title': 'Brukere', 'users': Users, 'permissions': Permissions})
+                               {'title': _("Users"), 'users': Users, 'permissions': Permissions})
 
 @login_required()
 def add(request):
@@ -38,7 +39,7 @@ def changeCanLogin(request, userID):
     u = User.objects.get(id=userID)
 
     if u == request.user:
-        request.messages_error("Du kan ikke endre status på deg selv.")
+        request.messages_error(_("You can't change your own login status"))
         return redirect(view, userID)
 
     u.canLogin = not u.canLogin
@@ -75,7 +76,7 @@ def sendGeneratedPassword(request, userID):
     user.set_password("%s" % ret)
     user.save()
 
-    request.message_success("Velykket sendt nytt passord til epost")
+    request.message_success(_("Successfully sent new password"))
 
     return redirect(overview)
 
@@ -112,7 +113,7 @@ def view(request, id):
     user = User.objects.get(id=id)
     Permissions = user.get_permissions()
 
-    return render_with_request(request, 'admin/users/view.html', {'title': 'Bruker',
+    return render_with_request(request, 'admin/users/view.html', {'title': _("User"),
                                                                   'userCard': user,
                                                                   'permissions': Permissions,
                                                                   })
@@ -122,14 +123,14 @@ def delete(request, id):
     u = User.objects.get(id=id)
     u.is_active = False
     u.save()
-    request.message_success("Velykket slettet bruker")
+    request.message_success(_("Successfully deletes user"))
     return redirect(overview)
 
 
 @login_required()
 def setHourRegistrationLimitsManually (request, id):
     instance = get_object_or_404(User, id=id)
-    msg = "Velykket satt tider"
+    msg = _("Successfully changed user")
 
     if request.method == 'POST':
         form = HourRegistrationManuallyForm(request.POST, instance=instance)
@@ -147,17 +148,17 @@ def setHourRegistrationLimitsManually (request, id):
     else:
         form = HourRegistrationManuallyForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Sett tider', 'form': form})
+    return render_with_request(request, "form.html", {'title': _("Change user"), 'form': form})
 
 
 @login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(User, id=id, company=request.user.company)
-        msg = "Velykket endret bruker"
+        msg = _("Successfully edited user")
     else:
         instance = User()
-        msg = "Velykket lagt til ny bruker"
+        msg = _("Successfully added new user")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -191,4 +192,4 @@ def form (request, id=False):
     else:
         form = UserForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Bruker', 'form': form})
+    return render_with_request(request, "form.html", {'title': _("User"), 'form': form})

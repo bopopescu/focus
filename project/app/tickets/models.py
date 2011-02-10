@@ -31,7 +31,6 @@ class TicketType(PersistentModel):
     def __unicode__(self):
         return unicode(self.name)
 
-
 class Ticket(PersistentModel):
     title = models.CharField(max_length=50)
     description = models.TextField()
@@ -43,7 +42,6 @@ class Ticket(PersistentModel):
     customer = models.ForeignKey(Customer)
     assigned_to = models.ForeignKey(User, null=True, blank=True)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True)
-
 
     def __unicode__(self):
         return unicode(self.title)
@@ -66,18 +64,14 @@ class Ticket(PersistentModel):
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
 
-
 class Comment(PersistentModel):
     title = models.CharField(max_length=50)
     text = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
     Ticket = models.ForeignKey(Ticket, related_name="comments")
-    
 
     class Meta:
         ordering = ['date_created']
-
-
 
 def initial_data() :
 
@@ -91,13 +85,3 @@ def initial_data() :
     TicketPriority.objects.get_or_create(name="H&oslash;y")
 
     TicketType.objects.get_or_create(name="type")
-
-
-
-
-
-
-
-
-
-

@@ -2,7 +2,7 @@
 {% load timetracking_tags %}
 
 {% block submenu %}
-    <a href="add"><span>Oprett nytt prosjekt</span></a>
+    <a href="add"><span>{% trans "New hour registration" %}</span></a>
 {% endblock %}
 
 {% block maincontent %}
@@ -16,8 +16,8 @@
 
         <thead>
         <tr>
-            <th>År</th>
-            <th>Måneder</th>
+            <th>{% trans "Year" %}</th>
+            <th>{% trans "Months" %}</th>
             <th>#</th>
         </tr>
         </thead>

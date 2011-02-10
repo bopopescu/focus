@@ -1,29 +1,29 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
+from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
     updateTimeout(request)
     suppliers = Supplier.objects.all()
-    return render_with_request(request, 'suppliers/list.html', {'title': 'Leverandører', 'suppliers': suppliers})
+    return render_with_request(request, 'suppliers/list.html', {'title': _("Suppliers"), 'suppliers': suppliers})
 
 @login_required()
 def overview_deleted(request):
     suppliers = Supplier.objects.filter(deleted=True)
     return render_with_request(request, 'suppliers/list.html',
-                               {'title': 'Slettede leverandører', 'suppliers': suppliers})
+                               {'title': _('Deleted suppliers'), 'suppliers': suppliers})
 
 @login_required()
 def overview_all(request):
     suppliers = Supplier.objects.all()
     return render_with_request(request, 'suppliers/list.html',
-                               {'title': 'Alle aktive leverandører', 'suppliers': suppliers})
+                               {'title': _("All active suppliers"), 'suppliers': suppliers})
 
 @login_required()
 def add(request):
@@ -50,7 +50,7 @@ def addPop(request):
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title': 'Kontakt', 'form': form})
+    return render_with_request(request, "simpleform.html", {'title': _('Contact'), 'form': form})
 
 def delete(request, id):
     Supplier.objects.get(id=id).delete()
@@ -60,10 +60,10 @@ def delete(request, id):
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Supplier, id=id, deleted=False)
-        msg = "Vellykket endret leverandør"
+        msg = _("Successfully edited supplier")
     else:
         instance = Supplier()
-        msg = "Vellykket lagt til ny leverandør"
+        msg = _("Successfully addded new supplier")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -78,6 +78,6 @@ def form (request, id=False):
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Leverandør',
+    return render_with_request(request, "form.html", {'title': _("Supplier"),
                                                       'form': form,
                                                       })

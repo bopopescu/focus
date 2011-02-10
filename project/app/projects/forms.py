@@ -3,6 +3,7 @@ from django.forms import ModelForm
 import django.forms as forms
 from models import *
 from core.widgets import SelectWithPop, DatePickerField
+from django.utils.translation import ugettext as _
 
 class ProjectForm(ModelForm):
     deliveryDate = forms.DateField(required=True, input_formats=["%d.%m.%Y"], widget=DatePickerField(format="%d.%m.%Y"))

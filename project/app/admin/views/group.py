@@ -5,13 +5,14 @@ from core.decorators import login_required
 from core.models import Group
 from core.shortcuts import *
 from core.views import updateTimeout
+from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
     updateTimeout(request)
 
     groups = Core.current_user().getPermittedObjects("VIEW", Group)
-    return render_with_request(request, 'admin/groups/list.html', {'title': 'Grupper', 'groups': groups})
+    return render_with_request(request, 'admin/groups/list.html', {'title': _("Groups"), 'groups': groups})
 
 def add(request):
     return form(request)
@@ -44,7 +45,7 @@ def addPop(request):
 @login_required()
 def view(request, id):
     group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
-    return render_with_request(request, 'admin/groups/view.html', {'title': 'Gruppe',
+    return render_with_request(request, 'admin/groups/view.html', {'title': _("Groups"),
                                                                    'group': group,
                                                                    })
 
@@ -53,17 +54,17 @@ def delete(request, id):
     group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
     group.delete()
 
-    request.message_success("Vellykket slettet bruker")
+    request.message_success(_("Successfully deleted group"))
     return redirect(overview)
 
 @login_required()
 def form (request, id=False):
     if id:
         instance = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
-        msg = "Velykket endret gruppe"
+        msg = _("Successfully edited group")
     else:
         instance = Group()
-        msg = "Velykket lagt til ny gruppe"
+        msg = _("Successfully added new group")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -80,4 +81,4 @@ def form (request, id=False):
     else:
         form = GroupForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Gruppe', 'form': form})
+    return render_with_request(request, "form.html", {'title': _("Group"), 'form': form})

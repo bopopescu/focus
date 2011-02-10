@@ -8,15 +8,15 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = ('name', 'productGroup', 'countOfAvailableInStock', 'size', 'price', 'unitForSize', 'priceVal',
-                  'normalDeliveryTime')
+                  'normalDeliveryTime',)
 
     def __init__(self, *args, **kwrds):
         super(ProductForm, self).__init__(*args, **kwrds)
-        self.fields['unitForSize'].widget = SelectWithPop()
+        #self.fields['unitForSize'].widget = SelectWithPop()
         self.fields['unitForSize'].queryset = UnitsForSizes.objects.all()
-        self.fields['priceVal'].widget = SelectWithPop()
+        #self.fields['priceVal'].widget = SelectWithPop()
         self.fields['priceVal'].queryset = Currency.objects.all()
-        self.fields['productGroup'].widget = SelectWithPop()
+        #self.fields['productGroup'].widget = SelectWithPop()
         self.fields['productGroup'].queryset = ProductGroup.objects.all()
 
 class ProductGroupForm(ModelForm):
@@ -27,7 +27,7 @@ class ProductGroupForm(ModelForm):
 class CurrencyForm(ModelForm):
     class Meta:
         model = Currency
-        fields = ('name', 'sign', 'value')
+        fields = ('name', 'sign', 'value',)
 
 class UnitsForSizesForm(ModelForm):
     class Meta:
@@ -37,4 +37,4 @@ class UnitsForSizesForm(ModelForm):
 class ProductFileForm(ModelForm):
     class Meta:
            model = ProductFile
-           fields = ('name','file')
+           fields = ('name','file',)

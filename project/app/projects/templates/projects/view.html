@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load auth %}
+{% load i18n %}
 {% block extrahead %}
 
 {% endblock %}
@@ -15,18 +16,17 @@
     <div class="portlet-header"><h4>{{ title }}</h4></div>
 
     <div class="portlet-content">
-        <b>Beskrivelse</b><br>
+        <b>{% trans "Description" %}</b><br>
         {{ project.description }}
         <br><br>
-
         <br><br>
         <table>
             <tr>
-                <th>Ordre</th>
-                <th>Registrert</th>
-                <th>Sist endret</th>
-                <th>Sist endret av</th>
-                <th>Opprettet av</th>
+                <th>{% trans "Project number" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Delivery date" %}</th>
+                <th>{% trans "Responsible" %}</th>
+                <th>#</th>
             </tr>
             {% for order in project.orders.all %}
                 <tr>
@@ -45,19 +45,19 @@
 
 <div class="portlet x3">
 
-    <div class="portlet-header"><h4>Valg</h4></div>
+    <div class="portlet-header"><h4>{% trans "Choices" %}</h4></div>
 
     <div class="portlet-content">
 
         {% require_permission EDIT project %}
         <div class="tool editChoice">
-            <a href="{% url app.projects.views.edit project.id %}">Endre prosjekt</a>
+            <a href="{% url app.projects.views.edit project.id %}">{% trans "edit" %}</a>
         </div>
         {% end_require %}
 
         {% require_permission DELETE project %}
         <div class="tool deleteChoice">
-            <a href="{% url app.projects.views.delete project.id %}">Slett prosjektet</a>
+            <a href="{% url app.projects.views.delete project.id %}">{% trans "delete" %}</a>
         </div>
         {% end_require %}
 
@@ -67,7 +67,7 @@
 
 <div class="portlet x9">
 
-    <div class="portlet-header"><h4>Filer</h4></div>
+    <div class="portlet-header"><h4>{% trans "Files" %}</h4></div>
 
     <div class="portlet-content">
 

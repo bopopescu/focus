@@ -6,17 +6,18 @@ from app.customers.models import Customer
 from django.core import urlresolvers
 from datetime import timedelta, datetime
 import time
+from django.utils.translation import ugettext as _
 
 class Project(PersistentModel):
-    pid = models.IntegerField("Prosjektnr", null=True)
-    POnumber = models.CharField("PO-number", max_length=150, blank=True, null=True)
-    customer = models.ForeignKey(Customer, verbose_name="Kunde", related_name="projects", default=None, null=True)
-    project_name = models.CharField("Prosjektnavn", max_length=80)
+    pid = models.IntegerField(_("Project nuber"), null=True)
+    POnumber = models.CharField(_("PO-number"), max_length=150, blank=True, null=True)
+    customer = models.ForeignKey(Customer, verbose_name=_("Customer"), related_name="projects", default=None, null=True)
+    project_name = models.CharField(_("Name"), max_length=80)
     description = models.TextField()
     deliveryAddress = models.CharField(max_length=150, null=True)
-    responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name="Ansvarlig", null=True)
-    deliveryDate = models.DateTimeField(verbose_name="Leveringsdato", null=True, blank=True)
-    deliveryDateDeadline = models.DateTimeField(verbose_name="Leveringsfrist", null=True, blank=True)
+    responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"), null=True)
+    deliveryDate = models.DateTimeField(verbose_name=_("Delivery date"), null=True, blank=True)
+    deliveryDateDeadline = models.DateTimeField(verbose_name=_("Delivery deadline"), null=True, blank=True)
 
     def __unicode__(self):
         return self.project_name

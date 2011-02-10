@@ -4,17 +4,17 @@ from django.shortcuts import redirect
 from app.admin.forms import *
 from core.shortcuts import *
 from core.models import User
+from django.utils.translation import ugettext as _
 
 def edit(request):
     return form(request)
 
 def form (request):
-
     try:
         instance = request.user
-        msg = "Velykket endret profil"
+        msg = _("Successfully changed your profile")
     except:
-        request.message_error("Profil finnes ikke")
+        request.message_error(_("Unknown profile"))
         return redirect("/")
 
     if request.method == 'POST':
@@ -27,6 +27,6 @@ def form (request):
             return redirect(edit)
 
     else:
-        form = UserProfileForm(instance=instance, initial = {"profileImage": None})
+        form = UserProfileForm(instance=instance, initial={"profileImage": None})
 
-    return render_with_request(request, "admin/profile/form.html", {'title': 'Profil', 'form': form})
+    return render_with_request(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form})

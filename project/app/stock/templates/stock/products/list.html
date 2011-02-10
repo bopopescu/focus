@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block submenu %}
     <a href="add"><span>Oprett nytt produkt</span></a>
@@ -17,7 +18,7 @@
             <table class="tablesorter">
                 <thead>
                 <tr>
-                    <th>Produkt</th>
+                    <th>{% trans "Product" %}</th>
                     <th>#</th>
                 </tr>
                 </thead>

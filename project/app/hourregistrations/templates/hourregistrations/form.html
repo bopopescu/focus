@@ -82,7 +82,7 @@
 
 
         <div class="portlet x6">
-            <div class="portlet-header"><h4>Utlegg</h4></div>
+            <div class="portlet-header"><h4>{% trans "Disbursements" %}</h4></div>
             <div class="portlet-content">
                 {{ DisbursementFormSet.management_form }}
 
@@ -102,7 +102,7 @@
                         </tr>
                     {% endfor %}
 
-                    <p id="add_new">Legg til nytt utlegg</p>
+                    <p id="add_new">{% trans "New disbursement" %}</p>
 
                 </table>
 
@@ -112,18 +112,18 @@
         </div>
 
         <div class="portlet x12">
-            <div class="portlet-header"><h4>Kjøring</h4></div>
+            <div class="portlet-header"><h4>{% trans "Driving" %}</h4></div>
             <div class="portlet-content">
                 {{ DrivingRegistrationFormSet.management_form }}
 
                 <table id="drivingList">
                     <thead>
 
-                    <th>Beskrivelse</th>
-                    <th>Tidspunkt start</th>
-                    <th>Tidspunkt destinasjon</th>
-                    <th>Antall km</th>
-                    <th>Slette</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "Time start" %}</th>
+                    <th>{% trans "Time stop" %}</th>
+                    <th>{% trans "kilometres" %}</th>
+                    <th>{% trans "delete" %}</th>
 
                     </thead>
 
@@ -148,7 +148,7 @@
                         </tr>
                     {% endfor %}
 
-                    <p id="add_new_driving">Legg til ny</p>
+                    <p id="add_new_driving">{% trans "New drive registration" %}</p>
 
                 </table>
             </div>

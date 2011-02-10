@@ -11,4 +11,4 @@ class SupplierForm(ModelForm):
 
     class Meta:
         model = Supplier
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company',)
+        fields = ("name","contacts")

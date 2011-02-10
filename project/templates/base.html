@@ -35,7 +35,7 @@
     <div id="info">
         <h4><a href="{% url app.admin.views.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
         <p>
-            <a href="/accounts/logout">Logg ut</a>
+            <a href="/accounts/logout">{% trans "Log out" %}</a>
             <br/>
             {% if user.get_new_notifications.count %}
                 <a href="{% url app.dashboard.views.notifications %}">{{ user.get_new_notifications.count }}

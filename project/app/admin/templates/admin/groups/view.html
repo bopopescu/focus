@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block extrahead %}
 
@@ -23,7 +24,7 @@
             <br><br>
 
 
-            <h2>Deltagere</h2>
+            <h2>{% trans "Participants" %}</h2>
 
             <div style="height:200px">
 
@@ -40,7 +41,7 @@
                             <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
                                 {{ user.phone }}<br/>
 
-                                <a href="{% url app.admin.views.user.view user.id %}">Flere detaljer</a></p>
+                                <a href="{% url app.admin.views.user.view user.id %}">{% trans "Details" %}</a></p>
                         </div>
                         <!-- .user-card-content -->
 
@@ -55,7 +56,7 @@
             {% regroup permissions by content_type as Permissions %}
 
             <br><br>
-            <b>Rettigheter</b>
+            <b>{% trans "Permisison" %}</b>
             <br><br>
             <table style="text-align:center">
 

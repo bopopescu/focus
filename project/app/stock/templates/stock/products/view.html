@@ -21,53 +21,53 @@
             <tbody>
 
             <tr>
-                <td>Varenr</td>
+                <td>{% trans "Number" %}</td>
                 <td>{{ product.pid }}</td>
             </tr>
 
             <tr>
-                <td>Pris inn</td>
+                <td>{% trans "Price in" %}</td>
                 <td>{{ product.price }}</td>
             </tr>
 
             <tr>
-                <td>Utpris</td>
+                <td>{% trans "Price out" %}</td>
                 <td>{{ product.price_out }}</td>
             </tr>
             <tr>
-                <td>Maks avslag</td>
+                <td>{% trans "Max discount" %}</td>
                 <td>{{ product.max_discount }}</td>
             </tr>
             <tr>
-                <td>Inne på lager</td>
+                <td>{% trans "Available in store (count)" %}</td>
                 <td>{{ product.countOfAvailableInStock }}</td>
             </tr>
             <tr>
-                <td>Leverandør</td>
+                <td>{% trans "Supplier" %}</td>
                 <td>{{ product.supplier }}</td>
             </tr>
             <tr>
-                <td>Størrelse</td>
+                <td>{% trans "Size" %}</td>
                 <td>{{ product.size }}</td>
             </tr>
 
             <tr>
-                <td>Enhet</td>
+                <td>{% trans "Unit" %}</td>
                 <td>{{ product.unitForSize }}</td>
             </tr>
 
             <tr>
-                <td>Valuta</td>
+                <td>{% trans "Currency" %}</td>
                 <td>{{ product.priceVal }}</td>
             </tr>
 
             <tr>
-                <td>Normal leveringstid</td>
+                <td>{% trans "Normal delivery time" %}</td>
                 <td>{{ product.normalDeliveryTime }}</td>
             </tr>
 
             <tr>
-                <td>Produktgruppe</td>
+                <td>{% trans "Product group" %}</td>
                 <td><a href="{{ product.productGroup.getViewUrl }}">{{ product.productGroup }}</a></td>
             </tr>
 
@@ -84,7 +84,7 @@
 
 
         <div class="tool editChoice">
-            <a href="{{ product.getEditUrl }}">Endre produkt</a>
+            <a href="{{ product.getEditUrl }}">{% trans "Edit product" %}</a>
         </div>
 
     </div>
@@ -92,7 +92,7 @@
 
 <div class="portlet x6">
 
-    <div class="portlet-header"><h4>Filer</h4></div>
+    <div class="portlet-header"><h4>{% trans "Files" %}</h4></div>
 
     <div class="portlet-content">
 
@@ -108,10 +108,10 @@
             {% for file in product.files.all %}
             <tr>
                 <td>{{ file.name }}</td>
-                <td><a target="_blank" href="{{ file.getFile }}">Last ned fil</a></td>
+                <td><a target="_blank" href="{{ file.getFile }}">{% trans "download" %}</a></td>
                 <td>
                     {% require_permission EDIT product %}
-                    <a href="{% url app.stock.products.views.deleteFile product.id file.id %}">Slett fil</a>
+                    <a href="{% url app.stock.products.views.deleteFile product.id file.id %}">{% trans "delete" %}</a>
                     {% end_require %}
                 </td>
 
@@ -126,7 +126,7 @@
 
 <div class="portlet x6">
 
-    <div class="portlet-header"><h4>Brukt i følgende ordrer</h4></div>
+    <div class="portlet-header"><h4>{% trans "Used in this orders" %}</h4></div>
 
     <div class="portlet-content">
 

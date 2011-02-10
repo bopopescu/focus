@@ -11,14 +11,12 @@ from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
+    title = _("Welcome to TIME")
 
-    print request.LANGUAGE_CODE
-    title = _("Welcome to my site.")
+    announcements = Core.current_user().getPermittedObjects("VIEW", Announcement)[::-1]
+    your_projects = Core.current_user().getPermittedObjects("VIEW", Project)
 
-    announcements = Core.current_user().getPermittedObjects("VIEW",Announcement)[::-1]
-    your_projects = Core.current_user().getPermittedObjects("VIEW",Project)
-
-    your_orders = Core.current_user().getPermittedObjects("VIEW",Order).filter(state="Order")[::-1]
+    your_orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="Order")[::-1]
 
     return render_with_request(request, 'dashboard/dashboard.html', {'title': title,
                                                                      'announcements': announcements,
@@ -29,7 +27,7 @@ def overview(request):
 def logs(request):
     #logs = Log.objects.filter(company=get_current_company())
     logs = Log.objects.all()
-    return render_with_request(request, 'dashboard/listLog.html', {'title': 'Siste hendelser',
+    return render_with_request(request, 'dashboard/listLog.html', {'title': _("Latest events"),
                                                                    'logs': logs[::-1][0:150]})
 
 @login_required()
@@ -50,7 +48,7 @@ def notifications(request):
     #Set to read, so they wont bother the user anymore.
     Notification.objects.filter(recipient=Core.current_user()).update(read=True)
 
-    return render_with_request(request, 'dashboard/notifications.html', {'title': 'Oppdateringer',
+    return render_with_request(request, 'dashboard/notifications.html', {'title': _('Updates'),
                                                                          'notifications': newNotifications,
                                                                          'oldNotifications': oldNotifications[::-1][
-                                                                                        0:150]})
+                                                                                             0:150]})

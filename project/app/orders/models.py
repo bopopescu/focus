@@ -11,44 +11,44 @@ STATUS_CHOICES = (
 ('Order', _('Order')),
 ('Offer', _('Offer')),
 ("Invoice", _("Ready for Invoice")),
-("Archiv", _("Archived")),
+("Archive", _("Archived")),
 )
 
 class Order(PersistentModel):
-    oid = models.IntegerField("Ordrenr", null=True, blank=True)
-    POnumber = models.CharField("PO-number", max_length=150, blank=True, null=True)
-    order_name = models.CharField("Navn", max_length=80)
-    customer = models.ForeignKey(Customer, related_name="orders", verbose_name="Kunde", blank=True, null=True)
-    project = models.ForeignKey(Project, related_name="orders", verbose_name="Prosjekt", blank=True, null=True)
+    oid = models.IntegerField(_("Order number"), null=True, blank=True)
+    POnumber = models.CharField(_("PO-number"), max_length=150, blank=True, null=True)
+    order_name = models.CharField(_("Name"), max_length=80)
+    customer = models.ForeignKey(Customer, related_name="orders", verbose_name=_("Customer"), blank=True, null=True)
+    project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
     deliveryAddress = models.CharField(max_length=150, null=True)
-    responsible = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name="Ansvarlig")
-    delivery_date = models.DateField(verbose_name="Leveringsdato", null=True, blank=True)
-    delivery_date_deadline = models.DateField(verbose_name="Leveringsfrist", null=True, blank=True)
-    description = models.TextField("Beskrivelse")
-    contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name="Kontakter", blank=True)
-
+    responsible = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name=_("Responsible"))
+    delivery_date = models.DateField(verbose_name=_("Delivery date"), null=True, blank=True)
+    delivery_date_deadline = models.DateField(verbose_name=_("Delivery deadline"), null=True, blank=True)
+    description = models.TextField(_("Description"))
+    contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name=_("Contacts"), blank=True)
+    
     state = models.CharField(max_length=2, choices=STATUS_CHOICES)
 
     def __unicode__(self):
         return self.order_name
 
     def is_archived(self):
-        if self.state == "Arkivert":
+        if self.state == "Archive":
             return True
         return False
 
     def is_ready_for_invoice(self):
-        if self.state == "Til faktura":
+        if self.state == "Invoice":
             return True
         return False
 
     def is_offer(self):
-        if self.state == "Tilbud":
+        if self.state == "Offer":
             return True
         return False
 
     def is_order(self):
-        if self.state == "Ordre":
+        if self.state == "Order":
             return True
         return False
 

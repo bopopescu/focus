@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block extrahead %}
 
@@ -18,13 +19,13 @@
 
             <img src="{{ user.profileImage }}">
             <br>
-            Navn: {{ userCard.first_name }} {{ userCard.last_name }}
+            {% trans "Name") %}: {{ userCard.first_name }} {{ userCard.last_name }}
             <br>
-            Epost: {{ userCard.email }}
+            {% trans "E-mail" %}: {{ userCard.email }}
             <br>
-            Firma: {{ userCard.get_profile.company }}
+            {% trans "Company" %}: {{ userCard.get_profile.company }}
             <br><br>
-            <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">Kan logge inn:
+            <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">{% trans "Permission to log in" %}:
                 <b>{{ userCard.canLogin }}</b></a>
             <br>
 
@@ -32,7 +33,7 @@
             <table style="text-align:center">
 
                 <tr>
-                    <th>Medlem i gruppene</th>
+                    <th>{% trans "Member of this groups" %}</th>
                 </tr>
 
                 {% for member in userCard.groups.all %}
@@ -49,15 +50,15 @@
 
 
             <br><br>
-            <b>Rettigheter</b>
+            <b>{% trans "Permission" %}</b>
             <br><br>
             <table style="text-align:center">
 
                 <tr>
                     <th></th>
-                    <th>Objekt</th>
-                    <th>Rettigheter</th>
-                    <th>Gruppe</th>
+                    <th>{% trans "Object" %}</th>
+                    <th>{% trans "Permissions" %}</th>
+                    <th>{% trans "Group" %}</th>
                 </tr>
 
 
@@ -87,7 +88,7 @@
                             </td>
 
                             <td>{% if perm.group %}
-                                Gjennom gruppen <a
+                               {% trans "Thru group" %} <a
                                         href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
                             {% endif %}
                             </td>
@@ -104,20 +105,17 @@
         <div class="portlet-header"><h4>Valg</h4></div>
         <div class="portlet-content">
             <div class="tool editChoice">
-                <a href="{% url app.admin.views.user.edit userCard.id %}" class="edit admintool">Endre</a>
+                <a href="{% url app.admin.views.user.edit userCard.id %}" class="edit admintool">{% trans "edit" %}</a>
             </div>
 
             <div class="tool editChoice">
-                <a href="{% url app.admin.views.user.sendGeneratedPassword userCard.id %}" class="edit admintool">Send
-                    nytt
-                    passord</a>
+                <a href="{% url app.admin.views.user.sendGeneratedPassword userCard.id %}" class="edit admintool">{% trans "Send new password" %}</a>
             </div>
 
             <div class="tool editChoice">
                 <a href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"
                    class="edit admintool">
-                    Sett tider timelister manuelt
-
+                    {% trans "Set hour registration limits manually" %}
                 </a>
             </div>
 

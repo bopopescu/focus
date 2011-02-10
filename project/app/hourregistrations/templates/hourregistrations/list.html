@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load timetracking_tags %}
-
+{% load i18n %}
 {% block submenu %}
     <a href="add"><span>Oprett nytt prosjekt</span></a>
 {% endblock %}
@@ -16,10 +16,10 @@
 
             <thead>
             <tr>
-                <th>Dato</th>
-                <th>Tidspunkt</th>
-                <th>Ordre</th>
-                <th>Timer</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Date time" %}</th>
+                <th>{% trans "Order" %}</th>
+                <th>{% trans "Hours" %}</th>
                 <th></th>
             </tr>
             </thead>
@@ -52,23 +52,23 @@
     <div class="portlet-content">
         <div id="_stats" class="clearfix">
             <div class="stat" style="width:200px">
-                <h4>sum timer arbeidet</h4>
+                <h4>{% trans "Sum hours worked" %}</h4>
                 <span class="value">{{ sumHours }}</span>
             </div>
             <div class="stat" style="width:250px">
-                <h4>Kilometer</h4>
+                <h4>{% trans "kilometres" %}</h4>
                 <span class="value">{{ sumKilometers }} km</span>
 
             </div>
 
             <div class="stat" style="width:260px">
-                <h4>Utlegg</h4>
+                <h4>{% trans "disbursments" %}</h4>
                 <span class="value">{{ sumDisbursements }} kr</span>
 
             </div>
 
             <div class="stat" style="width:250px">
-                <h4>Tjent totalt etter skatt</h4>
+                <h4>{% trans "Total earned after tax" %}</h4>
                 <span class="value">{{ sumTotalEarned }} kr</span>
 
             </div>

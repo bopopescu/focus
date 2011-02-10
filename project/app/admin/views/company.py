@@ -4,13 +4,14 @@ from django.shortcuts import get_object_or_404
 from core.shortcuts import *
 from core.decorators import *
 from app.company.forms import *
+from django.utils.translation import ugettext as _
 
 @require_permission("CONFIGURE", Company)
 def editCompany(request):
     id = Core.current_user().get_company().id
 
     instance = get_object_or_404(Company, id=id)
-    msg = "Velykket endret ditt firma"
+    msg = _("Successfully edited your company")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -28,4 +29,4 @@ def editCompany(request):
     else:
         form = CompanyForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Firmadetaljer', 'form': form})
+    return render_with_request(request, "form.html", {'title': _('Company details'), 'form': form})
