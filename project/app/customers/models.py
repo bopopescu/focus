@@ -1,10 +1,10 @@
 from django.db import models
-from app.contacts.models import Contact
 from core import Core
 from core.models import PersistentModel
 from django.core import urlresolvers
 from core.models import User
 from django.utils.translation import ugettext as _
+from app.contacts.models import Contact
 
 class Customer(PersistentModel):
     cid = models.IntegerField(_("Customer number"))
@@ -36,7 +36,7 @@ class Customer(PersistentModel):
 
     @staticmethod
     def simpleform():
-        return CustomerFormSimple(instance=Customer())
+        return CustomerFormSimple(instance=Customer(), prefix="customers")
 
     def save(self, *args, **kwargs):
         new = False

@@ -35,7 +35,7 @@ class CustomerFormSimple(ModelForm):
     class Meta:
         model = Customer
         exclude = (
-        'deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', 'contacts')
+        'deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', 'contacts')
 
     def __init__(self, *args, **kwrds):
         super(CustomerFormSimple, self).__init__(*args, **kwrds)

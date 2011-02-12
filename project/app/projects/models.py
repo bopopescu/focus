@@ -46,7 +46,7 @@ class Project(PersistentModel):
 
     @staticmethod
     def simpleform():
-        return ProjectFormSimple(instance=Project())
+        return ProjectFormSimple(instance=Project(), prefix="projects")
 
     def save(self, *args, **kwargs):
         new = False

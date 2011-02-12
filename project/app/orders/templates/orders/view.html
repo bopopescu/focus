@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load auth %}
+{% load i18n %}
 {% block extrahead %}
 
 {% endblock %}
@@ -69,7 +70,7 @@
                 <div class="details">
                     <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
                         {{ user.phone }}<br/>
-                        <a href="{% url app.admin.users.views.view user.id %}">{% trans "More details" %}</a></p>
+                        <a href="{% url app.admin.views.user.view user.id %}">{% trans "More details" %}</a></p>
                 </div>
             </div>
 

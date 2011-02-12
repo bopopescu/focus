@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.db import models
 from core import Core
 from core.models import PersistentModel
@@ -18,8 +17,15 @@ class Contact(PersistentModel):
     def canBeDeleted(self):
         return (True, "ok")
 
-    def save(self, *args, **kwargs):
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.contacts.views.add_ajax')
 
+    @staticmethod
+    def simpleform():
+        return ContactForm(instance=Contact(), prefix="contacts")
+
+    def save(self, *args, **kwargs):
         new = False
         if not self.id:
             new = True
@@ -35,7 +41,7 @@ class Contact(PersistentModel):
 
             if adminGroup:
                 adminGroup.grant_role("Admin", self)
-                
+
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
 
@@ -44,3 +50,6 @@ class Contact(PersistentModel):
 
     def getEditUrl(self):
         return urlresolvers.reverse('app.contacts.views.edit', args=("%s" % self.id,))
+
+
+from app.contacts.forms import ContactForm

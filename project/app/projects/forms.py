@@ -63,5 +63,3 @@ class ProjectFormSimple(ModelForm):
                 raise forms.ValidationError("Det kreves unikt prosjektnr")
 
         return pid
-
-
