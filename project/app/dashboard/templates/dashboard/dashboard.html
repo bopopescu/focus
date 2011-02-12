@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block extrahead %}
 
 {% endblock %}
@@ -16,10 +16,10 @@
 
             <ul class="portlet-tab-nav">
                 <li class="portlet-tab-nav-active"><a href="#allreq" rel="tooltip"
-                                                      title="Alle prosjekter og ordrer">Alt</a>
+                                                      title="Alle prosjekter og ordrer">{% trans "All" %}</a>
                 </li>
-                <li class=""><a href="#openreq" rel="tooltip" title="Dine ordrer">Ordrer</a></li>
-                <li class=""><a href="#respreq" rel="tooltip" title="Dine prosjekter">Prosjekter</a></li>
+                <li class=""><a href="#openreq" rel="tooltip" title="Dine ordrer">{% trans "Orders" %}</a></li>
+                <li class=""><a href="#respreq" rel="tooltip" title="Dine prosjekter">{% trans "Projects" %}</a></li>
             </ul>
         </div>
         <!-- .portlet-header -->
@@ -32,7 +32,7 @@
                     {% for order in orders %}
 
                         <tr>
-                            <td><span class="ticket open">Ordre</span></td>
+                            <td><span class="ticket open">{% trans "Order" %}</span></td>
 
                             <td>
                                 <a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
@@ -49,7 +49,7 @@
                     {% for order in orders %}
 
                         <tr>
-                            <td><span class="ticket open">Ordre</span></td>
+                            <td><span class="ticket open">{% trans "Order" %}</span></td>
 
                             <td>
                                 <a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
@@ -57,9 +57,9 @@
                     {% endfor %}
                     {% for project in projects %}
                         <tr>
-                            <td><span class="ticket open">Prosjekt</span></td>
+                            <td><span class="ticket open">{% trans "Project" %}</span></td>
 
-                            <td><a href="{% url app.projects.views.view project.id %}">{{ project }}</a></td>
+                            <td><a href="{% url app.projects.views.project.view project.id %}">{{ project }}</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -73,9 +73,9 @@
 
                     {% for project in projects %}
                         <tr>
-                            <td><span class="ticket open">Prosjekt</span></td>
+                            <td><span class="ticket open">{% trans "Project" %}</span></td>
 
-                            <td><a href="{% url app.projects.views.view project.id %}">{{ project }}</a></td>
+                            <td><a href="{% url app.projects.views.project.view project.id %}">{{ project }}</a></td>
                         </tr>
                     {% endfor %}
 

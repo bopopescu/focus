@@ -1,7 +1,9 @@
 {% load i18n %}
 {% load auth %}
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -10,18 +12,35 @@
 
     <title>FocusTime</title>
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/screen.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/noticeui.css" type="text/css" media="screen" title="no title"
           charset="utf-8"/>
 
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/screen.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/plugin.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/custom.css" type="text/css" media="screen" title="no title"
+          charset="utf-8"/>
+
+    <style type="text/css" media="screen">
+
+    </style>
+
+
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jqueryui.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/slate/slate.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/slate/slate.portlet.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/plugin.js"></script>
 
-    <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-            <![endif]-->
+    <script type="text/javascript" charset="utf-8">
+        $(function () {
+            slate.init();
+            slate.portlet.init();
+        });
+    </script>
+
 
 
     {% block extraHead %}
