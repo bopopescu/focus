@@ -2,9 +2,7 @@
 
 <script>
     $(function() {
-        // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
-        $("#dialog:ui-dialog").dialog("destroy");
-
+    
         {% for field in form %}
             var {{ field_id }}_{{ field.name }} = $("#id_{{ field.html_name }}");
         {% endfor %}
@@ -42,7 +40,8 @@
                 $(this).dialog("close");
             }
         },
-                close:
+
+            close:
         function() {
 
         }
@@ -53,12 +52,14 @@
             .click(function() {
         $("#dialog-form{{ field_id }}").dialog("open");
     });
-    })
-    ;
+
+    $("#dialog-form{{ field_id }}").hidden();
+
+
+    });
 </script>
 
 <div id="dialog-form{{ field_id }}">
-
     <form id="thisForm{{ field_id }}">
         <fieldset>
             {% for field in form %}
