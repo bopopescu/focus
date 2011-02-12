@@ -63,3 +63,10 @@ class ProjectFormSimple(ModelForm):
                 raise forms.ValidationError("Det kreves unikt prosjektnr")
 
         return pid
+
+
+
+class MilestoneForm(ModelForm):
+    class Meta:
+        model = Milestone
+        fields = ("name","description")

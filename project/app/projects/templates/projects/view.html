@@ -22,20 +22,19 @@
         <br><br>
         <table>
             <tr>
-                <th>{% trans "Project number" %}</th>
+                <th>{% trans "Order number" %}</th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Delivery date" %}</th>
+                <th>{% trans "Created date" %}</th>
                 <th>{% trans "Responsible" %}</th>
-                <th>#</th>
             </tr>
             {% for order in project.orders.all %}
                 <tr>
+                    <td>{{ order.oid }}</td>
                     <td><a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
                     <td>{{ order.date_created|date:"d.m.Y" }}</td>
                     <td>{{ order.date_edited|date:"d.m.Y" }}</td>
                     <td>{{ order.editor }}</td>
-                    <td>{{ order.creator }}</td>
-
                 </tr>
             {% endfor %}
         </table>
@@ -51,18 +50,58 @@
 
         {% require_permission EDIT project %}
         <div class="tool editChoice">
-            <a href="{% url app.projects.views.edit project.id %}">{% trans "edit" %}</a>
+            <a href="{% url app.projects.views.project.edit project.id %}">{% trans "edit" %}</a>
         </div>
         {% end_require %}
 
         {% require_permission DELETE project %}
         <div class="tool deleteChoice">
-            <a href="{% url app.projects.views.delete project.id %}">{% trans "delete" %}</a>
+            <a href="{% url app.projects.views.project.delete project.id %}">{% trans "delete" %}</a>
         </div>
         {% end_require %}
 
     </div>
 </div>
+
+
+<div class="portlet x9">
+
+    <div class="portlet-header"><h4>{% trans "Milestones" %}</h4></div>
+
+    <div class="portlet-content">
+
+        <table>
+            <tr>
+                <th>{% trans "Milestones" %}</th>
+            </tr>
+            {% for milestone in project.milestones.all %}
+                <tr>
+                    <td>{{ milestone.name }}</td>
+                    <td><a href="{% url app.projects.views.milestone.edit project.id, milestone.id %}">edit</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+</div>
+
+<div class="portlet x3">
+
+    <div class="portlet-header"><h4>{% trans "Milestone choices" %}</h4></div>
+
+    <div class="portlet-content">
+
+        {% require_permission EDIT project %}
+        <div class="tool editChoice">
+            <a href="{% url app.projects.views.milestone.add project.id %}">{% trans "New milestone" %}</a>
+        </div>
+        {% end_require %}
+
+
+    </div>
+</div>
+
+
 
 
 <div class="portlet x9">

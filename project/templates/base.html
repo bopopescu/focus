@@ -128,24 +128,24 @@
 </li>
 
 <li class="mega {% active request "^/projects/" %}">
-    <a class="mega-tab" href="{% url app.projects.views.overview %}">{% trans "Projects" %}</a>
+    <a class="mega-tab" href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
 
     <div class="mega-content mega-menu ">
         <ul>
             {% require_permission CREATE projects.Project %}
-            <li><a href="{% url app.projects.views.add %}">{% trans "New project" %}</a></li>
+            <li><a href="{% url app.projects.views.project.add %}">{% trans "New project" %}</a></li>
             {% end_require %}
             {% require_permission LIST projects.Project %}
-            <li><a href="{% url app.projects.views.overview %}">{% trans "Your projects" %}</a></li>
+            <li><a href="{% url app.projects.views.project.overview %}">{% trans "Your projects" %}</a></li>
             {% end_require %}
             {% require_permission LIST projects.Project %}
-            <li><a href="{% url app.projects.views.timeline %}">{% trans "Timeline" %}</a></li>
+            <li><a href="{% url app.projects.views.project.timeline %}">{% trans "Timeline" %}</a></li>
             {% end_require %}
             {% require_permission LISTALL projects.Project %}
-            <li><a href="{% url app.projects.views.overview_all %}">{% trans "All active projects" %}</a></li>
+            <li><a href="{% url app.projects.views.project.overview_all %}">{% trans "All active projects" %}</a></li>
             {% end_require %}
             {% require_permission LISTDELETED projects.Project %}
-            <li><a href="{% url app.projects.views.overview_trashed %}">{% trans "All deleted projects" %}</a></li>
+            <li><a href="{% url app.projects.views.project.overview_trashed %}">{% trans "All deleted projects" %}</a></li>
             {% end_require %}
         </ul>
     </div>

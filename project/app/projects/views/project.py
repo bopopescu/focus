@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.html import escape
 from app.contacts.models import Contact
-from forms import *
+from app.projects.forms import *
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
