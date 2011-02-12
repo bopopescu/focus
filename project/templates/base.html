@@ -19,6 +19,11 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jqueryui.js"></script>
 
+    <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+            <![endif]-->
+
+
     {% block extraHead %}
     {% endblock %}
 </head>
@@ -145,7 +150,8 @@
             <li><a href="{% url app.projects.views.project.overview_all %}">{% trans "All active projects" %}</a></li>
             {% end_require %}
             {% require_permission LISTDELETED projects.Project %}
-            <li><a href="{% url app.projects.views.project.overview_trashed %}">{% trans "All deleted projects" %}</a></li>
+            <li><a href="{% url app.projects.views.project.overview_trashed %}">{% trans "All deleted projects" %}</a>
+            </li>
             {% end_require %}
         </ul>
     </div>
