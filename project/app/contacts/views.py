@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
+from core.models import Log
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
@@ -28,6 +30,17 @@ def overview_all(request):
 @require_permission("CREATE", Contact)
 def add(request):
     return form(request)
+
+@require_permission("EDIT", Contact, "id")
+def history(request, id):
+    contact = get_object_or_404(Contact, id=id, deleted=False)
+
+    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(contact.__class__),
+                                 object_id = contact.id)
+    
+    return render_with_request(request, 'contacts/log.html', {'title': _("Latest events"),
+                                                              'contact':contact,
+                                                                            'logs': history[::-1][0:150]})
 
 @require_permission("EDIT", Contact, "id")
 def edit(request, id):
@@ -81,9 +94,7 @@ def form (request, id=False):
     else:
         form = ContactForm(instance=instance)
 
-    contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
-
     return render_with_request(request, "contacts/form.html", {'title': _("Contact"),
                                                                'form': form,
-                                                               'contacts': contacts,
+                                                               'contact': instance,
                                                                })

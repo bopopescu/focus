@@ -9,13 +9,11 @@ class CustomerForm(ModelForm):
     class Meta:
         model = Customer
         #exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
-        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website", "alternative_address", "contacts")
+        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website", "alternative_address", )
 
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
-        self.fields['contacts'].widget = MultipleSelectWithPop(Contact)
-        self.fields['contacts'].queryset = Contact.objects.all()
-
+      
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
 
@@ -35,7 +33,7 @@ class CustomerFormSimple(ModelForm):
     class Meta:
         model = Customer
         exclude = (
-        'deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', 'contacts')
+        'deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', )
 
     def __init__(self, *args, **kwrds):
         super(CustomerFormSimple, self).__init__(*args, **kwrds)

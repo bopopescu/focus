@@ -15,7 +15,7 @@ from inspect import isclass
 import time
 import os
 from django.core.files.storage import FileSystemStorage
-
+from django.utils.translation import ugettext as _
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -633,15 +633,15 @@ class Log(models.Model):
                 if i == "id" or i == "date_created" or i == "date_edited":
                     continue
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    msg += value[1] + " ble endret fra: %s til: %s. " % (
+                    msg += value[1] +  _(" was changed from %s to: %s. ") % (
                     eval(lastLog.message)[i][0], eval(self.message)[i][0])
 
             if msg =="":
-                return "Ingen endring registrert"
-            
+                _("No changes")
+
             return msg
 
-        return "%s ble opprettet" % self.getObject()
+        return _("%s was created") % self.getObject()
 
 
     def getObject(self, *args, **kwargs):

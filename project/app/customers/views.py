@@ -1,5 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from core.models import Log
+from django.shortcuts import get_object_or_404
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
@@ -44,6 +47,18 @@ def add_ajax(request):
                                               'id': a.id}), mimetype='application/json')
 
     return HttpResponse("ERROR")
+
+@require_permission("EDIT", Customer, "id")
+def history(request, id):
+    instance = get_object_or_404(Customer, id=id, deleted=False)
+
+    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+                                 object_id = instance.id)
+
+    return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
+                                                              'customer':instance,
+                                                              'logs': history[::-1][0:150]})
+
 
 @require_permission("CREATE", Customer)
 def add(request):
@@ -97,6 +112,4 @@ def form (request, id=False):
     else:
         form = CustomerForm(instance=instance)
 
-    customers = Core.current_user().getPermittedObjects("VIEW", Customer)
-
-    return render_with_request(request, "customers/form.html", {'title': title, 'customers': customers, 'form': form})
+    return render_with_request(request, "customers/form.html", {'title': title, 'customer': instance, 'form': form})

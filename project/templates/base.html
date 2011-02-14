@@ -1,316 +1,94 @@
 {% load i18n %}
 {% load auth %}
+{% load menu_tags %}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+<title>Super Simple Admin Theme</title>
 
-    <title>FocusTime</title>
+<!--  REQUIRED FOR IE6 SUPPORT -->
+<style type="text/css">
+img, div { behavior: url({{ STATIC_URL }}iepngfix.htc) }</style>
 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/scripts.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/facebox.js"></script>
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/noticeui.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
+<link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css" />
+<link href="{{ STATIC_URL }}css/facebox.css" rel="stylesheet" type="text/css" />
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/screen.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/plugin.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/custom.css" type="text/css" media="screen" title="no title"
-          charset="utf-8"/>
-
-    <style type="text/css" media="screen">
-
-    </style>
-
-
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/jquery.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jqueryui.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/slate/slate.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/slate/slate.portlet.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/plugin.js"></script>
-
-    <script type="text/javascript" charset="utf-8">
-        $(function () {
-            slate.init();
-            slate.portlet.init();
-        });
-    </script>
-
-
-
-    {% block extraHead %}
-    {% endblock %}
 </head>
 
 <body>
+<!--  START WRAPPER -->
+<div id="wrapper">
 
-{% load menu_tags %}
+    <div id="header"><h1>FocusTime</h1></div><!--  end header -->
 
-<div id="wrapper" class="clearfix">
-
-<div id="top">
-<div id="header">
-    <h1><a href="/">TIME | {{ user.company }}</a></h1>
-    <div id="info">
-        <h4><a href="{% url app.admin.views.profile.edit %}">{{ user.first_name }} {{ user.last_name }}</a></h4>
-        <p>
-            <a href="/accounts/logout">{% trans "Log out" %}</a>
-            <br/>
-            {% if user.get_new_notifications.count %}
-                <a href="{% url app.dashboard.views.notifications %}">{{ user.get_new_notifications.count }}
-                    {% trans "updates since last login" %}</a> |
-            {% endif %}
-        </p>
-        <img width="30px" height="70px" src="{{ user.getProfileImage }}" alt="avatar"/>
-    </div>
-</div>
-
-<div id="nav">
-
-<ul class="mega-container mega-grey">
-
-
-<li class="mega {% active request "^/dashboard/" %}">
-    <a class="mega-tab" href="{% url app.dashboard.views.overview %}">{% trans "Dashboard" %}</a>
-
-    <div class="mega-content mega-menu ">
+    <!--  START NAVIGATION -->
+    <!-- the class "active" is used to highlight the current/active linke -->
+    <div id="nav">
+        
         <ul>
-            <li><a href="{% url app.dashboard.views.overview %}">{% trans "Dashboard" %}</a></li>
-            {% require_permission LISTALL core.Log %}
-            <li><a href="{% url app.dashboard.views.logs %}">{% trans "Log" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST core.Notification %}
-            <li><a href="{% url app.dashboard.views.notifications %}">{% trans "Notifications" %}</a></li>
-            {% end_require %}
-            {% require_permission CREATE announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.add %}">{% trans "New announcement" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTALL announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.overview %}">{% trans "Announcements" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTDELETED announcements.Announcement %}
-            <li><a href="{% url app.announcements.views.overview_trashed %}">{% trans "Deleted announcements" %}</a>
-            </li>
-            {% end_require %}
+          <li class="{% active request "^/dashboard/" %}"><a class="{% active request "^/dashboard/" %}" href="{% url app.dashboard.views.overview %}">Dashboard</a></li>
+          <li><a href="{% url app.customers.views.overview %}">Customers</a></li>
+          <li><a href="{% url app.contacts.views.overview %}">Contacts</a></li>
+          <li><a href="#">Manage Contacts</a></li>
+          <li><a href="#">Suppersized Longer Link</a></li>
+          <li><a href="#">Another</a></li>
+          <li><a href="#">Logout</a></li>
         </ul>
-    </div>
-</li>
 
-<li class="mega {% active request "^/customers/" %}">
-    <a class="mega-tab" href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
+    </div> <!--  end div #nav -->
+  	<!--  END NAVIGATION -->
 
-    <div class="mega-content mega-menu ">
+    <!--  START SUB NAV -->
+
+    <!-- the class "active" is used to highlight the current/active linke -->
+	<div id="subnav">
         <ul>
-
-            {% require_permission CREATE customers.Customer %}
-            <li><a href="{% url app.customers.views.add %}">{% trans "New customer" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST customers.Customer %}
-            <li><a href="{% url app.customers.views.overview %}">{% trans "Overview" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTDELETED customers.Customer %}
-            <li><a href="{% url app.customers.views.overview_trashed %}">{% trans "Deleted customers" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTALL customers.Customer %}
-            <li><a href="{% url app.customers.views.overview_all %}">{% trans "All customers" %}</a></li>
-            {% end_require %}
+            <li><a href="#">Lorem Ipsum</a></li>
+            <li><a href="#">Cras Lorum</a></li>
+            <li><a href="#" class="active">Nunc Tempus</a></li>
+            <li><a href="#">Aenean</a></li>
+            <li><a href="#">Nulla</a></li>
         </ul>
-    </div>
-</li>
+    </div><!--  end div #subnav -->
+    <!--  END SUB NAV -->
+
+    <!--  START CONTENT -->
+    <div id="content_wrapper">
+
+    <!--  START PRIMARY CONTENT -->
+    <div id="primary_content">
 
 
-<li class="mega {% active request "^/contacts/" %}">
-    <a class="mega-tab" href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            {% require_permission CREATE contacts.Contact %}
-
-            <li><a href="{% url app.contacts.views.add %}">{% trans "New contact" %}</a></li>
-            {% end_require %}
-
-            {% require_permission LIST contacts.Contact %}
-
-            <li><a href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a></li>
-            {% end_require %}
-
-            {% require_permission LISTALL contacts.Contact %}
-            <li><a href="{% url app.contacts.views.overview_all %}">{% trans "All customers" %}</a></li>
-            {% end_require %}
-
-            {% require_permission LISTDELETED contacts.Contact %}
-            <li><a href="{% url app.contacts.views.overview_trashed %}">{% trans "Deleted customer" %}</a></li>
-            {% end_require %}
-
-        </ul>
-    </div>
-</li>
-
-<li class="mega {% active request "^/projects/" %}">
-    <a class="mega-tab" href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            {% require_permission CREATE projects.Project %}
-            <li><a href="{% url app.projects.views.project.add %}">{% trans "New project" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST projects.Project %}
-            <li><a href="{% url app.projects.views.project.overview %}">{% trans "Your projects" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST projects.Project %}
-            <li><a href="{% url app.projects.views.project.timeline %}">{% trans "Timeline" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTALL projects.Project %}
-            <li><a href="{% url app.projects.views.project.overview_all %}">{% trans "All active projects" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTDELETED projects.Project %}
-            <li><a href="{% url app.projects.views.project.overview_trashed %}">{% trans "All deleted projects" %}</a>
-            </li>
-            {% end_require %}
-        </ul>
-    </div>
-</li>
-
-<li class="mega {% active request "^/orders/" %}">
-    <a class="mega-tab" href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            {% require_permission CREATE orders.Order %}
-            <li><a href="{% url app.orders.views.add %}">{% trans "New order" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST orders.Order %}
-            <li><a href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a></li>
-            {% end_require %}
-            {% require_permission CREATE orders.Order %}
-            <li><a href="{% url app.orders.views.addOffer %}">{% trans "New offer" %}</a></li>
-            {% end_require %}
-            {% require_permission CREATE orders.Order %}
-            <li><a href="{% url app.orders.views.overviewOffers %}">{% trans "Offers" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTREADYINVOICE orders.Order %}
-            <li><a href="{% url app.orders.views.overviewReadyForInvoice %}">{% trans "Ready for invoice" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTARCHIVE orders.Order %}
-            <li><a href="{% url app.orders.views.overviewArchive %}">{% trans "Archive" %}</a></li>
-            {% end_require %}
-        </ul>
-    </div>
-</li>
-
-<li class="mega {% active request "^/hourregistrationsOLD/" %}">
-    <a class="mega-tab" href="{% url app.hourregistrations.views.overview %}">{% trans "Hour registrations" %}</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            {% require_permission LIST hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.overview %}">{% trans "Active timesheet" %}</a></li>
-            {% end_require %}
-            {% require_permission LISTARCHIVE hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.your_archive %}">{% trans "Archive" %}</a></li>
-            {% end_require %}
-            {% require_permission CREATE hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.add %}">{% trans "Register new" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST hourregistrations.HourRegistration %}
-            <li><a href="{% url app.hourregistrations.views.calendar %}">{% trans "Calendar" %}</a></li>
-            {% end_require %}
-
-        </ul>
-    </div>
-</li>
-
-
-<li class="mega {% active request "^/stock/" %}">
-    <a class="mega-tab" href="{% url app.stock.products.views.overview %}">{% trans "Stock" %}</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            <li><a href="{% url app.stock.products.views.overview %}">{% trans "Products" %}</a></li>
-            <li><a href="{% url app.stock.products.views.add %}">{% trans "New product" %}</a></li>
-            <li><a href="{% url app.stock.productgroups.views.add %}">{% trans "New product group" %}</a></li>
-            <li><a href="{% url app.stock.products.views.overview_trashed %}">{% trans "Deleted products" %}</a></li>
-            <ul>
-                <li><a href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a></li>
-                <li><a href="{% url app.suppliers.views.add %}">{% trans "New supplier" %}</a></li>
-            </ul>
-        </ul>
-    </div>
-</li>
-
-<li class="mega {% active request "^/tickets/" %}">
-    <a class="mega-tab" href="{% url app.tickets.views.overview %}">Tickets</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            <li><a href="{% url app.tickets.views.overview %}">{% trans "All tickets" %}</a></li>
-            <li><a href="{% url app.tickets.views.add %}">{% trans "New ticket" %}</a></li>
-        </ul>
-    </div>
-</li>
-
-<li class="mega {% active request "^/useradmin/" %} {% active request "^/groupadmin/" %}">
-    <a class="mega-tab" href="{% url app.admin.views.user.overview %}">Admin</a>
-
-    <div class="mega-content mega-menu ">
-        <ul>
-            {% require_permission LIST core.User %}
-            <li><a href="{% url app.admin.views.user.overview %}">{% trans "Overview" %}</a></li>
-            {% end_require %}
-            {% require_permission CREATE core.User %}
-            <li><a href="{% url app.admin.views.user.add %}">{% trans "New user" %}</a></li>
-            {% end_require %}
-            {% require_permission LIST core.Group %}
-            <li><a href="{% url app.admin.views.group.overview %}">{% trans "Groups" %}</a></li>
-            {% end_require %}
-            {% require_permission CREATE core.Group %}
-            <li><a href="{% url app.admin.views.group.add %}">{% trans "New group" %}</a></li>
-            {% end_require %}
-            {% require_permission CONFIGURE core.Company %}
-            <li><a href="{% url app.admin.views.company.editCompany %}">{% trans "Company" %}</a></li>
-            {% end_require %}
-        </ul>
-    </div>
-</li>
-</ul>
-
-</div>
-<!-- #nav -->
-</div> <!-- #top -->
-
-<div id="content" class="xfluid">
-
-    {% include "messages.html" %}
+            {% include "messages.html" %}
 
     {% block maincontent %}
 
     {% endblock %}
 
-</div> <!-- #content -->
-
-<div id="footer">
-
-    <p>Focus Security AS.</p>
 
 </div>
-<!-- #footer -->
 
-</div> <!-- #wrapper -->
+   <!--  START SIDEBAR -->
+   <div id="sidebar">
+		{% block sidebar %}{% endblock %}
+   </div>
+
+<!--  START FOOTER -->
+<div id="footer">FocusTime</div>
+<!--  END FOOTER -->
+
+</div><!--  end div #wconent_rapper -->
+<!--  END CONTENT WRAPPER -->
+</div>
+<!--  END WRAPPER -->
 
 </body>
-
-
-
-{% block extraFooter %}
-
-
-{% endblock %}
-
-
-
 </html>

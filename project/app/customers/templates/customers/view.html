@@ -3,12 +3,10 @@
 {% load util %}
 {% load i18n %}
 
-{% block extrahead %}
-{% endblock %}
 
-{% block submenu %}
+{% block sidebar %}
+   {% include "customers/sidebar.html" %}
 {% endblock %}
-
 
 {% block maincontent %}
 
@@ -55,38 +53,6 @@
     </div>
 </div>
 
-<div class="portlet x5">
-
-    <div class="portlet-header"><h4>{% trans "Choices" %}</h4></div>
-
-    <div class="portlet-content">
-
-        {% if not customer.trashed %}
-        {% require_permission EDIT customer %}
-        <div class="tool editChoice">
-            <a href="{% url app.customers.views.edit customer.id %}">{% trans "Edit customer" %}</a>
-        </div>
-        {% end_require %}
-        {% endif %}
-
-        {% require_permission DELETE customer %}
-
-        {% if customer.trashed %}
-            <div class="tool deleteChoice">
-                <a href="{% url app.customers.views.recover customer.id %}">{% trans "Recover customer" %}</a>
-            </div>
-
-        {% endif %}{% if not customer.trashed %}
-        <div class="tool deleteChoice">
-            <a href="{% url app.customers.views.trash customer.id %}">{% trans "Delete customer" %}</a>
-        </div>
-    {% endif %}
-
-
-        {% end_require %}
-
-    </div>
-</div>
 
 <div class="portlet x5">
     <div class="portlet-header"><h4>{% trans "Projects and orders" %}</h4></div>
