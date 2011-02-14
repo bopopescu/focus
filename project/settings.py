@@ -70,17 +70,17 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-BASE_PATH + '/templates/',
+    BASE_PATH + '/templates/',
 )
+
 STATICFILES_DIRS = (
-BASE_PATH + '/files/media/',
+    BASE_PATH + '/files/media/',
 )
 
 INSTALLED_APPS = (
 'django.contrib.contenttypes',
 'django.contrib.sessions',
 'django.contrib.staticfiles',
-
 
 #All the applicaitons
 'core',

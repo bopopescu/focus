@@ -85,15 +85,14 @@ dd 		{
 }
 
 .even					{
-	background-color: #EAEAEA;
+	background-color: #DEEBF7;
 }
 
 /* ----------------------------
 		LAYOUT
 ------------------------------- */
 
-#top			{ height: 20px;background-color: #0A0F13;}
-#header			{ height: 70px;background-color: #131C25;padding-left: 50px;}
+#header			{ height: 70px;background-color: #3182BD;padding-left: 50px;}
 	
 	#header h1 {
 		color: #FFFFFF;
@@ -297,7 +296,7 @@ table {
 
 th 	{
 	text-align: left;
-	background-color: #d6d6d6;
+	background-color: #DEEBF7;
 	padding: 5px;
 	text-transform: uppercase;
 }

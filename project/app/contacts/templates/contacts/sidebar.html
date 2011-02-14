@@ -2,7 +2,7 @@
 {% load i18n %}
 <h3>Sidebar</h3>
 <ul>
-    {% if contact %}
+    {% if contact.id %}
         <li><a class="{% active request "view" %}" href="{% url app.contacts.views.view contact.id %}"><img
                 src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
         <li><a class="{% active request "edit" %}" href="{% url app.contacts.views.edit contact.id %}"><img

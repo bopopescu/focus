@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load auth %}
+
+{% block submenu %}
+<ul>
+    {% require_permission CREATE contacts.Contact %}
+    <li><a href="{% url app.contacts.views.add %}">{% trans "New contact" %}</a></li>
+    {% end_require %}
+    {% require_permission LIST contacts.Contact %}
+    <li><a href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a></li>
+    {% end_require %}
+    {% require_permission LISTALL contacts.Contact %}
+    <li><a href="{% url app.contacts.views.overview_all %}">{% trans "All customers" %}</a></li>
+    {% end_require %}
+    {% require_permission LISTDELETED contacts.Contact %}
+    <li><a href="{% url app.contacts.views.overview_trashed %}">{% trans "Deleted customer" %}</a></li>
+    {% end_require %}
+</ul>
+{% endblock %}
