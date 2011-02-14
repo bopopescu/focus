@@ -8,4 +8,5 @@ from models import *
 class AnnouncementForm(ModelForm):
     class Meta:
         model = Announcement
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company')
+        fields = ("title","text","attachment",)
+        #exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company')

@@ -4,17 +4,20 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('app.projects.views',
 
-                       url(r'^$', 'overview'),
+                       #Project
+                       url(r'^$', 'project.overview'),
+                       url(r'^timeline/?$', 'project.timeline'),
+                       url(r'^deleted/?$', 'project.overview_trashed'),
+                       url(r'^all/?$', 'project.overview_all'),
+                       url(r'^add/$', 'project.add'),
+                       url(r'^add_ajax/$', 'project.add_ajax'),
+                       url(r'^(?P<id>\d+)/edit/?$', 'project.edit'),
+                       url(r'^(?P<id>\d+)/view/?$', 'project.view'),
+                       url(r'^(?P<id>\d+)/delete/?$', 'project.delete'),
 
-                       url(r'^timeline/?$', 'timeline'),
-                       
-                       url(r'^deleted/?$', 'overview_trashed'),
-                       url(r'^all/?$', 'overview_all'),
+                       #Milestone
 
-                       url(r'^add/$', 'add'),
-                       url(r'^add_ajax/$', 'add_ajax'),
+                       url(r'^(?P<project_id>\d+)/add_milestone/$', 'milestone.add'),
+                       url(r'^(?P<project_id>\d+)/edit_milestone/(?P<milestone_id>\d+)$', 'milestone.edit'),
 
-                       url(r'^(?P<id>\d+)/edit/?$', 'edit'),
-                       url(r'^(?P<id>\d+)/view/?$', 'view'),
-                       url(r'^(?P<id>\d+)/delete/?$', 'delete'),
-                    )
+                       )

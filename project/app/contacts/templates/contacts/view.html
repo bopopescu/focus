@@ -9,6 +9,10 @@
 {% endblock %}
 
 
+{% block sidebar %}
+    {% include "contacts/sidebar.html" %}
+{% endblock %}
+
 {% block maincontent %}
 
 <div class="portlet x9">
@@ -41,41 +45,6 @@
 
 
         </table>
-
-    </div>
-</div>
-<div class="portlet x3">
-
-    <div class="portlet-header"><h4>{% trans "Choices" %}</h4></div>
-
-    <div class="portlet-content">
-
-
-        {% trans "Created" %} {{ contact.date_created|timesince }} {% trans "ago" %}
-        <br>
-        {% trans "Edited" %} {{ contact.date_edited|timesince }} {% trans "ago" %}
-        <br>
-
-        {% if not contact.trashed %}
-            {% require_permission EDIT contact %}
-            <div class="tool editChoice">
-                <a href="{% url app.contacts.views.edit contact.id %}">{% trans "Edit contact" %}</a>
-            </div>
-            {% end_require %}
-            {% require_permission DELETE contact %}
-            <div class="tool deleteChoice">
-                <a href="{% url app.contacts.views.delete contact.id %}">{% trans "Delete contact" %}</a>
-            </div>
-            {% end_require %}
-        {% endif %}
-        
-        {% if contact.trashed %}
-            {% require_permission EDIT contact %}
-            <div class="tool editChoice">
-                <a href="{% url app.contacts.views.edit contact.id %}">{% trans "Edit contact" %}</a>
-            </div>
-            {% end_require %}
-        {% endif %}
 
     </div>
 </div>

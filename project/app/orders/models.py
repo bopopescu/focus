@@ -53,6 +53,7 @@ class Order(PersistentModel):
         return False
 
     def is_valid_for_edit(self):
+
         if self.is_offer():
             return True
         if self.is_order():

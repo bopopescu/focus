@@ -65,3 +65,8 @@ class ProjectFormSimple(ModelForm):
         return pid
 
 
+
+class MilestoneForm(ModelForm):
+    class Meta:
+        model = Milestone
+        fields = ("name","description")

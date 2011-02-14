@@ -16,7 +16,8 @@ def overviewOffers(request):
 
 @require_permission("LIST", Order)
 def overview(request):
-    orders = Order.objects.all().filter(state="Order")
+    #orders = Order.objects.all().filter(state="Order")
+    orders = Order.objects.all()
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
@@ -109,8 +110,11 @@ def edit(request, id):
     if not order.is_valid_for_edit():
         if order.is_archived():
             request.message_error("Ordren er arkivert og kan ikke forandres.")
-        if order.is_ready_for_invoice():
+        elif order.is_ready_for_invoice():
             request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
+        else:
+            request.message_error("Du kan ikke endre denne ordren")
+        
         return redirect(overview)
 
     return form(request, id)
@@ -187,9 +191,9 @@ def form (request, id=False, *args, **kwargs):
 
             if not o.id:
                 if 'offer' in kwargs:
-                    o.state = "T"
+                    o.state = "Offer"
                 else:
-                    o.state = "O"
+                    o.state = "Order"
 
             o.owner = request.user
             o.save()

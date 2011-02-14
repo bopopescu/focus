@@ -29,6 +29,10 @@ class SelectWithPop(forms.Select):
         return html + popupplus
 
 class MultipleSelectWithPop(forms.SelectMultiple):
+    def __init__(self, app, *args, **kwargs):
+        self.app = app
+        super(MultipleSelectWithPop, self).__init__(*args, **kwargs)
+
     def render(self, name, *args, **kwargs):
         html = super(MultipleSelectWithPop, self).render(name, *args, **kwargs)
 
@@ -37,7 +41,11 @@ class MultipleSelectWithPop(forms.SelectMultiple):
 
         name_id = name
 
-        popupplus = render_to_string("popupplus.html", {'field': name, 'field_id': name_id})
+        popupplus = render_to_string("popupplus.html", {'field': name,
+                                                        'field_id': name_id,
+                                                        'add_ajax_url': self.app.add_ajax_url(),
+                                                        'form': self.app.simpleform()})
+
         return html + popupplus
 
 class DatePickerField(forms.DateInput):

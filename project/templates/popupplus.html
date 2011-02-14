@@ -2,16 +2,13 @@
 
 <script>
     $(function() {
-        // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
-        $("#dialog:ui-dialog").dialog("destroy");
-
+    
         {% for field in form %}
-            var {{ field_id }}_{{ field.html_name }} = $("#id_{{ field_id }}_{{ field.html_name }}");
+            var {{ field_id }}_{{ field.name }} = $("#id_{{ field.html_name }}");
         {% endfor %}
 
         $("#dialog-form{{ field_id }}").dialog({
             autoOpen: false,
-            height: 500,
             width: 550,
             modal: true,
             buttons: {
@@ -20,31 +17,31 @@
                     if (bValid) {
                         $.post("{{ add_ajax_url }}",
                                 {
-                                    {% for field in form %}
-                                        {{ field.html_name }}: {{ field_id }}_{{ field.html_name }}.val(),
 
+                                    {% for field in form %}
+                                        {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
                                     {% endfor %}
 
-
-                    },
+                                },
 
                     function(data) {
+
                         $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
                         $('#id_{{ field_id }} option[value='+data['id']+']').attr('selected', 'selected');
                     }
 
-                    )
-                    ;
+                    );
 
+                   $(this).dialog("close");
 
-                    $(this).dialog("close");
-                }
+                    }
             },
             Cancel: function() {
                 $(this).dialog("close");
             }
         },
-                close:
+
+            close:
         function() {
 
         }
@@ -55,16 +52,17 @@
             .click(function() {
         $("#dialog-form{{ field_id }}").dialog("open");
     });
-    })
-    ;
+
+    $("#dialog-form{{ field_id }}").hide();
+
+    });
 </script>
 
-<div id="dialog-form{{ field_id }}" title="Create new user">
-
+<div id="dialog-form{{ field_id }}">
     <form id="thisForm{{ field_id }}">
         <fieldset>
             {% for field in form %}
-                {{ field.label_tag }}
+                {{ field.label_tag }}<br>
                 {{ field }}
                 {% for error in field.errors %}
                     <span style="color:red">{{ error }}</span>

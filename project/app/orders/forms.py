@@ -12,15 +12,17 @@ class OrderForm(ModelForm):
 
     class Meta:
         model = Order
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'state')
+        exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'state')
 
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
+        self.fields['contacts'].widget = MultipleSelectWithPop(Contact)
+        self.fields['contacts'].queryset = Contact.objects.all()
         self.fields['project'].widget = SelectWithPop(Project)
         self.fields['project'].queryset = Project.objects.all()
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.all()
-        self.fields['responsible'].queryset = get_company_users()
+        self.fields['responsible'].queryset = User.objects.inCompany()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -51,7 +53,7 @@ class OrderForm(ModelForm):
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
+        exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
                    'participant',)
 
 class TaskForm(ModelForm):

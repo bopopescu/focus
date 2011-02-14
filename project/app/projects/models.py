@@ -42,11 +42,11 @@ class Project(PersistentModel):
 
     @staticmethod
     def add_ajax_url():
-        return urlresolvers.reverse('app.projects.views.add_ajax')
+        return urlresolvers.reverse('app.projects.views.project.add_ajax')
 
     @staticmethod
     def simpleform():
-        return ProjectFormSimple(instance=Project())
+        return ProjectFormSimple(instance=Project(), prefix="projects")
 
     def save(self, *args, **kwargs):
         new = False

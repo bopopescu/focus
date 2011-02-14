@@ -3,11 +3,12 @@ from django.db import models
 from core import Core
 from core.models import PersistentModel
 from django.core import urlresolvers
+from django.utils.translation import ugettext as _
 
 class Announcement(PersistentModel):
-    title = models.CharField("Overskrift", max_length=80)
-    text = models.TextField("Tekst")
-    attachment = models.FileField(upload_to="uploads/announcements/", verbose_name="Vedlegg", null=True, blank=True)
+    title = models.CharField(_("Title"), max_length=80)
+    text = models.TextField(_("Text"))
+    attachment = models.FileField(upload_to="uploads/announcements/", verbose_name=_("Attachment"), null=True, blank=True)
 
     def __unicode__(self):
         return self.title
