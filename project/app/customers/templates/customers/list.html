@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block submenu %}
-    <a href="add"><span>{% trans "New customer" %}</span></a>
+{% block sidebar %}
+   {% include "customers/sidebar.html" %}
 {% endblock %}
-
 
 {% block maincontent %}
 
