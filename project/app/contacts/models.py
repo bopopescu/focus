@@ -7,6 +7,7 @@ from django.core import urlresolvers
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+
 import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
@@ -28,7 +29,7 @@ class Contact(PersistentModel):
     def getImage(self):
         if self.image:
             if os.path.join("/file/", self.image.name):
-                return settings.os.path.join("/file/", self.image.name)
+                return os.path.join("/file/", self.image.name)
 
         return settings.STATIC_URL + "img/dummy.png"
 

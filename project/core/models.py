@@ -14,9 +14,9 @@ import settings
 from widgets import get_hexdigest, check_password
 from inspect import isclass
 import time
-import os
 from django.core.files.storage import FileSystemStorage
 from django.utils.translation import ugettext as _
+import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
