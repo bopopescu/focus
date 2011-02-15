@@ -26,11 +26,6 @@ class Contact(PersistentModel):
         return (True, "ok")
 
     def getImage(self):
-        if settings.DEBUG:
-            return "HEIEHHIHEI"
-        else:
-            return "NEIDA %s" % settings.DEBUG
-
         if self.image:
             if os.path.join("/file/", self.image.name):
                 return settings.os.path.join("/file/", self.image.name)
