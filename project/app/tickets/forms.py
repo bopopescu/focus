@@ -1,5 +1,5 @@
 from django.forms.models import ModelForm
-from app.tickets.models import Ticket, Comment
+from app.tickets.models import Ticket
 from core.models import User
 
 class TicketForm(ModelForm):
@@ -15,18 +15,3 @@ class EditTicketForm(ModelForm):
     class Meta:
         model = Ticket
         include = ('status', 'priority', 'type', 'spent_time', 'estimated_time', 'assigned_to',)
-
-class CommentForm(ModelForm):
-    class Meta:
-        model = Comment
-        exclude = ('Ticket', )
-
-
-
-
-
-
-
-
-
-

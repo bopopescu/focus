@@ -2,7 +2,10 @@
 {% load auth %}
 {% load i18n %}
 
-{% include "contacts/base.html" %}
+
+{% block sidebar %}
+    {% include "contacts/sidebar.html" %}
+{% endblock %}
 
 {% block maincontent %}
 
@@ -19,7 +22,6 @@
                 <th>{% trans "Address" %}</th>
                 <th>{% trans "Phone" %}</th>
                 <th>{% trans "E-mail" %}</th>
-                <th>#</th>
             </tr>
             </thead>
 
@@ -31,17 +33,6 @@
                 <td>{{ contact.phone }}</td>
                 <td>{{ contact.email }}</td>
 
-                <td>
-                    {% require_permission EDIT contact %}
-
-                    <div class="tool">
-                        <a href="{% url app.contacts.views.edit contact.id  %}"><img
-                                class="tool" src="/media/icons/edit.gif" alt=""></a>
-                    </div>
-                    {% end_require %}
-
-
-                </td>
 
             </tr>
             {% endfor %}

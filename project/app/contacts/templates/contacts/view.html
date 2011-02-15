@@ -15,11 +15,7 @@
 
 {% block maincontent %}
 
-<div class="portlet x9">
-
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
-
-    <div class="portlet-content">
+{{ title }}
 
         <table>
 
@@ -46,6 +42,6 @@
 
         </table>
 
-    </div>
-</div>
+{% include "comments.html" %}
+
 {% endblock %}

@@ -2,6 +2,7 @@
 from . import Core
 from copy import deepcopy
 import mimetypes
+from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime, timedelta, date
 from django.http import HttpResponse
@@ -754,7 +755,6 @@ def createTuple(object):
 
     return data
 
-
 class PersistentModel(models.Model):
     trashed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
@@ -870,12 +870,30 @@ class PersistentModel(models.Model):
                     if u.group:
                         for user in u.group.members.all():
                             if user and user not in users:
-                                users.append(user)
+                             users.append(user)
 
             return users
         except:
             return []
 
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
+
+class Comment (PersistentModel):
+
+    text = models.TextField()
+    attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
+
+    # What object is this a comment for?
+    object = generic.GenericForeignKey('content_type', 'object_id')
+    object_id = models.PositiveIntegerField(null=True)
+    content_type = models.ForeignKey(ContentType, null=True)
+    attachment = models.FileField(upload_to="comments", storage=fs, null=True)
+
+    class Meta:
+        ordering = ['date_created']
+        
+    def __unicode__ (self):
+        return self.text
 
 """
 Adding some initial data to the model when run syncdb

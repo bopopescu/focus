@@ -64,15 +64,6 @@ class Ticket(PersistentModel):
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
 
-class Comment(PersistentModel):
-    title = models.CharField(max_length=50)
-    text = models.TextField()
-    attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
-    Ticket = models.ForeignKey(Ticket, related_name="comments")
-
-    class Meta:
-        ordering = ['date_created']
-
 def initial_data() :
 
     TicketStatus.objects.get_or_create(name="Ny", order_priority=1)

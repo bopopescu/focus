@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from core.models import Log
 from forms import *
-from core.shortcuts import *
+from core.shortcuts import render_with_request, comment_block
 from core.decorators import *
 from core.views import updateTimeout
 from django.utils import simplejson
@@ -49,7 +49,8 @@ def edit(request, id):
 @require_permission("VIEW", Contact, "id")
 def view(request, id):
     contact = get_object_or_404(Contact, id=id)
-    return render_with_request(request, 'contacts/view.html', {'title': _('Contact'), 'contact': contact})
+    comments = comment_block(request, contact)
+    return render_with_request(request, 'contacts/view.html', {'title': _('Contact'), 'comments':comments, 'contact': contact})
 
 @require_permission("DELETE", Contact, "id")
 def delete(request, id):

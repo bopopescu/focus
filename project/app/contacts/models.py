@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from core import Core
-from core.models import PersistentModel
+from django.contrib.contenttypes import generic
+from core.models import PersistentModel, Comment
 from django.core import urlresolvers
 from django.utils.translation import ugettext as _
 
@@ -10,6 +11,7 @@ class Contact(PersistentModel):
     address = models.CharField(_("Adresse"), max_length=80)
     email = models.EmailField(_("Epostadresse"), max_length=80)
     phone = models.CharField(_("Telefon"), max_length=20)
+    comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
         return "%s" % unicode(self.full_name)
