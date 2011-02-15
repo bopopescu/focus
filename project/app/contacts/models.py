@@ -6,11 +6,10 @@ from core.models import PersistentModel, Comment
 from django.core import urlresolvers
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 import os
-import settings
 
-fs = FileSystemStorage(location=settings.os.path.join(settings.BASE_PATH, "uploads"))
-
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class Contact(PersistentModel):
     full_name = models.CharField(_("Full name"), max_length=80)
@@ -27,12 +26,11 @@ class Contact(PersistentModel):
         return (True, "ok")
 
     def getImage(self):
-
         if settings.DEBUG:
             return "HEIEHHIHEI"
         else:
             return "NEIDA %s" % settings.DEBUG
-        
+
         if self.image:
             if os.path.join("/file/", self.image.name):
                 return settings.os.path.join("/file/", self.image.name)
@@ -53,7 +51,7 @@ class Contact(PersistentModel):
             new = True
 
         super(Contact, self).save()
-        
+
         #Give the user who created this ALL permissions on object
         if new:
             Core.current_user().grant_role("Owner", self)
