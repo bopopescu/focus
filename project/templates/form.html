@@ -21,23 +21,38 @@
 
     {% endblock %}
 
+
+    {% if form.errors %}
+
+        <div class="information" id="message">
+
+            <p>Fix before submit again</p>
+
+        </div>
+
+        {% for i in form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+    {% endif %}
+
     <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
         {% for field in form %}
 
-            <div class="fieldWrapper{% if field.errors %} fielderror {% endif %}">
-                {{ field.label }}
+            <div class="fieldWrapper">
+                <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }}</span>
                 {{ field }}
-                {% if field.errors %}
-                    <div style="margin-left:150px">{% for i in field.errors %}{{ i }}{% endfor %}</div>
-                {% endif %}
             </div>
 
         {% endfor %}
 
         <div>
-        <input type="submit" value="Lagre" class="btn" name="save"/>
-    </div>
+            <input type="submit" value="Lagre" class="btn" name="save"/>
+        </div>
 
     </form>
 

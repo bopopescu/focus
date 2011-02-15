@@ -9,24 +9,33 @@
 
 {% block maincontent %}
 
-<div class="portlet x12">
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tr");
+        });
+    </script>
+    <style>
+        #dataset tr:hover {
+            background: #ddd;
+            cursor: default;
+        }
+    </style>
 
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
 
-    <div class="portlet-content">
+    <table cellpadding="0" cellspacing="0" border="0" id="dataTable">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Address" %}</th>
+            <th>{% trans "Phone" %}</th>
+            <th>{% trans "E-mail" %}</th>
+        </tr>
+        </thead>
 
-        <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-            <thead>
-            <tr>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Address" %}</th>
-                <th>{% trans "Phone" %}</th>
-                <th>{% trans "E-mail" %}</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            {% for contact in contacts %}
+        <tbody>
+        {% for contact in contacts %}
             <tr>
                 <td><a href="{{ contact.getViewUrl }}">{{ contact.full_name }}</a></td>
                 <td>{{ contact.address }}</td>
@@ -35,13 +44,8 @@
 
 
             </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-
-    </div>
-</div>
-
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
