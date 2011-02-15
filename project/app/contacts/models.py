@@ -5,6 +5,12 @@ from django.contrib.contenttypes import generic
 from core.models import PersistentModel, Comment
 from django.core import urlresolvers
 from django.utils.translation import ugettext as _
+from django.core.files.storage import FileSystemStorage
+import settings
+import os
+
+fs = FileSystemStorage(location=settings.os.path.join(settings.BASE_PATH, "uploads"))
+
 
 class Contact(PersistentModel):
     full_name = models.CharField(_("Full name"), max_length=80)
@@ -12,12 +18,20 @@ class Contact(PersistentModel):
     email = models.EmailField(_("Epostadresse"), max_length=80)
     phone = models.CharField(_("Telefon"), max_length=20)
     comments = generic.GenericRelation(Comment)
+    image = models.FileField(upload_to="contacts", storage=fs, null=True, blank=True)
 
     def __unicode__(self):
         return "%s" % unicode(self.full_name)
 
     def canBeDeleted(self):
         return (True, "ok")
+
+    def getImage(self):
+        if self.image:
+            if os.path.join("/file/", self.image.name):
+                return settings.os.path.join("/file/", self.image.name)
+
+        return settings.STATIC_URL + "img/dummy.png"
 
     @staticmethod
     def add_ajax_url():
