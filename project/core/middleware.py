@@ -43,7 +43,7 @@ class MessageMiddleware(object):
 
     # Uses a partial function to feed the request
         request.message_success = partial(self.add_message, request, "success")
-        request.message_error = partial(self.add_message, request, "error")
+        request.message_error = partial(self.add_message, request, "fail")
         request.message_info = partial(self.add_message, request, "info")
 
         return None

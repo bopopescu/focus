@@ -5,85 +5,86 @@
 
 
 {% block sidebar %}
-   {% include "customers/sidebar.html" %}
+    {% include "customers/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
 
-<div class="portlet x7">
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <div class="portlet x7">
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-    <div class="portlet-content">
+        <div class="portlet-content">
 
-        <table>
+            <table>
 
-            <tr>
-                <td width="100px">{% trans "Name" %}</td>
-                <td>{{ customer.full_name }}</td>
-            </tr>
-
-            <tr>
-                <td>{% trans "E-mail" %}</td>
-                <td>{{ customer.email }}</td>
-            </tr>
-
-            <tr>
-                <td>{% trans "Website" %}</td>
-                <td>
-                    {{ customer.website|urlize|url_target_blank|safe }}
-                </td>
-            </tr>
-            <tr>
-                <td>{% trans "Address" %}</td>
-                <td>
-                    {% if customer.address %}
-                        {{ customer.address }}, {{ customer.zip }} {{ customer.city }}
-                        {% else %}{% if customer.address %}
-                            {{ customer.address }} {{ customer.zip }} {{ customer.city }}
-                        {% endif %}{% endif %}
-                </td>
-            </tr>
-            <tr>
-                <td>{% trans "Alternative address" %}</td>
-                <td>{{ customer.alternative_address }}</td>
-            </tr>
-        </table>
-
-
-    </div>
-</div>
-
-
-<div class="portlet x5">
-    <div class="portlet-header"><h4>{% trans "Projects and orders" %}</h4></div>
-
-    <div class="portlet-content">
-
-
-        <table>
-
-            <tr>
-                <th>Prosjekt</th>
-                <th>Ordrer</th>
-            </tr>
-
-            {% for project in customer.projects.all %}
                 <tr>
-                    <td><a href="{% url app.projects.views.view project.id %}">{{ project.project_name }}</a></td>
-                    <td></td>
+                    <td width="100px">{% trans "Name" %}</td>
+                    <td>{{ customer.full_name }}</td>
                 </tr>
 
-                {% for order in project.orders.all %}
-                    <tr>
-                        <td></td>
-                        <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
-                    </tr>
-                {% endfor %}
-            {% endfor %}
-        </table>
+                <tr>
+                    <td>{% trans "E-mail" %}</td>
+                    <td>{{ customer.email }}</td>
+                </tr>
 
+                <tr>
+                    <td>{% trans "Website" %}</td>
+                    <td>
+                        {{ customer.website|urlize|url_target_blank|safe }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% trans "Address" %}</td>
+                    <td>
+                        {% if customer.address %}
+                            {{ customer.address }}, {{ customer.zip }} {{ customer.city }}
+                            {% else %}{% if customer.address %}
+                                {{ customer.address }} {{ customer.zip }} {{ customer.city }}
+                            {% endif %}{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% trans "Alternative address" %}</td>
+                    <td>{{ customer.alternative_address }}</td>
+                </tr>
+            </table>
+
+
+        </div>
     </div>
-</div>
+
+
+    <div class="portlet x5">
+        <div class="portlet-header"><h4>{% trans "Projects and orders" %}</h4></div>
+
+        <div class="portlet-content">
+
+            <table>
+
+                <tr>
+                    <th>Prosjekt</th>
+                    <th>Ordrer</th>
+                </tr>
+
+                {% for project in customer.projects.all %}
+                    <tr>
+                        <td>
+                            <a href="{% url app.projects.views.project.view project.id %}">{{ project.project_name }}</a>
+                        </td>
+                        <td></td>
+                    </tr>
+
+                    {% for order in project.orders.all %}
+                        <tr>
+                            <td></td>
+                            <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+
+        </div>
+    </div>
 
 
 

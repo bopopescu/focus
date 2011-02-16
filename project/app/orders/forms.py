@@ -5,25 +5,17 @@ from core.shortcuts import get_company_users
 from models import *
 
 class OrderForm(ModelForm):
-    delivery_date = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
-                                    widget=DatePickerField(format="%d.%m.%Y"))
-    delivery_date_deadline = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
-                                             widget=DatePickerField(format="%d.%m.%Y"))
+    #delivery_date = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
+    #                                widget=DatePickerField(format="%d.%m.%Y"))
+    #delivery_date_deadline = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
+    #                                         widget=DatePickerField(format="%d.%m.%Y"))
 
     class Meta:
         model = Order
-        exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'state')
-
+        fields = ("oid","POnumber","order_name","customer","project","responsible")
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
-        self.fields['contacts'].widget = MultipleSelectWithPop(Contact)
-        self.fields['contacts'].queryset = Contact.objects.all()
-        self.fields['project'].widget = SelectWithPop(Project)
-        self.fields['project'].queryset = Project.objects.all()
-        self.fields['customer'].widget = SelectWithPop(Customer)
-        self.fields['customer'].queryset = Customer.objects.all()
-        self.fields['responsible'].queryset = User.objects.inCompany()
-
+      
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
 

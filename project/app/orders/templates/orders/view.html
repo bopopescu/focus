@@ -5,8 +5,8 @@
 
 {% endblock %}
 
-{% block submenu %}
-
+{% block sidebar %}
+    {% include "orders/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
@@ -31,7 +31,7 @@
 
                 <tr>
                     <td> {% trans "Project" %}</td>
-                    <td><a href="{% url app.projects.views.view order.project.id %}">{{ order.project }}</a></td>
+                    <td><a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a></td>
                 </tr>
             {% endif %}
 

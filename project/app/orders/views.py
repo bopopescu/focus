@@ -114,7 +114,7 @@ def edit(request, id):
             request.message_error("Ordren er klar til fakturering og kan ikke forandres.")
         else:
             request.message_error("Du kan ikke endre denne ordren")
-        
+
         return redirect(overview)
 
     return form(request, id)
@@ -205,4 +205,4 @@ def form (request, id=False, *args, **kwargs):
     else:
         form = OrderForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': title, 'form': form})
+    return render_with_request(request, "orders/form.html", {'title': title, 'order':instance, 'form': form})

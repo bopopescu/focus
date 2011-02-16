@@ -1,43 +1,51 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block submenu %}
-    <a href="add"><span>{% trans "New order" %}</span></a>
+
+{% block sidebar %}
+    {% include "orders/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
 
-    <div class="portlet x12">
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
 
-        <div class="portlet-content">
+    </script>
 
-            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-                <thead>
-                <tr>
-                    <th>{% trans "Order number" %}</th>
-                    <th>{% trans "Title" %}</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for p in orders %}
-                    <tr>
-                        <td>{{ p.oid }}</td>
-                        <td><a href="{% url app.orders.views.view p.id %}">{{ p.order_name }}</a></td>
-                        <td>
-                            <div class="tool">
-                                {% if p.state == "O" or p.state == "T" %}
-                                    <a href="{% url app.orders.views.edit p.id %}"><img
-                                            class="tool" src="/media/icons/edit.gif" alt=""></a>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div></div>
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th>{% trans "Order number" %}</th>
+            <th>{% trans "Title" %}</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in orders %}
+            <tr>
+                <td>{{ p.oid }}</td>
+                <td><a href="{% url app.orders.views.view p.id %}">{{ p.order_name }}</a></td>
+                <td>
+                    <div class="tool">
+                        {% if p.state == "O" or p.state == "T" %}
+                            <a href="{% url app.orders.views.edit p.id %}"><img
+                                    class="tool" src="/media/icons/edit.gif" alt=""></a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
 

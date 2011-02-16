@@ -4,11 +4,13 @@ from django.shortcuts import get_object_or_404
 from django.utils.html import escape
 from app.contacts.models import Contact
 from app.projects.forms import *
+from core.models import Log
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
+from django.contrib.contenttypes.models import ContentType
 
 @require_permission("LIST", Project)
 def overview(request):
@@ -19,7 +21,8 @@ def overview(request):
 @require_permission("LIST", Project)
 def timeline(request):
     updateTimeout(request)
-    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
+    #projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
+    projects = Project.objects.all()
     return render_with_request(request, 'projects/timeline.html',
                                {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
@@ -42,6 +45,17 @@ def view(request, id):
                                                                'whoCanSeeThis': whoCanSeeThis,
                                                                })
 
+@require_permission("EDIT", Contact, "id")
+def history(request, id):
+    instance = get_object_or_404(Project, id=id, deleted=False)
+
+    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+                                 object_id=instance.id)
+
+    return render_with_request(request, 'projects/log.html', {'title': _("Latest events"),
+                                                              'project': instance,
+                                                              'logs': history[::-1][0:150]})
+
 @require_permission("CREATE", Project)
 def add_ajax(request):
     form = ProjectFormSimple(request.POST, instance=Project())
@@ -51,11 +65,8 @@ def add_ajax(request):
 
         return HttpResponse(simplejson.dumps({'name': a.project_name,
                                               'id': a.id}), mimetype='application/json')
-
-    print form.errors
-
+    
     return HttpResponse("ERROR")
-
 
 @require_permission("CREATE", Project)
 def add(request):
@@ -67,18 +78,24 @@ def edit(request, id):
 
 @require_permission("DELETE", Project, 'id')
 def delete(request, id):
-    Project.objects.get(id=id).delete()
-    return redirect(overview)
+    project = Project.objects.get(id=id)
+    if project.canBeDeleted()[0]:
+        project.delete()
+        request.message_success("Successfully deleted")
+        return redirect(overview)
+    else:
+        request.message_error("You cannot delete this project: %s" % project.canBeDeleted()[1])
+        return redirect(view, id)
 
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Project, id=id, deleted=False)
-        title = "Endre prosjekt"
+        title = _("Edit project")
         msg = "Vellykket endret prosjekt"
     else:
         instance = Project()
         msg = "Vellykket lagt til nytt prosjekt"
-        title = "Nytt prosjekt"
+        title = _("New project")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -89,9 +106,9 @@ def form (request, id=False):
             o.save()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(edit, o.id)
 
     else:
         form = ProjectForm(instance=instance)
 
-    return render_with_request(request, "projects/form.html", {'title': title, 'form': form})
+    return render_with_request(request, "projects/form.html", {'title': title, 'project': instance, 'form': form})

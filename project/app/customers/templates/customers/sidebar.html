@@ -2,7 +2,7 @@
 {% load i18n %}
 <h3>Sidebar</h3>
 <ul>
-    {% if customer %}
+    {% if customer.id %}
         <li><a class="{% active request "view" %}" href="{% url app.customers.views.view customer.id %}"><img
                 src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
         <li><a class="{% active request "edit" %}" href="{% url app.customers.views.edit customer.id %}"><img
@@ -11,11 +11,12 @@
                 src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
     {% else %}
         <li><a class="{% active request "view" %}" href="{% url app.customers.views.overview %}"><img
-                      src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
-      
-        <li><a class="{% active request "view" %}" href="{% url app.customers.views.overview %}"><img
-                            src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "DELETED" %}</a></li>
+                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
+        <li><a class="{% active request "new" %}" href="{% url app.customers.views.add %}"><img
+                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW CUSTOMER" %}</a></li>
+
+        <li><a class="{% active request "trashed" %}" href="{% url app.customers.views.overview_trashed %}"><img
+                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
     {% endif %}
-
 </ul>

@@ -1,48 +1,52 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block submenu %}
-    <a href="add"><span>{% trans "New project" %}</span></a>
+{% block sidebar %}
+    {% include "projects/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
 
-    <div class="portlet x12">
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
 
-        <div class="portlet-content">
+    </script>
 
-
-            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-
-                <thead>
-                <tr>
-                    <th>{% trans "Project number" %}</th>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Delivery date" %}</th>
-                    <th>{% trans "Responsible" %}</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for p in projects %}
-                    <tr>
-                        <td>{{ p.pid }}</td>
-                        <td><a href="{% url app.projects.views.project.view p.id %}">{{ p }}</a></td>
-                        <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
-                        <td>{{ p.responsible }}</td>
-                        <td>
-                            <div class="tool">
-                                <a href="{% url app.projects.views.project.edit p.id %}"><img
-                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
     </div>
+    <table id="dataTable">
+
+        <thead>
+        <tr>
+            <th>{% trans "Project number" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Delivery date" %}</th>
+            <th>{% trans "Responsible" %}</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in projects %}
+            <tr>
+                <td>{{ p.pid }}</td>
+                <td><a href="{% url app.projects.views.project.view p.id %}">{{ p }}</a></td>
+                <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
+                <td>{{ p.responsible }}</td>
+                <td>
+                    <div class="tool">
+                        <a href="{% url app.projects.views.project.edit p.id %}"><img
+                                class="tool" src="/media/icons/edit.gif" alt=""></a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}

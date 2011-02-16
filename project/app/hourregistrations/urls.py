@@ -3,7 +3,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('app.hourregistrations.views',
 
                        url(r'^$', 'overview'),
-                       url(r'^add/$', 'add'),
+                       url(r'^new/$', 'add'),
                        url(r'^archive/$', 'your_archive'),
                        url(r'^archive/(?P<user_id>\d+)$', 'user_archive'),
                        url(r'^archive/(?P<year>\d+)/(?P<month>\d+)/$', 'viewArchivedMonth'),

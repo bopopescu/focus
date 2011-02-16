@@ -2,8 +2,9 @@
 {% load i18n %}
 {% load timetracking_tags %}
 
-{% block submenu %}
-    <a href="add"><span>{% trans "New hour registration" %}</span></a>
+
+{% block sidebar %}
+    {% include "hourregistrations/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}

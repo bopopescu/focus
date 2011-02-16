@@ -2,59 +2,51 @@
 {% load i18n %}
 
 {% block sidebar %}
-   {% include "customers/sidebar.html" %}
+    {% include "customers/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
 
 
-    <div class="portlet x12">
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    </script>
 
-        <div class="portlet-content">
-
-            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-
-                <thead>
-                <tr>
-                    <th>{% trans "Customer number" %}</th>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Address" %}</th>
-                    <th>{% trans "Phone" %}</th>
-                    <th>{% trans "E-mail" %}</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for customer in customers %}
-                    <tr>
-                        <td>{{ customer.cid }}</td>
-                        <td><a href="{% url app.customers.views.view customer.id %}">{{ customer.full_name }}</a></td>
-                        <td>{{ customer.address }}</td>
-                        <td>{{ customer.phone }}</td>
-                        <td>{{ customer.email }}</td>
-                        <td>
-
-                        <div class="tool">
-                                <a href="{% url app.customers.views.edit customer.id%}"><img
-                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
-                            </div>
-
-
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-
-            </table>
-
-
-
-        </div>
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
     </div>
+    <table id="dataTable">
+
+        <thead>
+        <tr>
+            <th>{% trans "Customer number" %}</th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Address" %}</th>
+            <th>{% trans "Phone" %}</th>
+            <th>{% trans "E-mail" %}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for customer in customers %}
+            <tr>
+                <td>{{ customer.cid }}</td>
+                <td><a href="{% url app.customers.views.view customer.id %}">{{ customer.full_name }}</a></td>
+                <td>{{ customer.address }}</td>
+                <td>{{ customer.phone }}</td>
+                <td>{{ customer.email }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+
 
 
 
