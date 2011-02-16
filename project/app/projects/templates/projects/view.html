@@ -11,103 +11,29 @@
 
 {% block maincontent %}
 
-<div class="portlet x9">
-
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
-
-    <div class="portlet-content">
-        <b>{% trans "Description" %}</b><br>
-        {{ project.description }}
-        <br><br>
-        <br><br>
-        <table>
-            <tr>
-                <th>{% trans "Order number" %}</th>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Delivery date" %}</th>
-                <th>{% trans "Created date" %}</th>
-                <th>{% trans "Responsible" %}</th>
-            </tr>
-            {% for order in project.orders.all %}
-                <tr>
-                    <td>{{ order.oid }}</td>
-                    <td><a href="{% url app.orders.views.view order.id %}">{{ order }}</a></td>
-                    <td>{{ order.date_created|date:"d.m.Y" }}</td>
-                    <td>{{ order.date_edited|date:"d.m.Y" }}</td>
-                    <td>{{ order.editor }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+    <b>{% trans "Description" %}</b><br>
+    {{ project.description }}
 
 
-    </div>    </div>
+    {% for user in whoCanSeeThis %}
 
-<div class="portlet x9">
+        <div class="user-card">
 
-    <div class="portlet-header"><h4>{% trans "Milestones" %}</h4></div>
+            <div class="avatar">
+                <img src="{{ user.getProfileImage }}" title="User" alt=""/>
+            </div>
 
-    <div class="portlet-content">
+            <div class="details">
+                <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
+                    {{ user.phone }}<br/>
 
-        <table>
-            <tr>
-                <th>{% trans "Milestones" %}</th>
-            </tr>
-            {% for milestone in project.milestones.all %}
-                <tr>
-                    <td>{{ milestone.name }}</td>
-                    <td><a href="{% url app.projects.views.milestone.edit project.id, milestone.id %}">edit</a></td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-</div>
+                    <a href="{% url app.admin.views.user.view user.id %}">Flere detaljer</a></p>
+            </div>
+            <!-- .user-card-content -->
 
-<div class="portlet x3">
+        </div> <!-- .user-card -->
+    {% endfor %}
 
-    <div class="portlet-header"><h4>{% trans "Milestone choices" %}</h4></div>
+    {% include "comments.html" %}
 
-    <div class="portlet-content">
-
-        {% require_permission EDIT project %}
-        <div class="tool editChoice">
-            <a href="{% url app.projects.views.milestone.add project.id %}">{% trans "New milestone" %}</a>
-        </div>
-        {% end_require %}
-    </div>
-</div>
-
-
-
-<div class="portlet x12">
-
-    <div class="portlet-header"><h4>Deltagere</h4></div>
-
-    <div class="portlet-content">
-
-        {% for user in whoCanSeeThis %}
-
-            <div class="user-card">
-
-                <div class="avatar">
-                    <img src="{{ user.getProfileImage }}" title="User" alt=""/>
-                </div>
-
-                <!-- .user-card-avatar -->
-
-                <div class="details">
-                    <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
-                        {{ user.phone }}<br/>
-
-                        <a href="{% url app.admin.views.user.view user.id %}">Flere detaljer</a></p>
-                </div>
-                <!-- .user-card-content -->
-
-            </div> <!-- .user-card -->
-        {% endfor %}
-
-
-    </div>
-</div>
-
-
-{% endblock %}	
+{% endblock %}

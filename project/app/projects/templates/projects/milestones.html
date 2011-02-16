@@ -1,0 +1,14 @@
+<table>
+    <tr>
+        <th>{% trans "Milestones" %}</th>
+    </tr>
+    <a href="{% url app.projects.views.milestone.add project.id %}">{% trans "New milestone" %}</a>
+
+
+    {% for milestone in project.milestones.all %}
+        <tr>
+            <td>{{ milestone.name }}</td>
+            <td><a href="{% url app.projects.views.milestone.edit project.id, milestone.id %}">edit</a></td>
+        </tr>
+    {% endfor %}
+</table>

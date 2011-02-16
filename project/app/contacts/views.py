@@ -66,9 +66,6 @@ def add_ajax(request):
 
         return HttpResponse(simplejson.dumps({'name': a.full_name,
                                               'id': a.id}), mimetype='application/json')
-
-    print form.errors
-
     return HttpResponse("ERROR")
 
 

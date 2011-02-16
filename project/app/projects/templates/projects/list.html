@@ -28,7 +28,6 @@
             <th>{% trans "Name" %}</th>
             <th>{% trans "Delivery date" %}</th>
             <th>{% trans "Responsible" %}</th>
-            <th>#</th>
         </tr>
         </thead>
         <tbody>
@@ -38,13 +37,7 @@
                 <td><a href="{% url app.projects.views.project.view p.id %}">{{ p }}</a></td>
                 <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
                 <td>{{ p.responsible }}</td>
-                <td>
-                    <div class="tool">
-                        <a href="{% url app.projects.views.project.edit p.id %}"><img
-                                class="tool" src="/media/icons/edit.gif" alt=""></a>
-                    </div>
-                </td>
-            </tr>
+                  </tr>
         {% endfor %}
         </tbody>
     </table>

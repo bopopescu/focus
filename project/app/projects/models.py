@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from core import Core
-from core.models import PersistentModel, User
+from django.contrib.contenttypes import generic
+from core.models import PersistentModel, User, Comment
 from app.customers.models import Customer
 from django.core import urlresolvers
 from datetime import timedelta, datetime
@@ -18,6 +19,7 @@ class Project(PersistentModel):
     responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"), null=True)
     deliveryDate = models.DateTimeField(verbose_name=_("Delivery date"), null=True, blank=True)
     deliveryDateDeadline = models.DateTimeField(verbose_name=_("Delivery deadline"), null=True, blank=True)
+    comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
         return self.project_name

@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.html import escape
 from app.contacts.models import Contact
-from app.projects.forms import *
+from app.projects.forms import ProjectForm, ProjectFormSimple
+from app.projects.models import Project
+from core import Core
 from core.models import Log
-from core.shortcuts import *
-from core.decorators import *
+from core.shortcuts import render_with_request, comment_block
+from core.decorators import require_permission
 from core.views import updateTimeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
@@ -39,10 +41,21 @@ def overview_all(request):
 @require_permission("VIEW", Project, 'id')
 def view(request, id):
     project = Project.objects.get(id=id)
+    comments = comment_block(request, project)
     whoCanSeeThis = project.whoHasPermissionTo('view')
     return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
+                                                                'comments':comments,
                                                                'project': project,
                                                                'whoCanSeeThis': whoCanSeeThis,
+                                                               })
+
+@require_permission("VIEW", Project, 'id')
+def view_orders(request, id):
+    project = Project.objects.get(id=id)
+
+    return render_with_request(request, 'projects/orders.html', {'title': 'Prosjekt: %s orders' % project,
+                                                                 'project':project,
+                                                               'orders': project.orders.all(),
                                                                })
 
 @require_permission("EDIT", Contact, "id")

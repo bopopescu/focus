@@ -7,6 +7,8 @@ from django.utils.translation import ugettext as _
 
 class ProjectForm(ModelForm):
  
+
+
     class Meta:
         model = Project
         fields = ('pid', 'project_name', 'customer', 'responsible',  'deliveryAddress', 'deliveryDate',
