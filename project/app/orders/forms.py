@@ -41,7 +41,6 @@ class OrderForm(ModelForm):
 
         return oid
 
-
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order
