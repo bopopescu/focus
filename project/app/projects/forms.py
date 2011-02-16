@@ -6,19 +6,16 @@ from core.widgets import SelectWithPop, DatePickerField
 from django.utils.translation import ugettext as _
 
 class ProjectForm(ModelForm):
- 
-
-
     class Meta:
         model = Project
-        fields = ('pid', 'project_name', 'customer', 'responsible',  'deliveryAddress', 'deliveryDate',
-                  'deliveryDateDeadline','description',)
+        fields = ('pid', 'project_name', 'customer', 'responsible', 'deliveryAddress', 'deliveryDate',
+                  'deliveryDateDeadline', 'description',)
 
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
+        self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.inCompany()
         self.fields['responsible'].queryset = User.objects.inCompany()
-
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id

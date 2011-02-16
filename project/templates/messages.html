@@ -1,15 +1,7 @@
 {% if messages %}
-
     {% for message in messages %}
-
-
         <div class="{{ message.type }}" id="message">
-
             <p>{{ message.text }}</p>
-
         </div>
-
-
     {% endfor %}
-
 {% endif %}

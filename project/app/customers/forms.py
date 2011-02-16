@@ -32,8 +32,8 @@ class CustomerForm(ModelForm):
 class CustomerFormSimple(ModelForm):
     class Meta:
         model = Customer
-        exclude = (
-        'deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', )
+        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website", "alternative_address", )
+        #exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', )
 
     def __init__(self, *args, **kwrds):
         super(CustomerFormSimple, self).__init__(*args, **kwrds)

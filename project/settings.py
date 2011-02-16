@@ -29,12 +29,11 @@ TIME_FORMAT = 'H.i'
 
 LANGUAGE_CODE = 'en'
 
-
 _ = lambda s: s
 
 LANGUAGES = (
-  ('en', _('English')),
-  ('nb', _('Norwegian')),
+('en', _('English')),
+('nb', _('Norwegian')),
 )
 
 SITE_ID = 1
@@ -52,8 +51,8 @@ STATIC_URL = '/static/'
 SECRET_KEY = '$cv2_y@eqne&amp;%cp2fs!8@#p#*!q)9etm!++#34f01^mlnk6=et'
 
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+'django.template.loaders.filesystem.Loader',
+'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -70,11 +69,11 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-    BASE_PATH + '/templates/',
+BASE_PATH + '/templates/',
 )
 
 STATICFILES_DIRS = (
-    BASE_PATH + '/files/media/',
+BASE_PATH + '/files/media/',
 )
 
 INSTALLED_APPS = (

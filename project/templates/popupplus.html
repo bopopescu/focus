@@ -2,7 +2,7 @@
 
 <script>
     $(function() {
-    
+
         {% for field in form %}
             var {{ field_id }}_{{ field.name }} = $("#id_{{ field.html_name }}");
         {% endfor %}
@@ -16,47 +16,48 @@
                     var bValid = true;
                     if (bValid) {
                         $.post("{{ add_ajax_url }}",
-                                {
+                        {
 
-                                    {% for field in form %}
-                                        {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
-                                    {% endfor %}
+                            {% for field in form %}
+                                {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
+                            {% endfor %}
 
-                                },
+                        },
+                              function(data) {
 
-                    function(data) {
+                                  $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
+                                  $('#id_{{ field_id }} option[value=' + data['id'] + ']').attr('selected', 'selected');
+                              }
 
-                        $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
-                        $('#id_{{ field_id }} option[value='+data['id']+']').attr('selected', 'selected');
+                                );
+
+                        $(this).dialog("close");
+
                     }
-
-                    );
-
-                   $(this).dialog("close");
-
-                    }
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
             },
-            Cancel: function() {
-                $(this).dialog("close");
-            }
-        },
 
             close:
-        function() {
+            function() {
 
-        }
-    });
+            }
+        });
 
-    $("#create_{{ field_id }}")
-            .button()
-            .click(function() {
-        $("#dialog-form{{ field_id }}").dialog("open");
-    });
+        $("#create_{{ field_id }}")
+                .button()
+                .click(function() {
+            $("#dialog-form{{ field_id }}").dialog("open");
+        });
 
-    $("#dialog-form{{ field_id }}").hide();
+        $("#dialog-form{{ field_id }}").hide();
 
     });
 </script>
+
+{{ STATIC_URL }}
 
 <div id="dialog-form{{ field_id }}">
     <form id="thisForm{{ field_id }}">
@@ -73,4 +74,5 @@
     </form>
 </div>
 
-<img id="create_{{ field_id }}" src="/static/icons/32/add.png" width="10" height="10" alt="Legg til ny"/>
+<img id="create_{{ field_id }}" style="verticla-align:middle;" src="/static/img/add.png" width="15" height="15"
+     alt="Legg til ny"/>

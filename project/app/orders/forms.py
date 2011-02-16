@@ -12,10 +12,15 @@ class OrderForm(ModelForm):
 
     class Meta:
         model = Order
-        fields = ("oid","POnumber","order_name","customer","project","responsible")
+        fields = ("oid", "POnumber", "order_name", "customer", "project", "responsible")
+
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
-      
+        self.fields['customer'].widget = SelectWithPop(Customer)
+        self.fields['customer'].queryset = Customer.objects.inCompany()
+        self.fields['project'].widget = SelectWithPop(Project)
+        self.fields['project'].queryset = Project.objects.inCompany()
+
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
 
@@ -44,8 +49,9 @@ class OrderForm(ModelForm):
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order
-        exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
-                   'participant',)
+        exclude = (
+        'deleted', 'trashed', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
+        'participant',)
 
 class TaskForm(ModelForm):
     class Meta:
