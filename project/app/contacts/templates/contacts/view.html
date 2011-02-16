@@ -15,33 +15,61 @@
 
 {% block maincontent %}
 
-{{ title }}
+    <style>
 
-        <table>
+        .topPart {
+            width: auto;
+            height: 200px;
 
-            <tr>
-                <th>{% trans "Contact" %}</th>
-                <th>{% trans "Details" %}</th>
-            </tr>
+        }
 
-            <tr>
-                <td>{% trans "Name" %}</td>
-                <td>{{ contact.full_name }}</td>
-            </tr>
+        .topPart .left {
+            width: 350px;
+            float: left;
+        }
 
-            <tr>
-                <td>{% trans "E-mail" %}</td>
-                <td>{{ contact.email }}</td>
-            </tr>
+        .topPart .right {
+            width: 400px;
+            float: left;
+        }
 
-            <tr>
-                <td>{% trans "Address" %}</td>
-                <td> {{ contact.address }}</td>
-            </tr>
+    </style>
 
+    <div class="topPart">
+        <div class="left">
+            <img width="300px" height="200px" src="{{ contact.getImage }}">
+        </div>
 
-        </table>
+        <div class="right">
+            <table>
+                <thead>
+                <tr>
+                    <th>{% trans "Contact" %}</th>
+                    <th>{% trans "Details" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{% trans "Name" %}</td>
+                    <td>{{ contact.full_name }}</td>
+                </tr>
 
-{% include "comments.html" %}
+                <tr>
+                    <td>{% trans "E-mail" %}</td>
+                    <td>{{ contact.email }}</td>
+                </tr>
+
+                <tr>
+                    <td>{% trans "Address" %}</td>
+                    <td> {{ contact.address }}</td>
+                </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    {% include "comments.html" %}
+
 
 {% endblock %}

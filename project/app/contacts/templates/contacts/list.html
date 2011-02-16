@@ -12,8 +12,9 @@
     <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
     <script>
         $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tr");
+            $('#filter').quicksearch("#dataTable tbody tr");
         });
+
     </script>
     <style>
         #dataset tr:hover {
@@ -21,10 +22,11 @@
             cursor: default;
         }
     </style>
-
-    <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-
-    <table cellpadding="0" cellspacing="0" border="0" id="dataTable">
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
         <thead>
         <tr>
             <th></th>
@@ -34,11 +36,10 @@
             <th>{% trans "E-mail" %}</th>
         </tr>
         </thead>
-
         <tbody>
         {% for contact in contacts %}
             <tr>
-                <td><img style="vertical-align:middle;" src="{{ contact.getImage }}"></td>
+                <td><img style="vertical-align:middle;" width="50px" height="50px" src="{{ contact.getImage }}"></td>
                 <td><a href="{{ contact.getViewUrl }}">{{ contact.full_name }}</a></td>
                 <td>{{ contact.address }}</td>
                 <td>{{ contact.phone }}</td>
@@ -47,5 +48,4 @@
         {% endfor %}
         </tbody>
     </table>
-
 {% endblock %}

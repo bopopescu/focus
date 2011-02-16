@@ -631,8 +631,13 @@ class Log(models.Model):
             msg = ""
             lastLog = lastLog[len(lastLog)-1]
             for i, value in eval(self.message).iteritems():
+
                 if i == "id" or i == "date_created" or i == "date_edited":
                     continue
+
+                if i not in eval(lastLog.message):
+                    continue
+
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
                     msg += value[1] +  _(" was changed from %s to: %s. ") % (
                     eval(lastLog.message)[i][0], eval(self.message)[i][0])

@@ -31,7 +31,7 @@ class Contact(PersistentModel):
             if os.path.join("/file/", self.image.name):
                 return os.path.join("/file/", self.image.name)
 
-        return settings.STATIC_URL + "img/dummy.png"
+        return settings.STATIC_URL + "img/person.png"
 
     @staticmethod
     def add_ajax_url():

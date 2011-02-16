@@ -71,6 +71,31 @@ def add_ajax(request):
 
     return HttpResponse("ERROR")
 
+
+@require_permission("EDIT",Contact,"id")
+def editImage(request, id):
+    instance = get_object_or_404(Contact, id=id, deleted=False)
+    msg = _("Successfully changed image")
+
+    
+    if request.method == 'POST':
+        form = ContactImageForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            o = form.save(commit=False)
+            o.owner = request.user
+            o.save()
+            form.save_m2m()
+            request.message_success(msg)
+
+            return redirect(view, o.id)
+    else:
+        form = ContactImageForm(instance=instance, initial={"image":None})
+
+    return render_with_request(request, "contacts/form.html", {'title': _("Contact"),
+                                                               'form': form,
+                                                               'contact': instance,
+                                                               })
+
 @login_required()
 def form (request, id=False):
     if id:

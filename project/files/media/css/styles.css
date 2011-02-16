@@ -115,9 +115,7 @@ dd 		{
 	margin-bottom: 20px;
 	clear: both;
 	width: 90%;
-
-
-
+    min-width:1100px;
 }
 #primary_content {
 	width: 70%;
@@ -282,37 +280,6 @@ dd 		{
 	padding-left: 20px;
 }
 
-/* ----------------------------
-		TABLES
-------------------------------- */
-
-table {
-	font: 11px/24px Verdana, Arial, Helvetica, sans-serif;
-	border-collapse: collapse;
-	width: 100%;
-	border-top-style: none;
-	border-right-style: none;
-	border-bottom-style: none;
-	border-left-style: none;
-	}
-
-th 	{
-	text-align: left;
-	background-color: #DEEBF7;
-	padding: 5px;
-	text-transform: uppercase;
-}
-td 	{
-	text-align: left;
-	padding: 3px;
-}
-
-#primary_content tr:hover {
-	background-color: #FFFFCC;
-}
-
-
-
 
 /* ----------------------------
 		TABS
@@ -410,7 +377,7 @@ form p 			{
 	margin: 0px;
 }
 
-.fieldWrapper {display:inline-table; width:100px; height:60px;}
+.fieldWrapper {display:inline-table; width:300px; height:60px;}
 
 
 .fieldWrapper input{
@@ -538,48 +505,21 @@ form .radio		{
 	font-size: 10px;
 }
 
+/*TABLE*/
+table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+thead th { background: #3182BD; color: #fff; }
+tbody th { text-align: left; }
+table th, table td { border: 1px solid #ddd; padding: 2px 5px; font-size: 100%; }
+pre { font-size: 130%; background: #f7f7f7; padding: 10px 10px; font-weight: bold; }
 
+.searchBox {
+    height:50px;
+    float:right;
+}
 
-
-/* tables */
-table.tablesorter {
-	font-family:arial;
-	background-color: #CDCDCD;
-	font-size: 8pt;
-	width: 100%;
-	text-align: left;
-	margin-top: 10px;
-	margin-right: 0pt;
-	margin-bottom: 25px;
-	margin-left: 0pt;
-}
-table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	background-color: #d6d6d6;
-	border: 1px solid #FFF;
-	font-size: 8pt;
-	padding: 4px;
-}
-table.tablesorter thead tr .header {
-	background-image: url(../img/bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
-}
-table.tablesorter tbody td {
-	color: #3D3D3D;
-	padding: 4px;
-	background-color: #FFF;
-	vertical-align: top;
-}
-table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
-}
-table.tablesorter thead tr .headerSortUp {
-	background-image: url(../img/asc.gif);
-}
-table.tablesorter thead tr .headerSortDown {
-	background-image: url(../img/desc.gif);
-}
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-	background-color: #B7B7B7;
+.searchBox input {
+    border: 2px solid #DEEBF7;
+	width: 190px;
+	height: 20px;
+	margin-right: 5px;
 }

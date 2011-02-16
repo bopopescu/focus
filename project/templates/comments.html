@@ -11,64 +11,45 @@
         {% endif %}
     </h2>
 
-    <ol class="comments list with_images small">
-        {% if comments.list %}
-            {% for comment in comments.list %}
-                <li class="comment item {% cycle '' 'alt' %}">
-                    <div class="image">
-                      
-                    </div>
-                    <div class="info">
-                        <p class="date">{{ comment.created }}</p>
 
-                        <p class="author"><strong>{{ comment.user.fullname }}</strong> said</p>
 
-                        <p class="text introtext">{{ comment.text }}</p>
-                    </div>
-                    <div class="clearer"></div>
-                </li>
-            {% endfor %}
-            {% else %}
-            {% if user.logged_in %}
-                <li class="item">
-                    <em>{% trans "No comments yet." %}</em>
-                </li>
-            {% else %}
-                <li class="item">
-                    <em>{% trans "You must be logged in to comment." %}</em>
-                </li>
-            {% endif %}
-        {% endif %}
+    {% if comments.list %}
 
-        <li class="item last">
-            <div>
-                <div class="image small">
-                    {% if user.image %}
-                        <img src="{{ user.image }}">
-                    {% else %}
-                        <img src="{{ default.images.abakus }}">
-                    {% endif %}
-                </div>
-                <div class="info">
-                    <p class="author"><strong>{{ user.first_name }}</strong> {% trans "says" %}</p>
+        {% for comment in comments.list %}
 
-                    <p class="introtext">
+            <img style="vertcial-align:middle;" width="70px" height="50px" src="{{ comment.creator.getProfileImage }}">
 
-                    <form class="comment_form" action="" method="post">
-                        <table>
-                            <tr>
-                                <td class="text">{{ comments.form.text|escape }}</td>
-                                <td class="button">
-                                    <button name="new_comment" class="add_comment">{% trans "Submit" %}</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                    </p>
-                </div>
-                <div class="clearer"></div>
-            </div>
-        </li>
-    </ol>
+            {{ comment.text }}
+            {{ comment.date_created }}
+
+            <br>
+        {% endfor %}
+
+        </table>
+
+    {% endif %}
+    <div>
+
+        <style>
+            table th, table td { border: 0px solid #ddd; padding: 2px 5px; font-size: 100%; }
+        </style>
+
+        <div class="info">
+            <p class="introtext">
+
+            <form action=""  method="post">
+                <table style="border:none;">
+                    <tr>
+                        <td class="text">{{ comments.form.text|escape }}</td>
+                        <td class="button">
+                            <button name="new_comment" class="add_comment">{% trans "Submit" %}</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            </p>
+        </div>
+        <div class="clearer"></div>
+    </div>
 
 </div>

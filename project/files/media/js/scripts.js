@@ -5,7 +5,7 @@
 
 $(document).ready(function(){
 	/* Zebra Striping for Tables */					   
-	$("tr:nth-child(even)").addClass("even");
+	//$("tr:nth-child(even)").addClass("even");
 	
 	/* Load Facebox */	
 	$('a[rel*=facebox]').facebox();

@@ -39,23 +39,24 @@
         <br><br>
     {% endif %}
 
-    <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+    <div style="width:700px;">
 
-        {% for field in form %}
+        <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
-            <div class="fieldWrapper">
-                <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }}</span>
-                {{ field }}
+
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }}</span>
+                    {{ field }}
+                </div>
+
+            {% endfor %}
+            <div>
+                <input type="submit" value="Lagre" class="btn" name="save"/>
             </div>
 
-        {% endfor %}
-
-        <div>
-            <input type="submit" value="Lagre" class="btn" name="save"/>
-        </div>
-
-    </form>
-
+        </form>
+    </div>
 
 {% endblock %}
 
