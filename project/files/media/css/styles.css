@@ -613,34 +613,34 @@ form .radio {
     font-size: 10px;
 }
 
-/*TABLE*/
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1em 0;
-}
+table { width: 100%; border: 0; margin-bottom: 2em;  }
 
-thead th {
-    background: #3182BD;
-    color: #fff;
-}
+	 table thead th
+	 {
+	 	font-size: 13px;
+		font-weight: bold;
+		text-align: left;
+		padding: 10px;
 
-tbody th {
-    text-align: left;
-}
+		background-color: #263849 !important;
 
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 2px 5px;
-    font-size: 100%;
-}
+		color: #FFF;
 
-pre {
-    font-size: 130%;
-    background: #f7f7f7;
-    padding: 10px 10px;
-    font-weight: bold;
-}
+		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+	}
+
+	table td { vertical-align: top; }
+
+	table tbody tr td { background: #FFF; border-bottom: 1px dotted #DDD; }
+
+	table th { padding: 10px 0; }
+	table tbody td { padding: 10px; }
+
+	table tr.even td { background: #F9F9F9; }
+
+	tr:nth-child(odd) { background-color:#F9F9F9; }
+	tr:nth-child(even) { background-color:#FFF; }
 
 #dataTable tr:hover {
     background: #DEEBF7;

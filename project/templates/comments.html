@@ -1,55 +1,49 @@
 {% load auth %}
 {% load i18n %}
 
-<div id="comments">
 
-    <h2>
-        {% if comments.list %}
-            {{ comments.list|length }} {% trans "comments" %}
-        {% else %}
-            {% trans "Comments" %}
-        {% endif %}
-    </h2>
+<h2>
+    {% if comments.list %}
+        {{ comments.list|length }} {% trans "comments" %}
+    {% else %}
+        {% trans "Comments" %}
+    {% endif %}
+</h2>
 
-
+<table>
 
     {% if comments.list %}
-
         {% for comment in comments.list %}
+            <tr>
+                <td><img width="120px" height="100px" src="{{ comment.creator.getProfileImage }}" class="avatar_img"
+                         alt=""/></td>
+                <td>
+                    <p><strong>{{ comment.creator }}</strong> on {{ comment.date_created }}</p>
 
-            <img style="vertcial-align:middle;" width="70px" height="50px" src="{{ comment.creator.getProfileImage }}">
+                    <p>{{ comment.text }}</p>
+                </td>
+            </tr>
 
-            {{ comment.text }}
-            {{ comment.date_created }}
-
-            <br>
         {% endfor %}
 
-        </table>
-
     {% endif %}
-    <div>
 
-        <style>
-            table th, table td { border: 0px solid #ddd; padding: 2px 5px; font-size: 100%; }
-        </style>
+    <tr>
+        <td><img width="130px" height="100px" src="{{ request.user.getProfileImage }}" class="avatar_img" alt=""/></td>
+        <td>
+            <form action="" method="post">
+                <div class="field">
+                    {{ comments.form.text|escape }}
+                </div>
 
-        <div class="info">
-            <p class="introtext">
+                <br/>
 
-            <form action=""  method="post">
-                <table style="border:none;">
-                    <tr>
-                        <td class="text">{{ comments.form.text|escape }}</td>
-                        <td class="button">
-                            <button name="new_comment" class="add_comment">{% trans "Submit" %}</button>
-                        </td>
-                    </tr>
-                </table>
+                <div class="buttonrow">
+                    <button name="new_comment" class="add_comment">{% trans "Submit" %}</button>
+                </div>
             </form>
-            </p>
-        </div>
-        <div class="clearer"></div>
-    </div>
+        </td>
+    </tr>
 
-</div>
+
+</table>
