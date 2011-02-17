@@ -24,10 +24,11 @@
 	/*  background-color: #0000CC;		THEME 4 BLUE 	*/
 	/* background-color: #FFCC00;	 	THEME 6 YELLOW 	*/
 	/* ackground-color: #660099;	 	THEME 7 PURPLE 	*/
-	background-color: #9ECAE1;/* 	 	THEME 8 PINK 	*/
+	/*background-color: #9ECAE1;/* 	 	THEME 8 PINK 	*/
 	 /*		background-color: #666666;THEME 9 GREY 	*/
 	
-	
+    background: url(../img/header_bg.png);
+
 }
 	#nav li {
 	padding-right: 12px;

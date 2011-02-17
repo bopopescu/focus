@@ -148,7 +148,7 @@ dd {
 
 #header {
     height: 70px;
-    background-color: #3182BD;
+    background: url(../img/header_bg.png);
     padding-left: 50px;
 }
 
