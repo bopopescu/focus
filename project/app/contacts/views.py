@@ -37,11 +37,11 @@ def history(request, id):
     contact = get_object_or_404(Contact, id=id, deleted=False)
 
     history = Log.objects.filter(content_type=ContentType.objects.get_for_model(contact.__class__),
-                                 object_id = contact.id)
-    
+                                 object_id=contact.id)
+
     return render_with_request(request, 'contacts/log.html', {'title': _("Latest events"),
-                                                              'contact':contact,
-                                                                            'logs': history[::-1][0:150]})
+                                                              'contact': contact,
+                                                              'logs': history[::-1][0:150]})
 
 @require_permission("EDIT", Contact, "id")
 def edit(request, id):
@@ -51,7 +51,8 @@ def edit(request, id):
 def view(request, id):
     contact = get_object_or_404(Contact, id=id)
     comments = comment_block(request, contact)
-    return render_with_request(request, 'contacts/view.html', {'title': _('Contact'), 'comments':comments, 'contact': contact})
+    return render_with_request(request, 'contacts/view.html',
+                               {'title': _('Contact'), 'comments': comments, 'contact': contact})
 
 @require_permission("DELETE", Contact, "id")
 def trash(request, id):
@@ -68,10 +69,11 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render_with_request(request, 'contacts/trash.html', {'title': _("Confirm delete"),
-                                                                     'contact':instance,
-                                                                     'canBeDeleted': instance.canBeDeleted()[0],
-                                                                     'reasons': instance.canBeDeleted()[1],
-                                                                     })
+                                                                    'contact': instance,
+                                                                    'canBeDeleted': instance.canBeDeleted()[0],
+                                                                    'reasons': instance.canBeDeleted()[1],
+                                                                    })
+
 @require_permission("CREATE", Contact)
 def add_ajax(request):
     form = ContactForm(request.POST, instance=Contact())
@@ -84,12 +86,11 @@ def add_ajax(request):
     return HttpResponse("ERROR")
 
 
-@require_permission("EDIT",Contact,"id")
+@require_permission("EDIT", Contact, "id")
 def editImage(request, id):
     instance = get_object_or_404(Contact, id=id, deleted=False)
     msg = _("Successfully changed image")
 
-    
     if request.method == 'POST':
         form = ContactImageForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
@@ -101,7 +102,7 @@ def editImage(request, id):
 
             return redirect(view, o.id)
     else:
-        form = ContactImageForm(instance=instance, initial={"image":None})
+        form = ContactImageForm(instance=instance, initial={"image": None})
 
     return render_with_request(request, "contacts/form.html", {'title': _("Contact"),
                                                                'form': form,

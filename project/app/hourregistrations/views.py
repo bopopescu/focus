@@ -2,7 +2,6 @@
 from decimal import Decimal
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
-from helpers import calculateHoursWorked
 from core.decorators import require_permission, login_required
 from forms import *
 from core.shortcuts import *
@@ -11,6 +10,7 @@ from core.views import updateTimeout
 from datetime import date, datetime
 import time
 from calendar import monthrange
+
 
 @require_permission("LIST", HourRegistration)
 def overview(request):
@@ -126,7 +126,7 @@ def edit(request, id):
 
     time = get_object_or_404(HourRegistration, id=id, deleted=False)
 
-    if validForEdit(time.date.strftime("%d.%m.%Y")):
+    if Core.current_user().canEditHourRegistration(time):
         return form(request, id)
 
     request.message_error("Du kan ikke redigere denne timen")

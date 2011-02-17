@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="/static/ui-lightness/jquery-ui-1.8.6.custom.css">
-<script type="text/javascript" src="/static/js/jquery/datepickerNO.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery/datepickerNO.js"></script>
 
 <script>
     $(function() {
@@ -9,7 +8,7 @@
 
         $("#id_{{ field }}").datepicker(
         {
-            buttonImage: "/media/icons/16/calendar.png",
+            buttonImage: "{{ STATIC_URL }}icons/16/calendar.png",
             buttonImageOnly: true,
             dateFormat: 'dd.mm.yy',
             maxDate: new Date({{ to_date|date:"Y" }}, {{ to_date|date:"m" }}-1, {{ to_date|date:"d" }}),
@@ -21,7 +20,7 @@
 
         $("#id_{{ field }}").datepicker(
         {
-            buttonImage: "/media/icons/16/calendar.png",
+            buttonImage: "{{ STATIC_URL }}icons/16/calendar.png",
             buttonImageOnly: true,
             dateFormat: 'dd.mm.yy',
             minDate: new Date({{ from_date|date:"Y" }}, {{ from_date|date:"m" }}-1, {{ from_date|date:"d" }}),
@@ -33,7 +32,7 @@
 
         $("#id_{{ field }}").datepicker(
         {
-            buttonImage: "/media/icons/16/calendar.png",
+            buttonImage: "{{ STATIC_URL }}icons/16/calendar.png",
             buttonImageOnly: true,
             dateFormat: 'dd.mm.yy',
             maxDate: new Date({{ to_date|date:"Y" }}, {{ to_date|date:"m" }}-1, {{ to_date|date:"d" }}),
@@ -46,12 +45,11 @@
 
         $("#id_{{ field }}").datepicker(
         {
-            buttonImage: "/media/icons/16/calendar.png",
+            buttonImage: "{{ STATIC_URL }}icons/16/calendar.png",
             buttonImageOnly: true,
             dateFormat: 'dd.mm.yy',
         }
                 );
-
         {% endif %}{% endif %}{% endif %}
 
     });

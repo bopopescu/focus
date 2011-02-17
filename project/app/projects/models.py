@@ -41,13 +41,16 @@ class Project(PersistentModel):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 
     def percentDone(self):
-        realDiff = (time.mktime(datetime.now().timetuple()) - time.mktime(self.date_created.timetuple()))
-        estimatedDiff = (time.mktime(self.deliveryDate.timetuple()) - time.mktime(self.date_created.timetuple()))
+        if self.date_created and self.deliveryDate:
+            realDiff = (time.mktime(datetime.now().timetuple()) - time.mktime(self.date_created.timetuple()))
+            estimatedDiff = (time.mktime(self.deliveryDate.timetuple()) - time.mktime(self.date_created.timetuple()))
 
-        if realDiff > estimatedDiff:
-            return 100
-
-        return (realDiff / estimatedDiff) * 100
+            if realDiff > estimatedDiff:
+                return 100
+            
+            return (realDiff / estimatedDiff) * 100
+        
+        return 0
 
     @staticmethod
     def add_ajax_url():

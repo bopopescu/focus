@@ -126,20 +126,11 @@ class DrivingRegistration(PersistentModel):
 def __unicode__(self):
     return "DrivingRegistration for %s" % self.HourRegistration
 
-"""
 def initial_data ():
     #Create default time tracking types
     type = TypeOfHourRegistration.objects.get_or_create(name="Kontorarbeid")[0]
 
-    a, created = User.objects.all().get_or_create(username="superadmin",
-                                                  first_name="SuperAdmin",
-                                                  last_name="",
-                                                  canLogin=True,
-                                                  is_superuser=True,
-                                                  is_staff=True,
-                                                  hourly_rate=120,
-                                                  percent_cover=20,
-                                                  is_active=True)
+    a, created = User.objects.all().get_or_create(username="superadmin")
     Core.set_test_user(a)
 
     testCustomer, created = Customer.objects.get_or_create(cid="100", full_name="Per", email="test@test.com")
@@ -235,4 +226,3 @@ def initial_data ():
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
-"""

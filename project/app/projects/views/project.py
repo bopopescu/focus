@@ -30,7 +30,7 @@ def timeline(request):
 
 @require_permission("LIST", Project)
 def overview_trashed(request):
-    projects = Core.current_user().getPermittedObjects("VIEW", Project)
+    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
     return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
 @require_permission("LIST", Project)
@@ -44,7 +44,7 @@ def view(request, id):
     comments = comment_block(request, project)
     whoCanSeeThis = project.whoHasPermissionTo('view')
     return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
-                                                                'comments':comments,
+                                                               'comments': comments,
                                                                'project': project,
                                                                'whoCanSeeThis': whoCanSeeThis,
                                                                })
@@ -54,9 +54,9 @@ def view_orders(request, id):
     project = Project.objects.get(id=id)
 
     return render_with_request(request, 'projects/orders.html', {'title': 'Prosjekt: %s orders' % project,
-                                                                 'project':project,
-                                                               'orders': project.orders.all(),
-                                                               })
+                                                                 'project': project,
+                                                                 'orders': project.orders.all(),
+                                                                 })
 
 @require_permission("EDIT", Contact, "id")
 def history(request, id):
@@ -78,7 +78,7 @@ def add_ajax(request):
 
         return HttpResponse(simplejson.dumps({'name': a.project_name,
                                               'id': a.id}), mimetype='application/json')
-    
+
     return HttpResponse("ERROR")
 
 @require_permission("CREATE", Project)
@@ -104,11 +104,11 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render_with_request(request, 'projects/trash.html', {'title': _("Confirm delete"),
-                                                                     'project':instance,
-                                                                     'canBeDeleted': instance.canBeDeleted()[0],
-                                                                     'reasons': instance.canBeDeleted()[1],
-                                                                     })
-   
+                                                                    'project': instance,
+                                                                    'canBeDeleted': instance.canBeDeleted()[0],
+                                                                    'reasons': instance.canBeDeleted()[1],
+                                                                    })
+
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Project, id=id, deleted=False)

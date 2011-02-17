@@ -36,7 +36,7 @@ class DateValidForEdtNode(template.Node):
         try:
             object = self.object.resolve(context)
 
-            if context['user'].has_permission_to("EDIT", object) and validForEdit(object.date.strftime("%d.%m.%Y")):
+            if context['user'].has_permission_to("EDIT", object) and context['user'].canEditHourRegistration(object):
                 return self.nodelist.render(context)
             else:
                 return ''

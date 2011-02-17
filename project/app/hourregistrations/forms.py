@@ -12,14 +12,17 @@ class HourRegistrationForm(ModelForm):
     class Meta:
         model = HourRegistration
         exclude = (
-        'deleted', 'date_created', 'date_edited', 'owner', 'creator', 'hourly_rate', 'percent_cover', 'editor',
+        'deleted', 'trashed', 'date_created', 'date_edited', 'owner', 'creator', 'hourly_rate', 'percent_cover',
+        'editor',
         'company', 'hours_worked')
 
     def __init__(self, *args, **kwargs):
         super(HourRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['date'].required = True
-        self.fields['date'].widget = DatePickerField(format="%d.%m.%Y", from_date=Core.current_user().generateValidPeriode()[0],
+        self.fields['date'].widget = DatePickerField(format="%d.%m.%Y",
+                                                     from_date=Core.current_user().generateValidPeriode()[0],
                                                      to_date=Core.current_user().generateValidPeriode()[1])
+
         self.fields['date'].input_formats = ["%d.%m.%Y"]
 
         self.fields['time_start'].widget = MaskedField(format="99:99")
@@ -27,9 +30,9 @@ class HourRegistrationForm(ModelForm):
 
     def clean_date(self):
         date = self.cleaned_data['date']
-
-        if not validForEdit(date.strftime("%d.%m.%Y")):
-            raise forms.ValidationError(u"Du kan ikke velge denne datoen, den er utenfor aktiv periode.")
+        
+        #if not validForEdit(date.strftime("%d.%m.%Y")):
+        #    raise forms.ValidationError(u"Du kan ikke velge denne datoen, den er utenfor aktiv periode.")
 
         return date
 

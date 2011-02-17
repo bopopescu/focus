@@ -18,13 +18,10 @@
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/scripts.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/facebox.js"></script>
 
     <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ STATIC_URL }}css/facebox.css" rel="stylesheet" type="text/css"/>
-    
+    <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
+
 </head>
 
 <body>
@@ -35,24 +32,23 @@
 
     <div id="nav">
         <ul>
-            <li class="{% active request "^/dashboard/" %}"><a class="{% active request "^/dashboard/" %}"
-                                                               href="{% url app.dashboard.views.overview %}">Dashboard</a>
+            <li class="{% active request "^/dashboard/" %}">
+                <a class="{% active request "^/dashboard/" %}"href="{% url app.dashboard.views.overview %}">Dashboard</a>
             </li>
-            <li class="{% active request "^/customers/" %}"><a class="{% active request "^/customers/" %}"
-                                                               href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
+            <li class="{% active request "^/customers/" %}">
+                <a class="{% active request "^/customers/" %}"href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
             </li>
-            <li class="{% active request "^/contacts/" %}"><a class="{% active request "^/contacts/" %}"
-                                                              href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
+            <li class="{% active request "^/contacts/" %}">
+                <a class="{% active request "^/contacts/" %}"href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
             </li>
-            <li class="{% active request "^/projects/" %}"><a class="{% active request "^/projects/" %}"
-                                                              href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
+            <li class="{% active request "^/projects/" %}">
+                <a class="{% active request "^/projects/" %}" href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
             </li>
-            <li class="{% active request "^/orders/" %}"><a class="{% active request "^/orders/" %}"
-                                                            href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a>
+            <li class="{% active request "^/orders/" %}">
+                <a class="{% active request "^/orders/" %}"href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a>
             </li>
-            <li class="{% active request "^/hourregistrations/" %}"><a
-                    class="{% active request "^/hourregistrations/" %}"
-                    href="{% url app.hourregistrations.views.overview %}">{% trans "Hour registration" %}</a>
+            <li class="{% active request "^/hourregistrations/" %}">
+                <a class="{% active request "^/hourregistrations/" %}" href="{% url app.hourregistrations.views.overview %}">{% trans "Hour registration" %}</a>
             </li>
         </ul>
     </div>
