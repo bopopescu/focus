@@ -47,7 +47,6 @@
         });
 
         $("#create_{{ field_id }}")
-                .button()
                 .click(function() {
             $("#dialog-form{{ field_id }}").dialog("open");
         });
@@ -74,5 +73,4 @@
     </form>
 </div>
 
-<img id="create_{{ field_id }}" style="verticla-align:middle;" src="/static/img/add.png" width="15" height="15"
-     alt="Legg til ny"/>
+<span id="create_{{ field_id }}">ny</span>

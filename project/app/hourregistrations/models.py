@@ -130,6 +130,7 @@ def initial_data ():
     #Create default time tracking types
     type = TypeOfHourRegistration.objects.get_or_create(name="Kontorarbeid")[0]
 
+    """
     a, created = User.objects.all().get_or_create(username="superadmin")
     Core.set_test_user(a)
 
@@ -226,3 +227,5 @@ def initial_data ():
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
+    """
+
