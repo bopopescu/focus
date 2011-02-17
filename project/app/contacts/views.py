@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
+from app.customers.models import Customer
 from core.models import Log
 from forms import *
 from core.shortcuts import render_with_request, comment_block
@@ -53,10 +54,24 @@ def view(request, id):
     return render_with_request(request, 'contacts/view.html', {'title': _('Contact'), 'comments':comments, 'contact': contact})
 
 @require_permission("DELETE", Contact, "id")
-def delete(request, id):
-    Contact.objects.get(id=id).delete()
-    return redirect(overview)
+def trash(request, id):
+    instance = Contact.objects.get(id=id)
 
+    if request.method == "POST":
+        if not instance.canBeDeleted()[0]:
+            request.message_error("You can't delete this contact because: ")
+            for reason in instance.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully contact this contact")
+            instance.trash()
+        return redirect(overview)
+    else:
+        return render_with_request(request, 'contacts/trash.html', {'title': _("Confirm delete"),
+                                                                     'contact':instance,
+                                                                     'canBeDeleted': instance.canBeDeleted()[0],
+                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     })
 @require_permission("CREATE", Contact)
 def add_ajax(request):
     form = ContactForm(request.POST, instance=Contact())

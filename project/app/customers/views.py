@@ -53,11 +53,11 @@ def history(request, id):
     instance = get_object_or_404(Customer, id=id, deleted=False)
 
     history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
-                                 object_id = instance.id)
+                                 object_id=instance.id)
 
     return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
-                                                              'customer':instance,
-                                                              'logs': history[::-1][0:150]})
+                                                               'customer': instance,
+                                                               'logs': history[::-1][0:150]})
 
 
 @require_permission("CREATE", Customer)
@@ -73,11 +73,21 @@ def edit(request, id):
 def trash(request, id):
     customer = Customer.objects.get(id=id)
 
-    if not customer.canBeDeleted()[0]:
-        request.message_error(customer.canBeDeleted()[1])
+    if request.method == "POST":
+        if not customer.canBeDeleted()[0]:
+            request.message_error("You can't delete this customer because: ")
+            for reason in customer.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully deleted this customer")
+            customer.trash()
+        return redirect(overview)
     else:
-        customer.trash()
-    return redirect(overview)
+        return render_with_request(request, 'customers/trash.html', {'title': _("Confirm delete"),
+                                                                     'customer': customer,
+                                                                     'canBeDeleted': customer.canBeDeleted()[0],
+                                                                     'reasons': customer.canBeDeleted()[1],
+                                                                     })
 
 @require_permission("DELETE", Customer, "id")
 def recover(request, id):

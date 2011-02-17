@@ -25,11 +25,18 @@ class Project(PersistentModel):
         return self.project_name
 
     def canBeDeleted(self):
+        canBeDeleted = True
+        reasons = []
+
         if self.orders.all().count() > 0:
-            return (False, _("Project has active orders"))
+            canBeDeleted = False
+            reasons.append(_("Project has active orders"))
 
-        return (True, "ok")
+        if canBeDeleted:
+            return (True, "OK")
 
+        return (False, reasons)
+    
     def getViewUrl(self):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 

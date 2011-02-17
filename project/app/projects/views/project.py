@@ -89,17 +89,26 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
-@require_permission("DELETE", Project, 'id')
-def delete(request, id):
-    project = Project.objects.get(id=id)
-    if project.canBeDeleted()[0]:
-        project.delete()
-        request.message_success("Successfully deleted")
+@require_permission("DELETE", Project, "id")
+def trash(request, id):
+    instance = Project.objects.get(id=id)
+
+    if request.method == "POST":
+        if not instance.canBeDeleted()[0]:
+            request.message_error("You can't delete this project because: ")
+            for reason in instance.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully deleted this project")
+            instance.trash()
         return redirect(overview)
     else:
-        request.message_error("You cannot delete this project: %s" % project.canBeDeleted()[1])
-        return redirect(view, id)
-
+        return render_with_request(request, 'projects/trash.html', {'title': _("Confirm delete"),
+                                                                     'project':instance,
+                                                                     'canBeDeleted': instance.canBeDeleted()[0],
+                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     })
+   
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Project, id=id, deleted=False)

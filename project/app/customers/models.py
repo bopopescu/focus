@@ -22,13 +22,21 @@ class Customer(PersistentModel):
         return self.full_name
 
     def canBeDeleted(self):
+        canBeDeleted = True
+        reasons = []
+
         if self.orders.all().count() > 0:
-            return (False, _("Customer has active orders"))
+            canBeDeleted = False
+            reasons.append(_("Customer has active orders"))
 
         if self.projects.all().count() > 0:
-            return (False, _("Customer has active projects"))
+            canBeDeleted = False
+            reasons.append(_("Customer has active projects"))
 
-        return (True, "ok")
+        if canBeDeleted:
+            return (True, "OK")
+
+        return (False, reasons)
 
     @staticmethod
     def add_ajax_url():
