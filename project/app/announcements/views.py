@@ -26,7 +26,7 @@ def view(request, id):
 def edit(request, id):
     return form(request, id)
 
-def delete(request, id):
+def trash(request, id):
     Announcement.objects.filter().get(id=id).delete()
     return redirect(overview)
 
@@ -57,4 +57,4 @@ def form (request, id=False):
     else:
         form = AnnouncementForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Oppslag', 'form': form})
+    return render_with_request(request, "announcements/form.html", {'title': 'Oppslag', 'announcement':instance, 'form': form})

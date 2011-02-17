@@ -1,49 +1,32 @@
 {% extends "base.html" %}
-{% block submenu %}
-    <a href="add"><span>Oprett ny kunde</span></a>
-{% endblock %}
 
+
+{% block sidebar %}
+    {% include "dashboard/sidebar.html" %}
+{% endblock %}
 
 {% block maincontent %}
 
 
-    <div class="portlet x12">
+    {{ title }}
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <table>
+        <thead>
+        <tr>
+            <th>Tittel</th>
+        </tr>
+        </thead>
 
-        <div class="portlet-content">
-
-
-
-            <table class="tablesorter hover">
-                <thead>
-                <tr>
-                    <th>Tittel</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for a in announcements %}
-                    <tr>
-                        <td><a href="{{ a.getViewUrl }}">{{ a.title }}</a></td>
-                        <td>
-                            {% if not a.deleted %}
-                            <div class="tool">
-                                <a href="{% url app.announcements.views.edit a.id  %}"><img
-                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
-                            </div>
-                            {% endif %}
-
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
+        <tbody>
+        {% for a in announcements %}
+            <tr>
+                <td><a href="{{ a.getViewUrl }}">{{ a.title }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
 
 
-            </table>
+    </table>
 
-        </div>
-    </div>
 
 {% endblock %}

@@ -7,6 +7,5 @@ urlpatterns = patterns('app.announcements.views',
                        url(r'^edit/(\d+)/?$', 'edit'),
                        url(r'^view/(\d+)/?$', 'view'),
                        url(r'^recover/(\d+)/?$', 'recover'),
-                       url(r'^delete/(\d+)/?$', 'delete'),
-                       url(r'^delete/(\d+)$', 'delete'),
+                       url(r'^trash/(\d+)/?$', 'trash'),
                        )
