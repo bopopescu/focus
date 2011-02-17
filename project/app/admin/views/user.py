@@ -35,16 +35,16 @@ def editProfile(request):
     pass
 
 @login_required()
-def changeCanLogin(request, userID):
-    u = User.objects.get(id=userID)
+def changeCanLogin(request, id):
+    u = User.objects.get(id=id)
 
     if u == request.user:
         request.messages_error(_("You can't change your own login status"))
-        return redirect(view, userID)
+        return redirect(view, id)
 
     u.canLogin = not u.canLogin
     u.save()
-    return redirect(view, userID)
+    return redirect(view, id)
 
 @login_required()
 def sendGeneratedPassword(request, userID):
@@ -148,7 +148,7 @@ def setHourRegistrationLimitsManually (request, id):
     else:
         form = HourRegistrationManuallyForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': _("Change user"), 'form': form})
+    return render_with_request(request, "admin/users/form.html", {'title': _("Change user"), 'form': form})
 
 
 @login_required()
@@ -192,4 +192,5 @@ def form (request, id=False):
     else:
         form = UserForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': _("User"), 'form': form})
+    return render_with_request(request, "admin/users/form.html",
+                               {'title': _("User"), 'userCard': instance, 'form': form})

@@ -3,39 +3,35 @@
 {% block submenu %}
 {% endblock %}
 
+{% block sidebar %}
+    {% include "admin/sidebar.html" %}
+{% endblock %}
 
 {% block maincontent %}
 
-    <div class="portlet x12">
+    {{ title }}
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th>#</th>
+        </tr>
+        </thead>
 
-        <div class="portlet-content">
-
-
-
-            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-                <thead>
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for u in groups %}
-                    <tr>
-                        <td><a href="{% url app.admin.views.group.view u.id %}">{{ u }}</a></td>
-                        <td>
-                            <a href="{% url app.admin.views.group.edit u.id %}" class="edit admintool"><img
-                                    src="/media/images/icons/user_edit.png" alt=""></a>
-                            <a href="{% url app.admin.views.group.delete u.id %}" class="edit admintool"><img
-                                    src="/media/images/icons/user_delete.png" alt=""></a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div></div>
+        <tbody>
+        {% for u in groups %}
+            <tr>
+                <td><a href="{% url app.admin.views.group.view u.id %}">{{ u }}</a></td>
+                <td>
+                    <a href="{% url app.admin.views.group.edit u.id %}" class="edit admintool"><img
+                            src="/media/images/icons/user_edit.png" alt=""></a>
+                    <a href="{% url app.admin.views.group.delete u.id %}" class="edit admintool"><img
+                            src="/media/images/icons/user_delete.png" alt=""></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

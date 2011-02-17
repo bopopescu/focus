@@ -4,15 +4,13 @@
 
 {% endblock %}
 
-{% block submenu %}
-
+{% block sidebar %}
+    {% include "admin/sidebar.html" %}
 {% endblock %}
 
 
 {% block extraHead %}
     {{ form.media }}
-
-
 {% endblock %}
 
 {% block maincontent %}

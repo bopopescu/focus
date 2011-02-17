@@ -30,7 +30,7 @@ class HourRegistrationForm(ModelForm):
 
     def clean_date(self):
         date = self.cleaned_data['date']
-        
+
         #if not validForEdit(date.strftime("%d.%m.%Y")):
         #    raise forms.ValidationError(u"Du kan ikke velge denne datoen, den er utenfor aktiv periode.")
 

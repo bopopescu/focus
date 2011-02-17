@@ -186,8 +186,21 @@ dd {
     border: 1px solid #d6d6d6;
 }
 
+#header .profile {
+    padding-top: 5px;
+    height: 20px;
+    font-size: 10px;
+    color: white;
+    margin-left: 55%;
+}
+
+#header .profile a {
+    color: white;
+    text-decoration: none;
+}
+
 /* ----------------------------
-		PRIMARY CONTENT
+       PRIMARY CONTENT
 ------------------------------- */
 
 #primary_content h1, #modal h1 {
@@ -612,34 +625,54 @@ form .radio {
     font-size: 10px;
 }
 
-table { width: 100%; border: 0; margin-bottom: 2em;  }
+table {
+    width: 100%;
+    border: 0;
+    margin-bottom: 2em;
+}
 
-	 table thead th
-	 {
-	 	font-size: 13px;
-		font-weight: bold;
-		text-align: left;
-		padding: 10px;
+table thead th {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
 
-		background-color: #263849 !important;
+    background-color: #263849 !important;
 
-		color: #FFF;
+    color: #FFF;
 
-		border-top: 1px solid #ccc;
-		border-bottom: 1px solid #ccc;
-	}
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
 
-	table td { vertical-align: top; }
+table td {
+    vertical-align: top;
+}
 
-	table tbody tr td { background: #FFF; border-bottom: 1px dotted #DDD; }
+table tbody tr td {
+    background: #FFF;
+    border-bottom: 1px dotted #DDD;
+}
 
-	table th { padding: 10px 0; }
-	table tbody td { padding: 10px; }
+table th {
+    padding: 10px 0;
+}
 
-	table tr.even td { background: #F9F9F9; }
+table tbody td {
+    padding: 10px;
+}
 
-	tr:nth-child(odd) { background-color:#F9F9F9; }
-	tr:nth-child(even) { background-color:#FFF; }
+table tr.even td {
+    background: #F9F9F9;
+}
+
+tr:nth-child(odd) {
+    background-color: #F9F9F9;
+}
+
+tr:nth-child(even) {
+    background-color: #FFF;
+}
 
 #dataTable tr:hover {
     background: #DEEBF7;

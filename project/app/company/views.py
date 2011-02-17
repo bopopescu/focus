@@ -49,8 +49,8 @@ def form (request, id=False):
             return redirect(overview)
     else:
         form = CompanyForm(instance=instance)
-
-    return render_with_request(request, "form.html", {'title': 'Kunde', 'form': form})
+        
+    return render_with_request(request, "company/form.html", {'title': 'Kunde', 'form': form})
 
 def newForm(request):
     if request.method == 'POST': # If the form has been submitted...
@@ -123,4 +123,4 @@ def newForm(request):
     else:
         form = newCompanyForm() # An unbound form
 
-    return render_with_request(request, "form.html", {'title': 'Nytt firma', 'form': form})
+    return render_with_request(request, "company/form.html", {'title': 'Nytt firma', 'form': form})

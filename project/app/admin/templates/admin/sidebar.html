@@ -1,0 +1,75 @@
+{% load menu_tags %}
+{% load i18n %}
+<h3>Sidebar</h3>
+<ul>
+
+    {% if userCard.id %}
+
+        <li><a class="{% active request "list" %}" href="{% url app.admin.views.user.overview %}"><img
+                src="{{ STATIC_URL }}img/users.png" width="24" height="24" alt="Home"/>{% trans "USERS" %}</a>
+        </li>
+
+        <li><a class="{% active request "view" %}" href="{% url app.admin.views.user.view userCard.id %}"><img
+                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
+
+        <li><a class="{% active request "edit" %}" href="{% url app.admin.views.user.edit userCard.id %}"><img
+                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+
+        <li><a class="{% active request "trash" %}"
+               href="{% url app.admin.views.user.sendGeneratedPassword userCard.id %}"><img
+                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "SEND NEW PASSWORD" %}
+        </a></li>
+
+        <li><a class="{% active request "trash" %}"
+               href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"><img
+                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "SEND HOUR LIMITS" %}</a>
+        </li>
+
+        <li><a class="{% active request "trash" %}" href="{% url app.admin.views.user.delete userCard.id %}"><img
+                src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
+
+        {% else %}{% if group.id %}
+
+            <li><a class="{% active request "view" %}" href="{% url app.admin.views.group.view group.id %}"><img
+                    src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
+
+            <li><a class="{% active request "edit" %}" href="{% url app.admin.views.group.edit group.id %}"><img
+                    src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+
+            <li><a class="{% active request "trash" %}" href="{% url app.admin.views.group.delete group.id %}"><img
+                    src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a>
+            </li>
+
+        {% else %}
+            <li><a class="{% active request "users" %}" href="{% url app.admin.views.user.overview %}"><img
+                    src="{{ STATIC_URL }}img/users.png" width="24" height="24" alt="Home"/>{% trans "USERS" %}</a>
+            </li>
+
+            <li><a class="{% active request "user/add" %}" href="{% url app.admin.views.user.add %}"><img
+                    src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW USER" %}</a>
+            </li>
+
+
+            <li><a class="{% active request "groups$" %}" href="{% url app.admin.views.group.overview %}"><img
+                    src="{{ STATIC_URL }}img/groups.png" width="24" height="24" alt="Home"/>{% trans "GROUPS" %}</a>
+            </li>
+
+            <li><a class="{% active request "groups/add" %}" href="{% url app.admin.views.group.add %}"><img
+                    src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW GROUP" %}</a>
+            </li>
+
+            <li><a class="{% active request "company/$" %}" href="{% url app.company.views.overview %}"><img
+                    src="{{ STATIC_URL }}img/company.png" width="24" height="24" alt="Home"/>{% trans "COMPANIES" %}
+            </a>
+            </li>
+
+            <li><a class="{% active request "company/new/" %}" href="{% url app.company.views.add %}"><img
+                    src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW COMPANY" %}
+            </a>
+            </li>
+
+
+
+        {% endif %}{% endif %}
+
+</ul>

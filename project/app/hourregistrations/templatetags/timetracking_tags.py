@@ -44,7 +44,6 @@ class DateValidForEdtNode(template.Node):
         except template.VariableDoesNotExist:
             return ''
 
-
 @register.tag
 def links_for_archived_month(parser, token):
     """

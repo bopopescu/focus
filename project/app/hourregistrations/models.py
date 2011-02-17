@@ -50,11 +50,11 @@ class HourRegistration(PersistentModel):
     hours_worked = models.DecimalField(decimal_places=3, max_digits=5)
 
     savedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
-    usedOfSavedHours = models.DecimalField(decimal_places=3, max_digits=5, default = Decimal("0.0"))
+    usedOfSavedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
 
     def __unicode__(self):
         return unicode(self.date)
-    
+
     def save(self, *args, **kwargs):
         """
        Checks length of H:i, if in need of extend to a complete clock

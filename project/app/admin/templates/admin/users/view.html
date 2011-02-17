@@ -5,8 +5,8 @@
 
 {% endblock %}
 
-{% block submenu %}
-
+{% block sidebar %}
+    {% include "admin/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
@@ -17,7 +17,7 @@
 
         <div class="portlet-content">
 
-            <img src="{{ user.profileImage }}">
+            <img src="{{ user.getProfileImage }}">
             <br>
             {% trans "Name" %}: {{ userCard.first_name }} {{ userCard.last_name }}
             <br>
@@ -88,7 +88,7 @@
                             </td>
 
                             <td>{% if perm.group %}
-                               {% trans "Thru group" %} <a
+                                {% trans "Thru group" %} <a
                                         href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
                             {% endif %}
                             </td>
@@ -98,31 +98,6 @@
                     </tr>
                 {% endfor %}
             </table>
-        </div>
-    </div>
-
-    <div class="portlet x3">
-        <div class="portlet-header"><h4>Valg</h4></div>
-        <div class="portlet-content">
-            <div class="tool editChoice">
-                <a href="{% url app.admin.views.user.edit userCard.id %}" class="edit admintool">{% trans "edit" %}</a>
-            </div>
-
-            <div class="tool editChoice">
-                <a href="{% url app.admin.views.user.sendGeneratedPassword userCard.id %}" class="edit admintool">{% trans "Send new password" %}</a>
-            </div>
-
-            <div class="tool editChoice">
-                <a href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"
-                   class="edit admintool">
-                    {% trans "Set hour registration limits manually" %}
-                </a>
-            </div>
-
-
-            <div class="tool deleteChoice">
-                <a href="{% url app.admin.views.user.delete userCard.id %}" class="edit admintool">Slett</a>
-            </div>
         </div>
     </div>
 
