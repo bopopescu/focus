@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extrahead %}
+
+{% endblock %}
+
+{% block sidebar %}
+    {% include "admin/profile/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <h1>{{ title }}</h1><br><br>
+
+    <form enctype="multipart/form-data" action="" method="post">
+
+        <img src="{{ user.getProfileImage }}" width="200px" height="150px">
+
+        {% for field in form %}
+
+            <div class="field{% if field.errors %} fielderror {% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div style="margin-left:150px">{% for i in field.errors %}{{ i }}{% endfor %}</div>
+                {% endif %}
+            </div>
+
+        {% endfor %}
+
+        <input type="submit" value="{% trans "Save" %}" class="btn" name="save"/>
+
+    </form>
+
+
+{% endblock %}
+

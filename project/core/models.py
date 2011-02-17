@@ -424,7 +424,7 @@ Memberships, user can be members of memberships, which can have permissions for 
 class Group(models.Model):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('Group', related_name="children", null=True)
-    members = models.ManyToManyField(User, related_name="groups")
+    members = models.ManyToManyField(User, related_name="groups", null=True, blank=True)
     company = models.ForeignKey(Company, related_name="groups", null=True)
     deleted = models.BooleanField()
 
@@ -629,9 +629,8 @@ class Log(models.Model):
 
         if lastLog:
             msg = ""
-            lastLog = lastLog[len(lastLog)-1]
+            lastLog = lastLog[len(lastLog) - 1]
             for i, value in eval(self.message).iteritems():
-
                 if i == "id" or i == "date_created" or i == "date_edited":
                     continue
 
@@ -639,10 +638,10 @@ class Log(models.Model):
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    msg += value[1] +  _(" was changed from %s to: %s. ") % (
+                    msg += value[1] + _(" was changed from %s to: %s. ") % (
                     eval(lastLog.message)[i][0], eval(self.message)[i][0])
 
-            if msg =="":
+            if msg == "":
                 _("No changes")
 
             return msg
@@ -875,7 +874,7 @@ class PersistentModel(models.Model):
                     if u.group:
                         for user in u.group.members.all():
                             if user and user not in users:
-                             users.append(user)
+                                users.append(user)
 
             return users
         except:
@@ -883,8 +882,7 @@ class PersistentModel(models.Model):
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
-class Comment (PersistentModel):
-
+class Comment(PersistentModel):
     text = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
 
@@ -896,7 +894,7 @@ class Comment (PersistentModel):
 
     class Meta:
         ordering = ['date_created']
-        
+
     def __unicode__ (self):
         return self.text
 

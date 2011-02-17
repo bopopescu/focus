@@ -12,7 +12,6 @@ urlpatterns = patterns('app.admin.views',
                        url(r'^user/(?P<id>\d+)/sendNewPassword/', 'user.sendGeneratedPassword'),
                        url(r'^user/(?P<id>\d+)/manualSetTime/$', 'user.setHourRegistrationLimitsManually'),
 
-
                        #Group
                        url(r'^groups/$', 'group.overview'),
                        url(r'^groups/add/$', 'group.add'),
@@ -22,5 +21,10 @@ urlpatterns = patterns('app.admin.views',
 
                        #Company
                        url(r'^company/', 'company.editCompany'),
+
+                       #Profle
+                       url(r'^profile/edit/$', 'profile.edit'),
+                       url(r'^profile/password/$', 'profile.changePassword'),
+                       url(r'^profile/image/$', 'profile.changeProfileImage'),
                        )
 
