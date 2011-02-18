@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from models import Customer
-from app.contacts.models import Contact
-from core.widgets import *
 from django.utils.translation import ugettext as _
+
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -13,7 +12,7 @@ class CustomerForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
-      
+
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
 
@@ -38,3 +37,4 @@ class CustomerFormSimple(ModelForm):
     def __init__(self, *args, **kwrds):
         super(CustomerFormSimple, self).__init__(*args, **kwrds)
         #self.fields['contacts'].queryset = Contact.objects.all()
+

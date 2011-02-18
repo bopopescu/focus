@@ -59,6 +59,12 @@ def history(request, id):
                                                                'customer': instance,
                                                                'logs': history[::-1][0:150]})
 
+@require_permission("VIEW", Customer, "id")
+def list_contacts(request, id):
+    customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
+    return render_with_request(request, 'customers/contacts.html',
+                               {'title': unicode(customer.full_name) + " " + _('contacts'),
+                                'customer': customer})
 
 @require_permission("CREATE", Customer)
 def add(request):

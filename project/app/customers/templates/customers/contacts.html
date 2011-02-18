@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load auth %}
+{% load i18n %}
+
+
+{% block sidebar %}
+    {% include "customers/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+
+
+
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
+    </script>
+
+    <h1>{{ title }} </h1>
+
+
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th></th>
+            <th>{% trans "Name" %}</th>
+            <th>{% trans "Address" %}</th>
+            <th>{% trans "Phone" %}</th>
+            <th>{% trans "E-mail" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in customer.contacts.all %}
+            <tr>
+                <td><img style="vertical-align:middle;" width="50px" height="50px" src="{{ contact.getImage }}"></td>
+                <td><a href="{{ contact.getViewUrl }}">{{ contact.full_name }}</a></td>
+                <td>{{ contact.address }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>{{ contact.email }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

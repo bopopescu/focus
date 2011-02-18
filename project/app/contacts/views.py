@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.contenttypes.models import ContentType
+from django.db.models.query_utils import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -10,12 +11,27 @@ from core.shortcuts import render_with_request, comment_block
 from core.decorators import *
 from core.views import updateTimeout
 from django.utils import simplejson
+from django.utils.simplejson import JSONEncoder
 
 @login_required()
 def overview(request):
     updateTimeout(request)
     contacts = Core.current_user().getPermittedObjects("VIEW", Contact).filter(trashed=False)
     return render_with_request(request, 'contacts/list.html', {'title': _('Contacts'), 'contacts': contacts})
+
+def listAjax(request, query, limit):
+    users = request.user.get_permitted_objects("LIST", Contact).filter(
+                                Q(username__startswith=query)|
+                                Q(surname__istartswith=query) |
+                                Q(name__istartswith=query)|
+                                Q(mail__istartswith=query)
+                                )[:limit]
+
+    users = [{'id':user.id,
+              'label': "%s (%s)" % (user.username, ("%s %s" % (user.name, user.surname)).strip()),
+              'value': user.username} for user in users]
+    return HttpResponse(JSONEncoder().encode(users), mimetype='application/json')
+
 
 @login_required()
 def overview_trashed(request):
