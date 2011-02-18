@@ -11,94 +11,89 @@
 
 {% block maincontent %}
 
-    <div class="portlet x9">
+    {{ title }}
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <img src="{{ userCard.getProfileImage }}">
+    <br>
+    {% trans "Name" %}: {{ userCard.first_name }} {{ userCard.last_name }}
+    <br>
+    {% trans "E-mail" %}: {{ userCard.email }}
+    <br>
+    {% trans "Company" %}: {{ userCard.get_profile.company }}
+    <br><br>
+    <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">{% trans "Permission to log in" %}:
+        <b>{{ userCard.canLogin }}</b></a>
+    <br>
 
-        <div class="portlet-content">
+    <br><br>
+    <table style="text-align:center">
 
-            <img src="{{ user.getProfileImage }}">
-            <br>
-            {% trans "Name" %}: {{ userCard.first_name }} {{ userCard.last_name }}
-            <br>
-            {% trans "E-mail" %}: {{ userCard.email }}
-            <br>
-            {% trans "Company" %}: {{ userCard.get_profile.company }}
-            <br><br>
-            <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">{% trans "Permission to log in" %}:
-                <b>{{ userCard.canLogin }}</b></a>
-            <br>
+        <tr>
+            <th>{% trans "Member of this groups" %}</th>
+        </tr>
 
-            <br><br>
-            <table style="text-align:center">
+        {% for member in userCard.groups.all %}
+
+            <tr>
+                <td><a href="{% url app.admin.views.group.view member.id %}">{{ member }}</a></td>
+            </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% regroup permissions by content_type as Permissions %}
+
+
+    <br><br>
+    <b>{% trans "Permission" %}</b>
+    <br><br>
+    <table style="text-align:center">
+
+        <tr>
+            <th></th>
+            <th>{% trans "Object" %}</th>
+            <th>{% trans "Permissions" %}</th>
+            <th>{% trans "Group" %}</th>
+        </tr>
+
+
+
+        {% for type in Permissions %}
+
+            <tr>
+                <td style="text-align:left;"><b>{{ type.grouper }}</b></td>
+                <td colspan=5></td>
+            </tr>
+
+            {% for perm in type.list %}
 
                 <tr>
-                    <th>{% trans "Member of this groups" %}</th>
+                    <td></td>
+                    <td style="text-align:left;">{{ perm.id }} | <a
+                            href='{{perm.get_object.getViewUrl}}'>{{ perm.get_object }}</a>
+                    </td>
+                    <td>
+
+                        {% for action in perm.get_valid_actions %}
+
+                            {{ action }}
+
+                        {% endfor %}
+
+                    </td>
+
+                    <td>{% if perm.group %}
+                        {% trans "Thru group" %} <a
+                                href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
+                    {% endif %}
+                    </td>
+
                 </tr>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
 
-                {% for member in userCard.groups.all %}
-
-                    <tr>
-                        <td><a href="{% url app.admin.views.group.view member.id %}">{{ member }}</a></td>
-                    </tr>
-
-                {% endfor %}
-
-            </table>
-
-            {% regroup permissions by content_type as Permissions %}
-
-
-            <br><br>
-            <b>{% trans "Permission" %}</b>
-            <br><br>
-            <table style="text-align:center">
-
-                <tr>
-                    <th></th>
-                    <th>{% trans "Object" %}</th>
-                    <th>{% trans "Permissions" %}</th>
-                    <th>{% trans "Group" %}</th>
-                </tr>
-
-
-
-                {% for type in Permissions %}
-
-                    <tr>
-                        <td style="text-align:left;"><b>{{ type.grouper }}</b></td>
-                        <td colspan=5></td>
-                    </tr>
-
-                    {% for perm in type.list %}
-
-                        <tr>
-                            <td></td>
-                            <td style="text-align:left;">{{ perm.id }} | <a
-                                    href='{{perm.get_object.getViewUrl}}'>{{ perm.get_object }}</a>
-                            </td>
-                            <td>
-
-                                {% for action in perm.get_valid_actions %}
-
-                                    {{ action }}
-
-                                {% endfor %}
-
-                            </td>
-
-                            <td>{% if perm.group %}
-                                {% trans "Thru group" %} <a
-                                        href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
-                            {% endif %}
-                            </td>
-
-                        </tr>
-                    {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
 
 {% endblock %}	

@@ -3,8 +3,11 @@
 <h3>Sidebar</h3>
 <ul>
     {% if customer.id %}
+        <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}"><img
+                   src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+
         <li><a class="{% active request "view" %}" href="{% url app.customers.views.view customer.id %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
+                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
         <li><a class="{% active request "edit" %}" href="{% url app.customers.views.edit customer.id %}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
 
@@ -14,7 +17,7 @@
         <li><a class="{% active request "history" %}" href="{% url app.customers.views.history customer.id %}"><img
                 src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
     {% else %}
-        <li><a class="{% active request "view" %}" href="{% url app.customers.views.overview %}"><img
+        <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}"><img
                 src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
         <li><a class="{% active request "new" %}" href="{% url app.customers.views.add %}"><img

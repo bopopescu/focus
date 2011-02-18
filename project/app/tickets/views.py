@@ -1,24 +1,27 @@
 from app.tickets.models import Ticket
 from core import Core
-from core.shortcuts import render_with_request
+from core.decorators import require_permission
+from core.shortcuts import render_with_request, comment_block
 from app.tickets.forms import TicketForm, EditTicketForm
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
 
 def overview(request):
-    tickets = Core.current_user().getPermittedObjects("VIEW", Ticket)
+    tickets = Core.current_user().getPermittedObjects("VIEW", Ticket).filter(trashed=False)
     return render_with_request(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
-def view(request):
-    pass
+def overview_trashed(request):
+    tickets = Core.current_user().getPermittedObjects("VIEW", Ticket).filter(trashed=True)
+    return render_with_request(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
-"""
+
 def view(request, id):
     ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+    comments = comment_block(request, ticket)
+
     if request.method == 'POST':
         ticket_form = EditTicketForm(request.POST, instance=ticket, prefix="ticket")
-        #comment_form = CommentForm(request.POST, instance=Comment(), prefix="comment")
 
         if ticket_form.is_valid() and comment_form.is_valid():
             ticket_form.save()
@@ -28,32 +31,48 @@ def view(request, id):
 
             return redirect(view, id)
 
-
     else:
         ticket_form = EditTicketForm(instance=ticket, prefix="ticket")
-        comment_form = CommentForm(instance=Comment(), prefix="comment")
 
     return render_with_request(request, "tickets/view.html", {'title': _('Ticket'),
-                                                              'ticket_form': ticket_form,
-                                                              'comment_form': comment_form,
+                                                              'comments': comments,
+                                                              'ticket': ticket,
                                                               })
 
-"""
+@require_permission("DELETE", Ticket, "id")
+def trash(request, id):
+    customer = Ticket.objects.get(id=id)
+
+    if request.method == "POST":
+        if not customer.canBeDeleted()[0]:
+            request.message_error("You can't delete this customer because: ")
+            for reason in customer.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully deleted this customer")
+            customer.trash()
+        return redirect(overview)
+    else:
+        return render_with_request(request, 'tickets/trash.html', {'title': _("Confirm delete"),
+                                                                     'customer': customer,
+                                                                     'canBeDeleted': customer.canBeDeleted()[0],
+                                                                     'reasons': customer.canBeDeleted()[1],
+                                                                     })
+
 def add(request):
     return form(request)
-
 
 def edit(request, id):
     return form(request, id)
 
-
 def form(request, id=False):
+
     if id:
-        instance = get_object_or_404(Ticket, id)
-        msg = _("Contact changed")
+        instance = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+        msg = _("Ticket changed")
     else:
         instance = Ticket()
-        msg = _("Contact added")
+        msg = _("Ticket added")
 
     if request.method == 'POST':
         form = TicketForm(request.POST, instance=instance)
@@ -67,12 +86,7 @@ def form(request, id=False):
     else:
         form = TicketForm(instance=instance)
 
-    tickets = Core.current_user().getPermittedObjects("VIEW", Ticket)
     return render_with_request(request, "tickets/form.html", {'title': _('Ticket'),
+                                                              'ticket':instance,
                                                               'form': form,
-                                                              'tickets': tickets,
                                                               })
-
-
-
-

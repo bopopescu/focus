@@ -2,34 +2,39 @@
 {% load auth %}
 {% load i18n %}
 
-{% block submenu %}
-    <a href="add"><span>Oprett ny kunde</span></a>
+{% block sidebar %}
+    {% include "tickets/sidebar.html" %}
 {% endblock %}
-
 
 {% block maincontent %}
 
 
-<div class="portlet x12">
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
 
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
+    </script>
 
-    <div class="portlet-content">
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
 
+        <thead>
+        <tr>
+            <th>{% trans "Tickets" %}</th>
+            <th>{% trans "Priority" %}</th>
+            <th>{% trans "Comments" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Last edited" %}</th>
+        </tr>
+        </thead>
 
-        <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-            <thead>
-            <tr>
-                <th>{% trans "Tickets" %}</th>
-                <th>{% trans "Priority" %}</th>
-                <th>{% trans "Comments" %}</th>
-                <th>{% trans "Status" %}</th>
-                <th>{% trans "Last edited" %}</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            {% for ticket in tickets %}
+        <tbody>
+        {% for ticket in tickets %}
             <tr>
                 <td><a href="{% url app.tickets.views.view ticket.id %}">{{ ticket.title }}</a></td>
                 <td>{{ ticket.priority }}</td>
@@ -37,26 +42,11 @@
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.date_edited|date:"d.m.Y H:i" }} av {{ ticket.editor }}</td>
 
-                <td>
-                    {% require_permission EDIT ticket %}
-
-                    <div class="tool">
-                        <a href="{% url app.tickets.views.edit ticket.id  %}"><img
-                                class="tool" src="/media/icons/edit.gif" alt=""></a>
-                    </div>
-                    {% end_require %}
-
-
-                </td>
 
             </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-
-    </div>
-</div>
+        {% endfor %}
+        </tbody>
+    </table>
 
 
 {% endblock %}

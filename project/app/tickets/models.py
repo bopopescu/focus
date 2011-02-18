@@ -1,8 +1,10 @@
-from core.models import PersistentModel, User
+from core.models import PersistentModel, User, Comment
 from django.db import models
 from app.customers.models import Customer
+from django.contrib.contenttypes import generic
 from django.core import urlresolvers
 from core import Core
+from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 import settings
 import os
@@ -41,10 +43,24 @@ class Ticket(PersistentModel):
     estimated_time = models.IntegerField(default=0)
     customer = models.ForeignKey(Customer)
     assigned_to = models.ForeignKey(User, null=True, blank=True)
+    comments = generic.GenericRelation(Comment)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True)
 
     def __unicode__(self):
         return unicode(self.title)
+
+    def canBeDeleted(self):
+         canBeDeleted = True
+         reasons = []
+
+         if self.comments.all().count() > 0:
+             canBeDeleted = False
+             reasons.append(_("Ticket has comments"))
+
+         if canBeDeleted:
+             return (True, "OK")
+
+         return (False, reasons)
 
     class Meta:
         ordering = ['status', 'date_created']
@@ -52,20 +68,7 @@ class Ticket(PersistentModel):
     def save(self, *args, **kwargs):
         super(Ticket, self).save()
 
-        new = not self.id
-        if new:
-            current_user = Core.current_user()
-            current_user.grant_role("Owner", self)
-            admin_group = current_user().get_company_admingroup()
-            allemployeesgroup = current_user.get_company_allemployeesgroup()
-
-            if admin_group:
-                admin_group.grant_role("Admin", self)
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
-
-def initial_data() :
-
+def initial_data():
     TicketStatus.objects.get_or_create(name="Ny", order_priority=1)
     TicketStatus.objects.get_or_create(name="In Progress", order_priority=2)
     TicketStatus.objects.get_or_create(name="Ferdig", order_priority=3)

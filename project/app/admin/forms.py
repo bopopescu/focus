@@ -7,7 +7,7 @@ from core.models import User, Group, Company
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email")
+        fields = ("username","first_name", "last_name", "email")
 
 class HourRegistrationManuallyForm(ModelForm):
     class Meta:
@@ -27,7 +27,6 @@ class GroupForm(ModelForm):
     class Meta:
         model = Group
         fields = ('name', 'members',)
-
 
 class UserProfileForm(ModelForm):
     class Meta:

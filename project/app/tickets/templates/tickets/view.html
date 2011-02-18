@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load auth %}
+{% load i18n %}
+
+{% block extrahead %}
+{% endblock %}
+
+{% block submenu %}
+{% endblock %}
+
+
+{% block sidebar %}
+    {% include "tickets/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <style>
+
+        .topPart {
+            width: auto;
+            height: 200px;
+
+        }
+
+        .topPart .left {
+            width: 350px;
+            float: left;
+        }
+
+        .topPart .right {
+            width: 400px;
+            float: left;
+        }
+
+    </style>
+
+    <div class="topPart">
+        <div class="left">
+            <img width="300px" height="200px" src="{{ contact.getImage }}">
+        </div>
+
+        <div class="right">
+            <table>
+                <thead>
+                <tr>
+                    <th>{% trans "Ticket" %}</th>
+                    <th>{% trans "Details" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{% trans "Title" %}</td>
+                    <td>{{ ticket.title }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans "Status" %}</td>
+                    <td> {{ ticket.status }}</td>
+                </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    {% include "comments.html" %}
+
+
+{% endblock %}

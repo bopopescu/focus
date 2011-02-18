@@ -64,10 +64,16 @@
                    href="{% url app.hourregistrations.views.overview %}">{% trans "Hour registration" %}</a>
             </li>
 
+            <li class="{% active request "^/tickets/" %}">
+                <a class="{% active request "^/tickets/" %}"
+                   href="{% url app.tickets.views.overview %}">{% trans "Tickets" %}</a>
+            </li>
+
             <li class="{% active request "^/admin/" %}">
                 <a class="{% active request "^/admin/" %}"
                    href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
             </li>
+
 
         </ul>
     </div>

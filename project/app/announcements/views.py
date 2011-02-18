@@ -55,6 +55,6 @@ def form (request, id=False):
             return redirect(view, o.id)
 
     else:
-        form = AnnouncementForm(instance=instance)
+        form = AnnouncementForm(instance=instance, initial={"attachment":None})
 
     return render_with_request(request, "announcements/form.html", {'title': 'Oppslag', 'announcement':instance, 'form': form})

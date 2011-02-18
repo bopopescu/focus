@@ -21,9 +21,9 @@
         </p>
 
         {% if announcement.attachment %}
-            <img src="/media/images/icons/downloadBox.png"
+            <img src="{{ STATIC_URL }}img/download.png"
                  style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank"
-                                                                             href="/media/{{announcement.attachment}}">Last
+                                                                             href="{{announcement.getAttachment}}">Last
             ned vedlegg</a>
         {% endif %}
 
