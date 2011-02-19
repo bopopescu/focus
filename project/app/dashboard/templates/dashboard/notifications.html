@@ -7,22 +7,23 @@
 {% block maincontent %}
 
 
-    <div class="portlet x12">
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    </script>
 
-        <div class="portlet-content">
-
-
-
-            <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
-
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
 
         <thead>
         <tr>
             <th width="100px">Dato</th>
-            <th width="100px">Mottaker</th>
-            <th width="100px">Kategori</th>
             <th>Objekt</th>
             <th>Melding</th>
         </tr>
@@ -31,27 +32,22 @@
         <tbody>
         {% for notification in notifications %}
             <tr>
-                <td>{{ notification.date|date:"d.m.y H:i" }}</td>
-                <td>{{ notification.recipient }}</td>
-                <td>{{ notification.content_type }}</td>
-                <td>{{ notification.getObject }}</td>
-                <td>{{ notification.text }}</td>
+                <td>{{ notification.log.date|date:"d.m.y H:i" }}</td>
+                <td><a href="{{ notification.getObject.getViewUrl }}">{{ notification.getObject }}</a></td>
+                <td>{{ notification }}</td>
             </tr>
         {% endfor %}
 
         {% for notification in oldNotifications %}
             <tr style="color:grey;">
-                <td>{{ notification.date|date:"d.m.y H:i" }}</td>
-                <td>{{ notification.recipient }}</td>
-                <td>{{ notification.content_type }}</td>
+                <td>{{ notification.log.date|date:"d.m.y H:i" }}</td>
                 <td><a href="{{ notification.getObject.getViewUrl }}">{{ notification.getObject }}</a></td>
-                <td>{{ notification.text }}</td>
+                <td>{{ notification }}</td>
             </tr>
         {% endfor %}
 
         </tbody>
     </table>
-        </div>
-    </div>
+
 
 {% endblock %}

@@ -21,6 +21,7 @@
 
     <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/masked.js"></script>
 
 </head>
 
@@ -29,12 +30,17 @@
 <div id="wrapper">
 
     <div id="header">
-
         <div style="float:left"><h1>FocusTime</h1></div>
-
-        <div class="profile">Logget inn som <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a> | <a
-                href="{% url app.accounts.views.logout_view %}">Logg ut</a></div>
-
+        <div class="profile">
+            Logget inn som
+            <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a> | <a
+                href="{% url app.accounts.views.logout_view %}">Logg ut</a>
+            {% if request.user.get_new_notifications %}
+                <br><br>
+                <b><a href="{% url app.dashboard.views.notifications %}">{{ request.user.get_new_notifications.count }}
+                </b> {% trans "changes since last time you were logged in" %}</a>
+            {% endif %}
+        </div>
     </div>
 
     <div id="nav">
@@ -70,6 +76,12 @@
                 <a class="{% active request "^/tickets/" %}"
                    href="{% url app.tickets.views.overview %}">{% trans "Tickets" %}</a>
             </li>
+
+            <li class="{% active request "^/suppliers/" %}">
+                <a class="{% active request "^/suppliers/" %}"
+                   href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a>
+            </li>
+
 
             <li class="{% active request "^/stock/" %}">
                 <a class="{% active request "^/stock/" %}"

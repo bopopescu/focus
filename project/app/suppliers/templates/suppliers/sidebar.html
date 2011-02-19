@@ -1,0 +1,30 @@
+{% load menu_tags %}
+{% load i18n %}
+<h3>Sidebar</h3>
+
+<ul>
+
+    {% if supplier.id %}
+        <li><a class="{% active request "customers/$" %}" href="{% url app.suppliers.views.overview %}"><img
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+
+        <li><a class="{% active request "view" %}" href="{{ supplier.getViewUrl }}"><img
+                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
+        <li><a class="{% active request "edit" %}" href="{{ supplier.getEditUrl }}"><img
+                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+
+        <li><a class="{% active request "history" %}" href="{{ supplier.getHistoryUrl }}"><img
+                src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
+
+    {% else %}
+        <li><a class="{% active request "customers/$" %}" href="{% url app.suppliers.views.overview %}"><img
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+
+        <li><a class="{% active request "new" %}" href="{% url app.suppliers.views.add %}"><img
+                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW SUPPLIER" %}</a></li>
+
+        <li><a class="{% active request "trashed" %}" href="{% url app.suppliers.views.overview_trashed %}"><img
+                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
+    {% endif %}
+
+</ul>

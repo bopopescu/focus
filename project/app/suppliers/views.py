@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from app.customers.models import Customer
+from core.models import Log
+from django.contrib.contenttypes.models import ContentType
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
@@ -10,14 +13,15 @@ from django.utils.translation import ugettext as _
 @login_required()
 def overview(request):
     updateTimeout(request)
-    suppliers = Supplier.objects.all()
+    suppliers = Core.current_user().getPermittedObjects("VIEW", Supplier).filter(trashed=False)
     return render_with_request(request, 'suppliers/list.html', {'title': _("Suppliers"), 'suppliers': suppliers})
 
 @login_required()
-def overview_deleted(request):
-    suppliers = Supplier.objects.filter(deleted=True)
+def overview_trashed(request):
+    updateTimeout(request)
+    suppliers = Core.current_user().getPermittedObjects("VIEW", Supplier).filter(trashed=True)
     return render_with_request(request, 'suppliers/list.html',
-                               {'title': _('Deleted suppliers'), 'suppliers': suppliers})
+                               {'title': _("Deleted suppliers"), 'suppliers': suppliers})
 
 @login_required()
 def overview_all(request):
@@ -25,32 +29,33 @@ def overview_all(request):
     return render_with_request(request, 'suppliers/list.html',
                                {'title': _("All active suppliers"), 'suppliers': suppliers})
 
+
+@login_required()
+def view(request, id):
+    supplier = Core.current_user().getPermittedObjects("VIEW", Supplier).get(id=id)
+
+    return render_with_request(request, 'suppliers/view.html',
+                               {'title': supplier.name,
+                                'supplier': supplier})
+
+
+@require_permission("EDIT", Supplier, "id")
+def history(request, id):
+    instance = get_object_or_404(Supplier, id=id, deleted=False)
+
+    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+                                 object_id=instance.id)
+
+    return render_with_request(request, 'suppliers/log.html', {'title': _("Latest events"),
+                                                               'supplier': instance,
+                                                               'logs': history[::-1][0:150]})
+
 @login_required()
 def add(request):
     return form(request)
 
 def edit(request, id):
     return form(request, id)
-
-@login_required()
-def addPop(request):
-    instance = Supplier()
-
-    if request.method == "POST":
-        form = SupplierForm(request.POST, instance=instance)
-
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
-    else:
-        form = SupplierForm(instance=instance)
-
-    return render_with_request(request, "simpleform.html", {'title': _('Contact'), 'form': form})
 
 def delete(request, id):
     Supplier.objects.get(id=id).delete()
@@ -78,6 +83,7 @@ def form (request, id=False):
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': _("Supplier"),
-                                                      'form': form,
-                                                      })
+    return render_with_request(request, "suppliers/form.html", {'title': _("Supplier"),
+                                                                'supplier':instance,
+                                                                'form': form,
+                                                                })

@@ -20,8 +20,6 @@
     <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
 </div>
 <table id="dataTable">
-
-
     <thead>
     <tr>
         <th>{% trans "Date" %}</th>
@@ -32,7 +30,6 @@
     </tr>
     </thead>
     <tbody>
-
     {% for p in hourregistrations %}
     <tr>
         <td>{{ p.date|date:"d.m.Y" }} {{ p.hourly_rate }}</td>
@@ -42,48 +39,35 @@
         <td>
             {% require_valid_date_for_edit p %}
             <div class="tool">
-                <a href="{% url app.hourregistrations.views.edit p.id %}"><img
-                        class="tool" src="/media/icons/edit.gif" alt=""></a>
+                <a href="{{ p.getEditUrl }}"><img
+                        class="tool" width="24px" height="24px" src="{{ STATIC_URL }}img/edit.png" alt=""></a>
             </div>
             {% end_require %}
         </td>
     </tr>
     {% endfor %}
-
     </tbody>
 </table>
 
-<div class="portlet x12">
+<div class="stat" style="width:200px">
+    <h4>{% trans "Sum hours worked" %}</h4>
+    <span class="value">{{ sumHours }}</span>
+</div>
 
-    <div class="portlet-content">
-        <div id="_stats" class="clearfix">
-            <div class="stat" style="width:200px">
-                <h4>{% trans "Sum hours worked" %}</h4>
-                <span class="value">{{ sumHours }}</span>
-            </div>
-            <div class="stat" style="width:250px">
-                <h4>{% trans "kilometres" %}</h4>
-                <span class="value">{{ sumKilometers }} km</span>
+<div class="stat" style="width:250px">
+    <h4>{% trans "kilometres" %}</h4>
+    <span class="value">{{ sumKilometers }} km</span>
+</div>
 
-            </div>
+<div class="stat" style="width:260px">
+    <h4>{% trans "disbursments" %}</h4>
+    <span class="value">{{ sumDisbursements }} kr</span>
+</div>
 
-            <div class="stat" style="width:260px">
-                <h4>{% trans "disbursments" %}</h4>
-                <span class="value">{{ sumDisbursements }} kr</span>
-
-            </div>
-
-            <div class="stat" style="width:250px">
-                <h4>{% trans "Total earned after tax" %}</h4>
-                <span class="value">{{ sumTotalEarned }} kr</span>
-
-            </div>
-        </div>
-    </div>
-    <!-- .portlet-content -->
-</div> <!-- .portlet -->
-
-
+<div class="stat" style="width:250px">
+    <h4>{% trans "Total earned after tax" %}</h4>
+    <span class="value">{{ sumTotalEarned }} kr</span>
+</div>
 
 
 {% endblock %}

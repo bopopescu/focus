@@ -464,7 +464,6 @@ class Group(models.Model):
     def saveWithoutCreatePermissions(self):
         super(Group, self).save()
 
-
     def save(self, *args, **kwargs):
         new = False
         if not id:
@@ -514,7 +513,6 @@ class Group(models.Model):
             act = Action.objects.filter(name=actions)
         else:
             act = Action.objects.filter(name__in=actions)
-
 
         #Get info about the object
         content_type = ContentType.objects.get_for_model(object)
@@ -568,39 +566,6 @@ class Group(models.Model):
 
         return False
 
-
-class Notification(models.Model):
-    recipient = models.ForeignKey(User, related_name="notifications")
-    text = models.TextField()
-    read = models.BooleanField(default=False)
-    date = models.DateTimeField()
-    content_type = models.ForeignKey(ContentType, null=True)
-    object_id = models.PositiveIntegerField(null=True)
-    company = models.ForeignKey(Company, related_name="notifications", null=True)
-    creator = models.ForeignKey(User, related_name="createdNotifications", null=True)
-
-    #If true, add note to daily-mail updates
-    sendEmail = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.text
-
-    def getObject(self, *args, **kwargs):
-        o = ContentType.objects.get(model=self.content_type)
-        k = o.get_object_for_this_type(id=self.object_id)
-        return k
-
-    def save(self, *args, **kwargs):
-        self.date = datetime.now()
-        #self.company = get_current_company()
-
-        if 'user' in kwargs:
-            self.creator = kwargs['user']
-        else:
-            self.creator = Core.current_user()
-
-        super(Notification, self).save()
-
 class Log(models.Model):
     date = models.DateTimeField()
     creator = models.ForeignKey(User, related_name="logs", null=True)
@@ -648,7 +613,6 @@ class Log(models.Model):
 
         return _("%s was created") % self.getObject()
 
-
     def getObject(self, *args, **kwargs):
         o = ContentType.objects.get(model=self.content_type)
         k = o.get_object_for_this_type(id=self.object_id)
@@ -664,6 +628,24 @@ class Log(models.Model):
 
         super(Log, self).save()
 
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, related_name="notifications")
+    text = models.TextField()
+    read = models.BooleanField(default=False)
+    log = models.ForeignKey(Log, null=True)
+
+    #If true, add note to daily-mail updates
+    sendEmail = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        if self.log:
+            return self.log.changedSinceLastTime()
+        return self.text
+
+    def getObject(self, *args, **kwargs):
+        if self.log:
+            return self.log.getObject()
+        return None
 
 """
 Actions("ADD","EDIT","VIEW"..)
@@ -753,7 +735,6 @@ def createTuple(object):
         if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
                                                                                           (int, long, float)):
             data[i.attname] = [getattr(object, i.attname), unicode(i.verbose_name)]
-
         else:
             data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]
 
@@ -793,8 +774,7 @@ class PersistentModel(models.Model):
         """
         GRANT PERMISSIONS
         """
-        
-        if action =="ADD":
+        if action == "ADD":
             Core.current_user().grant_role("Owner", self)
             adminGroup = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
@@ -804,26 +784,20 @@ class PersistentModel(models.Model):
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
-                
+
         if 'noLog' not in kwargs:
-            msg = "endret"
-            if action == "ADD":
-                msg = "opprettet"
+            log = Log(message=changes,
+                      object_id=self.id,
+                      content_type=ContentType.objects.get_for_model(self.__class__),
+                      action=action,
+                      )
+            log.save()
 
-            Log(message=changes,
-                object_id=self.id,
-                content_type=ContentType.objects.get_for_model(self.__class__),
-                action=action,
-                ).save()
-
-        if 'noNotification' not in kwargs:
             for us in self.whoHasPermissionTo('VIEW'):
                 if us == Core.current_user():
                     continue
-                Notification(text="Dette er en test",
-                             recipient=us,
-                             object_id=self.id,
-                             content_type=ContentType.objects.get_for_model(self.__class__)
+                Notification(recipient=us,
+                             log=log,
                              ).save()
 
     def trash(self, **kwargs):

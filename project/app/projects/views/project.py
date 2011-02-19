@@ -23,8 +23,7 @@ def overview(request):
 @require_permission("LIST", Project)
 def timeline(request):
     updateTimeout(request)
-    #projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
-    projects = Project.objects.all()
+    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=False)
     return render_with_request(request, 'projects/timeline.html',
                                {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 

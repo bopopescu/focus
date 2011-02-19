@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load auth %}
+{% load util %}
+{% load i18n %}
+
+
+{% block sidebar %}
+    {% include "suppliers/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    {{ title }}
+
+    <table>
+
+        <tr>
+            <td width="100px">{% trans "Name" %}</td>
+            <td>{{ supplier.name }}</td>
+        </tr>
+
+        <tr>
+            <td>{% trans "E-mail" %}</td>
+            <td>{{ customer.email }}</td>
+        </tr>
+
+   </table>
+
+
+{% endblock %}	

@@ -8,6 +8,7 @@ from app.orders.models import Order
 from core import Core
 from core.models import PersistentModel, User
 from django.db import models
+from django.core import urlresolvers
 
 class TypeOfHourRegistration(PersistentModel):
     name = models.CharField(max_length=100)
@@ -22,20 +23,7 @@ class TypeOfHourRegistration(PersistentModel):
             new = True
 
         super(TypeOfHourRegistration, self).save()
-
-        #Give the user who created this ALL permissions on object
-
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
-
+    
 class HourRegistration(PersistentModel):
     date = models.DateTimeField()
     order = models.ForeignKey(Order)
@@ -52,6 +40,9 @@ class HourRegistration(PersistentModel):
     savedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
     usedOfSavedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
 
+    def getEditUrl(self):
+        return urlresolvers.reverse('app.hourregistrations.views.edit', args=("%s" % self.id,))
+
     def __unicode__(self):
         return unicode(self.date)
 
@@ -59,7 +50,6 @@ class HourRegistration(PersistentModel):
         """
        Checks length of H:i, if in need of extend to a complete clock
         """
-
         if re.match("\d\d:\d$", self.time_start):
             self.time_start = self.time_start + "0"
 
@@ -94,15 +84,6 @@ class HourRegistration(PersistentModel):
             self.percent_cover = self.creator.percent_cover
             #Save again
         super(HourRegistration, self).save()
-
-        #Give the user who created this ALL permissions on object
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
 
 class HourRegisrationImage(PersistentModel):
     pass

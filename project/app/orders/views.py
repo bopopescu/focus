@@ -17,7 +17,10 @@ def overviewOffers(request):
 @require_permission("LIST", Order)
 def overview(request):
     #orders = Order.objects.all().filter(state="Order")
-    orders = Order.objects.all()
+    #orders = Order.objects.all()
+
+    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="Order")
+
     updateTimeout(request)
     return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 

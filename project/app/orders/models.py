@@ -79,15 +79,7 @@ class Order(PersistentModel):
 
         super(Order, self).save()
 
-        #Give the user who created this ALL permissions on object
-
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
+        
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")
     text = models.TextField("Ny oppgave")
@@ -95,7 +87,6 @@ class Task(PersistentModel):
 
     def __unicode__(self):
         return self.text
-
 
 class OrderFolder(PersistentModel):
     project_id = models.ForeignKey(Order, related_name="folders")

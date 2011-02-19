@@ -13,6 +13,11 @@ class ProjectForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
+        self.fields['deliveryDate'].widget = DatePickerField(format="%d.%m.%Y",)
+        self.fields['deliveryDate'].input_formats = ["%d.%m.%Y"]
+        self.fields['deliveryDateDeadline'].widget = DatePickerField(format="%d.%m.%Y",)
+        self.fields['deliveryDateDeadline'].input_formats = ["%d.%m.%Y"]
+
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.inCompany()
         self.fields['responsible'].queryset = User.objects.inCompany()

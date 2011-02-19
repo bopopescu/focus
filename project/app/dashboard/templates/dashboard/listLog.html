@@ -7,38 +7,41 @@
 {% block maincontent %}
 
 
-    <div class="portlet x12">
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
 
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+    </script>
 
-        <div class="portlet-content">
-
-            <table cellpadding="0" cellspacing="0" border="0" rel="datatable" class="display" id="example">
-
-                <thead>
-                <tr>
-                    <th width="100px">Dato</th>
-                    <th width="100px">Bruker</th>
-                    <th width="100px">Kategori</th>
-                    <th>Objekt</th>
-                    <th>Melding</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for log in logs %}
-                    <tr>
-                        <td>{{ log.date|date:"Y.m.d H:i" }}</td>
-                        <td>{{ log.creator }}</td>
-                        <td>{{ log.content_type }}</td>
-                        <td>{{ log.getObject }}</td>
-                        <td>{{ log.changedSinceLastTime }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
     </div>
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th width="100px">Dato</th>
+            <th width="100px">Bruker</th>
+            <th width="100px">Kategori</th>
+            <th>Objekt</th>
+            <th>Melding</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.date|date:"Y.m.d H:i" }}</td>
+                <td>{{ log.creator }}</td>
+                <td>{{ log.content_type }}</td>
+                <td>{{ log.getObject }}</td>
+                <td>{{ log.changedSinceLastTime }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
 
 {% endblock %}
