@@ -67,7 +67,7 @@ class ProductGroup(PersistentModel):
         return self.name
 
     def getViewUrl(self):
-        return urlresolvers.reverse('app.stock.productgroups.views.edit', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.stock.views.productgroup.edit', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
         new = False
@@ -117,16 +117,16 @@ class Product(PersistentModel):
         return self.name
 
     def getViewUrl(self):
-        return urlresolvers.reverse('app.stock.products.views.view', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.stock.views.product.view', args=("%s" % self.id,))
 
     def getEditUrl(self):
-        return urlresolvers.reverse('app.stock.products.views.edit', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.stock.views.product.edit', args=("%s" % self.id,))
 
     def getDeleteUrl(self):
-        return urlresolvers.reverse('app.stock.products.views.delete', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.stock.views.product.delete', args=("%s" % self.id,))
 
     def getRecoverUrl(self):
-        return urlresolvers.reverse('app.stock.products.views.recover', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.stock.views.product.recover', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
         new = False

@@ -51,10 +51,12 @@
                 <a class="{% active request "^/contacts/" %}"
                    href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
             </li>
+
             <li class="{% active request "^/projects/" %}">
                 <a class="{% active request "^/projects/" %}"
                    href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
             </li>
+
             <li class="{% active request "^/orders/" %}">
                 <a class="{% active request "^/orders/" %}"
                    href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a>
@@ -69,11 +71,15 @@
                    href="{% url app.tickets.views.overview %}">{% trans "Tickets" %}</a>
             </li>
 
+            <li class="{% active request "^/stock/" %}">
+                <a class="{% active request "^/stock/" %}"
+                   href="{% url app.stock.views.product.overview %}">{% trans "Products" %}</a>
+            </li>
+
             <li class="{% active request "^/admin/" %}">
                 <a class="{% active request "^/admin/" %}"
                    href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
             </li>
-
 
         </ul>
     </div>

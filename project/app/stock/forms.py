@@ -7,8 +7,8 @@ from core.widgets import *
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'productGroup', 'countOfAvailableInStock', 'size', 'price', 'unitForSize', 'priceVal',
-                  'normalDeliveryTime',)
+        fields = ('name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
+                  'price','priceVal',)
 
     def __init__(self, *args, **kwrds):
         super(ProductForm, self).__init__(*args, **kwrds)

@@ -25,19 +25,11 @@ urlpatterns = patterns('',
                        (r'^profile/$', 'app.admin.views.profile.edit'),
 
                        #Stock
-                       (r'^stock/products/', include('app.stock.products.urls')),
-                       (r'^stock/productgroups/', include('app.stock.productgroups.urls')),
-                       (r'^stock/currencies/', include('app.stock.currencies.urls')),
-                       (r'^stock/productunits/', include('app.stock.productUnits.urls')),
+                       (r'^stock/', include('app.stock.urls')),
+
                        #Suppliers
                        (r'^suppliers/', include('app.suppliers.urls')),
                        (r'^tickets/', include('app.tickets.urls')),
-                       #Directlink for use of popup
-                       #For adding users
-                       #(r'participants/addPop/$', 'app.admin.users.views.addPop'),
-                       #(r'users/addPop/$', 'app.admin.users.views.addPop'),
-
-                       (r'testtest$', 'app.mail.views.overview'),
 
                        #Grant permissions
                        (
@@ -50,11 +42,6 @@ urlpatterns = patterns('',
                        (r'testing', 'core.views.testing'),
 
                        (r'^file/(?P<filename>.*)$', 'core.views.retrieve_file'),
-
-                       #for adding currency
-                       (r'unitForSizes/addPop/$', 'app.stock.productUnits.views.addPop'),
-                       (r'priceVals/addPop/$', 'app.stock.currencies.views.addPop'),
-                       (r'productGroups/addPop/$', 'app.stock.productgroups.views.addPop'),
                        )
 
 if settings.DEBUG:

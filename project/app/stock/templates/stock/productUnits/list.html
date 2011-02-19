@@ -1,50 +1,45 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block submenu %}
-    <a href="add"><span>Oprett nytt produkt</span></a>
+{% block sidebar %}
+    {% include "stock/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
-    <div class="portlet x12">
-
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
-
-        <div class="portlet-content">
 
 
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
+    </script>
 
-            <table class="tablesorter">
-                <thead>
-                <tr>
-                    <th>{% trans "Product units" %}</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                {% for p in units %}
-                    <tr>
-                        <td><a href="{% url app.stock.productUnits.views.edit p.id %}">{{ p }}</a></td>
-                        <td>
-                            <div class="tool">
-                                <a href="{% url  app.stock.productUnits.views.edit p.id  %}"><img
-                                        class="tool" src="/media/icons/edit.gif" alt=""></a>
-                            </div>
+    <h1>{{ title }} </h1>
 
 
-                        </td>
-
-
-                    </tr>
-                {% endfor %}
-                </tbody>
-
-            </table>
-
-
-        </div>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
     </div>
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th>{% trans "Product units" %}</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in units %}
+            <tr>
+                <td><a href="{% url app.stock.views.productunit.edit p.id %}">{{ p }}</a></td>
+                <td>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
 
 
 {% endblock %}

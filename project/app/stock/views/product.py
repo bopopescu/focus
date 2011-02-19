@@ -101,4 +101,6 @@ def form (request, id=False):
     else:
         form = ProductForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': _("Product"), 'form': form})
+    return render_with_request(request, "stock/form.html", {'title': _("Product"),
+                                                            'product': instance,
+                                                            'form': form})

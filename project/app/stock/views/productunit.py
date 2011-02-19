@@ -25,7 +25,6 @@ def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
 
-
 @login_required()
 def addPop(request):
     instance = UnitsForSizes()

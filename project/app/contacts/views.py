@@ -21,13 +21,13 @@ def overview(request):
 
 def listAjax(request, query, limit):
     users = request.user.get_permitted_objects("LIST", Contact).filter(
-                                Q(username__startswith=query)|
-                                Q(surname__istartswith=query) |
-                                Q(name__istartswith=query)|
-                                Q(mail__istartswith=query)
-                                )[:limit]
+            Q(username__startswith=query) |
+            Q(surname__istartswith=query) |
+            Q(name__istartswith=query) |
+            Q(mail__istartswith=query)
+            )[:limit]
 
-    users = [{'id':user.id,
+    users = [{'id': user.id,
               'label': "%s (%s)" % (user.username, ("%s %s" % (user.name, user.surname)).strip()),
               'value': user.username} for user in users]
     return HttpResponse(JSONEncoder().encode(users), mimetype='application/json')
