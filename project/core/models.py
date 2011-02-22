@@ -873,7 +873,6 @@ fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class Comment(PersistentModel):
     text = models.TextField()
-    attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
 
     # What object is this a comment for?
     object = generic.GenericForeignKey('content_type', 'object_id')
