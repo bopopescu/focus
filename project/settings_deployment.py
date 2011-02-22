@@ -1,7 +1,7 @@
 from settings import *
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG = False
+TEMPLATE_DEBUG = True
 
 import os
 
