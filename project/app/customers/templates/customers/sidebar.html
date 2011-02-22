@@ -1,37 +1,49 @@
 {% load menu_tags %}
 {% load i18n %}
+{% load auth %}
 <h3>Sidebar</h3>
 
 <ul>
-
     {% if customer.id %}
-        <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
-        <li><a class="{% active request "view" %}" href="{% url app.customers.views.view customer.id %}"><img
-                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
-        <li><a class="{% active request "edit" %}" href="{% url app.customers.views.edit customer.id %}"><img
-                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+    <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}"><img
+            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
-        <li><a class="{% active request "contacts" %}"
-               href="{% url app.customers.views.list_contacts customer.id %}"><img
-                src="{{ STATIC_URL }}img/contact.png" width="24" height="24" alt="Mail"/>{% trans "Contacts" %}</a>
-        </li>
+    <li><a class="{% active request "view" %}" href="{% url app.customers.views.view customer.id %}"><img
+            src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
 
-        <li><a class="{% active request "trash" %}" href="{% url app.customers.views.trash customer.id %}"><img
-                src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
 
-        <li><a class="{% active request "history" %}" href="{% url app.customers.views.history customer.id %}"><img
-                src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
+    {% require_permission EDIT customer %}
+    <li><a class="{% active request "edit" %}" href="{% url app.customers.views.edit customer.id %}"><img
+            src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+    {% end_require %}
+
+    {% require_permission EDIT customer %}
+    <li><a class="{% active request "contacts" %}"
+           href="{% url app.customers.views.list_contacts customer.id %}"><img
+            src="{{ STATIC_URL }}img/contact.png" width="24" height="24" alt="Mail"/>{% trans "Contacts" %}</a>
+    </li>
+
+    {% end_require %}
+    {% require_permission EDIT customer %}
+    <li><a class="{% active request "trash" %}" href="{% url app.customers.views.trash customer.id %}"><img
+            src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
+    {% end_require %}
+    {% require_permission EDIT customer %}
+
+    <li><a class="{% active request "history" %}" href="{% url app.customers.views.history customer.id %}"><img
+            src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
+
+    {% end_require %}
+
     {% else %}
-        <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+    <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}"><img
+            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
-        <li><a class="{% active request "new" %}" href="{% url app.customers.views.add %}"><img
-                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW CUSTOMER" %}</a></li>
+    <li><a class="{% active request "new" %}" href="{% url app.customers.views.add %}"><img
+            src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW CUSTOMER" %}</a></li>
 
-        <li><a class="{% active request "trashed" %}" href="{% url app.customers.views.overview_trashed %}"><img
-                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
+    <li><a class="{% active request "trashed" %}" href="{% url app.customers.views.overview_trashed %}"><img
+            src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
     {% endif %}
-
 </ul>

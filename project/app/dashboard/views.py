@@ -8,11 +8,15 @@ from core.decorators import login_required
 from core.models import Log, Notification
 from core.shortcuts import render_with_request
 from django.utils.translation import ugettext as _
+from core.utils import get_permission
 
 @login_required()
 def overview(request):
     title = _("Welcome to TIME")
 
+
+    print request.META['REMOTE_ADDR']
+    
     announcements = Core.current_user().getPermittedObjects("VIEW", Announcement)[::-1]
     your_projects = Core.current_user().getPermittedObjects("VIEW", Project)
 

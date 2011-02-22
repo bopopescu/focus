@@ -11,7 +11,7 @@ from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
 
-@require_permission("LIST", Company)
+@require_permission("MANAGE", Company)
 def overview(request):
     updateTimeout(request)
     companies = Company.objects.all()
@@ -19,15 +19,14 @@ def overview(request):
     return render_with_request(request, 'company/list.html', {'title': 'Firmaer',
                                                               'companies': companies})
 
-@require_permission("CREATE", Company)
+@require_permission("MANAGE", Company)
 def add(request):
     return newForm(request)
 
-@require_permission("EDIT", Company, 'id')
+@require_permission("MANAGE", Company)
 def edit(request, id):
     return form(request, id)
 
-@login_required()
 def form (request, id=False):
     if id:
         instance = Company.objects.all().get(id=id)
@@ -52,6 +51,7 @@ def form (request, id=False):
         
     return render_with_request(request, "company/form.html", {'title': 'Kunde', 'form': form})
 
+@require_permission("MANAGE", Company)
 def newForm(request):
     if request.method == 'POST': # If the form has been submitted...
         form = newCompanyForm(request.POST) # A form bound to the POST data
