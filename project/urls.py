@@ -43,3 +43,8 @@ urlpatterns = patterns('',
 
                        (r'^file/(?P<filename>.*)$', 'core.views.retrieve_file'),
                        )
+
+if settings.DEBUG:
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    urlpatterns += staticfiles_urlpatterns()
