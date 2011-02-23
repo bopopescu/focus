@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
+from django.utils import simplejson
 from core.views import updateTimeout
 from django.utils.translation import ugettext as _
 
@@ -28,6 +29,19 @@ def overview_all(request):
     suppliers = Supplier.objects.all()
     return render_with_request(request, 'suppliers/list.html',
                                {'title': _("All active suppliers"), 'suppliers': suppliers})
+
+
+@require_permission("CREATE", Customer)
+def add_ajax(request):
+    form = SupplierSimpleForm(request.POST, instance=Supplier())
+
+    if form.is_valid():
+        a = form.save()
+
+        return HttpResponse(simplejson.dumps({'name': a.name,
+                                              'id': a.id}), mimetype='application/json')
+
+    return HttpResponse("ERROR")
 
 
 @login_required()
