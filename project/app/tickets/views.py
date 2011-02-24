@@ -82,7 +82,7 @@ def form(request, id=False):
             ticket.save()
             request.message_success(msg)
 
-            return redirect(edit, ticket.id)
+            return redirect(view, ticket.id)
     else:
         form = TicketForm(instance=instance)
 

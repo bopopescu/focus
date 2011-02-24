@@ -113,7 +113,7 @@ def form (request, id=False):
             o.save()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(view, o.id)
 
     else:
         form = ProductForm(instance=instance)

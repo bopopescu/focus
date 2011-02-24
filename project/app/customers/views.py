@@ -135,7 +135,7 @@ def form (request, id=False):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(edit, o.id)
+            return redirect(view, o.id)
     else:
         form = CustomerForm(instance=instance)
 

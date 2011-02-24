@@ -93,7 +93,8 @@ def form (request, id=False):
             o.save()
             form.save_m2m()
             request.message_success(msg)
-            return redirect(overview)
+
+            return redirect(view, o.id)
     else:
         form = SupplierForm(instance=instance)
 

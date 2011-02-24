@@ -127,7 +127,7 @@ def form (request, id=False):
             o.save()
             request.message_success(msg)
 
-            return redirect(edit, o.id)
+            return redirect(view, o.id)
 
     else:
         form = ProjectForm(instance=instance)
