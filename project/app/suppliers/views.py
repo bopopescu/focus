@@ -98,6 +98,6 @@ def form (request, id=False):
         form = SupplierForm(instance=instance)
 
     return render_with_request(request, "suppliers/form.html", {'title': _("Supplier"),
-                                                                'supplier':instance,
+                                                                'supplier': instance,
                                                                 'form': form,
                                                                 })

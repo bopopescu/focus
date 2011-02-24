@@ -1,5 +1,6 @@
 from django.core import urlresolvers
 from django.db import models
+from app.stock.models import Product
 from core import Core
 from app.projects.models import Project
 from app.customers.models import Customer
@@ -79,7 +80,14 @@ class Order(PersistentModel):
 
         super(Order, self).save()
 
-        
+class OrderLine(PersistentModel):
+    order = models.ForeignKey(Order, related_name="orderlines")
+    product = models.ForeignKey(Product, related_name="orderlines")
+    count = models.IntegerField()
+
+    def __unicode__(self):
+        return "Order: %s, Product: %s" % (self.order,self.product)
+
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")
     text = models.TextField("Ny oppgave")

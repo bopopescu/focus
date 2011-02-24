@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block sidebar %}
-    {% include "stock/sidebar.html" %}
+    {% include "orders/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
@@ -16,10 +16,15 @@
 
     <h1>{{ title }} </h1>
 
-
     <div class="searchBox">
         <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
     </div>
+
+    <form action="" method="POST">
+        {{ form }}
+        <input type="submit" value="{% trans "Add new product" %}">
+    </form>
+
     <table id="dataTable">
         <thead>
         <tr>
@@ -29,23 +34,13 @@
         </thead>
         <tbody>
 
-
-        {% for p in products %}
-
+        {% for orderline in orderlines.all %}
             <tr>
-                <td><a href="{{ p.getViewUrl }}">{{ p }}</a></td>
-
-                <td>
-                </td>
-            
+                <td><a href="{% url app.stock.views.product.view orderline.product.id %}">{{ orderline }}</a></td>
+                <td><a href="{% url app.orders.views.deleteOrderLine order.id orderline.id %}">{% trans "Delete" %}</a></td>
             </tr>
-
         {% endfor %}
-
-
         </tbody>
-
     </table>
-
 
 {% endblock %}

@@ -46,6 +46,11 @@ class OrderForm(ModelForm):
 
         return oid
 
+class OrderLineForm(ModelForm):
+    class Meta:
+        model = OrderLine
+        fields = ("product","count",)
+
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order

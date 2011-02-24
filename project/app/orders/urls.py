@@ -16,6 +16,9 @@ urlpatterns = patterns('app.orders.views',
                        url(r'^(?P<id>\d+)/view/?$', 'view'),
                        url(r'^(?P<id>\d+)/delete/$', 'delete'),
 
+                       url(r'^(?P<id>\d+)/products/$', 'products'),
+                       url(r'^(?P<id>\d+)/deleteorderline/(?P<orderlineID>\d+)$', 'deleteOrderLine'),
+
                        url(r'^(?P<id>\d+)/changeStatus/$', 'changeStatus'),
 
                        #TASKS
