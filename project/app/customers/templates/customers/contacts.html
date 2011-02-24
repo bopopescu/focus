@@ -9,9 +9,6 @@
 
 {% block maincontent %}
 
-
-
-
     <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
     <script>
         $(document).ready(function() {
@@ -21,6 +18,10 @@
 
     <h1>{{ title }} </h1>
 
+
+    <form action="" method="POST">
+        {{ form }}
+    </form>
 
     <div class="searchBox">
         <input class="search" type="text" value="" id="filter" placeholder="Filtrér">

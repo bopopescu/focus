@@ -56,8 +56,6 @@
     });
 </script>
 
-{{ STATIC_URL }}
-
 <div id="dialog-form{{ field_id }}">
     <form id="thisForm{{ field_id }}">
         <fieldset>
@@ -73,4 +71,5 @@
     </form>
 </div>
 
-<span id="create_{{ field_id }}">ny</span>
+<span id="create_{{ field_id }}"><img width="15px" height="15px" style='vertical-align:middle;'
+                                      src="{{ STATIC_URL }}img/add.png"></span>

@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe, SafeString, SafeUnicode
 from django.utils.html import escape
 from django.utils.encoding import force_unicode, smart_unicode
 from django.forms.widgets import flatatt
+from django.conf import settings
 
 
 class SelectWithPop(forms.Select):
@@ -27,9 +28,11 @@ class SelectWithPop(forms.Select):
             name += "s"
 
         popupplus = render_to_string("popupplus.html", {'field': name,
+                                                        'STATIC_URL': settings.STATIC_URL,
                                                         'field_id': name_id,
                                                         'add_ajax_url': self.app.add_ajax_url(),
-                                                        'form': self.app.simpleform()})
+                                                        'form': self.app.simpleform()},
+                                     )
 
         return html + popupplus
 
@@ -47,6 +50,7 @@ class MultipleSelectWithPop(forms.SelectMultiple):
         name_id = name
 
         popupplus = render_to_string("popupplus.html", {'field': name,
+                                                        'STATIC_URL': settings.STATIC_URL,
                                                         'field_id': name_id,
                                                         'add_ajax_url': self.app.add_ajax_url(),
                                                         'form': self.app.simpleform()})

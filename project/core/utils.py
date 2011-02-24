@@ -68,3 +68,56 @@ def get_permission (view):
     req = view.__decorators__['require_permission']
 
     return (req.action, req.model)
+
+
+class suggest_ajax_parse_arguments:
+    """
+    Decorator used for view authorization
+
+    Usage:
+        Adds query string and limit arguments to a view with this argument,
+       error conditions releated to parsing the argumetns
+
+       i.e.
+       @suggest_ajax_parse_arguments()
+       def autocomplete(request, query, limit):
+
+    Params:
+        argument_name - name of the parameter which has the argument
+        default_limit - default limit on how many results that should be returned
+        limit_name -    name on the limit parameter deciding the limit on how many
+                        results that should be returned
+    """
+
+    def __init__(self, argument_name = 'term', default_limit = 15, limit_name = 'limit'):
+        """
+        Used to make ajax-suggest views simpler
+        Called when python finds a decorator
+        """
+        self.argument_name = argument_name
+        self.default_limit = default_limit
+        self.limit_name = limit_name
+
+    def __call__(self, func):
+        """
+        Used to make ajax-suggest views simpler
+        Called when a method we have decorated is called
+        """
+
+        def check_arguments (request, *args, **kwargs):
+                if not request.GET.get(self.argument_name):
+                    return HttpResponse(mimetype='text/plain')
+
+                query = request.GET.get(self.argument_name)
+                limit = request.GET.get(self.limit_name, self.default_limit)
+                try:
+                    limit = int(limit)
+                except ValueError:
+                    return HttpResponseBadRequest()
+
+                return func(request, query, limit, *args, **kwargs)
+
+        functools.update_wrapper(check_arguments, func)
+        return check_arguments
+#       functools.update_wrapper(check_permission, func)
+#        return check_permission

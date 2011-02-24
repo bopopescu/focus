@@ -61,9 +61,20 @@ def history(request, id):
 
 @require_permission("VIEW", Customer, "id")
 def list_contacts(request, id):
+
+
+
+    if request.method == "POST":
+        form = ContactToCustomerForm(request.POST)
+        print form
+    else:
+        form = ContactToCustomerForm()
+
+        
     customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
     return render_with_request(request, 'customers/contacts.html',
                                {'title': unicode(customer.full_name) + " " + _('contacts'),
+                                'form':form,
                                 'customer': customer})
 
 @require_permission("CREATE", Customer)

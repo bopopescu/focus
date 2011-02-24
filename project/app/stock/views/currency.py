@@ -5,8 +5,10 @@ from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
 from core.views import  updateTimeout
-from app.stock.forms import CurrencyForm
 from app.stock.models import Currency
+from django.utils import simplejson
+from django.utils.translation import ugettext as _
+
 
 @login_required()
 def overview(request):
@@ -25,25 +27,17 @@ def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required()
-def addPop(request):
-    instance = Currency()
+@require_permission("CREATE", Currency)
+def add_ajax(request):
+    form = CurrencyForm(request.POST, instance=Currency())
 
-    if request.method == "POST":
-        form = CurrencyForm(request.POST, instance=instance)
+    if form.is_valid():
+        a = form.save()
 
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
-    else:
-        form = CurrencyForm(instance=instance)
+        return HttpResponse(simplejson.dumps({'name': a.name,
+                                              'id': a.id}), mimetype='application/json')
 
-    return render_with_request(request, "simpleform.html", {'title': 'Valuta', 'form': form})
+    return HttpResponse("ERROR")
 
 @login_required()
 def form (request, id=False):
@@ -69,3 +63,7 @@ def form (request, id=False):
         form = CurrencyForm(instance=instance)
 
     return render_with_request(request, "form.html", {'title': 'Valuta', 'form': form})
+
+
+
+from app.stock.forms import CurrencyForm

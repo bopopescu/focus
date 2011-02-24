@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from app.customers.models import Customer
 from core.models import Log
+from core.utils import suggest_ajax_parse_arguments
 from forms import *
 from core.shortcuts import render_with_request, comment_block
 from core.decorators import *
@@ -89,6 +90,24 @@ def trash(request, id):
                                                                     'canBeDeleted': instance.canBeDeleted()[0],
                                                                     'reasons': instance.canBeDeleted()[1],
                                                                     })
+
+@suggest_ajax_parse_arguments()
+def autocomplete(request, query, limit):
+
+    contacts = Contact.objects.all()
+
+    """
+    contacts = Contact.objects.filter(
+            Q(full_name__startswith=query)
+            )[:limit]
+
+    contacts = [{'id': contact.id,
+                 'label': "%s" % (contact.full_name),
+                 'value': contact.name} for contact in contacts]
+    """
+    
+    return HttpResponse(JSONEncoder().encode(contacts), mimetype='application/json')
+
 
 @require_permission("CREATE", Contact)
 def add_ajax(request):

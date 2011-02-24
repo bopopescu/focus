@@ -2,9 +2,13 @@
 from django.shortcuts import get_object_or_404, redirect
 from core.shortcuts import *
 from core.decorators import require_permission
+from core.utils import suggest_ajax_parse_arguments
 from core.views import  updateTimeout
 from app.stock.forms import ProductForm, ProductFileForm
 from app.stock.models import Product, ProductFile
+from django.utils.simplejson import JSONEncoder
+from django.http import HttpResponse
+from django.db.models.query_utils import Q
 from django.utils.translation import ugettext as _
 
 @require_permission("LIST", Product)
@@ -68,6 +72,19 @@ def delete(request, id):
 def recover(request, id):
     Product.objects.get(id=id).recover()
     return redirect(overview)
+
+@suggest_ajax_parse_arguments()
+def autocomplete(request, query, limit):
+    products = Product.objects.filter(
+            Q(name__startswith=query)
+            )[:limit]
+
+    products = [{'id': product.id,
+                 'label': "%s" % (product.name),
+                 'value': product.name} for product in products]
+
+    return HttpResponse(JSONEncoder().encode(products), mimetype='application/json')
+
 
 @require_permission("VIEW", Product, "id")
 def view(request, id):

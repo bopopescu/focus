@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
+from app.stock.forms import ProductField
 from core.widgets import *
 from core.shortcuts import get_company_users
-from models import *
+from django.utils.translation import ugettext as _
+from app.orders.models import *
 
 class OrderForm(ModelForm):
     #delivery_date = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
@@ -47,6 +49,8 @@ class OrderForm(ModelForm):
         return oid
 
 class OrderLineForm(ModelForm):
+    product = ProductField()
+
     class Meta:
         model = OrderLine
         fields = ("product","count",)
