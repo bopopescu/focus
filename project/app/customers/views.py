@@ -47,9 +47,9 @@ def add_ajax(request):
                                               'id': a.id,
                                               'valid': True}), mimetype='application/json')
     else:
-        errors = dict([(field, [unicode(error) for error in errors]) for field, errors in form.errors.items()])
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-        return HttpResponse(simplejson.dumps({'errors': '%s' % errors,
+        return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")

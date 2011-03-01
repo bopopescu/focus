@@ -18,7 +18,15 @@
 
             }
             else {
+                var K = data['errors']
+                obj = eval(K);
 
+                //Clean all error-fiels
+                $(".errormessage").text("")
+
+                $.each(obj, function(i, error) {
+                    $("#error_{{ field_id }}_for_" + i).text(error);
+                });
             }
         }
 
@@ -27,7 +35,7 @@
             width: 550,
             modal: true,
             buttons: {
-                "Ny kunde": function() {
+                "Legg til": function() {
 
 
                     $.post("{{ add_ajax_url }}",
@@ -68,14 +76,14 @@
     <form id="thisForm{{ field_id }}">
         <fieldset>
             {% for field in form %}
-                {{ field.label_tag }}
+                {{ field.label }}
+                <div class="errormessage" style='color:red' id="error_{{ field_id }}_for_{{ field.name }}"></div>
                 <br>
                 {{ field }}
-                <div id="error_for_{{ field.name }}"></div>
                 <br>
             {% endfor %}
-        </fieldset>
-    </form>
+</fieldset>
+</form>
 </div>
 
 <span id="create_{{ field_id }}"><img width="15px" height="15px" style='vertical-align:middle;'

@@ -117,7 +117,15 @@ def add_ajax(request):
         a = form.save()
 
         return HttpResponse(simplejson.dumps({'name': a.full_name,
+                                              'valid': True,
                                               'id': a.id}), mimetype='application/json')
+
+    else:
+       errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+
+       return HttpResponse(simplejson.dumps({'errors': errors,
+                                             'valid': False}), mimetype='application/json')
+
     return HttpResponse("ERROR")
 
 
