@@ -7,33 +7,41 @@
             var {{ field_id }}_{{ field.name }} = $("#id_{{ field.html_name }}");
         {% endfor %}
 
+
+        function validateForm(data) {
+
+            if (data['valid'] == true) {
+                $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
+                $('#id_{{ field_id }} option[value=' + data['id'] + ']').attr('selected', 'selected');
+
+                $("#dialog-form{{ field_id }}").dialog("close");
+
+            }
+            else {
+
+            }
+        }
+
         $("#dialog-form{{ field_id }}").dialog({
             autoOpen: false,
             width: 550,
             modal: true,
             buttons: {
                 "Ny kunde": function() {
-                    var bValid = true;
-                    if (bValid) {
-                        $.post("{{ add_ajax_url }}",
-                        {
 
-                            {% for field in form %}
-                                {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
-                            {% endfor %}
 
-                        },
-                              function(data) {
+                    $.post("{{ add_ajax_url }}",
+                    {
 
-                                  $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
-                                  $('#id_{{ field_id }} option[value=' + data['id'] + ']').attr('selected', 'selected');
-                              }
+                        {% for field in form %}
+                            {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
+                        {% endfor %}
 
-                                );
-
-                        $(this).dialog("close");
-
-                    }
+                    },
+                          function(data) {
+                              validateForm(data);
+                          }
+                            );
                 },
                 Cancel: function() {
                     $(this).dialog("close");
@@ -42,8 +50,8 @@
 
             close:
             function() {
-
             }
+
         });
 
         $("#create_{{ field_id }}")
@@ -60,11 +68,10 @@
     <form id="thisForm{{ field_id }}">
         <fieldset>
             {% for field in form %}
-                {{ field.label_tag }}<br>
+                {{ field.label_tag }}
+                <br>
                 {{ field }}
-                {% for error in field.errors %}
-                    <span style="color:red">{{ error }}</span>
-                {% endfor %}
+                <div id="error_for_{{ field.name }}"></div>
                 <br>
             {% endfor %}
         </fieldset>
