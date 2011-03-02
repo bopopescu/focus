@@ -16,7 +16,8 @@
         }
                 );
 
-        {% else %}{% if from_date %}
+        {% else %}
+        {% if from_date %}
 
         $("#id_{{ field }}").datepicker(
         {
@@ -27,7 +28,8 @@
         }
                 );
 
-        {% else %}{% if to_date %}
+        {% else %}
+        {% if to_date %}
 
 
         $("#id_{{ field }}").datepicker(

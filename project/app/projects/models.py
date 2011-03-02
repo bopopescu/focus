@@ -55,7 +55,7 @@ class Project(PersistentModel):
 
     @staticmethod
     def add_ajax_url():
-        return urlresolvers.reverse('app.projects.views.project.add_ajax')
+        return urlresolvers.reverse('app.projects.views.project_ajax.add')
 
     @staticmethod
     def simpleform():
