@@ -895,6 +895,7 @@ def initial_data ():
     Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
     Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
     Action.objects.get_or_create(name='CONFIGURE', verb='edited', description='edit an object')
+    Action.objects.get_or_create(name='MANAGE', verb='mange', description='manage an object')
     Action.objects.get_or_create(name='DELETE', verb='deleted', description='delete an object')
     Action.objects.get_or_create(name='VIEW', verb='viewed', description='view an object')
     Action.objects.get_or_create(name='LIST', verb='listed', description='list instances of an object')
