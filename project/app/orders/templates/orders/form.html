@@ -4,50 +4,88 @@
 
 {% block sidebar %}
 
-
-
     {% include "orders/sidebar.html" %}
 
+
+    <style>
+    #id_project {
+        width:260px;
+    }
+    </style>
+
     <script type="text/javascript" charset="utf-8">
-        $(function() {
 
 
-            $("select#id_project").html("<option value=''>----------</option>");
-            $("#id_projects-customer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}");
+        $(document).ready(function() {
 
 
-            $("select#id_customer").change(function() {
+            function setSelectBoxInPopup(currentID, currentText) {
 
+                    var exists = 0 != $('#id_projects-customer option[value=' + currentID + ']').length;
+
+                    if (!exists) {
+                        $('#id_projects-customer').
+                                append($("<option></option>").
+                                attr("value", currentID).
+                                text(currentText));
+                    }
+
+                    $("#id_projects-customer").val(currentID);
+            }
+
+
+            function getProjects() {
 
                 //Populate belonging projects in select
-                var currentID = $(this).val();
-                var currenText = $("select#id_customer :selected").text();
+                var currentID = $("select#id_customer").val();
+                var currentText = $("select#id_customer :selected").text();
 
+                $.getJSON("{% url app.projects.views.project_ajax.list_by_customer %}", {id: currentID}, function(data) {
+
+                    var options = '';
+                    for (var i = 0; i < data.length; i++) {
+                        //options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
+                        options += "<option value=" + data[i].pk + ">" + data[i].fields.project_name + "</option>";
+                    }
+
+                    $("select#id_project").html(options);
+
+                    setSelectBoxInPopup(currentID, currentText);
+
+                    $("#error_project_for_customer").replaceWith("<div id='error_project_for_customer'>" + currentText + "</div>");
+                    
+                })
+            }
+
+            function setNeedCustomerMessage() {
+                $("select#id_project").html("<option>----------</option>");
+                $("#projectcustomer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}</div>");
+            }
+
+            $("select#id_project").html("<option>----------</option>");
+            $("#id_projects-customer").hide();
+
+            $("#error_project_for_customer").replaceWith("<div id='error_project_for_customer'>{% trans 'You have to select a customer' %}</div>");
+
+            //Check if customer
+            if ($("select#id_customer").val() != "") {
+                getProjects();
+            } else {
+                setNeedCustomerMessage();
+            }
+
+            $("select#id_customer").change(function() {
                 if ($(this).val()) {
-                    $.getJSON("{% url app.projects.views.project_ajax.list_by_customer %}", {id: currentID}, function(data) {
-
-
-                        var options = '';
-                        for (var i = 0; i < data.length; i++) {
-                            //options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
-                            options += "<option value=" + data[i].pk + ">" + data[i].fields.project_name + "</option>";
-                        }
-
-                        $("select#id_project").html(options);
-
-                        $("#projectcustomer").replaceWith("<div id='projectcustomer'>" + currenText + "<br><input id='id_projects-customer' type='hidden' value=" + currentID + "></div>");
-                        $("#id_projects-customer").val(currentID);
-
-                    })
-                } else {
-                    $("select#id_project").html("<option>----------</option>");
-
-                    $("#projectcustomer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}");
-
+                    getProjects();
                 }
-
+                else {
+                    setNeedCustomerMessage();
+                }
             })
+
         })
+
+
     </script>
 
 
