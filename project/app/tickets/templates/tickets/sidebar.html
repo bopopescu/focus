@@ -10,7 +10,7 @@
                 src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
 
         <li><a class="{% active request "edit" %}" href="{% url app.tickets.views.edit ticket.id %}"><img
-                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "UPDATE" %}</a></li>
 
         <li><a class="{% active request "trash" %}" href="{% url app.tickets.views.trash ticket.id %}"><img
                 src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>

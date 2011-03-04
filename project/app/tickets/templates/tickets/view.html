@@ -17,30 +17,15 @@
 
     <style>
 
-        .topPart {
-            width: auto;
-            height: 200px;
-
-        }
-
-        .topPart .left {
-            width: 350px;
-            float: left;
-        }
-
-        .topPart .right {
-            width: 400px;
+        .ticketinfo {
+            width: 100%;
             float: left;
         }
 
     </style>
 
-    <div class="topPart">
-        <div class="left">
-            <img width="300px" height="200px" src="{{ contact.getImage }}">
-        </div>
 
-        <div class="right">
+        <div class="ticketinfo">
             <table>
                 <thead>
                 <tr>
@@ -62,9 +47,17 @@
 
             </table>
         </div>
-    </div>
 
-    {% include "comments.html" %}
+        <div class="history">
+            History
+
+        <br>
+        {% for entry in history %}
+            {{ entry.changedSinceLastTime }}
+            <br>
+
+        {% endfor %}
+        </div>
 
 
 {% endblock %}

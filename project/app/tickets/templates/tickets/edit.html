@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extraHead %}
+    {{ form.media }}
+{% endblock %}
+
+{% block maincontent %}
+
+    <h1>{{ title }}</h1>
+    <br>
+    <br>
+
+    {% if ticket_form.errors %}
+
+        <div class="information" id="message">
+
+            <p>Fix before submit again</p>
+
+        </div>
+
+        {% for i in ticket_form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+    {% endif %}
+
+    <div style="width:605px;">
+
+        <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+
+
+            {% for field in ticket_form %}
+                <div class="fieldWrapper">
+                    <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
+                    <br>{{ field }}
+                </div>
+
+            {% endfor %}
+
+
+            <div>
+                <input type="submit" value="Lagre" class="btn" name="save"/>
+            </div>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block sidebar %}
+    {% include "tickets/sidebar.html" %}
+
+ {% endblock %}

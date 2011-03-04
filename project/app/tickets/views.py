@@ -1,7 +1,7 @@
 from app.tickets.models import Ticket
 from core import Core
 from core.decorators import require_permission
-from core.shortcuts import render_with_request, comment_block
+from core.shortcuts import render_with_request
 from app.tickets.forms import TicketForm, EditTicketForm
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
@@ -18,24 +18,8 @@ def overview_trashed(request):
 
 def view(request, id):
     ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
-    comments = comment_block(request, ticket)
 
-    if request.method == 'POST':
-        ticket_form = EditTicketForm(request.POST, instance=ticket, prefix="ticket")
-
-        if ticket_form.is_valid() and comment_form.is_valid():
-            ticket_form.save()
-            comment_form.save()
-            msg = _("Successful update")
-            request.message_success(msg)
-
-            return redirect(view, id)
-
-    else:
-        ticket_form = EditTicketForm(instance=ticket, prefix="ticket")
-
-    return render_with_request(request, "tickets/view.html", {'title': _('Ticket'),
-                                                              'comments': comments,
+    return render_with_request(request, "tickets/view.html", {'title': _('Ticket'),                                                              
                                                               'ticket': ticket,
                                                               })
 
@@ -63,7 +47,23 @@ def add(request):
     return form(request)
 
 def edit(request, id):
-    return form(request, id)
+    ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+    if request.method == "POST":
+        ticket_form = EditTicketForm(request.POST, instance=ticket)
+
+        if ticket_form.is_valid():
+            ticket_form.save()
+            request.message_success(_("Ticket updated"))
+
+            return redirect(view, ticket.id)
+
+    else:
+        ticket_form = EditTicketForm(instance=ticket)
+
+    return render_with_request(request, "tickets/edit.html", {'title': _('Edit Ticket'),
+                                                              'ticket': ticket,
+                                                              'ticket_form': ticket_form,
+                                                              })
 
 def form(request, id=False):
 

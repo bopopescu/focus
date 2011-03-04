@@ -43,7 +43,6 @@ class Ticket(PersistentModel):
     estimated_time = models.IntegerField(default=0)
     customer = models.ForeignKey(Customer)
     assigned_to = models.ForeignKey(User, null=True, blank=True)
-    comments = generic.GenericRelation(Comment)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True)
 
     def __unicode__(self):
@@ -67,6 +66,23 @@ class Ticket(PersistentModel):
 
     def save(self, *args, **kwargs):
         super(Ticket, self).save()
+
+
+
+    class Meta:
+        ordering = ['date_created']
+
+
+class TicketUpdate(PersistentModel):
+    ticket = models.ForeignKey(Ticket)
+    comment = models.TextField()
+    attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
+
+
+class TicketUpdateLine(PersistentModel):
+    update = models.ForeignKey(TicketUpdate)
+    change = models.CharField(max_length=250)
+
 
 def initial_data():
     TicketStatus.objects.get_or_create(name="Ny", order_priority=1)
