@@ -1,3 +1,5 @@
+
+
 {% load i18n %}
 
 
@@ -25,6 +27,9 @@
     <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="{{ STATIC_URL }}js/masked.js"></script>
+
+
+
 
     <script src="http://pixelmatrixdesign.com/uniform/jquery.uniform.js" type="text/javascript"></script>
     <link rel="stylesheet" href="http://pixelmatrixdesign.com/uniform/uniform.default.css" type="text/css"
@@ -143,7 +148,7 @@
         <h2>Queries</h2>
         <p>
             {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
-            {% ifnotequal sql_queries | length 0 %}
+            {% ifnotequal sql_queries|length 0 %}
                 (<span style="cursor: pointer;"
                        onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>
                 )
@@ -163,9 +168,9 @@
             <tbody>
             {% for query in sql_queries %}
                 <tr class="{% cycle odd,even %}">
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ query.sql|escape }}</td>
-                    <td>{{ query.time }}</td>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ query.sql|escape }}</td>
+                <td>{{ query.time }}</td>
                 </tr>{% endfor %}
             </tbody>
         </table>
