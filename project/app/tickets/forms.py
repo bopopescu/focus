@@ -17,20 +17,19 @@ class TicketForm(ModelForm):
         self.fields['attachment'].required = False
 
 class EditTicketForm(ModelForm):
-    comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"))
-    attachment = forms.FileField(label=_("Add Attachment"))
+    comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
+    attachment = forms.FileField(label=_("Add Attachment"), required=False)
     class Meta:
         model = Ticket
         fields = ('title', 'customer', 'description', 'status', 'priority', 'type', 'estimated_time', 'assigned_to', 'spent_time',)
 
-    def __init__(self, *args, **kwargs):
-        super(EditTicketForm, self).__init__(*args, **kwargs)
-        self.fields['attachment'].required = False
+    def save(self, *args, **kwargs):
+        ticket = super(EditTicketForm, self).save()
+        ticketupdate = TicketUpdate.objects.create(ticket=ticket,
+                                    comment=self.cleaned_data['comment'],
+                                    attachment=self.cleaned_data['attachment'])
 
-    def save(self, commit=True):
-        ticket = super(EditTicketForm, self).save(commit)
-        if commit:
-            TicketUpdate.objects.create(ticket=ticket,
-                                        comment=self.cleaned_data['comment'],
-                                        attachment=self.cleaned_data['attachment'])
+        return ticket, ticketupdate
+
+
 

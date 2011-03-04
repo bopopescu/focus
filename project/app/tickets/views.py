@@ -1,10 +1,11 @@
-from app.tickets.models import Ticket
+from app.tickets.models import Ticket, TicketUpdate
 from core import Core
 from core.decorators import require_permission
 from core.shortcuts import render_with_request
 from app.tickets.forms import TicketForm, EditTicketForm
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
+import copy
 
 
 def overview(request):
@@ -18,9 +19,11 @@ def overview_trashed(request):
 
 def view(request, id):
     ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+    updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
 
     return render_with_request(request, "tickets/view.html", {'title': _('Ticket'),                                                              
                                                               'ticket': ticket,
+                                                              'updates': updates
                                                               })
 
 @require_permission("DELETE", Ticket, "id")
@@ -48,11 +51,15 @@ def add(request):
 
 def edit(request, id):
     ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+
     if request.method == "POST":
-        ticket_form = EditTicketForm(request.POST, instance=ticket)
+        old_ticket = copy.copy(ticket)
+        ticket_form = EditTicketForm(request.POST, request.FILES, instance=ticket)
 
         if ticket_form.is_valid():
-            ticket_form.save()
+            ticket, ticket_update = ticket_form.save()
+            differences = Ticket.find_differences(ticket, old_ticket)
+            ticket_update.create_update_lines(differences)
             request.message_success(_("Ticket updated"))
 
             return redirect(view, ticket.id)
