@@ -114,7 +114,7 @@ def thumbnail_with_max_side(file, size='220'):
         except:
             image.save(miniature_filename, image.format, quality=90)
 
-    return miniature_url
+    return os.path.join("/file/", miniature_url)
 
 register.filter(thumbnail)
 register.filter(thumbnail_with_max_side)

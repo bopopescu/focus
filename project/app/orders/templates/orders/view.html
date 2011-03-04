@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load auth %}
+{% load thumbnail %}
 {% load i18n %}
 {% block extrahead %}
 
@@ -31,7 +32,8 @@
 
                 <tr>
                     <td> {% trans "Project" %}</td>
-                    <td><a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a></td>
+                    <td><a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
+                    </td>
                 </tr>
             {% endif %}
 
@@ -60,17 +62,17 @@
         <br><br><br>
 
         <h2>{% trans "Participants" %}</h2>
-        {% for user in whoCanSeeThis %}
+        {% for cuser in whoCanSeeThis %}
 
             <div class="user-card">
                 <div class="avatar">
-                    <img src="{{ user.get_profile.getProfileImage }}" title="User" alt=""/>
+                    <img src="{{ cuser.profileImage|thumbnail_with_max_side:"120" }}" title="User" alt=""/>
                 </div>
                 <!-- .user-card-avatar -->
                 <div class="details">
-                    <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
-                        {{ user.phone }}<br/>
-                        <a href="{% url app.admin.views.user.view user.id %}">{% trans "More details" %}</a></p>
+                    <p><strong>{{ cuser.first_name }} {{ cuser.last_name }}</strong><br/>
+                        {{ cuser.phone }}<br/>
+                        <a href="{% url app.admin.views.user.view cuser.id %}">{% trans "More details" %}</a></p>
                 </div>
             </div>
 
