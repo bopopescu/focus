@@ -15,6 +15,14 @@ class Supplier(PersistentModel):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.suppliers.views.add_ajax')
+
+    @staticmethod
+    def simpleform():
+        return SupplierSimpleForm(instance=Supplier(), prefix="suppliers")
+
     def getViewUrl(self):
         return urlresolvers.reverse('app.suppliers.views.view', args=("%s" % self.id,))
 
@@ -30,3 +38,5 @@ class Supplier(PersistentModel):
             new = True
 
         super(Supplier, self).save()
+
+from app.suppliers.forms import SupplierSimpleForm

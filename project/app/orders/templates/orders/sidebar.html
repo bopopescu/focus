@@ -9,6 +9,9 @@
         <li><a class="{% active request "view" %}" href="{% url app.orders.views.view order.id %}"><img
                 src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
 
+        <li><a class="{% active request "products" %}" href="{% url app.orders.views.products order.id %}"><img
+                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "Products" %}</a></li>
+
         <li><a class="{% active request "edit$" %}" href="{% url app.orders.views.edit order.id %}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
 
@@ -23,7 +26,5 @@
 
         <li><a class="{% active request "new" %}" href="{% url app.orders.views.addOffer %}"><img
                 src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW OFFER" %}</a></li>
-
-
     {% endif %}
 </ul>

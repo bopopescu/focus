@@ -44,7 +44,13 @@ def add_ajax(request):
         a = form.save()
 
         return HttpResponse(simplejson.dumps({'name': a.full_name,
-                                              'id': a.id}), mimetype='application/json')
+                                              'id': a.id,
+                                              'valid': True}), mimetype='application/json')
+    else:
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+
+        return HttpResponse(simplejson.dumps({'errors': errors,
+                                              'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")
 
@@ -61,9 +67,16 @@ def history(request, id):
 
 @require_permission("VIEW", Customer, "id")
 def list_contacts(request, id):
+    if request.method == "POST":
+        form = ContactToCustomerForm(request.POST)
+        print form
+    else:
+        form = ContactToCustomerForm()
+
     customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
     return render_with_request(request, 'customers/contacts.html',
                                {'title': unicode(customer.full_name) + " " + _('contacts'),
+                                'form': form,
                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
@@ -124,7 +137,7 @@ def form (request, id=False):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(edit, o.id)
+            return redirect(view, o.id)
     else:
         form = CustomerForm(instance=instance)
 

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
+from app.contacts.forms import ContactField
 from models import Customer
 from django.utils.translation import ugettext as _
+from django.forms import forms
 
 
 class CustomerForm(ModelForm):
@@ -38,3 +40,6 @@ class CustomerFormSimple(ModelForm):
         super(CustomerFormSimple, self).__init__(*args, **kwrds)
         #self.fields['contacts'].queryset = Contact.objects.all()
 
+
+class ContactToCustomerForm(forms.Form):
+    contact = ContactField()

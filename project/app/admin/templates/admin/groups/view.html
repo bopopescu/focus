@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block extrahead %}
 
@@ -8,8 +9,6 @@
 {% block sidebar %}
     {% include "admin/sidebar.html" %}
 {% endblock %}
-
-
 
 {% block maincontent %}
 
@@ -33,7 +32,7 @@
                     <div class="user-card">
 
                         <div class="avatar">
-                            <img src="{{ user.getProfileImage }}" title="User" alt=""/>
+                            <img src="{{ user.profileImage|thumbnail:"50x50" }}" title="User" alt=""/>
                         </div>
                         <!-- .user-card-avatar -->
 

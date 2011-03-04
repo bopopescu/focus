@@ -7,6 +7,8 @@ from core.decorators import *
 from core.views import  updateTimeout
 from app.stock.forms import UnitsForSizesForm
 from app.stock.models import UnitsForSizes
+from django.utils import simplejson
+from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
@@ -25,25 +27,25 @@ def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required()
-def addPop(request):
-    instance = UnitsForSizes()
+@require_permission("CREATE", UnitsForSizes)
+def add_ajax(request):
+    form = UnitsForSizesForm(request.POST, instance=UnitsForSizes())
 
-    if request.method == "POST":
-        form = UnitsForSizesForm(request.POST, instance=instance)
+    if form.is_valid():
+        a = form.save()
 
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
+        return HttpResponse(simplejson.dumps({'name': a.name,
+                                              'valid': True,
+                                              'id': a.id}), mimetype='application/json')
+
+
     else:
-        form = UnitsForSizesForm(instance=instance)
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-    return render_with_request(request, "simpleform.html", {'title': 'Enhet', 'form': form})
+        return HttpResponse(simplejson.dumps({'errors': errors,
+                                              'valid': False}), mimetype='application/json')
+
+    return HttpResponse("ERROR")
 
 @login_required()
 def form (request, id=False):

@@ -10,13 +10,14 @@ import time
 from django.utils.translation import ugettext as _
 
 class Project(PersistentModel):
-    pid = models.IntegerField(_("Project nuber"), null=True)
+    pid = models.IntegerField(_("Project number"), null=True)
     POnumber = models.CharField(_("PO-number"), max_length=150, blank=True, null=True)
     customer = models.ForeignKey(Customer, verbose_name=_("Customer"), related_name="projects", default=None, null=True)
     project_name = models.CharField(_("Name"), max_length=80)
     description = models.TextField()
-    deliveryAddress = models.CharField(max_length=150, null=True)
-    responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"), null=True)
+    deliveryAddress = models.CharField(_("Delivery address"), max_length=150, null=True)
+    responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"),
+                                    null=True)
     deliveryDate = models.DateTimeField(verbose_name=_("Delivery date"), null=True, blank=True)
     deliveryDateDeadline = models.DateTimeField(verbose_name=_("Delivery deadline"), null=True, blank=True)
     comments = generic.GenericRelation(Comment)
@@ -36,7 +37,7 @@ class Project(PersistentModel):
             return (True, "OK")
 
         return (False, reasons)
-    
+
     def getViewUrl(self):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 
@@ -47,14 +48,14 @@ class Project(PersistentModel):
 
             if realDiff > estimatedDiff:
                 return 100
-            
+
             return (realDiff / estimatedDiff) * 100
-        
+
         return 0
 
     @staticmethod
     def add_ajax_url():
-        return urlresolvers.reverse('app.projects.views.project.add_ajax')
+        return urlresolvers.reverse('app.projects.views.project_ajax.add')
 
     @staticmethod
     def simpleform():

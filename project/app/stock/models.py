@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from core import Core
 from core.models import PersistentModel
 from app.suppliers.models import Supplier
 from django.core import urlresolvers
@@ -12,52 +11,19 @@ class UnitsForSizes(PersistentModel):
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        new = False
-        if not self.id:
-            new = True
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.stock.views.productunit.add_ajax')
 
-        super(UnitsForSizes, self).save()
-
-        #Give the user who created this ALL permissions on object
-
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
+    @staticmethod
+    def simpleform():
+        return UnitsForSizesForm(instance=UnitsForSizes(), prefix="units")
 
 class ProductCategory(PersistentModel):
     name = models.CharField("Navn", max_length=100)
 
     def __unicode__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        new = False
-        if not self.id:
-            new = True
-
-        super(ProductCategory, self).save()
-
-        #Give the user who created this ALL permissions on object
-
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
-
 
 class ProductGroup(PersistentModel):
     name = models.CharField("Navn", max_length=100)
@@ -66,34 +32,29 @@ class ProductGroup(PersistentModel):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.stock.views.productgroup.add_ajax')
+
+    @staticmethod
+    def simpleform():
+        return ProductGroupForm(instance=ProductGroup(), prefix="productgroups")
+
     def getViewUrl(self):
         return urlresolvers.reverse('app.stock.views.productgroup.edit', args=("%s" % self.id,))
-
-    def save(self, *args, **kwargs):
-        new = False
-        if not self.id:
-            new = True
-
-        super(ProductGroup, self).save()
-
-        #Give the user who created this ALL permissions on object
-
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
-
 
 class Currency(PersistentModel):
     name = models.CharField("Navn", max_length=100)
     sign = models.CharField("Tegn ($, kr) osv", max_length=10)
     value = models.CharField("Verdi", max_length=100)
+
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.stock.views.currency.add_ajax')
+
+    @staticmethod
+    def simpleform():
+        return CurrencyForm(instance=Currency(), prefix="currencies")
 
     def __unicode__(self):
         return self.name
@@ -128,26 +89,6 @@ class Product(PersistentModel):
     def getRecoverUrl(self):
         return urlresolvers.reverse('app.stock.views.product.recover', args=("%s" % self.id,))
 
-    def save(self, *args, **kwargs):
-        new = False
-        if not self.id:
-            new = True
-
-        super(Product, self).save()
-
-        #Give the user who created this ALL permissions on object
-
-        if new:
-            Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
-            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
-
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
-
 class ProductFile(PersistentModel):
     product = models.ForeignKey(Product, related_name="files")
     name = models.CharField(max_length=200)
@@ -155,3 +96,6 @@ class ProductFile(PersistentModel):
 
     def getFile(self):
         return "/media/%s" % self.file
+
+
+from app.stock.forms import ProductGroupForm, UnitsForSizesForm, CurrencyForm

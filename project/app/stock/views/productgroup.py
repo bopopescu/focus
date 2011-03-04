@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-
-from core.shortcuts import *
-from core.decorators import *
+from django.shortcuts import get_object_or_404, redirect
+from django.utils import simplejson
+from core.shortcuts import render_with_request
+from core.decorators import require_permission, login_required
 from core.views import  updateTimeout
 from app.stock.forms import ProductGroupForm
 from app.stock.models import ProductGroup
+from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
@@ -28,26 +29,25 @@ def delete(request, id):
     ProductGroup.objects.get(id=id).delete()
     return redirect(overview)
 
-@login_required()
-def addPop(request):
-    instance = ProductGroup()
+@require_permission("CREATE", ProductGroup)
+def add_ajax(request):
+    form = ProductGroupForm(request.POST, instance=ProductGroup())
 
-    if request.method == "POST":
-        form = ProductGroupForm(request.POST, instance=instance)
+    if form.is_valid():
+        a = form.save()
 
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
+        return HttpResponse(simplejson.dumps({'name': a.name,
+                                              'valid':True,
+                                              'id': a.id}), mimetype='application/json')
+
+
     else:
-        form = ProductGroupForm(instance=instance)
+       errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-    return render_with_request(request, "simpleform.html", {'title': 'Produktgruppe', 'form': form})
+       return HttpResponse(simplejson.dumps({'errors': errors,
+                                             'valid': False}), mimetype='application/json')
 
+    return HttpResponse("ERROR")
 
 @login_required()
 def form (request, id=False):

@@ -38,6 +38,35 @@ def overviewArchive(request):
 
 
 @require_permission("VIEW", Order, "id")
+def products(request, id):
+    order = Order.objects.get(id=id)
+    orderlines = order.orderlines
+
+    if request.method == "POST":
+        form = OrderLineForm(request.POST, instance=OrderLine())
+        o = form.save(commit=False)
+        o.order = order
+        o.save()
+        
+    else:
+        form = OrderLineForm(instance=OrderLine())
+
+    return render_with_request(request, 'orders/products.html', {'title': _('Products'),
+                                                                 'form':form,
+                                                                 'order':order,
+                                                                 'orderlines': orderlines})
+
+
+@require_permission("EDIT", Order, "id")
+def deleteOrderLine(request,id, orderlineID):
+    order = Order.objects.get(id=id)
+    orderline = order.orderlines.get(id=orderlineID)
+    orderline.delete()
+
+    return redirect(products, id)
+
+
+@require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.all().get(id=id)
     whoCanSeeThis = order.whoHasPermissionTo('view')
@@ -203,9 +232,9 @@ def form (request, id=False, *args, **kwargs):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(view, o.id)
 
     else:
         form = OrderForm(instance=instance)
 
-    return render_with_request(request, "orders/form.html", {'title': title, 'order':instance, 'form': form})
+    return render_with_request(request, "orders/form.html", {'title': title, 'order': instance, 'form': form})

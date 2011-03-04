@@ -68,17 +68,6 @@ def history(request, id):
                                                               'project': instance,
                                                               'logs': history[::-1][0:150]})
 
-@require_permission("CREATE", Project)
-def add_ajax(request):
-    form = ProjectFormSimple(request.POST, instance=Project())
-
-    if form.is_valid():
-        a = form.save()
-
-        return HttpResponse(simplejson.dumps({'name': a.project_name,
-                                              'id': a.id}), mimetype='application/json')
-
-    return HttpResponse("ERROR")
 
 @require_permission("CREATE", Project)
 def add(request):
@@ -127,7 +116,7 @@ def form (request, id=False):
             o.save()
             request.message_success(msg)
 
-            return redirect(edit, o.id)
+            return redirect(view, o.id)
 
     else:
         form = ProjectForm(instance=instance)

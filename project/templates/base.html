@@ -22,6 +22,7 @@
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-json.js"></script>
 
     <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
@@ -36,7 +37,7 @@
 
     <script>
 
-        $("select, input:checkbox, input:radio, input:file").uniform();
+        //$("select, input:checkbox, input:radio, input:file").uniform();
 
     </script>
 
@@ -141,36 +142,38 @@
 </body>
 </html>
 
-
 {% if debug %}
 
-<div id="debug">
-  <h2>Queries</h2>
-  <p>
-    {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
-    {% ifnotequal sql_queries|length 0 %}
-    (<span style="cursor: pointer;" onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>)
-    {% endifnotequal %}
-  </p>
-  <table id="debugQueryTable" style="display: none;">
-    <col width="1"></col>
-    <col></col>
-    <col width="1"></col>
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">SQL</th>
-      <th scope="col">Time</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for query in sql_queries %}<tr class="{% cycle odd,even %}">
-      <td>{{ forloop.counter }}</td>
-      <td>{{ query.sql|escape }}</td>
-      <td>{{ query.time }}</td>
-    </tr>{% endfor %}
-    </tbody>
-  </table>
-</div>
+    <div id="debug">
+        <h2>Queries</h2>
+        <p>
+            {{ sql_queries|length }} Quer{{ sql_queries|pluralize:"y,ies" }}
+            {% ifnotequal sql_queries|length 0 %}
+                (<span style="cursor: pointer;"
+                       onclick="var s=document.getElementById('debugQueryTable').style;s.display=s.display=='none'?'':'none';this.innerHTML=this.innerHTML=='Show'?'Hide':'Show';">Show</span>
+                )
+            {% endifnotequal %}
+        </p>
+        <table id="debugQueryTable" style="display: none;">
+            <col width="1"></col>
+            <col></col>
+            <col width="1"></col>
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">SQL</th>
+                <th scope="col">Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for query in sql_queries %}
+                <tr class="{% cycle odd,even %}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ query.sql|escape }}</td>
+                <td>{{ query.time }}</td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endif %}
 

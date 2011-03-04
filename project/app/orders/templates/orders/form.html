@@ -3,5 +3,52 @@
 {% load i18n %}
 
 {% block sidebar %}
+
+
+
     {% include "orders/sidebar.html" %}
+
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+
+
+            $("select#id_project").html("<option value=''>----------</option>");
+            $("#id_projects-customer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}");
+
+
+            $("select#id_customer").change(function() {
+
+
+                //Populate belonging projects in select
+                var currentID = $(this).val();
+                var currenText = $("select#id_customer :selected").text();
+
+                if ($(this).val()) {
+                    $.getJSON("{% url app.projects.views.project_ajax.list_by_customer %}", {id: currentID}, function(data) {
+
+
+                        var options = '';
+                        for (var i = 0; i < data.length; i++) {
+                            //options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
+                            options += "<option value=" + data[i].pk + ">" + data[i].fields.project_name + "</option>";
+                        }
+
+                        $("select#id_project").html(options);
+
+                        $("#projectcustomer").replaceWith("<div id='projectcustomer'>" + currenText + "<br><input id='id_projects-customer' type='hidden' value=" + currentID + "></div>");
+                        $("#id_projects-customer").val(currentID);
+
+                    })
+                } else {
+                    $("select#id_project").html("<option>----------</option>");
+
+                    $("#projectcustomer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}");
+
+                }
+
+            })
+        })
+    </script>
+
+
 {% endblock %}

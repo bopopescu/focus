@@ -28,21 +28,16 @@
     {% endif %}
 
     <div style="width:605px;">
-
         <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
-
-
             {% for field in form %}
                 <div class="fieldWrapper">
                     <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
                     <br>{{ field }}
                 </div>
-
             {% endfor %}
             <div>
                 <input type="submit" value="Lagre" class="btn" name="save"/>
             </div>
-
         </form>
     </div>
 

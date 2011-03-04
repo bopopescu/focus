@@ -3,6 +3,9 @@
 /* ----------------------------
        MAIN NAVIGATION
 ------------------------------- */
+
+
+
 #nav {
     height: 30px;
     padding-left: 50px;
@@ -29,6 +32,8 @@
     background: url(../img/header_bg.png);
 
 }
+
+ul { list-style-type: none; }
 
 #nav li {
     padding-right: 12px;
@@ -87,6 +92,7 @@
     padding-left: 50px;
     padding-bottom: 5px;
 }
+
 
 #subnav li {
     float: left;
