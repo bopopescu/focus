@@ -73,7 +73,7 @@ class User(models.Model):
 
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
-    profileImage = models.FileField(upload_to="profileImages", storage=fs, null=True, blank=True)
+    profileImage = models.ImageField(upload_to="profileImages", storage=fs, null=True, blank=True)
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
