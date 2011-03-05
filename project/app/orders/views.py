@@ -47,18 +47,16 @@ def products(request, id):
         o = form.save(commit=False)
         o.order = order
         o.save()
-        
     else:
         form = OrderLineForm(instance=OrderLine())
 
     return render_with_request(request, 'orders/products.html', {'title': _('Products'),
-                                                                 'form':form,
-                                                                 'order':order,
+                                                                 'form': form,
+                                                                 'order': order,
                                                                  'orderlines': orderlines})
 
-
 @require_permission("EDIT", Order, "id")
-def deleteOrderLine(request,id, orderlineID):
+def deleteOrderLine(request, id, orderlineID):
     order = Order.objects.get(id=id)
     orderline = order.orderlines.get(id=orderlineID)
     orderline.delete()

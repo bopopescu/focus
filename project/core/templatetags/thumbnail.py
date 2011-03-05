@@ -1,10 +1,15 @@
 import os
 import Image, ImageOps
 from django.template import Library
+from django.conf import settings
 
 register = Library()
 
 def thumbnail(file, size='320x220'):
+
+    if not file:
+        return settings.STATIC_URL + "img/frame.png"
+
     # defining the size
     x, y = [int(x) for x in size.split('x')]
     # defining the filename and the miniature filename
@@ -58,6 +63,10 @@ def thumbnail(file, size='320x220'):
     return os.path.join("/file/", miniature_url)
 
 def thumbnail_with_max_side(file, size='220'):
+
+    if not file:
+        return settings.STATIC_URL + "img/frame.png"
+
     # defining the filename and the miniature filename
     filehead, filetail = os.path.split(file.path)
     basename, format = os.path.splitext(filetail)

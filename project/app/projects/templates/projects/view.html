@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load auth %}
 {% load i18n %}
+{% load thumbnail %}
 {% block extrahead %}
 
 {% endblock %}
@@ -20,7 +21,7 @@
         <div class="user-card">
 
             <div class="avatar">
-                <img src="{{ user.getProfileImage }}" title="User" alt=""/>
+                <img src="{{ user.profileImage|thumbnail_with_max_side:"150" }}" title="User" alt=""/>
             </div>
 
             <div class="details">

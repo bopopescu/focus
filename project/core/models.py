@@ -10,7 +10,7 @@ from core.managers import PersistentManager
 from django.db import models
 from django.utils.encoding import smart_str
 from django.core.servers.basehttp import FileWrapper
-import settings
+from django.conf import settings
 from widgets import get_hexdigest, check_password
 from inspect import isclass
 import time

@@ -18,7 +18,7 @@ class Contact(PersistentModel):
     email = models.EmailField(_("Epostadresse"), max_length=80)
     phone = models.CharField(_("Telefon"), max_length=20)
     comments = generic.GenericRelation(Comment)
-    image = models.FileField(upload_to="contacts", storage=fs, null=True, blank=True)
+    image = models.ImageField(upload_to="contacts", storage=fs, null=True, blank=True)
 
     def __unicode__(self):
         return unicode(self.full_name)

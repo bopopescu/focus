@@ -8,9 +8,9 @@
 
 
     <style>
-    #id_project {
-        width:260px;
-    }
+        #id_project {
+            width: 260px;
+        }
     </style>
 
     <script type="text/javascript" charset="utf-8">
@@ -21,16 +21,16 @@
 
             function setSelectBoxInPopup(currentID, currentText) {
 
-                    var exists = 0 != $('#id_projects-customer option[value=' + currentID + ']').length;
+                var exists = 0 != $('#id_projects-customer option[value=' + currentID + ']').length;
 
-                    if (!exists) {
-                        $('#id_projects-customer').
-                                append($("<option></option>").
-                                attr("value", currentID).
-                                text(currentText));
-                    }
+                if (!exists) {
+                    $('#id_projects-customer').
+                            append($("<option></option>").
+                            attr("value", currentID).
+                            text(currentText));
+                }
 
-                    $("#id_projects-customer").val(currentID);
+                $("#id_projects-customer").val(currentID);
             }
 
 
@@ -53,7 +53,7 @@
                     setSelectBoxInPopup(currentID, currentText);
 
                     $("#error_project_for_customer").replaceWith("<div id='error_project_for_customer'>" + currentText + "</div>");
-                    
+
                 })
             }
 
