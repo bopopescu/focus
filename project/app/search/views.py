@@ -27,7 +27,7 @@ def search(request):
     for o in searchIn.keys():
         for i in searchIn[o]:
             kwargs = {'%s__%s' % ('%s' % i, 'icontains'): '%s' % term}
-            k = o.objects.all().filter(**kwargs)
+            k = o.objects.inCompany().filter(**kwargs)
 
             for s in k:
                 if s in result:

@@ -5,6 +5,7 @@ from app.customers.models import Customer
 from app.orders.models import Order
 from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
+from app.stock.models import Product
 from forms import *
 from core.models import Company, Group, Log, Notification
 from core.shortcuts import *
@@ -99,6 +100,7 @@ def newForm(request):
             adminGroup.grant_role("Admin", HourRegistration)
             adminGroup.grant_role("Admin", Announcement)
             adminGroup.grant_role("Admin", Log)
+            adminGroup.grant_role("Admin", Product)
             adminGroup.grant_role("Admin", Notification)
             adminGroup.grant_role("Admin", User)
             adminGroup.grant_role("Admin", Group)
@@ -109,6 +111,7 @@ def newForm(request):
             allEmployeesGroup.grant_role("Member", Customer)
             allEmployeesGroup.grant_role("Member", Contact)
             allEmployeesGroup.grant_role("Member", HourRegistration)
+            allEmployeesGroup.grant_role("Member", Product)
             allEmployeesGroup.grant_role("Member", Order)
             allEmployeesGroup.grant_role("Member", Announcement)
             allEmployeesGroup.grant_role("Member", Log)
