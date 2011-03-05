@@ -591,6 +591,12 @@ class Log(models.Model):
         #lastLog = self.getObject().getLogs().filter(id__lt=self.id)
 
         lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
+        obj = self.content_type.get_object_for_this_type(id=self.object_id)
+
+        fields = {}
+        for a in obj._meta.fields:
+            if 'related' in a.__dict__:
+                fields[a.attname] = a.related.parent_model
 
         if lastLog:
             msg = ""
@@ -600,6 +606,16 @@ class Log(models.Model):
                     continue
 
                 if i not in eval(lastLog.message):
+                    continue
+
+                if i in fields:
+                    if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
+                        lastObj = fields[i].objects.get(id=eval(lastLog.message)[i][0])
+                        newObj = fields[i].objects.get(id=eval(self.message)[i][0])
+
+                        msg += value[1] + _(" was changed from %s to %s") % (
+                        lastObj, newObj)
+
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:

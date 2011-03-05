@@ -93,10 +93,6 @@ class Ticket(PersistentModel):
 
         return data
 
-
-
-
-
     @staticmethod
     def find_differences(ticket1, ticket2):
         ticket1 = ticket1.create_model_dict()
