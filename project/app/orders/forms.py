@@ -22,6 +22,7 @@ class OrderForm(ModelForm):
         self.fields['customer'].queryset = Customer.objects.inCompany()
         self.fields['project'].widget = SelectWithPop(Project)
         self.fields['project'].queryset = Project.objects.inCompany()
+        self.fields['responsible'].queryset = User.objects.inCompany()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -38,7 +39,7 @@ class OrderForm(ModelForm):
     def clean_oid(self):
         oid = self.cleaned_data['oid']
 
-        orders = Order.objects.all()
+        orders = Order.objects.inCompany()
         for i in orders:
             if self.id == i.id:
                 continue

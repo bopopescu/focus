@@ -920,7 +920,7 @@ def initial_data ():
     member.grant_actions(["VIEW", "LIST"])
 
     #Other default objects
-    comp = Company(name="FNCIT AS")
+    comp = Company.objects.get_or_create(name="FNCIT AS", daysIntoNextMonthHourRegistration=4)[0]
     comp.save()
 
     a, created = User.all_objects.get_or_create(username="superadmin",

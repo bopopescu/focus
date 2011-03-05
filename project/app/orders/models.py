@@ -28,7 +28,7 @@ class Order(PersistentModel):
     description = models.TextField(_("Description"))
     contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name=_("Contacts"), blank=True)
     
-    state = models.CharField(max_length=2, choices=STATUS_CHOICES)
+    state = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __unicode__(self):
         return self.order_name
