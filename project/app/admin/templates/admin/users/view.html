@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block extrahead %}
 
@@ -11,20 +12,23 @@
 
 {% block maincontent %}
 
-    {{ title }}
+    <h1>{{ title }}</h1>
 
-    <img src="{{ userCard.getProfileImage }}">
+    <img src="{{ userCard.profileImage|thumbnail_with_max_side:"350" }}">
+
     <br>
     {% trans "Name" %}: {{ userCard.first_name }} {{ userCard.last_name }}
     <br>
     {% trans "E-mail" %}: {{ userCard.email }}
+
     <br>
     {% trans "Company" %}: {{ userCard.get_profile.company }}
+
     <br><br>
     <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">{% trans "Permission to log in" %}:
         <b>{{ userCard.canLogin }}</b></a>
     <br>
-
+    
     <br><br>
     <table style="text-align:center">
 

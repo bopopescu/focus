@@ -593,10 +593,18 @@ class Log(models.Model):
         lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
         obj = self.content_type.get_object_for_this_type(id=self.object_id)
 
+
+        """
+        Needs optimalization
+        """
+
         fields = {}
         for a in obj._meta.fields:
             if 'related' in a.__dict__:
                 fields[a.attname] = a.related.parent_model
+
+
+        
 
         if lastLog:
             msg = ""

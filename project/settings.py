@@ -73,7 +73,7 @@ BASE_PATH + '/templates/',
 )
 
 STATICFILES_DIRS = (
-BASE_PATH + '/files/media/',
+    BASE_PATH + '/files/media/',
 )
 
 INTERNAL_IPS = ('127.0.0.1')
@@ -108,6 +108,7 @@ INSTALLED_APPS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
 'django.core.context_processors.request',
+'django.core.context_processors.csrf',
 'django.core.context_processors.i18n',
 'django.core.context_processors.static',
 'django.core.context_processors.debug',
