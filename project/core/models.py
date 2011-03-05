@@ -930,7 +930,7 @@ def initial_data ():
     a.is_superuser = True
     a.canLogin = True
     a.is_staff = True
-    a.set_password("superpassord")
+    a.set_password("sperpassord")
     a.save()
 
     u, created = User.all_objects.get_or_create(username="test",

@@ -54,7 +54,7 @@ class OrderLineForm(ModelForm):
 
     class Meta:
         model = OrderLine
-        fields = ("product","count",)
+        fields = ("product", "count",)
 
 class OrderFormSimple(ModelForm):
     class Meta:

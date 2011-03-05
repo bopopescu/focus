@@ -27,7 +27,7 @@ class Order(PersistentModel):
     delivery_date_deadline = models.DateField(verbose_name=_("Delivery deadline"), null=True, blank=True)
     description = models.TextField(_("Description"))
     contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name=_("Contacts"), blank=True)
-    
+
     state = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __unicode__(self):
@@ -54,7 +54,6 @@ class Order(PersistentModel):
         return False
 
     def is_valid_for_edit(self):
-
         if self.is_offer():
             return True
         if self.is_order():
@@ -86,7 +85,7 @@ class OrderLine(PersistentModel):
     count = models.IntegerField()
 
     def __unicode__(self):
-        return "Order: %s, Product: %s" % (self.order,self.product)
+        return "Order: %s, Product: %s" % (self.order, self.product)
 
 class Task(PersistentModel):
     order = models.ForeignKey(Order, related_name="tasks")

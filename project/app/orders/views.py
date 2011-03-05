@@ -225,7 +225,8 @@ def form (request, id=False, *args, **kwargs):
                 else:
                     o.state = "Order"
 
-            o.owner = request.user
+            print o.state
+            
             o.save()
             form.save_m2m()
             request.message_success(msg)
