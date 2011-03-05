@@ -1,9 +1,6 @@
 from core.models import PersistentModel, User, Comment
 from django.db import models
 from app.customers.models import Customer
-from django.contrib.contenttypes import generic
-from django.core import urlresolvers
-from core import Core
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 import settings
@@ -68,9 +65,51 @@ class Ticket(PersistentModel):
         super(Ticket, self).save()
 
 
+    foreign_key_dict = {
+        'status_id': (TicketStatus, 'name',),
+        'priority_id': (TicketPriority, 'name',),
+        'type_id': (TicketType, 'name',),
+        'customer_id': (Customer, 'full_name',),
+        'assigned_to_id': (User, 'username')
+    }
 
-    class Meta:
-        ordering = ['date_created']
+    def create_model_dict(self):
+        data = {}
+        ignore_list = ('_state', 'date_edited')
+        for field in self._meta.fields:
+            if field.attname.startswith('_') or field.attname in ignore_list:
+                continue
+
+            print field.attname
+
+            field_value = getattr(self, field.attname)
+            if field.attname in self.foreign_key_dict:
+                model_class = self.foreign_key_dict[field.attname][0]
+                model_attr = self.foreign_key_dict[field.attname][1]
+                id = field_value
+                field_value = getattr(model_class.objects.get(id=id), model_attr)
+
+            data[field.verbose_name] = field_value
+
+        return data
+
+
+
+
+
+    @staticmethod
+    def find_differences(ticket1, ticket2):
+        ticket1 = ticket1.create_model_dict()
+        ticket2 = ticket2.create_model_dict()
+        diff = {}
+        for field in ticket1:
+            try:
+                if ticket1[field] != ticket2[field]:
+                    diff[field] = (ticket1[field], ticket2[field],)
+            except KeyError:
+                pass
+
+        return diff
 
 
 class TicketUpdate(PersistentModel):
@@ -78,10 +117,18 @@ class TicketUpdate(PersistentModel):
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
 
+    def create_update_lines(self, differences):
+        for diff in differences:
+            change_text = _("%s changed from %s to %s") % \
+                          (diff, differences[diff][1], differences[diff][0])
+            TicketUpdateLine.objects.create(update=self, change=change_text)
+    
+
 
 class TicketUpdateLine(PersistentModel):
-    update = models.ForeignKey(TicketUpdate)
+    update = models.ForeignKey(TicketUpdate, related_name='update_lines')
     change = models.CharField(max_length=250)
+
 
 
 def initial_data():

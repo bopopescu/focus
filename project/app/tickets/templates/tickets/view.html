@@ -52,9 +52,16 @@
             History
 
         <br>
-        {% for entry in history %}
-            {{ entry.changedSinceLastTime }}
-            <br>
+        {% for update in updates %}
+            <div class="history_entry" style="border:1px solid">
+            <ul>
+                {% for line in update.update_lines.all %}
+                     <li>{{ line.change }}</li>
+                {% endfor %}
+            </ul>
+            {{ update.comment }}
+            {{ update.attachment }}
+            </div>
 
         {% endfor %}
         </div>
