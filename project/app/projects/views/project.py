@@ -57,13 +57,10 @@ def view_orders(request, id):
                                                                  'orders': project.orders.all(),
                                                                  })
 
-@require_permission("EDIT", Contact, "id")
+@require_permission("EDIT", Project, "id")
 def history(request, id):
     instance = get_object_or_404(Project, id=id, deleted=False)
-
-    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
-                                 object_id=instance.id)
-
+    history = instance.history()
     return render_with_request(request, 'projects/log.html', {'title': _("Latest events"),
                                                               'project': instance,
                                                               'logs': history[::-1][0:150]})

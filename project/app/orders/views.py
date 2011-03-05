@@ -63,6 +63,13 @@ def deleteOrderLine(request, id, orderlineID):
 
     return redirect(products, id)
 
+@require_permission("EDIT", Order, "id")
+def history(request, id):
+    instance = get_object_or_404(Order, id=id, deleted=False)
+    history = instance.history()
+    return render_with_request(request, 'orders/log.html', {'title': _("Latest events"),
+                                                            'order': instance,
+                                                            'logs': history[::-1][0:150]})
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
@@ -226,7 +233,7 @@ def form (request, id=False, *args, **kwargs):
                     o.state = "Order"
 
             print o.state
-            
+
             o.save()
             form.save_m2m()
             request.message_success(msg)

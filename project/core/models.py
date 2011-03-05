@@ -375,7 +375,6 @@ class User(models.Model):
 
         return set(permissions)
 
-
     def getPermittedObjects(self, action, model):
         unwanted = []
         objects = model.objects.filter(company=self.get_company())
@@ -593,7 +592,6 @@ class Log(models.Model):
         lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
         obj = self.content_type.get_object_for_this_type(id=self.object_id)
 
-
         """
         Needs optimalization
         """
@@ -602,9 +600,6 @@ class Log(models.Model):
         for a in obj._meta.fields:
             if 'related' in a.__dict__:
                 fields[a.attname] = a.related.parent_model
-
-
-        
 
         if lastLog:
             msg = ""
@@ -836,7 +831,7 @@ class PersistentModel(models.Model):
         self.deleted = True
         super(PersistentModel, self).save()
 
-    def getLogs(self):
+    def history(self):
         return Log.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__),
                                   object_id=self.id)
 
