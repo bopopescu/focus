@@ -77,8 +77,8 @@ class User(models.Model):
     deleted = models.BooleanField()
 
     #HourRegistrations valid period
-    validEditHourRegistrationsToDate = models.DateTimeField(null=True, verbose_name="From")
-    validEditHourRegistrationsFromDate = models.DateTimeField(null=True, verbose_name="To")
+    validEditHourRegistrationsFromDate = models.DateTimeField(null=True, verbose_name="From")
+    validEditHourRegistrationsToDate = models.DateTimeField(null=True, verbose_name="To")
 
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
