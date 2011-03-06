@@ -69,14 +69,4 @@
         </tbody>
     </table>
 
-    <h4>{% trans "Used in this orders" %}</h4>
-    <table>
-        {% for order in product.orders.all %}
-            <tr>
-                <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
-                <td></td>
-            </tr>
-        {% endfor %}
-    </table>
-
 {% endblock %}

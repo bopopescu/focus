@@ -25,16 +25,13 @@
     <li><a class="{% active request "product/$" %}" href="{% url app.stock.views.product.overview %}"><img
             src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "PRODUCTS" %}</a></li>
     {% end_require %}
-
     {% require_permission "ADD" stock.Product %}
     <li><a class="{% active request "add" %}" href="{% url app.stock.views.product.add %}"><img
             src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW PRODUCT" %}</a></li>
     {% end_require %}
-
     {% require_permission "LISTDELETED" stock.Product %}
     <li><a class="{% active request "trashed" %}" href="{% url app.stock.views.product.overview_trashed %}"><img
             src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "Trashed" %}</a></li>
     {% end_require %}
-
     {% endif %}
 </ul>
