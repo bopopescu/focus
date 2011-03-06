@@ -55,8 +55,10 @@ def changePassword(request):
 
         if form.is_valid():
             u = request.user
-            u.set_password(form.cleaned_data['newPassword'])
+            u.set_password(form.cleaned_data['new_password'])
             u.save()
+
+            request.message_success(_("Successfully edited password"))
 
             return redirect(edit)
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.conf import settings
 from django.shortcuts import get_object_or_404, HttpResponse
 from django.db.models import Q
 from core.shortcuts import *
@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 @login_required()
 def overview(request):
     updateTimeout(request)
-    Users = User.objects.inCompany().filter(is_active=True)
+    Users = User.objects.inCompany()
     return render_with_request(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
 
 @login_required()
@@ -47,8 +47,8 @@ def changeCanLogin(request, id):
     return redirect(view, id)
 
 @login_required()
-def sendGeneratedPassword(request, userID):
-    user = get_object_or_404(User, id=userID, company=request.user.get_company())
+def sendGeneratedPassword(request, id):
+    user = get_object_or_404(User, id=id, company=request.user.get_company())
 
     import string
     import random
@@ -76,9 +76,12 @@ def sendGeneratedPassword(request, userID):
     user.set_password("%s" % ret)
     user.save()
 
+    if settings.DEBUG:
+        print "Nytt passord er: %s" % ret
+
     request.message_success(_("Successfully sent new password"))
 
-    return redirect(overview)
+    return redirect(view, id)
 
 @login_required()
 def addPop(request):
