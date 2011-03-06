@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from django.shortcuts import get_object_or_404, redirect
 from core.shortcuts import *
 from core.decorators import require_permission
@@ -14,14 +15,14 @@ from django.utils.translation import ugettext as _
 @require_permission("LIST", Product)
 def overview(request):
     updateTimeout(request)
-    products = Product.objects.all()
+    products = Product.objects.filter(trashed=False)
 
     return render_with_request(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
 
 @require_permission("LISTDELETED", Product)
 def overview_trashed(request):
     updateTimeout(request)
-    products = Product.objects.filter(deleted=True)
+    products = Product.objects.filter(trashed=True)
     return render_with_request(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
 
 @require_permission("CREATE", Product)
@@ -31,6 +32,23 @@ def add(request):
 @require_permission("EDIT", Product, "id")
 def edit(request, id):
     return form(request, id)
+
+@require_permission("EDIT", Product, "id")
+def orders(request, id):
+    product = Product.objects.get(id=id)
+    return render_with_request(request, 'stock/products/orders.html',
+                               {'title': _("Product used in these orders"), 'product': product,
+                                'orders': product.orders})
+
+@require_permission("EDIT", Product, "id")
+def files(request, id):
+    product = Product.objects.get(id=id)
+    productFileForm = ProductFileForm(instance=ProductFile())
+
+    return render_with_request(request, 'stock/products/files.html',
+                               {'title': _("Files"), 'product': product,
+                                'productFileForm': productFileForm,
+                                'files': product.files})
 
 @require_permission("EDIT", Product, "id")
 def addFile(request, id):
@@ -45,15 +63,15 @@ def addFile(request, id):
             o.save()
             request.message_success(_("Successfully uploaded file"))
 
-            return redirect(view, id)
+            return redirect(files, id)
 
         request.message_error(_("Invalid file"))
 
-        return redirect(edit, id)
+        return redirect(files, id)
 
     else:
         request.message_error(_("An error occoured"))
-        return redirect(overview)
+        return redirect(files, id)
 
 @require_permission("EDIT", Product, "id")
 def deleteFile(request, id, fileID):
@@ -61,12 +79,27 @@ def deleteFile(request, id, fileID):
     file = product.files.get(id=fileID)
     file.delete()
 
-    return redirect(view, id)
+    return redirect(files, id)
 
 @require_permission("DELETE", Product, "id")
-def delete(request, id):
-    Product.objects.get(id=id).delete()
-    return redirect(overview)
+def trash(request, id):
+    instance = Product.objects.get(id=id)
+
+    if request.method == "POST":
+        if not instance.canBeDeleted()[0]:
+            request.message_error("You can't delete this product because: ")
+            for reason in instance.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully trashed this product")
+            instance.trash()
+        return redirect(overview)
+    else:
+        return render_with_request(request, 'stock/products/trash.html', {'title': _("Confirm delete"),
+                                                                          'product': instance,
+                                                                          'canBeDeleted': instance.canBeDeleted()[0],
+                                                                          'reasons': instance.canBeDeleted()[1],
+                                                                          })
 
 @require_permission("DELETE", Product, "id")
 def recover(request, id):
@@ -85,16 +118,14 @@ def autocomplete(request, query, limit):
 
     return HttpResponse(JSONEncoder().encode(products), mimetype='application/json')
 
-
 @require_permission("VIEW", Product, "id")
 def view(request, id):
     instance = ProductFile()
-    productFileForm = ProductFileForm(instance=instance)
     product = Product.objects.get(id=id)
 
     return render_with_request(request, 'stock/products/view.html', {'title': _("Product"),
                                                                      'product': product,
-                                                                     'productFileForm': productFileForm})
+                                                                     })
 
 def form (request, id=False):
     if id:

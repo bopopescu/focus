@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load auth %}
+{% load util %}
+{% load i18n %}
+
+
+{% block sidebar %}
+    {% include "stock/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+    <h1>{{ title }}</h1>
+    {% if canBeDeleted %}
+        <form action="" method="POST">
+            <input type="submit" value="{% trans "Delete product" %}">
+        </form>
+    {% else %}
+        {% trans "You can't delete this customer because: " %}
+        <br><br>
+        {% for reason in reasons %}
+            - {{ reason }}<br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}	

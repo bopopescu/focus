@@ -38,7 +38,7 @@ class Customer(PersistentModel):
 
         return (False, reasons)
 
-    
+
     @staticmethod
     def add_ajax_url():
         return urlresolvers.reverse('app.customers.views.add_ajax')

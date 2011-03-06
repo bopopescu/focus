@@ -9,101 +9,74 @@
 {% block maincontent %}
 
 
-<h1>{{ title }} </h1>
+    <h1>{{ title }} </h1>
 
-<table>
+    <table>
 
-    <tbody>
+        <tbody>
 
-    <tr>
-        <td>{% trans "Number" %}</td>
-        <td>{{ product.pid }}</td>
-    </tr>
-
-    <tr>
-        <td>{% trans "Price in" %}</td>
-        <td>{{ product.price }}</td>
-    </tr>
-
-    <tr>
-        <td>{% trans "Price out" %}</td>
-        <td>{{ product.price_out }}</td>
-    </tr>
-    <tr>
-        <td>{% trans "Max discount" %}</td>
-        <td>{{ product.max_discount }}</td>
-    </tr>
-    <tr>
-        <td>{% trans "Available in store (count)" %}</td>
-        <td>{{ product.countOfAvailableInStock }}</td>
-    </tr>
-    <tr>
-        <td>{% trans "Supplier" %}</td>
-        <td>{{ product.supplier }}</td>
-    </tr>
-    <tr>
-        <td>{% trans "Size" %}</td>
-        <td>{{ product.size }}</td>
-    </tr>
-
-    <tr>
-        <td>{% trans "Unit" %}</td>
-        <td>{{ product.unitForSize }}</td>
-    </tr>
-
-    <tr>
-        <td>{% trans "Currency" %}</td>
-        <td>{{ product.priceVal }}</td>
-    </tr>
-
-    <tr>
-        <td>{% trans "Normal delivery time" %}</td>
-        <td>{{ product.normalDeliveryTime }}</td>
-    </tr>
-
-    <tr>
-        <td>{% trans "Product group" %}</td>
-        <td><a href="{{ product.productGroup.getViewUrl }}">{{ product.productGroup }}</a></td>
-    </tr>
-
-    </tbody>
-</table>
-
-{% trans "Files" %}
-
-<form action="{% url app.stock.views.product.addFile product.id %}" method="POST"
-      enctype="multipart/form-data">
-    {{ productFileForm }} <input type="submit" value="Last opp" class="btn" name="save"/>
-</form>
-
-<br>
-<table class="tablesorter">
-
-    <tbody>
-
-    {% for file in product.files.all %}
-    <tr>
-        <td>{{ file.name }}</td>
-        <td><a target="_blank" href="{{ file.getFile }}">{% trans "download" %}</a></td>
-        <td>
-            {% require_permission EDIT product %}
-            <a href="{% url app.stock.products.views.deleteFile product.id file.id %}">{% trans "delete" %}</a>
-            {% end_require %}
-        </td>
-    </tr>
-    {% endfor %}
-
-    </tbody>
-</table>
-
-<h4>{% trans "Used in this orders" %}</h4>
-<table>
-    {% for order in product.orders.all %}
         <tr>
-            <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
-            <td></td>
+            <td>{% trans "Number" %}</td>
+            <td>{{ product.pid }}</td>
         </tr>
-    {% endfor %}
-</table>
+
+        <tr>
+            <td>{% trans "Price in" %}</td>
+            <td>{{ product.price }}</td>
+        </tr>
+
+        <tr>
+            <td>{% trans "Price out" %}</td>
+            <td>{{ product.price_out }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Max discount" %}</td>
+            <td>{{ product.max_discount }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Available in store (count)" %}</td>
+            <td>{{ product.countOfAvailableInStock }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Supplier" %}</td>
+            <td>{{ product.supplier }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Size" %}</td>
+            <td>{{ product.size }}</td>
+        </tr>
+
+        <tr>
+            <td>{% trans "Unit" %}</td>
+            <td>{{ product.unitForSize }}</td>
+        </tr>
+
+        <tr>
+            <td>{% trans "Currency" %}</td>
+            <td>{{ product.priceVal }}</td>
+        </tr>
+
+        <tr>
+            <td>{% trans "Normal delivery time" %}</td>
+            <td>{{ product.normalDeliveryTime }}</td>
+        </tr>
+
+        <tr>
+            <td>{% trans "Product group" %}</td>
+            <td><a href="{{ product.productGroup.getViewUrl }}">{{ product.productGroup }}</a></td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <h4>{% trans "Used in this orders" %}</h4>
+    <table>
+        {% for order in product.orders.all %}
+            <tr>
+                <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
+                <td></td>
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}

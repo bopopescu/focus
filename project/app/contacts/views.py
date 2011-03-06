@@ -93,7 +93,6 @@ def trash(request, id):
 
 @suggest_ajax_parse_arguments()
 def autocomplete(request, query, limit):
-
     contacts = Contact.objects.all()
 
     """
@@ -105,7 +104,7 @@ def autocomplete(request, query, limit):
                  'label': "%s" % (contact.full_name),
                  'value': contact.name} for contact in contacts]
     """
-    
+
     return HttpResponse(JSONEncoder().encode(contacts), mimetype='application/json')
 
 
@@ -121,10 +120,10 @@ def add_ajax(request):
                                               'id': a.id}), mimetype='application/json')
 
     else:
-       errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-       return HttpResponse(simplejson.dumps({'errors': errors,
-                                             'valid': False}), mimetype='application/json')
+        return HttpResponse(simplejson.dumps({'errors': errors,
+                                              'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")
 
