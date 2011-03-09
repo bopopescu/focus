@@ -68,10 +68,11 @@ def sendGeneratedPassword(request, id):
 
     ret += "%s" % random.randint(20, 99)
 
-    from django.core.mail import send_mail
+    from core.mail import send_mail
 
-    send_mail('Nytt passord', 'Nytt passord er: %s' % ret, 'FocusTime',
-              ["%s" % user.email], fail_silently=False)
+    send_mail(_("New password"), (_("Your username is: %s" % user.username) + _("\nYour password is: ") + '%s' % ret),
+              settings.NO_REPLY_EMAIL,
+              [user.email], fail_silently=False)
 
     user.set_password("%s" % ret)
     user.save()
@@ -152,8 +153,8 @@ def setHourRegistrationLimitsManually (request, id):
         form = HourRegistrationManuallyForm(instance=instance)
 
     return render_with_request(request, "admin/users/form.html", {'title': _("Change user"),
-                                                                  'userCard':instance,
-                                                                   'form': form})
+                                                                  'userCard': instance,
+                                                                  'form': form})
 
 
 @login_required()

@@ -9,6 +9,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 SERVER_EMAIL = 'fredrik+django@fncit.no'
+NO_REPLY_EMAIL = 'no-reply@focustime.no'
 
 ADMINS = (
 (u'Fredrik Nygård Carlsen', 'fredrik@fncit.no'),
@@ -73,7 +74,7 @@ BASE_PATH + '/templates/',
 )
 
 STATICFILES_DIRS = (
-    BASE_PATH + '/files/media/',
+BASE_PATH + '/files/media/',
 )
 
 INTERNAL_IPS = ('127.0.0.1')
