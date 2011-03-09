@@ -3,6 +3,7 @@ from core import Core
 from core.models import PersistentModel
 from app.contacts.models import Contact
 from django.core import urlresolvers
+from django.utils.translation import ugettext as _
 
 class Supplier(PersistentModel):
     name = models.CharField(max_length=200)
@@ -14,6 +15,20 @@ class Supplier(PersistentModel):
 
     def __unicode__(self):
         return self.name
+
+
+    def canBeDeleted(self):
+        canBeDeleted = True
+        reasons = []
+
+        if self.products.all().count() > 0:
+            canBeDeleted = False
+            reasons.append(_("Supplier has active products"))
+
+        if canBeDeleted:
+            return (True, "OK")
+
+        return (False, reasons)
 
     @staticmethod
     def add_ajax_url():
@@ -30,8 +45,8 @@ class Supplier(PersistentModel):
         return urlresolvers.reverse('app.suppliers.views.edit', args=("%s" % self.id,))
 
     def getHistoryUrl(self):
-      return urlresolvers.reverse('app.suppliers.views.history', args=("%s" % self.id,))
-  
+        return urlresolvers.reverse('app.suppliers.views.history', args=("%s" % self.id,))
+
     def save(self, *args, **kwargs):
         new = False
         if not self.id:

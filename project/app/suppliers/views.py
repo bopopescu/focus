@@ -39,15 +39,15 @@ def add_ajax(request):
         a = form.save()
 
         return HttpResponse(simplejson.dumps({'name': a.name,
-                                              'valid':True,
+                                              'valid': True,
                                               'id': a.id}), mimetype='application/json')
 
 
     else:
-       errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-       return HttpResponse(simplejson.dumps({'errors': errors,
-                                             'valid': False}), mimetype='application/json')
+        return HttpResponse(simplejson.dumps({'errors': errors,
+                                              'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")
 
@@ -57,7 +57,7 @@ def view(request, id):
     supplier = Core.current_user().getPermittedObjects("VIEW", Supplier).get(id=id)
 
     return render_with_request(request, 'suppliers/view.html',
-                               {'title': supplier.name,
+                               {'title': _("Supplier"),
                                 'supplier': supplier})
 
 
@@ -79,9 +79,25 @@ def add(request):
 def edit(request, id):
     return form(request, id)
 
-def delete(request, id):
-    Supplier.objects.get(id=id).delete()
-    return redirect(overview)
+@require_permission("DELETE", Customer, "id")
+def trash(request, id):
+    instance = Supplier.objects.get(id=id)
+
+    if request.method == "POST":
+        if not instance.canBeDeleted()[0]:
+            request.message_error("You can't delete this supplier because: ")
+            for reason in instance.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully deleted this supplier")
+            instance.trash()
+        return redirect(overview)
+    else:
+        return render_with_request(request, 'suppliers/trash.html', {'title': _("Confirm delete"),
+                                                                     'supplier': instance,
+                                                                     'canBeDeleted': instance.canBeDeleted()[0],
+                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     })
 
 @login_required()
 def form (request, id=False):

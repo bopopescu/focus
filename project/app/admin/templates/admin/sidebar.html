@@ -21,7 +21,7 @@
             src="{{ STATIC_URL }}img/password.png" width="24" height="24" alt="Mail"/>{% trans "SEND NEW PASSWORD" %}
     </a></li>
 
-    <li><a class="{% active request "trash" %}"
+    <li><a class="{% active request "manualSetTime" %}"
            href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"><img
             src="{{ STATIC_URL }}img/datetime.png" width="24" height="24" alt="Mail"/>{% trans "SET HOUR DAYS LIMITS" %}
     </a>
@@ -30,7 +30,7 @@
     <li><a class="{% active request "trash" %}" href="{% url app.admin.views.user.delete userCard.id %}"><img
             src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
 
-    {% else %}{% if graoup.id %}
+    {% else %}{% if group.id %}
 
     <li><a class="{% active request "view" %}" href="{% url app.admin.views.group.view group.id %}"><img
             src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>

@@ -9,5 +9,5 @@ urlpatterns = patterns('app.suppliers.views',
                        url(r'^(?P<id>\d+)/edit/$', 'edit'),
                        url(r'^(?P<id>\d+)/view/$', 'view'),
                        url(r'^(?P<id>\d+)/history/$', 'history'),
-                       url(r'^(?P<id>\d+)/delete/$', 'delete'),
+                       url(r'^(?P<id>\d+)/trash/$', 'trash'),
                        )

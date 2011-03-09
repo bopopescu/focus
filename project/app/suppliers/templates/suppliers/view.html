@@ -10,7 +10,7 @@
 
 {% block maincontent %}
 
-    {{ title }}
+    <h2>{{ title }}</h2>
 
     <table>
 
@@ -21,10 +21,19 @@
 
         <tr>
             <td>{% trans "E-mail" %}</td>
-            <td>{{ customer.email }}</td>
+            <td>{{ supplier.email }}</td>
         </tr>
 
-   </table>
+        <tr>
+            <td>{% trans "Phone" %}</td>
+            <td>{{ supplier.phone }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "Address" %}</td>
+            <td>{{ supplier.address }}</td>
+        </tr>
+
+    </table>
 
 
 {% endblock %}	
