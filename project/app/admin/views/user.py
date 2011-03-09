@@ -126,14 +126,14 @@ def delete(request, id):
     u = User.objects.get(id=id)
     u.is_active = False
     u.save()
-    request.message_success(_("Successfully deletes user"))
+    request.message_success(_("User successfully deleted"))
     return redirect(overview)
 
 
 @login_required()
 def setHourRegistrationLimitsManually (request, id):
     instance = get_object_or_404(User, id=id)
-    msg = _("Successfully changed user")
+    msg = _("User successfully edited")
 
     if request.method == 'POST':
         form = HourRegistrationManuallyForm(request.POST, instance=instance)
@@ -152,18 +152,18 @@ def setHourRegistrationLimitsManually (request, id):
         form = HourRegistrationManuallyForm(instance=instance)
 
     return render_with_request(request, "admin/users/form.html", {'title': _("Change user"),
-                                                                  'userCard':instance,
-                                                                   'form': form})
+                                                                  'userCard': instance,
+                                                                  'form': form})
 
 
 @login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(User, id=id, company=request.user.company)
-        msg = _("Successfully edited user")
+        msg = _("User successfully added")
     else:
         instance = User()
-        msg = _("Successfully added new user")
+        msg = _("New user successfully added")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
