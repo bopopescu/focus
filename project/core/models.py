@@ -99,7 +99,7 @@ class User(models.Model):
         if not self.id:
             action = "ADD"
 
-        super(Group, self).save()
+        super(User, self).save()
 
         if action == "ADD":
             Core.current_user().grant_role("Owner", self)
