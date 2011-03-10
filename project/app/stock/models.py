@@ -8,8 +8,8 @@ from app.suppliers.models import Supplier
 from django.core import urlresolvers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from app.orders.models import Order
 from django.utils.translation import ugettext as _
+from app.orders.models import Order
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -68,7 +68,7 @@ class Currency(PersistentModel):
         return self.name
 
 class Product(PersistentModel):
-    pid = models.IntegerField("Varenr", null=True)
+    pid = models.CharField("Varenr", max_length=50, null=True)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
     price = models.CharField("Pris", max_length=100, null=True)

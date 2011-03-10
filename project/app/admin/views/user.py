@@ -8,6 +8,7 @@ from core.decorators import *
 from core.models import User, Permission
 from app.admin.forms import *
 from django.utils.translation import ugettext as _
+from core.mail import send_mail
 
 @login_required()
 def overview(request):
@@ -46,10 +47,7 @@ def changeCanLogin(request, id):
     u.save()
     return redirect(view, id)
 
-@login_required()
-def sendGeneratedPassword(request, id):
-    user = get_object_or_404(User, id=id, company=request.user.get_company())
-
+def generateNewPassordForUser(user):
     import string
     import random
 
@@ -57,7 +55,6 @@ def sendGeneratedPassword(request, id):
     consonants = [a for a in string.ascii_lowercase if a not in vowels]
     ret = ''
     slen = 8
-
     for i in range(slen):
         if i % 2 == 0:
             randid = random.randint(0, 20) #number of consonants
@@ -65,17 +62,19 @@ def sendGeneratedPassword(request, id):
         else:
             randid = random.randint(0, 4) #number of vowels
             ret += vowels[randid]
-
     ret += "%s" % random.randint(20, 99)
-
-    from core.mail import send_mail
-
     send_mail(_("New password"), (_("Your username is: %s" % user.username) + _("\nYour password is: ") + '%s' % ret),
               settings.NO_REPLY_EMAIL,
               [user.email], fail_silently=False)
-
     user.set_password("%s" % ret)
     user.save()
+    return ret
+
+@login_required()
+def sendGeneratedPassword(request, id):
+    user = get_object_or_404(User, id=id, company=Core.current_user().get_company())
+
+    ret = generateNewPassordForUser(user)
 
     if settings.DEBUG:
         print "Nytt passord er: %s" % ret

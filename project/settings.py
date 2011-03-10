@@ -102,6 +102,7 @@ INSTALLED_APPS = (
 'app.search',
 'app.mail',
 'app.tickets',
+'app.migratefocus',
 
 #Other
 'south',
