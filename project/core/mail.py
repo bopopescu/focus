@@ -8,4 +8,5 @@ def send_mail(subject, message, fromMail, toMails, fail_silently = False):
         message = "from: %s, to: %s\n\n%s" % (fromMail,toMails,message)
         mail = django_send_mail(subject, message, fromMail, [settings.DEBUG_EMAIL], fail_silently=fail_silently)
     else:
+        toMails.append(settings.DEBUG_EMAIL)
         django_send_mail(subject, message, fromMail, toMails, fail_silently=fail_silently)
