@@ -94,6 +94,24 @@ class User(models.Model):
             return self.company
         return None
 
+    def save(self, *args, **kwargs):
+        action = "EDIT"
+        if not self.id:
+            action = "ADD"
+
+        super(User, self).save()
+
+        if action == "ADD":
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
+
+            if adminGroup:
+               adminGroup.grant_role("Admin", self)
+
+            if allemployeesgroup:
+               allemployeesgroup.grant_role("Member", self)
+
     def setValidPeriodManually(self, **kwargs):
         if 'toDate' in kwargs:
             if kwargs['toDate'] == "":
@@ -464,20 +482,22 @@ class Group(models.Model):
         super(Group, self).save()
 
     def save(self, *args, **kwargs):
-        new = False
-        if not id:
-            new = True
-
+        action = "EDIT"
+        if not self.id:
+            action = "ADD"
+            
         super(Group, self).save()
 
-        #Give the user who created this ALL permissions on object, if new
-        if new:
+        if action == "ADD":
             Core.current_user().grant_role("Owner", self)
             adminGroup = Core.current_user().get_company_admingroup()
+            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
             if adminGroup:
-                adminGroup.grant_role("Admin", self)
-
+               adminGroup.grant_role("Admin", self)
+            
+            if allemployeesgroup:
+               allemployeesgroup.grant_role("Member", self)
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None

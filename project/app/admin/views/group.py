@@ -81,4 +81,5 @@ def form (request, id=False):
     else:
         form = GroupForm(instance=instance)
 
-    return render_with_request(request, "admin/groups/form.html", {'title': _("Group"),'group':instance, 'form': form})
+    return render_with_request(request, "admin/groups/form.html",
+                               {'title': _("Group"), 'group': instance, 'form': form})
