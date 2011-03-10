@@ -95,6 +95,19 @@ class Command(BaseCommand):
 
         print "Current user is: %s " % Core.current_user()
 
+        print "Migrate users"
+
+        cursor.execute("SELECT * FROM brukere")
+        for cu in cursor.fetchall():
+            u = User()
+            u.focusID = cu['brukerid']
+            u.username = cu['brukernavn'].decode("latin1") + str(int(random.random() * 99999))
+            u.last_name = cu['fult_navn'].decode("latin1")
+            u.email = cu['epostadresse'].decode("latin1")
+            u.phone = cu['telefon']
+            u.company = company
+            u.save()
+
         print "Migrate customers"
 
         cursor.execute("SELECT * FROM kunder")
@@ -116,26 +129,29 @@ class Command(BaseCommand):
             p.pid = cu['prosjektid']
             p.project_name = cu['prosjektnavn'].decode('latin1')
             p.description = cu['beskrivelse'].decode('latin1')
-            p.customer = Customer.objects.get(cid = cu['kundenr'], company=company)
+            p.customer = Customer.objects.get(cid=cu['kundenr'], company=company)
             p.save()
 
         print "Migrate orders"
         cursor.execute("SELECT * FROM ordrer")
         for cu in cursor.fetchall():
             p = Order()
-            p.state="Order"
+            p.state = "Order"
             if cu['ordrenr'] and cu['ordrenr'].isdigit():
                 p.oid = cu['ordrenr']
-        
+
             if cu['ordrenavn']:
                 p.order_name = cu['ordrenavn'].decode('latin1')
 
             if cu['ordrebeskrivelse']:
                 p.description = cu['ordrebeskrivelse'].decode('latin1')
-            
+
+            if cu['ansvarlig']:
+                p.responsible = User.objects.get(focusID=cu['ansvarlig'], company=company)
+
             try:
-                p.customer = Customer.objects.get(cid = cu['kundenr'], company=company)
-                p.project = Project.objects.get(pid = (cu['prosjektid']), company=company)
+                p.customer = Customer.objects.get(cid=cu['kundenr'], company=company)
+                p.project = Project.objects.get(pid=(cu['prosjektid']), company=company)
             except:
                 pass
 
@@ -164,10 +180,9 @@ class Command(BaseCommand):
             p = Product()
             if cu['varenr']:
                 p.pid = cu['varenr'].decode("latin1")
-                
+
             p.name = cu['varenavn'].decode('latin1')
             p.description = cu['varebetegnelse'].decode("latin1")
             p.save()
 
 
-        

@@ -50,11 +50,6 @@ class Company(models.Model):
 
 
 class User(models.Model):
-    """
-    Users within the Django authentication system are represented by this model.
-
-    Username and password are required. Other fields are optional.
-    """
     username = models.CharField(('username'), max_length=30, unique=True, help_text=(
     "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
     first_name = models.CharField(('first name'), max_length=30, blank=True)
@@ -71,11 +66,17 @@ class User(models.Model):
     last_login = models.DateTimeField(('last login'), default=datetime.now)
     date_joined = models.DateTimeField(('date joined'), default=datetime.now)
 
+    phone = models.CharField(max_length=30, null=True)
+    birthdate = models.DateField("Bday", null=True)
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
     profileImage = models.ImageField(upload_to="profileImages", storage=fs, null=True, blank=True)
     deleted = models.BooleanField()
 
+
+    #id used for migration from old TIME, can be deleted later
+    focusID = models.IntegerField(null=True)
+    
     #HourRegistrations valid period
     validEditHourRegistrationsFromDate = models.DateTimeField(null=True, verbose_name="From")
     validEditHourRegistrationsToDate = models.DateTimeField(null=True, verbose_name="To")
@@ -107,10 +108,10 @@ class User(models.Model):
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
             if adminGroup:
-               adminGroup.grant_role("Admin", self)
+                adminGroup.grant_role("Admin", self)
 
             if allemployeesgroup:
-               allemployeesgroup.grant_role("Member", self)
+                allemployeesgroup.grant_role("Member", self)
 
     def setValidPeriodManually(self, **kwargs):
         if 'toDate' in kwargs:
@@ -485,7 +486,7 @@ class Group(models.Model):
         action = "EDIT"
         if not self.id:
             action = "ADD"
-            
+
         super(Group, self).save()
 
         if action == "ADD":
@@ -494,10 +495,10 @@ class Group(models.Model):
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
             if adminGroup:
-               adminGroup.grant_role("Admin", self)
-            
+                adminGroup.grant_role("Admin", self)
+
             if allemployeesgroup:
-               allemployeesgroup.grant_role("Member", self)
+                allemployeesgroup.grant_role("Member", self)
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None
