@@ -5,7 +5,7 @@ from django.db.models import Q
 from core.shortcuts import *
 from core.views import updateTimeout
 from core.decorators import *
-from core.models import User, Permission
+from core.models import User, Permission, Log
 from app.admin.forms import *
 from django.utils.translation import ugettext as _
 from core.mail import send_mail
@@ -83,33 +83,14 @@ def sendGeneratedPassword(request, id):
 
     return redirect(view, id)
 
-@login_required()
-def addPop(request):
-    instance = User()
 
-    if request.method == "POST":
-        form = UserForm(request.POST, instance=instance)
-
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.save()
-
-            form.save_m2m()
-
-            if not o.get_profile().company:
-                o.get_profile().company = request.user.get_profile().company
-                o.get_profile().save()
-                sendGeneratedPassword(request, o.id)
-
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
-
-    else:
-        form = UserForm(instance=instance)
-
-    return render_with_request(request, "simpleform.html", {'title': 'Bruker', 'form': form})
-
+@require_permission("EDIT", User, "id")
+def history(request, id):
+    user = User.objects.get(id=id)
+    history = user.logs.all()
+    return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
+                                                               'user': user,
+                                                               'logs': history[::-1][0:150]})
 
 @login_required()
 def view(request, id):
@@ -121,14 +102,25 @@ def view(request, id):
                                                                   'permissions': Permissions,
                                                                   })
 
-@login_required()
-def delete(request, id):
-    u = User.objects.get(id=id)
-    u.is_active = False
-    u.save()
-    request.message_success(_("User successfully deleted"))
-    return redirect(overview)
+@require_permission("DELETE", User, "id")
+def trash(request, id):
+    instance = User.objects.get(id=id)
 
+    if request.method == "POST":
+        if not instance.canBeDeleted()[0]:
+            request.message_error("You can't delete this user because: ")
+            for reason in instance.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully deleted this user")
+            customer.trash()
+        return redirect(overview)
+    else:
+        return render_with_request(request, 'customers/trash.html', {'title': _("Confirm delete"),
+                                                                     'user': instance,
+                                                                     'canBeDeleted': instance.canBeDeleted()[0],
+                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     })
 
 @login_required()
 def setHourRegistrationLimitsManually (request, id):

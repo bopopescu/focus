@@ -90,6 +90,20 @@ class User(models.Model):
             return self.company
         return None
 
+    def canBeDeleted(self):
+        canBeDeleted = True
+        reasons = []
+
+        if self.logs.all().count() > 0:
+            canBeDeleted = False
+            reasons.append(_("User has a history, check history tab. "))
+
+        if canBeDeleted:
+            return (True, "OK")
+
+        return (False, reasons)
+
+
     def save(self, *args, **kwargs):
         action = "EDIT"
         if not self.id:
@@ -640,8 +654,12 @@ class Log(models.Model):
         #lastLog = self.getObject().getLogs().filter(id__lt=self.id)
 
         lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
-        obj = self.content_type.get_object_for_this_type(id=self.object_id)
 
+        try:
+            obj = self.content_type.get_object_for_this_type(id=self.object_id)
+        except:
+            return ""
+            
         """
         Needs optimalization
         """

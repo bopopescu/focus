@@ -23,8 +23,8 @@ Contact = getClass("contacts", "contact")
 Product = getClass("stock", "product")
 UnitsForSizes = getClass("stock", "unitsforsizes")
 Currency = getClass("stock", "currency")
-ProductCategory = getClass("stock","productcategory")
-ProductGroup = getClass("stock","productgroup")
+ProductCategory = getClass("stock", "productcategory")
+ProductGroup = getClass("stock", "productgroup")
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
@@ -78,7 +78,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
 
 def findElementByOldID(users, oldID):
     for user in users:
-        if user[1]==oldID:
+        if user[1] == oldID:
             return user[0]
     return None
 
@@ -97,7 +97,6 @@ class Command(BaseCommand):
         print "Connection established!"
 
         randomCompanyIdentifier = str(int(random.random() * 99999))
-
 
         company, user = createNewCustomer("Ledere", "Bjarte Hatlenes", "superadmin",
                                           "superadmin" + randomCompanyIdentifier, "Ansatte",
@@ -122,7 +121,7 @@ class Command(BaseCommand):
             u.phone = cu['telefon']
             u.company = company
             u.save()
-            users.append((u,cu['brukerid']))
+            users.append((u, cu['brukerid']))
 
         print "Migrate customers"
 
@@ -173,8 +172,6 @@ class Command(BaseCommand):
 
             p.save()
 
-
-
         print "Migrate contacts"
         cursor.execute("SELECT * FROM kundebrukere")
         for cu in cursor.fetchall():
@@ -184,7 +181,6 @@ class Command(BaseCommand):
             p.email = cu['epostadresse_kundebruker'].decode('latin1')
             p.save()
 
-
         print "Migrate suppliers"
         cursor.execute("SELECT * FROM leverandor")
         for cu in cursor.fetchall():
@@ -193,25 +189,24 @@ class Command(BaseCommand):
             p.address = cu['adresse'].decode('latin1')
             p.save()
 
-
         print "Migrate product categories"
         productcategories = []
         cursor.execute("SELECT * FROM lager_varegrupper")
         for cu in cursor.fetchall():
-           p = ProductCategory()
-           p.name = cu['varegruppenavn'].decode('latin1')
-           p.save()
-           productcategories.append((p,cu['varegruppenr']))
+            p = ProductCategory()
+            p.name = cu['varegruppenavn'].decode('latin1')
+            p.save()
+            productcategories.append((p, cu['varegruppenr']))
 
         print "Migrate product groups"
         productgroups = []
         cursor.execute("SELECT * FROM lager_produktgrupper")
         for cu in cursor.fetchall():
-           p = ProductGroup()
-           p.name = cu['produktgruppenavn'].decode('latin1')
-           p.category = findElementByOldID(productcategories, cu['varegruppenr'])
-           p.save()
-           productgroups.append((p,cu['produktgruppenr']))
+            p = ProductGroup()
+            p.name = cu['produktgruppenavn'].decode('latin1')
+            p.category = findElementByOldID(productcategories, cu['varegruppenr'])
+            p.save()
+            productgroups.append((p, cu['produktgruppenr']))
 
         print "Migrate products"
         cursor.execute("SELECT * FROM lager_varer")
@@ -228,7 +223,6 @@ class Command(BaseCommand):
             p.description = cu['varebetegnelse'].decode("latin1")
             p.productGroup = findElementByOldID(productgroups, cu['produktgruppenr'])
             p.save()
-
 
         print "Done!"
 
