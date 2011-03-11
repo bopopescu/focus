@@ -25,7 +25,7 @@
            href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"><img
             src="{{ STATIC_URL }}img/datetime.png" width="24" height="24" alt="Mail"/>{% trans "SET HOUR DAYS LIMITS" %}
     </a>
-  <li><a class="{% active request "history" %}"
+    <li><a class="{% active request "history" %}"
            href="{% url app.admin.views.user.history userCard.id %}"><img
             src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}
     </a>
