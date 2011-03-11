@@ -266,7 +266,7 @@ class PermissionsTesting(FocusTest):
 
 
     def testGrantRoleByUrls(self):
-        
+
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
 

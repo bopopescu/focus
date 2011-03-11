@@ -72,8 +72,17 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
 
     return company, user
 
+def findUserByOldID(users, oldID):
+    for user in users:
+        if user[1]==oldID:
+            return user[0]
+    return None
+
 class Command(BaseCommand):
     def handle(self, *apps, **options):
+        print "======================================================="
+
+        print "Connecting to database..."
         conn = MySQLdb.connect(host="focustimeno.mysql.domeneshop.no",
                                user="focustimeno",
                                passwd="XFu7qBLy",
@@ -81,32 +90,35 @@ class Command(BaseCommand):
                                cursorclass=MySQLdb.cursors.DictCursor)
 
         cursor = conn.cursor()
+        print "Connection established!"
 
-        print "======================================================="
+        randomCompanyIdentifier = str(int(random.random() * 99999))
 
-        print "Create new company"
 
         company, user = createNewCustomer("Ledere", "Bjarte Hatlenes", "superadmin",
-                                          "bjarte" + str(int(random.random() * 99999)), "Ansatte",
+                                          "bjarte" + randomCompanyIdentifier, "Ansatte",
                                           "Focus Security AS")
 
         Core.set_test_user(user)
         generateNewPassordForUser(user)
 
+        print "Company: %s " % company
         print "Current user is: %s " % Core.current_user()
 
         print "Migrate users"
 
+        users = []
+
         cursor.execute("SELECT * FROM brukere")
         for cu in cursor.fetchall():
             u = User()
-            u.focusID = cu['brukerid']
-            u.username = cu['brukernavn'].decode("latin1") + str(int(random.random() * 99999))
+            u.username = cu['brukernavn'].decode("latin1") + randomCompanyIdentifier
             u.last_name = cu['fult_navn'].decode("latin1")
             u.email = cu['epostadresse'].decode("latin1")
             u.phone = cu['telefon']
             u.company = company
             u.save()
+            users.append((u,cu['brukerid']))
 
         print "Migrate customers"
 
@@ -147,7 +159,7 @@ class Command(BaseCommand):
                 p.description = cu['ordrebeskrivelse'].decode('latin1')
 
             if cu['ansvarlig']:
-                p.responsible = User.objects.get(focusID=cu['ansvarlig'], company=company)
+                p.responsible = findUserByOldID(users, cu['ansvarlig'])
 
             try:
                 p.customer = Customer.objects.get(cid=cu['kundenr'], company=company)
@@ -185,4 +197,6 @@ class Command(BaseCommand):
             p.description = cu['varebetegnelse'].decode("latin1")
             p.save()
 
+
+        print "Done!"
 

@@ -14,9 +14,6 @@ class Migration(SchemaMigration):
         # Adding field 'User.birthdate'
         db.add_column('core_user', 'birthdate', self.gf('django.db.models.fields.DateField')(null=True), keep_default=False)
 
-        # Adding field 'User.focusID'
-        db.add_column('core_user', 'focusID', self.gf('django.db.models.fields.IntegerField')(null=True), keep_default=False)
-
 
     def backwards(self, orm):
         
@@ -25,9 +22,6 @@ class Migration(SchemaMigration):
 
         # Deleting field 'User.birthdate'
         db.delete_column('core_user', 'birthdate')
-
-        # Deleting field 'User.focusID'
-        db.delete_column('core_user', 'focusID')
 
 
     models = {
@@ -51,8 +45,8 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'comment_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.Company']"}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'comment_created'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 3, 10, 13, 53, 45, 797904)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 3, 10, 13, 53, 45, 797938)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 3, 10, 14, 36, 47, 253998)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 3, 10, 14, 36, 47, 254031)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'comment_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['core.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -129,7 +123,6 @@ class Migration(SchemaMigration):
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'focusID': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'hourly_rate': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),

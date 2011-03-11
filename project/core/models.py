@@ -48,7 +48,6 @@ class Company(models.Model):
     def getDaysIntoNextMonthHourRegistration(self):
         return self.daysIntoNextMonthHourRegistration
 
-
 class User(models.Model):
     username = models.CharField(('username'), max_length=30, unique=True, help_text=(
     "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
@@ -73,10 +72,6 @@ class User(models.Model):
     profileImage = models.ImageField(upload_to="profileImages", storage=fs, null=True, blank=True)
     deleted = models.BooleanField()
 
-
-    #id used for migration from old TIME, can be deleted later
-    focusID = models.IntegerField(null=True)
-    
     #HourRegistrations valid period
     validEditHourRegistrationsFromDate = models.DateTimeField(null=True, verbose_name="From")
     validEditHourRegistrationsToDate = models.DateTimeField(null=True, verbose_name="To")
@@ -259,6 +254,7 @@ class User(models.Model):
         """
         Make it possible to set permissions for classes
         """
+
         object_id = 0
         if not isclass(object):
             object_id = object.id
@@ -394,7 +390,38 @@ class User(models.Model):
 
         return set(permissions)
 
+    """
+    SKRIVE OM , ta utgangspunkt i permission-tabellen
+    """
+
     def getPermittedObjects(self, action, model):
+        objects = model.objects.filter()
+        contenttype = ContentType.objects.get_for_model(model)
+        permissions = Permission.objects.filter(content_type=contenttype, user=self)
+
+        action = Action.objects.get(name=action)
+        allAction = Action.objects.get(name="ALL")
+
+        tree = {}
+        permitted = []
+
+        for perm in permissions:
+            if not perm.object_id in tree:
+                tree[perm.object_id] = []
+
+            tree[perm.object_id].extend(perm.actions.all())
+            tree[perm.object_id].extend(perm.role.actions.all())
+
+        for node in tree:
+            if allAction in tree[node]:
+                permitted.append(node)
+            if action in tree[node]:
+                permitted.append(node)
+
+        return model.objects.filter(id__in=permitted)
+
+        """
+        SLOW
         unwanted = []
         objects = model.objects.filter(company=self.get_company())
 
@@ -403,6 +430,7 @@ class User(models.Model):
                 unwanted.append(obj.id)
 
         return objects.exclude(id__in=unwanted)
+        """
 
 class AnonymousUser(User):
     id = 0
@@ -499,6 +527,7 @@ class Group(models.Model):
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
+
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None
@@ -815,7 +844,7 @@ class PersistentModel(models.Model):
         GRANT PERMISSIONS
         """
         if action == "ADD":
-            Core.current_user().grant_role("Owner", self)
+            Core.current_user().grant_role("Admin", self)
             adminGroup = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
@@ -931,6 +960,7 @@ Adding some initial data to the model when run syncdb
 """
 
 def initial_data ():
+    print "creating Actions"
     Action.objects.get_or_create(name='ALL', verb='all', description='all actions on an object')
     Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
     Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
@@ -943,12 +973,14 @@ def initial_data ():
     Action.objects.get_or_create(name='LISTDELETED', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTARCHIVE', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
-
+    print "Done"
+    print "creating Roles"
     #Generates som standard roles
     Role.objects.get_or_create(name="Admin", description="Typisk leder, kan gjøre alt")
     Role.objects.get_or_create(name="Responsible", description="Ansvarlig, kan se,endre")
     Role.objects.get_or_create(name="Member", description="Typisk medlem, kan se")
     Role.objects.get_or_create(name="Owner", description="Typisk den som opprettet objektet")
+    print "Done"
 
     leader = Role.objects.get(name="Admin")
     leader.grant_actions(["ALL"])
@@ -970,7 +1002,7 @@ def initial_data ():
     a.is_superuser = True
     a.canLogin = True
     a.is_staff = True
-    a.set_password("sperpassord")
+    a.set_password("superpassord")
     a.save()
 
     u, created = User.all_objects.get_or_create(username="test",
