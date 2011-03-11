@@ -51,8 +51,8 @@ class Company(models.Model):
 class User(models.Model):
     username = models.CharField(('username'), max_length=30, unique=True, help_text=(
     "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
-    first_name = models.CharField(('first name'), max_length=30, blank=True)
-    last_name = models.CharField(('last name'), max_length=30, blank=True)
+    first_name = models.CharField(('first name'), max_length=60, blank=True)
+    last_name = models.CharField(('last name'), max_length=60, blank=True)
     email = models.EmailField(('e-mail address'), blank=True)
     password = models.CharField(('password'), max_length=128, help_text=(
     "Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))

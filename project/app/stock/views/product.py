@@ -15,8 +15,9 @@ from django.utils.translation import ugettext as _
 @require_permission("LIST", Product)
 def overview(request):
     updateTimeout(request)
-    products = Product.objects.filter(trashed=False)
-
+    #products = Product.objects.filter(trashed=False)
+    products = Core.current_user().getPermittedObjects("VIEW",Product)
+    
     return render_with_request(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
 
 @require_permission("LISTDELETED", Product)

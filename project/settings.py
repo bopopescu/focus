@@ -18,12 +18,25 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'project.db'
     }
 }
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'focus_test',
+        'USER': 'root',
+        'PORT': '8889',
+        'HOST':'127.0.0.1',
+        'PASSWORD': 'root',
+    }
+}
+
 
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'

@@ -21,6 +21,10 @@ Order = getClass("orders", "order")
 Supplier = getClass("suppliers", "supplier")
 Contact = getClass("contacts", "contact")
 Product = getClass("stock", "product")
+UnitsForSizes = getClass("stock", "unitsforsizes")
+Currency = getClass("stock", "currency")
+ProductCategory = getClass("stock","productcategory")
+ProductGroup = getClass("stock","productgroup")
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
@@ -72,7 +76,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
 
     return company, user
 
-def findUserByOldID(users, oldID):
+def findElementByOldID(users, oldID):
     for user in users:
         if user[1]==oldID:
             return user[0]
@@ -96,7 +100,7 @@ class Command(BaseCommand):
 
 
         company, user = createNewCustomer("Ledere", "Bjarte Hatlenes", "superadmin",
-                                          "bjarte" + randomCompanyIdentifier, "Ansatte",
+                                          "superadmin" + randomCompanyIdentifier, "Ansatte",
                                           "Focus Security AS")
 
         Core.set_test_user(user)
@@ -113,7 +117,7 @@ class Command(BaseCommand):
         for cu in cursor.fetchall():
             u = User()
             u.username = cu['brukernavn'].decode("latin1") + randomCompanyIdentifier
-            u.last_name = cu['fult_navn'].decode("latin1")
+            u.last_name = cu['fult_navn'].decode("latin1").encode("utf-8")
             u.email = cu['epostadresse'].decode("latin1")
             u.phone = cu['telefon']
             u.company = company
@@ -156,10 +160,10 @@ class Command(BaseCommand):
                 p.order_name = cu['ordrenavn'].decode('latin1')
 
             if cu['ordrebeskrivelse']:
-                p.description = cu['ordrebeskrivelse'].decode('latin1')
+                p.description = "OK"
 
             if cu['ansvarlig']:
-                p.responsible = findUserByOldID(users, cu['ansvarlig'])
+                p.responsible = findElementByOldID(users, cu['ansvarlig'])
 
             try:
                 p.customer = Customer.objects.get(cid=cu['kundenr'], company=company)
@@ -169,13 +173,7 @@ class Command(BaseCommand):
 
             p.save()
 
-        print "Migrate suppliers"
-        cursor.execute("SELECT * FROM leverandor")
-        for cu in cursor.fetchall():
-            p = Supplier()
-            p.name = cu['levnavn'].decode('latin1')
-            p.address = cu['adresse'].decode('latin1')
-            p.save()
+
 
         print "Migrate contacts"
         cursor.execute("SELECT * FROM kundebrukere")
@@ -186,6 +184,35 @@ class Command(BaseCommand):
             p.email = cu['epostadresse_kundebruker'].decode('latin1')
             p.save()
 
+
+        print "Migrate suppliers"
+        cursor.execute("SELECT * FROM leverandor")
+        for cu in cursor.fetchall():
+            p = Supplier()
+            p.name = cu['levnavn'].decode('latin1')
+            p.address = cu['adresse'].decode('latin1')
+            p.save()
+
+
+        print "Migrate product categories"
+        productcategories = []
+        cursor.execute("SELECT * FROM lager_varegrupper")
+        for cu in cursor.fetchall():
+           p = ProductCategory()
+           p.name = cu['varegruppenavn'].decode('latin1')
+           p.save()
+           productcategories.append((p,cu['varegruppenr']))
+
+        print "Migrate product groups"
+        productgroups = []
+        cursor.execute("SELECT * FROM lager_produktgrupper")
+        for cu in cursor.fetchall():
+           p = ProductGroup()
+           p.name = cu['produktgruppenavn'].decode('latin1')
+           p.category = findElementByOldID(productcategories, cu['varegruppenr'])
+           p.save()
+           productgroups.append((p,cu['produktgruppenr']))
+
         print "Migrate products"
         cursor.execute("SELECT * FROM lager_varer")
         for cu in cursor.fetchall():
@@ -193,8 +220,13 @@ class Command(BaseCommand):
             if cu['varenr']:
                 p.pid = cu['varenr'].decode("latin1")
 
+            p.size = 0
+            p.unitForSize = UnitsForSizes.objects.get_or_create(name=cu['prisenhet'].decode('latin1'))[0]
+            p.supplier = Supplier.objects.get(id=cu['levid'])
+            p.priceVal = Currency.objects.get_or_create(name=cu['prisenhet'].decode('latin1'))[0]
             p.name = cu['varenavn'].decode('latin1')
             p.description = cu['varebetegnelse'].decode("latin1")
+            p.productGroup = findElementByOldID(productgroups, cu['produktgruppenr'])
             p.save()
 
 
