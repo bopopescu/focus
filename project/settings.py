@@ -18,13 +18,14 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'project.db'
     }
 }
+
 """
 DATABASES = {
     'default': {
@@ -37,6 +38,7 @@ DATABASES = {
     }
 }
 
+"""
 
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
