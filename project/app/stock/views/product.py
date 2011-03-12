@@ -16,8 +16,8 @@ from django.utils.translation import ugettext as _
 def overview(request):
     updateTimeout(request)
     #products = Product.objects.filter(trashed=False)
-    products = Core.current_user().getPermittedObjects("VIEW",Product)
-    
+    products = Core.current_user().getPermittedObjects("VIEW", Product)
+
     return render_with_request(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
 
 @require_permission("LISTDELETED", Product)
@@ -57,17 +57,18 @@ def addFile(request, id):
 
     if request.method == 'POST':
         form = ProductFileForm(request.POST, request.FILES, instance=instance)
+
         if form.is_valid():
             product = Product.objects.get(id=id)
             o = form.save(commit=False)
             o.product = product
             o.save()
             request.message_success(_("Successfully uploaded file"))
-
+            
             return redirect(files, id)
-
+        
         request.message_error(_("Invalid file"))
-
+        
         return redirect(files, id)
 
     else:

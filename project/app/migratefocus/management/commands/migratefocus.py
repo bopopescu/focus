@@ -83,48 +83,50 @@ def findElementByOldID(users, oldID):
     return None
 
 class Command(BaseCommand):
-    def handle(self, *apps, **options):
-        print "======================================================="
-
-        print "Connecting to database..."
-        conn = MySQLdb.connect(host="focustimeno.mysql.domeneshop.no",
-                               user="focustimeno",
-                               passwd="XFu7qBLy",
-                               db="focustimeno",
-                               cursorclass=MySQLdb.cursors.DictCursor)
-
-        cursor = conn.cursor()
-        print "Connection established!"
-
-        randomCompanyIdentifier = str(int(random.random() * 99999))
-
-        company, user = createNewCustomer("Ledere", "Bjarte Hatlenes", "superadmin",
-                                          "superadmin" + randomCompanyIdentifier, "Ansatte",
-                                          "Focus Security AS")
-
-        Core.set_test_user(user)
-        generateNewPassordForUser(user)
-
-        print "Company: %s " % company
-        print "Current user is: %s " % Core.current_user()
-
-        print "Migrate users"
-
-        users = []
-
-        cursor.execute("SELECT * FROM brukere")
+    def migrate_contacts(self, cursor):
+        cursor.execute("SELECT * FROM kundebrukere")
         for cu in cursor.fetchall():
-            u = User()
-            u.username = cu['brukernavn'].decode("latin1") + randomCompanyIdentifier
-            u.last_name = cu['fult_navn'].decode("latin1").encode("utf-8")
-            u.email = cu['epostadresse'].decode("latin1")
-            u.phone = cu['telefon']
-            u.company = company
-            u.save()
-            users.append((u, cu['brukerid']))
+            p = Contact()
+            p.full_name = cu['fult_navn'].decode('latin1')
+            p.phone = cu['telefon'].decode('latin1')
+            p.email = cu['epostadresse_kundebruker'].decode('latin1')
+            p.save()
 
-        print "Migrate customers"
+    def migrate_suppliers(self, cursor):
+        suppliers = []
+        cursor.execute("SELECT * FROM leverandor")
+        for cu in cursor.fetchall():
+            p = Supplier()
+            p.name = cu['levnavn'].decode('latin1')
+            p.address = cu['adresse'].decode('latin1')
+            p.save()
+            suppliers.append((p, cu['levid']))
+        print "suppliers: %s" % suppliers
+        return suppliers
 
+    def migrate_product_categories(self, cursor):
+        productcategories = []
+        cursor.execute("SELECT * FROM lager_varegrupper")
+        for cu in cursor.fetchall():
+            p = ProductCategory()
+            p.name = cu['varegruppenavn'].decode('latin1')
+            p.save()
+            productcategories.append((p, cu['varegruppenr']))
+        print "productcategories %s " % productcategories
+        return productcategories
+
+    def migrate_product_groups(self, cursor, productcategories):
+        productgroups = []
+        cursor.execute("SELECT * FROM lager_produktgrupper")
+        for cu in cursor.fetchall():
+            p = ProductGroup()
+            p.name = cu['produktgruppenavn'].decode('latin1')
+            p.category = findElementByOldID(productcategories, cu['varegruppenr'])
+            p.save()
+            productgroups.append((p, cu['produktgruppenr']))
+        return productgroups
+
+    def migrate_customers(self, cursor):
         cursor.execute("SELECT * FROM kunder")
         for cu in cursor.fetchall():
             u = Customer()
@@ -136,8 +138,18 @@ class Command(BaseCommand):
             u.area_code = cu['levpostnr'].decode('latin1')
             u.save()
 
-        print "Migrate projects"
+    def migrate_users(self, company, cursor, randomCompanyIdentifier, users):
+        for cu in cursor.fetchall():
+            u = User()
+            u.username = cu['brukernavn'].decode("latin1") + randomCompanyIdentifier
+            u.last_name = cu['fult_navn'].decode("latin1").encode("utf-8")
+            u.email = cu['epostadresse'].decode("latin1")
+            u.phone = cu['telefon']
+            u.company = company
+            u.save()
+            users.append((u, cu['brukerid']))
 
+    def migrate_projects(self, company, cursor):
         cursor.execute("SELECT * FROM prosjekter")
         for cu in cursor.fetchall():
             p = Project()
@@ -147,7 +159,7 @@ class Command(BaseCommand):
             p.customer = Customer.objects.get(cid=cu['kundenr'], company=company)
             p.save()
 
-        print "Migrate orders"
+    def migrate_orders(self, company, cursor, users):
         cursor.execute("SELECT * FROM ordrer")
         for cu in cursor.fetchall():
             p = Order()
@@ -172,43 +184,7 @@ class Command(BaseCommand):
 
             p.save()
 
-        print "Migrate contacts"
-        cursor.execute("SELECT * FROM kundebrukere")
-        for cu in cursor.fetchall():
-            p = Contact()
-            p.full_name = cu['fult_navn'].decode('latin1')
-            p.phone = cu['telefon'].decode('latin1')
-            p.email = cu['epostadresse_kundebruker'].decode('latin1')
-            p.save()
-
-        print "Migrate suppliers"
-        cursor.execute("SELECT * FROM leverandor")
-        for cu in cursor.fetchall():
-            p = Supplier()
-            p.name = cu['levnavn'].decode('latin1')
-            p.address = cu['adresse'].decode('latin1')
-            p.save()
-
-        print "Migrate product categories"
-        productcategories = []
-        cursor.execute("SELECT * FROM lager_varegrupper")
-        for cu in cursor.fetchall():
-            p = ProductCategory()
-            p.name = cu['varegruppenavn'].decode('latin1')
-            p.save()
-            productcategories.append((p, cu['varegruppenr']))
-
-        print "Migrate product groups"
-        productgroups = []
-        cursor.execute("SELECT * FROM lager_produktgrupper")
-        for cu in cursor.fetchall():
-            p = ProductGroup()
-            p.name = cu['produktgruppenavn'].decode('latin1')
-            p.category = findElementByOldID(productcategories, cu['varegruppenr'])
-            p.save()
-            productgroups.append((p, cu['produktgruppenr']))
-
-        print "Migrate products"
+    def migrate_products(self, cursor, productgroups, suppliers):
         cursor.execute("SELECT * FROM lager_varer")
         for cu in cursor.fetchall():
             p = Product()
@@ -217,12 +193,72 @@ class Command(BaseCommand):
 
             p.size = 0
             p.unitForSize = UnitsForSizes.objects.get_or_create(name=cu['prisenhet'].decode('latin1'))[0]
-            p.supplier = Supplier.objects.get(id=cu['levid'])
+            p.supplier = findElementByOldID(suppliers, cu['levid'])
             p.priceVal = Currency.objects.get_or_create(name=cu['prisenhet'].decode('latin1'))[0]
             p.name = cu['varenavn'].decode('latin1')
             p.description = cu['varebetegnelse'].decode("latin1")
             p.productGroup = findElementByOldID(productgroups, cu['produktgruppenr'])
             p.save()
+
+    def connect_database(self):
+        conn = MySQLdb.connect(host="focustimeno.mysql.domeneshop.no",
+                               user="focustimeno",
+                               passwd="XFu7qBLy",
+                               db="focustimeno",
+                               cursorclass=MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor()
+        return cursor
+
+    def handle(self, *apps, **options):
+        print "======================================================="
+
+        print "Connecting to database..."
+        cursor = self.connect_database()
+
+        print "Connection established!"
+
+        randomCompanyIdentifier = str(int(random.random() * 99999))
+
+        company, user = createNewCustomer("Ledere", "Bjarte Hatlenes", "superadmin",
+                                          "superadmin" + randomCompanyIdentifier, "Ansatte",
+                                          "Focus Security AS")
+
+        Core.set_test_user(user)
+        generateNewPassordForUser(user)
+
+        print "Company: %s " % company
+        print "Current user is: %s " % Core.current_user()
+
+        print "Migrate users"
+
+        users = []
+
+        cursor.execute("SELECT * FROM brukere")
+        self.migrate_users(company, cursor, randomCompanyIdentifier, users)
+
+        print "Migrate customers"
+        #self.migrate_customers(cursor)
+
+        print "Migrate projects"
+        #self.migrate_projects(company, cursor)
+
+        print "Migrate orders"
+        #self.migrate_orders(company, cursor, users)
+
+        print "Migrate contacts"
+        #self.migrate_contacts(cursor)
+
+        print "Migrate suppliers"
+        suppliers = self.migrate_suppliers(cursor)
+
+        print "Migrate product categories"
+        productcategories = self.migrate_product_categories(cursor)
+
+        print "Migrate product groups"
+        productgroups = self.migrate_product_groups(cursor, productcategories)
+
+        print "Migrate products"
+        self.migrate_products(cursor, productgroups, suppliers)
 
         print "Done!"
 

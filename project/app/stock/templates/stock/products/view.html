@@ -39,7 +39,7 @@
         </tr>
         <tr>
             <td>{% trans "Supplier" %}</td>
-            <td>{{ product.supplier }}</td>
+            <td><a href="{{ product.supplier.getViewUrl }}">{{ product.supplier }}</a></td>
         </tr>
         <tr>
             <td>{% trans "Size" %}</td>
