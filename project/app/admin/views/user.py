@@ -66,6 +66,7 @@ def generateNewPassordForUser(user):
     send_mail(_("New password"), (_("Your username is: %s" % user.username) + _("\nYour password is: ") + '%s' % ret),
               settings.NO_REPLY_EMAIL,
               [user.email], fail_silently=False)
+
     user.set_password("%s" % ret)
     user.save()
     return ret
@@ -82,7 +83,6 @@ def sendGeneratedPassword(request, id):
     request.message_success(_("Successfully sent new password"))
 
     return redirect(view, id)
-
 
 @require_permission("EDIT", User, "id")
 def history(request, id):

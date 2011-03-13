@@ -103,6 +103,7 @@ def trash(request, id):
                                                                           'reasons': instance.canBeDeleted()[1],
                                                                           })
 
+    
 @require_permission("DELETE", Product, "id")
 def recover(request, id):
     Product.objects.get(id=id).recover()

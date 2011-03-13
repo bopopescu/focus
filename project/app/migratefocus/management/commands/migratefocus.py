@@ -33,21 +33,26 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     allEmployeesGroup.saveWithoutCreatePermissions()
     company = Company(name=name, adminGroup=adminGroup, allEmployeesGroup=allEmployeesGroup)
     company.save()
+
     #Create the admin user
     user = User(first_name=adminuserName, username=adminuserUsername)
     user.set_password(adminuserPassword)
     user.company = company
     user.save()
+
     #Manually give permission to the admin group
     adminGroup.grant_permissions("ALL", adminGroup)
     adminGroup.grant_permissions("ALL", allEmployeesGroup)
+
     #Add admin user to admin group
     adminGroup.addMember(user)
+
     #Set the company fields on groups
     adminGroup.company = company
     adminGroup.save()
     allEmployeesGroup.company = company
     allEmployeesGroup.save()
+
     #Give admin group all permissions on classes
     adminGroup.grant_role("Admin", Project)
     adminGroup.grant_role("Admin", Customer)
@@ -62,6 +67,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     adminGroup.grant_role("Admin", User)
     adminGroup.grant_role("Admin", Group)
     adminGroup.grant_permissions("CONFIGURE", Company)
+
     #Give employee group some permissions on classes
     allEmployeesGroup.grant_role("Admin", Project)
     allEmployeesGroup.grant_role("Admin", Customer)
