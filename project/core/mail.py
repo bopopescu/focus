@@ -8,10 +8,8 @@ def send_mail(subject, message, fromMail, toMails, fail_silently=False):
 
     if settings.DEBUG:
         subject = "[debug] subject: %s" % subject
-        message = "from: %s, to: %s\n\n%s" % (fromMail, toMails, message)
+        message = "from: %s, to: %s\n\n%s" % (fromMail, recipients, message)
         mail = django_send_mail(subject, message, fromMail, recipients, fail_silently=fail_silently)
     else:
         recipients.extend(toMails)
-        subject = "[debug] subject: %s" % subject
-        message = "from: %s, to: %s\n\n%s" % (fromMail, toMails, message)
         mail = django_send_mail(subject, message, fromMail, recipients, fail_silently=fail_silently)
