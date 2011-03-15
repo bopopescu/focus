@@ -397,12 +397,16 @@ class User(models.Model):
     def get_permissions(self):
         permissions = []
 
-        permissions.extend(Permission.objects.filter(user=self))
+        for p in Permission.objects.filter(user=self):
+            if not p.id in permissions:
+                permissions.append(p.id)
 
         for group in self.groups.all():
-            permissions.extend(Permission.objects.filter(user=self))
+            for p in group.get_permissions():
+                if not p.id in permissions:
+                    permissions.append(p.id)
 
-        return set(permissions)
+        return Permission.objects.filter(id__in=permissions)
 
     """
     SKRIVE OM , ta utgangspunkt i permission-tabellen
@@ -541,6 +545,14 @@ class Group(models.Model):
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
+
+
+    def get_permissions(self):
+       permissions = []
+       for p in Permission.objects.filter(group=self):
+           if not p.id in permissions:
+               permissions.append(p.id)
+       return Permission.objects.filter(id__in=permissions)
 
 
     def grant_permissions (self, actions, object, **kwargs):

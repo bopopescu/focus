@@ -95,12 +95,20 @@ def history(request, id):
 @login_required()
 def view(request, id):
     user = User.objects.get(id=id)
-    Permissions = user.get_permissions()
 
     return render_with_request(request, 'admin/users/view.html', {'title': _("User"),
                                                                   'userCard': user,
-                                                                  'permissions': Permissions,
                                                                   })
+
+@login_required()
+def permissions(request, id):
+    user = User.objects.get(id=id)
+    Permissions = user.get_permissions()
+
+    return render_with_request(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
+                                                                   'userCard': user,
+                                                                   'permissions': Permissions,
+                                                                   })
 
 @require_permission("DELETE", User, "id")
 def trash(request, id):

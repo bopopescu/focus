@@ -48,6 +48,15 @@ def view(request, id):
     return render_with_request(request, 'admin/groups/view.html', {'title': _("Groups"),
                                                                    'group': group,
                                                                    })
+login_required()
+def permissions(request, id):
+    group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
+
+    return render_with_request(request, 'admin/permissions.html', {'title': _("Groups"),
+                                                                   'group': group,
+                                                                   })
+
+
 
 @login_required()
 def delete(request, id):
