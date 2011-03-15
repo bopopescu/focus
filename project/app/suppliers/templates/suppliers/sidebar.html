@@ -13,6 +13,10 @@
         <li><a class="{% active request "edit" %}" href="{{ supplier.getEditUrl }}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
 
+        <li><a class="{% active request "products" %}" href="{% url app.suppliers.views.products supplier.id %}"><img
+                src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "PRODUCTS" %}</a></li>
+
+
         <li><a class="{% active request "history" %}" href="{{ supplier.getHistoryUrl }}"><img
                 src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
 

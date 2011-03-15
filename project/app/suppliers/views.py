@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from app.customers.models import Customer
+from app.stock.models import Product
 from core.models import Log
 from django.contrib.contenttypes.models import ContentType
 from forms import *
@@ -59,6 +60,15 @@ def view(request, id):
     return render_with_request(request, 'suppliers/view.html',
                                {'title': _("Supplier"),
                                 'supplier': supplier})
+
+@login_required()
+def products(request, id):
+    supplier = Core.current_user().getPermittedObjects("VIEW", Supplier).get(id=id)
+    products = Core.current_user().getPermittedObjects("VIEW", Product).filter(supplier=supplier)
+
+    return render_with_request(request, 'suppliers/products.html', {'title': _("Products"),
+                                                                    'supplier': supplier,
+                                                                    'products': products})
 
 
 @require_permission("EDIT", Supplier, "id")
