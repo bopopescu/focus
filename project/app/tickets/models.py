@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from core.models import PersistentModel, User, Comment
 from django.db import models
 from app.customers.models import Customer
@@ -31,32 +32,32 @@ class TicketType(PersistentModel):
         return unicode(self.name)
 
 class Ticket(PersistentModel):
-    title = models.CharField(max_length=50)
-    description = models.TextField()
-    status = models.ForeignKey(TicketStatus)
-    priority = models.ForeignKey(TicketPriority)
-    type = models.ForeignKey(TicketType)
-    spent_time = models.IntegerField(default=0)
-    estimated_time = models.IntegerField(default=0)
-    customer = models.ForeignKey(Customer)
-    assigned_to = models.ForeignKey(User, null=True, blank=True)
-    attachment = models.FileField(upload_to="tickets", storage=fs, null=True)
+    title = models.CharField(_("Title"), max_length=50)
+    description = models.TextField(_("Description"), )
+    status = models.ForeignKey(TicketStatus, verbose_name=_("Status"))
+    priority = models.ForeignKey(TicketPriority, verbose_name=_("Priority"))
+    type = models.ForeignKey(TicketType, verbose_name=_("Type"))
+    spent_time = models.IntegerField(_("Spent time"), default=0)
+    estimated_time = models.IntegerField(_("Estimated time"), default=0)
+    customer = models.ForeignKey(Customer, verbose_name=_("Custoemr"))
+    assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
+    attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 
     def __unicode__(self):
         return unicode(self.title)
 
     def canBeDeleted(self):
-         canBeDeleted = True
-         reasons = []
+        canBeDeleted = True
+        reasons = []
 
-         if self.comments.all().count() > 0:
-             canBeDeleted = False
-             reasons.append(_("Ticket has comments"))
+        if self.updates.all().count() > 0:
+            canBeDeleted = False
+            reasons.append(_("Ticket has comments"))
 
-         if canBeDeleted:
-             return (True, "OK")
+        if canBeDeleted:
+            return (True, "OK")
 
-         return (False, reasons)
+        return (False, reasons)
 
     class Meta:
         ordering = ['status', 'date_created']
@@ -107,18 +108,16 @@ class Ticket(PersistentModel):
 
         return diff
 
-
 class TicketUpdate(PersistentModel):
-    ticket = models.ForeignKey(Ticket)
+    ticket = models.ForeignKey(Ticket, related_name="updates")
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
 
     def create_update_lines(self, differences):
         for diff in differences:
-            change_text = _("%s changed from %s to %s") % \
+            change_text = _("%s changed from %s to %s") %\
                           (diff, differences[diff][1], differences[diff][0])
             TicketUpdateLine.objects.create(update=self, change=change_text)
-    
 
 
 class TicketUpdateLine(PersistentModel):
@@ -126,15 +125,14 @@ class TicketUpdateLine(PersistentModel):
     change = models.CharField(max_length=250)
 
 
-
 def initial_data():
-    TicketStatus.objects.get_or_create(name="Ny", order_priority=1)
-    TicketStatus.objects.get_or_create(name="In Progress", order_priority=2)
-    TicketStatus.objects.get_or_create(name="Ferdig", order_priority=3)
-    TicketStatus.objects.get_or_create(name="Lukket", order_priority=4)
+    TicketStatus.objects.get_or_create(name=_("New"), order_priority=1)
+    TicketStatus.objects.get_or_create(name=_("In Progress"), order_priority=2)
+    TicketStatus.objects.get_or_create(name=_("Completed"), order_priority=3)
+    TicketStatus.objects.get_or_create(name=_("Closed"), order_priority=4)
 
-    TicketPriority.objects.get_or_create(name="Lav")
-    TicketPriority.objects.get_or_create(name="Normal")
-    TicketPriority.objects.get_or_create(name="H&oslash;y")
+    TicketPriority.objects.get_or_create(name=_("Low"))
+    TicketPriority.objects.get_or_create(name=_("Medium"))
+    TicketPriority.objects.get_or_create(name=_("High"))
 
     TicketType.objects.get_or_create(name="type")
