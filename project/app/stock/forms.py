@@ -10,8 +10,8 @@ from django.utils.translation import ugettext as _
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
-                  'price', 'priceVal', 'supplier',)
+        fields = ('pid', 'name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
+                  'price', 'price_out', 'max_discount','priceVal', 'supplier',)
 
     def __init__(self, *args, **kwrds):
         super(ProductForm, self).__init__(*args, **kwrds)
