@@ -13,5 +13,5 @@ def send_mail(subject, message, fromMail, toMails, fail_silently=False):
     mail = django_send_mail(subject, message, fromMail, [settings.DEBUG_EMAIL], fail_silently=fail_silently)
 
     #Send actual email if not in debug mode
-    if not settings.DEBUG:
+    if not settings.DEBUG and len(recipients)>0:
         mail = django_send_mail(subject, message, fromMail, recipients, fail_silently=fail_silently)
