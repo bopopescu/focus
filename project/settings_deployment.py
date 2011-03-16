@@ -12,7 +12,7 @@ f.close()
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'frecarlsen_focus',
         'USER': 'frecarlsen',
         'PASSWORD': DB_PASSWORD,
