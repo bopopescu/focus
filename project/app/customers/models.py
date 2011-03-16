@@ -23,7 +23,7 @@ class Customer(PersistentModel):
     invoice_zip = models.CharField(_("Invoice area code"), max_length=15, blank=True)
     invoice_city = models.CharField(_("Invoice city"), max_length=20, blank=True)
 
-    contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name=_("Contacts"))
+    contacts = models.ManyToManyField('Contact', blank=True, related_name="customers", verbose_name=_("Contacts"))
 
     def __unicode__(self):
         return self.full_name
