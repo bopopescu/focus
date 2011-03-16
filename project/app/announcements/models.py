@@ -6,7 +6,7 @@ from core.models import PersistentModel
 from django.core import urlresolvers
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
-import settings
+from django.conf import settings
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
