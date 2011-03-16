@@ -10,7 +10,11 @@ class Supplier(PersistentModel):
     email = models.EmailField(null=True)
     phone = models.CharField(max_length=20, null=True)
     address = models.TextField(null=True)
-
+    zip = models.CharField(max_length=10, default="")
+    email_contact = models.EmailField(default="")
+    email_order = models.EmailField(default="")
+    country = models.CharField(max_length=20, default="")
+    reference = models.CharField(max_length=150, default="")
     contacts = models.ManyToManyField(Contact, related_name="suppliers")
 
     def __unicode__(self):

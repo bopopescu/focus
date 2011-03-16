@@ -14,11 +14,14 @@ fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class Contact(PersistentModel):
     full_name = models.CharField(_("Full name"), max_length=80)
-    address = models.CharField(_("Adresse"), max_length=80)
-    email = models.EmailField(_("Epostadresse"), max_length=80)
-    phone = models.CharField(_("Telefon"), max_length=20)
-    comments = generic.GenericRelation(Comment)
+    address = models.CharField(_("Address"), max_length=80)
+    email = models.EmailField(_("Email"), max_length=80)
+    phone = models.CharField(_("Phone"), max_length=20, default="")
+    phone_office = models.CharField(_("Phone office"), max_length=20, default="")
+    phone_mobile = models.CharField(_("Mobile phone"), max_length=20, default="")
+    description = models.TextField(default="")
     image = models.ImageField(upload_to="contacts", storage=fs, null=True, blank=True)
+    comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
         return unicode(self.full_name)

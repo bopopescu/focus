@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from app.contacts.models import Contact
 from core import Core
 from django.contrib.contenttypes import generic
 from core.models import PersistentModel, User, Comment
@@ -16,10 +17,10 @@ class Project(PersistentModel):
     project_name = models.CharField(_("Name"), max_length=80)
     description = models.TextField()
     deliveryAddress = models.TextField(_("Delivery address"), max_length=150, null=True)
-    responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"),
-                                    null=True)
     deliveryDate = models.DateTimeField(verbose_name=_("Delivery date"), null=True, blank=True)
     deliveryDateDeadline = models.DateTimeField(verbose_name=_("Delivery deadline"), null=True, blank=True)
+    responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"),                                null=True)
+    contact = models.ForeignKey(Contact, related_name="projects", null=True)
     comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
