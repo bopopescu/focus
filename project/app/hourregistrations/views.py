@@ -8,9 +8,9 @@ from core.shortcuts import *
 from django.utils.html import escape
 from core.views import updateTimeout
 from datetime import date, datetime
-import time
 from calendar import monthrange
-
+import time
+import calendar as pycalendar
 
 @require_permission("LIST", HourRegistration)
 def overview(request):
@@ -18,6 +18,7 @@ def overview(request):
 
     return listHourRegistrations(request, Core.current_user(), Core.current_user().generateValidPeriode()[0],
                                  Core.current_user().generateValidPeriode()[1])
+
 
 def viewArchivedMonth(request, year, month, user_id=None):
     updateTimeout(request)
@@ -36,6 +37,7 @@ def viewArchivedMonth(request, year, month, user_id=None):
         user = User.objects.get(id=user_id)
 
     return listHourRegistrations(request, user, from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y"))
+
 
 def listHourRegistrations(request, user, from_date, to_date):
     HourRegistrations = user.getPermittedObjects("VIEW", HourRegistration).filter(creator=user)
@@ -87,11 +89,14 @@ def listHourRegistrations(request, user, from_date, to_date):
                                 'sumDisbursements': round(sumDisbursements, 2),
                                 'sumKilometers': round(sumKilometers, 2)})
 
+
 def your_archive(request):
     return archive(request)
 
+
 def user_archive(request, user_id):
     return archive(request, user_id)
+
 
 def archive(request, user_id=None):
     updateTimeout(request)
@@ -138,8 +143,10 @@ def delete(request, id):
     HourRegistration.objects.get(id=id).delete()
     return redirect(overview)
 
+
 def addAjax(request):
     return
+
 
 @require_permission("CREATE", HourRegistration)
 def addTypeOfWork(request):
@@ -156,23 +163,79 @@ def addTypeOfWork(request):
 
             #Redirects after save for direct editing
             return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    (escape(o._get_pk_val()), escape(o)))
+                '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
+                (escape(o._get_pk_val()), escape(o)))
     else:
         form = TypeOfHourRegistrationForm(instance=instance)
 
     return render_with_request(request, "simpleform.html", {'title': 'Typer arbeid', 'form': form})
 
-@require_permission("LIST", HourRegistration)
-def calendar(request):
-    HourRegistrations = HourRegistration.objects.all()
 
+@require_permission("LIST", HourRegistration)
+def calendar_today(request):
+    return redirect(calendar, datetime.now().year, datetime.now().month, datetime.now().isocalendar()[1],
+                    datetime.now().day)
+
+
+@require_permission("LIST", HourRegistration)
+def calendar(request, year, month, week, day):
     instance = HourRegistration()
     form = HourRegistrationForm(request.POST, instance=instance)
 
+    months = {}
+
+    year = int(year)
+    month = int(month)
+    week = int(week)
+    day = int(day)
+
+
+    for m in range(1, 13):
+        days = pycalendar.monthrange(year, m)[1]
+
+        months[m] = {}
+
+        for d in range(1, days):
+            weeknumber = date(year, m, d).isocalendar()[1]
+
+            if m == 1 and weeknumber > 50:
+                continue
+
+            if not weeknumber in months[m]:
+                months[m][weeknumber] = []
+
+            months[m][weeknumber].append(date(year, m, d))
+
+    """
+    for m in months:
+        #print str(m) + "\n"
+        for d in months[m]:
+            k = "    " + str(d) + str(months[m][d]) + "\n"
+    """
+
+    if not week in months[month].keys():
+        week = sorted(months[month].keys())[0]
+        return redirect(calendar, year, month, week, day)
+
+    if pycalendar.monthrange(year, month)[1] < day or not date(year, month, day) in months[month][week]:
+        return redirect(calendar, year, month, week, months[month][week][0].day)
+
+    HourRegistrations = HourRegistration.objects.filter(date=datetime(year, month, day))
+
     return render_with_request(request, "hourregistrations/calendar.html", {'title': 'Timeregistrering',
-                                                                            'HourRegistrations': HourRegistrations,
-                                                                            'form': form, })
+                                                                            'hourregistrations': HourRegistrations,
+                                                                            'form': form,
+
+                                                                            'year': year,
+                                                                            'month': month,
+                                                                            'week': week,
+                                                                            'day': day,
+
+                                                                            'weeks': sorted(months[int(month)].keys()),
+                                                                            'days': months[int(month)][int(week)],
+
+                                                                            })
+
 
 @login_required()
 def ajaxEditCalendar(request):
