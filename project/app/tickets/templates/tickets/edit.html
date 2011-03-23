@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% load i18n %}
 
@@ -7,7 +8,7 @@
 
 {% block maincontent %}
 
-    <h1>{{ title }}</h1>
+    <h1>{% trans "Update Ticket" %}</h1>
     <br>
     <br>
 
@@ -33,13 +34,76 @@
         <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
 
+            <div class="ticket_update" >
+                <h3>Comment</h3>
+                {{ ticket_form.comment }}
+            </div>
+
+            <div class="ticket_update">
+
+                <h3>{% trans "Change properties" %}</h3>
+
+                <table class="ticket_attributes">
+                    <tr>
+                        <td>
+                            <span {% if ticket_form.status.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.status.label }} </span> <br />
+                            {{ ticket_form.status }}
+                        </td>
+                        
+                        <td>
+                         <span {% if ticket_form.due_date.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.due_date.label }} </span> <br />
+                            {{ ticket_form.due_date }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span {% if ticket_form.priority.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.priority.label }} </span> <br />
+                            {{ ticket_form.priority }}
+                        </td>
+                        <td>
+                            <span {% if ticket_form.spent_time.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.spent_time.label }} </span> <br />
+                            {{ ticket_form.spent_time }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span {% if ticket_form.assigned_to.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.assigned_to.label }} </span> <br />
+                            {{ ticket_form.assigned_to }}
+                        </td>
+                        <td>
+                            <span {% if ticket_form.estimated_time.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.estimated_time.label }} </span> <br />
+                            {{ ticket_form.estimated_time }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span {% if ticket_form.type.errors %}style="color:red;" {% endif %}>
+                                {{ ticket_form.type.label }} </span> <br />
+                            {{ ticket_form.type }}
+                        </td>
+                    </tr>
+
+                    
+                </table>
+            </div>
+
+<!--
             {% for field in ticket_form %}
                 <div class="fieldWrapper">
                     <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
                     <br>{{ field }}
                 </div>
 
-            {% endfor %}
+            {% endfor %} -->
 
 
             <div>
@@ -49,9 +113,18 @@
         </form>
     </div>
 
+
+  <script>
+  $(document).ready(function () {
+      $("#id_comment").focus();
+  });
+  </script>
+    
 {% endblock %}
 
 {% block sidebar %}
     {% include "tickets/sidebar.html" %}
 
+
  {% endblock %}
+
