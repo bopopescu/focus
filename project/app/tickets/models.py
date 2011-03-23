@@ -61,6 +61,14 @@ class Ticket(PersistentModel):
     class Meta:
         ordering = ['status', 'date_created']
 
+    def get_attachment_url(self):
+        if self.attachment:
+            return os.path.join("/file/", self.attachment.name)
+        return None
+
+    def get_attachment_name(self):
+        return self.attachment.name.split(os.sep)[-1]
+
     def save(self, *args, **kwargs):
         super(Ticket, self).save()
 
@@ -79,8 +87,6 @@ class Ticket(PersistentModel):
         for field in self._meta.fields:
             if field.attname.startswith('_') or field.attname in ignore_list:
                 continue
-
-            print field.attname
 
             field_value = getattr(self, field.attname)
             if field.attname in self.foreign_key_dict:
@@ -112,6 +118,14 @@ class TicketUpdate(PersistentModel):
     ticket = models.ForeignKey(Ticket)
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
+    
+    def get_attachment_url(self):
+        if self.attachment:
+            return os.path.join("/file/", self.attachment.name)
+        return None
+
+    def get_attachment_name(self):
+        return self.attachment.name.split(os.sep)[-1]
 
     def create_update_lines(self, differences):
         for diff in differences:
@@ -119,7 +133,10 @@ class TicketUpdate(PersistentModel):
                           (diff, differences[diff][1], differences[diff][0])
             TicketUpdateLine.objects.create(update=self, change=change_text)
     
-
+    def get_attachment(self):
+        if self.attachment:
+            return os.path.join("/file/", self.attachment.name)
+        return None
 
 class TicketUpdateLine(PersistentModel):
     update = models.ForeignKey(TicketUpdate, related_name='update_lines')

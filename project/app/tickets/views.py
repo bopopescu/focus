@@ -67,7 +67,7 @@ def edit(request, id):
     else:
         ticket_form = EditTicketForm(instance=ticket)
 
-    return render_with_request(request, "tickets/edit.html", {'title': _('Edit Ticket'),
+    return render_with_request(request, "tickets/edit.html", {'title': _('Update Ticket'),
                                                               'ticket': ticket,
                                                               'ticket_form': ticket_form,
                                                               })
@@ -82,7 +82,7 @@ def form(request, id=False):
         msg = _("Ticket added")
 
     if request.method == 'POST':
-        form = TicketForm(request.POST, instance=instance)
+        form = TicketForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.owner = request.user

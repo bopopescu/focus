@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load auth %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block extrahead %}
 {% endblock %}
@@ -14,15 +15,6 @@
 {% endblock %}
 
 {% block maincontent %}
-
-    <style>
-
-        .ticketinfo {
-            width: 100%;
-            float: left;
-        }
-
-    </style>
 
 
         <div class="ticketinfo">
@@ -38,33 +30,106 @@
                     <td>{% trans "Title" %}</td>
                     <td>{{ ticket.title }}</td>
                 </tr>
+
+                <tr>
+                    <td>{% trans "Customer" %}</td>
+                    <td>{{ ticket.customer }}</td>
+                </tr>
+
+                <tr>
+                    <td>{% trans "Assigned To" %}</td>
+                    <td>{{ ticket.assigned_to }}</td>
+                </tr>
+
+                <tr>
+                    <td>{% trans "Description" %}</td>
+                    <td>{{ ticket.description }}</td>
+                </tr>
+
                 <tr>
                     <td>{% trans "Status" %}</td>
                     <td> {{ ticket.status }}</td>
                 </tr>
+
+                <tr>
+                    <td>{% trans "Priority" %}</td>
+                    <td>{{ ticket.priority }}</td>
+                </tr>
+
+                <tr>
+                    <td>{% trans "Type" %}</td>
+                    <td>{{ ticket.type }}</td>
+                </tr>
+
+                <tr>
+                    <td> {% trans "Estimated Time" %}</td>
+                    <td> {{ ticket.estimated_time  }}</td>
+                </tr>
+
+                <tr>
+                    <td>{% trans "Spent Time" %}</td>
+                    <td>{{ ticket.spent_time }}</td>
+                </tr>
+
+                {% if ticket.attachment %}
+                <tr>
+                    <td>{% trans "Attachment" %}</td>
+                    <td>
+                        <a href="{{ ticket.get_attachment_url }}">
+                        <img src="{{ STATIC_URL }}img/download.png" style="width:30px; height:30px; vertical-align:middle;">
+                        {{ ticket.get_attachment_name }}</a>
+                    </td>
+                </tr>
+                {% endif %}
+
 
                 </tbody>
 
             </table>
         </div>
 
-        <div class="history">
-            History
 
-        <br>
+
+        <h2>{% trans "History" %}</h2>
+
+        <table>
         {% for update in updates %}
-            <div class="history_entry" style="border:1px solid">
-            <ul>
-                {% for line in update.update_lines.all %}
-                     <li>{{ line.change }}</li>
-                {% endfor %}
-            </ul>
-            {{ update.comment }}
-            {{ update.attachment }}
-            </div>
 
-        {% endfor %}
-        </div>
+            <tr>
+                <td><img
+                        src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
+                        alt=""/></td>
+                <td>
+                    <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
 
+                    <p>
+                        {%  if update.update_lines.all %}
+                        <b>{% trans "Changes: " %}</b>
+                        <ul>
+                            {% for line in update.update_lines.all %}
+                            <li>{{ line.change }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </p>
+                    {% if update.comment %}
+                    <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
+                    {% endif %}
+
+                    {% if update.attachment %}
+                        <p>
+                        <b>{% trans "New Attachment:" %}</b>
+                            <a href="{{ update.get_attachment_url }}">
+                            <img src="{{ STATIC_URL }}img/download.png" style="width:30px; height:30px; vertical-align:middle;">
+                            {{ update.get_attachment_name }}</a>
+                        </p>
+                    {% endif %}
+
+
+                </td>
+            </tr>
+       {% endfor %}
+        </table>
+        
 
 {% endblock %}
