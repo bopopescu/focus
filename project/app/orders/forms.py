@@ -14,7 +14,8 @@ class OrderForm(ModelForm):
 
     class Meta:
         model = Order
-        fields = ("oid", "POnumber", "order_name", "customer", "project", "responsible",'description')
+        fields = ("oid", "POnumber", "order_name", "customer", "project", "responsible", 'delivery_date',
+                  'delivery_date_deadline', 'description')
 
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
@@ -23,6 +24,12 @@ class OrderForm(ModelForm):
         self.fields['project'].widget = SelectWithPop(Project)
         self.fields['project'].queryset = Project.objects.inCompany()
         self.fields['responsible'].queryset = User.objects.inCompany()
+        self.fields['delivery_date'].required = True
+        self.fields['delivery_date'].input_formats = ["%d.%m.%Y"]
+        self.fields['delivery_date'].widget = DatePickerField(format="%d.%m.%Y")
+        self.fields['delivery_date_deadline'].required = True
+        self.fields['delivery_date_deadline'].input_formats = ["%d.%m.%Y"]
+        self.fields['delivery_date_deadline'].widget = DatePickerField(format="%d.%m.%Y")
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -49,6 +56,7 @@ class OrderForm(ModelForm):
 
         return oid
 
+
 class OrderLineForm(ModelForm):
     product = ProductField()
 
@@ -56,12 +64,14 @@ class OrderLineForm(ModelForm):
         model = OrderLine
         fields = ("product", "count",)
 
+
 class OrderFormSimple(ModelForm):
     class Meta:
         model = Order
         exclude = (
         'deleted', 'trashed', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
-        'participant','description')
+        'participant', 'description')
+
 
 class TaskForm(ModelForm):
     class Meta:

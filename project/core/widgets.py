@@ -36,6 +36,7 @@ class SelectWithPop(forms.Select):
 
         return html + popupplus
 
+
 class MultipleSelectWithPop(forms.SelectMultiple):
     def __init__(self, app, *args, **kwargs):
         self.app = app
@@ -56,6 +57,7 @@ class MultipleSelectWithPop(forms.SelectMultiple):
                                                         'form': self.app.simpleform()})
 
         return html + popupplus
+
 
 class DatePickerField(forms.DateInput):
     def __init__(self, *args, **kwargs):
@@ -78,6 +80,7 @@ class DatePickerField(forms.DateInput):
                                       {'field': name, 'from_date': self.from_date, 'to_date': self.to_date})
         return html + datepicker
 
+
 class MaskedField(Input):
     def __init__(self, *args, **kwargs):
         self.format = None
@@ -92,6 +95,7 @@ class MaskedField(Input):
         html = super(MaskedField, self).render(name, *args, **kwargs)
         masked = render_to_string("masked.html", {'field': name, 'maskedFormat': self.format})
         return html + masked
+
 
 def get_hexdigest(algorithm, salt, raw_password):
     """
@@ -111,6 +115,7 @@ def get_hexdigest(algorithm, salt, raw_password):
     elif algorithm == 'sha1':
         return sha_constructor(salt + raw_password).hexdigest()
     raise ValueError("Got unknown password algorithm type in password.")
+
 
 def check_password(raw_password, enc_password):
     """

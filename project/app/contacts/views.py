@@ -20,13 +20,14 @@ def overview(request):
     contacts = Core.current_user().getPermittedObjects("VIEW", Contact).filter(trashed=False)
     return render_with_request(request, 'contacts/list.html', {'title': _('Contacts'), 'contacts': contacts})
 
+
 def listAjax(request, query, limit):
     users = request.user.get_permitted_objects("LIST", Contact).filter(
-            Q(username__startswith=query) |
-            Q(surname__istartswith=query) |
-            Q(name__istartswith=query) |
-            Q(mail__istartswith=query)
-            )[:limit]
+        Q(username__startswith=query) |
+        Q(surname__istartswith=query) |
+        Q(name__istartswith=query) |
+        Q(mail__istartswith=query)
+    )[:limit]
 
     users = [{'id': user.id,
               'label': "%s (%s)" % (user.username, ("%s %s" % (user.name, user.surname)).strip()),
@@ -39,15 +40,18 @@ def overview_trashed(request):
     contacts = Core.current_user().getPermittedObjects("VIEW", Contact).filter(trashed=True)
     return render_with_request(request, 'contacts/list.html', {'title': _('Deleted contacts'), 'contacts': contacts})
 
+
 @login_required()
 def overview_all(request):
     contacts = Core.current_user().getPermittedObjects("VIEW", Contact)
     return render_with_request(request, 'contacts/list.html',
                                {'title': _("All deleted contacts"), 'contacts': contacts})
 
+
 @require_permission("CREATE", Contact)
 def add(request):
     return form(request)
+
 
 @require_permission("EDIT", Contact, "id")
 def history(request, id):
@@ -60,9 +64,11 @@ def history(request, id):
                                                               'contact': contact,
                                                               'logs': history[::-1][0:150]})
 
+
 @require_permission("EDIT", Contact, "id")
 def edit(request, id):
     return form(request, id)
+
 
 @require_permission("VIEW", Contact, "id")
 def view(request, id):
@@ -70,6 +76,7 @@ def view(request, id):
     comments = comment_block(request, contact)
     return render_with_request(request, 'contacts/view.html',
                                {'title': _('Contact'), 'comments': comments, 'contact': contact})
+
 
 @require_permission("DELETE", Contact, "id")
 def trash(request, id):
@@ -91,19 +98,16 @@ def trash(request, id):
                                                                     'reasons': instance.canBeDeleted()[1],
                                                                     })
 
+
 @suggest_ajax_parse_arguments()
 def autocomplete(request, query, limit):
-    contacts = Contact.objects.all()
-
-    """
-    contacts = Contact.objects.filter(
-            Q(full_name__startswith=query)
-            )[:limit]
+    contacts = Contact.objects.inCompany().filter(
+        Q(full_name__startswith=query)
+    )[:limit]
 
     contacts = [{'id': contact.id,
                  'label': "%s" % (contact.full_name),
-                 'value': contact.name} for contact in contacts]
-    """
+                 'value': contact.full_name} for contact in contacts]
 
     return HttpResponse(JSONEncoder().encode(contacts), mimetype='application/json')
 
@@ -150,6 +154,7 @@ def editImage(request, id):
                                                                'form': form,
                                                                'contact': instance,
                                                                })
+
 
 @login_required()
 def form (request, id=False):
