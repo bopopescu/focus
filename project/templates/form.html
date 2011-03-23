@@ -28,7 +28,7 @@
     {% endif %}
 
     <div style="width:605px;">
-        <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+        <form enctype="multipart/form-data" class="form label-inline" method="post">
             {% for field in form %}
                 <div class="fieldWrapper">
                     <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>

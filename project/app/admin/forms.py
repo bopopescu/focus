@@ -27,7 +27,7 @@ class HourRegistrationManuallyForm(ModelForm):
 class GroupForm(ModelForm):
     class Meta:
         model = Group
-        fields = ('name', 'members',)
+        fields = ('name',)
 
 class UserProfileForm(ModelForm):
     class Meta:
@@ -79,33 +79,3 @@ class UserProfilePasswordForm(forms.Form):
             del cleaned_data['new_password_copy']
 
         return cleaned_data
-
-    """
-    def clean_oldPassword(self):
-        oldPass = self.cleaned_data['oldPassword']
-
-        if not self.user.check_password(oldPass):
-            raise forms.ValidationError("Feil passord!")
-
-        return oldPass
-
-    def clean_newPassword(self):
-        newPass = self.cleaned_data['newPassword']
-
-        if len(newPass) < 5:
-            raise forms.ValidationError("Passord må være lenger enn 5 tegn")
-
-        if self.user.check_password(newPass):
-            raise forms.ValidationError("Nytt passord må være forskjellig fra det gamle!")
-
-        return newPass
-
-    def clean_newPasswordCopy(self):
-        newPass = self.cleaned_data['newPassword']
-        newPassCopy = self.cleaned_data['newPasswordCopy']
-
-        if newPass != newPassCopy:
-            raise forms.ValidationError("Dette stemmer ikke overens med ditt nye passord, prøv igjen!")
-
-        return newPassCopy
-    """

@@ -1,96 +1,215 @@
-<style>
-body 					{
-	background-color: #EAEAEA;
-	font-family: Arial, Helvetica, sans-serif;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>TIME</title>
+    <script type="text/javascript"
+     src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
+</head>
+
+<style>body {
+    background: #263849;
+    font: 12px/1.7em arial, sans-serif;
 }
 
-#admin_wrapper {
-	width: 450px;
-	margin-top: 50px;
-	margin-right: auto;
-	margin-bottom: 10px;
-	margin-left: auto;
-	background-color: #FFFFFF;
-	border: 10px solid #d6d6d6;
-	padding-top: 15px;
-	padding-right: 30px;
-	padding-bottom: 15px;
-	padding-left: 30px;
-}	
-
-.small			{ width: 15%;}
-.medium 		{ width: 35%;}
-.large			{ width: 75%;}
-.full			{width: 98%;}
+#login {
 
 
-form  label 	{
-	font-weight: bold;
-	font-size: 13px;
-	margin-bottom: 12px;
-	display: block;
-	margin-top: 12px;
+    width: 450px;
+    margin: 150px auto;
+    text-align: center;
 }
 
-form p 			{
-	padding: 0px;
-	margin: 0px;
+#login h1#title {
+    color: white;
+    width: 160px;
+    height: 26px;
+    margin: 0 auto .90em;
+    overflow: hidden;
 }
 
-form .input {
-	margin-top: 0px;
-	margin-right: 10px;
-	margin-bottom: 0px;
-	margin-left: 0px;
-	border: 1px solid #CCCCCC;
-	padding: 7px;
-	background-color: #F3F3F3;
-	
-	}
-form select {
-	padding: 0px;
-	margin: 0px;
+#login h1#title a {
+    display: block;
 }
 
-form .button	{
-	background-color: #D6D6D6;
-	color: #666666;
-	font-weight: bold;
-	border: 1px solid #CCCCCC;
-	margin-top: 7px;
-	margin-bottom: 7px;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+#login-body {
+    background: #FFF;
+    padding-bottom: 15px;
+    border: 1px solid #ccc;
+    padding: 0 0 10px 0;
+    text-align: left;
+    width: 100%;
+    overflow: hidden;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-box-shadow: 1px 1px 10px rgba(0, 0, 0, .25);
+    -webkit-box-shadow: 1px 1px 10px rgba(0, 0, 0, .25);
 }
 
-input:focus	{
-	background-color: #FFFFCC;
-	border: 1px solid #999999;
+#login-body form {
+    padding: 0 0 50px;
+    position: relative;
 }
-</style>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+#login-body input#login_password {
+    width: 170px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
 
-	<div id="admin_wrapper">
-	
-	<h1>TIME</h1> <div style="position:absolute; margin-left:350px; margin-top:70px"><img src="/media/images/login.png"></div>
-	
-	<form id="myForm" method="POST">
+#login-body input.text {
+    width: 275px;
+    font: bold 18px Helvetica, Arial, Verdana, sans-serif;
+    letter-spacing: -1px;
+    vertical-align: bottom;
+}
 
-		<p><label>Brukernavn</label>
-	  	<input name="username" type="text" class="input large" value="" />
-	  </p>
-		
-		<p><label>Password</label>
-		<input name="password" type="password" class="input large" value="" />
+#login-body .field {
+    width: 100%;
+    position: relative;
+    float: left;
+}
 
-	  </p>
-	  
-	  <p><input type="submit" name="Submit" id="button" value="Logg inn"  class="button"/>
-		</p>
-	</form>
+#login-body .pad {
+    padding: 20px 20px 0 20px;
+}
+
+#login-body label,
+#login-body .label {
+    font-size: 12px;
+    float: left;
+    line-height: 15px;
+    width: 100px;
+    padding: 15px 0 0 0;
+    margin: 0;
+    text-align: left;
+    font-weight: bold;
+
+}
+
+#login-body .field div {
+    float: left;
+    position: relative;
+    width: 300px;
+    padding: 0;
+    margin: 0;
+}
+
+#login-body .field div span.input {
+    text-align: right;
+    line-height: 3em;
+    font-size: 11px;
+    padding-right: 10px !important;
+}
+
+#login-body .checkbox input {
+    float: none !important;
+    display: inline !important;
+}
+
+#login-body .checkbox label {
+    float: none;
+    display: inline;
+    font-weight: normal;
+    font-size: 11px;
+}
+
+#login-body input,
+#login-body select,
+#login-body textarea {
+    margin: 0;
+    padding: 5px;
+    border: solid 1px #CCC;
+    color: #444;
+    background: #fff;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#login-body input[type=checkbox] {
+    border: none;
+}
+
+#login-body span.input,
+#login-body  span.checkbox {
+    display: block;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: #EEE;
+    padding: 5px;
+    margin: 0 0 15px 0;
+}</style>
+
+<body>
+
+  <script>
+  $(document).ready(function () {
+      $("#username").focus();
+  });
+  </script>
+
+<div id="login">
+
+    <h1 id="title">TIME</h1>
+
+    <div id="login-body" class="clearfix">
+
+
+        <form method="post">
+
+
+            <div class="content_front">
+
+                <div class="pad">
+
+                    <div class="field">
+                        <label>Username:</label>
+
+                        <div class=""><span class="input"><input name="username" id="username" class="text"
+                                                                 type="text"
+                                                                 value=""/></span></div>
+                    </div>
+                    <!-- .field -->
+
+                    <div class="field">
+                        <label>Password:</label>
+
+
+                        <div class=""><span class="input"><input name="password" id="" class="text" type="password"
+                                                                 value=""/></span></div>
+                    </div>
+                    <!-- .field -->
+
+
+                    <div class="field">
+                        <span class="label">&nbsp;</span>
+
+                        <div class="">
+                            <button type="submit" class="btn">Login</button>
+                        </div>
+                    </div>
+                    <!-- .field -->
+
+
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+<!-- #login -->
+
 
 </body>
-</html>	
+
+</html>

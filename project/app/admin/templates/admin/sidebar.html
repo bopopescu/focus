@@ -21,22 +21,42 @@
             src="{{ STATIC_URL }}img/password.png" width="24" height="24" alt="Mail"/>{% trans "SEND NEW PASSWORD" %}
     </a></li>
 
-    <li><a class="{% active request "trash" %}"
+    <li><a class="{% active request "manualSetTime" %}"
            href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"><img
             src="{{ STATIC_URL }}img/datetime.png" width="24" height="24" alt="Mail"/>{% trans "SET HOUR DAYS LIMITS" %}
     </a>
+    <li><a class="{% active request "history" %}"
+           href="{% url app.admin.views.user.history userCard.id %}"><img
+            src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}
+    </a>
     </li>
 
-    <li><a class="{% active request "trash" %}" href="{% url app.admin.views.user.delete userCard.id %}"><img
+    <li><a class="{% active request "permissions" %}"
+           href="{% url app.admin.views.user.permissions userCard.id %}"><img
+            src="{{ STATIC_URL }}img/001_42.png" width="24" height="24" alt="Mail"/>{% trans "PERMISSIONS" %}
+    </a>
+    </li>
+
+
+    <li><a class="{% active request "trash" %}" href="{% url app.admin.views.user.trash userCard.id %}"><img
             src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
 
-    {% else %}{% if graoup.id %}
+    {% else %}{% if group.id %}
+
+
+    <li><a class="{% active request "list" %}" href="{% url app.admin.views.group.overview %}"><img
+            src="{{ STATIC_URL }}img/groups.png" width="24" height="24" alt="Home"/>{% trans "GROUPS" %}</a>
+    </li>
+
 
     <li><a class="{% active request "view" %}" href="{% url app.admin.views.group.view group.id %}"><img
             src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
 
     <li><a class="{% active request "edit" %}" href="{% url app.admin.views.group.edit group.id %}"><img
             src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
+
+    <li><a class="{% active request "permissions" %}" href="{% url app.admin.views.group.permissions group.id %}"><img
+            src="{{ STATIC_URL }}img/001_42.png" width="24" height="24" alt="Mail"/>{% trans "PERMISSIONS" %}</a></li>
 
     <li><a class="{% active request "trash" %}" href="{% url app.admin.views.group.delete group.id %}"><img
             src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a>

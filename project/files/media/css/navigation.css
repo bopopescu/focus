@@ -9,6 +9,7 @@
 #nav {
     height: 30px;
     padding-left: 50px;
+    min-width:1200px;
     /* 	THEME COLOUR - HOW TO CHANGE THEME
 
      1.	Comment out the theme that is active, you can do this by

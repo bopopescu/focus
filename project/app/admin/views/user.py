@@ -5,9 +5,10 @@ from django.db.models import Q
 from core.shortcuts import *
 from core.views import updateTimeout
 from core.decorators import *
-from core.models import User, Permission
+from core.models import User, Permission, Log
 from app.admin.forms import *
 from django.utils.translation import ugettext as _
+from core.mail import send_mail
 
 @login_required()
 def overview(request):
@@ -46,10 +47,7 @@ def changeCanLogin(request, id):
     u.save()
     return redirect(view, id)
 
-@login_required()
-def sendGeneratedPassword(request, id):
-    user = get_object_or_404(User, id=id, company=request.user.get_company())
-
+def generateNewPassordForUser(user):
     import string
     import random
 
@@ -57,7 +55,6 @@ def sendGeneratedPassword(request, id):
     consonants = [a for a in string.ascii_lowercase if a not in vowels]
     ret = ''
     slen = 8
-
     for i in range(slen):
         if i % 2 == 0:
             randid = random.randint(0, 20) #number of consonants
@@ -65,16 +62,20 @@ def sendGeneratedPassword(request, id):
         else:
             randid = random.randint(0, 4) #number of vowels
             ret += vowels[randid]
-
     ret += "%s" % random.randint(20, 99)
-
-    from django.core.mail import send_mail
-
-    send_mail('Nytt passord', 'Nytt passord er: %s' % ret, 'FocusTime',
-              ["%s" % user.email], fail_silently=True)
+    send_mail(_("New password"), (_("Your username is: %s" % user.username) + _("\nYour password is: ") + '%s' % ret),
+              settings.NO_REPLY_EMAIL,
+              [user.email], fail_silently=False)
 
     user.set_password("%s" % ret)
     user.save()
+    return ret
+
+@login_required()
+def sendGeneratedPassword(request, id):
+    user = get_object_or_404(User, id=id, company=Core.current_user().get_company())
+
+    ret = generateNewPassordForUser(user)
 
     if settings.DEBUG:
         print "Nytt passord er: %s" % ret
@@ -83,57 +84,56 @@ def sendGeneratedPassword(request, id):
 
     return redirect(view, id)
 
-@login_required()
-def addPop(request):
-    instance = User()
-
-    if request.method == "POST":
-        form = UserForm(request.POST, instance=instance)
-
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.save()
-
-            form.save_m2m()
-
-            if not o.get_profile().company:
-                o.get_profile().company = request.user.get_profile().company
-                o.get_profile().save()
-                sendGeneratedPassword(request, o.id)
-
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
-
-    else:
-        form = UserForm(instance=instance)
-
-    return render_with_request(request, "simpleform.html", {'title': 'Bruker', 'form': form})
-
+@require_permission("EDIT", User, "id")
+def history(request, id):
+    user = User.objects.get(id=id)
+    history = user.logs.all()
+    return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
+                                                               'user': user,
+                                                               'logs': history[::-1][0:150]})
 
 @login_required()
 def view(request, id):
     user = User.objects.get(id=id)
-    Permissions = user.get_permissions()
 
     return render_with_request(request, 'admin/users/view.html', {'title': _("User"),
                                                                   'userCard': user,
-                                                                  'permissions': Permissions,
                                                                   })
 
 @login_required()
-def delete(request, id):
-    u = User.objects.get(id=id)
-    u.is_active = False
-    u.save()
-    request.message_success(_("Successfully deletes user"))
-    return redirect(overview)
+def permissions(request, id):
+    user = User.objects.get(id=id)
+    Permissions = user.get_permissions()
 
+    return render_with_request(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
+                                                                   'userCard': user,
+                                                                   'permissions': Permissions,
+                                                                   })
+
+@require_permission("DELETE", User, "id")
+def trash(request, id):
+    instance = User.objects.get(id=id)
+
+    if request.method == "POST":
+        if not instance.canBeDeleted()[0]:
+            request.message_error("You can't delete this user because: ")
+            for reason in instance.canBeDeleted()[1]:
+                request.message_error(reason)
+        else:
+            request.message_success("Successfully deleted this user")
+            customer.trash()
+        return redirect(overview)
+    else:
+        return render_with_request(request, 'customers/trash.html', {'title': _("Confirm delete"),
+                                                                     'user': instance,
+                                                                     'canBeDeleted': instance.canBeDeleted()[0],
+                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     })
 
 @login_required()
 def setHourRegistrationLimitsManually (request, id):
     instance = get_object_or_404(User, id=id)
-    msg = _("Successfully changed user")
+    msg = _("User successfully edited")
 
     if request.method == 'POST':
         form = HourRegistrationManuallyForm(request.POST, instance=instance)
@@ -151,17 +151,19 @@ def setHourRegistrationLimitsManually (request, id):
     else:
         form = HourRegistrationManuallyForm(instance=instance)
 
-    return render_with_request(request, "admin/users/form.html", {'title': _("Change user"), 'form': form})
+    return render_with_request(request, "admin/users/form.html", {'title': _("Change user"),
+                                                                  'userCard': instance,
+                                                                  'form': form})
 
 
 @login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(User, id=id, company=request.user.company)
-        msg = _("Successfully edited user")
+        msg = _("User successfully added")
     else:
         instance = User()
-        msg = _("Successfully added new user")
+        msg = _("New user successfully added")
 
     #Save and set to active, require valid form
     if request.method == 'POST':

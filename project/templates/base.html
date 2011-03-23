@@ -1,10 +1,9 @@
 {% load i18n %}
 {% load auth %}
 {% load menu_tags %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML>
 <head>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <title>FocusTime</title>
@@ -21,6 +20,7 @@
 
     <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/ui-lightness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="{{ STATIC_URL }}js/masked.js"></script>
 
 
@@ -45,7 +45,7 @@
             <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a> | <a
                 href="{% url app.accounts.views.logout_view %}">Logg ut</a>
             {% if request.user.get_new_notifications %}
-                <br><br>
+                <br/><br/>
                 <b><a href="{% url app.dashboard.views.notifications %}">{{ request.user.get_new_notifications.count }}
                 </b> {% trans "changes since last time you were logged in" %}</a>
             {% endif %}
@@ -78,7 +78,7 @@
             </li>
             <li class="{% active request "^/hourregistrations/" %}">
                 <a class="{% active request "^/hourregistrations/" %}"
-                   href="{% url app.hourregistrations.views.overview %}">{% trans "Hour registration" %}</a>
+                   href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Hour registration" %}</a>
             </li>
 
             <li class="{% active request "^/tickets/" %}">
@@ -108,8 +108,8 @@
     <div id="subnav">
         <div style="padding-top:5px; margin-right:5%; float:right;">
             <form action="{% url app.search.views.search %}">
-                <input type="text" placeholder="search" name="s">
-                <input type="submit" value="Søk">
+                <input type="text" placeholder="search" name="s"/>
+                <input type="submit" value="Søk"/>
             </form>
         </div>
     </div>

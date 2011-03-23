@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block extrahead %}
+
+{% endblock %}
+
+{% block sidebar %}
+    {% include "admin/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <h1>{{ title }}</h1>
+
+    {% regroup permissions by get_content_type_display as Permissions %}
+    <table style="text-align:center">
+        <tr>
+            <th></th>
+            <th>{% trans "Object" %}</th>
+            <th>{% trans "Permissions" %}</th>
+            <th>{% trans "Group" %}</th>
+        </tr>
+        {% for type in Permissions %}
+            <tr>
+                <td style="text-align:left;"><b>{{ type.grouper }}</b></td>
+                <td colspan=5></td>
+            </tr>
+            {% for perm in type.list %}
+                <tr>
+                    <td></td>
+                    <td style="text-align:left;">{{ perm.id }} | <a
+                            href='{{perm.get_object.getViewUrl}}'>{{ perm.get_object }}</a>
+                    </td>
+                    <td>
+                        {% for action in perm.get_valid_actions %}
+                            {{ action }}
+                        {% endfor %}
+                    </td>
+                    <td>{% if perm.group %}
+                        {% trans "Thru group" %} <a
+                                href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}	

@@ -14,7 +14,7 @@ class OrderForm(ModelForm):
 
     class Meta:
         model = Order
-        fields = ("oid", "POnumber", "order_name", "customer", "project", "responsible")
+        fields = ("oid", "POnumber", "order_name", "customer", "project", "responsible",'description')
 
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
@@ -61,7 +61,7 @@ class OrderFormSimple(ModelForm):
         model = Order
         exclude = (
         'deleted', 'trashed', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
-        'participant',)
+        'participant','description')
 
 class TaskForm(ModelForm):
     class Meta:

@@ -1,6 +1,5 @@
-<link rel="stylesheet" href="/static/ui-lightness/jquery-ui-1.8.6.custom.css">
 
-<script>
+<script type="text/javascript">
     $(function() {
 
         {% for field in form %}
@@ -74,7 +73,6 @@
 </script>
 
 <div id="dialog-form{{ field_id }}">
-    <form id="thisForm{{ field_id }}">
         <fieldset>
             {% for field in form %}
                 {{ field.label }}
@@ -84,8 +82,7 @@
                 <br>
             {% endfor %}
         </fieldset>
-    </form>
 </div>
 
-<span id="create_{{ field_id }}"><img width="15px" height="15px" style='vertical-align:middle;'
+<span id="create_{{ field_id }}"><img width="15" height="15" style='vertical-align:middle;'
                                       src="{{ STATIC_URL }}img/add.png"></span>

@@ -10,7 +10,7 @@ class CustomerForm(ModelForm):
     class Meta:
         model = Customer
         #exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
-        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website", "alternative_address", )
+        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website",)
 
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
@@ -33,7 +33,7 @@ class CustomerForm(ModelForm):
 class CustomerFormSimple(ModelForm):
     class Meta:
         model = Customer
-        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website", "alternative_address", )
+        fields = ("cid", "full_name", "email", "address", "phone", "zip", "city", "website", )
         #exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', )
 
     def __init__(self, *args, **kwrds):

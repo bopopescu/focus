@@ -48,17 +48,11 @@ class Company(models.Model):
     def getDaysIntoNextMonthHourRegistration(self):
         return self.daysIntoNextMonthHourRegistration
 
-
 class User(models.Model):
-    """
-    Users within the Django authentication system are represented by this model.
-
-    Username and password are required. Other fields are optional.
-    """
     username = models.CharField(('username'), max_length=30, unique=True, help_text=(
     "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
-    first_name = models.CharField(('first name'), max_length=30, blank=True)
-    last_name = models.CharField(('last name'), max_length=30, blank=True)
+    first_name = models.CharField(('first name'), max_length=60, blank=True)
+    last_name = models.CharField(('last name'), max_length=60, blank=True)
     email = models.EmailField(('e-mail address'), blank=True)
     password = models.CharField(('password'), max_length=128, help_text=(
     "Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
@@ -71,6 +65,8 @@ class User(models.Model):
     last_login = models.DateTimeField(('last login'), default=datetime.now)
     date_joined = models.DateTimeField(('date joined'), default=datetime.now)
 
+    phone = models.CharField(max_length=30, null=True)
+    birthdate = models.DateField("Bday", null=True)
     company = models.ForeignKey(Company, blank=True, null=True, related_name="%(app_label)s_%(class)s_users")
     canLogin = models.BooleanField(default=True)
     profileImage = models.ImageField(upload_to="profileImages", storage=fs, null=True, blank=True)
@@ -93,6 +89,38 @@ class User(models.Model):
         if self.company:
             return self.company
         return None
+
+    def canBeDeleted(self):
+        canBeDeleted = True
+        reasons = []
+
+        if self.logs.all().count() > 0:
+            canBeDeleted = False
+            reasons.append(_("User has a history, check history tab. "))
+
+        if canBeDeleted:
+            return (True, "OK")
+
+        return (False, reasons)
+
+
+    def save(self, *args, **kwargs):
+        action = "EDIT"
+        if not self.id:
+            action = "ADD"
+
+        super(User, self).save()
+
+        if action == "ADD":
+            Core.current_user().grant_role("Owner", self)
+            adminGroup = Core.current_user().get_company_admingroup()
+            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
+
+            if adminGroup:
+                adminGroup.grant_role("Admin", self)
+
+            if allemployeesgroup:
+                allemployeesgroup.grant_role("Member", self)
 
     def setValidPeriodManually(self, **kwargs):
         if 'toDate' in kwargs:
@@ -240,6 +268,7 @@ class User(models.Model):
         """
         Make it possible to set permissions for classes
         """
+
         object_id = 0
         if not isclass(object):
             object_id = object.id
@@ -368,14 +397,49 @@ class User(models.Model):
     def get_permissions(self):
         permissions = []
 
-        permissions.extend(Permission.objects.filter(user=self))
+        for p in Permission.objects.filter(user=self):
+            if not p.id in permissions:
+                permissions.append(p.id)
 
         for group in self.groups.all():
-            permissions.extend(Permission.objects.filter(user=self))
+            for p in group.get_permissions():
+                if not p.id in permissions:
+                    permissions.append(p.id)
 
-        return set(permissions)
+        return Permission.objects.filter(id__in=permissions)
+
+    """
+    SKRIVE OM , ta utgangspunkt i permission-tabellen
+    """
 
     def getPermittedObjects(self, action, model):
+        objects = model.objects.filter()
+        contenttype = ContentType.objects.get_for_model(model)
+        permissions = Permission.objects.filter(content_type=contenttype, user=self)
+
+        action = Action.objects.get(name=action)
+        allAction = Action.objects.get(name="ALL")
+
+        tree = {}
+        permitted = []
+
+        for perm in permissions:
+            if not perm.object_id in tree:
+                tree[perm.object_id] = []
+
+            tree[perm.object_id].extend(perm.actions.all())
+            tree[perm.object_id].extend(perm.role.actions.all())
+
+        for node in tree:
+            if allAction in tree[node]:
+                permitted.append(node)
+            if action in tree[node]:
+                permitted.append(node)
+
+        return model.objects.filter(id__in=permitted)
+
+        """
+        SLOW
         unwanted = []
         objects = model.objects.filter(company=self.get_company())
 
@@ -384,6 +448,7 @@ class User(models.Model):
                 unwanted.append(obj.id)
 
         return objects.exclude(id__in=unwanted)
+        """
 
 class AnonymousUser(User):
     id = 0
@@ -464,19 +529,30 @@ class Group(models.Model):
         super(Group, self).save()
 
     def save(self, *args, **kwargs):
-        new = False
-        if not id:
-            new = True
+        action = "EDIT"
+        if not self.id:
+            action = "ADD"
 
         super(Group, self).save()
 
-        #Give the user who created this ALL permissions on object, if new
-        if new:
+        if action == "ADD":
             Core.current_user().grant_role("Owner", self)
             adminGroup = Core.current_user().get_company_admingroup()
+            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
             if adminGroup:
                 adminGroup.grant_role("Admin", self)
+
+            if allemployeesgroup:
+                allemployeesgroup.grant_role("Member", self)
+
+
+    def get_permissions(self):
+       permissions = []
+       for p in Permission.objects.filter(group=self):
+           if not p.id in permissions:
+               permissions.append(p.id)
+       return Permission.objects.filter(id__in=permissions)
 
 
     def grant_permissions (self, actions, object, **kwargs):
@@ -590,8 +666,12 @@ class Log(models.Model):
         #lastLog = self.getObject().getLogs().filter(id__lt=self.id)
 
         lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
-        obj = self.content_type.get_object_for_this_type(id=self.object_id)
 
+        try:
+            obj = self.content_type.get_object_for_this_type(id=self.object_id)
+        except:
+            return ""
+            
         """
         Needs optimalization
         """
@@ -794,7 +874,7 @@ class PersistentModel(models.Model):
         GRANT PERMISSIONS
         """
         if action == "ADD":
-            Core.current_user().grant_role("Owner", self)
+            Core.current_user().grant_role("Admin", self)
             adminGroup = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
@@ -910,6 +990,7 @@ Adding some initial data to the model when run syncdb
 """
 
 def initial_data ():
+    print "creating Actions"
     Action.objects.get_or_create(name='ALL', verb='all', description='all actions on an object')
     Action.objects.get_or_create(name='CREATE', verb='created', description='create an object')
     Action.objects.get_or_create(name='EDIT', verb='edited', description='edit an object')
@@ -922,12 +1003,14 @@ def initial_data ():
     Action.objects.get_or_create(name='LISTDELETED', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTARCHIVE', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
-
+    print "Done"
+    print "creating Roles"
     #Generates som standard roles
     Role.objects.get_or_create(name="Admin", description="Typisk leder, kan gjøre alt")
     Role.objects.get_or_create(name="Responsible", description="Ansvarlig, kan se,endre")
     Role.objects.get_or_create(name="Member", description="Typisk medlem, kan se")
     Role.objects.get_or_create(name="Owner", description="Typisk den som opprettet objektet")
+    print "Done"
 
     leader = Role.objects.get(name="Admin")
     leader.grant_actions(["ALL"])
@@ -949,7 +1032,7 @@ def initial_data ():
     a.is_superuser = True
     a.canLogin = True
     a.is_staff = True
-    a.set_password("sperpassord")
+    a.set_password("superpassord")
     a.save()
 
     u, created = User.all_objects.get_or_create(username="test",

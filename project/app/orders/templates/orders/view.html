@@ -12,160 +12,119 @@
 
 {% block maincontent %}
 
-<div class="portlet x9">
-    <div class="portlet-header"><h4>{{ title }}</h4></div>
+    <div class="portlet x9">
+        <div class="portlet-header"><h4>{{ title }}</h4></div>
 
-    <div class="portlet-content">
+        <div class="portlet-content">
 
-        <table>
-
-            <tr>
-                <th>{% trans "Orders" %}</th>
-                <th>{% trans "Details" %}</th>
-            </tr>
-
-            <tr>
-                <td>{% trans "Customer" %}</td>
-                <td>{{ order.customer }}</td>
-            </tr>
-            {% if order.project %}
+            <table>
 
                 <tr>
-                    <td> {% trans "Project" %}</td>
-                    <td><a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
-                    </td>
+                    <th>{% trans "Orders" %}</th>
+                    <th>{% trans "Details" %}</th>
                 </tr>
-            {% endif %}
 
-            <tr>
-                <td>{% trans "Status" %}</td>
-                <td>{{ order.get_state_display }}</td>
-            </tr>
+                <tr>
+                    <td>{% trans "Customer" %}</td>
+                    <td>{{ order.customer }}</td>
+                </tr>
+                {% if order.project %}
 
-            <tr>
-                <td>{% trans "Delivery date" %}</td>
-                <td>{{ order.delivery_date|date:"d.m.Y" }}</td>
-            </tr>
+                    <tr>
+                        <td> {% trans "Project" %}</td>
+                        <td><a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
+                        </td>
+                    </tr>
+                {% endif %}
 
-            <tr>
-                <td>{% trans "Delivery deadline" %}</td>
-                <td>{{ order.delivery_date_deadline|date:"d.m.Y" }}</td>
-            </tr>
+                <tr>
+                    <td>{% trans "Status" %}</td>
+                    <td>{{ order.get_state_display }}</td>
+                </tr>
 
-        </table>
+                <tr>
+                    <td>{% trans "Delivery date" %}</td>
+                    <td>{{ order.delivery_date|date:"d.m.Y" }}</td>
+                </tr>
 
-        <div class="">
-            <h2>{% trans "Description" %}</h2>
-            {{ order.description }}
-        </div>
+                <tr>
+                    <td>{% trans "Delivery deadline" %}</td>
+                    <td>{{ order.delivery_date_deadline|date:"d.m.Y" }}</td>
+                </tr>
 
-        <br><br><br>
+            </table>
 
-        <h2>{% trans "Participants" %}</h2>
-        {% for cuser in whoCanSeeThis %}
-
-            <div class="user-card">
-                <div class="avatar">
-                    <img src="{{ cuser.profileImage|thumbnail_with_max_side:"120" }}" title="User" alt=""/>
-                </div>
-                <!-- .user-card-avatar -->
-                <div class="details">
-                    <p><strong>{{ cuser.first_name }} {{ cuser.last_name }}</strong><br/>
-                        {{ cuser.phone }}<br/>
-                        <a href="{% url app.admin.views.user.view cuser.id %}">{% trans "More details" %}</a></p>
-                </div>
+            <div class="">
+                <h2>{% trans "Description" %}</h2>
+                {{ order.description }}
             </div>
 
-        {% endfor %}
+            <br><br><br>
 
-        <br><br>
+            <h2>{% trans "Participants" %}</h2>
+            {% for cuser in whoCanSeeThis %}
 
-        <table>
-            <tr>
-                <th>{% trans "Description" %}</th>
-            </tr>
-            {% for task in order.tasks.all %}
-                <tr>
-                    {% if task.done %}
-                        <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
-                                src="/media/images/icons/checked.png" style="vertical-align:middle">{{ task }}</a>
-                        </td>
-                    {% else %}
-                        <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
-                                src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{ task }}</a>
-                        </td>
-                    {% endif %}
-
-                </tr>
+                <div class="user-card">
+                    <div class="avatar">
+                        <img src="{{ cuser.profileImage|thumbnail_with_max_side:"120" }}" title="User" alt=""/>
+                    </div>
+                    <!-- .user-card-avatar -->
+                    <div class="details">
+                        <p><strong>{{ cuser.first_name }} {{ cuser.last_name }}</strong><br/>
+                            {{ cuser.phone }}<br/>
+                            <a href="{% url app.admin.views.user.view cuser.id %}">{% trans "More details" %}</a></p>
+                    </div>
+                </div>
 
             {% endfor %}
-        </table>
-        <form enctype="multipart/form-data" action="{% url app.orders.views.addTask order.id %}" method="post">
-            <fieldset class="module aligned ">
 
-                {% for field in taskForm %}
-                    <div class="form-row">
-                        <div>
+            <br><br>
 
-                            {{ field.label_tag }}
+            <table>
+                <tr>
+                    <th>{% trans "Description" %}</th>
+                </tr>
+                {% for task in order.tasks.all %}
+                    <tr>
+                        {% if task.done %}
+                            <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
+                                    src="/media/images/icons/checked.png" style="vertical-align:middle">{{ task }}</a>
+                            </td>
+                        {% else %}
+                            <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
+                                    src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{ task }}</a>
+                            </td>
+                        {% endif %}
 
-                            {{ field }}
-                            {% for error in field.errors %}
-                                <span style="color:red">{{ error }}</span>
-                            {% endfor %}
+                    </tr>
 
-
-                        </div>
-                    </div>
                 {% endfor %}
+            </table>
+            <form enctype="multipart/form-data" action="{% url app.orders.views.addTask order.id %}" method="post">
+                <fieldset class="module aligned ">
 
-            </fieldset>
-            <input type="submit" value="{% trans "Save" %}" class="default" name="_save"/>
-        </form>
+                    {% for field in taskForm %}
+                        <div class="form-row">
+                            <div>
 
-    </div>    </div>
+                                {{ field.label_tag }}
+
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <span style="color:red">{{ error }}</span>
+                                {% endfor %}
 
 
-<div class="portlet x3">
+                            </div>
+                        </div>
+                    {% endfor %}
 
-    <div class="portlet-header"><h4>Valg</h4></div>
+                </fieldset>
+                <input type="submit" value="{% trans "Save" %}" class="default" name="_save"/>
+            </form>
 
-    <div class="portlet-content">
-
-        {% require_permission EDIT order %}
-        <div class="tool editChoice">
-            <a href="{% url app.orders.views.edit order.id %}">{% trans "edit" %}</a>
         </div>
-        {% end_require %}
-        {% require_permission DELETE order %}
-        <div class="tool deleteChoice">
-            <a href="{% url app.orders.views.delete order.id %}">{% trans "delete" %}</a>
-        </div>
-        {% end_require %}
-
-        {% if order.state != "A" %}
-
-            <a href="{% url app.orders.views.changeStatus order.id %}">
-
-                {% if order.state == "T" %}
-                    {% trans "Accept offer" %}
-                {% endif %}
-
-                {% if order.state == "O" and order.haveCompletedAllTasks %}
-                    {% trans "Set ready for invoice" %}
-                {% endif %}
-
-                {% if order.state == "F" %}
-                    {% trans "Archive order" %}
-                {% endif %}
-
-            </a>
-
-        {% endif %}
 
     </div>
-</div>
-
-
 
 {% endblock %}	

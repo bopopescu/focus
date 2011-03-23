@@ -13,15 +13,12 @@
 {% block maincontent %}
 
     <div class="portlet x12">
-
         <div class="portlet-header"><h4>{{ title }}</h4></div>
-
         <div class="portlet-content">
 
             {{ user.first_name }} {{ user.last_name }}
             <br>
             <br><br>
-
 
             <h2>{% trans "Participants" %}</h2>
 
@@ -46,65 +43,8 @@
 
                     </div> <!-- .user-card -->
                 {% endfor %}
-
-
             </div>
-
-
-
-            {% regroup permissions by content_type as Permissions %}
-
-            <br><br>
-            <b>{% trans "Permisison" %}</b>
-            <br><br>
-            <table style="text-align:center">
-
-                <tr>
-                    <th></th>
-                    <th>Objekt</th>
-                    <th>Kan se</th>
-                    <th>Kan endre</th>
-                    <th>Kan slette</th>
-                </tr>
-
-
-
-                {% for type in Permissions %}
-
-                    <tr>
-                        <td style="text-align:left;"><b>{{ type.grouper }}</b></td>
-                        <td colspan=5></td>
-                    </tr>
-
-                    {% for perm in type.list %}
-
-                        <tr>
-                            <td></td>
-                            <td style="text-align:left;"><a href='{{perm.get_object.get_url}}'>{{ perm.get_object }}</a>
-                            </td>
-                            <td>{% if perm.can_view %}
-                                X
-                            {% endif %}
-                            </td>
-                            <td>{% if perm.can_change %}
-                                X
-                            {% endif %}
-                            </td>
-                            <td>{% if perm.can_delete %}
-                                X
-                            {% endif %}
-                            </td>
-
-                        </tr>
-                    {% endfor %}
-                    </tr>
-
-                {% endfor %}
-
-            </table>
-
-
-
-        </div>  </div>
+        </div>
+    </div>
 
 {% endblock %}  

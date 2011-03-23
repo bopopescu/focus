@@ -10,23 +10,23 @@ from django.utils.translation import ugettext as _
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
-                  'price', 'priceVal', 'supplier',)
+        fields = ('pid', 'name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
+                  'price', 'price_out', 'max_discount','priceVal', 'supplier',)
 
     def __init__(self, *args, **kwrds):
         super(ProductForm, self).__init__(*args, **kwrds)
 
         self.fields['unitForSize'].widget = SelectWithPop(UnitsForSizes)
-        self.fields['unitForSize'].queryset = UnitsForSizes.objects.all()
+        self.fields['unitForSize'].queryset = UnitsForSizes.objects.inCompany()
 
         self.fields['priceVal'].widget = SelectWithPop(Currency)
         self.fields['priceVal'].queryset = Currency.objects.all()
 
         self.fields['productGroup'].widget = SelectWithPop(ProductGroup)
-        self.fields['productGroup'].queryset = ProductGroup.objects.all()
+        self.fields['productGroup'].queryset = ProductGroup.objects.inCompany()
 
         self.fields['supplier'].widget = SelectWithPop(Supplier)
-        self.fields['supplier'].queryset = Supplier.objects.all()
+        self.fields['supplier'].queryset = Supplier.objects.inCompany()
 
 class ProductGroupForm(ModelForm):
     class Meta:

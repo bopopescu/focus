@@ -48,6 +48,15 @@ def view(request, id):
     return render_with_request(request, 'admin/groups/view.html', {'title': _("Groups"),
                                                                    'group': group,
                                                                    })
+login_required()
+def permissions(request, id):
+    group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
+
+    return render_with_request(request, 'admin/permissions.html', {'title': _("Groups"),
+                                                                   'group': group,
+                                                                   })
+
+
 
 @login_required()
 def delete(request, id):
@@ -81,4 +90,5 @@ def form (request, id=False):
     else:
         form = GroupForm(instance=instance)
 
-    return render_with_request(request, "admin/groups/form.html", {'title': _("Group"),'group':instance, 'form': form})
+    return render_with_request(request, "admin/groups/form.html",
+                               {'title': _("Group"), 'group': instance, 'form': form})

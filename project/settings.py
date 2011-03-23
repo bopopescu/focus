@@ -9,6 +9,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 SERVER_EMAIL = 'fredrik+django@fncit.no'
+NO_REPLY_EMAIL = 'no-reply@focustime.no'
+DEBUG_EMAIL = "focustimeno@gmail.com"
 
 ADMINS = (
 (u'Fredrik Nygård Carlsen', 'fredrik@fncit.no'),
@@ -16,12 +18,27 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'project.db'
     }
 }
+
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'focus_test',
+        'USER': 'root',
+        'PORT': '8889',
+        'HOST':'127.0.0.1',
+        'PASSWORD': 'root',
+    }
+}
+
+"""
 
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
@@ -73,7 +90,7 @@ BASE_PATH + '/templates/',
 )
 
 STATICFILES_DIRS = (
-    BASE_PATH + '/files/media/',
+BASE_PATH + '/files/media/',
 )
 
 INTERNAL_IPS = ('127.0.0.1')
@@ -88,19 +105,20 @@ INSTALLED_APPS = (
 'app.admin',
 'app.company',
 'app.announcements',
+'app.contacts',
 'app.accounts',
 'app.customers',
 'app.projects',
-'app.orders',
-'app.hourregistrations',
-'app.contacts',
 'app.files',
 'app.dashboard',
 'app.stock',
+'app.orders',
+'app.hourregistrations',
 'app.suppliers',
 'app.search',
 'app.mail',
 'app.tickets',
+'app.migratefocus',
 
 #Other
 'south',

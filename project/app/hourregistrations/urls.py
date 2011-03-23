@@ -10,7 +10,8 @@ urlpatterns = patterns('app.hourregistrations.views',
                        url(r'^(?P<user_id>\d+)/archive/(?P<year>\d+)/(?P<month>\d+)/$', 'viewArchivedMonth'),
                        url(r'^(?P<id>\d+)/edit/?$', 'edit'),
                        url(r'^(?P<id>\d+)/delete/?$', 'delete'),
-                       url(r'^calendar/', 'calendar'),
+                       url(r'^calendar/$', 'calendar_today'),
+                       url(r'^calendar/(?P<year>\d+)/(?P<month>\d+)/(?P<week>\d+)/(?P<day>\d+)/', 'calendar'),
 
                        #Ajax
                        url(r'^ajaxEditCalendar/$', 'ajaxEditCalendar'),

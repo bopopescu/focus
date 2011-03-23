@@ -8,8 +8,8 @@ from app.suppliers.models import Supplier
 from django.core import urlresolvers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from app.orders.models import Order
 from django.utils.translation import ugettext as _
+from app.orders.models import Order
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -68,18 +68,18 @@ class Currency(PersistentModel):
         return self.name
 
 class Product(PersistentModel):
-    pid = models.IntegerField("Varenr", null=True)
+    pid = models.CharField(_("ProductID"), max_length=50, null=True)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True)
-    price = models.CharField("Pris", max_length=100, null=True)
-    price_out = models.CharField("Pris ut", max_length=100, null=True)
-    max_discount = models.CharField("Maks prosentavslag", max_length=5, null=True)
-    countOfAvailableInStock = models.CharField("Lagerstatus", max_length=10)
+    price = models.CharField(_("Price in"), max_length=100, null=True)
+    price_out = models.CharField(_("Price out"), max_length=100, null=True)
+    max_discount = models.CharField(_("Max discount"), max_length=5, null=True)
+    countOfAvailableInStock = models.CharField(_("Avaiable in stock"), max_length=10)
     supplier = models.ForeignKey(Supplier, related_name="products", null=True)
-    size = models.CharField(max_length=100)
-    unitForSize = models.ForeignKey(UnitsForSizes, verbose_name="Enhet")
-    priceVal = models.ForeignKey(Currency, related_name="products", verbose_name="Valuta")
-    normalDeliveryTime = models.CharField("Normal leveringstid", max_length=10, null=True)
+    size = models.CharField(max_length=100, null=True)
+    unitForSize = models.ForeignKey(UnitsForSizes, verbose_name=_("Unit"), null=True)
+    priceVal = models.ForeignKey(Currency, related_name="products", verbose_name=_("Currency"))
+    normalDeliveryTime = models.CharField(_("Expected delivery time"), max_length=10, null=True)
     productGroup = models.ForeignKey(ProductGroup, related_name="products", null=True)
 
     def __unicode__(self):
