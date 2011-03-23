@@ -3,6 +3,7 @@ from settings import *
 DEBUG = True
 TEMPLATE_DEBUG = True
 
+DEBUG_EMAIL = "fredrik@fncit.no"
 
 #EMAIL DEBUG
 EMAIL_USE_TLS = True
