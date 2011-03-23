@@ -1,4 +1,3 @@
-#file endings not of generated files
 *.pyc
 *.pyo
 *.orig
@@ -14,10 +13,10 @@ downloads
 eggs
 omelette
 parts
-uploads
 .installed.cfg
 .settings
 .pydevproject
 media/uploads
 static_media
 .idea
+development.py
