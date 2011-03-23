@@ -715,3 +715,9 @@ tr:nth-child(even) {
 .ticket_info p {
     font-size: medium;
 }
+
+.ticket_update textarea {
+    width: 550px;
+}
+
+
