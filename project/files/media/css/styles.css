@@ -694,3 +694,20 @@ tr:nth-child(even) {
     height: 20px;
     margin-right: 5px;
 }
+
+.ticket_details {
+    border: 2px solid #d6d6d6;
+    padding: 10px;
+}
+
+.ticket_attributes th {
+    text-align: left;
+}
+
+.ticket_attributes td {
+    border-bottom: none;
+}
+
+.ticket_info p {
+    font-size: medium;
+}

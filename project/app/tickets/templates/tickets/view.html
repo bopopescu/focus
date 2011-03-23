@@ -17,75 +17,50 @@
 {% block maincontent %}
 
 
-        <div class="ticketinfo">
-            <table>
-                <thead>
-                <tr>
-                    <th>{% trans "Ticket" %}</th>
-                    <th>{% trans "Details" %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{% trans "Title" %}</td>
-                    <td>{{ ticket.title }}</td>
-                </tr>
 
-                <tr>
-                    <td>{% trans "Customer" %}</td>
-                    <td>{{ ticket.customer }}</td>
-                </tr>
 
-                <tr>
-                    <td>{% trans "Assigned To" %}</td>
-                    <td>{{ ticket.assigned_to }}</td>
-                </tr>
+        <div class="ticket_info">
 
-                <tr>
-                    <td>{% trans "Description" %}</td>
-                    <td>{{ ticket.description }}</td>
-                </tr>
+        <h2> {% trans "Ticket" %}  #{{ ticket.id }} - {{ ticket.title }}</h2>
 
-                <tr>
-                    <td>{% trans "Status" %}</td>
-                    <td> {{ ticket.status }}</td>
-                </tr>
+            <div class="ticket_details">
+                <p class="ticket_author">{% trans "Added by" %} {{ ticket.creator }} <br />
+                {% trans "Last updated" %} {{ ticket.date_edited }}</p>
+    
+                <table class="ticket_attributes">
+                    <tr>
+                        <th>{% trans "status" %}</th> <td> {{ ticket.status }}</td>
+                        <th>{% trans "created" %}</th> <td> {{ ticket.date_created }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "priority" %}</th> <td> {{ ticket.priority }}</td>
+                        <th>{% trans "estimated time" %}</th> <td>{{ ticket.estimated_time }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "assigned to" %}</th> <td>{{ ticket.assigned_to }}</td>
+                        <th>{% trans "spent time" %}</th> <td>{{ ticket.spent_time }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans "customer" %}</th> <td>{{ ticket.customer }}</td>
+                    </tr>
 
-                <tr>
-                    <td>{% trans "Priority" %}</td>
-                    <td>{{ ticket.priority }}</td>
-                </tr>
+                </table>
 
-                <tr>
-                    <td>{% trans "Type" %}</td>
-                    <td>{{ ticket.type }}</td>
-                </tr>
-
-                <tr>
-                    <td> {% trans "Estimated Time" %}</td>
-                    <td> {{ ticket.estimated_time  }}</td>
-                </tr>
-
-                <tr>
-                    <td>{% trans "Spent Time" %}</td>
-                    <td>{{ ticket.spent_time }}</td>
-                </tr>
+                <div>
+                    <p><b>{% trans "Description" %}</b></p>
+                    <p class="ticket_description">{{ ticket.description }}</p>
+                </div>
 
                 {% if ticket.attachment %}
-                <tr>
-                    <td>{% trans "Attachment" %}</td>
-                    <td>
+                <div>
+                    <p><b>{% trans "Attachment" %}</b></p>
                         <a href="{{ ticket.get_attachment_url }}">
                         <img src="{{ STATIC_URL }}img/download.png" style="width:30px; height:30px; vertical-align:middle;">
                         {{ ticket.get_attachment_name }}</a>
-                    </td>
-                </tr>
+                </div>
                 {% endif %}
+            </div>
 
-
-                </tbody>
-
-            </table>
         </div>
 
 

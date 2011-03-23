@@ -46,6 +46,10 @@ class Ticket(PersistentModel):
     def __unicode__(self):
         return unicode(self.title)
 
+
+    class Meta:
+        ordering = ['status', 'date_created']
+
     def canBeDeleted(self):
         canBeDeleted = True
         reasons = []
@@ -58,9 +62,6 @@ class Ticket(PersistentModel):
             return (True, "OK")
 
         return (False, reasons)
-
-    class Meta:
-        ordering = ['status', 'date_created']
 
     def get_attachment_url(self):
         if self.attachment:
