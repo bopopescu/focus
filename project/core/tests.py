@@ -6,7 +6,7 @@ from app.customers.models import *
 from core.views import grant_role, grant_permission
 from core import load_initial_data
 
-class FocusTestSuiteRunner (DjangoTestSuiteRunner):
+class FocusTestSuiteRunner(DjangoTestSuiteRunner):
     """
     Made just to escape a single test that failed in DJANGO itself
     This is a small HACK because of django wanting us to use django-users, we will do no such thing!
@@ -32,8 +32,8 @@ class FocusTestSuiteRunner (DjangoTestSuiteRunner):
 
         return super(FocusTestSuiteRunner, self).run_suite(suite, **kwargs)
 
-class FocusTest(TestCase):
 
+class FocusTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.get_or_create(username="test")[0]
         self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
@@ -50,8 +50,8 @@ class FocusTest(TestCase):
         self.role1 = Role.objects.get_or_create(name="Admin")[0]
         self.role2 = Role.objects.get_or_create(name="Member")[0]
 
-class PermissionsTesting(FocusTest):
 
+class PermissionsTesting(FocusTest):
     def testUserPerm(self):
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
@@ -293,7 +293,6 @@ class PermissionsTesting(FocusTest):
 
 
     def testGrantRoleByUrls(self):
-
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), False)
 
