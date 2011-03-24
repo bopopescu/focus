@@ -129,7 +129,7 @@ class TimeTrackingTesting(FocusTest):
 
         testTypeHour = TypeOfHourRegistration.objects.create(name="Arbeid", description="test")
         testCustomer = Customer.objects.create(cid="10432", full_name="testKunde", email="test@test.com")
-        testOrder = Order.objects.create(oid="2342", order_name="test", customer=testCustomer, state="Offer")
+        testOrder = Order.objects.create(oid="2342", order_name="test", customer=testCustomer, state="Offer", responsible=user)
         hourRegistration = HourRegistration.objects.create(date=now,
                                                            order=testOrder,
                                                            typeOfWork=testTypeHour,
@@ -140,6 +140,7 @@ class TimeTrackingTesting(FocusTest):
                                                            )
 
         user.setValidPeriodManually(fromDate="", toDate="")
+        user.company.setDaysIntoNextMonthHourRegistration(3)
 
         #check if user can edit
         self.assertEqual(user.canEditHourRegistration(hourRegistration, today=todayDate), True)

@@ -133,3 +133,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 'core.context_processors.message',
 'core.context_processors.user',
 )
+
+TEST_RUNNER = 'core.tests.FocusTestSuiteRunner'
