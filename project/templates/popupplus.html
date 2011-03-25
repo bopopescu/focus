@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
     $(function() {
 
@@ -26,41 +25,39 @@
                 $.each(obj, function(i, error) {
                     $("#error_{{ field_id }}_for_" + i).text(error);
                 });
-
             }
         }
 
         $("#dialog-form{{ field_id }}").dialog({
-            autoOpen: false,
-            width: 550,
-            modal: true,
-            buttons: {
-                "Legg til": function() {
+                    autoOpen: false,
+                    width: 550,
+                    modal: true,
+                    buttons: {
+                        "Legg til": function() {
 
+                            $.post("{{ add_ajax_url }}",
+                                    {
 
-                    $.post("{{ add_ajax_url }}",
-                    {
+                                        {% for field in form %}
+                                            {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
+                                        {% endfor %}
 
-                        {% for field in form %}
-                            {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
-                        {% endfor %}
-
-                    },
-                          function(data) {
-                              validateForm(data);
-                          }
+                                    },
+                                    function(data) {
+                                        validateForm(data);
+                                    }
                             );
-                },
-                Cancel: function() {
-                    $(this).dialog("close");
-                }
-            },
+                        },
+                        Cancel: function() {
+                            $(this).dialog("close");
+                        }
+                    },
 
-            close:
-            function() {
-            }
+                    close:
+                            function() {
+                            }
 
-        });
+                });
 
         $("#create_{{ field_id }}")
                 .click(function() {
@@ -73,15 +70,15 @@
 </script>
 
 <div id="dialog-form{{ field_id }}">
-        <fieldset>
-            {% for field in form %}
-                {{ field.label }}
-                <span class="errormessage" style='color:red' id="error_{{ field_id }}_for_{{ field.name }}"></span>
-                <br>
-                {{ field }}
-                <br>
-            {% endfor %}
-        </fieldset>
+    <fieldset>
+        {% for field in form %}
+            {{ field.label }}
+            <span class="errormessage" style='color:red' id="error_{{ field_id }}_for_{{ field.name }}"></span>
+            <br>
+            {{ field }}
+            <br>
+        {% endfor %}
+    </fieldset>
 </div>
 
 <span id="create_{{ field_id }}"><img width="15" height="15" style='vertical-align:middle;'

@@ -11,6 +11,8 @@ from datetime import date, datetime
 from calendar import monthrange
 import time
 import calendar as pycalendar
+from django.shortcuts import render
+from django.utils import simplejson
 
 @require_permission("LIST", HourRegistration)
 def overview(request):
@@ -80,14 +82,14 @@ def listHourRegistrations(request, user, from_date, to_date):
         sumCover = a * Decimal(sumEarned)
         sumTotalEarned = sumEarned - sumCover
 
-    return render_with_request(request, 'hourregistrations/list.html',
-                               {'title': 'Timeføringer', 'hourregistrations': HourRegistrations,
-                                'sumHours': round(sumHours, 2),
-                                'sumEarned': round(sumEarned, 2),
-                                'sumCover': round(sumCover, 2),
-                                'sumTotalEarned': round(sumTotalEarned, 2),
-                                'sumDisbursements': round(sumDisbursements, 2),
-                                'sumKilometers': round(sumKilometers, 2)})
+    return render(request, 'hourregistrations/daily.html',
+                  {'title': 'Timeføringer', 'hourregistrations': HourRegistrations,
+                   'sumHours': round(sumHours, 2),
+                   'sumEarned': round(sumEarned, 2),
+                   'sumCover': round(sumCover, 2),
+                   'sumTotalEarned': round(sumTotalEarned, 2),
+                   'sumDisbursements': round(sumDisbursements, 2),
+                   'sumKilometers': round(sumKilometers, 2)})
 
 
 def your_archive(request):
@@ -128,7 +130,6 @@ def add(request):
 @require_permission("EDIT", HourRegistration, "id")
 def edit(request, id):
     #Check if valid for edit
-
     time = get_object_or_404(HourRegistration, id=id, deleted=False)
 
     if Core.current_user().canEditHourRegistration(time):
@@ -144,8 +145,32 @@ def delete(request, id):
     return redirect(overview)
 
 
-def addAjax(request):
-    return
+@require_permission("CREATE", Customer)
+def ajax(request, id=None):
+    instance = HourRegistration()
+    if id:
+        instance = HourRegistration.objects.inCompany().get(id=id)
+
+    form = HourRegistrationForm(request.POST, instance=instance)
+
+    if form.is_valid():
+        a = form.save()
+
+        return HttpResponse(simplejson.dumps({'date': a.date.strftime("d.m.Y"),
+                                              'id': a.id,
+                                              'order': a.order.order_name,
+                                              'description': a.description,
+                                              'customer': a.order.company.name,
+                                              'time': a.time_start + " - " + a.time_end,
+                                              'hours': a.hours_worked,
+                                              'valid': True}), mimetype='application/json')
+    else:
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+
+        return HttpResponse(simplejson.dumps({'errors': errors,
+                                              'valid': False}), mimetype='application/json')
+
+    return HttpResponse("ERROR")
 
 
 @require_permission("CREATE", HourRegistration)
@@ -188,7 +213,6 @@ def calendar(request, year, month, week, day):
     month = int(month)
     week = int(week)
     day = int(day)
-
 
     for m in range(1, 13):
         days = pycalendar.monthrange(year, m)[1]

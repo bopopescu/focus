@@ -52,15 +52,18 @@ class HourRegistrationForm(ModelForm):
 
         return time
 
+
 class TypeOfHourRegistrationForm(ModelForm):
     class Meta:
         model = TypeOfHourRegistration
         exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
 
+
 class DisbursementForm(ModelForm):
     class Meta:
         model = Disbursement
         fields = ('price', 'description')
+
 
 class DrivingRegistrationForm(ModelForm):
     class Meta:

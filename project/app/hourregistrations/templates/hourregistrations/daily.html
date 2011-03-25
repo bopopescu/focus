@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load timetracking_tags %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "hourregistrations/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+<h1>{{ title }}</h1>
+
+<style type="text/css">
+    .event {
+        border-bottom: 1px solid gray;
+        min-height: 130px;
+    }
+
+    .event .project {
+        width: 200px;
+        font-size: 11px;
+        color: gray;
+    }
+
+    .event .type {
+        margin-top: 10px;
+        float: left;
+        width: 200px;
+        font-size: 11px;
+    }
+
+    .event .hours {
+        float: left;
+        width: 90px;
+    }
+
+    .event .edit {
+        float: left;
+        width: 100px;
+    }
+
+    .event .form {
+        height: 200px;
+        background-color: #F5F5F5;
+    }
+
+</style>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".form").hide();
+
+        $(".edit").click(function() {
+            $(this).parent().hide();
+            $(this).parent().parent().find(".form").show();
+        });
+
+        $(".save").click(function() {
+            $(this).parent().parent().hide();
+            $(this).parent().parent().parent().find(".details").show();
+
+            var val_id = $(this).parent().parent().parent().attr("id");
+
+            var date = $("#id_id_" + val_id + "-date");
+            var order = $("#id_id_" + val_id + "-order");
+            var description = $("#id_id_" + val_id + "-description");
+            var time_start = $("#id_id_" + val_id + "-time_start");
+            var time_end = $("#id_id_" + val_id + "-time_end");
+            var pause = $("#id_id_" + val_id + "-pause");
+            var typeOfWork = $("#id_id_" + val_id + "-typeOfWork");
+
+
+            $.post("{% url app.hourregistrations.views.ajax %}" + val_id,
+                    {
+                        order:order.val(),
+                        date:date.val(),
+                        pause:pause.val(),
+                        description:description.val(),
+                        time_start:time_start.val(),
+                        time_end:time_end.val(),
+                        typeOfWork:typeOfWork.val(),
+
+                    },
+
+                    function(data) {
+                        event = $("#id_id_" + val_id + "-description").parent().parent().parent();
+
+                        event.find(".description").html(data['description']);
+                        event.find(".customer").html(data['customer']);
+                        event.find(".order").html(data['order']);
+                        event.find(".hours").html(data['hours']);
+                        event.find(".time").html(data['time']);
+
+
+                    }
+            );
+        });
+    });
+</script>
+
+<div id="day">
+    {% for registration in hourregistrations %}
+    <div class="event" id="{{ registration.id }}">
+
+        <div class="form">
+            <form action="">
+                {% form_for_hourregistration registration %}
+                {% end_require %}
+
+                {{ form.date }}
+                {{ form.typeOfWork }}
+                {{ form.order }}
+                {{ form.pause }}
+                {{ form.TypeOfHourRegistration }}
+                {{ form.time_start }}
+                {{ form.time_end }}
+                {{ form.description }}
+
+                <div class="save">
+                    Lagre
+                </div>
+
+            </form>
+        </div>
+
+        <div class="details">
+
+            <div class="customer">
+                {{ registration.order.company }}
+            </div>
+
+            <div class="order">
+                {{ registration.order }}
+            </div>
+
+            <div class="type">
+                {{ registration.type }}
+            </div>
+
+            <div class="time">
+                {{ registration.time_start }} - {{ registration.time_end }}
+            </div>
+
+            <div class="hours">
+                {{ registration.hours_worked|floatformat }}
+            </div>
+
+            <div class="description">
+                {{ registration.description }}
+            </div>
+
+            <div class="edit">
+                edit
+            </div>
+
+        </div>
+
+    </div>
+    {% endfor %}
+
+
+</div>
+
+
+{% endblock %}

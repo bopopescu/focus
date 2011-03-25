@@ -10,6 +10,9 @@ from core.models import PersistentModel, User
 from django.db import models
 from django.core import urlresolvers
 
+max_digits = 5
+decimal_places = 3
+
 class TypeOfHourRegistration(PersistentModel):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -23,44 +26,48 @@ class TypeOfHourRegistration(PersistentModel):
             new = True
 
         super(TypeOfHourRegistration, self).save()
-    
+
+
 class HourRegistration(PersistentModel):
     date = models.DateTimeField()
     order = models.ForeignKey(Order)
     typeOfWork = models.ForeignKey(TypeOfHourRegistration)
-    time_start = models.CharField(max_length=5)
-    time_end = models.CharField(max_length=5)
+    time_start = models.CharField(max_length=max_digits)
+    time_end = models.CharField(max_length=max_digits)
     description = models.TextField()
 
-    pause = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.5"))
-    hourly_rate = models.DecimalField(null=True, decimal_places=3, max_digits=5)
-    percent_cover = models.DecimalField(null=True, decimal_places=3, max_digits=5)
-    hours_worked = models.DecimalField(decimal_places=3, max_digits=5)
+    pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.5"))
+    hourly_rate = models.DecimalField(null=True, decimal_places=decimal_places, max_digits=max_digits)
+    percent_cover = models.DecimalField(null=True, decimal_places=decimal_places, max_digits=max_digits)
+    hours_worked = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits)
 
-    savedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
-    usedOfSavedHours = models.DecimalField(decimal_places=3, max_digits=5, default=Decimal("0.0"))
+    savedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
+                                     default=Decimal("0.0"))
+    
+    usedOfSavedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
+                                           default=Decimal("0.0"))
+
+    def __unicode__(self):
+        return unicode(self.date)
 
     def getEditUrl(self):
         return urlresolvers.reverse('app.hourregistrations.views.edit', args=("%s" % self.id,))
 
-    def __unicode__(self):
-        return unicode(self.date)
+    def format_date(self):
+        if re.match("\d\d:\d$", self.time_start):
+            self.time_start = self.time_start + "0"
+        elif re.match("\d:\d\d", self.time_start):
+            self.time_start = "0" + self.time_start
+        if re.match("\d\d:\d$", self.time_end):
+            self.time_end = self.time_end + "0"
+        elif re.match("\d:\d\d", self.time_end):
+            self.time_end = "0" + self.time_end
 
     def save(self, *args, **kwargs):
         """
        Checks length of H:i, if in need of extend to a complete clock
         """
-        if re.match("\d\d:\d$", self.time_start):
-            self.time_start = self.time_start + "0"
-
-        if re.match("\d:\d\d", self.time_start):
-            self.time_start = "0" + self.time_start
-
-        if re.match("\d\d:\d$", self.time_end):
-            self.time_end = self.time_end + "0"
-
-        if re.match("\d:\d\d", self.time_end):
-            self.time_end = "0" + self.time_end
+        self.format_date()
 
         new = False
         if not self.id:
@@ -85,8 +92,10 @@ class HourRegistration(PersistentModel):
             #Save again
         super(HourRegistration, self).save()
 
+
 class HourRegisrationImage(PersistentModel):
     pass
+
 
 class Disbursement(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="disbursements")
@@ -97,6 +106,7 @@ class Disbursement(PersistentModel):
     def __unicode__(self):
         return "Disbusment for %s" % self.HourRegistration
 
+
 class DrivingRegistration(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="drivingregistration")
     time_start = models.CharField(max_length=5)
@@ -104,8 +114,10 @@ class DrivingRegistration(PersistentModel):
     kilometres = models.IntegerField()
     description = models.CharField(max_length=100)
 
+
 def __unicode__(self):
     return "DrivingRegistration for %s" % self.HourRegistration
+
 
 def initial_data ():
     #Create default time tracking types

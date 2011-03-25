@@ -37,8 +37,13 @@ def view(request, id):
                                                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
-def add_ajax(request):
-    form = CustomerFormSimple(request.POST, instance=Customer())
+def add_ajax(request, id=None):
+
+    customer = Customer()
+    if id:
+        customer = Customer.objects.inCompany().get(id=id)
+
+    form = CustomerFormSimple(request.POST, instance=customer)
 
     if form.is_valid():
         a = form.save()

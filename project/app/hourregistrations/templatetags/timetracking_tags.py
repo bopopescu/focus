@@ -1,6 +1,7 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
+from app.hourregistrations.forms import HourRegistrationForm
 from app.hourregistrations.helpers import get_month_by_number
 
 register = template.Library()
@@ -46,6 +47,43 @@ class DateValidForEdtNode(template.Node):
         except template.VariableDoesNotExist:
             return ''
 
+
+@register.tag
+def form_for_hourregistration(parser, token):
+    try:
+        tag_name, object = token.split_contents()
+
+    # Raise an error if we don't have the correct params
+    except ValueError:
+        raise template.TemplateSyntaxError, "%r tag requires exactly one argument (object)" % token.contents.split()[0]
+
+    # Fetch everything from this tag to end_require
+    nodelist = parser.parse(('end_require',))
+    parser.delete_first_token()
+
+    return form_for_hourregistration_node(nodelist, object)
+
+
+class form_for_hourregistration_node(template.Node):
+    """
+    Node for require_permission tag
+    """
+
+    def __init__(self, nodelist, object):
+        self.nodelist = nodelist
+        self.object = template.Variable(object)
+
+    def render(self, context):
+        # If the object param resolves into an actual object, use that to check
+        # if the user has permission
+
+        try:
+            object = self.object.resolve(context)
+            context["form"] = HourRegistrationForm(instance=object,prefix="id_%s"%object.id)
+            return ''
+        
+        except template.VariableDoesNotExist:
+            return ''
 
 @register.tag
 def month_title_with_arrows(parser, token):

@@ -16,4 +16,6 @@ urlpatterns = patterns('app.hourregistrations.views',
                        #Ajax
                        url(r'^ajaxEditCalendar/$', 'ajaxEditCalendar'),
 
+                       url(r'^ajax/(?P<id>\d+)?$', 'ajax'),
+
                        )
