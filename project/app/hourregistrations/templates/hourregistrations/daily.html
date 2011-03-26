@@ -16,25 +16,25 @@
         min-height: 130px;
     }
 
-    .event .project {
+    .event .details .project {
         width: 200px;
         font-size: 11px;
         color: gray;
     }
 
-    .event .type {
+    .event .details .type {
         margin-top: 10px;
         float: left;
         width: 200px;
         font-size: 11px;
     }
 
-    .event .hours {
+    .event .details .hours {
         float: left;
         width: 90px;
     }
 
-    .event .edit {
+    .event .details .edit {
         float: left;
         width: 100px;
     }
@@ -42,6 +42,27 @@
     .event .form {
         height: 200px;
         background-color: #F5F5F5;
+    }
+
+    .event .form .order {
+        background-color: red;
+        width: 300px;
+        float: left;
+    }
+
+    .event .form .time {
+        background-color: red;
+        width: 130px;
+        float: left;
+    }
+
+    .event .form .time_input {
+        width: 40px;
+    }
+
+    .event .form textarea {
+        height: 50px;
+        width: 400px;
     }
 
 </style>
@@ -108,19 +129,23 @@
                 {% form_for_hourregistration registration %}
                 {% end_require %}
 
-                {{ form.date }}
-                {{ form.typeOfWork }}
-                {{ form.order }}
+                <div style="display:none;" class="formDate">
+                    {{ form.date }}
+                </div>
+                <div class="order_input">
+                    {{ form.order }} <br>
+                    {{ form.typeOfWork }}<br>
+                </div>
+                <div class="time">
+                    {{ form.time_start }}
+                    {{ form.time_end }}
+                </div>
                 {{ form.pause }}
                 {{ form.TypeOfHourRegistration }}
-                {{ form.time_start }}
-                {{ form.time_end }}
                 {{ form.description }}
-
                 <div class="save">
                     Lagre
                 </div>
-
             </form>
         </div>
 

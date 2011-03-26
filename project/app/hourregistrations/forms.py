@@ -27,6 +27,8 @@ class HourRegistrationForm(ModelForm):
 
         self.fields['time_start'].widget = MaskedField(format="99:99")
         self.fields['time_end'].widget = MaskedField(format="99:99")
+        self.fields['time_start'].widget.attrs['class'] = 'time_input'
+        self.fields['time_end'].widget.attrs['class'] = 'time_input'
 
     def clean_date(self):
         date = self.cleaned_data['date']
