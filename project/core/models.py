@@ -48,6 +48,7 @@ class Company(models.Model):
     def getDaysIntoNextMonthHourRegistration(self):
         return self.daysIntoNextMonthHourRegistration
 
+
 class User(models.Model):
     username = models.CharField(('username'), max_length=30, unique=True, help_text=(
     "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
@@ -278,11 +279,11 @@ class User(models.Model):
         act = Role.objects.get(name=role)
 
         perm = Permission(
-                role=act,
-                user=self,
-                content_type=content_type,
-                object_id=object_id
-                )
+            role=act,
+            user=self,
+            content_type=content_type,
+            object_id=object_id
+        )
         perm.save()
 
 
@@ -324,13 +325,13 @@ class User(models.Model):
         content_type = ContentType.objects.get_for_model(object)
 
         perm = Permission(
-                user=self,
-                content_type=content_type,
-                object_id=object_id,
-                from_date=from_date,
-                to_date=to_date,
-                negative=negative,
-                )
+            user=self,
+            content_type=content_type,
+            object_id=object_id,
+            from_date=from_date,
+            to_date=to_date,
+            negative=negative,
+            )
         perm.save()
 
         for p in act:
@@ -343,7 +344,7 @@ class User(models.Model):
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):
             raise Exception(
-                    'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
+                'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
         #if isinstance(action, str):
         #   action = [action]
@@ -450,6 +451,7 @@ class User(models.Model):
         return objects.exclude(id__in=unwanted)
         """
 
+
 class AnonymousUser(User):
     id = 0
     user_ptr_id = 0
@@ -517,11 +519,11 @@ class Group(models.Model):
         act = Role.objects.get(name=role)
 
         perm = Permission(
-                role=act,
-                group=self,
-                content_type=content_type,
-                object_id=object_id
-                )
+            role=act,
+            group=self,
+            content_type=content_type,
+            object_id=object_id
+        )
 
         perm.save()
 
@@ -548,11 +550,11 @@ class Group(models.Model):
 
 
     def get_permissions(self):
-       permissions = []
-       for p in Permission.objects.filter(group=self):
-           if not p.id in permissions:
-               permissions.append(p.id)
-       return Permission.objects.filter(id__in=permissions)
+        permissions = []
+        for p in Permission.objects.filter(group=self):
+            if not p.id in permissions:
+                permissions.append(p.id)
+        return Permission.objects.filter(id__in=permissions)
 
 
     def grant_permissions (self, actions, object, **kwargs):
@@ -593,13 +595,13 @@ class Group(models.Model):
         content_type = ContentType.objects.get_for_model(object)
 
         perm = Permission(
-                group=self,
-                content_type=content_type,
-                object_id=object_id,
-                from_date=from_date,
-                to_date=to_date,
-                negative=negative,
-                )
+            group=self,
+            content_type=content_type,
+            object_id=object_id,
+            from_date=from_date,
+            to_date=to_date,
+            negative=negative,
+            )
         perm.save()
 
         for p in act:
@@ -610,7 +612,7 @@ class Group(models.Model):
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):
             raise Exception(
-                    'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
+                'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
         content_type = ContentType.objects.get_for_model(object)
 
@@ -640,6 +642,7 @@ class Group(models.Model):
             return self.parent.has_permission_to(action, object, id=id, any=any)
 
         return False
+
 
 class Log(models.Model):
     date = models.DateTimeField()
@@ -671,7 +674,7 @@ class Log(models.Model):
             obj = self.content_type.get_object_for_this_type(id=self.object_id)
         except:
             return ""
-            
+
         """
         Needs optimalization
         """
@@ -727,6 +730,7 @@ class Log(models.Model):
 
         super(Log, self).save()
 
+
 class Notification(models.Model):
     recipient = models.ForeignKey(User, related_name="notifications")
     text = models.TextField()
@@ -756,6 +760,7 @@ class Action(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Role(models.Model):
     name = models.CharField(max_length=200)
@@ -839,6 +844,7 @@ def createTuple(object):
 
     return data
 
+
 class PersistentModel(models.Model):
     trashed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
@@ -847,7 +853,7 @@ class PersistentModel(models.Model):
     date_edited = models.DateTimeField(default=datetime.now())
     creator = models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_created")
     editor = models.ForeignKey(User, blank=True, null=True, default=None, related_name="%(class)s_edited")
-    company = models.ForeignKey(Company, blank=True, null=True, default=None, related_name="%(class)s_edited")
+    company = models.ForeignKey(Company, blank=True, null=True, default=None, related_name="%(class)s_companies")
 
     objects = PersistentManager()
     #objects = models.Manager()
@@ -1004,6 +1010,7 @@ def initial_data ():
     Action.objects.get_or_create(name='LISTARCHIVE', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
     print "Done"
+
     print "creating Roles"
     #Generates som standard roles
     Role.objects.get_or_create(name="Admin", description="Typisk leder, kan gjøre alt")
