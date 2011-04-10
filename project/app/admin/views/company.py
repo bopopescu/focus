@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.shortcuts import get_object_or_404
-from core.shortcuts import *
-from core.decorators import *
-from app.company.forms import *
+from core import Core
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
+from app.company.forms import CompanyForm
+from core.auth.company.models import Company
+from core.decorators import require_permission
 
 @require_permission("CONFIGURE", Company)
 def editCompany(request):
@@ -29,4 +30,4 @@ def editCompany(request):
     else:
         form = CompanyForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': _('Company details'), 'form': form})
+    return render(request, "form.html", {'title': _('Company details'), 'form': form})

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import redirect, get_object_or_404, HttpResponse
-from app.admin.forms import *
+from django.shortcuts import redirect, HttpResponse, render
+from app.admin.forms import GroupForm
+from core import Core
+from core.auth.user.models import User
 from core.decorators import login_required
-from core.models import Group
-from core.shortcuts import *
 from core.views import updateTimeout
 from django.utils.translation import ugettext as _
+from core.auth.group.models import Group
 
 @login_required()
 def overview(request):
     updateTimeout(request)
 
     groups = Core.current_user().getPermittedObjects("VIEW", Group)
-    return render_with_request(request, 'admin/groups/list.html', {'title': _("Groups"), 'groups': groups})
+    return render(request, 'admin/groups/list.html', {'title': _("Groups"), 'groups': groups})
 
 def add(request):
     return form(request)
@@ -39,20 +40,20 @@ def addPop(request):
     else:
         form = GroupForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title': 'Bruker', 'form': form})
+    return render(request, "simpleform.html", {'title': 'Bruker', 'form': form})
 
 
 @login_required()
 def view(request, id):
     group = Group.objects.inCompany().get(id=id)
-    return render_with_request(request, 'admin/groups/view.html', {'title': _("Groups"),
+    return render(request, 'admin/groups/view.html', {'title': _("Groups"),
                                                                    'group': group,
                                                                    })
 login_required()
 def permissions(request, id):
     group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
 
-    return render_with_request(request, 'admin/permissions.html', {'title': _("Groups"),
+    return render(request, 'admin/permissions.html', {'title': _("Groups"),
                                                                    'group': group,
                                                                    })
 
@@ -90,5 +91,5 @@ def form (request, id=False):
     else:
         form = GroupForm(instance=instance)
 
-    return render_with_request(request, "admin/groups/form.html",
+    return render(request, "admin/groups/form.html",
                                {'title': _("Group"), 'group': instance, 'form': form})

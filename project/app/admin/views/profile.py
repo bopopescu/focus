@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-
 from django.shortcuts import redirect
-from app.admin.forms import *
-from core.shortcuts import *
-from core.models import User
 from django.utils.translation import ugettext as _
+from app.admin.forms import UserProfileForm, UserProfileImageForm, UserProfilePasswordForm
+from core.shortcuts import render_with_request
 
 def edit(request):
     try:
@@ -22,11 +20,11 @@ def edit(request):
             o.save()
             request.message_success(msg)
             return redirect(edit)
-
     else:
         form = UserProfileForm(instance=instance, initial={"profileImage": None})
 
     return render_with_request(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form})
+
 
 def changeProfileImage(request):
     try:
@@ -48,6 +46,7 @@ def changeProfileImage(request):
         form = UserProfileImageForm(instance=instance, initial={"profileImage": None})
 
     return render_with_request(request, "admin/profile/formimage.html", {'title': _('Profile'), 'form': form})
+
 
 def changePassword(request):
     if request.method == 'POST':

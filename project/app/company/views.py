@@ -1,16 +1,19 @@
-from django.http import HttpResponse
 from app.announcements.models import Announcement
+from app.company.forms import CompanyForm, newCompanyForm
 from app.contacts.models import Contact
 from app.customers.models import Customer
 from app.orders.models import Order
 from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
-from forms import *
-from core.models import Company, Group, Log, Notification
 from core.shortcuts import *
 from core.decorators import *
 from core.views import updateTimeout
+from core.auth.company.models import Company
+from core.auth.user.models import User
+from core.auth.group.models import Group
+from core.auth.log.models import Log, Notification
+
 
 @require_permission("MANAGE", Company)
 def overview(request):
@@ -20,13 +23,16 @@ def overview(request):
     return render_with_request(request, 'company/list.html', {'title': 'Firmaer',
                                                               'companies': companies})
 
+
 @require_permission("MANAGE", Company)
 def add(request):
     return newForm(request)
 
+
 @require_permission("MANAGE", Company)
 def edit(request, id):
     return form(request, id)
+
 
 def form (request, id=False):
     if id:
@@ -51,6 +57,7 @@ def form (request, id=False):
         form = CompanyForm(instance=instance)
 
     return render_with_request(request, "company/form.html", {'title': 'Kunde', 'form': form})
+
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
@@ -103,6 +110,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     allEmployeesGroup.grant_permissions("CREATE", Contact)
 
     return company, user
+
 
 @require_permission("MANAGE", Company)
 def newForm(request):

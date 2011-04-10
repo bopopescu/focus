@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from django import forms
-from core.models import Company, Group
+from core.auth.company.models import Company
+from core.auth.group.models import Group
 
 class CompanyForm(ModelForm):
     class Meta:

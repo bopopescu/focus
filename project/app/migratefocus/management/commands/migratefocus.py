@@ -10,11 +10,8 @@ from core import Core
 from core.models import User, Group, Company, Log, Notification
 import random
 from app.admin.views.user import generateNewPassordForUser
+from core.utils import getClass
 
-def getClass(app, model):
-    content_type = ContentType.objects.get(app_label=app, model=model)
-    model = content_type.model_class()
-    return model
 
 Customer = getClass("customers", "customer")
 Project = getClass("projects", "project")

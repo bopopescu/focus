@@ -18,7 +18,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -96,12 +95,21 @@ BASE_PATH + '/files/media/',
 INTERNAL_IPS = ('127.0.0.1')
 
 INSTALLED_APPS = (
+
+#Django stuff
 'django.contrib.contenttypes',
 'django.contrib.sessions',
 'django.contrib.staticfiles',
 
-#All the applicaitons
+#Core
 'core',
+'core.auth.group',
+'core.auth.permission',
+'core.auth.company',
+'core.auth.user',
+'core.auth.log',
+
+#Apps
 'app.admin',
 'app.company',
 'app.announcements',

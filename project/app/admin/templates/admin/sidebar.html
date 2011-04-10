@@ -43,7 +43,6 @@
 
     {% else %}{% if group.id %}
 
-
     <li><a class="{% active request "list" %}" href="{% url app.admin.views.group.overview %}"><img
             src="{{ STATIC_URL }}img/groups.png" width="24" height="24" alt="Home"/>{% trans "GROUPS" %}</a>
     </li>
@@ -81,7 +80,7 @@
     </li>
 
 
-    {% require_permission MANAGE core.Company %}
+    {% require_permission MANAGE company.Company %}
     <li><a class="{% active request "company/$" %}" href="{% url app.company.views.overview %}"><img
             src="{{ STATIC_URL }}img/company.png" width="24" height="24" alt="Home"/>{% trans "COMPANIES" %}
     </a>

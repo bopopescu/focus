@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
+import django.contrib.auth.decorators as auth_decorators
+import django.http
 import mimetypes
+import os
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from core.decorators import login_required
-from core.models import User, Group
 from django.core import urlresolvers
 from django.shortcuts import redirect
-import os
-import django.contrib.auth.decorators as auth_decorators
-import django.http
 from django.core.servers.basehttp import FileWrapper
 from settings import BASE_PATH
+from core.auth.user.models import User
+from core.auth.group.models import Group
 
 STATIC_ROOT = os.path.join(BASE_PATH, "uploads")
 

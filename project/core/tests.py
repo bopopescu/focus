@@ -1,10 +1,13 @@
-from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
+from datetime import timedelta, datetime
+from django.conf import settings
+from django.test import TestCase
 from django.test.simple import DjangoTestSuiteRunner
-from models import *
-from app.customers.models import *
-from core.views import grant_role, grant_permission
-from core import load_initial_data
+from core import load_initial_data, Core
+from core.auth.permission.models import Action, Permission, Role
+from core.auth.user.models import User
+from core.auth.group.models import Group
+from app.customers.models import Customer
+from datetime import datetime
 
 class FocusTestSuiteRunner(DjangoTestSuiteRunner):
     """

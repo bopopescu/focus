@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import os
-from django.db import models
 from core import Core
+from django.db import models
 from core.models import PersistentModel
 from django.core import urlresolvers
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 

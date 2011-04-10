@@ -8,7 +8,9 @@ Replace these with more appropriate tests for your application.
 from django.test import TestCase
 from app.contacts.models import Contact
 from core import Core
-from core.models import Role, User, Group, Company
+from core.auth.company.models import Company
+from core.auth.group.models import Group
+from core.auth.user.models import User
 
 class ContactsTesting(TestCase):
     def setUp(self):
@@ -39,4 +41,3 @@ class ContactsTesting(TestCase):
         #But User3 should not have any permission
         self.assertEqual(self.user3.has_permission_to("EDIT", self.contact1), False)
         self.assertEqual(self.user3.has_permission_to("DELETE", self.contact1), False)
-
