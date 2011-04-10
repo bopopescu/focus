@@ -14,6 +14,8 @@ urlpatterns = patterns('app.projects.views',
                        url(r'^(?P<id>\d+)/orders/?$', 'project.view_orders'),
                        url(r'^(?P<id>\d+)/trash/?$', 'project.trash'),
                        url(r'^(?P<id>\d+)/history/?$', 'project.history'),
+                       url(r'^(?P<id>\d+)/milestones/?$', 'project.milestones'),
+
                        #Project ajax
                        url(r'^add_ajax/$', 'project_ajax.add'),
                        url(r'^list_ajax/$', 'project_ajax.list_by_customer'),

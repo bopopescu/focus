@@ -40,7 +40,7 @@ class Ticket(PersistentModel):
     spent_time = models.IntegerField(_("Spent time"), default=0)
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
     due_date = models.DateTimeField(null=True, blank=True, default=None)
-    customer = models.ForeignKey(Customer, verbose_name=_("Custoemr"))
+    customer = models.ForeignKey(Customer, verbose_name=_("Customer"))
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 

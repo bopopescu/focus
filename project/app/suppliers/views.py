@@ -18,12 +18,14 @@ def overview(request):
     suppliers = Core.current_user().getPermittedObjects("VIEW", Supplier).filter(trashed=False)
     return render_with_request(request, 'suppliers/list.html', {'title': _("Suppliers"), 'suppliers': suppliers})
 
+
 @login_required()
 def overview_trashed(request):
     updateTimeout(request)
     suppliers = Core.current_user().getPermittedObjects("VIEW", Supplier).filter(trashed=True)
     return render_with_request(request, 'suppliers/list.html',
                                {'title': _("Deleted suppliers"), 'suppliers': suppliers})
+
 
 @login_required()
 def overview_all(request):
@@ -61,6 +63,7 @@ def view(request, id):
                                {'title': _("Supplier"),
                                 'supplier': supplier})
 
+
 @login_required()
 def products(request, id):
     supplier = Core.current_user().getPermittedObjects("VIEW", Supplier).get(id=id)
@@ -82,12 +85,15 @@ def history(request, id):
                                                                'supplier': instance,
                                                                'logs': history[::-1][0:150]})
 
+
 @login_required()
 def add(request):
     return form(request)
 
+
 def edit(request, id):
     return form(request, id)
+
 
 @require_permission("DELETE", Customer, "id")
 def trash(request, id):
@@ -108,6 +114,7 @@ def trash(request, id):
                                                                      'canBeDeleted': instance.canBeDeleted()[0],
                                                                      'reasons': instance.canBeDeleted()[1],
                                                                      })
+
 
 @login_required()
 def form (request, id=False):

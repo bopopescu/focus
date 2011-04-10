@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.html import escape
 from app.contacts.models import Contact
 from app.projects.forms import ProjectForm, ProjectFormSimple
@@ -20,6 +20,7 @@ def overview(request):
     projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=False)
     return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
+
 @require_permission("LIST", Project)
 def timeline(request):
     updateTimeout(request)
@@ -27,15 +28,24 @@ def timeline(request):
     return render_with_request(request, 'projects/timeline.html',
                                {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
+
 @require_permission("LIST", Project)
 def overview_trashed(request):
     projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
     return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
+
 @require_permission("LIST", Project)
 def overview_all(request):
     projects = Project.objects.all()
     return render_with_request(request, 'projects/list.html', {'title': 'Alle prosjekter', 'projects': projects})
+
+
+@require_permission("VIEW", Project, "id")
+def milestones(request, id):
+    project = Project.objects.get(id=id)
+    return render(request, "projects/milestones.html", {"project": project})
+
 
 @require_permission("VIEW", Project, 'id')
 def view(request, id):
@@ -48,6 +58,7 @@ def view(request, id):
                                                                'whoCanSeeThis': whoCanSeeThis,
                                                                })
 
+
 @require_permission("VIEW", Project, 'id')
 def view_orders(request, id):
     project = Project.objects.get(id=id)
@@ -56,6 +67,7 @@ def view_orders(request, id):
                                                                  'project': project,
                                                                  'orders': project.orders.all(),
                                                                  })
+
 
 @require_permission("EDIT", Project, "id")
 def history(request, id):
@@ -70,9 +82,11 @@ def history(request, id):
 def add(request):
     return form(request)
 
+
 @require_permission("EDIT", Project, 'id')
 def edit(request, id):
     return form(request, id)
+
 
 @require_permission("DELETE", Project, "id")
 def trash(request, id):
@@ -93,6 +107,7 @@ def trash(request, id):
                                                                     'canBeDeleted': instance.canBeDeleted()[0],
                                                                     'reasons': instance.canBeDeleted()[1],
                                                                     })
+
 
 def form (request, id=False):
     if id:

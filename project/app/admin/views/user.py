@@ -84,12 +84,11 @@ def sendGeneratedPassword(request, id):
 
     return redirect(view, id)
 
-@require_permission("EDIT", User, "id")
 def history(request, id):
     user = User.objects.get(id=id)
     history = user.logs.all()
-    return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
-                                                               'user': user,
+    return render_with_request(request, 'admin/log.html', {'title': _("Latest events"),
+                                                               'userCard': user,
                                                                'logs': history[::-1][0:150]})
 
 @login_required()

@@ -27,11 +27,13 @@ class UnitsForSizes(PersistentModel):
     def simpleform():
         return UnitsForSizesForm(instance=UnitsForSizes(), prefix="units")
 
+
 class ProductCategory(PersistentModel):
     name = models.CharField("Navn", max_length=100)
 
     def __unicode__(self):
         return self.name
+
 
 class ProductGroup(PersistentModel):
     name = models.CharField("Navn", max_length=100)
@@ -51,10 +53,11 @@ class ProductGroup(PersistentModel):
     def getViewUrl(self):
         return urlresolvers.reverse('app.stock.views.productgroup.edit', args=("%s" % self.id,))
 
+
 class Currency(PersistentModel):
     name = models.CharField("Navn", max_length=100)
-    sign = models.CharField("Tegn ($, kr) osv", max_length=10)
-    value = models.CharField("Verdi", max_length=100)
+    iso = models.CharField("Verdi", max_length=100, null=True)
+    value = models.DecimalField(decimal_places=2, max_digits=5, default=0)
 
     @staticmethod
     def add_ajax_url():
@@ -66,6 +69,7 @@ class Currency(PersistentModel):
 
     def __unicode__(self):
         return self.name
+
 
 class Product(PersistentModel):
     pid = models.CharField(_("ProductID"), max_length=50, null=True)
@@ -118,6 +122,7 @@ class Product(PersistentModel):
         orders = Order.objects.filter(id__in=orderIDs)
         return orders
 
+
 class ProductFile(PersistentModel):
     product = models.ForeignKey(Product, related_name="files")
     name = models.CharField(max_length=200)
@@ -127,5 +132,14 @@ class ProductFile(PersistentModel):
         if self.file:
             if os.path.join("/file/", self.file.name):
                 return os.path.join("/file/", self.file.name)
+
+
+def initial_data ():
+    Currency.objects.get_or_create(name="Norsk Krone", iso="NOK")
+    Currency.objects.get_or_create(name="Dansk Krone", iso="DKK")
+    Currency.objects.get_or_create(name="Svensk krona", iso="SEK")
+    Currency.objects.get_or_create(name="Pound sterling", iso="GBP")
+    Currency.objects.get_or_create(name="US Dollar", iso="USD")
+    Currency.objects.get_or_create(name="Euro", iso="EUR")
 
 from app.stock.forms import ProductGroupForm, UnitsForSizesForm, CurrencyForm

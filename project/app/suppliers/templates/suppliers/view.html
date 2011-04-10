@@ -11,7 +11,6 @@
 {% block maincontent %}
 
     <h2>{{ title }}</h2>
-
     <table>
 
         <tr>
@@ -30,7 +29,7 @@
         </tr>
         <tr>
             <td>{% trans "Address" %}</td>
-            <td>{{ supplier.address }}</td>
+            <td>{{ supplier.address|linebreaksbr }}</td>
         </tr>
 
     </table>
