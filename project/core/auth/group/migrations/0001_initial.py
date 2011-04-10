@@ -8,44 +8,35 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Announcement'
-        db.create_table('announcements_announcement', (
+        # Adding model 'Group'
+        db.create_table('group_group', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', null=True, to=orm['group.Group'])),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(related_name='groups', null=True, to=orm['company.Company'])),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 51, 48, 614262))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 51, 48, 614297))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_companies', null=True, blank=True, to=orm['company.Company'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=80)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
-            ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
         ))
-        db.send_create_signal('announcements', ['Announcement'])
+        db.send_create_signal('group', ['Group'])
+
+        # Adding M2M table for field members on 'Group'
+        db.create_table('group_group_members', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('group', models.ForeignKey(orm['group.group'], null=False)),
+            ('user', models.ForeignKey(orm['user.user'], null=False))
+        ))
+        db.create_unique('group_group_members', ['group_id', 'user_id'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Announcement'
-        db.delete_table('announcements_announcement')
+        # Deleting model 'Group'
+        db.delete_table('group_group')
+
+        # Removing M2M table for field members on 'Group'
+        db.delete_table('group_group_members')
 
 
     models = {
-        'announcements.announcement': {
-            'Meta': {'object_name': 'Announcement'},
-            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 51, 48, 614262)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 51, 48, 614297)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
         'company.company': {
             'Meta': {'object_name': 'Company'},
             'adminGroup': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAdmin'", 'null': 'True', 'to': "orm['group.Group']"}),
@@ -91,4 +82,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['announcements']
+    complete_apps = ['group']

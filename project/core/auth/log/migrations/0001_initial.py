@@ -8,44 +8,41 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Announcement'
-        db.create_table('announcements_announcement', (
+        # Adding model 'Log'
+        db.create_table('log_log', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 51, 48, 614262))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 51, 48, 614297))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_companies', null=True, blank=True, to=orm['company.Company'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=80)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
-            ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+            ('date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(related_name='logs', null=True, to=orm['user.User'])),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'], null=True)),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True)),
+            ('message', self.gf('django.db.models.fields.TextField')()),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(related_name='logs', null=True, to=orm['company.Company'])),
+            ('action', self.gf('django.db.models.fields.CharField')(max_length=10, null=True)),
         ))
-        db.send_create_signal('announcements', ['Announcement'])
+        db.send_create_signal('log', ['Log'])
+
+        # Adding model 'Notification'
+        db.create_table('log_notification', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('recipient', self.gf('django.db.models.fields.related.ForeignKey')(related_name='notifications', to=orm['user.User'])),
+            ('text', self.gf('django.db.models.fields.TextField')()),
+            ('read', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('log', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['log.Log'], null=True)),
+            ('sendEmail', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('log', ['Notification'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Announcement'
-        db.delete_table('announcements_announcement')
+        # Deleting model 'Log'
+        db.delete_table('log_log')
+
+        # Deleting model 'Notification'
+        db.delete_table('log_notification')
 
 
     models = {
-        'announcements.announcement': {
-            'Meta': {'object_name': 'Announcement'},
-            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 51, 48, 614262)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 51, 48, 614297)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
         'company.company': {
             'Meta': {'object_name': 'Company'},
             'adminGroup': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAdmin'", 'null': 'True', 'to': "orm['group.Group']"}),
@@ -56,6 +53,13 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'})
         },
+        'contenttypes.contenttype': {
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         'group.group': {
             'Meta': {'object_name': 'Group'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'groups'", 'null': 'True', 'to': "orm['company.Company']"}),
@@ -64,6 +68,26 @@ class Migration(SchemaMigration):
             'members': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'groups'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['user.User']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'null': 'True', 'to': "orm['group.Group']"})
+        },
+        'log.log': {
+            'Meta': {'object_name': 'Log'},
+            'action': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'null': 'True', 'to': "orm['company.Company']"}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'null': 'True', 'to': "orm['user.User']"}),
+            'date': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'message': ('django.db.models.fields.TextField', [], {}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'})
+        },
+        'log.notification': {
+            'Meta': {'object_name': 'Notification'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'log': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['log.Log']", 'null': 'True'}),
+            'read': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'recipient': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'notifications'", 'to': "orm['user.User']"}),
+            'sendEmail': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'text': ('django.db.models.fields.TextField', [], {})
         },
         'user.user': {
             'Meta': {'object_name': 'User'},
@@ -91,4 +115,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['announcements']
+    complete_apps = ['log']

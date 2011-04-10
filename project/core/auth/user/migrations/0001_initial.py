@@ -8,44 +8,40 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Announcement'
-        db.create_table('announcements_announcement', (
+        # Adding model 'User'
+        db.create_table('user_user', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('username', self.gf('django.db.models.fields.CharField')(unique=True, max_length=30)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=60, blank=True)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=60, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, blank=True)),
+            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('is_superuser', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('date_joined', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=30, null=True)),
+            ('birthdate', self.gf('django.db.models.fields.DateField')(null=True)),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='user_user_users', null=True, to=orm['company.Company'])),
+            ('canLogin', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('profileImage', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 51, 48, 614262))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 51, 48, 614297))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='announcement_companies', null=True, blank=True, to=orm['company.Company'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=80)),
-            ('text', self.gf('django.db.models.fields.TextField')()),
-            ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+            ('validEditHourRegistrationsFromDate', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('validEditHourRegistrationsToDate', self.gf('django.db.models.fields.DateTimeField')(null=True)),
+            ('hourly_rate', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('percent_cover', self.gf('django.db.models.fields.IntegerField')(null=True)),
         ))
-        db.send_create_signal('announcements', ['Announcement'])
+        db.send_create_signal('user', ['User'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Announcement'
-        db.delete_table('announcements_announcement')
+        # Deleting model 'User'
+        db.delete_table('user_user')
 
 
     models = {
-        'announcements.announcement': {
-            'Meta': {'object_name': 'Announcement'},
-            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 51, 48, 614262)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 51, 48, 614297)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'announcement_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'text': ('django.db.models.fields.TextField', [], {}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
         'company.company': {
             'Meta': {'object_name': 'Company'},
             'adminGroup': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAdmin'", 'null': 'True', 'to': "orm['group.Group']"}),
@@ -91,4 +87,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['announcements']
+    complete_apps = ['user']
