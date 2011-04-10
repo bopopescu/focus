@@ -40,7 +40,6 @@ class Company(models.Model):
     def __unicode__(self):
         return self.name
 
-
     def setDaysIntoNextMonthHourRegistration(self, days):
         self.daysIntoNextMonthHourRegistration = days
         self.save()
