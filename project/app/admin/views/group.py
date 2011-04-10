@@ -44,7 +44,7 @@ def addPop(request):
 
 @login_required()
 def view(request, id):
-    group = Core.current_user().getPermittedObjects("VIEW", Group).get(id=id)
+    group = Group.objects.inCompany().get(id=id)
     return render_with_request(request, 'admin/groups/view.html', {'title': _("Groups"),
                                                                    'group': group,
                                                                    })

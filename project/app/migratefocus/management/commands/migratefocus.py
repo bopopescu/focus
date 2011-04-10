@@ -122,6 +122,7 @@ class Command(BaseCommand):
             p = Supplier()
             p.name = cu['levnavn'].decode('latin1')
             p.address = cu['adresse'].decode('latin1')
+            p.address = p.address.replace("<br/>","\n")
             p.zip = cu['postnr'].decode("latin1")
             p.phone = cu['telefon'].decode("latin1")
             p.email_contact = cu['kontaktepost'].decode("latin1")
