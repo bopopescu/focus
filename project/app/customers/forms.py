@@ -21,7 +21,7 @@ class CustomerForm(ModelForm):
     def clean_cid(self):
         cid = self.cleaned_data['cid']
 
-        customers = Customer.objects.inCompany()
+        customers = Customer.objects.filter_current_company()
 
         for i in customers:
             if self.id == i.id:

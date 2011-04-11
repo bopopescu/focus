@@ -17,12 +17,12 @@
             src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
 
     <li><a class="{% active request "trash" %}"
-           href="{% url app.admin.views.user.sendGeneratedPassword userCard.id %}"><img
+           href="{% url app.admin.views.user.send_generated_password_to_user userCard.id %}"><img
             src="{{ STATIC_URL }}img/password.png" width="24" height="24" alt="Mail"/>{% trans "SEND NEW PASSWORD" %}
     </a></li>
 
     <li><a class="{% active request "manualSetTime" %}"
-           href="{% url app.admin.views.user.setHourRegistrationLimitsManually userCard.id %}"><img
+           href="{% url app.admin.views.user.set_hourregistration_limits userCard.id %}"><img
             src="{{ STATIC_URL }}img/datetime.png" width="24" height="24" alt="Mail"/>{% trans "SET HOUR DAYS LIMITS" %}
     </a>
     <li><a class="{% active request "history" %}"

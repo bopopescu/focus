@@ -26,20 +26,20 @@ class Project(PersistentModel):
     def __unicode__(self):
         return self.project_name
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.orders.all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Project has active orders"))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
 
     def percentDone(self):

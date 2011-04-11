@@ -17,7 +17,7 @@ class Log(models.Model):
         s = "%s, %s, %s:" % (self.date, (self.creator), self.content_type)
         return s
 
-    def getChanges(self):
+    def get_changes(self):
         msg = ""
 
         for k, v in eval(self.message).iteritems():
@@ -25,8 +25,8 @@ class Log(models.Model):
 
         return msg
 
-    def changedSinceLastTime(self):
-        #lastLog = self.getObject().getLogs().filter(id__lt=self.id)
+    def changed_since_last_time(self):
+        #lastLog = self.get_object().getLogs().filter(id__lt=self.id)
 
         lastLog = Log.objects.filter(content_type=self.content_type, object_id=self.object_id).filter(id__lt=self.id)
 
@@ -73,9 +73,9 @@ class Log(models.Model):
 
             return msg
 
-        return _("%s was created") % self.getObject()
+        return _("%s was created") % self.get_object()
 
-    def getObject(self, *args, **kwargs):
+    def get_object(self, *args, **kwargs):
         o = ContentType.objects.get(model=self.content_type)
         k = o.get_object_for_this_type(id=self.object_id)
         return k
@@ -102,10 +102,10 @@ class Notification(models.Model):
 
     def __unicode__(self):
         if self.log:
-            return self.log.changedSinceLastTime()
+            return self.log.changed_since_last_time()
         return self.text
 
-    def getObject(self, *args, **kwargs):
+    def get_object(self, *args, **kwargs):
         if self.log:
-            return self.log.getObject()
+            return self.log.get_object()
         return None

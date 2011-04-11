@@ -57,15 +57,15 @@ class User(models.Model):
             return self.company
         return None
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.logs.all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("User has a history, check history tab. "))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)
@@ -89,7 +89,7 @@ class User(models.Model):
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
 
-    def setValidPeriodManually(self, **kwargs):
+    def set_valid_period(self, **kwargs):
         if 'toDate' in kwargs:
             if kwargs['toDate'] == "":
                 self.validEditHourRegistrationsToDate = None
@@ -104,7 +104,7 @@ class User(models.Model):
 
         self.save()
 
-    def generateValidPeriode(self, *args, **kwargs):
+    def generate_valid_period(self, *args, **kwargs):
         now = datetime.now()
 
         if 'today' in kwargs:
@@ -112,7 +112,7 @@ class User(models.Model):
 
         daysIntoNextMonthTimetracking = 0
         if self.company:
-            daysIntoNextMonthTimetracking = self.company.getDaysIntoNextMonthHourRegistration()
+            daysIntoNextMonthTimetracking = self.company.get_days_into_next_month()
 
         #If true, user can still edit last month
         if daysIntoNextMonthTimetracking >= now.day:
@@ -141,14 +141,14 @@ class User(models.Model):
 
         return [from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y")]
 
-    def canEditHourRegistration(self, hourRegistration, *args, **kwargs):
+    def can_edit_hourregistration(self, hourRegistration, *args, **kwargs):
         now = datetime.now()
 
-        period = self.generateValidPeriode(*args, **kwargs)
+        period = self.generate_valid_period(*args, **kwargs)
 
         if 'today' in kwargs:
             now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
-            period = self.generateValidPeriode(today=kwargs['today'])
+            period = self.generate_valid_period(today=kwargs['today'])
 
         date = time.mktime(time.strptime("%s" % (hourRegistration.date.strftime("%d.%m.%Y")), "%d.%m.%Y"))
         from_date = time.mktime(time.strptime("%s" % (period[0]), "%d.%m.%Y"))
@@ -379,7 +379,7 @@ class User(models.Model):
     SKRIVE OM , ta utgangspunkt i permission-tabellen
     """
 
-    def getPermittedObjects(self, action, model):
+    def get_permitted_objects(self, action, model):
         objects = model.objects.filter()
         contenttype = ContentType.objects.get_for_model(model)
         permissions = Permission.objects.filter(content_type=contenttype, user=self)

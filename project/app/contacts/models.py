@@ -26,7 +26,7 @@ class Contact(PersistentModel):
     def __unicode__(self):
         return unicode(self.full_name)
 
-    def canBeDeleted(self):
+    def can_be_deleted(self):
         return (True, "ok")
 
     def getImage(self):
@@ -63,10 +63,10 @@ class Contact(PersistentModel):
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.contacts.views.view', args=("%s" % self.id,))
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.contacts.views.edit', args=("%s" % self.id,))
 
 

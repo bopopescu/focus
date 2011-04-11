@@ -6,7 +6,7 @@ from core.decorators import require_permission, login_required
 from forms import *
 from core.shortcuts import *
 from django.utils.html import escape
-from core.views import updateTimeout
+from core.views import update_timeout
 from datetime import date, datetime
 from calendar import monthrange
 import time
@@ -16,14 +16,14 @@ from django.utils import simplejson
 
 @require_permission("LIST", HourRegistration)
 def overview(request):
-    updateTimeout(request)
+    update_timeout(request)
 
-    return listHourRegistrations(request, Core.current_user(), Core.current_user().generateValidPeriode()[0],
-                                 Core.current_user().generateValidPeriode()[1])
+    return listHourRegistrations(request, Core.current_user(), Core.current_user().generate_valid_period()[0],
+                                 Core.current_user().generate_valid_period()[1])
 
 
 def viewArchivedMonth(request, year, month, user_id=None):
-    updateTimeout(request)
+    update_timeout(request)
 
     year = int(year)
     month = int(month)
@@ -42,7 +42,7 @@ def viewArchivedMonth(request, year, month, user_id=None):
 
 
 def listHourRegistrations(request, user, from_date, to_date):
-    HourRegistrations = user.getPermittedObjects("VIEW", HourRegistration).filter(creator=user)
+    HourRegistrations = user.get_permitted_objects("VIEW", HourRegistration).filter(creator=user)
 
     unwanted = []
 
@@ -101,7 +101,7 @@ def user_archive(request, user_id):
 
 
 def archive(request, user_id=None):
-    updateTimeout(request)
+    update_timeout(request)
 
     year_with_months = {}
 
@@ -110,7 +110,7 @@ def archive(request, user_id=None):
     if user_id:
         user = User.objects.get(id=user_id)
 
-    HourRegistrations = user.getPermittedObjects("VIEW", HourRegistration).filter(creator=user)
+    HourRegistrations = user.get_permitted_objects("VIEW", HourRegistration).filter(creator=user)
 
     for time in HourRegistrations:
         year_with_months[time.date.year] = set([])
@@ -132,7 +132,7 @@ def edit(request, id):
     #Check if valid for edit
     time = get_object_or_404(HourRegistration, id=id, deleted=False)
 
-    if Core.current_user().canEditHourRegistration(time):
+    if Core.current_user().can_edit_hourregistration(time):
         return form(request, id)
 
     request.message_error("Du kan ikke redigere denne timen")
@@ -149,7 +149,7 @@ def delete(request, id):
 def ajax(request, id=None):
     instance = HourRegistration()
     if id:
-        instance = HourRegistration.objects.inCompany().get(id=id)
+        instance = HourRegistration.objects.filter_current_company().get(id=id)
 
     form = HourRegistrationForm(request.POST, instance=instance)
 

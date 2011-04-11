@@ -37,7 +37,7 @@
         {% for orderline in orderlines.all %}
             <tr>
                 <td><a href="{% url app.stock.views.product.view orderline.product.id %}">{{ orderline }}</a></td>
-                <td><a href="{% url app.orders.views.deleteOrderLine order.id orderline.id %}">{% trans "Delete" %}</a></td>
+                <td><a href="{% url app.orders.views.delete_order_line order.id orderline.id %}">{% trans "Delete" %}</a></td>
             </tr>
         {% endfor %}
         </tbody>

@@ -6,12 +6,12 @@ from forms import *
 
 @login_required()
 def overview(request):
-    announcements = Core.current_user().getPermittedObjects("VIEW", Announcement).filter(trashed=False)
+    announcements = Core.current_user().get_permitted_objects("VIEW", Announcement).filter(trashed=False)
     return render_with_request(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
 
 @login_required()
 def overview_trashed(request):
-    announcements = Core.current_user().getPermittedObjects("VIEW", Announcement).filter(trashed=True)
+    announcements = Core.current_user().get_permitted_objects("VIEW", Announcement).filter(trashed=True)
     return render_with_request(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
 
 @login_required()
@@ -19,7 +19,7 @@ def add(request):
     return form(request)
 
 def view(request, id):
-    announcement = Core.current_user().getPermittedObjects("VIEW", Announcement).get(id=id)
+    announcement = Core.current_user().get_permitted_objects("VIEW", Announcement).get(id=id)
     return render_with_request(request, 'announcements/view.html', {'title': 'Oppslag',
                                                                     'announcement': announcement})
 

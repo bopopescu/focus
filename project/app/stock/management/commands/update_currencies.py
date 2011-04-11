@@ -6,12 +6,12 @@ from django.core.management.base import BaseCommand
 from django.contrib.contenttypes.models import ContentType
 from core.mail import send_mail
 
-def getClass(app, model):
+def get_class(app, model):
     content_type = ContentType.objects.get(app_label=app, model=model)
     model = content_type.model_class()
     return model
 
-Currency = getClass("stock", "currency")
+Currency = get_class("stock", "currency")
 
 class Command(BaseCommand):
     def handle(self, *apps, **options):

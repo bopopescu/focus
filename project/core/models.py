@@ -86,7 +86,7 @@ class PersistentModel(models.Model):
                       )
             log.save()
 
-            for us in self.whoHasPermissionTo('VIEW'):
+            for us in self.who_has_permission_to('VIEW'):
                 if us == Core.current_user():
                     continue
                 Notification(recipient=us,
@@ -124,11 +124,11 @@ class PersistentModel(models.Model):
 
 
     """
-    whoHasPermissionTo
+    who_has_permission_to
     returns a list of users who are permitted perform actions on the object
     """
 
-    def whoHasPermissionTo(self, perm):
+    def who_has_permission_to(self, perm):
         try:
             content_type = ContentType.objects.get_for_model(self)
             id = self.id

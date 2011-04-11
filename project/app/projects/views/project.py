@@ -9,29 +9,29 @@ from core import Core
 from core.models import Log
 from core.shortcuts import render_with_request, comment_block
 from core.decorators import require_permission
-from core.views import updateTimeout
+from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
 from django.contrib.contenttypes.models import ContentType
 
 @require_permission("LIST", Project)
 def overview(request):
-    updateTimeout(request)
-    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=False)
+    update_timeout(request)
+    projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=False)
     return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
 
 @require_permission("LIST", Project)
 def timeline(request):
-    updateTimeout(request)
-    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=False)
+    update_timeout(request)
+    projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=False)
     return render_with_request(request, 'projects/timeline.html',
                                {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
 
 @require_permission("LIST", Project)
 def overview_trashed(request):
-    projects = Core.current_user().getPermittedObjects("VIEW", Project).filter(trashed=True)
+    projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=True)
     return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
 
@@ -51,7 +51,7 @@ def milestones(request, id):
 def view(request, id):
     project = Project.objects.get(id=id)
     comments = comment_block(request, project)
-    whoCanSeeThis = project.whoHasPermissionTo('view')
+    whoCanSeeThis = project.who_has_permission_to('view')
     return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
                                                                'comments': comments,
                                                                'project': project,
@@ -93,9 +93,9 @@ def trash(request, id):
     instance = Project.objects.get(id=id)
 
     if request.method == "POST":
-        if not instance.canBeDeleted()[0]:
+        if not instance.can_be_deleted()[0]:
             request.message_error("You can't delete this project because: ")
-            for reason in instance.canBeDeleted()[1]:
+            for reason in instance.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
             request.message_success("Successfully deleted this project")
@@ -104,8 +104,8 @@ def trash(request, id):
     else:
         return render_with_request(request, 'projects/trash.html', {'title': _("Confirm delete"),
                                                                     'project': instance,
-                                                                    'canBeDeleted': instance.canBeDeleted()[0],
-                                                                    'reasons': instance.canBeDeleted()[1],
+                                                                    'can_be_deleted': instance.can_be_deleted()[0],
+                                                                    'reasons': instance.can_be_deleted()[1],
                                                                     })
 
 

@@ -20,7 +20,7 @@
         <tbody>
         {% for a in announcements %}
             <tr>
-                <td><a href="{{ a.getViewUrl }}">{{ a.title }}</a></td>
+                <td><a href="{{ a.get_view_url }}">{{ a.title }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

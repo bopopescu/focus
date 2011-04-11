@@ -20,10 +20,10 @@ class TicketForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TicketForm, self).__init__(*args, **kwargs)
-        self.fields['assigned_to'].queryset = User.objects.inCompany()
+        self.fields['assigned_to'].queryset = User.objects.filter_current_company()
         self.fields['attachment'].required = False
         self.fields['customer'].widget = SelectWithPop(Customer)
-        self.fields['customer'].queryset = Customer.objects.inCompany()
+        self.fields['customer'].queryset = Customer.objects.filter_current_company()
 
         self.fields['due_date'].required = True
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y")

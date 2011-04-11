@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
-from core.views import  updateTimeout
+from core.views import  update_timeout
 from app.stock.forms import UnitsForSizesForm
 from app.stock.models import UnitsForSizes
 from django.utils import simplejson
@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
-    updateTimeout(request)
+    update_timeout(request)
     units = UnitsForSizes.objects.all()
     return render_with_request(request, 'stock/productUnits/list.html', {'title': 'Enheter', 'units': units})
 

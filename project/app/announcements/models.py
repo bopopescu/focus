@@ -19,17 +19,17 @@ class Announcement(PersistentModel):
     def __unicode__(self):
         return self.title
 
-    def getAttachment(self):
+    def get_attachment(self):
         if self.attachment:
             if os.path.join("/file/", self.attachment.name):
                 return os.path.join("/file/", self.attachment.name)
 
         return None
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.announcements.views.view', args=("%s" % self.id,))
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.announcements.views.edit', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):

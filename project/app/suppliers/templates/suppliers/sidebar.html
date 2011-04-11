@@ -8,16 +8,16 @@
         <li><a class="{% active request "customers/$" %}" href="{% url app.suppliers.views.overview %}"><img
                 src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
-        <li><a class="{% active request "view" %}" href="{{ supplier.getViewUrl }}"><img
+        <li><a class="{% active request "view" %}" href="{{ supplier.get_view_url }}"><img
                 src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
-        <li><a class="{% active request "edit" %}" href="{{ supplier.getEditUrl }}"><img
+        <li><a class="{% active request "edit" %}" href="{{ supplier.get_edit_url }}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
 
         <li><a class="{% active request "products" %}" href="{% url app.suppliers.views.products supplier.id %}"><img
                 src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "PRODUCTS" %}</a></li>
 
 
-        <li><a class="{% active request "history" %}" href="{{ supplier.getHistoryUrl }}"><img
+        <li><a class="{% active request "history" %}" href="{{ supplier.get_history_url }}"><img
                 src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
 
         <li><a class="{% active request "trash" %}" href="{% url app.suppliers.views.trash supplier.id %}"><img

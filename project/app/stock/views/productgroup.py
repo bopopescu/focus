@@ -4,14 +4,14 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import simplejson
 from core.shortcuts import render_with_request
 from core.decorators import require_permission, login_required
-from core.views import  updateTimeout
+from core.views import  update_timeout
 from app.stock.forms import ProductGroupForm
 from app.stock.models import ProductGroup
 from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
-    updateTimeout(request)
+    update_timeout(request)
     productgroups = ProductGroup.objects.all()
     return render_with_request(request, 'stock/productgroups/list.html',
                                {'title': 'Produktgrupper', 'productgroups': productgroups})

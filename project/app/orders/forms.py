@@ -20,10 +20,10 @@ class OrderForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
         self.fields['customer'].widget = SelectWithPop(Customer)
-        self.fields['customer'].queryset = Customer.objects.inCompany()
+        self.fields['customer'].queryset = Customer.objects.filter_current_company()
         self.fields['project'].widget = SelectWithPop(Project)
-        self.fields['project'].queryset = Project.objects.inCompany()
-        self.fields['responsible'].queryset = User.objects.inCompany()
+        self.fields['project'].queryset = Project.objects.filter_current_company()
+        self.fields['responsible'].queryset = User.objects.filter_current_company()
         self.fields['delivery_date'].required = True
         self.fields['delivery_date'].input_formats = ["%d.%m.%Y"]
         self.fields['delivery_date'].widget = DatePickerField(format="%d.%m.%Y")
@@ -46,7 +46,7 @@ class OrderForm(ModelForm):
     def clean_oid(self):
         oid = self.cleaned_data['oid']
 
-        orders = Order.objects.inCompany()
+        orders = Order.objects.filter_current_company()
         for i in orders:
             if self.id == i.id:
                 continue

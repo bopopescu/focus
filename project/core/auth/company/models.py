@@ -21,9 +21,9 @@ class Company(models.Model):
     def __unicode__(self):
         return self.name
 
-    def setDaysIntoNextMonthHourRegistration(self, days):
+    def set_days_into_next_month(self, days):
         self.daysIntoNextMonthHourRegistration = days
         self.save()
 
-    def getDaysIntoNextMonthHourRegistration(self):
+    def get_days_into_next_month(self):
         return self.daysIntoNextMonthHourRegistration

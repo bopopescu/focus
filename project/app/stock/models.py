@@ -50,7 +50,7 @@ class ProductGroup(PersistentModel):
     def simpleform():
         return ProductGroupForm(instance=ProductGroup(), prefix="productgroups")
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.stock.views.productgroup.edit', args=("%s" % self.id,))
 
 
@@ -89,29 +89,29 @@ class Product(PersistentModel):
     def __unicode__(self):
         return self.name
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.orders().all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Product used in orders, see orders menu in sidebar."))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.stock.views.product.view', args=("%s" % self.id,))
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.stock.views.product.edit', args=("%s" % self.id,))
 
-    def getDeleteUrl(self):
+    def get_delete_url(self):
         return urlresolvers.reverse('app.stock.views.product.delete', args=("%s" % self.id,))
 
-    def getRecoverUrl(self):
+    def get_recover_url(self):
         return urlresolvers.reverse('app.stock.views.product.recover', args=("%s" % self.id,))
 
     def orders(self):
@@ -128,7 +128,7 @@ class ProductFile(PersistentModel):
     name = models.CharField(max_length=200)
     file = models.FileField(upload_to="products", storage=fs)
 
-    def getFile(self):
+    def get_file(self):
         if self.file:
             if os.path.join("/file/", self.file.name):
                 return os.path.join("/file/", self.file.name)

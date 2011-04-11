@@ -8,9 +8,9 @@
     {% if product.id %}
     <li><a class="{% active request "product/$" %}" href="{% url app.stock.views.product.overview %}"><img
             src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "PRODUCTS" %}</a></li>
-    <li><a class="{% active request "view" %}" href="{{ product.getViewUrl }}"><img
+    <li><a class="{% active request "view" %}" href="{{ product.get_view_url }}"><img
             src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
-    <li><a class="{% active request "edit" %}" href="{{ product.getEditUrl }}"><img
+    <li><a class="{% active request "edit" %}" href="{{ product.get_edit_url }}"><img
             src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
     <li><a class="{% active request "files" %}" href="{% url app.stock.views.product.files product.id %}"><img
             src="{{ STATIC_URL }}img/files.png" width="24" height="24" alt="Mail"/>{% trans "FILES" %}</a></li>

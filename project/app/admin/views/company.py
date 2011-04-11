@@ -8,7 +8,7 @@ from core.auth.company.models import Company
 from core.decorators import require_permission
 
 @require_permission("CONFIGURE", Company)
-def editCompany(request):
+def edit_company(request):
     id = Core.current_user().get_company().id
 
     instance = get_object_or_404(Company, id=id)
@@ -25,7 +25,7 @@ def editCompany(request):
             request.message_success(msg)
 
             #Redirects after save for direct editing
-            return redirect(editCompany)
+            return redirect(edit_company)
 
     else:
         form = CompanyForm(instance=instance)

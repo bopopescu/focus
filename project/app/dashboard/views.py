@@ -17,10 +17,10 @@ def overview(request):
 
     print request.META['REMOTE_ADDR']
     
-    announcements = Core.current_user().getPermittedObjects("VIEW", Announcement)[::-1]
-    your_projects = Core.current_user().getPermittedObjects("VIEW", Project)
+    announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
+    your_projects = Core.current_user().get_permitted_objects("VIEW", Project)
 
-    your_orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="Order")[::-1]
+    your_orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")[::-1]
 
     return render_with_request(request, 'dashboard/dashboard.html', {'title': title,
                                                                      'announcements': announcements,

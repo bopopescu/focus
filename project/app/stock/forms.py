@@ -17,13 +17,13 @@ class ProductForm(ModelForm):
         super(ProductForm, self).__init__(*args, **kwrds)
 
         self.fields['unitForSize'].widget = SelectWithPop(UnitsForSizes)
-        self.fields['unitForSize'].queryset = UnitsForSizes.objects.inCompany()
+        self.fields['unitForSize'].queryset = UnitsForSizes.objects.filter_current_company()
 
         self.fields['productGroup'].widget = SelectWithPop(ProductGroup)
-        self.fields['productGroup'].queryset = ProductGroup.objects.inCompany()
+        self.fields['productGroup'].queryset = ProductGroup.objects.filter_current_company()
 
         self.fields['supplier'].widget = SelectWithPop(Supplier)
-        self.fields['supplier'].queryset = Supplier.objects.inCompany()
+        self.fields['supplier'].queryset = Supplier.objects.filter_current_company()
 
 
 class ProductGroupForm(ModelForm):

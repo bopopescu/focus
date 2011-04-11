@@ -51,15 +51,15 @@ class Ticket(PersistentModel):
     class Meta:
         ordering = ['status', 'date_created']
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.updates.all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Ticket has comments"))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)

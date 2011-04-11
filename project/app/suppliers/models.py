@@ -21,15 +21,15 @@ class Supplier(PersistentModel):
         return self.name
 
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.products.all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Supplier has active products"))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)
@@ -42,13 +42,13 @@ class Supplier(PersistentModel):
     def simpleform():
         return SupplierSimpleForm(instance=Supplier(), prefix="suppliers")
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.suppliers.views.view', args=("%s" % self.id,))
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.suppliers.views.edit', args=("%s" % self.id,))
 
-    def getHistoryUrl(self):
+    def get_history_url(self):
         return urlresolvers.reverse('app.suppliers.views.history', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):

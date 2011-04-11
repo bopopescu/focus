@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from app.admin.forms import HourRegistrationManuallyForm, UserForm
 from core import Core
 from core.decorators import login_required, require_permission
-from core.views import updateTimeout
+from core.views import update_timeout
 from django.utils.translation import ugettext as _
 from core.mail import send_mail
 from core.auth.user.models import User
@@ -12,8 +12,8 @@ from core.auth.permission.models import Permission
 
 @login_required()
 def overview(request):
-    updateTimeout(request)
-    Users = User.objects.inCompany()
+    update_timeout(request)
+    Users = User.objects.filter_current_company()
     return render(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
 
 @login_required()
@@ -47,7 +47,7 @@ def changeCanLogin(request, id):
     u.save()
     return redirect(view, id)
 
-def generateNewPassordForUser(user):
+def generate_new_password_for_user(user):
     import string
     import random
 
@@ -72,10 +72,10 @@ def generateNewPassordForUser(user):
     return ret
 
 @login_required()
-def sendGeneratedPassword(request, id):
+def send_generated_password_to_user(request, id):
     user = get_object_or_404(User, id=id, company=Core.current_user().get_company())
 
-    ret = generateNewPassordForUser(user)
+    ret = generate_new_password_for_user(user)
 
     if settings.DEBUG:
         print "Nytt passord er: %s" % ret
@@ -114,9 +114,9 @@ def trash(request, id):
     instance = User.objects.get(id=id)
 
     if request.method == "POST":
-        if not instance.canBeDeleted()[0]:
+        if not instance.can_be_deleted()[0]:
             request.message_error("You can't delete this user because: ")
-            for reason in instance.canBeDeleted()[1]:
+            for reason in instance.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
             request.message_success("Successfully deleted this user")
@@ -125,12 +125,12 @@ def trash(request, id):
     else:
         return render(request, 'customers/trash.html', {'title': _("Confirm delete"),
                                                                      'user': instance,
-                                                                     'canBeDeleted': instance.canBeDeleted()[0],
-                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     'can_be_deleted': instance.can_be_deleted()[0],
+                                                                     'reasons': instance.can_be_deleted()[1],
                                                                      })
 
 @login_required()
-def setHourRegistrationLimitsManually (request, id):
+def set_hourregistration_limits (request, id):
     instance = get_object_or_404(User, id=id)
     msg = _("User successfully edited")
 
@@ -182,11 +182,11 @@ def form (request, id=False):
 
             if new:
                 #send new generated password to the new user
-                sendGeneratedPassword(request, o.id)
+                send_generated_password_to_user(request, o.id)
 
                 #Add the new user to allemployee group of the company
                 if Core.current_user().get_company_allemployeesgroup():
-                    Core.current_user().get_company_allemployeesgroup().addMember(o)
+                    Core.current_user().get_company_allemployeesgroup().add_member(o)
 
             request.message_success(msg)
 

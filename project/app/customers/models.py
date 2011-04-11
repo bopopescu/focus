@@ -28,23 +28,22 @@ class Customer(PersistentModel):
     def __unicode__(self):
         return self.full_name
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.orders.all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Customer has active orders"))
 
         if self.projects.all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Customer has active projects"))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)
-
 
     @staticmethod
     def add_ajax_url():
@@ -61,7 +60,7 @@ class Customer(PersistentModel):
 
         super(Customer, self).save()
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
 
 from forms import CustomerFormSimple

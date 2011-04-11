@@ -26,7 +26,7 @@ def edit(request):
     return render_with_request(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form})
 
 
-def changeProfileImage(request):
+def change_profile_image(request):
     try:
         instance = request.user
         msg = _("Successfully changed profile image")
@@ -48,7 +48,7 @@ def changeProfileImage(request):
     return render_with_request(request, "admin/profile/formimage.html", {'title': _('Profile'), 'form': form})
 
 
-def changePassword(request):
+def change_password(request):
     if request.method == 'POST':
         form = UserProfilePasswordForm(request.POST, user=request.user)
 

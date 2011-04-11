@@ -8,7 +8,7 @@ from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
 from core.shortcuts import *
 from core.decorators import *
-from core.views import updateTimeout
+from core.views import update_timeout
 from core.auth.company.models import Company
 from core.auth.user.models import User
 from core.auth.group.models import Group
@@ -17,7 +17,7 @@ from core.auth.log.models import Log, Notification
 
 @require_permission("MANAGE", Company)
 def overview(request):
-    updateTimeout(request)
+    update_timeout(request)
     companies = Company.objects.all()
 
     return render_with_request(request, 'company/list.html', {'title': 'Firmaer',
@@ -61,9 +61,9 @@ def form (request, id=False):
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
-    adminGroup.saveWithoutCreatePermissions()
+    adminGroup.save_without_permissions()
     allEmployeesGroup = Group(name=allEmployeesGroup)
-    allEmployeesGroup.saveWithoutCreatePermissions()
+    allEmployeesGroup.save_without_permissions()
     company = Company(name=name, adminGroup=adminGroup, allEmployeesGroup=allEmployeesGroup)
     company.save()
     #Create the admin user
@@ -75,7 +75,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     adminGroup.grant_permissions("ALL", adminGroup)
     adminGroup.grant_permissions("ALL", allEmployeesGroup)
     #Add admin user to admin group
-    adminGroup.addMember(user)
+    adminGroup.add_member(user)
     #Set the company fields on groups
     adminGroup.company = company
     adminGroup.save()

@@ -20,8 +20,8 @@ class HourRegistrationForm(ModelForm):
         super(HourRegistrationForm, self).__init__(*args, **kwargs)
         self.fields['date'].required = True
         self.fields['date'].widget = DatePickerField(format="%d.%m.%Y",
-                                                     from_date=Core.current_user().generateValidPeriode()[0],
-                                                     to_date=Core.current_user().generateValidPeriode()[1])
+                                                     from_date=Core.current_user().generate_valid_period()[0],
+                                                     to_date=Core.current_user().generate_valid_period()[1])
 
         self.fields['date'].input_formats = ["%d.%m.%Y"]
 

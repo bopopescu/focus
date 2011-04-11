@@ -39,7 +39,7 @@
         <td>
             {% require_valid_date_for_edit p %}
             <div class="tool">
-                <a href="{{ p.getEditUrl }}"><img
+                <a href="{{ p.get_edit_url }}"><img
                         class="tool" width="24px" height="24px" src="{{ STATIC_URL }}img/edit.png" alt=""></a>
             </div>
             {% end_require %}

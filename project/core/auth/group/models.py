@@ -6,7 +6,7 @@ from core import Core
 from core.auth.company.models import Company
 from core.auth.permission.models import Permission, Role, Action
 from core.managers import PersistentManager
-from core.utils import getClass
+from core.utils import get_class
 
 class Group(models.Model):
     name = models.CharField(max_length=50)
@@ -21,7 +21,7 @@ class Group(models.Model):
     def __unicode__(self):
         return self.name
 
-    def addMember(self, user):
+    def add_member(self, user):
         self.members.add(user)
         self.save()
 
@@ -48,7 +48,7 @@ class Group(models.Model):
 
         perm.save()
 
-    def saveWithoutCreatePermissions(self):
+    def save_without_permissions(self):
         super(Group, self).save()
 
     def save(self, *args, **kwargs):

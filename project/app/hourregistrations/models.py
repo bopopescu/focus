@@ -50,7 +50,7 @@ class HourRegistration(PersistentModel):
     def __unicode__(self):
         return unicode(self.date)
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.hourregistrations.views.edit', args=("%s" % self.id,))
 
     def format_date(self):

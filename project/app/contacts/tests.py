@@ -26,7 +26,7 @@ class ContactsTesting(TestCase):
 
         self.contact1 = Contact.objects.get_or_create(full_name="Customer1")[0]
 
-        self.group1.addMember(self.user2)
+        self.group1.add_member(self.user2)
 
     def testUserPerm(self):
 
