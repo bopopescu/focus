@@ -9,7 +9,7 @@ TEMPLATE_DEBUG = DEBUG
 
 SERVER_EMAIL = 'fredrik+django@fncit.no'
 NO_REPLY_EMAIL = 'no-reply@focustime.no'
-DEBUG_EMAIL = "focustimeno@gmail.com"
+DEBUG_EMAIL = "fredrik+debug@fncit.no"
 
 ADMINS = (
 (u'Fredrik Nygård Carlsen', 'fredrik@fncit.no'),
