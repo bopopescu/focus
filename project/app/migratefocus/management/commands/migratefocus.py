@@ -7,31 +7,33 @@ import os
 import MySQLdb
 import MySQLdb.cursors
 from core import Core
-from core.models import User, Group, Company, Log, Notification
+#from core.models import User, Group, Company, Log, Notification
+from core.auth.user.models import User
+from core.auth.group.models import Group
+from core.auth.company.models import Company
+from core.auth.log.models import Log, Notification
+
 import random
-from app.admin.views.user import generateNewPassordForUser
+from app.admin.views.user import generate_new_password_for_user
+from core.utils import get_class
 
-def getClass(app, model):
-    content_type = ContentType.objects.get(app_label=app, model=model)
-    model = content_type.model_class()
-    return model
 
-Customer = getClass("customers", "customer")
-Project = getClass("projects", "project")
-Order = getClass("orders", "order")
-Supplier = getClass("suppliers", "supplier")
-Contact = getClass("contacts", "contact")
-Product = getClass("stock", "product")
-UnitsForSizes = getClass("stock", "unitsforsizes")
-Currency = getClass("stock", "currency")
-ProductCategory = getClass("stock", "productcategory")
-ProductGroup = getClass("stock", "productgroup")
+Customer = get_class("customers", "customer")
+Project = get_class("projects", "project")
+Order = get_class("orders", "order")
+Supplier = get_class("suppliers", "supplier")
+Contact = get_class("contacts", "contact")
+Product = get_class("stock", "product")
+UnitsForSizes = get_class("stock", "unitsforsizes")
+Currency = get_class("stock", "currency")
+ProductCategory = get_class("stock", "productcategory")
+ProductGroup = get_class("stock", "productgroup")
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
-    adminGroup.saveWithoutCreatePermissions()
+    adminGroup.save_without_permissions()
     allEmployeesGroup = Group(name=allEmployeesGroup)
-    allEmployeesGroup.saveWithoutCreatePermissions()
+    allEmployeesGroup.save_without_permissions()
     company = Company(name=name, adminGroup=adminGroup, allEmployeesGroup=allEmployeesGroup)
     company.save()
 
@@ -46,7 +48,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     adminGroup.grant_permissions("ALL", allEmployeesGroup)
 
     #Add admin user to admin group
-    adminGroup.addMember(user)
+    adminGroup.add_member(user)
 
     #Set the company fields on groups
     adminGroup.company = company
@@ -59,8 +61,8 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     adminGroup.grant_role("Admin", Customer)
     adminGroup.grant_role("Admin", Contact)
     adminGroup.grant_role("Admin", Order)
-    adminGroup.grant_role("Admin", getClass("hourregistrations", "hourregistration"))
-    adminGroup.grant_role("Admin", getClass("announcements", "announcement"))
+    adminGroup.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
+    adminGroup.grant_role("Admin", get_class("announcements", "announcement"))
     adminGroup.grant_role("Admin", Product)
     adminGroup.grant_role("Admin", Log)
     adminGroup.grant_role("Admin", Supplier)
@@ -74,8 +76,8 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     allEmployeesGroup.grant_role("Admin", Customer)
     allEmployeesGroup.grant_role("Admin", Contact)
     allEmployeesGroup.grant_role("Admin", Order)
-    allEmployeesGroup.grant_role("Admin", getClass("hourregistrations", "hourregistration"))
-    allEmployeesGroup.grant_role("Admin", getClass("announcements", "announcement"))
+    allEmployeesGroup.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
+    allEmployeesGroup.grant_role("Admin", get_class("announcements", "announcement"))
     allEmployeesGroup.grant_role("Admin", Product)
     allEmployeesGroup.grant_role("Member", Log)
     allEmployeesGroup.grant_role("Member", Supplier)
@@ -122,6 +124,7 @@ class Command(BaseCommand):
             p = Supplier()
             p.name = cu['levnavn'].decode('latin1')
             p.address = cu['adresse'].decode('latin1')
+            p.address = p.address.replace("<br/>","\n")
             p.zip = cu['postnr'].decode("latin1")
             p.phone = cu['telefon'].decode("latin1")
             p.email_contact = cu['kontaktepost'].decode("latin1")
@@ -328,7 +331,7 @@ class Command(BaseCommand):
                                           "Focus Security AS")
 
         Core.set_test_user(user)
-        generateNewPassordForUser(user)
+        generate_new_password_for_user(user)
 
         print "Company: %s " % company
         print "Current user is: %s " % Core.current_user()

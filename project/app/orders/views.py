@@ -1,40 +1,36 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import ugettext as _
 from forms import *
 from core.shortcuts import *
-from core.views import updateTimeout
+from core.views import update_timeout
 from core.decorators import *
 from django.utils import simplejson
 
 @require_permission("LIST", Order)
-def overviewOffers(request):
-    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="Offer")
-    updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
+def overview_offers(request):
+    orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Offer")
+    update_timeout(request)
+    return render(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
 @require_permission("LIST", Order)
 def overview(request):
-    #orders = Order.objects.all().filter(state="Order")
-    #orders = Order.objects.all()
-
-    orders = Core.current_user().getPermittedObjects("VIEW", Order).filter(state="Order")
-
-    updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
+    orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")
+    update_timeout(request)
+    return render(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
 @require_permission("LISTARCHIVE", Order)
-def overviewReadyForInvoice(request):
+def overview_invoice(request):
     orders = Order.objects.all().filter(state="Invoice")
-    updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
+    update_timeout(request)
+    return render(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
 @require_permission("LISTREADYINVOICE", Order)
-def overviewArchive(request):
+def overview_archive(request):
     orders = Order.objects.all().filter(state="Archive")
-    updateTimeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
+    update_timeout(request)
+    return render(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
 
 @require_permission("VIEW", Order, "id")
@@ -50,13 +46,13 @@ def products(request, id):
     else:
         form = OrderLineForm(instance=OrderLine())
 
-    return render_with_request(request, 'orders/products.html', {'title': _('Products'),
+    return render(request, 'orders/products.html', {'title': _('Products'),
                                                                  'form': form,
                                                                  'order': order,
                                                                  'orderlines': orderlines})
 
 @require_permission("EDIT", Order, "id")
-def deleteOrderLine(request, id, orderlineID):
+def delete_order_line(request, id, orderlineID):
     order = Order.objects.get(id=id)
     orderline = order.orderlines.get(id=orderlineID)
     orderline.delete()
@@ -67,24 +63,24 @@ def deleteOrderLine(request, id, orderlineID):
 def history(request, id):
     instance = get_object_or_404(Order, id=id, deleted=False)
     history = instance.history()
-    return render_with_request(request, 'orders/log.html', {'title': _("Latest events"),
+    return render(request, 'orders/log.html', {'title': _("Latest events"),
                                                             'order': instance,
                                                             'logs': history[::-1][0:150]})
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.all().get(id=id)
-    whoCanSeeThis = order.whoHasPermissionTo('view')
+    whoCanSeeThis = order.who_has_permission_to('view')
 
     taskForm = TaskForm()
 
-    return render_with_request(request, 'orders/view.html', {'title': 'Ordre: %s' % order.order_name,
+    return render(request, 'orders/view.html', {'title': 'Ordre: %s' % order.order_name,
                                                              'order': order,
                                                              'taskForm': taskForm,
                                                              'whoCanSeeThis': whoCanSeeThis})
 
 @require_permission("VIEW", Order, "id")
-def addTask(request, id):
+def add_task(request, id):
     if request.method == "POST":
         order = Order.objects.all().get(id=id)
         form = TaskForm(request.POST, instance=Task())
@@ -101,7 +97,7 @@ def addTask(request, id):
     return redirect(view, id)
 
 @login_required()
-def changeStatusTask(request, id):
+def change_status_task(request, id):
     try:
         task = Task.objects.all().get(id=id)
         task.done = not task.done
@@ -112,7 +108,7 @@ def changeStatusTask(request, id):
     return redirect(view, task.order.id)
 
 @require_permission("EDIT", Order, "id")
-def changeStatus(request, id):
+def change_status(request, id):
     order = Order.objects.get(id=id)
 
     if order.is_offer():
@@ -133,7 +129,7 @@ def changeStatus(request, id):
     return redirect(view, order.id)
 
 @require_permission("CREATE", Order)
-def addOffer(request):
+def add_offer(request):
     return form(request, offer=True)
 
 @require_permission("CREATE", Order)
@@ -170,26 +166,6 @@ def delete(request, id):
     request.message_error("Det er ikke mulig å slette ordrer.")
 
     return view(request, id)
-
-@login_required()
-def addPop(request):
-    instance = Order()
-
-    if request.method == "POST":
-        form = OrderFormSimple(request.POST, instance=instance)
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.owner = request.user
-            o.save()
-            form.save_m2m()
-
-            return HttpResponse(
-                    '<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' %\
-                    ((o._get_pk_val()), (o)))
-    else:
-        form = OrderFormSimple(instance=instance)
-
-    return render_with_request(request, "simpleform.html", {'title': 'Ordre', 'form': form})
 
 @login_required()
 def form (request, id=False, *args, **kwargs):
@@ -243,4 +219,4 @@ def form (request, id=False, *args, **kwargs):
     else:
         form = OrderForm(instance=instance)
 
-    return render_with_request(request, "orders/form.html", {'title': title, 'order': instance, 'form': form})
+    return render(request, "orders/form.html", {'title': title, 'order': instance, 'form': form})

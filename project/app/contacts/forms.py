@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 
 class ContactWidget(JQueryAutoComplete):
     def __init__(self):
-        JQueryAutoComplete.__init__(self, source=partial(reverse, 'app.contacts.views.listAjax'))
+        JQueryAutoComplete.__init__(self, source=partial(reverse, 'app.contacts.views.list_ajax'))
 
 
 class ContactImageForm(ModelForm):

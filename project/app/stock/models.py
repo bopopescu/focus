@@ -27,11 +27,13 @@ class UnitsForSizes(PersistentModel):
     def simpleform():
         return UnitsForSizesForm(instance=UnitsForSizes(), prefix="units")
 
+
 class ProductCategory(PersistentModel):
     name = models.CharField("Navn", max_length=100)
 
     def __unicode__(self):
         return self.name
+
 
 class ProductGroup(PersistentModel):
     name = models.CharField("Navn", max_length=100)
@@ -48,13 +50,14 @@ class ProductGroup(PersistentModel):
     def simpleform():
         return ProductGroupForm(instance=ProductGroup(), prefix="productgroups")
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.stock.views.productgroup.edit', args=("%s" % self.id,))
+
 
 class Currency(PersistentModel):
     name = models.CharField("Navn", max_length=100)
-    sign = models.CharField("Tegn ($, kr) osv", max_length=10)
-    value = models.CharField("Verdi", max_length=100)
+    iso = models.CharField("Verdi", max_length=100, null=True)
+    value = models.DecimalField(decimal_places=2, max_digits=5, default=0)
 
     @staticmethod
     def add_ajax_url():
@@ -66,6 +69,7 @@ class Currency(PersistentModel):
 
     def __unicode__(self):
         return self.name
+
 
 class Product(PersistentModel):
     pid = models.CharField(_("ProductID"), max_length=50, null=True)
@@ -85,29 +89,29 @@ class Product(PersistentModel):
     def __unicode__(self):
         return self.name
 
-    def canBeDeleted(self):
-        canBeDeleted = True
+    def can_be_deleted(self):
+        can_be_deleted = True
         reasons = []
 
         if self.orders().all().count() > 0:
-            canBeDeleted = False
+            can_be_deleted = False
             reasons.append(_("Product used in orders, see orders menu in sidebar."))
 
-        if canBeDeleted:
+        if can_be_deleted:
             return (True, "OK")
 
         return (False, reasons)
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.stock.views.product.view', args=("%s" % self.id,))
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.stock.views.product.edit', args=("%s" % self.id,))
 
-    def getDeleteUrl(self):
+    def get_delete_url(self):
         return urlresolvers.reverse('app.stock.views.product.delete', args=("%s" % self.id,))
 
-    def getRecoverUrl(self):
+    def get_recover_url(self):
         return urlresolvers.reverse('app.stock.views.product.recover', args=("%s" % self.id,))
 
     def orders(self):
@@ -118,14 +122,24 @@ class Product(PersistentModel):
         orders = Order.objects.filter(id__in=orderIDs)
         return orders
 
+
 class ProductFile(PersistentModel):
     product = models.ForeignKey(Product, related_name="files")
     name = models.CharField(max_length=200)
     file = models.FileField(upload_to="products", storage=fs)
 
-    def getFile(self):
+    def get_file(self):
         if self.file:
             if os.path.join("/file/", self.file.name):
                 return os.path.join("/file/", self.file.name)
+
+
+def initial_data ():
+    Currency.objects.get_or_create(name="Norsk Krone", iso="NOK")
+    Currency.objects.get_or_create(name="Dansk Krone", iso="DKK")
+    Currency.objects.get_or_create(name="Svensk krona", iso="SEK")
+    Currency.objects.get_or_create(name="Pound sterling", iso="GBP")
+    Currency.objects.get_or_create(name="US Dollar", iso="USD")
+    Currency.objects.get_or_create(name="Euro", iso="EUR")
 
 from app.stock.forms import ProductGroupForm, UnitsForSizesForm, CurrencyForm

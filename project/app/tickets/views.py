@@ -1,7 +1,7 @@
 from app.tickets.models import Ticket, TicketUpdate
 from core import Core
 from core.decorators import require_permission
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 from app.tickets.forms import TicketForm, EditTicketForm
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
@@ -9,19 +9,19 @@ import copy
 
 
 def overview(request):
-    tickets = Core.current_user().getPermittedObjects("VIEW", Ticket).filter(trashed=False)
-    return render_with_request(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False)
+    return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 def overview_trashed(request):
-    tickets = Core.current_user().getPermittedObjects("VIEW", Ticket).filter(trashed=True)
-    return render_with_request(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True)
+    return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 
 def view(request, id):
-    ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+    ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
 
-    return render_with_request(request, "tickets/view.html", {'title': _('Ticket'),                                                              
+    return render(request, "tickets/view.html", {'title': _('Ticket'),
                                                               'ticket': ticket,
                                                               'updates': updates
                                                               })
@@ -31,26 +31,26 @@ def trash(request, id):
     customer = Ticket.objects.get(id=id)
 
     if request.method == "POST":
-        if not customer.canBeDeleted()[0]:
+        if not customer.can_be_deleted()[0]:
             request.message_error("You can't delete this customer because: ")
-            for reason in customer.canBeDeleted()[1]:
+            for reason in customer.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
             request.message_success("Successfully deleted this customer")
             customer.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'tickets/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'tickets/trash.html', {'title': _("Confirm delete"),
                                                                      'customer': customer,
-                                                                     'canBeDeleted': customer.canBeDeleted()[0],
-                                                                     'reasons': customer.canBeDeleted()[1],
+                                                                     'can_be_deleted': customer.can_be_deleted()[0],
+                                                                     'reasons': customer.can_be_deleted()[1],
                                                                      })
 
 def add(request):
     return form(request)
 
 def edit(request, id):
-    ticket = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+    ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
 
     if request.method == "POST":
         old_ticket = copy.copy(ticket)
@@ -67,7 +67,7 @@ def edit(request, id):
     else:
         ticket_form = EditTicketForm(instance=ticket)
 
-    return render_with_request(request, "tickets/edit.html", {'title': _('Update Ticket'),
+    return render(request, "tickets/edit.html", {'title': _('Update Ticket'),
                                                               'ticket': ticket,
                                                               'ticket_form': ticket_form,
                                                               })
@@ -75,7 +75,7 @@ def edit(request, id):
 def form(request, id=False):
 
     if id:
-        instance = Core.current_user().getPermittedObjects("VIEW", Ticket).get(id=id)
+        instance = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
         msg = _("Ticket changed")
     else:
         instance = Ticket()
@@ -93,7 +93,7 @@ def form(request, id=False):
     else:
         form = TicketForm(instance=instance)
 
-    return render_with_request(request, "tickets/form.html", {'title': _('Ticket'),
+    return render(request, "tickets/form.html", {'title': _('Ticket'),
                                                               'ticket':instance,
                                                               'form': form,
                                                               })

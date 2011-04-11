@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Django settings for focus project.
 
 import os.path
 
@@ -10,7 +9,7 @@ TEMPLATE_DEBUG = DEBUG
 
 SERVER_EMAIL = 'fredrik+django@fncit.no'
 NO_REPLY_EMAIL = 'no-reply@focustime.no'
-DEBUG_EMAIL = "focustimeno@gmail.com"
+DEBUG_EMAIL = "fredrik+debug@fncit.no"
 
 ADMINS = (
 (u'Fredrik Nygård Carlsen', 'fredrik@fncit.no'),
@@ -18,27 +17,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'project.db'
     }
 }
-
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'focus_test',
-        'USER': 'root',
-        'PORT': '8889',
-        'HOST':'127.0.0.1',
-        'PASSWORD': 'root',
-    }
-}
-
-"""
 
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
@@ -58,7 +42,7 @@ SITE_URL = "http://focus.fncit.no"
 
 USE_I18N = True
 
-LOGIN_URL = "/accounts/login"
+LOGIN_URL = "/accounts/login/"
 
 FORCE_SCRIPT_NAME = ""
 
@@ -96,12 +80,21 @@ BASE_PATH + '/files/media/',
 INTERNAL_IPS = ('127.0.0.1')
 
 INSTALLED_APPS = (
+
+#Django stuff
 'django.contrib.contenttypes',
 'django.contrib.sessions',
 'django.contrib.staticfiles',
 
-#All the applicaitons
+#Core
+'core.auth.user',
+'core.auth.group',
+'core.auth.company',
+'core.auth.log',
+'core.auth.permission',
 'core',
+
+#Apps
 'app.admin',
 'app.company',
 'app.announcements',

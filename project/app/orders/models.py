@@ -59,7 +59,7 @@ class Order(PersistentModel):
             return True
         return False
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.orders.views.view', args=("%s" % self.id,))
 
     def haveCompletedAllTasks(self):

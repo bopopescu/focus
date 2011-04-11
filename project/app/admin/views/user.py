@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.shortcuts import get_object_or_404, HttpResponse
-from django.db.models import Q
-from core.shortcuts import *
-from core.views import updateTimeout
-from core.decorators import *
-from core.models import User, Permission, Log
-from app.admin.forms import *
+from django.shortcuts import get_object_or_404, render, redirect
+from app.admin.forms import HourRegistrationManuallyForm, UserForm
+from core import Core
+from core.decorators import login_required, require_permission
+from core.views import update_timeout
 from django.utils.translation import ugettext as _
 from core.mail import send_mail
+from core.auth.user.models import User
+from core.auth.permission.models import Permission
 
 @login_required()
 def overview(request):
-    updateTimeout(request)
-    Users = User.objects.inCompany()
-    return render_with_request(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
+    update_timeout(request)
+    Users = User.objects.filter_current_company()
+    return render(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
 
 @login_required()
 def grant_permissions(request):
     Users = User.objects.all()
     Permissions = Permission.objects.all()
-    return render_with_request(request, 'admin/users/grant_permssions.html',
+    return render(request, 'admin/users/grant_permssions.html',
                                {'title': _("Users"), 'users': Users, 'permissions': Permissions})
 
 @login_required()
@@ -47,7 +47,7 @@ def changeCanLogin(request, id):
     u.save()
     return redirect(view, id)
 
-def generateNewPassordForUser(user):
+def generate_new_password_for_user(user):
     import string
     import random
 
@@ -72,10 +72,10 @@ def generateNewPassordForUser(user):
     return ret
 
 @login_required()
-def sendGeneratedPassword(request, id):
+def send_generated_password_to_user(request, id):
     user = get_object_or_404(User, id=id, company=Core.current_user().get_company())
 
-    ret = generateNewPassordForUser(user)
+    ret = generate_new_password_for_user(user)
 
     if settings.DEBUG:
         print "Nytt passord er: %s" % ret
@@ -84,19 +84,18 @@ def sendGeneratedPassword(request, id):
 
     return redirect(view, id)
 
-@require_permission("EDIT", User, "id")
 def history(request, id):
     user = User.objects.get(id=id)
     history = user.logs.all()
-    return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
-                                                               'user': user,
+    return render(request, 'admin/log.html', {'title': _("Latest events"),
+                                                               'userCard': user,
                                                                'logs': history[::-1][0:150]})
 
 @login_required()
 def view(request, id):
     user = User.objects.get(id=id)
 
-    return render_with_request(request, 'admin/users/view.html', {'title': _("User"),
+    return render(request, 'admin/users/view.html', {'title': _("User"),
                                                                   'userCard': user,
                                                                   })
 
@@ -105,7 +104,7 @@ def permissions(request, id):
     user = User.objects.get(id=id)
     Permissions = user.get_permissions()
 
-    return render_with_request(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
+    return render(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
                                                                    'userCard': user,
                                                                    'permissions': Permissions,
                                                                    })
@@ -115,23 +114,23 @@ def trash(request, id):
     instance = User.objects.get(id=id)
 
     if request.method == "POST":
-        if not instance.canBeDeleted()[0]:
+        if not instance.can_be_deleted()[0]:
             request.message_error("You can't delete this user because: ")
-            for reason in instance.canBeDeleted()[1]:
+            for reason in instance.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
             request.message_success("Successfully deleted this user")
-            customer.trash()
+            instance.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'customers/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'customers/trash.html', {'title': _("Confirm delete"),
                                                                      'user': instance,
-                                                                     'canBeDeleted': instance.canBeDeleted()[0],
-                                                                     'reasons': instance.canBeDeleted()[1],
+                                                                     'can_be_deleted': instance.can_be_deleted()[0],
+                                                                     'reasons': instance.can_be_deleted()[1],
                                                                      })
 
 @login_required()
-def setHourRegistrationLimitsManually (request, id):
+def set_hourregistration_limits (request, id):
     instance = get_object_or_404(User, id=id)
     msg = _("User successfully edited")
 
@@ -151,7 +150,7 @@ def setHourRegistrationLimitsManually (request, id):
     else:
         form = HourRegistrationManuallyForm(instance=instance)
 
-    return render_with_request(request, "admin/users/form.html", {'title': _("Change user"),
+    return render(request, "admin/users/form.html", {'title': _("Change user"),
                                                                   'userCard': instance,
                                                                   'form': form})
 
@@ -183,11 +182,11 @@ def form (request, id=False):
 
             if new:
                 #send new generated password to the new user
-                sendGeneratedPassword(request, o.id)
+                send_generated_password_to_user(request, o.id)
 
                 #Add the new user to allemployee group of the company
                 if Core.current_user().get_company_allemployeesgroup():
-                    Core.current_user().get_company_allemployeesgroup().addMember(o)
+                    Core.current_user().get_company_allemployeesgroup().add_member(o)
 
             request.message_success(msg)
 
@@ -197,5 +196,5 @@ def form (request, id=False):
     else:
         form = UserForm(instance=instance)
 
-    return render_with_request(request, "admin/users/form.html",
+    return render(request, "admin/users/form.html",
                                {'title': _("User"), 'userCard': instance, 'form': form})

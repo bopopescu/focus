@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import os
-from django.db import models
 from core import Core
+from django.db import models
 from core.models import PersistentModel
 from django.core import urlresolvers
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -19,17 +19,17 @@ class Announcement(PersistentModel):
     def __unicode__(self):
         return self.title
 
-    def getAttachment(self):
+    def get_attachment(self):
         if self.attachment:
             if os.path.join("/file/", self.attachment.name):
                 return os.path.join("/file/", self.attachment.name)
 
         return None
 
-    def getViewUrl(self):
+    def get_view_url(self):
         return urlresolvers.reverse('app.announcements.views.view', args=("%s" % self.id,))
 
-    def getEditUrl(self):
+    def get_edit_url(self):
         return urlresolvers.reverse('app.announcements.views.edit', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):

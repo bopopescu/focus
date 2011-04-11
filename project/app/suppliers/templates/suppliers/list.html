@@ -29,7 +29,7 @@
         <tbody>
         {% for supplier in suppliers %}
             <tr>
-                <td><a href="{{ supplier.getViewUrl }}">{{ supplier.name }}</a></td>
+                <td><a href="{{ supplier.get_view_url }}">{{ supplier.name }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

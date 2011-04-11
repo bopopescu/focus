@@ -23,8 +23,8 @@ def delete(request, id):
 def view(request, id):
     file = File.objects.filter().get(id=id)
 
-    whoCanSeeThis = file.whoHasPermissionTo('view')
-    return render_with_request(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
+    whoCanSeeThis = file.who_has_permission_to('view')
+    return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
                                                             'file': file,
                                                             'whoCanSeeThis': whoCanSeeThis})
 
@@ -62,4 +62,4 @@ def form (request, id=False, folderID=None):
     else:
         form = FolderForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Mappe', 'form': form})
+    return render(request, "form.html", {'title': 'Mappe', 'form': form})

@@ -12,7 +12,7 @@
         <li><a class="{% active request "edit$" %}" href="{% url app.contacts.views.edit contact.id %}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
 
-        <li><a class="{% active request "image" %}" href="{% url app.contacts.views.editImage contact.id %}"><img
+        <li><a class="{% active request "image" %}" href="{% url app.contacts.views.edit_image contact.id %}"><img
                 src="{{ STATIC_URL }}img/person.png" width="24" height="24" alt="Mail"/>{% trans "CHANGE IMAGE" %}</a>
         </li>
         <li><a class="{% active request "trash" %}" href="{% url app.contacts.views.trash contact.id %}"><img

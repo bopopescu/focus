@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from django import forms
-from core.models import Company, Group
+from core.auth.company.models import Company
+from core.auth.group.models import Group
 
 class CompanyForm(ModelForm):
     class Meta:
@@ -10,8 +11,8 @@ class CompanyForm(ModelForm):
 
     def __init__(self, *args, **kwrds):
         super(CompanyForm, self).__init__(*args, **kwrds)
-        self.fields['adminGroup'].queryset = Group.objects.inCompany()
-        self.fields['allEmployeesGroup'].queryset = Group.objects.inCompany()
+        self.fields['adminGroup'].queryset = Group.objects.filter_current_company()
+        self.fields['allEmployeesGroup'].queryset = Group.objects.filter_current_company()
 
     def clean_MonthsStillValidForEditWhenEditing(self):
         months = int(self.cleaned_data['MonthsStillValidForEditWhenEditing'])

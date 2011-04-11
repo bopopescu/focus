@@ -11,37 +11,38 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = ('pid', 'name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
-                  'price', 'price_out', 'max_discount','priceVal', 'supplier',)
+                  'price', 'price_out', 'max_discount', 'priceVal', 'supplier',)
 
     def __init__(self, *args, **kwrds):
         super(ProductForm, self).__init__(*args, **kwrds)
 
         self.fields['unitForSize'].widget = SelectWithPop(UnitsForSizes)
-        self.fields['unitForSize'].queryset = UnitsForSizes.objects.inCompany()
-
-        self.fields['priceVal'].widget = SelectWithPop(Currency)
-        self.fields['priceVal'].queryset = Currency.objects.all()
+        self.fields['unitForSize'].queryset = UnitsForSizes.objects.filter_current_company()
 
         self.fields['productGroup'].widget = SelectWithPop(ProductGroup)
-        self.fields['productGroup'].queryset = ProductGroup.objects.inCompany()
+        self.fields['productGroup'].queryset = ProductGroup.objects.filter_current_company()
 
         self.fields['supplier'].widget = SelectWithPop(Supplier)
-        self.fields['supplier'].queryset = Supplier.objects.inCompany()
+        self.fields['supplier'].queryset = Supplier.objects.filter_current_company()
+
 
 class ProductGroupForm(ModelForm):
     class Meta:
         model = Product
         fields = ('name',)
 
+
 class CurrencyForm(ModelForm):
     class Meta:
         model = Currency
-        fields = ('name', 'sign', 'value',)
+        fields = ('name', 'value', 'iso',)
+
 
 class UnitsForSizesForm(ModelForm):
     class Meta:
         model = UnitsForSizes
         fields = ('name',)
+
 
 class ProductFileForm(ModelForm):
     class Meta:
@@ -53,9 +54,11 @@ class ProductAutocompleteWidget(JQueryAutoComplete):
     def __init__(self):
         JQueryAutoComplete.__init__(self, source=partial(reverse, 'app.stock.views.product.autocomplete'))
 
+
 class ProductField(forms.Field):
     widget = ProductAutocompleteWidget() # Default widget to use when rendering this type of Field.
-    def __init__(self,  *args, **kwargs):
+
+    def __init__(self, *args, **kwargs):
         #self.max_length, self.min_length = max_length, min_length
         super(ProductField, self).__init__(*args, **kwargs)
 
@@ -65,5 +68,5 @@ class ProductField(forms.Field):
         try:
             product = Product.objects.get(name=value)
         except:
-            raise forms.ValidationError(_("Product with name %(name)s does not exist")  % {'name':value})
+            raise forms.ValidationError(_("Product with name %(name)s does not exist") % {'name': value})
         return product

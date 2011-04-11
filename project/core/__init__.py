@@ -179,4 +179,4 @@ def load_initial_data(app, **kwargs):
 
 signals.post_migrate.connect(load_initial_data)
 
-from core.models import User, AnonymousUser
+from core.auth.user.models import AnonymousUser, User

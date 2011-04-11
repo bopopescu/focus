@@ -1,14 +1,23 @@
-<table>
-    <tr>
-        <th>{% trans "Milestones" %}</th>
-    </tr>
-    <a href="{% url app.projects.views.milestone.add project.id %}">{% trans "New milestone" %}</a>
+{% extends "base.html" %}
+{% load i18n %}
 
 
-    {% for milestone in project.milestones.all %}
+{% block sidebar %}
+    {% include "projects/sidebar.html" %}
+{% endblock %}
+
+
+{% block maincontent %}
+    <table>
         <tr>
-            <td>{{ milestone.name }}</td>
-            <td><a href="{% url app.projects.views.milestone.edit project.id, milestone.id %}">edit</a></td>
+            <th>{% trans "Milestones" %}</th>
         </tr>
-    {% endfor %}
-</table>
+        <a href="{% url app.projects.views.milestone.add project.id %}">{% trans "New milestone" %}</a>
+        {% for milestone in project.milestones.all %}
+            <tr>
+                <td>{{ milestone.name }}</td>
+                <td><a href="{% url app.projects.views.milestone.edit project.id, milestone.id %}">edit</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

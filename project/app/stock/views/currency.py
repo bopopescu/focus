@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
-from core.views import  updateTimeout
+from core.views import  update_timeout
 from app.stock.models import Currency
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
@@ -12,9 +12,9 @@ from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
-    updateTimeout(request)
+    update_timeout(request)
     currencies = Currency.objects.all()
-    return render_with_request(request, 'stock/currencies/list.html', {'title': 'Produkter', 'currencies': currencies})
+    return render(request, 'stock/currencies/list.html', {'title': 'Produkter', 'currencies': currencies})
 
 @login_required()
 def add(request):
@@ -69,7 +69,7 @@ def form (request, id=False):
     else:
         form = CurrencyForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Valuta', 'form': form})
+    return render(request, "form.html", {'title': 'Valuta', 'form': form})
 
 
 from app.stock.forms import CurrencyForm

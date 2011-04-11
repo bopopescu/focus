@@ -31,7 +31,7 @@
                 <tr>
                     <td></td>
                     <td style="text-align:left;">{{ perm.id }} | <a
-                            href='{{perm.get_object.getViewUrl}}'>{{ perm.get_object }}</a>
+                            href='{{perm.get_object.get_view_url}}'>{{ perm.get_object }}</a>
                     </td>
                     <td>
                         {% for action in perm.get_valid_actions %}

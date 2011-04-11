@@ -11,7 +11,7 @@ urlpatterns = patterns('app.contacts.views',
                        url(r'^add_ajax/$', 'add_ajax'),
 
                        url(r'^(?P<id>\d+)/edit$', 'edit'),
-                       url(r'^(?P<id>\d+)/editimage$', 'editImage'),
+                       url(r'^(?P<id>\d+)/editimage$', 'edit_image'),
                        url(r'^(?P<id>\d+)/history$', 'history'),
                        url(r'^(?P<id>\d+)/view$', 'view'),
                        url(r'^(?P<id>\d+)/delete$', 'trash'),

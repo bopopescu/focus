@@ -2,13 +2,15 @@
 from core.widgets import *
 from django.forms.models import ModelForm
 from django import forms
-from core.models import User, Group, Company
 from django.utils.translation import ugettext as _
+from core.auth.user.models import User
+from core.auth.group.models import Group
 
 class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email")
+
 
 class HourRegistrationManuallyForm(ModelForm):
     class Meta:
@@ -24,20 +26,24 @@ class HourRegistrationManuallyForm(ModelForm):
         self.fields['validEditHourRegistrationsFromDate'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['validEditHourRegistrationsFromDate'].input_formats = ["%d.%m.%Y"]
 
+
 class GroupForm(ModelForm):
     class Meta:
         model = Group
         fields = ('name',)
+
 
 class UserProfileForm(ModelForm):
     class Meta:
         model = User
         fields = ('email',)
 
+
 class UserProfileImageForm(ModelForm):
     class Meta:
         model = User
         fields = ('profileImage',)
+
 
 class UserProfilePasswordForm(forms.Form):
     old_password = forms.CharField(label="Gammelt passord", widget=forms.PasswordInput)
@@ -75,7 +81,7 @@ class UserProfilePasswordForm(forms.Form):
 
         if new_password != new_password_copy:
             self._errors["new_password_copy"] = self.error_class(
-                    [_("New passord copy dont match new password. Try again.")])
+                [_("New passord copy dont match new password. Try again.")])
             del cleaned_data['new_password_copy']
 
         return cleaned_data

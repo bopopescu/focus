@@ -19,8 +19,8 @@ class ProjectForm(ModelForm):
         self.fields['deliveryDateDeadline'].input_formats = ["%d.%m.%Y"]
 
         self.fields['customer'].widget = SelectWithPop(Customer)
-        self.fields['customer'].queryset = Customer.objects.inCompany()
-        self.fields['responsible'].queryset = User.objects.inCompany()
+        self.fields['customer'].queryset = Customer.objects.filter_current_company()
+        self.fields['responsible'].queryset = User.objects.filter_current_company()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -28,7 +28,7 @@ class ProjectForm(ModelForm):
     def clean_pid(self):
         pid = self.cleaned_data['pid']
 
-        projects = Project.objects.inCompany()
+        projects = Project.objects.filter_current_company()
         for i in projects:
             if self.id == i.id:
                 continue
@@ -45,8 +45,8 @@ class ProjectFormSimple(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProjectFormSimple, self).__init__(*args, **kwargs)
-        self.fields['customer'].queryset = Customer.objects.inCompany()
-        self.fields['responsible'].queryset = User.objects.inCompany()
+        self.fields['customer'].queryset = Customer.objects.filter_current_company()
+        self.fields['responsible'].queryset = User.objects.filter_current_company()
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
@@ -54,7 +54,7 @@ class ProjectFormSimple(ModelForm):
     def clean_pid(self):
         pid = self.cleaned_data['pid']
 
-        projects = Project.objects.inCompany()
+        projects = Project.objects.filter_current_company()
         for i in projects:
             if self.id == i.id:
                 continue

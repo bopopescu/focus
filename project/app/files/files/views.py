@@ -2,7 +2,7 @@
 
 from app.files.forms import *
 from core.shortcuts import *
-from core.views import updateTimeout
+from core.views import update_timeout
 from core.decorators import *
 from app.files.models import File, Folder
 
@@ -11,9 +11,9 @@ def overview(request):
     folders = Folder.objects.filter(parent=None, creator=Core.current_user())
     files = File.objects.filter(folder=None, creator=Core.current_user())
 
-    updateTimeout(request)
+    update_timeout(request)
 
-    return render_with_request(request, 'files/list.html', {'title': 'Filer',
+    return render(request, 'files/list.html', {'title': 'Filer',
                                                             'files': files,
                                                             'folders': folders,
                                                             })
@@ -25,7 +25,7 @@ def folder(request, folderID):
 
     files = File.objects.filter(folder=folder, creator=Core.current_user())
 
-    return render_with_request(request, 'files/list.html', {'title': 'Filer',
+    return render(request, 'files/list.html', {'title': 'Filer',
                                                             'folder': folder,
                                                             'files': files,
                                                             'folders': folders,
@@ -75,8 +75,8 @@ def delete(request, id):
 def view(request, id):
     file = File.objects.filter().get(id=id)
 
-    whoCanSeeThis = file.whoHasPermissionTo('view')
-    return render_with_request(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
+    whoCanSeeThis = file.who_has_permission_to('view')
+    return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
                                                             'file': file,
                                                             'whoCanSeeThis': whoCanSeeThis})
 
@@ -130,6 +130,6 @@ def form (request, id=False, folderID=None):
     else:
         form = FileForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Fil',
+    return render(request, "form.html", {'title': 'Fil',
                                                       'form': form,
                                                       'folder': folder})

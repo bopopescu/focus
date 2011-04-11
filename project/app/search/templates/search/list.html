@@ -17,7 +17,7 @@
         <tbody>
         {% for o in objects %}
             <tr>
-                <td><a href="{{ o.getViewUrl }}">{{ o }}</a></td>
+                <td><a href="{{ o.get_view_url }}">{{ o }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

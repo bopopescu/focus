@@ -1,32 +1,38 @@
-from django.http import HttpResponse
 from app.announcements.models import Announcement
+from app.company.forms import CompanyForm, newCompanyForm
 from app.contacts.models import Contact
 from app.customers.models import Customer
 from app.orders.models import Order
 from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
-from forms import *
-from core.models import Company, Group, Log, Notification
-from core.shortcuts import *
-from core.decorators import *
-from core.views import updateTimeout
+from core.decorators import require_permission
+from core.views import update_timeout
+from core.auth.company.models import Company
+from core.auth.user.models import User
+from core.auth.group.models import Group
+from core.auth.log.models import Log, Notification
+from django.shortcuts import render, redirect
+
 
 @require_permission("MANAGE", Company)
 def overview(request):
-    updateTimeout(request)
+    update_timeout(request)
     companies = Company.objects.all()
 
-    return render_with_request(request, 'company/list.html', {'title': 'Firmaer',
-                                                              'companies': companies})
+    return render(request, 'company/list.html', {'title': 'Firmaer',
+                                                 'companies': companies})
+
 
 @require_permission("MANAGE", Company)
 def add(request):
     return newForm(request)
 
+
 @require_permission("MANAGE", Company)
 def edit(request, id):
     return form(request, id)
+
 
 def form (request, id=False):
     if id:
@@ -50,13 +56,14 @@ def form (request, id=False):
     else:
         form = CompanyForm(instance=instance)
 
-    return render_with_request(request, "company/form.html", {'title': 'Kunde', 'form': form})
+    return render(request, "company/form.html", {'title': 'Kunde', 'form': form})
+
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
-    adminGroup.saveWithoutCreatePermissions()
+    adminGroup.save_without_permissions()
     allEmployeesGroup = Group(name=allEmployeesGroup)
-    allEmployeesGroup.saveWithoutCreatePermissions()
+    allEmployeesGroup.save_without_permissions()
     company = Company(name=name, adminGroup=adminGroup, allEmployeesGroup=allEmployeesGroup)
     company.save()
     #Create the admin user
@@ -68,7 +75,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     adminGroup.grant_permissions("ALL", adminGroup)
     adminGroup.grant_permissions("ALL", allEmployeesGroup)
     #Add admin user to admin group
-    adminGroup.addMember(user)
+    adminGroup.add_member(user)
     #Set the company fields on groups
     adminGroup.company = company
     adminGroup.save()
@@ -104,6 +111,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
 
     return company, user
 
+
 @require_permission("MANAGE", Company)
 def newForm(request):
     if request.method == 'POST': # If the form has been submitted...
@@ -122,4 +130,4 @@ def newForm(request):
     else:
         form = newCompanyForm() # An unbound form
 
-    return render_with_request(request, "company/form.html", {'title': 'Nytt firma', 'form': form})
+    return render(request, "company/form.html", {'title': 'Nytt firma', 'form': form})

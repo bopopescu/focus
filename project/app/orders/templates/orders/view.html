@@ -87,11 +87,11 @@
                 {% for task in order.tasks.all %}
                     <tr>
                         {% if task.done %}
-                            <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
+                            <td><a href="{% url app.orders.views.change_status_task task.id %}"><img
                                     src="/media/images/icons/checked.png" style="vertical-align:middle">{{ task }}</a>
                             </td>
                         {% else %}
-                            <td><a href="{% url app.orders.views.changeStatusTask task.id %}"><img
+                            <td><a href="{% url app.orders.views.change_status_task task.id %}"><img
                                     src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{ task }}</a>
                             </td>
                         {% endif %}
@@ -100,7 +100,7 @@
 
                 {% endfor %}
             </table>
-            <form enctype="multipart/form-data" action="{% url app.orders.views.addTask order.id %}" method="post">
+            <form enctype="multipart/form-data" action="{% url app.orders.views.add_task order.id %}" method="post">
                 <fieldset class="module aligned ">
 
                     {% for field in taskForm %}

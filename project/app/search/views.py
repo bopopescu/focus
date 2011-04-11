@@ -2,7 +2,7 @@ from app.customers.models import Customer
 from app.projects.models import Project
 from app.contacts.models import Contact
 from core.decorators import login_required
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 from app.orders.models import Order
 from app.suppliers.models import Supplier
 from app.stock.models import Product
@@ -27,7 +27,7 @@ def search(request):
     for o in searchIn.keys():
         for i in searchIn[o]:
             kwargs = {'%s__%s' % ('%s' % i, 'icontains'): '%s' % term}
-            k = o.objects.inCompany().filter(**kwargs)
+            k = o.objects.filter_current_company().filter(**kwargs)
 
             for s in k:
                 if s in result:
@@ -40,5 +40,5 @@ def search(request):
     for i in result:
         v.append(i[0])
 
-    return render_with_request(request, 'search/list.html', {'title': 'Resultat',
+    return render(request, 'search/list.html', {'title': 'Resultat',
                                                              'objects': v})

@@ -1,39 +1,38 @@
 from django.contrib.contenttypes.models import ContentType
-from django.core.mail import send_mail
 from django.http import HttpResponse
 from core.models import Log
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
-from core.views import updateTimeout
+from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
 
 @require_permission("LIST", Customer)
 def overview(request):
-    updateTimeout(request)
-    customers = Core.current_user().getPermittedObjects("VIEW", Customer).filter(trashed=False)
+    update_timeout(request)
+    customers = Core.current_user().get_permitted_objects("VIEW", Customer).filter(trashed=False)
 
-    return render_with_request(request, 'customers/list.html', {'title': _('Customers'),
+    return render(request, 'customers/list.html', {'title': _('Customers'),
                                                                 'customers': customers})
 
 @require_permission("LISTDELETED", Customer)
 def overview_trashed(request):
     customers = Customer.all_objects.filter(trashed=True, company=Core.current_user().get_company())
-    return render_with_request(request, 'customers/list.html', {'title': _('Deleted customers'),
+    return render(request, 'customers/list.html', {'title': _('Deleted customers'),
                                                                 'customers': customers})
 
 @require_permission("LISTALL", Customer)
 def overview_all(request):
     customers = Customer.objects.all()
-    return render_with_request(request, 'customers/list.html', {'title': _("All active customers"),
+    return render(request, 'customers/list.html', {'title': _("All active customers"),
                                                                 'customers': customers})
 
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
-    customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
-    return render_with_request(request, 'customers/view.html', {'title': _('Customer: ') + customer.full_name,
+    customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
+    return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.full_name,
                                                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
@@ -41,7 +40,7 @@ def add_ajax(request, id=None):
 
     customer = Customer()
     if id:
-        customer = Customer.objects.inCompany().get(id=id)
+        customer = Customer.objects.filter_current_company().get(id=id)
 
     form = CustomerFormSimple(request.POST, instance=customer)
 
@@ -66,7 +65,7 @@ def history(request, id):
     history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
                                  object_id=instance.id)
 
-    return render_with_request(request, 'customers/log.html', {'title': _("Latest events"),
+    return render(request, 'customers/log.html', {'title': _("Latest events"),
                                                                'customer': instance,
                                                                'logs': history[::-1][0:150]})
 
@@ -78,8 +77,8 @@ def list_contacts(request, id):
     else:
         form = ContactToCustomerForm()
 
-    customer = Core.current_user().getPermittedObjects("VIEW", Customer).get(id=id)
-    return render_with_request(request, 'customers/contacts.html',
+    customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
+    return render(request, 'customers/contacts.html',
                                {'title': unicode(customer.full_name) + " " + _('contacts'),
                                 'form': form,
                                 'customer': customer})
@@ -98,19 +97,19 @@ def trash(request, id):
     customer = Customer.objects.get(id=id)
 
     if request.method == "POST":
-        if not customer.canBeDeleted()[0]:
+        if not customer.can_be_deleted()[0]:
             request.message_error("You can't delete this customer because: ")
-            for reason in customer.canBeDeleted()[1]:
+            for reason in customer.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
             request.message_success("Successfully deleted this customer")
             customer.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'customers/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'customers/trash.html', {'title': _("Confirm delete"),
                                                                      'customer': customer,
-                                                                     'canBeDeleted': customer.canBeDeleted()[0],
-                                                                     'reasons': customer.canBeDeleted()[1],
+                                                                     'can_be_deleted': customer.can_be_deleted()[0],
+                                                                     'reasons': customer.can_be_deleted()[1],
                                                                      })
 
 @require_permission("DELETE", Customer, "id")
@@ -146,4 +145,4 @@ def form (request, id=False):
     else:
         form = CustomerForm(instance=instance)
 
-    return render_with_request(request, "customers/form.html", {'title': title, 'customer': instance, 'form': form})
+    return render(request, "customers/form.html", {'title': title, 'customer': instance, 'form': form})

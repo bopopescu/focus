@@ -36,7 +36,7 @@
         {% for contact in contacts %}
             <tr>
                 <td><img style="vertical-align:middle;" src="{{ contact.image|thumbnail_with_max_side:"130" }}"></td>
-                <td><a href="{{ contact.getViewUrl }}">{{ contact.full_name }}</a></td>
+                <td><a href="{{ contact.get_view_url }}">{{ contact.full_name }}</a></td>
                 <td>{{ contact.address }}</td>
                 <td>{{ contact.phone }}</td>
                 <td>{{ contact.email }}</td>
