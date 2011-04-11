@@ -2,13 +2,13 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import ugettext as _
 from app.customers.models import Customer
 from core.models import Log
 from core.utils import suggest_ajax_parse_arguments
 from forms import *
-from core.shortcuts import render_with_request, comment_block
+from core.shortcuts import comment_block
 from core.decorators import *
 from core.views import update_timeout
 from django.utils import simplejson
@@ -18,7 +18,7 @@ from django.utils.simplejson import JSONEncoder
 def overview(request):
     update_timeout(request)
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False)
-    return render_with_request(request, 'contacts/list.html', {'title': _('Contacts'), 'contacts': contacts})
+    return render(request, 'contacts/list.html', {'title': _('Contacts'), 'contacts': contacts})
 
 
 def list_ajax(request, query, limit):
@@ -38,13 +38,13 @@ def list_ajax(request, query, limit):
 @login_required()
 def overview_trashed(request):
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=True)
-    return render_with_request(request, 'contacts/list.html', {'title': _('Deleted contacts'), 'contacts': contacts})
+    return render(request, 'contacts/list.html', {'title': _('Deleted contacts'), 'contacts': contacts})
 
 
 @login_required()
 def overview_all(request):
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact)
-    return render_with_request(request, 'contacts/list.html',
+    return render(request, 'contacts/list.html',
                                {'title': _("All deleted contacts"), 'contacts': contacts})
 
 
@@ -60,7 +60,7 @@ def history(request, id):
     history = Log.objects.filter(content_type=ContentType.objects.get_for_model(contact.__class__),
                                  object_id=contact.id)
 
-    return render_with_request(request, 'contacts/log.html', {'title': _("Latest events"),
+    return render(request, 'contacts/log.html', {'title': _("Latest events"),
                                                               'contact': contact,
                                                               'logs': history[::-1][0:150]})
 
@@ -74,7 +74,7 @@ def edit(request, id):
 def view(request, id):
     contact = get_object_or_404(Contact, id=id)
     comments = comment_block(request, contact)
-    return render_with_request(request, 'contacts/view.html',
+    return render(request, 'contacts/view.html',
                                {'title': _('Contact'), 'comments': comments, 'contact': contact})
 
 
@@ -92,7 +92,7 @@ def trash(request, id):
             instance.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'contacts/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'contacts/trash.html', {'title': _("Confirm delete"),
                                                                     'contact': instance,
                                                                     'can_be_deleted': instance.can_be_deleted()[0],
                                                                     'reasons': instance.can_be_deleted()[1],
@@ -150,7 +150,7 @@ def edit_image(request, id):
     else:
         form = ContactImageForm(instance=instance, initial={"image": None})
 
-    return render_with_request(request, "contacts/form.html", {'title': _("Contact"),
+    return render(request, "contacts/form.html", {'title': _("Contact"),
                                                                'form': form,
                                                                'contact': instance,
                                                                })
@@ -179,7 +179,7 @@ def form (request, id=False):
     else:
         form = ContactForm(instance=instance)
 
-    return render_with_request(request, "contacts/form.html", {'title': _("Contact"),
+    return render(request, "contacts/form.html", {'title': _("Contact"),
                                                                'form': form,
                                                                'contact': instance,
                                                                })

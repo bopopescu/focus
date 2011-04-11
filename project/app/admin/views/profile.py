@@ -2,7 +2,7 @@
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from app.admin.forms import UserProfileForm, UserProfileImageForm, UserProfilePasswordForm
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 
 def edit(request):
     try:
@@ -23,7 +23,7 @@ def edit(request):
     else:
         form = UserProfileForm(instance=instance, initial={"profileImage": None})
 
-    return render_with_request(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form})
+    return render(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form})
 
 
 def change_profile_image(request):
@@ -45,7 +45,7 @@ def change_profile_image(request):
     else:
         form = UserProfileImageForm(instance=instance, initial={"profileImage": None})
 
-    return render_with_request(request, "admin/profile/formimage.html", {'title': _('Profile'), 'form': form})
+    return render(request, "admin/profile/formimage.html", {'title': _('Profile'), 'form': form})
 
 
 def change_password(request):
@@ -64,5 +64,5 @@ def change_password(request):
     else:
         form = UserProfilePasswordForm(user=request.user)
 
-    return render_with_request(request, "admin/profile/formpassword.html",
+    return render(request, "admin/profile/formpassword.html",
                                {"title": _("Change password"), 'form': form})

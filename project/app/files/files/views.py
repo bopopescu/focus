@@ -13,7 +13,7 @@ def overview(request):
 
     update_timeout(request)
 
-    return render_with_request(request, 'files/list.html', {'title': 'Filer',
+    return render(request, 'files/list.html', {'title': 'Filer',
                                                             'files': files,
                                                             'folders': folders,
                                                             })
@@ -25,7 +25,7 @@ def folder(request, folderID):
 
     files = File.objects.filter(folder=folder, creator=Core.current_user())
 
-    return render_with_request(request, 'files/list.html', {'title': 'Filer',
+    return render(request, 'files/list.html', {'title': 'Filer',
                                                             'folder': folder,
                                                             'files': files,
                                                             'folders': folders,
@@ -76,7 +76,7 @@ def view(request, id):
     file = File.objects.filter().get(id=id)
 
     whoCanSeeThis = file.who_has_permission_to('view')
-    return render_with_request(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
+    return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
                                                             'file': file,
                                                             'whoCanSeeThis': whoCanSeeThis})
 
@@ -130,6 +130,6 @@ def form (request, id=False, folderID=None):
     else:
         form = FileForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Fil',
+    return render(request, "form.html", {'title': 'Fil',
                                                       'form': form,
                                                       'folder': folder})

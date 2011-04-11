@@ -7,7 +7,7 @@ from app.projects.forms import ProjectForm, ProjectFormSimple
 from app.projects.models import Project
 from core import Core
 from core.models import Log
-from core.shortcuts import render_with_request, comment_block
+from core.shortcuts import comment_block
 from core.decorators import require_permission
 from core.views import update_timeout
 from django.utils import simplejson
@@ -18,27 +18,27 @@ from django.contrib.contenttypes.models import ContentType
 def overview(request):
     update_timeout(request)
     projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=False)
-    return render_with_request(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
+    return render(request, 'projects/list.html', {'title': 'Prosjekter', 'projects': projects})
 
 
 @require_permission("LIST", Project)
 def timeline(request):
     update_timeout(request)
     projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=False)
-    return render_with_request(request, 'projects/timeline.html',
+    return render(request, 'projects/timeline.html',
                                {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
 
 @require_permission("LIST", Project)
 def overview_trashed(request):
     projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=True)
-    return render_with_request(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
+    return render(request, 'projects/list.html', {'title': 'Slettede prosjekter', 'projects': projects})
 
 
 @require_permission("LIST", Project)
 def overview_all(request):
     projects = Project.objects.all()
-    return render_with_request(request, 'projects/list.html', {'title': 'Alle prosjekter', 'projects': projects})
+    return render(request, 'projects/list.html', {'title': 'Alle prosjekter', 'projects': projects})
 
 
 @require_permission("VIEW", Project, "id")
@@ -52,7 +52,7 @@ def view(request, id):
     project = Project.objects.get(id=id)
     comments = comment_block(request, project)
     whoCanSeeThis = project.who_has_permission_to('view')
-    return render_with_request(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
+    return render(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
                                                                'comments': comments,
                                                                'project': project,
                                                                'whoCanSeeThis': whoCanSeeThis,
@@ -63,7 +63,7 @@ def view(request, id):
 def view_orders(request, id):
     project = Project.objects.get(id=id)
 
-    return render_with_request(request, 'projects/orders.html', {'title': 'Prosjekt: %s orders' % project,
+    return render(request, 'projects/orders.html', {'title': 'Prosjekt: %s orders' % project,
                                                                  'project': project,
                                                                  'orders': project.orders.all(),
                                                                  })
@@ -73,7 +73,7 @@ def view_orders(request, id):
 def history(request, id):
     instance = get_object_or_404(Project, id=id, deleted=False)
     history = instance.history()
-    return render_with_request(request, 'projects/log.html', {'title': _("Latest events"),
+    return render(request, 'projects/log.html', {'title': _("Latest events"),
                                                               'project': instance,
                                                               'logs': history[::-1][0:150]})
 
@@ -102,7 +102,7 @@ def trash(request, id):
             instance.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'projects/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'projects/trash.html', {'title': _("Confirm delete"),
                                                                     'project': instance,
                                                                     'can_be_deleted': instance.can_be_deleted()[0],
                                                                     'reasons': instance.can_be_deleted()[1],
@@ -133,4 +133,4 @@ def form (request, id=False):
     else:
         form = ProjectForm(instance=instance)
 
-    return render_with_request(request, "projects/form.html", {'title': title, 'project': instance, 'form': form})
+    return render(request, "projects/form.html", {'title': title, 'project': instance, 'form': form})

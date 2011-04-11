@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 from core.decorators import *
 from forms import *
 
 @login_required()
 def overview(request):
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement).filter(trashed=False)
-    return render_with_request(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
+    return render(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
 
 @login_required()
 def overview_trashed(request):
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement).filter(trashed=True)
-    return render_with_request(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
+    return render(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
 
 @login_required()
 def add(request):
@@ -20,7 +20,7 @@ def add(request):
 
 def view(request, id):
     announcement = Core.current_user().get_permitted_objects("VIEW", Announcement).get(id=id)
-    return render_with_request(request, 'announcements/view.html', {'title': 'Oppslag',
+    return render(request, 'announcements/view.html', {'title': 'Oppslag',
                                                                     'announcement': announcement})
 
 def edit(request, id):
@@ -57,4 +57,4 @@ def form (request, id=False):
     else:
         form = AnnouncementForm(instance=instance, initial={"attachment":None})
 
-    return render_with_request(request, "announcements/form.html", {'title': 'Oppslag', 'announcement':instance, 'form': form})
+    return render(request, "announcements/form.html", {'title': 'Oppslag', 'announcement':instance, 'form': form})

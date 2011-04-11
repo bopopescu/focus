@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from app.projects.forms import MilestoneForm
 from app.projects.models import Project, Milestone
 from core.decorators import require_permission
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 from app.projects.views.project import view as viewProject
@@ -38,4 +38,4 @@ def form (request, project_id, milestone_id = False):
     else:
         form = MilestoneForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': title, 'form': form})
+    return render(request, "form.html", {'title': title, 'form': form})

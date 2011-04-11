@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from app.customers.models import Customer
 from app.stock.models import Product
 from core.models import Log
@@ -16,21 +16,21 @@ from django.utils.translation import ugettext as _
 def overview(request):
     update_timeout(request)
     suppliers = Core.current_user().get_permitted_objects("VIEW", Supplier).filter(trashed=False)
-    return render_with_request(request, 'suppliers/list.html', {'title': _("Suppliers"), 'suppliers': suppliers})
+    return render(request, 'suppliers/list.html', {'title': _("Suppliers"), 'suppliers': suppliers})
 
 
 @login_required()
 def overview_trashed(request):
     update_timeout(request)
     suppliers = Core.current_user().get_permitted_objects("VIEW", Supplier).filter(trashed=True)
-    return render_with_request(request, 'suppliers/list.html',
+    return render(request, 'suppliers/list.html',
                                {'title': _("Deleted suppliers"), 'suppliers': suppliers})
 
 
 @login_required()
 def overview_all(request):
     suppliers = Supplier.objects.all()
-    return render_with_request(request, 'suppliers/list.html',
+    return render(request, 'suppliers/list.html',
                                {'title': _("All active suppliers"), 'suppliers': suppliers})
 
 
@@ -59,7 +59,7 @@ def add_ajax(request):
 def view(request, id):
     supplier = Core.current_user().get_permitted_objects("VIEW", Supplier).get(id=id)
 
-    return render_with_request(request, 'suppliers/view.html',
+    return render(request, 'suppliers/view.html',
                                {'title': _("Supplier"),
                                 'supplier': supplier})
 
@@ -69,7 +69,7 @@ def products(request, id):
     supplier = Core.current_user().get_permitted_objects("VIEW", Supplier).get(id=id)
     products = Core.current_user().get_permitted_objects("VIEW", Product).filter(supplier=supplier)
 
-    return render_with_request(request, 'suppliers/products.html', {'title': _("Products"),
+    return render(request, 'suppliers/products.html', {'title': _("Products"),
                                                                     'supplier': supplier,
                                                                     'products': products})
 
@@ -81,7 +81,7 @@ def history(request, id):
     history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
                                  object_id=instance.id)
 
-    return render_with_request(request, 'suppliers/log.html', {'title': _("Latest events"),
+    return render(request, 'suppliers/log.html', {'title': _("Latest events"),
                                                                'supplier': instance,
                                                                'logs': history[::-1][0:150]})
 
@@ -109,7 +109,7 @@ def trash(request, id):
             instance.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'suppliers/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'suppliers/trash.html', {'title': _("Confirm delete"),
                                                                      'supplier': instance,
                                                                      'can_be_deleted': instance.can_be_deleted()[0],
                                                                      'reasons': instance.can_be_deleted()[1],
@@ -139,7 +139,7 @@ def form (request, id=False):
     else:
         form = SupplierForm(instance=instance)
 
-    return render_with_request(request, "suppliers/form.html", {'title': _("Supplier"),
+    return render(request, "suppliers/form.html", {'title': _("Supplier"),
                                                                 'supplier': instance,
                                                                 'form': form,
                                                                 })

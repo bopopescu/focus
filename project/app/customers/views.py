@@ -1,5 +1,4 @@
 from django.contrib.contenttypes.models import ContentType
-from django.core.mail import resend_mail
 from django.http import HttpResponse
 from core.models import Log
 from django.shortcuts import get_object_or_404, render

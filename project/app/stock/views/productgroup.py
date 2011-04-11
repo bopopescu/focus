@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import simplejson
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 from core.decorators import require_permission, login_required
 from core.views import  update_timeout
 from app.stock.forms import ProductGroupForm
@@ -13,7 +13,7 @@ from django.utils.translation import ugettext as _
 def overview(request):
     update_timeout(request)
     productgroups = ProductGroup.objects.all()
-    return render_with_request(request, 'stock/productgroups/list.html',
+    return render(request, 'stock/productgroups/list.html',
                                {'title': 'Produktgrupper', 'productgroups': productgroups})
 
 @login_required()
@@ -72,4 +72,4 @@ def form (request, id=False):
     else:
         form = ProductGroupForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Produktgruppe', 'form': form})
+    return render(request, "form.html", {'title': 'Produktgruppe', 'form': form})

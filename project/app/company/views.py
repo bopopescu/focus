@@ -6,13 +6,13 @@ from app.orders.models import Order
 from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
-from core.shortcuts import *
-from core.decorators import *
+from core.decorators import require_permission
 from core.views import update_timeout
 from core.auth.company.models import Company
 from core.auth.user.models import User
 from core.auth.group.models import Group
 from core.auth.log.models import Log, Notification
+from django.shortcuts import render, redirect
 
 
 @require_permission("MANAGE", Company)
@@ -20,8 +20,8 @@ def overview(request):
     update_timeout(request)
     companies = Company.objects.all()
 
-    return render_with_request(request, 'company/list.html', {'title': 'Firmaer',
-                                                              'companies': companies})
+    return render(request, 'company/list.html', {'title': 'Firmaer',
+                                                 'companies': companies})
 
 
 @require_permission("MANAGE", Company)
@@ -56,7 +56,7 @@ def form (request, id=False):
     else:
         form = CompanyForm(instance=instance)
 
-    return render_with_request(request, "company/form.html", {'title': 'Kunde', 'form': form})
+    return render(request, "company/form.html", {'title': 'Kunde', 'form': form})
 
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
@@ -130,4 +130,4 @@ def newForm(request):
     else:
         form = newCompanyForm() # An unbound form
 
-    return render_with_request(request, "company/form.html", {'title': 'Nytt firma', 'form': form})
+    return render(request, "company/form.html", {'title': 'Nytt firma', 'form': form})

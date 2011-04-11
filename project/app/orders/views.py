@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import ugettext as _
 from forms import *
 from core.shortcuts import *
@@ -12,25 +12,25 @@ from django.utils import simplejson
 def overview_offers(request):
     orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Offer")
     update_timeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
+    return render(request, 'orders/list.html', {'title': 'Tilbud', 'orders': orders})
 
 @require_permission("LIST", Order)
 def overview(request):
     orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")
     update_timeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
+    return render(request, 'orders/list.html', {'title': 'Ordrer', 'orders': orders})
 
 @require_permission("LISTARCHIVE", Order)
 def overview_invoice(request):
     orders = Order.objects.all().filter(state="Invoice")
     update_timeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
+    return render(request, 'orders/list.html', {'title': 'Til fakturering', 'orders': orders})
 
 @require_permission("LISTREADYINVOICE", Order)
 def overview_archive(request):
     orders = Order.objects.all().filter(state="Archive")
     update_timeout(request)
-    return render_with_request(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
+    return render(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
 
 @require_permission("VIEW", Order, "id")
@@ -46,7 +46,7 @@ def products(request, id):
     else:
         form = OrderLineForm(instance=OrderLine())
 
-    return render_with_request(request, 'orders/products.html', {'title': _('Products'),
+    return render(request, 'orders/products.html', {'title': _('Products'),
                                                                  'form': form,
                                                                  'order': order,
                                                                  'orderlines': orderlines})
@@ -63,7 +63,7 @@ def delete_order_line(request, id, orderlineID):
 def history(request, id):
     instance = get_object_or_404(Order, id=id, deleted=False)
     history = instance.history()
-    return render_with_request(request, 'orders/log.html', {'title': _("Latest events"),
+    return render(request, 'orders/log.html', {'title': _("Latest events"),
                                                             'order': instance,
                                                             'logs': history[::-1][0:150]})
 
@@ -74,7 +74,7 @@ def view(request, id):
 
     taskForm = TaskForm()
 
-    return render_with_request(request, 'orders/view.html', {'title': 'Ordre: %s' % order.order_name,
+    return render(request, 'orders/view.html', {'title': 'Ordre: %s' % order.order_name,
                                                              'order': order,
                                                              'taskForm': taskForm,
                                                              'whoCanSeeThis': whoCanSeeThis})
@@ -219,4 +219,4 @@ def form (request, id=False, *args, **kwargs):
     else:
         form = OrderForm(instance=instance)
 
-    return render_with_request(request, "orders/form.html", {'title': title, 'order': instance, 'form': form})
+    return render(request, "orders/form.html", {'title': title, 'order': instance, 'form': form})

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from app.projects.models import Project
 from core.shortcuts import *
 from core.decorators import *
@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 def overview(request):
     update_timeout(request)
     units = UnitsForSizes.objects.all()
-    return render_with_request(request, 'stock/productUnits/list.html', {'title': 'Enheter', 'units': units})
+    return render(request, 'stock/productUnits/list.html', {'title': 'Enheter', 'units': units})
 
 @login_required()
 def add(request):
@@ -70,4 +70,4 @@ def form (request, id=False):
     else:
         form = UnitsForSizesForm(instance=instance)
 
-    return render_with_request(request, "form.html", {'title': 'Enhet', 'form': form})
+    return render(request, "form.html", {'title': 'Enhet', 'form': form})

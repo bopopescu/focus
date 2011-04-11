@@ -6,7 +6,7 @@ from app.projects.models import Project
 from core import Core
 from core.decorators import login_required
 from core.models import Log, Notification
-from core.shortcuts import render_with_request
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from core.utils import get_permission
 
@@ -22,7 +22,7 @@ def overview(request):
 
     your_orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")[::-1]
 
-    return render_with_request(request, 'dashboard/dashboard.html', {'title': title,
+    return render(request, 'dashboard/dashboard.html', {'title': title,
                                                                      'announcements': announcements,
                                                                      'orders': your_orders,
                                                                      'projects': your_projects})
@@ -31,7 +31,7 @@ def overview(request):
 def logs(request):
     #logs = Log.objects.filter(company=get_current_company())
     logs = Log.objects.all()
-    return render_with_request(request, 'dashboard/listLog.html', {'title': _("Latest events"),
+    return render(request, 'dashboard/listLog.html', {'title': _("Latest events"),
                                                                    'logs': logs[::-1][0:150]})
 
 @login_required()
@@ -52,7 +52,7 @@ def notifications(request):
     #Set to read, so they wont bother the user anymore.
     Notification.objects.filter(recipient=Core.current_user()).update(read=True)
 
-    return render_with_request(request, 'dashboard/notifications.html', {'title': _('Updates'),
+    return render(request, 'dashboard/notifications.html', {'title': _('Updates'),
                                                                          'notifications': newNotifications,
                                                                          'oldNotifications': oldNotifications[::-1][
                                                                                              0:150]})

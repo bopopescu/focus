@@ -118,7 +118,7 @@ def archive(request, user_id=None):
     for time in HourRegistrations:
         year_with_months[time.date.year].add(time.date.month)
 
-    return render_with_request(request, 'hourregistrations/archive.html',
+    return render(request, 'hourregistrations/archive.html',
                                {'title': 'Arkiv', 'year_with_months': year_with_months})
 
 
@@ -193,7 +193,7 @@ def addTypeOfWork(request):
     else:
         form = TypeOfHourRegistrationForm(instance=instance)
 
-    return render_with_request(request, "simpleform.html", {'title': 'Typer arbeid', 'form': form})
+    return render(request, "simpleform.html", {'title': 'Typer arbeid', 'form': form})
 
 
 @require_permission("LIST", HourRegistration)
@@ -246,7 +246,7 @@ def calendar(request, year, month, week, day):
 
     HourRegistrations = HourRegistration.objects.filter(date=datetime(year, month, day))
 
-    return render_with_request(request, "hourregistrations/calendar.html", {'title': 'Timeregistrering',
+    return render(request, "hourregistrations/calendar.html", {'title': 'Timeregistrering',
                                                                             'hourregistrations': HourRegistrations,
                                                                             'form': form,
 
@@ -352,7 +352,7 @@ def form (request, id=False):
         DisbursementFormSet = HourRegistrationDisbursementFormSet(instance=instance, prefix='disbursement')
         DrivingRegistrationFormSet = HourRegistrationDrivingRegistrationFormSet(instance=instance, prefix='driving')
 
-    return render_with_request(request, "hourregistrations/form.html", {'title': 'Timeføring',
+    return render(request, "hourregistrations/form.html", {'title': 'Timeføring',
                                                                         'form': form,
                                                                         'DisbursementFormSet': DisbursementFormSet,
                                                                         'DrivingRegistrationFormSet': DrivingRegistrationFormSet

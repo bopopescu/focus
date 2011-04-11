@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from core.shortcuts import *
 from core.decorators import require_permission
 from core.utils import suggest_ajax_parse_arguments
@@ -18,13 +18,13 @@ def overview(request):
     #products = Product.objects.filter(trashed=False)
     products = Core.current_user().get_permitted_objects("VIEW", Product)
 
-    return render_with_request(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
+    return render(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
 
 @require_permission("LISTDELETED", Product)
 def overview_trashed(request):
     update_timeout(request)
     products = Product.objects.filter(trashed=True)
-    return render_with_request(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
+    return render(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
 
 @require_permission("CREATE", Product)
 def add(request):
@@ -37,7 +37,7 @@ def edit(request, id):
 @require_permission("EDIT", Product, "id")
 def orders(request, id):
     product = Product.objects.get(id=id)
-    return render_with_request(request, 'stock/products/orders.html',
+    return render(request, 'stock/products/orders.html',
                                {'title': _("Product used in these orders"), 'product': product,
                                 'orders': product.orders})
 
@@ -46,7 +46,7 @@ def files(request, id):
     product = Product.objects.get(id=id)
     productFileForm = ProductFileForm(instance=ProductFile())
 
-    return render_with_request(request, 'stock/products/files.html',
+    return render(request, 'stock/products/files.html',
                                {'title': _("Files"), 'product': product,
                                 'productFileForm': productFileForm,
                                 'files': product.files})
@@ -97,7 +97,7 @@ def trash(request, id):
             instance.trash()
         return redirect(overview)
     else:
-        return render_with_request(request, 'stock/products/trash.html', {'title': _("Confirm delete"),
+        return render(request, 'stock/products/trash.html', {'title': _("Confirm delete"),
                                                                           'product': instance,
                                                                           'can_be_deleted': instance.can_be_deleted()[0],
                                                                           'reasons': instance.can_be_deleted()[1],
@@ -126,7 +126,7 @@ def view(request, id):
     instance = ProductFile()
     product = Product.objects.get(id=id)
 
-    return render_with_request(request, 'stock/products/view.html', {'title': _("Product"),
+    return render(request, 'stock/products/view.html', {'title': _("Product"),
                                                                      'product': product,
                                                                      })
 
@@ -152,6 +152,6 @@ def form (request, id=False):
     else:
         form = ProductForm(instance=instance)
 
-    return render_with_request(request, "stock/form.html", {'title': _("Product"),
+    return render(request, "stock/form.html", {'title': _("Product"),
                                                             'product': instance,
                                                             'form': form})
