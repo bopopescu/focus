@@ -23,8 +23,7 @@ class ContactHandler(BaseHandler):
             form.save_m2m()
             return o
         else:
-            print form.errors
-            return rc.BAD_REQUEST
+            return form.errors
 
 
 
