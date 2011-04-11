@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Django settings for focus project.
 
 import os.path
 
@@ -25,20 +24,6 @@ DATABASES = {
     }
 }
 
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'focus_test',
-        'USER': 'root',
-        'PORT': '8889',
-        'HOST':'127.0.0.1',
-        'PASSWORD': 'root',
-    }
-}
-
-"""
-
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
@@ -57,7 +42,7 @@ SITE_URL = "http://focus.fncit.no"
 
 USE_I18N = True
 
-LOGIN_URL = "/accounts/login"
+LOGIN_URL = "/accounts/login/"
 
 FORCE_SCRIPT_NAME = ""
 
@@ -102,12 +87,12 @@ INSTALLED_APPS = (
 'django.contrib.staticfiles',
 
 #Core
-'core',
-'core.auth.group',
-'core.auth.permission',
-'core.auth.company',
 'core.auth.user',
+'core.auth.group',
+'core.auth.company',
 'core.auth.log',
+'core.auth.permission',
+'core',
 
 #Apps
 'app.admin',
