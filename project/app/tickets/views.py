@@ -13,7 +13,7 @@ def overview(request):
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 def overview_trashed(request):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True)
+    tickets = Core.current_user().sget_permitted_object("VIEW", Ticket).filter(trashed=True)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 

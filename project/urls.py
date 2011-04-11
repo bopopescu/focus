@@ -27,6 +27,9 @@ urlpatterns = patterns('',
                        #Stock
                        (r'^stock/', include('app.stock.urls')),
 
+                       #API
+                       (r'^api/', include('api.urls')),
+
                        #Suppliers
                        (r'^suppliers/', include('app.suppliers.urls')),
                        (r'^tickets/', include('app.tickets.urls')),

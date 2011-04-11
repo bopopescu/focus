@@ -65,6 +65,10 @@ MIDDLEWARE_CLASSES = (
 'core.middleware.AuthenticationMiddleware',
 'core.middleware.MessageMiddleware',
 'core.middleware.SessionBasedLocaleMiddleware',
+
+'piston.middleware.ConditionalMiddlewareCompatProxy',
+'piston.middleware.CommonMiddlewareCompatProxy',
+
 )
 
 ROOT_URLCONF = 'urls'
@@ -113,8 +117,13 @@ INSTALLED_APPS = (
 'app.tickets',
 'app.migratefocus',
 
+#API
+'api',
+'api.contactsapi',
+
 #Other
 'south',
+'piston'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
