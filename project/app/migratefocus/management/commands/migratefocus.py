@@ -7,7 +7,12 @@ import os
 import MySQLdb
 import MySQLdb.cursors
 from core import Core
-from core.models import User, Group, Company, Log, Notification
+#from core.models import User, Group, Company, Log, Notification
+from core.auth.user.models import User
+from core.auth.group.models import Group
+from core.auth.company.models import Company
+from core.auth.log.models import Log, Notification
+
 import random
 from app.admin.views.user import generateNewPassordForUser
 from core.utils import getClass
