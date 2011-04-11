@@ -10,4 +10,5 @@ contacts = Resource(handler=ContactHandler, authentication=auth)
 
 urlpatterns = patterns('',
    url(r'contacts/list$', contacts),
+   url(r'contacts/new$', contacts),
 )
