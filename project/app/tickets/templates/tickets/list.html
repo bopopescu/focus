@@ -27,7 +27,7 @@
         <tr>
             <th>{% trans "Tickets" %}</th>
             <th>{% trans "Priority" %}</th>
-            <th>{% trans "Comments" %}</th>
+            <th>{% trans "Updates" %}</th>
             <th>{% trans "Status" %}</th>
             <th>{% trans "Last edited" %}</th>
         </tr>
@@ -38,7 +38,7 @@
             <tr>
                 <td><a href="{% url app.tickets.views.view ticket.id %}">{{ ticket.title }}</a></td>
                 <td>{{ ticket.priority }}</td>
-                <td>{{ ticket.comments.count }}</td>
+                <td>{{ ticket.updates.count }}</td>
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.date_edited|date:"d.m.Y H:i" }} av {{ ticket.editor }}</td>
 

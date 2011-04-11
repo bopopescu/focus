@@ -4,7 +4,7 @@ from app.tickets.models import Ticket, TicketUpdate
 from core.models import User
 from django import forms
 from django.utils.translation import ugettext as _
-from core.widgets import SelectWithPop
+from core.widgets import SelectWithPop, DatePickerField
 
 ticket_fields = (
 'title', 'customer', 'description', 'status', 'priority', 'type', 'estimated_time', 'assigned_to', 'attachment',)
@@ -22,6 +22,8 @@ class TicketForm(ModelForm):
         self.fields['attachment'].required = False
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.inCompany()
+        self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y",)
+        self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 
 class EditTicketForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
@@ -36,6 +38,8 @@ class EditTicketForm(ModelForm):
         super(EditTicketForm, self).__init__(*args, **kwargs)
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.inCompany()
+        self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y",)
+        self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 
     def save(self, *args, **kwargs):
         ticket = super(EditTicketForm, self).save()

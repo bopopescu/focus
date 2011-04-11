@@ -41,69 +41,83 @@
 
             <div class="ticket_update">
 
-                <h3>{% trans "Change properties" %}</h3>
+                <h3 >{% trans "Change properties" %}</h3>
 
-                <table class="ticket_attributes">
-                    <tr>
-                        <td>
-                            <span {% if ticket_form.status.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.status.label }} </span> <br />
-                            {{ ticket_form.status }}
-                        </td>
-                        
-                        <td>
-                         <span {% if ticket_form.due_date.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.due_date.label }} </span> <br />
-                            {{ ticket_form.due_date }}
-                        </td>
-                    </tr>
+                <div class="ticket_details">
+                    <table class="ticket_attributes">
+                        <a href="javascript: void(0)" id="toggle_extra">{% trans "more" %}</a>
+                        <tr class="ticket_hideable">
+                            <td>
+                                <span {% if ticket_form.title.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.title.label }} </span> <br />
+                                {{ ticket_form.title }}
+                            </td>
+                            <td>
+                                <span {% if ticket_form.customer.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.customer.label }} </span> <br />
+                                {{ ticket_form.customer }}
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>
-                            <span {% if ticket_form.priority.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.priority.label }} </span> <br />
-                            {{ ticket_form.priority }}
-                        </td>
-                        <td>
-                            <span {% if ticket_form.spent_time.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.spent_time.label }} </span> <br />
-                            {{ ticket_form.spent_time }}
-                        </td>
-                    </tr>
+                        <tr class="ticket_hideable">
+                            <td colspan="2">
+                                {{ ticket_form.description.label }} <br />
+                                {{ ticket_form.description }}
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td>
-                            <span {% if ticket_form.assigned_to.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.assigned_to.label }} </span> <br />
-                            {{ ticket_form.assigned_to }}
-                        </td>
-                        <td>
-                            <span {% if ticket_form.estimated_time.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.estimated_time.label }} </span> <br />
-                            {{ ticket_form.estimated_time }}
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <span {% if ticket_form.status.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.status.label }} </span> <br />
+                                {{ ticket_form.status }}
+                            </td>
 
-                    <tr>
-                        <td>
-                            <span {% if ticket_form.type.errors %}style="color:red;" {% endif %}>
-                                {{ ticket_form.type.label }} </span> <br />
-                            {{ ticket_form.type }}
-                        </td>
-                    </tr>
+                            <td>
+                             <span {% if ticket_form.due_date.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.due_date.label }} </span> <br />
+                                {{ ticket_form.due_date }}
+                            </td>
+                        </tr>
 
-                    
-                </table>
-            </div>
+                        <tr>
+                            <td>
+                                <span {% if ticket_form.priority.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.priority.label }} </span> <br />
+                                {{ ticket_form.priority }}
+                            </td>
+                            <td>
+                                <span {% if ticket_form.spent_time.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.spent_time.label }} </span> <br />
+                                {{ ticket_form.spent_time }}
+                            </td>
+                        </tr>
 
-<!--
-            {% for field in ticket_form %}
-                <div class="fieldWrapper">
-                    <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
-                    <br>{{ field }}
+                        <tr>
+                            <td>
+                                <span {% if ticket_form.assigned_to.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.assigned_to.label }} </span> <br />
+                                {{ ticket_form.assigned_to }}
+                            </td>
+                            <td>
+                                <span {% if ticket_form.estimated_time.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.estimated_time.label }} </span> <br />
+                                {{ ticket_form.estimated_time }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span {% if ticket_form.type.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.type.label }} </span> <br />
+                                {{ ticket_form.type }}
+                            </td>
+                        </tr>
+
+
+                    </table>
                 </div>
-
-            {% endfor %} -->
+            </div>
 
 
             <div>
@@ -118,6 +132,15 @@
   $(document).ready(function () {
       $("#id_comment").focus();
   });
+
+$(document).ready(function() {
+    $(".ticket_hideable").hide();
+    $("#toggle_extra").click(function () {
+        $(".ticket_hideable").toggle();
+        $(this).html($(this).html() == "more" ? "{% trans 'less' %}" : "{% trans 'more' %}");
+    });
+});
+
   </script>
     
 {% endblock %}
