@@ -230,13 +230,6 @@ def calendar(request, year, month, week, day):
 
             months[m][weeknumber].append(date(year, m, d))
 
-    """
-    for m in months:
-        #print str(m) + "\n"
-        for d in months[m]:
-            k = "    " + str(d) + str(months[m][d]) + "\n"
-    """
-
     if not week in months[month].keys():
         week = sorted(months[month].keys())[0]
         return redirect(calendar, year, month, week, day)

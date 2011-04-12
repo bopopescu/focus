@@ -85,7 +85,6 @@ class require_permission:
             # If the identifier is defined, get the object instance
             if self.field:
                 if not self.field in kwargs:
-                    print "KWARGS: %s" % kwargs
                     raise Exception(
                             "The specified field '%s' in the require_permission decorator did not match a input argument." % self.field)
 

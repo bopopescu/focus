@@ -12,7 +12,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
     color: #5c5c5c;
-    background: url(/media/images/errorcodes/background_gray.png);
+    background: url({{ STATIC_URL }}img/error/background_gray.png);
     background-repeat: repeat;
 }
 
@@ -219,7 +219,7 @@ p {
 .errorLabel {
     width: 181px;
     height: 181px;
-    background: url(/media/images/errorcodes/404_label.png);
+    background: url({{ STATIC_URL }}img/error/404_label.png);
     background-repeat: no-repeat;
     position: absolute;
     top: -5px;
@@ -229,14 +229,14 @@ p {
 .contentHeader {
     width: 833px;
     height: 12px;
-    background: url(/media/images/errorcodes/content_header.png);
+    background: url({{ STATIC_URL }}img/error/content_header.png);
     background-repeat: no-repeat;
 }
 
 .contentMiddle {
     width: 809px;
     height: auto;
-    background: url(/media/images/errorcodes/content_middle.png);
+    background: url({{ STATIC_URL }}img/error/content_middle.png);
     background-color: white;
     background-repeat: repeat-y;
     padding: 0 12px;
@@ -245,7 +245,7 @@ p {
 .contentFooter {
     width: 833px;
     height: 12px;
-    background: url(/media/images/errorcodes/content_footer.png);
+    background: url({{ STATIC_URL }}img/error/content_footer.png);
     background-repeat: no-repeat;
 }
 
@@ -264,13 +264,13 @@ p {
 .smiley {
     width: 250px;
     height: 305px;
-    background: url(/media/images/errorcodes/smiley.png);
+    background: url({{ STATIC_URL }}img/error/smiley.png);
     background-repeat: no-repeat;
     margin: 110px auto 50px auto;
 }
 
 ul {
-    list-style-image: url(/media/images/errorcodes/list_item.png);
+    list-style-image: url({{ STATIC_URL }}img/error/list_item.png);
     margin-left: 30px;
 }
 
@@ -293,7 +293,7 @@ ul li {
 .searchInputLeft {
     width: 4px;
     height: 36px;
-    background: url(/media/images/errorcodes/search_input_left.png);
+    background: url({{ STATIC_URL }}img/error/search_input_left.png);
     background-repeat: no-repeat;
     float: left;
 }
@@ -301,7 +301,7 @@ ul li {
 .searchInputMiddle {
     width: 197px;
     height: 34px;
-    background: url(/media/images/errorcodes/search_input_middle.png);
+    background: url({{ STATIC_URL }}img/error/search_input_middle.png);
     background-repeat: repeat-x;
     float: right;
     padding: 1px 0;
@@ -351,15 +351,13 @@ ul li {
     font-size: 15px;
     color: #8a8a8a;
 }
-
 </style>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>404 - feil oppstod</title>
-    <link rel="stylesheet" href="resources/css/main.css"/>
+    <title>Stylish 404 error page</title>
 </head>
 <body>
 <!-- start: container -->
@@ -375,7 +373,7 @@ ul li {
         <!-- end: leftContent -->
         <!-- start: contentMiddle -->
         <div class="rightContent">
-            <h1>OOOPS...404-error</h1>
+            <h1>OOOPS...</h1>
 
             <h3>The page you were looking for could not be found</h3>
 
@@ -383,6 +381,10 @@ ul li {
                 unavailable. This could be the result of the page being removed, the name being changed or the page
                 being temporarily unavailable.</p>
 
+            <h3>Troubleshooting</h3>
+            <ul>
+                <li>If you spelled the URL manually, double check the spelling</li>
+            </ul>
 
             <div class="space20"></div>
 

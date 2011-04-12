@@ -73,7 +73,6 @@ def history(request, id):
 def list_contacts(request, id):
     if request.method == "POST":
         form = ContactToCustomerForm(request.POST)
-        print form
     else:
         form = ContactToCustomerForm()
 
@@ -117,7 +116,6 @@ def recover(request, id):
     c = Customer.objects.get(id=id)
     c.recover()
 
-    print c
     return redirect(overview)
 
 @login_required()
