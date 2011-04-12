@@ -16,7 +16,6 @@ def overview_trashed(request):
     tickets = Core.current_user().sget_permitted_object("VIEW", Ticket).filter(trashed=True)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
-
 def view(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
