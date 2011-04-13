@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 class Supplier(PersistentModel):
     name = models.CharField(max_length=200)
     email = models.EmailField(null=True)
-    phone = models.CharField(max_length=20, null=True)
+    phone = models.CharField(max_length=40, null=True)
     address = models.TextField(null=True)
     zip = models.CharField(max_length=10, default="")
     email_contact = models.EmailField(default="")
