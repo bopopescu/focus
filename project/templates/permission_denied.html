@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block maincontent %}
+    <h1>{% trans "Wooops" %}</h1>
+    <p>
+        {% blocktrans %}
+
+            Det ser ut til at du ikke har rettigheter til å se denne siden. <br>
+            Ta kontakt med ansvarlig eller <a href="mailto:support@focustime.no">Support</a> og
+            send med informasjonen gitt under om du mener dette er en feil.
+
+        {% endblocktrans %}
+    </p>
+    <h3>{% trans "Permission information" %}</h3>
+    <table>
+        <tr>
+            <td>{% trans "action" %}</td>
+            <td>{{ action }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "model" %}</td>
+            <td>{{ model }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "field" %}</td>
+            <td>{{ field }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "any" %}</td>
+            <td>{{ any }}</td>
+        </tr>
+        <tr>
+            <td>{% trans "user" %}</td>
+            <td>{{ request.user }}</td>
+        </tr>
+    </table>
+{% endblock %}

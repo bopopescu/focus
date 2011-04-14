@@ -16,6 +16,7 @@ class login_required:
         functools.update_wrapper(check_login, func)
         return check_login
 
+
 class require_permission:
     """
     Decorator used for view authorization
@@ -71,7 +72,7 @@ class require_permission:
         if field_db:
             if not field:
                 raise Exception(
-                        "A database field was defined without a corrosponding view function field. See core.require_permission for more info")
+                    "A database field was defined without a corrosponding view function field. See core.require_permission for more info")
 
             self.field_db = field_db
 
@@ -86,7 +87,7 @@ class require_permission:
             if self.field:
                 if not self.field in kwargs:
                     raise Exception(
-                            "The specified field '%s' in the require_permission decorator did not match a input argument." % self.field)
+                        "The specified field '%s' in the require_permission decorator did not match a input argument." % self.field)
 
                 # Get the object instance, or 404 if it does not exist
                 try:
@@ -112,10 +113,11 @@ class require_permission:
 
             # Else, we just have to tell the user he just can't do this
             else:
-                request.message_error("Ingen tilgang")
-                return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
-
-                # Update the function so it still reports correct to inspect and pydoc
+                return permission_denied(request, {'action': self.action,
+                                                   'model': "%s.%s" % (self.model.__module__, self.model.__name__),
+                                                   'field': self.field,
+                                                   'any': self.any
+                })
 
         functools.update_wrapper(check_permission, func)
 
@@ -135,3 +137,6 @@ class require_permission:
         object = self.model.objects.get(**query)
 
         return object
+
+
+from core.views import permission_denied
