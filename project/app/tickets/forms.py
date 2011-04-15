@@ -8,8 +8,6 @@ from django import forms
 from django.utils.translation import ugettext as _
 from core.widgets import SelectWithPop, DatePickerField
 
-ticket_fields = (
-'title', 'customer', 'description', 'status', 'priority', 'type', 'estimated_time', 'assigned_to', 'attachment',)
 
 class TicketForm(ModelForm):
     class Meta:
@@ -34,13 +32,13 @@ class EditTicketForm(ModelForm):
     class Meta:
         model = Ticket
         fields = (
-        'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to', 'spent_time'
+        'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to', 'spent_time'
         ,)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
         self.fields['customer'].widget = SelectWithPop(Customer)
-        self.fields['customer'].queryset = Customer.objects.inCompany()
+        self.fields['customer'].queryset = Customer.objects.filter_current_company()
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y",)
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 
