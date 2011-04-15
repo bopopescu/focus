@@ -30,8 +30,8 @@ def overview_invoice(request):
 def overview_archive(request):
     orders = Order.objects.all().filter(state="Archive")
     update_timeout(request)
-    return render(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
+    return render(request, 'orders/list.html', {'title': 'Arkiv', 'orders': orders})
 
 @require_permission("VIEW", Order, "id")
 def products(request, id):

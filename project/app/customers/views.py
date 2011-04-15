@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from core.models import Log
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, render_to_response
 from forms import *
 from core.shortcuts import *
 from core.decorators import *
@@ -32,13 +32,14 @@ def overview_all(request):
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
+
     return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.full_name,
                                                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
 def add_ajax(request, id=None):
-
     customer = Customer()
+    
     if id:
         customer = Customer.objects.filter_current_company().get(id=id)
 

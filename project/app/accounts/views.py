@@ -29,7 +29,6 @@ def login(request):
 
     return render_to_response('login.html')
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/accounts/login/")
