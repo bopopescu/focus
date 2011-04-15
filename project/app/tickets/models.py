@@ -87,12 +87,20 @@ class Ticket(PersistentModel):
     def create_model_dict(self):
         data = {}
         ignore_list = ('_state', 'date_edited')
+
         for field in self._meta.fields:
             if field.attname.startswith('_') or field.attname in ignore_list:
                 continue
 
             field_value = getattr(self, field.attname)
+
             if field.attname in self.foreign_key_dict:
+
+                #Check if foreign-key value is None
+                if field_value == None:
+                    data[field.verbose_name] = None
+                    continue
+
                 model_class = self.foreign_key_dict[field.attname][0]
                 model_attr = self.foreign_key_dict[field.attname][1]
                 id = field_value

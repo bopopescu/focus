@@ -217,13 +217,14 @@ def initial_data ():
     member.grant_actions(["VIEW", "LIST"])
 
     #Other default objects
-    comp = Company.objects.get_or_create(name="FNCIT AS", daysIntoNextMonthHourRegistration=4)[0]
+    comp = Company.objects.get_or_create(name="Superfirma AS", daysIntoNextMonthHourRegistration=4)[0]
     comp.save()
 
     a, created = User.all_objects.get_or_create(username="superadmin",
                                                 first_name="SuperAdmin",
-                                                last_name="")
+                                                last_name="",)
 
+    a.company = comp
     a.is_superuser = True
     a.canLogin = True
     a.is_staff = True

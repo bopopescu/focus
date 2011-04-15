@@ -29,17 +29,20 @@ class TicketForm(ModelForm):
 class EditTicketForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
     attachment = forms.FileField(label=_("Add Attachment"), required=False)
+
     class Meta:
         model = Ticket
         fields = (
-        'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to', 'spent_time'
+        'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
+        'spent_time'
         ,)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
+        self.fields['assigned_to'].queryset = User.objects.filter_current_company()
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
-        self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y",)
+        self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y", )
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 
     def save(self, *args, **kwargs):

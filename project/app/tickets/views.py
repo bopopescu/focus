@@ -1,5 +1,6 @@
 from app.tickets.models import Ticket, TicketUpdate
 from core import Core
+from core.auth.user.models import User
 from core.decorators import require_permission
 from django.shortcuts import render
 from app.tickets.forms import TicketForm, EditTicketForm
@@ -12,18 +13,30 @@ def overview(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
+def assigned_to_user(request, id=None):
+    user = Core.current_user()
+    if id:
+        user = User.objects.get(id=id)
+
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False, assigned_to=user)
+
+    return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+
+
 def overview_trashed(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+
 
 def view(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
 
     return render(request, "tickets/view.html", {'title': _('Ticket'),
-                                                              'ticket': ticket,
-                                                              'updates': updates
-                                                              })
+                                                 'ticket': ticket,
+                                                 'updates': updates
+    })
+
 
 @require_permission("DELETE", Ticket, "id")
 def trash(request, id):
@@ -40,13 +53,15 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'tickets/trash.html', {'title': _("Confirm delete"),
-                                                                     'customer': customer,
-                                                                     'can_be_deleted': customer.can_be_deleted()[0],
-                                                                     'reasons': customer.can_be_deleted()[1],
-                                                                     })
+                                                      'customer': customer,
+                                                      'can_be_deleted': customer.can_be_deleted()[0],
+                                                      'reasons': customer.can_be_deleted()[1],
+                                                      })
+
 
 def add(request):
     return form(request)
+
 
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
@@ -67,12 +82,11 @@ def edit(request, id):
         ticket_form = EditTicketForm(instance=ticket)
 
     return render(request, "tickets/edit.html", {'title': _('Update Ticket'),
-                                                              'ticket': ticket,
-                                                              'ticket_form': ticket_form,
-                                                              })
+                                                 'ticket': ticket,
+                                                 'ticket_form': ticket_form,
+                                                 })
 
 def form(request, id=False):
-
     if id:
         instance = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
         msg = _("Ticket changed")
@@ -84,7 +98,6 @@ def form(request, id=False):
         form = TicketForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             ticket = form.save(commit=False)
-            ticket.owner = request.user
             ticket.save()
             request.message_success(msg)
 
@@ -93,6 +106,6 @@ def form(request, id=False):
         form = TicketForm(instance=instance)
 
     return render(request, "tickets/form.html", {'title': _('Ticket'),
-                                                              'ticket':instance,
-                                                              'form': form,
-                                                              })
+                                                 'ticket': instance,
+                                                 'form': form,
+                                                 })
