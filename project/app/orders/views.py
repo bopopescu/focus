@@ -207,9 +207,7 @@ def form (request, id=False, *args, **kwargs):
                     o.state = "Offer"
                 else:
                     o.state = "Order"
-
-            print o.state
-
+                    
             o.save()
             form.save_m2m()
             request.message_success(msg)

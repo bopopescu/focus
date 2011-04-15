@@ -14,25 +14,24 @@ from core.utils import get_permission
 def overview(request):
     title = _("Welcome to TIME")
 
-
-    print request.META['REMOTE_ADDR']
-    
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
     your_projects = Core.current_user().get_permitted_objects("VIEW", Project)
 
     your_orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")[::-1]
 
     return render(request, 'dashboard/dashboard.html', {'title': title,
-                                                                     'announcements': announcements,
-                                                                     'orders': your_orders,
-                                                                     'projects': your_projects})
+                                                        'announcements': announcements,
+                                                        'orders': your_orders,
+                                                        'projects': your_projects})
+
 
 @login_required()
 def logs(request):
     #logs = Log.objects.filter(company=get_current_company())
     logs = Log.objects.all()
     return render(request, 'dashboard/listLog.html', {'title': _("Latest events"),
-                                                                   'logs': logs[::-1][0:150]})
+                                                      'logs': logs[::-1][0:150]})
+
 
 @login_required()
 def notifications(request):
@@ -53,6 +52,6 @@ def notifications(request):
     Notification.objects.filter(recipient=Core.current_user()).update(read=True)
 
     return render(request, 'dashboard/notifications.html', {'title': _('Updates'),
-                                                                         'notifications': newNotifications,
-                                                                         'oldNotifications': oldNotifications[::-1][
-                                                                                             0:150]})
+                                                            'notifications': newNotifications,
+                                                            'oldNotifications': oldNotifications[::-1][
+                                                                                0:150]})

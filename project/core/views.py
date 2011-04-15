@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from core.decorators import login_required
 from django.core import urlresolvers
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.core.servers.basehttp import FileWrapper
 from settings import BASE_PATH
 from core.auth.user.models import User
@@ -22,6 +22,7 @@ def get_absolute_filename(filename='', safe=True):
         return get_absolute_filename(filename='')
 
     return os.path.join(STATIC_ROOT, filename)
+
 
 def retrieve_file(request, filename=''):
     abs_filename = get_absolute_filename(filename)
@@ -101,3 +102,7 @@ def grant_permission(request, perm, userorgroup, user_id, app, model, object_id)
 
     request.message_success("Permission granted")
     return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
+
+
+def permission_denied (request, permission_info=None):
+    return render(request, 'permission_denied.html', permission_info)

@@ -120,6 +120,8 @@ INSTALLED_APPS = (
 #API
 'api',
 'api.contactsapi',
+'api.customersapi',
+'api.hourregistrationsapi',
 
 #Other
 'south',

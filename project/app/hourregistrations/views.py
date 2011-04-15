@@ -119,7 +119,7 @@ def archive(request, user_id=None):
         year_with_months[time.date.year].add(time.date.month)
 
     return render(request, 'hourregistrations/archive.html',
-                               {'title': 'Arkiv', 'year_with_months': year_with_months})
+                  {'title': 'Arkiv', 'year_with_months': year_with_months})
 
 
 @require_permission("CREATE", HourRegistration)
@@ -230,13 +230,6 @@ def calendar(request, year, month, week, day):
 
             months[m][weeknumber].append(date(year, m, d))
 
-    """
-    for m in months:
-        #print str(m) + "\n"
-        for d in months[m]:
-            k = "    " + str(d) + str(months[m][d]) + "\n"
-    """
-
     if not week in months[month].keys():
         week = sorted(months[month].keys())[0]
         return redirect(calendar, year, month, week, day)
@@ -247,18 +240,17 @@ def calendar(request, year, month, week, day):
     HourRegistrations = HourRegistration.objects.filter(date=datetime(year, month, day))
 
     return render(request, "hourregistrations/calendar.html", {'title': 'Timeregistrering',
-                                                                            'hourregistrations': HourRegistrations,
-                                                                            'form': form,
+                                                               'hourregistrations': HourRegistrations,
+                                                               'form': form,
+                                                               'year': year,
+                                                               'month': month,
+                                                               'week': week,
+                                                               'day': day,
 
-                                                                            'year': year,
-                                                                            'month': month,
-                                                                            'week': week,
-                                                                            'day': day,
+                                                               'weeks': sorted(months[int(month)].keys()),
+                                                               'days': months[int(month)][int(week)],
 
-                                                                            'weeks': sorted(months[int(month)].keys()),
-                                                                            'days': months[int(month)][int(week)],
-
-                                                                            })
+                                                               })
 
 
 @login_required()
@@ -353,7 +345,7 @@ def form (request, id=False):
         DrivingRegistrationFormSet = HourRegistrationDrivingRegistrationFormSet(instance=instance, prefix='driving')
 
     return render(request, "hourregistrations/form.html", {'title': 'Timeføring',
-                                                                        'form': form,
-                                                                        'DisbursementFormSet': DisbursementFormSet,
-                                                                        'DrivingRegistrationFormSet': DrivingRegistrationFormSet
-                                                                        , })
+                                                           'form': form,
+                                                           'DisbursementFormSet': DisbursementFormSet,
+                                                           'DrivingRegistrationFormSet': DrivingRegistrationFormSet
+                                                           , })

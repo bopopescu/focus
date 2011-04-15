@@ -88,7 +88,7 @@ def trash(request, id):
             for reason in instance.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
-            request.message_success("Successfully contact this contact")
+            request.message_success("Successfully deleted this contact")
             instance.trash()
         return redirect(overview)
     else:

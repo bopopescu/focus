@@ -77,9 +77,6 @@ def send_generated_password_to_user(request, id):
 
     ret = generate_new_password_for_user(user)
 
-    if settings.DEBUG:
-        print "Nytt passord er: %s" % ret
-
     request.message_success(_("Successfully sent new password"))
 
     return redirect(view, id)
