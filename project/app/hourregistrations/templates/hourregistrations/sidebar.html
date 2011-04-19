@@ -2,32 +2,7 @@
 {% load i18n %}
 <h3>Sidebar</h3>
 <ul>
-    {% if contact.id %}
-        <li><a class="{% active request "contacts/$" %}" href="{% url app.hourregistration.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
-
-        <li><a class="{% active request "view" %}" href="{% url app.contacts.views.view contact.id %}"><img
-                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
-
-        <li><a class="{% active request "edit$" %}" href="{% url app.contacts.views.edit contact.id %}"><img
-                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
-
-        <li><a class="{% active request "image" %}" href="{% url app.contacts.views.edit_image contact.id %}"><img
-                src="{{ STATIC_URL }}img/person.png" width="24" height="24" alt="Mail"/>{% trans "CHANGE IMAGE" %}</a>
-        </li>
-
-        <li><a class="{% active request "history" %}" href="{% url app.contacts.views.history contact.id %}"><img
-                src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
-    {% else %}
-        <li><a class="{% active request "hourregistrations/$" %}" href="{% url app.hourregistrations.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
-
-        <li><a class="{% active request "new" %}" href="{% url app.hourregistrations.views.add %}"><img
-                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW REGISTRATION" %}</a>
-        </li>
 
 
-        <li><a class="{% active request "archive" %}" href="{% url app.hourregistrations.views.your_archive %}"><img
-                src="{{ STATIC_URL }}img/archive.png" width="24" height="24" alt="Home"/>{% trans "ARCHIVE" %}</a></li>
-    {% endif %}
+    
 </ul>

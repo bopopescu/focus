@@ -1,9 +1,7 @@
 from django.core.mail import send_mail as django_send_mail
-from django.core.mail import send_mass_mail as django_send_mall_email
 from django.conf import settings
 
 def send_mail(subject, message, fromMail, toMails, fail_silently=False):
-
     recipients = []
     recipients.extend(toMails)
 
@@ -18,5 +16,5 @@ def send_mail(subject, message, fromMail, toMails, fail_silently=False):
             recipients.remove(email)
 
     #Send actual email if not in debug mode
-    if not settings.DEBUG and len(recipients)>0:
+    if not settings.DEBUG and len(recipients) > 0:
         mail = django_send_mail(subject, message, fromMail, recipients, fail_silently=fail_silently)

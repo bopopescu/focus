@@ -9,10 +9,13 @@ from django.utils.translation import ugettext as _
 import copy
 
 
+@require_permission("LIST", Ticket)
 def overview(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
+
+@require_permission("LIST", Ticket)
 def assigned_to_user(request, id=None):
     user = Core.current_user()
     if id:
@@ -23,11 +26,13 @@ def assigned_to_user(request, id=None):
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 
+@require_permission("LIST", Ticket)
 def overview_trashed(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 
+@require_permission("VIEW", Ticket, "id")
 def view(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
@@ -59,10 +64,12 @@ def trash(request, id):
                                                       })
 
 
+@require_permission("ADD", Ticket)
 def add(request):
     return form(request)
 
 
+@require_permission("EDIT", Ticket, "id")
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
 
@@ -85,6 +92,7 @@ def edit(request, id):
                                                  'ticket': ticket,
                                                  'ticket_form': ticket_form,
                                                  })
+
 
 def form(request, id=False):
     if id:

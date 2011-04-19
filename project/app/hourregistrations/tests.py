@@ -141,7 +141,6 @@ class TimeTrackingTesting(FocusTest):
 
         #check if user can edit
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), True)
-
         todayDate = "1.1.2009"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), False)
         todayDate = "1.2.2011"

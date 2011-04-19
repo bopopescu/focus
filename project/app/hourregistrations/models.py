@@ -13,33 +13,17 @@ from django.core import urlresolvers
 max_digits = 5
 decimal_places = 3
 
-class TypeOfHourRegistration(PersistentModel):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-
-    def __unicode__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        new = False
-        if not self.id:
-            new = True
-
-        super(TypeOfHourRegistration, self).save()
-
-
-class HourRegistration(PersistentModel):
+class HourRegistration(PersistentModel):    
     date = models.DateTimeField()
-    order = models.ForeignKey(Order)
-    typeOfWork = models.ForeignKey(TypeOfHourRegistration)
-    time_start = models.CharField(max_length=max_digits)
-    time_end = models.CharField(max_length=max_digits)
-    description = models.TextField()
+    order = models.ForeignKey(Order, blank=True)
+    time_start = models.CharField(max_length=max_digits, null=True, blank=True, default="")
+    time_end = models.CharField(max_length=max_digits, null=True, blank=True, default="")
+    description = models.TextField(null=True, blank=True)
 
-    pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.5"))
-    hourly_rate = models.DecimalField(null=True, decimal_places=decimal_places, max_digits=max_digits)
-    percent_cover = models.DecimalField(null=True, decimal_places=decimal_places, max_digits=max_digits)
-    hours_worked = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits)
+    pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.5"), blank=True)
+    hourly_rate = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
+    percent_cover = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
+    hours_worked = models.DecimalField(blank=True, decimal_places=decimal_places, max_digits=max_digits)
 
     savedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
                                      default=Decimal("0.0"))
@@ -121,19 +105,18 @@ def __unicode__(self):
 
 def initial_data ():
     #Create default time tracking types
-    type = TypeOfHourRegistration.objects.get_or_create(name="Kontorarbeid")[0]
 
-    """
+
     a, created = User.objects.all().get_or_create(username="superadmin")
     Core.set_test_user(a)
 
     testCustomer, created = Customer.objects.get_or_create(cid="100", full_name="Per", email="test@test.com")
-    testOrder, created = Order.objects.get_or_create(oid="100", order_name="TestOrdre", customer=testCustomer)
+    testOrder, created = Order.objects.get_or_create(oid="100", order_name="TestOrdre", responsible=a, customer=testCustomer)
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.10.2010", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        typeOfWork=type,
+                                        
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
@@ -142,7 +125,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("2.10.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        typeOfWork=type,
+                                        
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -152,7 +135,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("15.10.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        typeOfWork=type,
+                                        
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -163,7 +146,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.5.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        typeOfWork=type,
+                                        
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -174,7 +157,7 @@ def initial_data ():
     t = HourRegistration.objects.create(date=datetime.strptime("15.5.2010", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        typeOfWork=type,
+                                        
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
@@ -183,7 +166,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("1.5.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        typeOfWork=type,
+                                        
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -193,7 +176,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
                                         order=testOrder,
-                                        typeOfWork=type,
+                                        
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -204,7 +187,7 @@ def initial_data ():
     t = HourRegistration.objects.create(date=datetime.strptime("4.08.2009", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        typeOfWork=type,
+                                        
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
@@ -214,11 +197,11 @@ def initial_data ():
     t = HourRegistration.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        typeOfWork=type,
+                                        
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
     t.save()
     a.grant_role("Owner", t)
-    """
+    
 

@@ -32,7 +32,6 @@ class ContactHandler(BaseHandler):
         else:
             return form.errors
 
-
     def update(self, request, id):
         try:
             contact = Core.current_user().get_permitted_objects("EDIT", Contact).filter(trashed=False).get(id=id)

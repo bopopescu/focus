@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.shortcuts import redirect
 from core import Core
-from inspect import isclass
-import os
-import time
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -12,6 +10,10 @@ from core.managers import PersistentManager
 from core.widgets import get_hexdigest, check_password
 from core.auth.company.models import Company
 from core.auth.permission.models import Permission, Action, Role
+from inspect import isclass
+import os
+import time
+
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -438,6 +440,9 @@ class AnonymousUser(User):
         self.name = 'Not'
         self.surname = 'logged in'
         self.company = None
+
+    def get_company(self):
+        return None
 
     def __unicode__(self):
         return "AnonymousUser"

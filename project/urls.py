@@ -17,7 +17,6 @@ urlpatterns = patterns('',
                        (r'^orders/', include('app.orders.urls')),
                        (r'^search/', include('app.search.urls')),
                        (r'^hourregistrations/', include('app.hourregistrations.urls')),
-                       (r'^typeOfWorks/addPop/?$', 'app.hourregistrations.views.addTypeOfWork'),
                        (r'^announcements/', include('app.announcements.urls')),
                        #settings for admin
                        (r'^admin/', include('app.admin.urls')),
@@ -41,8 +40,6 @@ urlpatterns = patterns('',
                        (
                        r'grant/permission/(?P<perm>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
                        , 'core.views.grant_permission'),
-
-                       (r'testing', 'core.views.testing'),
 
                        (r'^file/(?P<filename>.*)$', 'core.views.retrieve_file'),
                        )

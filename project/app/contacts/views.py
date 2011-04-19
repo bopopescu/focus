@@ -34,7 +34,6 @@ def list_ajax(request, query, limit):
               'value': user.username} for user in users]
     return HttpResponse(JSONEncoder().encode(users), mimetype='application/json')
 
-
 @login_required()
 def overview_trashed(request):
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=True)

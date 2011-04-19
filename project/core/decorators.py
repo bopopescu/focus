@@ -1,7 +1,10 @@
 import functools
 from django.http import Http404
 from django.core import urlresolvers
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+
+def permission_denied (request, permission_info=None):
+    return render(request, 'permission_denied.html', permission_info)
 
 class login_required:
     def __init__(self):
@@ -137,6 +140,3 @@ class require_permission:
         object = self.model.objects.get(**query)
 
         return object
-
-
-from core.views import permission_denied

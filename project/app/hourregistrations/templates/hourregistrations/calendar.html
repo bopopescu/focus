@@ -1,149 +1,311 @@
 {% extends "base.html" %}
-{% load timetracking_tags %}
-{% load i18n %}
-
-{% block sidebar %}
-    {% include "hourregistrations/sidebar.html" %}
-{% endblock %}
 
 {% block maincontent %}
 
-<style type="text/css">
+    <script>
 
-    #month {
-        width: 100%;
-        height: 60px;
-        font-size: 40px;
-        text-align: center;
+    var year = 2011;
+    var month = 1;
+    var day = null;
+    var lastSelected = null;
+    var selected = null;
+    var last_used_url_calendar = "";
+    var timetracking_id = 0;
+
+    function set_title() {
+        $("#title_calendar").text(year + " - " + month);
+        $("#title_calendar").css("font-size", "30px");
+        $("#title_calendar").css("text-align", "center");
+    }
+
+    function fill_table(url) {
+        $('#calendar_table tr').remove();
+
+        last_used_url_calendar = url;
+
+        $.getJSON(url,
+                {
+                    format: "json"
+                },
+                function(data) {
+
+                    set_title();
+
+                    $('#calendar_table tr').remove();
+
+                    var week = data[0][0];
+
+                    //Create row for day(Mon,thu..)
+                    $('#calendar_table').last().append("<tr></tr>");
+                    $('#calendar_table tr').last().append("<td>Uke</td>")
+                    $('#calendar_table tr').last().append("<td>Man</td>")
+                    $('#calendar_table tr').last().append("<td>Tirs</td>")
+                    $('#calendar_table tr').last().append("<td>Ons</td>")
+                    $('#calendar_table tr').last().append("<td>Tors</td>")
+                    $('#calendar_table tr').last().append("<td>Fre</td>")
+                    $('#calendar_table tr').last().append("<td>Lør</td>")
+                    $('#calendar_table tr').last().append("<td>Søn</td>")
+                    $('#calendar_table tr').last().append("<td>Total</td>")
+
+                    //Create first row
+                    $('#calendar_table').last().append("<tr></tr>");
+                    $('#calendar_table tr').last().append("<td>" + data[0][0] + "</td>");
+
+                    var total_week = 0;
+                    var total = 0;
+
+                    $.each(data, function(i, item) {
+
+                        if (item[0] != week) {
+                            //Create total row for last week
+                            $('#calendar_table tr').last().append("<td>" + total_week + "</td>");
+                            //Reset total
+                            total_week = 0;
+                            //Create new week
+                            $('#calendar_table').last().append("<tr></tr>");
+                            $('#calendar_table tr').last().append("<td>" + item[0] + "</td>");
+                            week = item[0];
+                        }
+
+                        if(item[1]>0) {
+                        $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + item[3] + "</div></td>")
+                        } else {
+                            $('#calendar_table tr').last().append("<td></td>");
+                        }
+
+                        total_week += item[3];
+                        total += item[3];
+                    });
+
+                    //Create last week_total
+                    $('#calendar_table tr').last().append("<td>" + total_week + "</td>");
+
+                    //Create the month total
+                    $('#calendar_table').last().append("<tr></tr>");
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td></td>")
+                    $('#calendar_table tr').last().append("<td>" + total + "</td>")
+
+                    //If day, reclick this day, this will also update the table_list
+                    $.each($('#calendar_table .day').find(".date_day"), function() {
+                        if ($(this).text() == day) {
+                            $(this).click();
+                        }
+                    });
+
+                    if(!day) {
+                        $('#calendar_table .day').find(".date_day").first().parent().click();
+                    }
+
+
+                });
+    }
+
+    function fill_calendar_list(year, month, day) {
+
+        var url = "http://localhost:8000/hourregistrations/calendar/" + year + "/" + month + "/" + day + "/";
+
+        $('#calender_list tr').remove();
+
+        $.getJSON(url,
+                {
+                    format: "json"
+                },
+                function(data) {
+                    $.each(data, function(i, item) {
+                        $('#calender_list').last().append("<tr></tr>")
+                        $('#calender_list tr').last().append("<td class='id'>" + item.id + "</td>");
+                        $('#calender_list tr').last().append("<td class='time_start'>" + item.time_start + "</td>");
+                        $('#calender_list tr').last().append("<td class='time_end'>" + item.time_end + "</td>");
+                        $('#calender_list tr').last().append("<td class='order'>" + item.order + "</td>");
+                        $('#calender_list tr').last().append("<td class='description'>" + item.description + "</td>");
+                        $('#calender_list tr').last().append("<td><a href='#' class='edit_hour_registration'> endre</a></td>");
+                    });
+                });
+    }
+
+    function increment_month() {
+
+        if (month == 12) {
+            month = 1;
+            year = year + 1;
+        }
+        else {
+            month += 1;
+        }
+
+        fill_table("/hourregistrations/calendar/" + year + "/" + month + "/");
 
     }
 
-    #weeks {
-        color: black;
-        background-color: #ff5c00;
-        height: 50px;
-        text-align: center;
+    function decrement_month() {
+        if (month == 1) {
+            month = 12;
+            year = year - 1;
+        }
+        else {
+            month -= 1;
+        }
+        fill_table("/hourregistrations/calendar/" + year + "/" + month + "/");
+
     }
 
-    #weeks a {
-        color: black;
+    function show_div_form_edit() {
+        $("#div_form_new").hide();
+        $("#div_form_edit").show();
     }
 
-    .week {
-        border-right: 1px solid black;
-        float: left;
-        width: 18%;
-        height: 50px;
+    function show_div_form_new() {
+        $("#div_form_edit").hide();
+        $("#div_form_new").show();
     }
 
-    .pressed {
-        background-color: #ffb515;
+    function clean_form_and_id() {
+        timetracking_id = 0;
+        $("#id_time_start").val("");
+        $("#id_time_end").val("");
+        $("#id_order").val("");
+        $("#id_description").val("");
     }
 
-    #days {
-        text-align: center;
-        width: 100%;
-        height: 50px;
-    }
 
-    .day {
-        width: 100px;
-        float: left;
-    }
+    $(document).ready(function () {
 
-    #activities {
-        width: 100%;
-        min-height: 500px;
-    }
+        fill_table("/hourregistrations/calendar/" + year + "/" + month + "/");
 
-    .activity {
-        width: 100%;
-        height: 50px;
-        margin-top: 10px;
-        border-bottom: 1px solid grey;
-    }
+        show_div_form_new();
 
-</style>
+        $("#decrement_month_arrow").click(function() {
+            decrement_month();
+        });
 
-<div id="month"> {% month_title_with_arrows year month week day %}</div>
-<div id="weeks">
-    {% for weeks in weeks %}
-        <div class="week {% ifequal weeks week %}
-             pressed
-                {% endifequal %}">
-            <a href="{% url app.hourregistrations.views.calendar year month weeks day %}">Week {{ weeks }}</a>
-        </div>
-    {% endfor %}
-</div>
+        $("#increment_month_arrow").click(function() {
+            increment_month();
+        });
 
-<div id="days">
-    {% for dayk in days %}
-        <div class="day"{% ifequal dayk.day day %}
-             style="background-color:gray;"
-                {% endifequal %}><a
-                href="{% url app.hourregistrations.views.calendar year month week dayk.day %}">{{ dayk }}</a>
-        </div>
-    {% endfor %}
-</div>
+        $("#cancel_edit").click(function() {
 
-<script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#filter').quicksearch("#dataTable tbody tr");
+            clean_form_and_id();
+            show_div_form_new();
+        });
+
+        $(".form_button").click(function() {
+
+            var date = year + "-" + month + "-" + day;
+            var order = $("#id_order").val();
+            var time_start = $("#id_time_start").val();
+            var time_end = $("#id_time_end").val();
+            var description = $("#id_description").val();
+
+            $.ajax({
+                        url: '/hourregistrations/calendar/form/',
+                        type:"POST",
+                        data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, description:description}),
+                        success: function(data) {
+                            //Refresh calendar
+                            fill_table(last_used_url_calendar);
+                        }
+                    });
+            clean_form_and_id();
+        });
+
+        $(".edit_hour_registration").live("click", function() {
+            show_div_form_edit();
+            timetracking_id = $(this).parent().parent().find(".id").text();
+            $("#id_time_start").val($(this).parent().parent().find(".time_start").text());
+            $("#id_time_end").val($(this).parent().parent().find(".time_end").text());
+            $("#id_order").val($(this).parent().parent().find(".order").text());
+            $("#id_description").val($(this).parent().parent().find(".description").text());
+        });
+
+
+        $('.day').live("click", function() {
+            lastSelected = selected;
+            selected = $(this);
+            day = selected.find(".date_day").text();
+
+            if (lastSelected) {
+                lastSelected.css("background-color", "");
+                lastSelected.css("opacity", "1");
+            }
+
+            fill_calendar_list(year, month, selected.find(".date_day").text());
+
+            $(this).css("background-color", "#D4D4D4");
+            $(this).css("opacity", ".4");
+
+        });
     });
+    </script>
 
-</script>
 
-<div class="searchBox">
-    <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-</div>
-<table id="dataTable">
-    <thead>
-    <tr>
-        <th>{% trans "Date" %}</th>
-        <th>{% trans "Date time" %}</th>
-        <th>{% trans "Order" %}</th>
-        <th>{% trans "Hours" %}</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for p in hourregistrations %}
-    <tr>
-        <td>{{ p.date|date:"d.m.Y" }} {{ p.hourly_rate }}</td>
-        <td>{{ p.time_start }} - {{ p.time_end }}</td>
-        <td>{{ p.order }}</td>
-        <td>{{ p.hours_worked }}</td>
-        <td>
-            {% require_valid_date_for_edit p %}
-            <div class="tool">
-                <a href="{{ p.get_edit_url }}"><img
-                        class="tool" width="24px" height="24px" src="{{ STATIC_URL }}img/edit.png" alt=""></a>
+    <style>
+
+        #calender_table {
+            width: 60%;
+            float: left;
+        }
+
+        #calender_form {
+            margin-left: 20px;
+            width: 30%;
+            float: left;
+        }
+
+        #calender_list {
+            width: 100%;
+        }
+
+        .date_day {
+            font-size: 9px;
+        }
+
+    </style>
+
+
+    <div id="title_calendar"></div>
+    <div id="arrows" style="text-align:center;">
+        <a href="#" id="decrement_month_arrow"><<</a> |
+        <a href="#" id="increment_month_arrow">>></a>
+    </div>
+
+
+    <div id="calender_table">
+        <table id="calendar_table"></table>
+    </div>
+
+    <div id="calender_form">
+        <form action="">
+
+            {% for field in form %}
+                {{ field.label }}
+                <span class="errormessage" style='color:red' id="error_{{ field_id }}_for_{{ field.name }}"></span>
+                <br>
+                {{ field }}
+                <br>
+            {% endfor %}
+
+            <div id="div_form_edit">
+                <button type="button" class="form_button">Lagre endringer"</button>
+                <a href="#" id="cancel_edit">Avbryt</a>
             </div>
-            {% end_require %}
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
 
-<div class="stat" style="width:200px">
-    <h4>{% trans "Sum hours worked" %}</h4>
-    <span class="value">{{ sumHours }}</span>
-</div>
+            <div id="div_form_new">
+                <button type="button" class="form_button">Lagre ny timeføring</button>
+            </div>
+        </form>
 
-<div class="stat" style="width:250px">
-    <h4>{% trans "kilometres" %}</h4>
-    <span class="value">{{ sumKilometers }} km</span>
-</div>
+    </div>
 
-<div class="stat" style="width:260px">
-    <h4>{% trans "disbursments" %}</h4>
-    <span class="value">{{ sumDisbursements }} kr</span>
-</div>
+    <div id="calender_list">
+        <table>
+        </table>
+    </div>
 
-<div class="stat" style="width:250px">
-    <h4>{% trans "Total earned after tax" %}</h4>
-    <span class="value">{{ sumTotalEarned }} kr</span>
-</div>
 {% endblock %}

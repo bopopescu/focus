@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import django.contrib.auth.decorators as auth_decorators
-import django.http
 import mimetypes
 import os
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from core.decorators import login_required
 from django.core import urlresolvers
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.core.servers.basehttp import FileWrapper
 from settings import BASE_PATH
 from core.auth.user.models import User
@@ -40,10 +38,6 @@ def retrieve_file(request, filename=''):
 def update_timeout(request):
     request.session.set_expiry(1800)
     return
-
-
-def testing(request):
-    return HttpResponse("OK")
 
 """
 
@@ -103,6 +97,3 @@ def grant_permission(request, perm, userorgroup, user_id, app, model, object_id)
     request.message_success("Permission granted")
     return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
 
-
-def permission_denied (request, permission_info=None):
-    return render(request, 'permission_denied.html', permission_info)

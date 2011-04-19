@@ -1,13 +1,12 @@
-from datetime import timedelta, datetime
 from django.conf import settings
 from django.test import TestCase
 from django.test.simple import DjangoTestSuiteRunner
 from core import load_initial_data, Core
-from core.auth.permission.models import Action, Permission, Role
+from core.auth.permission.models import  Permission, Role
 from core.auth.user.models import User
 from core.auth.group.models import Group
 from app.customers.models import Customer
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class FocusTestSuiteRunner(DjangoTestSuiteRunner):
     """
@@ -21,7 +20,7 @@ class FocusTestSuiteRunner(DjangoTestSuiteRunner):
         - Removes a certain test from the suite before running it
         """
 
-        # Add initial data that since 1.2.5 won't be added on tests automaticly anymore
+        # Add initial data that since Django won't be added on tests automaticly
         for app in settings.INSTALLED_APPS:
             load_initial_data(app, test=True)
 
@@ -34,7 +33,6 @@ class FocusTestSuiteRunner(DjangoTestSuiteRunner):
         suite._tests = new_suites
 
         return super(FocusTestSuiteRunner, self).run_suite(suite, **kwargs)
-
 
 class FocusTest(TestCase):
     def setUp(self):
