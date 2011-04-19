@@ -67,8 +67,8 @@
                             week = item[0];
                         }
 
-                        if(item[1]>0) {
-                        $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + item[3] + "</div></td>")
+                        if (item[1] > 0) {
+                            $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + item[3] + "</div></td>")
                         } else {
                             $('#calendar_table tr').last().append("<td></td>");
                         }
@@ -99,7 +99,7 @@
                         }
                     });
 
-                    if(!day) {
+                    if (!day) {
                         $('#calendar_table .day').find(".date_day").first().parent().click();
                     }
 
@@ -109,7 +109,7 @@
 
     function fill_calendar_list(year, month, day) {
 
-        var url = "http://localhost:8000/hourregistrations/calendar/" + year + "/" + month + "/" + day + "/";
+        var url = "/hourregistrations/calendar/" + year + "/" + month + "/" + day + "/";
 
         $('#calender_list tr').remove();
 
@@ -173,7 +173,6 @@
         $("#id_order").val("");
         $("#id_description").val("");
     }
-
 
     $(document).ready(function () {
 
