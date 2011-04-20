@@ -64,7 +64,7 @@ class HourRegistration(PersistentModel):
             start_t = time.mktime(start)
             end_t = time.mktime(end)
 
-            self.hours_worked = float(calculateHoursWorked(start_t, end_t)) - float(self.pause)
+            self.hours_worked = Decimal(calculateHoursWorked(start_t, end_t)) - Decimal(self.pause)
             #self.hours_worked = calculateHoursWorked(start_t, end_t)-self.pause-(self.savedHours - self.usedOfSavedHours)
 
         super(HourRegistration, self).save()
