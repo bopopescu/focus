@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.contenttypes.models import ContentType
 
 from django.core.management.base import BaseCommand
 import os
 import MySQLdb
 import MySQLdb.cursors
+from app.hourregistrations.models import HourRegistration
 from core import Core
 #from core.models import User, Group, Company, Log, Notification
 from core.auth.user.models import User
@@ -28,6 +29,7 @@ UnitsForSizes = get_class("stock", "unitsforsizes")
 Currency = get_class("stock", "currency")
 ProductCategory = get_class("stock", "productcategory")
 ProductGroup = get_class("stock", "productgroup")
+Ticket = get_class("tickets", "ticket")
 
 def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
     adminGroup = Group(name=adminGroup)
@@ -69,6 +71,7 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     adminGroup.grant_role("Admin", Notification)
     adminGroup.grant_role("Admin", User)
     adminGroup.grant_role("Admin", Group)
+    adminGroup.grant_role("Admin", Ticket)
     adminGroup.grant_permissions("CONFIGURE", Company)
 
     #Give employee group some permissions on classes
@@ -81,19 +84,20 @@ def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUse
     allEmployeesGroup.grant_role("Admin", Product)
     allEmployeesGroup.grant_role("Member", Log)
     allEmployeesGroup.grant_role("Member", Supplier)
+    allEmployeesGroup.grant_role("Member", Ticket)
     allEmployeesGroup.grant_role("Member", Notification)
 
     return company, user
 
+
 def findElementByOldID(elements, id):
     for e in elements:
-        if e[1] == id:
+        if str(e[1]) == str(id):
             return e[0]
     return None
 
+
 class Command(BaseCommand):
-
-
     def migrate_contacts(self, cursor):
         cursor.execute("SELECT * FROM kundebrukere")
         contacts = []
@@ -115,7 +119,7 @@ class Command(BaseCommand):
             p.save()
             contacts.append((p, cu['kundebrukerid']))
         return contacts
-    
+
     def migrate_suppliers(self, cursor):
         print "Migrating suppliers"
         suppliers = []
@@ -124,7 +128,7 @@ class Command(BaseCommand):
             p = Supplier()
             p.name = cu['levnavn'].decode('latin1')
             p.address = cu['adresse'].decode('latin1')
-            p.address = p.address.replace("<br/>","\n")
+            p.address = p.address.replace("<br/>", "\n")
             p.zip = cu['postnr'].decode("latin1")
             p.phone = cu['telefon'].decode("latin1")
             p.email_contact = cu['kontaktepost'].decode("latin1")
@@ -136,7 +140,7 @@ class Command(BaseCommand):
 
             p.save()
             suppliers.append((p, cu['levid']))
-            
+
         print "Done migrating suppliers"
         return suppliers
 
@@ -153,7 +157,6 @@ class Command(BaseCommand):
         return productcategories
 
     def migrate_product_groups(self, cursor, productcategories):
-
         print "Migrate product groups"
 
         productgroups = []
@@ -210,6 +213,7 @@ class Command(BaseCommand):
         print "Done migrating users"
         return users
 
+
     def migrate_projects(self, company, cursor, users, contacts):
         print "Migrating projects"
         projects = []
@@ -218,16 +222,15 @@ class Command(BaseCommand):
             p = Project()
             p.pid = cu['prosjektid']
             p.project_name = cu['prosjektnavn'].decode('latin1')
-            p.description = cu['beskrivelse'].decode('latin1')
+            p.description = cu['beskrivelse'].decode('latin1').replace("<br/>", "\n")
             p.customer = Customer.objects.get(cid=cu['kundenr'], company=company)
 
             if cu['ansvarlig']:
-               p.responsible = findElementByOldID(users, cu['ansvarlig'])
+                p.responsible = findElementByOldID(users, cu['ansvarlig'])
 
             p.save()
 
             if cu['kontaktperson']:
-
                 p.contact = findElementByOldID(contacts, cu['kontaktperson'])
                 p.save()
 
@@ -235,7 +238,6 @@ class Command(BaseCommand):
                     p.customer.contacts.add(findElementByOldID(contacts, cu['kontaktperson']))
                     p.customer.save()
 
-                
             projects.append((p, cu['prosjektid']))
 
         return projects
@@ -247,6 +249,9 @@ class Command(BaseCommand):
         cursor.execute("SELECT * FROM ordrer")
         orders = []
         for cu in cursor.fetchall():
+            if(len(orders) % 150 == 0):
+                print len(orders)
+
             p = Order()
             p.state = "Order"
             if cu['ordrenr'] and cu['ordrenr'].isdigit():
@@ -256,7 +261,7 @@ class Command(BaseCommand):
                 p.order_name = cu['ordrenavn'].decode('latin1')
 
             if cu['ordrebeskrivelse']:
-                p.description = cu['ordrebeskrivelse'].decode('latin1')
+                p.description = cu['ordrebeskrivelse'].decode('latin1').replace("<br/>", "\n")
 
             if cu['ansvarlig']:
                 p.responsible = findElementByOldID(users, cu['ansvarlig'])
@@ -277,10 +282,42 @@ class Command(BaseCommand):
                 pass
 
             p.save()
-            orders.append((p, cu['tilbudsnr']))
-            
+            orders.append((p, cu['ordrenr']))
+
         print "Done migrating orders"
         return orders
+
+    def migrate_timetracking(self, cursor, users, orders):
+        print "Migrating timetracking"
+        cursor.execute("SELECT * FROM timereg")
+
+        timetrackings = []
+
+        for cu in cursor.fetchall():
+            user = findElementByOldID(users, str(cu['brukerid']))
+            Core.set_test_user(user)
+
+            if(len(timetrackings) % 150 == 0):
+                print len(timetrackings)
+
+            o = HourRegistration()
+            o.order = findElementByOldID(orders, str(cu['ordrenr']))
+
+            if(cu['date']):
+                o.date = cu['date']
+
+            o.time_start = "08:00"
+            end_time = datetime.strptime("2010-10-10 08:00:00", "%Y-%m-%d %H:%M:%S") + timedelta(
+                hours=(float((cu['antalltimer_totalt'].decode("latin1")))))
+
+            o.time_end = end_time.strftime("%H:%M")
+            o.description = cu['beskrivelse_time'].decode("latin1")
+            o.save()
+            timetrackings.append(o)
+
+        print "Done migrating timetracking"
+
+        return timetrackings
 
     def migrate_products(self, cursor, productgroups, suppliers):
         print "Migrating products"
@@ -306,7 +343,7 @@ class Command(BaseCommand):
 
             p.save()
         print "Done migrating products"
-        
+
     def connect_database(self):
         conn = MySQLdb.connect(host="focustimeno.mysql.domeneshop.no",
                                user="focustimeno",
@@ -338,14 +375,18 @@ class Command(BaseCommand):
 
         users = self.migrate_users(company, cursor, randomCompanyIdentifier)
 
-
         contacts = self.migrate_contacts(cursor)
 
-        self.migrate_customers(cursor,contacts)
+        self.migrate_customers(cursor, contacts)
 
         self.migrate_projects(company, cursor, users, contacts)
 
-        self.migrate_orders(company, cursor, users)
+        orders = self.migrate_orders(company, cursor, users)
+
+        self.migrate_timetracking(cursor, users, orders)
+
+        #Set test user again
+        Core.set_test_user(user)
 
         suppliers = self.migrate_suppliers(cursor)
 

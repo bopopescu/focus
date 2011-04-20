@@ -39,8 +39,8 @@
                         {% endfor %}
                     </td>
                     <td>{% if perm.group %}
-                        {% trans "Thru group" %} <a
-                                href="{% url app.admin.views.group.view perm.membership.id %}">{{  perm.group }}</a>
+                        {% trans "Through group" %} <a
+                                href="{% url app.admin.views.group.view perm.group.id %}">{{  perm.group }}</a>
                     {% endif %}
                     </td>
                 </tr>

@@ -4,9 +4,10 @@
 
     <script>
 
-    var year = 2011;
-    var month = 1;
-    var day = null;
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = today.getMonth() + 1;
+    var day = today.getDate();
     var lastSelected = null;
     var selected = null;
     var last_used_url_calendar = "";
@@ -58,7 +59,7 @@
 
                         if (item[0] != week) {
                             //Create total row for last week
-                            $('#calendar_table tr').last().append("<td>" + total_week + "</td>");
+                            $('#calendar_table tr').last().append("<td>" + total_week.toFixed(2) + "</td>");
                             //Reset total
                             total_week = 0;
                             //Create new week
@@ -68,7 +69,7 @@
                         }
 
                         if (item[1] > 0) {
-                            $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + item[3] + "</div></td>")
+                            $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + item[3].toFixed(2) + "</div></td>")
                         } else {
                             $('#calendar_table tr').last().append("<td></td>");
                         }
@@ -78,7 +79,7 @@
                     });
 
                     //Create last week_total
-                    $('#calendar_table tr').last().append("<td>" + total_week + "</td>");
+                    $('#calendar_table tr').last().append("<td>" + total_week.toFixed(2) + "</td>");
 
                     //Create the month total
                     $('#calendar_table').last().append("<tr></tr>");
@@ -90,7 +91,7 @@
                     $('#calendar_table tr').last().append("<td></td>")
                     $('#calendar_table tr').last().append("<td></td>")
                     $('#calendar_table tr').last().append("<td></td>")
-                    $('#calendar_table tr').last().append("<td>" + total + "</td>")
+                    $('#calendar_table tr').last().append("<td>" + total.toFixed(2) + "</td>")
 
                     //If day, reclick this day, this will also update the table_list
                     $.each($('#calendar_table .day').find(".date_day"), function() {
@@ -102,7 +103,6 @@
                     if (!day) {
                         $('#calendar_table .day').find(".date_day").first().parent().click();
                     }
-
 
                 });
     }
@@ -120,12 +120,16 @@
                 function(data) {
                     $.each(data, function(i, item) {
                         $('#calender_list').last().append("<tr></tr>")
-                        $('#calender_list tr').last().append("<td class='id'>" + item.id + "</td>");
-                        $('#calender_list tr').last().append("<td class='time_start'>" + item.time_start + "</td>");
-                        $('#calender_list tr').last().append("<td class='time_end'>" + item.time_end + "</td>");
-                        $('#calender_list tr').last().append("<td class='order'>" + item.order + "</td>");
-                        $('#calender_list tr').last().append("<td class='description'>" + item.description + "</td>");
-                        $('#calender_list tr').last().append("<td><a href='#' class='edit_hour_registration'> endre</a></td>");
+                        $('#calender_list tr').last().append("<td class='id' style='display:none;'>" + item.id + "</td>");
+                        $('#calender_list tr').last().append("<td class='time_start' style='display:none;'>" + item.time_start + "</td>");
+                        $('#calender_list tr').last().append("<td class='time_end' style='display:none;'>" + item.time_end + "</td>");
+                        $('#calender_list tr').last().append("<td class='order' style='display:none;'>" + item.order + "</td>");
+                        $('#calender_list tr').last().append("<td class='pause' style='display:none;'>" + item.pause + "</td>");
+                        $('#calender_list tr').last().append("<td class='description' style='display:none;'>" + item.description + "</td>");
+
+                        $('#calender_list tr').last().append("<td>" + item.time_start + " - " + item.time_end + " </td>");
+                        $('#calender_list tr').last().append("<td> | " + item.customer_name + " - " + item.order_name + " </td>");
+                        $('#calender_list tr').last().append("<td> <a href='#' class='edit_hour_registration'> endre</a></td>");
                     });
                 });
     }
@@ -174,6 +178,19 @@
         $("#id_description").val("");
     }
 
+    function show_form_if_date_valid_for_edit() {
+        $.ajax({
+                    url: '/hourregistrations/calendar/date_valid_for_edit/' + year + '/' + month + '/' + day + '/',
+                    success: function(data) {
+                        if (data) {
+                            $("#calender_form").show();
+                        } else {
+                            $("#calender_form").hide();
+                        }
+                    }
+                });
+    }
+
     $(document).ready(function () {
 
         fill_table("/hourregistrations/calendar/" + year + "/" + month + "/");
@@ -189,7 +206,6 @@
         });
 
         $("#cancel_edit").click(function() {
-
             clean_form_and_id();
             show_div_form_new();
         });
@@ -200,12 +216,13 @@
             var order = $("#id_order").val();
             var time_start = $("#id_time_start").val();
             var time_end = $("#id_time_end").val();
+            var pause = $("#id_pause").val();
             var description = $("#id_description").val();
 
             $.ajax({
                         url: '/hourregistrations/calendar/form/',
                         type:"POST",
-                        data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, description:description}),
+                        data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, pause:pause, description:description}),
                         success: function(data) {
                             //Refresh calendar
                             fill_table(last_used_url_calendar);
@@ -220,6 +237,7 @@
             $("#id_time_start").val($(this).parent().parent().find(".time_start").text());
             $("#id_time_end").val($(this).parent().parent().find(".time_end").text());
             $("#id_order").val($(this).parent().parent().find(".order").text());
+            $("#id_pause").val($(this).parent().parent().find(".pause").text());
             $("#id_description").val($(this).parent().parent().find(".description").text());
         });
 
@@ -228,6 +246,8 @@
             lastSelected = selected;
             selected = $(this);
             day = selected.find(".date_day").text();
+
+            show_form_if_date_valid_for_edit();
 
             if (lastSelected) {
                 lastSelected.css("background-color", "");

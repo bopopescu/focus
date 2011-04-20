@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from django.forms import ModelForm
-from models import *
-from core.widgets import *
 from functools import partial
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from app.stock.models import Product, UnitsForSizes, ProductGroup, Currency, ProductFile
+from app.suppliers.models import Supplier
+from core.widgets import SelectWithPop, JQueryAutoComplete
+from django.forms import forms
 
 class ProductForm(ModelForm):
     class Meta:

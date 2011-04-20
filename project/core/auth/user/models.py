@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect
 from core import Core
+from django.db.models import Q
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -143,22 +144,27 @@ class User(models.Model):
 
         return [from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y")]
 
-    def can_edit_hourregistration(self, hourRegistration, *args, **kwargs):
-        now = datetime.now()
 
+    def can_edit_hour_date(self, date, *args, **kwargs):
+
+        now = datetime.now()
         period = self.generate_valid_period(*args, **kwargs)
 
         if 'today' in kwargs:
             now = datetime.strptime(kwargs['today'], "%d.%m.%Y")
             period = self.generate_valid_period(today=kwargs['today'])
 
-        date = time.mktime(time.strptime("%s" % (hourRegistration.date.strftime("%d.%m.%Y")), "%d.%m.%Y"))
+        date = time.mktime(time.strptime("%s" % (date), "%d.%m.%Y"))
         from_date = time.mktime(time.strptime("%s" % (period[0]), "%d.%m.%Y"))
         to_date = time.mktime(time.strptime("%s" % (period[1]), "%d.%m.%Y"))
 
         if date >= from_date and date <= to_date:
             return True
+
         return False
+
+    def can_edit_hourregistration(self, hourRegistration, *args, **kwargs):
+        return self.can_edit_hour_date(hourRegistration.date.strftime("%d.%m.%Y"), *args, **kwargs)
 
     def set_company(self):
         self.company = Core.current_user().get_company()
@@ -366,20 +372,14 @@ class User(models.Model):
     def get_permissions(self):
         permissions = []
 
-        for p in Permission.objects.filter(user=self):
-            if not p.id in permissions:
-                permissions.append(p.id)
+        groups = self.groups.all()
+        
+        return Permission.objects.filter(
 
-        for group in self.groups.all():
-            for p in group.get_permissions():
-                if not p.id in permissions:
-                    permissions.append(p.id)
+        Q(user=self) | Q(group__in = groups)
 
-        return Permission.objects.filter(id__in=permissions)
+        )
 
-    """
-    SKRIVE OM , ta utgangspunkt i permission-tabellen
-    """
 
     def get_permitted_objects(self, action, model):
         objects = model.objects.filter()

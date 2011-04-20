@@ -12,7 +12,7 @@
 
     <h2>{{ announcement.title }}</h2>
 
-    {{ announcement.text }}
+    {{ announcement.text|linebreaks }}
 
     <p>
         Skrevet av {{ announcement.creator.first_name }}, {{ announcement.date_created|date:"d.m.Y H:i" }}

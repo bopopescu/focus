@@ -1,7 +1,5 @@
 from datetime import datetime, date
 from decimal import Decimal
-import time
-import re
 from app.customers.models import Customer
 from helpers import calculateHoursWorked
 from app.orders.models import Order
@@ -9,6 +7,8 @@ from core import Core
 from core.models import PersistentModel, User
 from django.db import models
 from django.core import urlresolvers
+import time
+import re
 
 max_digits = 5
 decimal_places = 3
@@ -64,7 +64,7 @@ class HourRegistration(PersistentModel):
             start_t = time.mktime(start)
             end_t = time.mktime(end)
 
-            self.hours_worked = calculateHoursWorked(start_t, end_t)
+            self.hours_worked = float(calculateHoursWorked(start_t, end_t)) - float(self.pause)
             #self.hours_worked = calculateHoursWorked(start_t, end_t)-self.pause-(self.savedHours - self.usedOfSavedHours)
 
         super(HourRegistration, self).save()
@@ -79,7 +79,6 @@ class HourRegistration(PersistentModel):
 
 class HourRegisrationImage(PersistentModel):
     pass
-
 
 class Disbursement(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="disbursements")

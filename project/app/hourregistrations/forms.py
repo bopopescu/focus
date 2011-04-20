@@ -7,7 +7,7 @@ class HourRegistrationForm(ModelForm):
 
     class Meta:
         model = HourRegistration
-        fields = ("order","time_start","time_end","description")
+        fields = ("order","time_start","time_end","pause","description")
 
     def __init__(self, *args, **kwargs):
         super(HourRegistrationForm, self).__init__(*args, **kwargs)

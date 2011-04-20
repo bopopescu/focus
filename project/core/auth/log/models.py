@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from core import Core
 from django.db import models
 from datetime import datetime
+from django.utils.translation import ugettext as _
 
 class Log(models.Model):
     date = models.DateTimeField()

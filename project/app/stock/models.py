@@ -9,8 +9,10 @@ from django.core import urlresolvers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.translation import ugettext as _
-from app.orders.models import Order
+from core.utils import get_class
 
+
+Order = get_class("orders", "order")
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class UnitsForSizes(PersistentModel):

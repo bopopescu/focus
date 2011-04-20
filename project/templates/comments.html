@@ -22,7 +22,7 @@
                 <td>
                     <p><strong>{{ comment.creator }}</strong> on {{ comment.date_created }}</p>
 
-                    <p>{{ comment.text }}</p>
+                    <p>{{ comment.text|linebreaks }}</p>
                 </td>
             </tr>
 

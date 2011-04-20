@@ -2,6 +2,7 @@ from django.shortcuts import render
 from app.hourregistrations.forms import HourRegistrationForm
 from app.hourregistrations.models import HourRegistration
 from app.orders.models import Order
+from core import Core
 from core.decorators import login_required
 from datetime import datetime
 from django.utils import simplejson
@@ -41,17 +42,19 @@ def form(request):
 def calendar_day_json(request, year, month, day):
     date = datetime.strptime("%s-%s-%s" % (year, month, day), "%Y-%m-%d")
 
-    listHourRegistrations = HourRegistration.objects.filter(date=date)
+    listHourRegistrations = HourRegistration.objects.filter(date=date, creator=Core.current_user())
 
     registrations = [{'id': reg.id,
                       'time_start': reg.time_start,
                       'time_end': reg.time_end,
                       'order': reg.order.id,
+                      'pause': str(reg.pause),
+                      'customer_name': reg.order.customer.full_name,
+                      'order_name': reg.order.order_name,
                       'description': reg.description
                      } for reg in listHourRegistrations]
 
     return HttpResponse(JSONEncoder().encode(registrations), mimetype='application/json')
-
 
 @login_required()
 def calendar_json(request, year, month):
@@ -73,8 +76,8 @@ def calendar_json(request, year, month):
             if int(day) > 0:
                 day_date = datetime.strptime("%s-%s-%s" % (year, month, int(day)), "%Y-%m-%d")
 
-                for reg in HourRegistration.objects.filter(date=day_date):
-                    hours_count += int(reg.hours_worked)
+                for reg in HourRegistration.objects.filter(date=day_date, creator=Core.current_user()):
+                    hours_count += float(reg.hours_worked)
 
             if NOW == date:
                 temp_cal.append((CURRENT_WEEK, day, "day today", hours_count))
@@ -91,9 +94,18 @@ def calendar_json(request, year, month):
 
     return HttpResponse(JSONEncoder().encode(temp_cal), mimetype='application/json')
 
+@login_required()
+def date_valid_for_edit(request, year, month, day):
+    response = Core.current_user().can_edit_hour_date("%s.%s.%s"%(day,month,year))
+    return HttpResponse(JSONEncoder().encode(response), mimetype='application/json')
 
 @login_required()
 def calendar_today(request):
     form = HourRegistrationForm()
 
     return render(request, "hourregistrations/calendar.html", {"form":form})
+
+@login_required()
+def calendar_can_edit_form(request):
+    reg = HourRegistration.objects.get()
+    print Core.current_user()

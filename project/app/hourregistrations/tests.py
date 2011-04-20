@@ -1,6 +1,6 @@
 from datetime import datetime
 from app.customers.models import Customer
-from app.hourregistrations.models import HourRegistration, TypeOfHourRegistration
+from app.hourregistrations.models import HourRegistration
 from app.orders.models import Order
 from core.tests import FocusTest
 
@@ -123,13 +123,11 @@ class TimeTrackingTesting(FocusTest):
         todayDate = "1.1.2011"
         now = datetime.strptime(todayDate, "%d.%m.%Y")
 
-        testTypeHour = TypeOfHourRegistration.objects.create(name="Arbeid", description="test")
         testCustomer = Customer.objects.create(cid="10432", full_name="testKunde", email="test@test.com")
         testOrder = Order.objects.create(oid="2342", order_name="test", customer=testCustomer, state="Offer",
                                          responsible=user)
         hourRegistration = HourRegistration.objects.create(date=now,
                                                            order=testOrder,
-                                                           typeOfWork=testTypeHour,
                                                            time_start="15:00",
                                                            time_end="16:00",
                                                            description="testTime",
@@ -139,23 +137,39 @@ class TimeTrackingTesting(FocusTest):
         user.set_valid_period(fromDate="", toDate="")
         user.company.set_days_into_next_month(3)
 
-        #check if user can edit
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), True)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), True)
+
         todayDate = "1.1.2009"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), False)
+        self.assertEqual(user.can_edit_hour_date("1.1.2009", today=todayDate), True)
+
         todayDate = "1.2.2011"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), True)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), True)
+
         todayDate = "3.2.2011"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), True)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), True)
+
         todayDate = "4.2.2011"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), False)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), False)
+
         todayDate = "4.1.2020"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), False)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), False)
+
         todayDate = "31.12.2010"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), False)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), False)
 
         user.set_valid_period(fromDate="01.01.2000", toDate="01.01.2030")
+
         todayDate = "4.1.2020"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), True)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), True)
+        
         todayDate = "4.1.2000"
         self.assertEqual(user.can_edit_hourregistration(hourRegistration, today=todayDate), True)
+        self.assertEqual(user.can_edit_hour_date("1.1.2011", today=todayDate), True)
