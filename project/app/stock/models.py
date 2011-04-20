@@ -11,8 +11,6 @@ from django.core.files.storage import FileSystemStorage
 from django.utils.translation import ugettext as _
 from core.utils import get_class
 
-
-Order = get_class("orders", "order")
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class UnitsForSizes(PersistentModel):
@@ -118,12 +116,14 @@ class Product(PersistentModel):
 
     def orders(self):
         orderIDs = []
+        cls = None
         for line in self.orderlines.all():
+            if not cls:
+                cls = line.order.__class__
             if not line.order.id in orderIDs:
                 orderIDs.append(line.order.id)
-        orders = Order.objects.filter(id__in=orderIDs)
+        orders = cls.objects.filter(id__in=orderIDs)
         return orders
-
 
 class ProductFile(PersistentModel):
     product = models.ForeignKey(Product, related_name="files")
