@@ -51,11 +51,11 @@
             }
 
             function setNeedCustomerMessage() {
-                $("select#id_project").html("<option>----------</option>");
+                $("select#id_project").html("<option value=''>---------</option>");
                 $("#projectcustomer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}</div>");
             }
 
-            $("select#id_project").html("<option>----------</option>");
+            $("select#id_project").html("<option value=''>---------</option>");
             $("#id_projects-customer").hide();
 
             $("#error_project_for_customer").replaceWith("<div id='error_project_for_customer'>{% trans 'You have to select a customer' %}</div>");

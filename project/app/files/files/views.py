@@ -5,6 +5,7 @@ from core.shortcuts import *
 from core.views import update_timeout
 from core.decorators import *
 from app.files.models import File, Folder
+from django.shortcuts import get_object_or_404
 
 @login_required()
 def overview(request):
@@ -75,10 +76,10 @@ def delete(request, id):
 def view(request, id):
     file = File.objects.filter().get(id=id)
 
-    whoCanSeeThis = file.who_has_permission_to('view')
+    who_can_see_this = file.who_has_permission_to('view')
     return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
                                                             'file': file,
-                                                            'whoCanSeeThis': whoCanSeeThis})
+                                                            'who_can_see_this': who_can_see_this})
 
 """
 @login_required()

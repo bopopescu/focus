@@ -23,10 +23,10 @@ def delete(request, id):
 def view(request, id):
     file = File.objects.filter().get(id=id)
 
-    whoCanSeeThis = file.who_has_permission_to('view')
+    who_can_see_this = file.who_has_permission_to('view')
     return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
                                                             'file': file,
-                                                            'whoCanSeeThis': whoCanSeeThis})
+                                                            'who_can_see_this': who_can_see_this})
 
 @login_required()
 def form (request, id=False, folderID=None):

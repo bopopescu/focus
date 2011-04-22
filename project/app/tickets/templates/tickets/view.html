@@ -41,7 +41,8 @@
                         <th>{% trans "spent time" %}</th> <td>{{ ticket.spent_time }}</td>
                     </tr>
                     <tr>
-                        <th>{% trans "customer" %}</th> <td>{{ ticket.customer }}</td>
+                        <th>{% trans "customer" %}</th> <td><a href="{% url app.customers.views.view ticket.customer.id %}">{{ ticket.customer }}</a></td>
+                        <th>{% trans "order" %}</th> <td><a href="{% url app.orders.views.view ticket.order.id %}">{{ ticket.order }}</a></td>
                     </tr>
 
                 </table>

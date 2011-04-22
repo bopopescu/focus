@@ -20,8 +20,4 @@ urlpatterns = patterns('app.orders.views',
 
                        url(r'^(?P<id>\d+)/change_status/$', 'change_status'),
 
-                       #TASKS
-                       url(r'^(?P<id>\d+)/add_task/$', 'add_task'),
-                       url(r'^(?P<id>\d+)/change_status_task/$', 'change_status_task'),
-
                        )

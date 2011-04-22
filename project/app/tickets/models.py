@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from core.models import PersistentModel, User, Comment
+from core.models import PersistentModel, Comment
+from core.auth.user.models import User
 from django.db import models
 from app.customers.models import Customer
 from django.utils.translation import ugettext as _
@@ -41,6 +42,7 @@ class Ticket(PersistentModel):
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
     due_date = models.DateTimeField(null=True, blank=True, default=None)
     customer = models.ForeignKey(Customer, verbose_name=_("Customer"))
+    order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"), related_name="tickets")
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 

@@ -20,7 +20,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'project.db'
+        'NAME': 'project.db',
+        'options': {
+            'MAX_ENTRIES': 3000,
+            }
     }
 }
 

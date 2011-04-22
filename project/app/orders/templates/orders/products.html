@@ -21,7 +21,8 @@
     </div>
 
     <form action="" method="POST">
-        {{ form }}
+        {% trans "Product" %} {{ form.product }}
+        {% trans "Count" %} {{ form.count }}
         <input type="submit" value="{% trans "Add new product" %}">
     </form>
 
@@ -29,6 +30,7 @@
         <thead>
         <tr>
             <th>{% trans "Product" %}</th>
+            <th>{% trans "Count" %}</th>
             <th>#</th>
         </tr>
         </thead>
@@ -36,7 +38,8 @@
 
         {% for orderline in orderlines.all %}
             <tr>
-                <td><a href="{% url app.stock.views.product.view orderline.product.id %}">{{ orderline }}</a></td>
+                <td><a href="{% url app.stock.views.product.view orderline.product.id %}">{{ orderline.product }}</a></td>
+                <td>{{ orderline.count }} stk </td>
                 <td><a href="{% url app.orders.views.delete_order_line order.id orderline.id %}">{% trans "Delete" %}</a></td>
             </tr>
         {% endfor %}

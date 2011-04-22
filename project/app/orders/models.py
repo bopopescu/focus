@@ -21,7 +21,8 @@ class Order(PersistentModel):
     customer = models.ForeignKey(Customer, related_name="orders", verbose_name=_("Customer"), blank=True, null=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
     deliveryAddress = models.CharField(max_length=150, null=True)
-    responsible = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name=_("Responsible"))
+    responsible = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name=_("Responsible"),
+                                    null=True, blank=True)
     delivery_date = models.DateField(verbose_name=_("Delivery date"), null=True, blank=True)
     delivery_date_deadline = models.DateField(verbose_name=_("Delivery deadline"), null=True, blank=True)
     description = models.TextField(_("Description"))
@@ -62,21 +63,13 @@ class Order(PersistentModel):
     def get_view_url(self):
         return urlresolvers.reverse('app.orders.views.view', args=("%s" % self.id,))
 
-    def haveCompletedAllTasks(self):
-        tasks = self.tasks
-
-        for t in tasks.all():
-            if not t.done:
-                return False
-
-        return True
-
     def save(self, *args, **kwargs):
         new = False
         if not self.id:
             new = True
 
         super(Order, self).save()
+
 
 class OrderLine(PersistentModel):
     order = models.ForeignKey(Order, related_name="orderlines")
@@ -85,26 +78,3 @@ class OrderLine(PersistentModel):
 
     def __unicode__(self):
         return "Order: %s, Product: %s" % (self.order, self.product)
-
-class Task(PersistentModel):
-    order = models.ForeignKey(Order, related_name="tasks")
-    text = models.TextField("Ny oppgave")
-    done = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.text
-
-class OrderFolder(PersistentModel):
-    project_id = models.ForeignKey(Order, related_name="folders")
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return "Prosjektmappe: %s" % self.name
-
-class OrderFile(PersistentModel):
-    project_id = models.ForeignKey(Order, related_name="files")
-    name = models.CharField(max_length=100)
-    folder = models.ForeignKey(OrderFolder, related_name="files")
-
-    def __unicode__(self):
-        return "Prosjektfil: %s" % self.name

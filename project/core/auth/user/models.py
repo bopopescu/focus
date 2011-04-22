@@ -15,7 +15,6 @@ from inspect import isclass
 import os
 import time
 
-
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class User(models.Model):
@@ -146,7 +145,6 @@ class User(models.Model):
 
 
     def can_edit_hour_date(self, date, *args, **kwargs):
-
         now = datetime.now()
         period = self.generate_valid_period(*args, **kwargs)
 
@@ -320,13 +318,6 @@ class User(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
-        #if isinstance(action, str):
-        #   action = [action]
-
-        #If in debug and superadmin user is logged in, always return true
-        if settings.DEBUG and Core.current_user().is_superuser:
-            return True
-
         content_type = ContentType.objects.get_for_model(object)
 
         object_id = 0
@@ -369,22 +360,23 @@ class User(models.Model):
 
         return False
 
-    def get_permissions(self):
+    def get_permissions(self, content_type = None):
         permissions = []
 
         groups = self.groups.all()
-        
-        return Permission.objects.filter(
 
-        Q(user=self) | Q(group__in = groups)
+        if content_type:
+            return Permission.objects.filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups))
 
-        )
+        return Permission.objects.filter(Q(user=self) | Q(group__in=groups))
 
 
     def get_permitted_objects(self, action, model):
-        objects = model.objects.filter()
-        contenttype = ContentType.objects.get_for_model(model)
-        permissions = Permission.objects.filter(content_type=contenttype, user=self)
+
+        start_time = time.clock()
+
+        content_type = ContentType.objects.get_for_model(model)
+        permissions = self.get_permissions(content_type)
 
         action = Action.objects.get(name=action)
         allAction = Action.objects.get(name="ALL")
@@ -393,32 +385,30 @@ class User(models.Model):
         permitted = []
 
         for perm in permissions:
+          
             if not perm.object_id in tree:
                 tree[perm.object_id] = []
 
-            tree[perm.object_id].extend(perm.actions.all())
-            tree[perm.object_id].extend(perm.role.actions.all())
+            if perm.actions:
+                tree[perm.object_id].extend(perm.actions.all())
+
+                if action in tree[perm.object_id] or allAction in tree[perm.object_id]:
+                    continue
+
+            if perm.role:
+                tree[perm.object_id].extend(perm.role.actions.all())
 
         for node in tree:
             if allAction in tree[node]:
                 permitted.append(node)
-            if action in tree[node]:
+            elif action in tree[node]:
                 permitted.append(node)
 
-        return model.objects.filter(id__in=permitted)
+        result = model.objects.filter(id__in = permitted)
 
-        """
-        SLOW
-        unwanted = []
-        objects = model.objects.filter(company=self.get_company())
-
-        for obj in objects:
-            if not self.has_permission_to(action, obj):
-                unwanted.append(obj.id)
-
-        return objects.exclude(id__in=unwanted)
-        """
-
+        print "%s sec" % (time.clock()-start_time)
+        
+        return result
 
 class AnonymousUser(User):
     id = 0

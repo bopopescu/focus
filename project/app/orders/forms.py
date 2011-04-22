@@ -24,10 +24,10 @@ class OrderForm(ModelForm):
         self.fields['project'].widget = SelectWithPop(Project)
         self.fields['project'].queryset = Project.objects.filter_current_company()
         self.fields['responsible'].queryset = User.objects.filter_current_company()
-        self.fields['delivery_date'].required = True
+        self.fields['delivery_date'].required = False
         self.fields['delivery_date'].input_formats = ["%d.%m.%Y"]
         self.fields['delivery_date'].widget = DatePickerField(format="%d.%m.%Y")
-        self.fields['delivery_date_deadline'].required = True
+        self.fields['delivery_date_deadline'].required = False
         self.fields['delivery_date_deadline'].input_formats = ["%d.%m.%Y"]
         self.fields['delivery_date_deadline'].widget = DatePickerField(format="%d.%m.%Y")
 
@@ -57,6 +57,13 @@ class OrderForm(ModelForm):
         return oid
 
 
+class OfferForm(OrderForm):
+    class Meta:
+        model = Order
+        fields = ("order_name", "customer", "project", "responsible", 'delivery_date',
+                  'delivery_date_deadline', 'description')
+
+
 class OrderLineForm(ModelForm):
     product = ProductField()
 
@@ -71,9 +78,3 @@ class OrderFormSimple(ModelForm):
         exclude = (
         'deleted', 'trashed', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'contacts',
         'participant', 'description')
-
-
-class TaskForm(ModelForm):
-    class Meta:
-        model = Task
-        fields = ('text',)

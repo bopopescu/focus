@@ -34,6 +34,7 @@ class FocusTestSuiteRunner(DjangoTestSuiteRunner):
 
         return super(FocusTestSuiteRunner, self).run_suite(suite, **kwargs)
 
+
 class FocusTest(TestCase):
     def setUp(self):
         self.user1 = User.objects.get_or_create(username="test")[0]
@@ -389,3 +390,9 @@ class PermissionsTesting(FocusTest):
         self.assertEqual(self.customer1 in self.user1.get_permitted_objects("EDIT", Customer), False)
         self.user1.grant_role("Admin", self.customer1)
         self.assertEqual(self.customer1 in self.user1.get_permitted_objects("EDIT", Customer), True)
+
+    def testPermittedObjectsByGroups(self):
+        self.assertEqual(self.customer1 in self.user1.get_permitted_objects("VIEW", Customer), False)
+        self.group1.add_member(self.user1)
+        self.group1.grant_role("Member", self.customer1)
+        self.assertEqual(self.customer1 in self.user1.get_permitted_objects("VIEW", Customer), True)

@@ -70,42 +70,11 @@ def history(request, id):
 @require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.all().get(id=id)
-    whoCanSeeThis = order.who_has_permission_to('view')
-
-    taskForm = TaskForm()
+    who_can_see_this = order.who_has_permission_to('view')
 
     return render(request, 'orders/view.html', {'title': 'Ordre: %s' % order.order_name,
                                                              'order': order,
-                                                             'taskForm': taskForm,
-                                                             'whoCanSeeThis': whoCanSeeThis})
-
-@require_permission("VIEW", Order, "id")
-def add_task(request, id):
-    if request.method == "POST":
-        order = Order.objects.all().get(id=id)
-        form = TaskForm(request.POST, instance=Task())
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.order = order
-            o.save()
-            form.save_m2m()
-        else:
-            request.message_error("Ugyldig format")
-    else:
-        request.message_error("Du må skrive noe i feltet")
-
-    return redirect(view, id)
-
-@login_required()
-def change_status_task(request, id):
-    try:
-        task = Task.objects.all().get(id=id)
-        task.done = not task.done
-        task.save()
-    except:
-        return redirect(overview)
-
-    return redirect(view, task.order.id)
+                                                             'who_can_see_this': who_can_see_this})
 
 @require_permission("EDIT", Order, "id")
 def change_status(request, id):
@@ -150,7 +119,11 @@ def edit(request, id):
 
         return redirect(overview)
 
-    return form(request, id)
+    offer = False
+    if order.state == "Offer":
+        offer = True
+
+    return form(request, id, offer=True)
 
 @require_permission("DELETE", Order, "id")
 def delete(request, id):
@@ -198,7 +171,12 @@ def form (request, id=False, *args, **kwargs):
 
     #Save and set to active, require valid form
     if request.method == 'POST':
+
         form = OrderForm(request.POST, instance=instance)
+
+        if 'offer' in kwargs:
+            form = OfferForm(request.POST, instance=instance)
+
         if form.is_valid():
             o = form.save(commit=False)
 
@@ -207,7 +185,7 @@ def form (request, id=False, *args, **kwargs):
                     o.state = "Offer"
                 else:
                     o.state = "Order"
-                    
+
             o.save()
             form.save_m2m()
             request.message_success(msg)
@@ -216,5 +194,7 @@ def form (request, id=False, *args, **kwargs):
 
     else:
         form = OrderForm(instance=instance)
+        if 'offer' in kwargs:
+            form = OfferForm(instance=instance)
 
     return render(request, "orders/form.html", {'title': title, 'order': instance, 'form': form})

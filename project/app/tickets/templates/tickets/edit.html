@@ -51,10 +51,19 @@
                                     {{ ticket_form.title.label }} </span> <br />
                                 {{ ticket_form.title }}
                             </td>
+                            <td></td>
+                        </tr>
+                        <tr class="ticket_hideable">
+
                             <td>
                                 <span {% if ticket_form.customer.errors %}style="color:red;" {% endif %}>
                                     {{ ticket_form.customer.label }} </span> <br />
                                 {{ ticket_form.customer }}
+                            </td>
+                             <td>
+                                <span {% if ticket_form.order.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.order.label }} </span> <br />
+                                {{ ticket_form.order }}
                             </td>
                         </tr>
 

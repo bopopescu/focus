@@ -13,21 +13,17 @@
 {% block maincontent %}
 
     <div class="portlet x9">
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
+        <div class="portlet-header"><h2>{{ title }}</h2></div>
 
         <div class="portlet-content">
 
             <table>
 
                 <tr>
-                    <th>{% trans "Orders" %}</th>
-                    <th>{% trans "Details" %}</th>
-                </tr>
-
-                <tr>
-                    <td>{% trans "Customer" %}</td>
+                    <td style='width:250px'>{% trans "Customer" %}</td>
                     <td>{{ order.customer }}</td>
                 </tr>
+
                 {% if order.project %}
 
                     <tr>
@@ -61,8 +57,33 @@
 
             <br><br><br>
 
+            <h2>{% trans "Tickets" %}</h2>
+
+            <table>
+
+                <tr>
+                    <td>{% trans "Title" %}</td>
+                    <td>{% trans "Status" %}</td>
+                </tr>
+
+
+
+                {% for ticket in order.tickets.all %}
+
+                    <tr>
+                        <td><a href="{% url app.tickets.views.view ticket.id %}">{{ ticket.title }}</a></td>
+                        <td>{{ ticket.status }}</td>
+                    </tr>
+
+                {% endfor %}
+
+
+            </table>
+            <br><br><br>
+
+
             <h2>{% trans "Participants" %}</h2>
-            {% for cuser in whoCanSeeThis %}
+            {% for cuser in who_can_see_this %}
 
                 <div class="user-card">
                     <div class="avatar">
@@ -78,53 +99,7 @@
 
             {% endfor %}
 
-            <br><br>
-
-            <table>
-                <tr>
-                    <th>{% trans "Description" %}</th>
-                </tr>
-                {% for task in order.tasks.all %}
-                    <tr>
-                        {% if task.done %}
-                            <td><a href="{% url app.orders.views.change_status_task task.id %}"><img
-                                    src="/media/images/icons/checked.png" style="vertical-align:middle">{{ task }}</a>
-                            </td>
-                        {% else %}
-                            <td><a href="{% url app.orders.views.change_status_task task.id %}"><img
-                                    src="/media/images/icons/unchecked.png" style="vertical-align:middle">{{ task }}</a>
-                            </td>
-                        {% endif %}
-
-                    </tr>
-
-                {% endfor %}
-            </table>
-            <form enctype="multipart/form-data" action="{% url app.orders.views.add_task order.id %}" method="post">
-                <fieldset class="module aligned ">
-
-                    {% for field in taskForm %}
-                        <div class="form-row">
-                            <div>
-
-                                {{ field.label_tag }}
-
-                                {{ field }}
-                                {% for error in field.errors %}
-                                    <span style="color:red">{{ error }}</span>
-                                {% endfor %}
-
-
-                            </div>
-                        </div>
-                    {% endfor %}
-
-                </fieldset>
-                <input type="submit" value="{% trans "Save" %}" class="default" name="_save"/>
-            </form>
-
         </div>
-
     </div>
 
-{% endblock %}	
+{% endblock %}

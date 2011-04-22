@@ -51,11 +51,11 @@ def milestones(request, id):
 def view(request, id):
     project = Project.objects.get(id=id)
     comments = comment_block(request, project)
-    whoCanSeeThis = project.who_has_permission_to('view')
+    who_can_see_this = project.who_has_permission_to('view')
     return render(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
                                                                'comments': comments,
                                                                'project': project,
-                                                               'whoCanSeeThis': whoCanSeeThis,
+                                                               'who_can_see_this': who_can_see_this,
                                                                })
 
 

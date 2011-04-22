@@ -10,7 +10,8 @@
                 src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
 
         <li><a class="{% active request "products" %}" href="{% url app.orders.views.products order.id %}"><img
-                src="{{ STATIC_URL }}img/products.png" width="24" height="24" alt="Mail"/>{% trans "Products" %}</a></li>
+                src="{{ STATIC_URL }}img/products.png" width="24" height="24" alt="Mail"/>{% trans "Products" %}</a>
+        </li>
 
         <li><a class="{% active request "edit$" %}" href="{% url app.orders.views.edit order.id %}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "EDIT" %}</a></li>
@@ -18,8 +19,18 @@
         <li><a class="{% active request "history" %}" href="{% url app.orders.views.history order.id %}"><img
                 src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
     {% else %}
+
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.orders.views.overview_offers %}"><img
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OFFERS" %}</a></li>
+
         <li><a class="{% active request "contacts/$" %}" href="{% url app.orders.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ORDERS" %}</a></li>
+
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.orders.views.overview_invoice %}"><img
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "BILLABLE" %}</a></li>
+
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.orders.views.overview_archive %}"><img
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ARCHIVED" %}</a></li>
 
         <li><a class="{% active request "new" %}" href="{% url app.orders.views.add %}"><img
                 src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW ORDER" %}</a></li>
