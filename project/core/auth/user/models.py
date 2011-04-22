@@ -373,8 +373,6 @@ class User(models.Model):
 
     def get_permitted_objects(self, action, model):
 
-        start_time = time.clock()
-
         content_type = ContentType.objects.get_for_model(model)
         permissions = self.get_permissions(content_type)
 
@@ -406,8 +404,6 @@ class User(models.Model):
 
         result = model.objects.filter(id__in = permitted)
 
-        print "%s sec" % (time.clock()-start_time)
-        
         return result
 
 class AnonymousUser(User):
