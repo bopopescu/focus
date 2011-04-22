@@ -6,7 +6,7 @@ from core.widgets import MultipleSelectWithPop
 class SupplierForm(ModelForm):
     class Meta:
         model = Supplier
-        fields = ("name", "email","phone","address")
+        fields = ("name", "email","phone","zip","address")
 
     def __init__(self, *args, **kwrds):
         super(SupplierForm, self).__init__(*args, **kwrds)

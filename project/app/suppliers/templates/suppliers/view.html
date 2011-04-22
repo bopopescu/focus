@@ -17,22 +17,21 @@
             <td width="100px">{% trans "Name" %}</td>
             <td>{{ supplier.name }}</td>
         </tr>
-
         <tr>
             <td>{% trans "E-mail" %}</td>
             <td>{{ supplier.email }}</td>
         </tr>
-
         <tr>
             <td>{% trans "Phone" %}</td>
             <td>{{ supplier.phone }}</td>
+        </tr><tr>
+            <td>{% trans "Zip" %}</td>
+            <td>{{ supplier.zip }}</td>
         </tr>
         <tr>
             <td>{% trans "Address" %}</td>
             <td>{{ supplier.address|linebreaksbr }}</td>
         </tr>
-
     </table>
-
-
+    
 {% endblock %}	
