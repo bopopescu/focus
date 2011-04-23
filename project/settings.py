@@ -27,6 +27,14 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
+
+
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'

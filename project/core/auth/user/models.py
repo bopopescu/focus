@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect
+from django.core.cache import cache
 from core import Core
 from django.db.models import Q
 from django.conf import settings
@@ -258,6 +259,8 @@ class User(models.Model):
         )
         perm.save()
 
+        #Invalidate cache for user
+        cache.delete(self.id)
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None
@@ -311,6 +314,9 @@ class User(models.Model):
 
         perm.save()
 
+        #Invalidate cache for user
+        cache.delete(self.id)
+
         return perm
 
     def has_permission_to (self, action, object, id=None, any=False):
@@ -360,7 +366,7 @@ class User(models.Model):
 
         return False
 
-    def get_permissions(self, content_type = None):
+    def get_permissions(self, content_type=None):
         permissions = []
 
         groups = self.groups.all()
@@ -376,34 +382,43 @@ class User(models.Model):
         content_type = ContentType.objects.get_for_model(model)
         permissions = self.get_permissions(content_type)
 
+
+        action_string = action
+
         action = Action.objects.get(name=action)
         allAction = Action.objects.get(name="ALL")
 
         tree = {}
         permitted = []
 
-        for perm in permissions:
-          
-            if not perm.object_id in tree:
-                tree[perm.object_id] = []
 
-            if perm.actions:
-                tree[perm.object_id].extend(perm.actions.all())
 
-                if action in tree[perm.object_id] or allAction in tree[perm.object_id]:
-                    continue
+        if cache.get(self.id) and model.__name__+action_string in cache.get(self.id):
+            permitted = cache.get(self.id)[model.__name__+action_string]
+            print cache.get(self.id)
+        else:
+            for perm in permissions:
+                if not perm.object_id in tree:
+                    tree[perm.object_id] = []
 
-            if perm.role:
-                tree[perm.object_id].extend(perm.role.actions.all())
+                if perm.actions:
+                    tree[perm.object_id].extend(perm.actions.all())
 
-        for node in tree:
-            if allAction in tree[node]:
-                permitted.append(node)
-            elif action in tree[node]:
-                permitted.append(node)
+                    if action in tree[perm.object_id] or allAction in tree[perm.object_id]:
+                        continue
 
-        result = model.objects.filter(id__in = permitted)
+                if perm.role:
+                    tree[perm.object_id].extend(perm.role.actions.all())
 
+            for node in tree:
+                if allAction in tree[node]:
+                    permitted.append(node)
+                elif action in tree[node]:
+                    permitted.append(node)
+
+            cache.set(self.id, {model.__name__+action_string:permitted})
+
+        result = model.objects.filter(id__in=permitted)
         return result
 
 class AnonymousUser(User):

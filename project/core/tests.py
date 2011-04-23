@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 from django.test import TestCase
 from django.test.simple import DjangoTestSuiteRunner
 from core import load_initial_data, Core
@@ -40,6 +41,10 @@ class FocusTest(TestCase):
         self.user1 = User.objects.get_or_create(username="test")[0]
         self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
         self.user3 = User.objects.get_or_create(username="test3", company=self.user1.get_company())[0]
+
+        cache.delete(self.user1.id)
+        cache.delete(self.user2.id)
+        cache.delete(self.user3.id)
 
         Core.set_test_user(self.user3)
 
@@ -384,6 +389,7 @@ class PermissionsTesting(FocusTest):
         self.group1.add_member(self.user1)
         self.assertEqual(self.customer1 in self.user1.get_permitted_objects("VIEW", Customer), True)
         self.assertEqual(self.customer2 in self.user1.get_permitted_objects("VIEW", Customer), False)
+        self.assertEqual(self.customer1 in self.user1.get_permitted_objects("EDIT", Customer), False)
         self.assertEqual(self.customer1 in self.user1.get_permitted_objects("DELETE", Customer), False)
         self.role2.grant_actions("DELETE")
         self.assertEqual(self.customer1 in self.user1.get_permitted_objects("DELETE", Customer), True)

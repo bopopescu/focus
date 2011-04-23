@@ -1,5 +1,6 @@
-from inspect import isclass
 # -*- coding: utf-8 -*-
+from django.core.cache import cache
+from inspect import isclass
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from core import Core
@@ -24,6 +25,9 @@ class Group(models.Model):
     def add_member(self, user):
         self.members.add(user)
         self.save()
+        #Invalidate cache for user
+        cache.delete(user.id)
+
 
     def grant_role(self, role, object):
         #Get info about the object
@@ -47,6 +51,10 @@ class Group(models.Model):
         )
 
         perm.save()
+
+        #Invalidate cache for users
+        for user in self.members.all():
+            cache.delete(user.id)
 
     def save_without_permissions(self):
         super(Group, self).save()
@@ -130,6 +138,9 @@ class Group(models.Model):
             perm.actions.add(p)
 
         perm.save()
+
+        #Invalidate cache for user
+        cache.delete(Core.current_user().id)
 
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):

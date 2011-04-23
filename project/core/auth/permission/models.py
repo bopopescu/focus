@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.db import models
 from datetime import datetime, timedelta
 
@@ -30,6 +31,8 @@ class Role(models.Model):
             self.actions.add(p)
 
         self.save()
+
+        cache.clear()
 
 
 class Permission(models.Model):
