@@ -416,7 +416,7 @@ class User(models.Model):
                 elif action in tree[node]:
                     permitted.append(node)
 
-            cache.set(self.id, {model.__name__+action_string:permitted})
+            cache.set(self.id, {model.__name__+action_string:permitted}, 120)
 
         result = model.objects.filter(id__in=permitted)
         return result
