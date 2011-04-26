@@ -311,10 +311,17 @@ class Command(BaseCommand):
                 hours=(float((cu['antalltimer_totalt'].decode("latin1")))))
 
             o.time_end = end_time.strftime("%H:%M")
-            o.description = cu['beskrivelse_time'].decode("latin1")
-            o.save()
-            timetrackings.append(o)
 
+            try:
+                o.description = cu['beskrivelse_time'].decode("latin1")
+            except:
+                pass
+            
+            try:
+                o.save()
+                timetrackings.append(o)
+            except:
+                pass
         print "Done migrating timetracking"
 
         return timetrackings
