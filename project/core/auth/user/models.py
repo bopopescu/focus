@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import redirect
 from django.core.cache import cache
-from core import Core
 from django.db.models import Q
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from datetime import datetime
 from django.core.files.storage import FileSystemStorage
+from datetime import datetime
+from inspect import isclass
+from core import Core
 from core.managers import PersistentManager
 from core.widgets import get_hexdigest, check_password
 from core.auth.company.models import Company
 from core.auth.permission.models import Permission, Action, Role
-from inspect import isclass
-import os
 import time
+import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -73,7 +72,6 @@ class User(models.Model):
 
         return (False, reasons)
 
-
     def save(self, *args, **kwargs):
         action = "EDIT"
         if not self.id:
@@ -117,33 +115,32 @@ class User(models.Model):
         if self.company:
             daysIntoNextMonthTimetracking = self.company.get_days_into_next_month()
 
-        #If true, user can still edit last month
+        #if true, user can still edit last month
         if daysIntoNextMonthTimetracking >= now.day:
-            #If January, the user should be able to edit December last year
+            #if January, the user should be able to edit December last year
             if now.month == 1:
                 from_date = datetime(now.year - 1, 12, 1)
                 to_date = datetime(now.year, 1, now.day)
 
-            #If rest of the year, set last month editable
+            #if rest of the year, set last month editable
             else:
                 from_date = datetime(now.year, now.month - 1, 1)
                 to_date = datetime(now.year, now.month, now.day)
 
-        #Else, the user can edit from first this month -> today
+        #else, the user can edit from first this month -> today
         else:
             from_date = datetime(now.year, now.month, 1)
             to_date = datetime(now.year, now.month, now.day)
 
-
-        #Check if user has extended the period
+        #check if user has extended the period
         if self.validEditHourRegistrationsToDate and self.validEditHourRegistrationsToDate > to_date:
             to_date = self.validEditHourRegistrationsToDate
 
+        #check if user has extended the period
         if self.validEditHourRegistrationsFromDate and self.validEditHourRegistrationsFromDate < from_date:
             from_date = self.validEditHourRegistrationsFromDate
 
         return [from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y")]
-
 
     def can_edit_hour_date(self, date, *args, **kwargs):
         now = datetime.now()
@@ -193,7 +190,7 @@ class User(models.Model):
         return True
 
     def get_full_name(self):
-        "Returns the first_name plus the last_name, with a space in between."
+        #Returns the first_name plus the last_name, with a space in between.
         full_name = u'%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
@@ -237,8 +234,6 @@ class User(models.Model):
         return check_password(raw_password, self.password)
 
     def grant_role(self, role, object):
-        #Get info about the object
-
         """
         Make it possible to set permissions for classes
         """
@@ -267,30 +262,22 @@ class User(models.Model):
         to_date = None
         negative = False
 
-        """
-        Set time limits, if set in func-call
-        """
+        #Set time limits, if set in func-call
         if 'from_date' in kwargs:
             from_date = kwargs['from_date']
         if 'to_date' in kwargs:
             to_date = kwargs['to_date']
 
-        """
-        Set negative to negative value in kwargs
-        """
+        #Set negative to negative value in kwargs
         if 'negative' in kwargs:
             negative = True
 
-        """
-        Make it possible to set permissions for classes
-        """
+        #Make it possible to set permissions for classes
         object_id = 0
         if not isclass(object):
             object_id = object.id
 
-        """
-        For making it possible to give both list and string for permission adding.
-        """
+        #For making it possible to give both list and string for permission adding.
         if(isinstance(actions, str)):
             act = Action.objects.filter(name=actions)
         else:
@@ -378,10 +365,8 @@ class User(models.Model):
 
 
     def get_permitted_objects(self, action, model):
-
         content_type = ContentType.objects.get_for_model(model)
         permissions = self.get_permissions(content_type)
-
 
         action_string = action
 
@@ -391,11 +376,8 @@ class User(models.Model):
         tree = {}
         permitted = []
 
-
-
-        if cache.get(self.id) and model.__name__+action_string in cache.get(self.id):
-            permitted = cache.get(self.id)[model.__name__+action_string]
-            print cache.get(self.id)
+        if cache.get(self.id) and model.__name__ + action_string in cache.get(self.id):
+            permitted = cache.get(self.id)[model.__name__ + action_string]
         else:
             for perm in permissions:
                 if not perm.object_id in tree:
@@ -416,10 +398,12 @@ class User(models.Model):
                 elif action in tree[node]:
                     permitted.append(node)
 
-            cache.set(self.id, {model.__name__+action_string:permitted}, 120)
+            cache.set(self.id, {model.__name__ + action_string: permitted}, 120)
 
         result = model.objects.filter(id__in=permitted)
+
         return result
+
 
 class AnonymousUser(User):
     id = 0
