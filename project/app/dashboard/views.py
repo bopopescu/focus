@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 
+from core import Core
 from app.announcements.models import Announcement
 from app.orders.models import Order
 from app.projects.models import Project
-from core import Core
-from core.decorators import login_required
+from core.decorators import login_required, require_permission
 from core.models import Log, Notification
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from core.utils import get_permission
 
-@login_required()
+@require_permission("LIST", Announcement)
 def overview(request):
     title = _("Welcome to TIME")
 
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
     your_projects = Core.current_user().get_permitted_objects("VIEW", Project)
-
     your_orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")[::-1]
 
     return render(request, 'dashboard/dashboard.html', {'title': title,

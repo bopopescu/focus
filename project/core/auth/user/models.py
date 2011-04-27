@@ -307,6 +307,7 @@ class User(models.Model):
         return perm
 
     def has_permission_to (self, action, object, id=None, any=False):
+        return True
         if isinstance(object, str):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
