@@ -1,24 +1,32 @@
 {% extends "base.html" %}
 
 {% block maincontent %}
-            <table cellpadding="0" cellspacing="0" border="0" rel="datatable" class="display" id="example">
+    <table cellpadding="0" cellspacing="0" border="0" rel="datatable" class="display" id="example">
 
-                <thead>
-                <tr>
-                    <th width="100px">Dato</th>
-                    <th width="100px">Bruker</th>
-                    <th>Melding</th>
-                </tr>
-                </thead>
+        <thead>
 
-                <tbody>
-                {% for log in logs %}
-                    <tr>
-                        <td>{{ log.date|date:"Y.m.d H:i" }}</td>
-                        <td>{{ log.creator }}</td>
-                        <td>{{ log.changed_since_last_time }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <tr>
+            <th width="100px">Dato</th>
+            <th width="100px">Bruker</th>
+            <th>Melding</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.date|date:"Y.m.d H:i" }}</td>
+                <td>{{ log.creator }}</td>
+                <td>
+                    <ul>
+                        {% for change in log.changed_since_last_time %}
+                            <li>{{ change }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

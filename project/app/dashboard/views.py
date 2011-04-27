@@ -23,15 +23,6 @@ def overview(request):
                                                         'orders': your_orders,
                                                         'projects': your_projects})
 
-
-@login_required()
-def logs(request):
-    #logs = Log.objects.filter(company=get_current_company())
-    logs = Log.objects.all()
-    return render(request, 'dashboard/listLog.html', {'title': _("Latest events"),
-                                                      'logs': logs[::-1][0:150]})
-
-
 @login_required()
 def notifications(request):
     #Get all notifactions

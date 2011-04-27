@@ -40,6 +40,8 @@ class Log(models.Model):
         Needs optimalization
         """
 
+        diff = []
+
         fields = {}
         for a in obj._meta.fields:
             if 'related' in a.__dict__:
@@ -60,21 +62,22 @@ class Log(models.Model):
                         lastObj = fields[i].objects.get(id=eval(lastLog.message)[i][0])
                         newObj = fields[i].objects.get(id=eval(self.message)[i][0])
 
-                        msg += value[1] + _(" was changed from %s to %s") % (
-                        lastObj, newObj)
-
+                        diff.append(value[1] + _(" was changed from %s to %s \n") % (
+                        lastObj, newObj))
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    msg += value[1] + _(" was changed from %s to: %s. ") % (
-                    eval(lastLog.message)[i][0], eval(self.message)[i][0])
+                    diff.append(value[1] + _(" was changed from %s to: %s \n") % (
+                    eval(lastLog.message)[i][0], eval(self.message)[i][0]))
 
-            if msg == "":
-                _("No changes")
+            if len(diff) == 0:
+                diff.append(_("No changes"))
 
-            return msg
+            return diff
 
-        return _("%s was created") % self.get_object()
+        diff.append(_("%s was created") % self.get_object())
+
+        return diff
 
     def get_object(self, *args, **kwargs):
         o = ContentType.objects.get(model=self.content_type)
