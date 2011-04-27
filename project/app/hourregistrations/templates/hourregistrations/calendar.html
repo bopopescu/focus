@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block maincontent %}
 
     <script>
@@ -12,6 +12,8 @@
     var selected = null;
     var last_used_url_calendar = "";
     var timetracking_id = 0;
+
+    var textbox;
 
     function set_title() {
         $("#title_calendar").text(year + " - " + month);
@@ -111,7 +113,7 @@
 
         var url = "/hourregistrations/calendar/" + year + "/" + month + "/" + day + "/";
 
-        $('#calender_list tr').remove();
+        $('#calender_list tbody tr').remove();
 
         $.getJSON(url,
                 {
@@ -119,17 +121,19 @@
                 },
                 function(data) {
                     $.each(data, function(i, item) {
-                        $('#calender_list').last().append("<tr></tr>")
-                        $('#calender_list tr').last().append("<td class='id' style='display:none;'>" + item.id + "</td>");
-                        $('#calender_list tr').last().append("<td class='time_start' style='display:none;'>" + item.time_start + "</td>");
-                        $('#calender_list tr').last().append("<td class='time_end' style='display:none;'>" + item.time_end + "</td>");
-                        $('#calender_list tr').last().append("<td class='order' style='display:none;'>" + item.order + "</td>");
-                        $('#calender_list tr').last().append("<td class='pause' style='display:none;'>" + item.pause + "</td>");
-                        $('#calender_list tr').last().append("<td class='description' style='display:none;'>" + item.description + "</td>");
+                        $('#calender_list tbody').last().append("<tr></tr>")
+                        $('#calender_list tbody tr').last().append("<td class='id' style='display:none;'>" + item.id + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='time_start' style='display:none;'>" + item.time_start + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='time_end' style='display:none;'>" + item.time_end + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='order' style='display:none;'>" + item.order + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='order_name' style='display:none;'>" + item.order_name + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='pause' style='display:none;'>" + item.pause + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='description' style='display:none;'>" + item.description + "</td>");
 
-                        $('#calender_list tr').last().append("<td>" + item.time_start + " - " + item.time_end + " </td>");
-                        $('#calender_list tr').last().append("<td> | " + item.customer_name + " - " + item.order_name + " </td>");
-                        $('#calender_list tr').last().append("<td> <a href='#' class='edit_hour_registration'> endre</a></td>");
+                        $('#calender_list tbody tr').last().append("<td>" + item.hours_worked + " </td>");
+                        $('#calender_list tbody tr').last().append("<td>" + item.time_start + " - " + item.time_end + " </td>");
+                        $('#calender_list tbody tr').last().append("<td>" + item.customer_name + " - " + item.order_name + " </td>");
+                        $('#calender_list tbody tr').last().append("<td> <a href='#' class='edit_hour_registration'> endre</a></td>");
                     });
                 });
     }
@@ -174,8 +178,28 @@
         timetracking_id = 0;
         $("#id_time_start").val("");
         $("#id_time_end").val("");
-        $("#id_order").val("");
+        $("#id_pause").val("0");
         $("#id_description").val("");
+        $("#hours_worked_in_form").text("");
+        textbox.val("");
+    }
+
+    function calculate_hours_worked_in_form() {
+
+        var hours_worked = 0;
+        var time_start = $("#id_time_start").val();
+        var time_end = $("#id_time_end").val();
+
+        if (time_start.length == 5 && time_end.length == 5) {
+
+            var diff = new Date(new Date("2010-10-10 " + time_end) - new Date("2010-10-10 " + time_start));
+            hours_worked = (diff / 1000 / 60 / 60) - $("#id_pause").val();
+            if (hours_worked > 0) {
+                $("#hours_worked_in_form").text((hours_worked).toFixed(2) + " {% trans "hours" %}");
+                return;
+            }
+        }
+        $("#hours_worked_in_form").text(0 + " {% trans "hours" %}");
     }
 
     function show_form_if_date_valid_for_edit() {
@@ -196,6 +220,18 @@
         fill_table("/hourregistrations/calendar/" + year + "/" + month + "/");
 
         show_div_form_new();
+
+        $("#id_pause").after("<span id='hours_worked_in_form'>0 {% trans "hours" %}</span>");
+
+        $("#id_time_start").change(function() {
+            calculate_hours_worked_in_form();
+        });
+        $("#id_time_end").change(function() {
+            calculate_hours_worked_in_form();
+        });
+        $("#id_pause").change(function() {
+            calculate_hours_worked_in_form();
+        });
 
         $("#decrement_month_arrow").click(function() {
             decrement_month();
@@ -237,6 +273,7 @@
             $("#id_time_start").val($(this).parent().parent().find(".time_start").text());
             $("#id_time_end").val($(this).parent().parent().find(".time_end").text());
             $("#id_order").val($(this).parent().parent().find(".order").text());
+            textbox.val($(this).parent().parent().find(".order_name").text());
             $("#id_pause").val($(this).parent().parent().find(".pause").text());
             $("#id_description").val($(this).parent().parent().find(".description").text());
         });
@@ -277,7 +314,7 @@
             float: left;
         }
 
-        #calender_list {
+        #calender_list tbody {
             width: 100%;
         }
 
@@ -294,6 +331,124 @@
         <a href="#" id="increment_month_arrow">>></a>
     </div>
 
+    <style>
+        .ui-autocomplete-input {
+            margin: 0;
+            padding: 0.48em 0 0.47em 0.45em;
+        }
+    </style>
+    <script>
+        (function($) {
+            $.widget("ui.combobox", {
+                        _create: function() {
+                            var self = this,
+                                    select = this.element.hide(),
+                                    selected = select.children(":selected"),
+                                    value = selected.val() ? selected.text() : "";
+                            var input = this.input = $("<input id='text_for_order'>")
+                                    .insertAfter(select)
+                                    .val(value)
+                                    .autocomplete({
+                                        delay: 0,
+                                        minLength: 0,
+                                        source: function(request, response) {
+                                            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                                            response(select.children("option").map(function() {
+                                                var text = $(this).text();
+                                                if (this.value && ( !request.term || matcher.test(text) ))
+                                                    return {
+                                                        label: text.replace(
+                                                                new RegExp(
+                                                                        "(?![^&;]+;)(?!<[^<>]*)(" +
+                                                                                $.ui.autocomplete.escapeRegex(request.term) +
+                                                                                ")(?![^<>]*>)(?![^&;]+;)", "gi"
+                                                                ), "<strong>$1</strong>"),
+                                                        value: text,
+                                                        option: this
+                                                    };
+                                            }));
+                                        },
+                                        select: function(event, ui) {
+                                            ui.item.option.selected = true;
+                                            self._trigger("selected", event, {
+                                                        item: ui.item.option
+                                                    });
+                                        },
+                                        change: function(event, ui) {
+                                            if (!ui.item) {
+                                                var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
+                                                        valid = false;
+                                                select.children("option").each(function() {
+                                                    if ($(this).text().match(matcher)) {
+                                                        this.selected = valid = true;
+                                                        return false;
+                                                    }
+                                                });
+                                                if (!valid) {
+                                                    // remove invalid value, as it didn't match anything
+                                                    $(this).val("");
+                                                    select.val("");
+                                                    input.data("autocomplete").term = "";
+                                                    return false;
+                                                }
+                                            }
+                                        }
+                                    })
+                                    .addClass("ui-widget ui-widget-content ui-corner-left");
+
+
+                            //For getting the new textfield
+                            textbox = input;
+
+
+                            input.data("autocomplete")._renderItem = function(ul, item) {
+                                return $("<li></li>")
+                                        .data("item.autocomplete", item)
+                                        .append("<a>" + item.label + "</a>")
+                                        .appendTo(ul);
+                            };
+
+                            this.button = $("<button type='button'>&nbsp;</button>")
+                                    .attr("tabIndex", -1)
+                                    .attr("title", "Show All Items")
+                                    .insertAfter(input)
+                                    .button({
+                                        text: false
+                                    })
+                                    .removeClass("ui-corner-all")
+                                    .addClass("ui-corner-right ui-button-icon")
+                                    .click(function() {
+                                // close if already visible
+                                if (input.autocomplete("widget").is(":visible")) {
+                                    input.autocomplete("close");
+                                    return;
+                                }
+
+                                // work around a bug (likely same cause as #5265)
+                                $(this).blur();
+
+                                // pass empty string as value to search for, displaying all results
+                                input.autocomplete("search", "");
+                                input.focus();
+                            });
+                        },
+
+                        destroy: function() {
+                            this.input.remove();
+                            this.button.remove();
+                            this.element.show();
+                            $.Widget.prototype.destroy.call(this);
+                        }
+                    });
+        })(jQuery);
+
+        $(function() {
+            $("#id_order").combobox();
+            $("#toggle").click(function() {
+                $("#id_order").toggle();
+            });
+        });
+    </script>
 
     <div id="calender_table">
         <table id="calendar_table"></table>
@@ -301,7 +456,6 @@
 
     <div id="calender_form">
         <form action="">
-
             {% for field in form %}
                 {{ field.label }}
                 <span class="errormessage" style='color:red' id="error_{{ field_id }}_for_{{ field.name }}"></span>
@@ -324,6 +478,21 @@
 
     <div id="calender_list">
         <table>
+
+            <thead>
+            <tr>
+                <th>{% trans "Hours" %}</th>
+                <th>{% trans "Time" %}</th>
+                <th>{% trans "Order" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+
+
         </table>
     </div>
 

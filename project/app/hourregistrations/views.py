@@ -47,6 +47,7 @@ def calendar_day_json(request, year, month, day):
     registrations = [{'id': reg.id,
                       'time_start': reg.time_start,
                       'time_end': reg.time_end,
+                      'hours_worked': str(reg.hours_worked),
                       'order': reg.order.id,
                       'pause': str(reg.pause),
                       'customer_name': reg.order.customer.full_name,

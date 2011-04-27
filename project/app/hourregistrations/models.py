@@ -13,21 +13,22 @@ import re
 max_digits = 5
 decimal_places = 3
 
-class HourRegistration(PersistentModel):    
+class HourRegistration(PersistentModel):
     date = models.DateTimeField()
     order = models.ForeignKey(Order, blank=True)
     time_start = models.CharField(max_length=max_digits, null=True, blank=True, default="")
     time_end = models.CharField(max_length=max_digits, null=True, blank=True, default="")
     description = models.TextField(null=True, blank=True)
 
-    pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.5"), blank=True)
+    pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.0"),
+                                blank=True)
     hourly_rate = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
     percent_cover = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
     hours_worked = models.DecimalField(blank=True, decimal_places=decimal_places, max_digits=max_digits)
 
     savedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
                                      default=Decimal("0.0"))
-    
+
     usedOfSavedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
                                            default=Decimal("0.0"))
 
@@ -80,6 +81,7 @@ class HourRegistration(PersistentModel):
 class HourRegisrationImage(PersistentModel):
     pass
 
+
 class Disbursement(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="disbursements")
     description = models.CharField(max_length=100)
@@ -110,12 +112,13 @@ def initial_data ():
     Core.set_test_user(a)
 
     testCustomer, created = Customer.objects.get_or_create(cid="100", full_name="Per", email="test@test.com")
-    testOrder, created = Order.objects.get_or_create(oid="100", order_name="TestOrdre", responsible=a, customer=testCustomer)
+    testOrder, created = Order.objects.get_or_create(oid="100", order_name="TestOrdre", responsible=a,
+                                                     customer=testCustomer)
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.10.2010", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        
+
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
@@ -124,7 +127,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("2.10.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        
+
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -134,7 +137,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("15.10.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        
+
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -145,7 +148,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.5.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        
+
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -156,7 +159,7 @@ def initial_data ():
     t = HourRegistration.objects.create(date=datetime.strptime("15.5.2010", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        
+
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
@@ -165,7 +168,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("1.5.2010", "%d.%m.%Y"),
                                         order=testOrder,
-                                        
+
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -175,7 +178,7 @@ def initial_data ():
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
                                         order=testOrder,
-                                        
+
                                         time_start="20:10",
                                         time_end="22:10",
                                         description="Dette er en test")
@@ -186,7 +189,7 @@ def initial_data ():
     t = HourRegistration.objects.create(date=datetime.strptime("4.08.2009", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        
+
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
@@ -196,7 +199,7 @@ def initial_data ():
     t = HourRegistration.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
                                         order=testOrder,
                                         time_start="20:10",
-                                        
+
                                         time_end="22:10",
                                         description="Dette er en test")
     t.creator = a
