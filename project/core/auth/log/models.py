@@ -80,10 +80,13 @@ class Log(models.Model):
         return diff
 
     def get_object(self, *args, **kwargs):
-        o = ContentType.objects.get(model=self.content_type)
-        k = o.get_object_for_this_type(id=self.object_id)
-        return k
-
+        try:
+            o = ContentType.objects.get(model=self.content_type)
+            k = o.get_object_for_this_type(id=self.object_id)
+            return k
+        except:
+            return None
+        
     def save(self, *args, **kwargs):
         self.date = datetime.now()
 
