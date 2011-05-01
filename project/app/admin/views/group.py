@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect, HttpResponse, render
-from app.admin.forms import GroupForm
+from app.admin.forms import GroupForm, AddMemberToGroupForm
 from core import Core
 from core.auth.user.models import User
 from core.decorators import login_required
@@ -15,26 +15,62 @@ def overview(request):
     groups = Core.current_user().get_permitted_objects("VIEW", Group)
     return render(request, 'admin/groups/list.html', {'title': _("Groups"), 'groups': groups})
 
+
 def add(request):
     return form(request)
+
 
 @login_required()
 def edit(request, id):
     return form(request, id)
 
+
 @login_required()
 def view(request, id):
     group = Group.objects.filter_current_company().get(id=id)
-    return render(request, 'admin/groups/view.html', {'title': _("Groups"),
-                                                                   'group': group,
-                                                                   })
-login_required()
+    return render(request, 'admin/groups/view.html', {'title': group.name,
+                                                      'group': group,
+                                                      })
+
+
+@login_required()
 def permissions(request, id):
     group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
 
     return render(request, 'admin/permissions.html', {'title': _("Groups"),
-                                                                   'group': group,
-                                                                   })
+                                                      'group': group,
+                                                      })
+
+
+@login_required()
+def remove_user_from_group(request, group_id, user_id):
+    user = User.objects.get(id=user_id)
+    group = Group.objects.get(id=group_id)
+    group.remove_member(user)
+
+    return redirect(members, group_id)
+
+@login_required()
+def members(request, id):
+
+    group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
+    
+    if request.method == 'POST':
+        
+        form = AddMemberToGroupForm(request.POST)
+
+        if form.is_valid():
+            user = form.cleaned_data['user']
+
+            group.add_member(user)
+
+    addMemberToGroupForm = AddMemberToGroupForm()
+    addMemberToGroupForm.fields['user'].queryset = User.objects.filter_current_company()
+
+    return render(request, 'admin/groups/members.html', {'title': _("Groups"),
+                                                      'group': group,
+                                                      'form':addMemberToGroupForm
+                                                      })
 
 @login_required()
 def delete(request, id):
@@ -69,4 +105,4 @@ def form (request, id=False):
         form = GroupForm(instance=instance)
 
     return render(request, "admin/groups/form.html",
-                               {'title': _("Group"), 'group': instance, 'form': form})
+                  {'title': _("Group"), 'group': instance, 'form': form})

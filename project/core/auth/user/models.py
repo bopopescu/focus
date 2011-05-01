@@ -12,6 +12,7 @@ from core.managers import PersistentManager
 from core.widgets import get_hexdigest, check_password
 from core.auth.company.models import Company
 from core.auth.permission.models import Permission, Action, Role
+from django.utils.translation import ugettext as _
 import time
 import os
 
@@ -399,12 +400,11 @@ class User(models.Model):
                 elif action in tree[node]:
                     permitted.append(node)
 
-            cache.set(self.id, {model.__name__ + action_string: permitted}, 120)
+            cache.set(self.id, {model.__name__ + action_string: permitted}, 1200)
 
         result = model.objects.filter(id__in=permitted)
 
         return result
-
 
 class AnonymousUser(User):
     id = 0

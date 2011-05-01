@@ -15,7 +15,7 @@ class UserForm(ModelForm):
 class HourRegistrationManuallyForm(ModelForm):
     class Meta:
         model = User
-        fields = ('validEditHourRegistrationsToDate', 'validEditHourRegistrationsFromDate',)
+        fields = ('validEditHourRegistrationsFromDate', 'validEditHourRegistrationsToDate')
 
     def __init__(self, *args, **kwargs):
         super(HourRegistrationManuallyForm, self).__init__(*args, **kwargs)
@@ -32,18 +32,18 @@ class GroupForm(ModelForm):
         model = Group
         fields = ('name',)
 
+class AddMemberToGroupForm(forms.Form):
+    user = forms.ModelChoiceField(queryset=User.objects.filter_current_company())
 
 class UserProfileForm(ModelForm):
     class Meta:
         model = User
         fields = ('email',)
 
-
 class UserProfileImageForm(ModelForm):
     class Meta:
         model = User
         fields = ('profileImage',)
-
 
 class UserProfilePasswordForm(forms.Form):
     old_password = forms.CharField(label="Gammelt passord", widget=forms.PasswordInput)

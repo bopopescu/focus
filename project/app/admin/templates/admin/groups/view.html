@@ -12,39 +12,26 @@
 
 {% block maincontent %}
 
-    <div class="portlet x12">
-        <div class="portlet-header"><h4>{{ title }}</h4></div>
-        <div class="portlet-content">
+    <h1>{{ title }}</h1>
 
-            {{ user.first_name }} {{ user.last_name }}
-            <br>
-            <br><br>
+    <br>
+    <br><br>
 
-            <h2>{% trans "Participants" %}</h2>
+    <h2>{% trans "Participants" %}</h2>
 
-            <div style="height:200px">
-
-                {% for user in group.members.all %}
-
-                    <div class="user-card">
-
-                        <div class="avatar">
-                            <img src="{{ user.profileImage|thumbnail:"50x50" }}" title="User" alt=""/>
-                        </div>
-                        <!-- .user-card-avatar -->
-
-                        <div class="details">
-                            <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
-                                {{ user.phone }}<br/>
-
-                                <a href="{% url app.admin.views.user.view user.id %}">{% trans "Details" %}</a></p>
-                        </div>
-                        <!-- .user-card-content -->
-
-                    </div> <!-- .user-card -->
-                {% endfor %}
+    <div style="height:200px">
+        {% for user in group.members.all %}
+            <div class="user-card" style="display:inline-block;">
+                <div class="avatar">
+                    <img src="{{ user.profileImage|thumbnail:"50x50" }}" title="User" alt=""/>
+                </div>
+                <div class="details">
+                    <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
+                        {{ user.phone }}<br/>
+                        <a href="{% url app.admin.views.user.view user.id %}">{% trans "Details" %}</a></p>
+                </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
 
 {% endblock %}  

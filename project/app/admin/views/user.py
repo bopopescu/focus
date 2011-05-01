@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
+from django.utils.translation import ugettext as _
 from app.admin.forms import HourRegistrationManuallyForm, UserForm
 from core import Core
 from core.decorators import login_required, require_permission
 from core.views import update_timeout
-from django.utils.translation import ugettext as _
 from core.mail import send_mail
 from core.auth.user.models import User
 from core.auth.permission.models import Permission
@@ -16,24 +16,29 @@ def overview(request):
     Users = User.objects.filter_current_company()
     return render(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
 
+
 @login_required()
 def grant_permissions(request):
     Users = User.objects.all()
     Permissions = Permission.objects.all()
     return render(request, 'admin/users/grant_permssions.html',
-                               {'title': _("Users"), 'users': Users, 'permissions': Permissions})
+                  {'title': _("Users"), 'users': Users, 'permissions': Permissions})
+
 
 @login_required()
 def add(request):
     return form(request)
 
+
 @login_required()
 def edit(request, id):
     return form(request, id)
 
+
 @login_required()
 def editProfile(request):
     pass
+
 
 @login_required()
 def changeCanLogin(request, id):
@@ -46,6 +51,7 @@ def changeCanLogin(request, id):
     u.canLogin = not u.canLogin
     u.save()
     return redirect(view, id)
+
 
 def generate_new_password_for_user(user):
     import string
@@ -71,6 +77,7 @@ def generate_new_password_for_user(user):
     user.save()
     return ret
 
+
 @login_required()
 def send_generated_password_to_user(request, id):
     user = get_object_or_404(User, id=id, company=Core.current_user().get_company())
@@ -81,20 +88,23 @@ def send_generated_password_to_user(request, id):
 
     return redirect(view, id)
 
+
 def history(request, id):
     user = User.objects.get(id=id)
     history = user.logs.all()
     return render(request, 'admin/log.html', {'title': _("Latest events"),
-                                                               'userCard': user,
-                                                               'logs': history[::-1][0:150]})
+                                              'userCard': user,
+                                              'logs': history[::-1][0:150]})
+
 
 @login_required()
 def view(request, id):
     user = User.objects.get(id=id)
 
     return render(request, 'admin/users/view.html', {'title': _("User"),
-                                                                  'userCard': user,
-                                                                  })
+                                                     'userCard': user,
+                                                     })
+
 
 @login_required()
 def permissions(request, id):
@@ -102,9 +112,10 @@ def permissions(request, id):
     Permissions = user.get_permissions()
 
     return render(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
-                                                                   'userCard': user,
-                                                                   'permissions': Permissions,
-                                                                   })
+                                                      'userCard': user,
+                                                      'permissions': Permissions,
+                                                      })
+
 
 @require_permission("DELETE", User, "id")
 def trash(request, id):
@@ -120,11 +131,11 @@ def trash(request, id):
             instance.trash()
         return redirect(overview)
     else:
-        return render(request, 'customers/trash.html', {'title': _("Confirm delete"),
-                                                                     'user': instance,
-                                                                     'can_be_deleted': instance.can_be_deleted()[0],
-                                                                     'reasons': instance.can_be_deleted()[1],
-                                                                     })
+        return render(request, 'admin/users/trash.html', {'title': _("Confirm delete"),
+                                                        'userCard': instance,
+                                                        'can_be_deleted': instance.can_be_deleted()[0],
+                                                        'reasons': instance.can_be_deleted()[1],
+                                                        })
 
 @login_required()
 def set_hourregistration_limits (request, id):
@@ -148,8 +159,8 @@ def set_hourregistration_limits (request, id):
         form = HourRegistrationManuallyForm(instance=instance)
 
     return render(request, "admin/users/form.html", {'title': _("Change user"),
-                                                                  'userCard': instance,
-                                                                  'form': form})
+                                                     'userCard': instance,
+                                                     'form': form})
 
 
 @login_required()
@@ -194,4 +205,4 @@ def form (request, id=False):
         form = UserForm(instance=instance)
 
     return render(request, "admin/users/form.html",
-                               {'title': _("User"), 'userCard': instance, 'form': form})
+                  {'title': _("User"), 'userCard': instance, 'form': form})

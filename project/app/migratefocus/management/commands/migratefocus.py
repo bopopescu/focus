@@ -209,7 +209,12 @@ class Command(BaseCommand):
             u.phone = cu['telefon']
             u.company = company
             u.save()
+
+            company.allEmployeesGroup.add(u)
+            company.save()
+
             users.append((u, cu['brukerid']))
+            
         print "Done migrating users"
         return users
 

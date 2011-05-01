@@ -28,6 +28,11 @@ class Group(models.Model):
         #Invalidate cache for user
         cache.delete(user.id)
 
+    def remove_member(self, user):
+        self.members.remove(user)
+        self.save()
+        #Invalidate cache for user
+        cache.delete(user.id)
 
     def grant_role(self, role, object):
         #Get info about the object
