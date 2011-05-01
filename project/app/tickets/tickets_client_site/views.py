@@ -1,5 +1,4 @@
 from app.tickets.tickets_client_site.models import TicketClient
-from hashlib import sha1
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.core.urlresolvers import reverse

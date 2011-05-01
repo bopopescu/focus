@@ -23,11 +23,9 @@ def overview(request):
     return render(request, 'company/list.html', {'title': 'Firmaer',
                                                  'companies': companies})
 
-
 @require_permission("MANAGE", Company)
 def add(request):
     return newForm(request)
-
 
 @require_permission("MANAGE", Company)
 def edit(request, id):
@@ -58,73 +56,78 @@ def form (request, id=False):
 
     return render(request, "company/form.html", {'title': 'Kunde', 'form': form})
 
+def createNewCustomer(data):
+    admin_group = Group(name=data['admin_group'])
+    admin_group.save_without_permissions()
+    all_employees_group = Group(name=data['all_employees_group'])
+    all_employees_group.save_without_permissions()
+    company = Company(name=data['name'], admin_group=admin_group, all_employees_group=all_employees_group)
 
-def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
-    adminGroup = Group(name=adminGroup)
-    adminGroup.save_without_permissions()
-    allEmployeesGroup = Group(name=allEmployeesGroup)
-    allEmployeesGroup.save_without_permissions()
-    company = Company(name=name, adminGroup=adminGroup, allEmployeesGroup=allEmployeesGroup)
+    #Set up email for receiving tickets
+    company.email_address = data['email_address']
+    company.email_host = data['email_host']
+    company.email_password = data['email_password']
+    company.email_username = data['email_username']
+
     company.save()
+
     #Create the admin user
-    user = User(first_name=adminuserName, username=adminuserUsername)
-    user.set_password(adminuserPassword)
+    user = User(first_name=data['adminuser_name'], username=data['adminuser_username'])
+    user.set_password(data['adminuser_password'])
     user.company = company
     user.save()
+
     #Manually give permission to the admin group
-    adminGroup.grant_permissions("ALL", adminGroup)
-    adminGroup.grant_permissions("ALL", allEmployeesGroup)
+    admin_group.grant_permissions("ALL", admin_group)
+    admin_group.grant_permissions("ALL", all_employees_group)
+
     #Add admin user to admin group
-    adminGroup.add_member(user)
+    admin_group.add_member(user)
+
     #Set the company fields on groups
-    adminGroup.company = company
-    adminGroup.save()
-    allEmployeesGroup.company = company
-    allEmployeesGroup.save()
+    admin_group.company = company
+    admin_group.save()
+    all_employees_group.company = company
+    all_employees_group.save()
+
     #Give admin group all permissions on classes
-    adminGroup.grant_role("Admin", Project)
-    adminGroup.grant_role("Admin", Customer)
-    adminGroup.grant_role("Admin", Contact)
-    adminGroup.grant_role("Admin", Order)
-    adminGroup.grant_role("Admin", HourRegistration)
-    adminGroup.grant_role("Admin", Announcement)
-    adminGroup.grant_role("Admin", Log)
-    adminGroup.grant_role("Admin", Product)
-    adminGroup.grant_role("Admin", Notification)
-    adminGroup.grant_role("Admin", User)
-    adminGroup.grant_role("Admin", Group)
-    adminGroup.grant_permissions("CONFIGURE", Company)
+    admin_group.grant_role("Admin", Project)
+    admin_group.grant_role("Admin", Customer)
+    admin_group.grant_role("Admin", Contact)
+    admin_group.grant_role("Admin", Order)
+    admin_group.grant_role("Admin", HourRegistration)
+    admin_group.grant_role("Admin", Announcement)
+    admin_group.grant_role("Admin", Log)
+    admin_group.grant_role("Admin", Product)
+    admin_group.grant_role("Admin", Notification)
+    admin_group.grant_role("Admin", User)
+    admin_group.grant_role("Admin", Group)
+    admin_group.grant_permissions("CONFIGURE", Company)
+
     #Give employee group some permissions on classes
-    allEmployeesGroup.grant_role("Member", Project)
-    allEmployeesGroup.grant_role("Member", Customer)
-    allEmployeesGroup.grant_role("Member", Contact)
-    allEmployeesGroup.grant_role("Member", HourRegistration)
-    allEmployeesGroup.grant_role("Member", Product)
-    allEmployeesGroup.grant_role("Member", Order)
-    allEmployeesGroup.grant_role("Member", Announcement)
-    allEmployeesGroup.grant_role("Member", Log)
-    allEmployeesGroup.grant_role("Member", Notification)
+    all_employees_group.grant_role("Member", Project)
+    all_employees_group.grant_role("Member", Customer)
+    all_employees_group.grant_role("Member", Contact)
+    all_employees_group.grant_role("Member", HourRegistration)
+    all_employees_group.grant_role("Member", Product)
+    all_employees_group.grant_role("Member", Order)
+    all_employees_group.grant_role("Member", Announcement)
+    all_employees_group.grant_role("Member", Log)
+    all_employees_group.grant_role("Member", Notification)
     #Manually give som other permissions
-    allEmployeesGroup.grant_permissions("CREATE", HourRegistration)
+    all_employees_group.grant_permissions("CREATE", HourRegistration)
     #Manually give som other permissions
-    allEmployeesGroup.grant_permissions("CREATE", Contact)
+    all_employees_group.grant_permissions("CREATE", Contact)
 
     return company, user
-
 
 @require_permission("MANAGE", Company)
 def newForm(request):
     if request.method == 'POST': # If the form has been submitted...
         form = newCompanyForm(request.POST) # A form bound to the POST data
         if form.is_valid(): # All validation rules pass
-            name = form.cleaned_data['name']
-            adminGroup = form.cleaned_data['adminGroup']
-            allEmployeesGroup = form.cleaned_data['allEmployeesGroup']
-            adminuserName = form.cleaned_data['adminuserName']
-            adminuserUsername = form.cleaned_data['adminuserUsername']
-            adminuserPassword = form.cleaned_data['adminuserPassword']
-
-            createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name)
+            data = form.cleaned_data
+            createNewCustomer(data)
 
             return redirect(overview)
     else:

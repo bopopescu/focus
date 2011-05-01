@@ -11,8 +11,8 @@ class CompanyForm(ModelForm):
 
     def __init__(self, *args, **kwrds):
         super(CompanyForm, self).__init__(*args, **kwrds)
-        self.fields['adminGroup'].queryset = Group.objects.filter_current_company()
-        self.fields['allEmployeesGroup'].queryset = Group.objects.filter_current_company()
+        self.fields['admin_group'].queryset = Group.objects.filter_current_company()
+        self.fields['all_employees_group'].queryset = Group.objects.filter_current_company()
 
     def clean_MonthsStillValidForEditWhenEditing(self):
         months = int(self.cleaned_data['MonthsStillValidForEditWhenEditing'])
@@ -21,7 +21,6 @@ class CompanyForm(ModelForm):
             return months
 
         raise forms.ValidationError("Ugyldig antall måned,velg mellom 1 og 12")
-
 
     def clean_DayInMonthsStillValidForEditWhenEditing(self):
         day = int(self.cleaned_data['DayInMonthsStillValidForEditWhenEditing'])
@@ -33,11 +32,17 @@ class CompanyForm(ModelForm):
 
 class newCompanyForm(forms.Form):
     name                = forms.CharField(label="Firmanavn")
-    adminGroup          = forms.CharField(label="Gruppenavn admin")
-    allEmployeesGroup   = forms.CharField(label="Gruppenavn ansatte")
-    adminuserName       = forms.CharField(label="Fullt navn admin")
-    adminuserUsername   = forms.CharField(label="Brukernavn for admin")
-    adminuserPassword   = forms.CharField(label="Passord for admin")
+    admin_group          = forms.CharField(label="Gruppenavn admin")
+    all_employees_group   = forms.CharField(label="Gruppenavn ansatte")
+
+    email_address       = forms.CharField(label="Email address")
+    email_host          = forms.CharField(label="Email host")
+    email_username      = forms.CharField(label="Email username")
+    email_password      = forms.CharField(label="Email password")
+
+    adminuser_name       = forms.CharField(label="Fullt navn admin")
+    adminuser_username   = forms.CharField(label="Brukernavn for admin")
+    adminuser_password   = forms.CharField(label="Passord for admin")
 
     def clean_name(self):
        name = self.cleaned_data['name']

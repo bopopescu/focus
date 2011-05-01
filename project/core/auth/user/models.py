@@ -82,11 +82,11 @@ class User(models.Model):
 
         if action == "ADD":
             Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
+            admin_group = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
+            if admin_group:
+                admin_group.grant_role("Admin", self)
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
@@ -170,18 +170,18 @@ class User(models.Model):
     def get_company_admingroup(self):
         if not self.company:
             return None
-        if not self.company.adminGroup:
+        if not self.company.admin_group:
             return None
 
-        return self.company.adminGroup
+        return self.company.admin_group
 
     def get_company_allemployeesgroup(self):
         if not self.company:
             return None
-        if not self.company.allEmployeesGroup:
+        if not self.company.all_employees_group:
             return None
 
-        return self.company.allEmployeesGroup
+        return self.company.all_employees_group
 
     def is_authenticated(self):
         """

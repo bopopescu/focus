@@ -8,32 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'Group'
-        db.create_table('group_group', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(related_name='children', null=True, to=orm['group.Group'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(related_name='groups', null=True, to=orm['company.Company'])),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('group', ['Group'])
-
-        # Adding M2M table for field members on 'Group'
-        db.create_table('group_group_members', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('group', models.ForeignKey(orm['group.group'], null=False)),
-            ('user', models.ForeignKey(orm['user.user'], null=False))
-        ))
-        db.create_unique('group_group_members', ['group_id', 'user_id'])
+        # Adding field 'Company.email_address'
+        db.add_column('company_company', 'email_address', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Deleting model 'Group'
-        db.delete_table('group_group')
-
-        # Removing M2M table for field members on 'Group'
-        db.delete_table('group_group_members')
+        # Deleting field 'Company.email_address'
+        db.delete_column('company_company', 'email_address')
 
 
     models = {
@@ -42,6 +24,10 @@ class Migration(SchemaMigration):
             'admin_group': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAdmin'", 'null': 'True', 'to': "orm['group.Group']"}),
             'all_employees_group': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAllEmployeed'", 'null': 'True', 'to': "orm['group.Group']"}),
             'days_into_next_month_hourregistration': ('django.db.models.fields.IntegerField', [], {'default': '3'}),
+            'email_address': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'email_host': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'email_password': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'email_username': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'hours_needed_for_100_overtime_pay': ('django.db.models.fields.IntegerField', [], {'default': '240'}),
             'hours_needed_for_50_overtime_pay': ('django.db.models.fields.IntegerField', [], {'default': '160'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -82,4 +68,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['group']
+    complete_apps = ['company']

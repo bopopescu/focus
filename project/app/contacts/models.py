@@ -54,11 +54,11 @@ class Contact(PersistentModel):
         #Give the user who created this ALL permissions on object
         if new:
             Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
+            admin_group = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
+            if admin_group:
+                admin_group.grant_role("Admin", self)
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)

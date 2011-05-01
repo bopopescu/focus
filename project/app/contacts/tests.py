@@ -16,7 +16,7 @@ class ContactsTesting(TestCase):
     def setUp(self):
 
         self.group1 = Group.objects.get_or_create(name="group1")[0]
-        company = Company.objects.get_or_create(name="TestFirma", adminGroup = self.group1)[0]
+        company = Company.objects.get_or_create(name="TestFirma", admin_group = self.group1)[0]
      
         self.user1 = User.objects.get_or_create(username="testbruker", company=company)[0]
         self.user2 = User.objects.get_or_create(username="testbruker2", company=company)[0]
@@ -34,7 +34,7 @@ class ContactsTesting(TestCase):
         self.assertEqual(self.user1.has_permission_to("EDIT", self.contact1), True)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.contact1), True)
 
-        #User2 should get the permission, because user2 is member of group1, who is the adminGroup of the company
+        #User2 should get the permission, because user2 is member of group1, who is the admin_group of the company
         self.assertEqual(self.user2.has_permission_to("EDIT", self.contact1), True)
         self.assertEqual(self.user2.has_permission_to("DELETE", self.contact1), True)
 
