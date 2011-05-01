@@ -28,5 +28,3 @@ class HourRegistrationHandler(BaseHandler):
         pass
 
 
-
-    
