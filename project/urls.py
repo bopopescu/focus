@@ -29,6 +29,9 @@ urlpatterns = patterns('',
                        #API
                        (r'^api/', include('api.urls')),
 
+                       #client ticket site
+                       (r'^tickets/client/', include('app.tickets.tickets_client_site.urls')),
+
                        #Suppliers
                        (r'^suppliers/', include('app.suppliers.urls')),
                        (r'^tickets/', include('app.tickets.urls')),

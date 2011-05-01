@@ -32,5 +32,8 @@ class TicketClient(PersistentModel):
                 randid = random.randint(0, 4) #number of vowels
                 ret += vowels[randid]
 
+        return ret
+
+
 
 
