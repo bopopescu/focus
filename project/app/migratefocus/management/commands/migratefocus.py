@@ -31,61 +31,61 @@ ProductCategory = get_class("stock", "productcategory")
 ProductGroup = get_class("stock", "productgroup")
 Ticket = get_class("tickets", "ticket")
 
-def createNewCustomer(adminGroup, adminuserName, adminuserPassword, adminuserUsername, allEmployeesGroup, name):
-    adminGroup = Group(name=adminGroup)
-    adminGroup.save_without_permissions()
-    allEmployeesGroup = Group(name=allEmployeesGroup)
-    allEmployeesGroup.save_without_permissions()
-    company = Company(name=name, adminGroup=adminGroup, allEmployeesGroup=allEmployeesGroup)
+def createNewCustomer(admin_group, adminuser_name, adminuser_password, adminuser_username, all_employees_group, name):
+    admin_group = Group(name=admin_group)
+    admin_group.save_without_permissions()
+    all_employees_group = Group(name=all_employees_group)
+    all_employees_group.save_without_permissions()
+    company = Company(name=name, admin_group=admin_group, all_employees_group=all_employees_group)
     company.save()
 
     #Create the admin user
-    user = User(first_name=adminuserName, username=adminuserUsername)
-    user.set_password(adminuserPassword)
+    user = User(first_name=adminuser_name, username=adminuser_username)
+    user.set_password(adminuser_password)
     user.company = company
     user.save()
 
     #Manually give permission to the admin group
-    adminGroup.grant_permissions("ALL", adminGroup)
-    adminGroup.grant_permissions("ALL", allEmployeesGroup)
+    admin_group.grant_permissions("ALL", admin_group)
+    admin_group.grant_permissions("ALL", all_employees_group)
 
     #Add admin user to admin group
-    adminGroup.add_member(user)
+    admin_group.add_member(user)
 
     #Set the company fields on groups
-    adminGroup.company = company
-    adminGroup.save()
-    allEmployeesGroup.company = company
-    allEmployeesGroup.save()
+    admin_group.company = company
+    admin_group.save()
+    all_employees_group.company = company
+    all_employees_group.save()
 
     #Give admin group all permissions on classes
-    adminGroup.grant_role("Admin", Project)
-    adminGroup.grant_role("Admin", Customer)
-    adminGroup.grant_role("Admin", Contact)
-    adminGroup.grant_role("Admin", Order)
-    adminGroup.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
-    adminGroup.grant_role("Admin", get_class("announcements", "announcement"))
-    adminGroup.grant_role("Admin", Product)
-    adminGroup.grant_role("Admin", Log)
-    adminGroup.grant_role("Admin", Supplier)
-    adminGroup.grant_role("Admin", Notification)
-    adminGroup.grant_role("Admin", User)
-    adminGroup.grant_role("Admin", Group)
-    adminGroup.grant_role("Admin", Ticket)
-    adminGroup.grant_permissions("CONFIGURE", Company)
+    admin_group.grant_role("Admin", Project)
+    admin_group.grant_role("Admin", Customer)
+    admin_group.grant_role("Admin", Contact)
+    admin_group.grant_role("Admin", Order)
+    admin_group.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
+    admin_group.grant_role("Admin", get_class("announcements", "announcement"))
+    admin_group.grant_role("Admin", Product)
+    admin_group.grant_role("Admin", Log)
+    admin_group.grant_role("Admin", Supplier)
+    admin_group.grant_role("Admin", Notification)
+    admin_group.grant_role("Admin", User)
+    admin_group.grant_role("Admin", Group)
+    admin_group.grant_role("Admin", Ticket)
+    admin_group.grant_permissions("CONFIGURE", Company)
 
     #Give employee group some permissions on classes
-    allEmployeesGroup.grant_role("Admin", Project)
-    allEmployeesGroup.grant_role("Admin", Customer)
-    allEmployeesGroup.grant_role("Admin", Contact)
-    allEmployeesGroup.grant_role("Admin", Order)
-    allEmployeesGroup.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
-    allEmployeesGroup.grant_role("Admin", get_class("announcements", "announcement"))
-    allEmployeesGroup.grant_role("Admin", Product)
-    allEmployeesGroup.grant_role("Member", Log)
-    allEmployeesGroup.grant_role("Member", Supplier)
-    allEmployeesGroup.grant_role("Member", Ticket)
-    allEmployeesGroup.grant_role("Member", Notification)
+    all_employees_group.grant_role("Admin", Project)
+    all_employees_group.grant_role("Admin", Customer)
+    all_employees_group.grant_role("Admin", Contact)
+    all_employees_group.grant_role("Admin", Order)
+    all_employees_group.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
+    all_employees_group.grant_role("Admin", get_class("announcements", "announcement"))
+    all_employees_group.grant_role("Admin", Product)
+    all_employees_group.grant_role("Member", Log)
+    all_employees_group.grant_role("Member", Supplier)
+    all_employees_group.grant_role("Member", Ticket)
+    all_employees_group.grant_role("Member", Notification)
 
     return company, user
 
@@ -210,7 +210,7 @@ class Command(BaseCommand):
             u.company = company
             u.save()
 
-            company.allEmployeesGroup.add(u)
+            company.all_employees_group.add(u)
             company.save()
 
             users.append((u, cu['brukerid']))

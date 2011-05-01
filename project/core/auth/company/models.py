@@ -10,20 +10,25 @@ A user can only see objects within the same company.
 
 class Company(models.Model):
     name = models.CharField(max_length=80)
-    adminGroup = models.ForeignKey("group.Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True,
+    admin_group = models.ForeignKey("group.Group", verbose_name="Ledergruppe", related_name="companiesWhereAdmin", null=True,
                                    blank=True)
-    allEmployeesGroup = models.ForeignKey("group.Group", verbose_name="Ansattegruppe",
+    all_employees_group = models.ForeignKey("group.Group", verbose_name="Ansattegruppe",
                                           related_name="companiesWhereAllEmployeed", null=True, blank=True)
-    daysIntoNextMonthHourRegistration = models.IntegerField("Leveringsfrist", default=3)
-    hoursNeededFor50overtimePay = models.IntegerField("Timer før 50%", default=160)
-    hoursNeededFor100overtimePay = models.IntegerField("Timer før 100%", default=240)
+    days_into_next_month_hourregistration = models.IntegerField("Leveringsfrist", default=3)
+    hours_needed_for_50_overtime_pay = models.IntegerField("Timer før 50%", default=160)
+    hours_needed_for_100_overtime_pay = models.IntegerField("Timer før 100%", default=240)
 
+    email_address   = models.CharField(max_length=100, null=True, blank=True)
+    email_host      = models.CharField(max_length=100, null=True, blank=True)
+    email_username  = models.CharField(max_length=100, null=True, blank=True)
+    email_password  = models.CharField(max_length=100, null=True, blank=True)
+            
     def __unicode__(self):
         return self.name
 
     def set_days_into_next_month(self, days):
-        self.daysIntoNextMonthHourRegistration = days
+        self.days_into_next_month_hourregistration = days
         self.save()
 
     def get_days_into_next_month(self):
-        return self.daysIntoNextMonthHourRegistration
+        return self.days_into_next_month_hourregistrationstration

@@ -72,10 +72,10 @@ class Project(PersistentModel):
         #Give the user who created this ALL permissions on object
         if new:
             Core.current_user().grant_role("Owner", self)
-            adminGroup = Core.current_user().get_company_admingroup()
+            admin_group = Core.current_user().get_company_admingroup()
 
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
+            if admin_group:
+                admin_group.grant_role("Admin", self)
 
 class Milestone(PersistentModel):
     project = models.ForeignKey(Project, related_name="milestones")

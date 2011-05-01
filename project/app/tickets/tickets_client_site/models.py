@@ -2,18 +2,18 @@ from app.tickets.models import Ticket
 from core.models import PersistentModel
 from django.db import models
 from django.utils.translation import ugettext as _
+from hashlib import sha1
 
 class TicketClient(PersistentModel):
     email = models.EmailField()
     password = models.CharField(_('password'), max_length=128, blank=True)
     tickets = models.ManyToManyField(Ticket, related_name="clients")
 
+    def set_password(self, password):
+        self.password = sha1(password).digest()
 
-    def save(self, **kwargs):
-        if not self.id:
-            self.password = self.generate_password()
-        super(TicketClient, self).save()
-
+    def check_password(self, password):
+        return sha1(password).digest() == self.password
 
     @staticmethod
     def generate_password():
@@ -32,5 +32,4 @@ class TicketClient(PersistentModel):
                 randid = random.randint(0, 4) #number of vowels
                 ret += vowels[randid]
 
-
-
+        return ret

@@ -69,11 +69,11 @@ class PersistentModel(models.Model):
         """
         if action == "ADD":
             Core.current_user().grant_role("Admin", self)
-            adminGroup = Core.current_user().get_company_admingroup()
+            admin_group = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
-            if adminGroup:
-                adminGroup.grant_role("Admin", self)
+            if admin_group:
+                admin_group.grant_role("Admin", self)
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
@@ -217,7 +217,7 @@ def initial_data ():
     member.grant_actions(["VIEW", "LIST"])
 
     #Other default objects
-    comp = Company.objects.get_or_create(name="Superfirma AS", daysIntoNextMonthHourRegistration=4)[0]
+    comp = Company.objects.get_or_create(name="Superfirma AS", days_into_next_month_hourregistration=4)[0]
     comp.save()
 
     a, created = User.all_objects.get_or_create(username="superadmin",

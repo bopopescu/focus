@@ -74,10 +74,6 @@ class Ticket(PersistentModel):
     def get_attachment_name(self):
         return self.attachment.name.split(os.sep)[-1]
 
-    def save(self, *args, **kwargs):
-        super(Ticket, self).save()
-
-
     foreign_key_dict = {
         'status_id': (TicketStatus, 'name',),
         'priority_id': (TicketPriority, 'name',),
