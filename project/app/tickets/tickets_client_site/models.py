@@ -10,10 +10,11 @@ class TicketClient(PersistentModel):
     tickets = models.ManyToManyField(Ticket, related_name="clients")
 
     def set_password(self, password):
-        self.password = sha1(password).digest()
+        self.password = sha1(password).hexdigest()
 
     def check_password(self, password):
-        return sha1(password).digest() == self.password
+        print sha1(password).hexdigest(), self.password
+        return sha1(password).hexdigest() == self.password
 
     @staticmethod
     def generate_password():
@@ -31,5 +32,4 @@ class TicketClient(PersistentModel):
             else:
                 randid = random.randint(0, 4) #number of vowels
                 ret += vowels[randid]
-
         return ret
