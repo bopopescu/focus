@@ -263,7 +263,7 @@ class Migration(SchemaMigration):
             'oid': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'order_name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'project': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'orders'", 'null': 'True', 'to': "orm['projects.Project']"}),
-            'responsible': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'ordersWhereResponsible'", 'to': "orm['user.User']"}),
+            'responsible': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'responsible_orders'", 'to': "orm['user.User']"}),
             'state': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },

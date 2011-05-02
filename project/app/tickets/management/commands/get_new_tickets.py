@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 import poplib
 from email import parser
 from app.tickets.models import Ticket, TicketStatus, TicketPriority
-from app.tickets.tickets_client_site.models import TicketClient
+from app.client.models import ClientUser
 from core import Core
 from core.auth.company.models import Company
 import re
@@ -76,7 +76,7 @@ class Command(BaseCommand):
                         content = mail.get_payload()
 
 
-                    ticketClient, created = TicketClient.objects.get_or_create(email=email_address)
+                    ticketClient, created = ClientUser.objects.get_or_create(email=email_address)
                     if created:
                         password = ticketClient.generate_password()
                         ticketClient.set_password(password)

@@ -117,7 +117,7 @@ class Product(PersistentModel):
     def orders(self):
         orderIDs = []
         cls = None
-        for line in self.orderlines.all():
+        for line in self.order_lines.all():
             if not cls:
                 cls = line.order.__class__
             if not line.order.id in orderIDs:

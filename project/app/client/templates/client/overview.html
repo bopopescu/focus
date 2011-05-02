@@ -1,4 +1,4 @@
-{% extends "tickets_client_site/client_base.html" %}
+{% extends "client/client_base.html" %}
 
 {% block maincontent %}
 
@@ -12,7 +12,7 @@
 
             {% for ticket in tickets %}
                 <tr class="gray">
-                    <td><a href="{% url app.tickets.tickets_client_site.views.view ticket.id %}">{{ ticket.title }}</a></td>
+                    <td><a href="{% url app.client.views.tickets.view ticket.id %}">{{ ticket.title }}</a></td>
                     <td>{{ ticket.status }}</td>
                     <td>{{ ticket.description }}</td>
                 </tr>

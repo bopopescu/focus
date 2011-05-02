@@ -125,7 +125,7 @@ INSTALLED_APPS = (
 'app.search',
 'app.mail',
 'app.tickets',
-'app.tickets.tickets_client_site',
+'app.client',
 'app.migratefocus',
 
 #API

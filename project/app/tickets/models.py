@@ -41,7 +41,7 @@ class Ticket(PersistentModel):
     spent_time = models.IntegerField(_("Spent time"), default=0)
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
     due_date = models.DateTimeField(null=True, blank=True, default=None)
-    customer = models.ForeignKey(Customer, verbose_name=_("Customer"))
+    customer = models.ForeignKey(Customer, verbose_name=_("Customer"), null=True, blank=True)
     order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"), related_name="tickets")
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))

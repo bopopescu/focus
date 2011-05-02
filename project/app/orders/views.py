@@ -36,7 +36,7 @@ def overview_archive(request):
 @require_permission("VIEW", Order, "id")
 def products(request, id):
     order = Order.objects.get(id=id)
-    orderlines = order.orderlines
+    order_lines = order.order_lines
 
     if request.method == "POST":
         form = OrderLineForm(request.POST, instance=OrderLine())
@@ -49,12 +49,12 @@ def products(request, id):
     return render(request, 'orders/products.html', {'title': _('Products'),
                                                                  'form': form,
                                                                  'order': order,
-                                                                 'orderlines': orderlines})
+                                                                 'order_lines': order_lines})
 
 @require_permission("EDIT", Order, "id")
 def delete_order_line(request, id, orderlineID):
     order = Order.objects.get(id=id)
-    orderline = order.orderlines.get(id=orderlineID)
+    orderline = order.order_lines.get(id=orderlineID)
     orderline.delete()
 
     return redirect(products, id)

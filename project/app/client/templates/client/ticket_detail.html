@@ -1,9 +1,13 @@
-{% extends "tickets_client_site/client_base.html" %}
+{% extends "client/client_base.html" %}
 
 {% block maincontent %}
 
     <div class="in author">
         <h2>{{ ticket.title }}</h2>
+
+       <div style="margin-left:550px; font-size:30px; color:green;">
+           {{ ticket.status }}
+        </div>
     </div>
 
     <div class="line"></div>
@@ -25,73 +29,49 @@
             </div>
             <br><br><br>
             <hr>
-
-
             {{ ticket.description }}
-
             <br><br>
-
-
         </div>
-
 
         <br><br><br>
 
+        {% for update in updates %}
+            <div class="commentBoxes">
 
-        <div class="commentBoxes">
+                <div class="ticketBoxQInfo">
+                    <div class="createInfo">
+                        Lagt inn av: {{ update.creator }}<br>
+                        Opprettet: {{ update.date_created }}
+                    </div>
 
-            <div class="ticketBoxQInfo">
-                <div class="createInfo">
-                    Lagt inn av: Fredrik Carlsen<br>
-                    Opprettet: 18.02.2011 13:44
+
                 </div>
+                <br><br><br>
+                <hr>
+                <p>
+                    {{ update.comment }}
+                </p>
 
+                <br><br>
 
             </div>
-            <br><br><br>
-            <hr>
-            <p>få til å fungere med antall på lager, rest, mottak av nye varer, prioriteringer når man registrer dem inn
-                osv..</p>
-
-            <br><br>
-
-        </div>
+        {% endfor %}
 
         <div class="in forms">
-            <form id="form1" name="form1" method="post" action="/ticket/addComment/65"
-                  enctype="multipart/form-data">
-
+            <form id="form1" name="form1" method="post" action="" enctype="multipart/form-data">
                 <div class="form-row">
                     <div>
-                        <label for="id_text">Text</label>
-                        <br>
-                        <textarea id="id_text" rows="10" cols="40" name="text" class="box"></textarea>
+                        {{ form.comment }}
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div>
-                        <label for="id_attachment">Vedlegg</label>
-                        <br>
-                        <input id="id_attachment" type="file" class="box" name="attachment"/>
+                        {{ form.attachment }}
                     </div>
                 </div>
-
-
                 <p><input name="submit" type="submit" id="submit" tabindex="5" class="com_btn" value="LAGRE"/></p>
-
-
             </form>
         </div>
-
-
     </div>
-
-
-
-
     </div>
-
-
-
 {% endblock %}

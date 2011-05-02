@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <title>TIME</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/client_tickets.css"/>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <h1 class="logo">TIME </h1>
+
+    <p class="txt_right">Logged in as <strong>{{ client.email }}</strong>  <span class="v_line"> |
+        </span> <a href="{% url login.client_logout %}"> Logout</a></p>
+
+    <div class="navigation">
+        <ul>
+            <li><a href="{% url app.client.views.tickets.overview %}" class="active">TICKETS</a></li>
+            <li><a href="{% url app.client.views.offers.overview %}">TILBUD</a></li>
+            <li><a href="{% url app.client.views.offers.overview %}">Ordrer</a></li>
+            <li><a href="{% url app.client.views.offers.overview %}">Din profil</a></li>
+        </ul>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="content">
+        {% block maincontent %}
+        {% endblock %}
+    </div>
+
+</div>
+</body>
+</html>

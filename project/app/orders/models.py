@@ -9,11 +9,36 @@ from django.utils.translation import ugettext as _
 
 STATUS_CHOICES = (
 ('Order', _('Order')),
-('Offer', _('Offer')),
 ("Invoice", _("Ready for Invoice")),
 ("Archive", _("Archived")),
 )
 
+TYPE_CHOICES = (
+('GARANTI', _("GUARANTY")),
+("STANDARD", _("STANDARD")),
+)
+
+class Offer(PersistentModel):
+    oid = models.IntegerField()
+    title = models.CharField(max_length=40)
+    description = models.TextField()
+    price = models.IntegerField(default=0)
+    delivery_date = models.DateField()
+    approved = models.NullBooleanField(default=None, null=True, blank=True)
+    recipient_email_address = models.CharField(max_length=60)
+    earlier_version = models.ForeignKey("Offer")
+    
+    def __unicode__(self):
+        return self.title
+
+class OfferLine(PersistentModel):
+    order = models.ForeignKey(Offer, related_name="offer_lines")
+    product = models.ForeignKey('stock.Product', related_name="offer_lines")
+    count = models.IntegerField()
+
+    def __unicode__(self):
+        return "Order: %s, Product: %s" % (self.order, self.product)
+    
 class Order(PersistentModel):
     oid = models.IntegerField(_("Order number"), null=True, blank=True)
     POnumber = models.CharField(_("PO-number"), max_length=150, blank=True, null=True)
@@ -21,14 +46,18 @@ class Order(PersistentModel):
     customer = models.ForeignKey(Customer, related_name="orders", verbose_name=_("Customer"), blank=True, null=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
     deliveryAddress = models.CharField(max_length=150, null=True)
-    responsible = models.ForeignKey(User, related_name="ordersWhereResponsible", verbose_name=_("Responsible"),
+    responsible = models.ForeignKey(User, related_name="responsible_orders", verbose_name=_("Responsible"),
                                     null=True, blank=True)
+
     delivery_date = models.DateField(verbose_name=_("Delivery date"), null=True, blank=True)
     delivery_date_deadline = models.DateField(verbose_name=_("Delivery deadline"), null=True, blank=True)
     description = models.TextField(_("Description"))
     contacts = models.ManyToManyField(Contact, related_name="orders", verbose_name=_("Contacts"), blank=True)
 
+    type = models.CharField(_("Type"), max_length=15, choices=TYPE_CHOICES, default="STANDARD")
     state = models.CharField(max_length=10, choices=STATUS_CHOICES)
+
+    price = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.order_name
@@ -43,19 +72,12 @@ class Order(PersistentModel):
             return True
         return False
 
-    def is_offer(self):
-        if self.state == "Offer":
-            return True
-        return False
-
     def is_order(self):
         if self.state == "Order":
             return True
         return False
 
     def is_valid_for_edit(self):
-        if self.is_offer():
-            return True
         if self.is_order():
             return True
         return False
@@ -70,10 +92,9 @@ class Order(PersistentModel):
 
         super(Order, self).save()
 
-
 class OrderLine(PersistentModel):
-    order = models.ForeignKey(Order, related_name="orderlines")
-    product = models.ForeignKey('stock.Product', related_name="orderlines")
+    order = models.ForeignKey(Order, related_name="order_lines")
+    product = models.ForeignKey('stock.Product', related_name="order_lines")
     count = models.IntegerField()
 
     def __unicode__(self):
