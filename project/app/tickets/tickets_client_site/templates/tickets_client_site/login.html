@@ -1,18 +1,114 @@
+<style>
+    body {
+        background-color: #EAEAEA;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #admin_wrapper {
+        width: 450px;
+        margin-top: 50px;
+        margin-right: auto;
+        margin-bottom: 10px;
+        margin-left: auto;
+        background-color: #FFFFFF;
+        border: 10px solid #d6d6d6;
+        padding-top: 15px;
+        padding-right: 30px;
+        padding-bottom: 15px;
+        padding-left: 30px;
+    }
+
+    .small {
+        width: 15%;
+    }
+
+    .medium {
+        width: 35%;
+    }
+
+    .large {
+        width: 75%;
+    }
+
+    .full {
+        width: 98%;
+    }
+
+    form  label {
+        font-weight: bold;
+        font-size: 13px;
+        margin-bottom: 12px;
+        display: block;
+        margin-top: 12px;
+    }
+
+    form p {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    form .input {
+        margin-top: 0px;
+        margin-right: 10px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        border: 1px solid #CCCCCC;
+        padding: 7px;
+        background-color: #F3F3F3;
+
+    }
+
+    form select {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    form .button {
+        background-color: #D6D6D6;
+        color: #666666;
+        font-weight: bold;
+        border: 1px solid #CCCCCC;
+        margin-top: 7px;
+        margin-bottom: 7px;
+        padding-top: 5px;
+        padding-right: 10px;
+        padding-bottom: 5px;
+        padding-left: 10px;
+    }
+
+    input:focus {
+        background-color: #FFFFCC;
+        border: 1px solid #999999;
+    }
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+<div id="admin_wrapper">
 
 
-<html>
+    <h1>Tickets</h1>
+    <div style="position:absolute; margin-left:350px; margin-top:70px"></div>
 
-<body>
 
-    <h2>LOGIN</h2>
-    {% if error %}
-        feil epost/passord
-    {% endif %}
-    <form action="" method="POST">
-        email: <input type="text" name="email" /> <br />
-        passord: <input type="password" name="password"/> <br />
-        <input type="submit" />
-    </form>
+        {% if error %}
+
+            <span style="color:red">Feil epostadresse eller passord</span>
+            <br>
+        {% endif %}
+
+        <form id="myForm" action="" method="POST">
+            <p><label>Epostadresse</label>
+            <input type="text" name="email"/></p> 
+
+            <p><label>Passord</label>
+            <input type="password" name="password"/> </p><br/>
+
+            <input type="submit" value="Logg inn"/>
+        </form>
+
+
+</div>
+
 </body>
-
 </html>

@@ -1,46 +1,97 @@
-
-
 {% extends "tickets_client_site/client_base.html" %}
 
 {% block maincontent %}
 
-	<!-- Intro -->
+    <div class="in author">
+        <h2>{{ ticket.title }}</h2>
+    </div>
 
-				<div class="in author">
-					<h2>Lets Enter The Dragon</h2>
-					<p>Author <a href="#">Bruce Lee</a> | created 10-14-08</p>
-				</div>
-
-				<div class="line"></div>
-
-	<!-- Checks -->
-
-			<div class="check_main">
-
-				<div class="check">
-					<div class="good"><img src="images/check.gif" alt="check" class="icon" />Nice work <strong>Ninja Admin!</strong></div>
-				</div>
-				<div class="check">
-					<div class="bad"><img src="images/x.gif" alt="check" class="icon" />You need more training, please <a href="#">try again</a>.</div>
-				</div>
-
-			</div>
-
-	<!-- Form -->
-
-				<div class="in forms">
-					<form id="form1" name="form1" method="post" action="">
-
-      				<p><strong>TITLE</strong><br />
-					<input type="text" name="name" class="box" /></p>
+    <div class="line"></div>
 
 
-	  				<p><strong>TEXT</strong><br />
-					<textarea name="mes" rows="5" cols="30" class="box" ></textarea></p>
 
-					<p><input name="submit" type="submit" id="submit"  tabindex="5" class="com_btn" value="UPDATE" /></p>
-					</form>
+    <div class="in">
 
-				</div>
+        <div class="ticketBoxQ">
+
+            <div class="ticketBoxQInfo">
+
+                <div class="createInfo">
+                    Lagt inn av: Fredrik Carlsen<br>
+                    Opprettet: 29.10.2010 00:05
+                </div>
+
+
+            </div>
+            <br><br><br>
+            <hr>
+
+
+            {{ ticket.description }}
+
+            <br><br>
+
+
+        </div>
+
+
+        <br><br><br>
+
+
+        <div class="commentBoxes">
+
+            <div class="ticketBoxQInfo">
+                <div class="createInfo">
+                    Lagt inn av: Fredrik Carlsen<br>
+                    Opprettet: 18.02.2011 13:44
+                </div>
+
+
+            </div>
+            <br><br><br>
+            <hr>
+            <p>få til å fungere med antall på lager, rest, mottak av nye varer, prioriteringer når man registrer dem inn
+                osv..</p>
+
+            <br><br>
+
+        </div>
+
+        <div class="in forms">
+            <form id="form1" name="form1" method="post" action="/ticket/addComment/65"
+                  enctype="multipart/form-data">
+
+                <div class="form-row">
+                    <div>
+                        <label for="id_text">Text</label>
+                        <br>
+                        <textarea id="id_text" rows="10" cols="40" name="text" class="box"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="id_attachment">Vedlegg</label>
+                        <br>
+                        <input id="id_attachment" type="file" class="box" name="attachment"/>
+                    </div>
+                </div>
+
+
+                <p><input name="submit" type="submit" id="submit" tabindex="5" class="com_btn" value="LAGRE"/></p>
+
+
+            </form>
+        </div>
+
+
+    </div>
+
+
+
+
+    </div>
+
+
 
 {% endblock %}

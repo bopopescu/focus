@@ -32,7 +32,7 @@ def logout(request):
 @client_login_required
 def overview(request):
     client = TicketClient.objects.get(id=request.session['client_id'])
-    tickets = client.tickets
+    tickets = client.tickets.all()
     return render(request, 'tickets_client_site/overview.html', {'client': client,
                                                                  'tickets': tickets})
 
@@ -44,7 +44,7 @@ def view(request, id):
         ticket = client.tickets.get(id=id)
     except TicketClient.DoesNotExist:
         raise Http404
-    return render(request, 'tickets_client_site/view.html', {'client': client,
+    return render(request, 'tickets_client_site/ticket_detail.html', {'client': client,
                                                              'ticket': ticket})
 
 

@@ -9,6 +9,7 @@ from app.tickets.tickets_client_site.models import TicketClient
 from core import Core
 from core.auth.company.models import Company
 import re
+from core.mail import send_mail
 
 class Command(BaseCommand):
     def get_new_emails(self):
@@ -17,7 +18,6 @@ class Command(BaseCommand):
         import email
 
         for company in Company.objects.all():
-
 
             if company.admin_group and company.email_host and company.email_password and company.email_username:
 
@@ -29,7 +29,6 @@ class Command(BaseCommand):
                 M.user(company.email_username)
                 M.pass_(company.email_password)
 
-
                 numMessages = len(M.list()[1])
 
                 for i in range(numMessages):
@@ -38,11 +37,20 @@ class Command(BaseCommand):
                     str = string.join(msg[1], "\n")
                     str = re.sub(r'\r(?!=\n)', '\r\n', str)
 
-                    str.replace("=E5","å")
-
                     mail = email.message_from_string((str))
 
-                    email_address = mail["From"]
+                    email_address = ""
+
+                    for text, encoding in decode_header(mail["From"]):
+                        if encoding:
+                            email_address += text.decode(encoding)
+                        else:
+                            email_address += text
+
+                    address_start = email_address.find("<")+1
+                    address_end = email_address.find(">")
+                    email_address = email_address[address_start:address_end]
+
                     subject = mail["Subject"]
 
                     k = 3
@@ -68,11 +76,24 @@ class Command(BaseCommand):
                         content = mail.get_payload()
 
 
-
                     ticketClient, created = TicketClient.objects.get_or_create(email=email_address)
+                    if created:
+                        password = ticketClient.generate_password()
+                        ticketClient.set_password(password)
 
-                    if not ticketClient.id:
-                        ticketClient.set_password(ticketClient.generate_password())
+                        message = """Hei. Takk for din henvendelse. \n Vi har opprettet en sak hos oss.
+                        Du kan følge progresjon og komme med kommenterer ved å logge inn på %s
+
+                        Bruk din epostadresse og passordet: %s
+
+                                    """ % ("http://focus.fncit.no/tickets/client", password)
+                    else:
+                        message = """Hei. Takk for din henvendelse. \n Vi har opprettet en sak hos oss.
+                        Du kan følge progresjon og komme med kommenterer ved å logge inn på %s
+
+                                    """ % ("http://focus.fncit.no/tickets/client")
+
+                    send_mail("Din henvendelse er registrert", message, "no-reply@focussecurity.no", [email_address])
 
                     ticket = Ticket()
                     ticket.title = subject
@@ -91,8 +112,6 @@ class Command(BaseCommand):
                     ticket.description = ticket.description.replace("=C5",u"Å")
                     ticket.description = ticket.description.replace("=20",u"\n")
 
-                    print ticket.description
-
                     ticket.priority = TicketPriority.objects.all()[0]
                     ticket.status = TicketStatus.objects.all()[0]
 
@@ -102,8 +121,8 @@ class Command(BaseCommand):
                     ticketClient.tickets.add(ticket)
                     ticketClient.save()
 
-                    #if numMessages>0:
-                    #    M.dele(numMessages)
+                if numMessages>0:
+                    M.dele(numMessages)
 
                 M.quit()
 

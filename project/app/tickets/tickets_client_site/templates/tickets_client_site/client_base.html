@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Ninja Admin</title>
+<title>TIME</title>
 <link rel="stylesheet" type="text/css"  href="{{ STATIC_URL }}css/client_tickets.css" />
 </head>
 
@@ -11,7 +11,7 @@
 
 	<div class="wrapper">
 
-		<h1 class="logo">NINJA ADMIN</h1>
+		<h1 class="logo">TIME </h1>
 		<p class="txt_right">Logged in as <strong>{{ client.email }}</strong>  <span class="v_line"> |
         </span> <a href="{% url client_logout %}"> Logout</a></p>
 
@@ -19,19 +19,8 @@
 
 		<div class="navigation">
 				<ul>
-					<li><a href="#">WRITE</a></li>
-					<li><a href="#" class="active">MANAGE</a></li>
-					<li><a href="#l">SETTINGS</a></li>
-					<li><a href="#">USERS</a></li>
+					<li><a href="{% url app.tickets.tickets_client_site.views.overview %}" class="active">TICKETS</a></li>
 				</ul>
-
-				<div id="searchform">
-					<form method="get" action="">
-					<input type="text" value="find something good..." class="search_box" name="search" onclick="this.value='';"  />
-					<input type="submit" class="search_btn" value="SEARCH" />
-					</form>
-				</div>
-
 		</div>
 
 		<div class="clear"></div>
@@ -46,8 +35,6 @@
 
 		</div>
 
-
-		<p class="footer"><a href="#">ADVANCED  SEARCH</a> <span class="v_line"> |</span> <a href="#">LOGOUT</a></p>
 
 
 	</div>
