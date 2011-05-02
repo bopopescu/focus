@@ -36,13 +36,13 @@ class Command(BaseCommand):
                     print "=" * 40
                     msg = M.retr(i + 1)
                     str = string.join(msg[1], "\n")
+                    str = re.sub(r'\r(?!=\n)', '\r\n', str)
 
-                    try:
-                        mail = email.message_from_string((str))
-                    except Exception as e:
-                        print e
-                        
-                    emailAddress = mail["From"]
+                    str.replace("=E5","å")
+
+                    mail = email.message_from_string((str))
+
+                    email_address = mail["From"]
                     subject = mail["Subject"]
 
                     k = 3
@@ -53,28 +53,46 @@ class Command(BaseCommand):
                     decoded = decode_header(subject)
 
                     s = ""
-                    for i, encoding in decoded:
-                        s += i[0].decode(encoding)
 
-                    subject = s
-                    
-                    date = mail["Date"]
+                    for text, encoding in decoded:
+                        if encoding:
+                            s+= text.decode(encoding)
+                        else:
+                            s+= text
+
+                    subject = (s)
 
                     if mail.is_multipart():
                         content = mail.get_payload(0).get_payload()
                     else:
                         content = mail.get_payload()
 
-                    content = content.decode(encoding)
 
-                    ticketClient, created = TicketClient.objects.get_or_create(email=emailAddress)
+
+                    ticketClient, created = TicketClient.objects.get_or_create(email=email_address)
 
                     if not ticketClient.id:
                         ticketClient.set_password(ticketClient.generate_password())
 
                     ticket = Ticket()
                     ticket.title = subject
-                    ticket.description = content
+
+                    encoding = "utf-8"
+                    if 'text/plain' in mail["Content-Type"]:
+                        encoding = "latin1"
+
+                    ticket.description = content.decode(encoding).strip()
+
+                    ticket.description = ticket.description.replace("=F8",u"ø")
+                    ticket.description = ticket.description.replace("=D8",u"Ø")
+                    ticket.description = ticket.description.replace("=E6",u"æ")
+                    ticket.description = ticket.description.replace("=C6",u"Æ")
+                    ticket.description = ticket.description.replace("=E5",u"å")
+                    ticket.description = ticket.description.replace("=C5",u"Å")
+                    ticket.description = ticket.description.replace("=20",u"\n")
+
+                    print ticket.description
+
                     ticket.priority = TicketPriority.objects.all()[0]
                     ticket.status = TicketStatus.objects.all()[0]
 
@@ -84,8 +102,8 @@ class Command(BaseCommand):
                     ticketClient.tickets.add(ticket)
                     ticketClient.save()
 
-                    if numMessages>0:
-                        M.dele(numMessages)
+                    #if numMessages>0:
+                    #    M.dele(numMessages)
 
                 M.quit()
 

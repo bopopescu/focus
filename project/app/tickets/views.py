@@ -64,7 +64,7 @@ def trash(request, id):
                                                       })
 
 
-@require_permission("ADD", Ticket)
+@require_permission("CREATE", Ticket)
 def add(request):
     return form(request)
 

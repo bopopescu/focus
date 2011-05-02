@@ -28,7 +28,7 @@ class FocusTestSuiteRunner(DjangoTestSuiteRunner):
         # Remove a test that fails because of django only
         new_suites = []
         for test in suite._tests:
-            if not test.id().endswith('test_shortcut_view'):
+            if hasattr(test, 'id') and not test.id().endswith('test_shortcut_view'):
                 new_suites.append(test)
 
         suite._tests = new_suites
