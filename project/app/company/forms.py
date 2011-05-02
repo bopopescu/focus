@@ -11,8 +11,14 @@ class CompanyForm(ModelForm):
 
     def __init__(self, *args, **kwrds):
         super(CompanyForm, self).__init__(*args, **kwrds)
-        self.fields['admin_group'].queryset = Group.objects.filter_current_company()
-        self.fields['all_employees_group'].queryset = Group.objects.filter_current_company()
+
+        company = None
+
+        if self.__dict__['initial'] and self.__dict__['initial']['id']:
+            company = Company.objects.get(id=self.__dict__['initial']['id'])
+
+        self.fields['admin_group'].queryset = Group.objects.filter(company=company)
+        self.fields['all_employees_group'].queryset = Group.objects.filter(company=company)
 
     def clean_MonthsStillValidForEditWhenEditing(self):
         months = int(self.cleaned_data['MonthsStillValidForEditWhenEditing'])

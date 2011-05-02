@@ -41,14 +41,20 @@
                         <th>{% trans "spent time" %}</th> <td>{{ ticket.spent_time }}</td>
                     </tr>
                     <tr>
-                        <th>{% trans "customer" %}</th> <td><a href="{% url app.customers.views.view ticket.customer.id %}">{{ ticket.customer }}</a></td>
+                        <th>{% trans "customer" %}</th> <td>
+
+                        {% if ticket.customer %}
+                        <a href="{% url app.customers.views.view ticket.customer.id %}">{{ ticket.customer }}</a>
+                        {% endif %}
+
+                    </td>
                     </tr>
 
                 </table>
 
                 <div>
                     <p><b>{% trans "Description" %}</b></p>
-                    <p class="ticket_description">{{ ticket.description }}</p>
+                    <p class="ticket_description">{{ ticket.description|linebreaks }}</p>
                 </div>
 
                 {% if ticket.attachment %}
