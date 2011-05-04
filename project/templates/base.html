@@ -65,7 +65,7 @@
 
             <li class="{% active request "^/orders/" %}">
                 <a class="{% active request "^/orders/" %}"
-                   href="{% url app.orders.views.overview %}">{% trans "Orders" %}</a>
+                   href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
             </li>
             <li class="{% active request "^/hourregistrations/" %}">
                 <a class="{% active request "^/hourregistrations/" %}"
@@ -119,8 +119,8 @@
 
         <div id="footer">FocusTime
             {% if debug and sql_queries %}
-            {{ sql_queries|length }}
-        {% endif %}
+                {{ sql_queries|length }}
+            {% endif %}
         </div>
     </div>
 </div>

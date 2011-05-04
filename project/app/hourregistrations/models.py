@@ -112,7 +112,7 @@ def initial_data ():
     Core.set_test_user(a)
 
     testCustomer, created = Customer.objects.get_or_create(cid="100", full_name="Per", email="test@test.com")
-    testOrder, created = Order.objects.get_or_create(oid="100", order_name="TestOrdre", responsible=a,
+    testOrder, created = Order.objects.get_or_create(order_number="100", title="TestOrdre", responsible=a,
                                                      customer=testCustomer)
 
     t = HourRegistration.objects.create(date=datetime.strptime("10.10.2010", "%d.%m.%Y"),

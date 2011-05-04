@@ -47,8 +47,8 @@ class Offer(OrderBase):
     offer_number = models.IntegerField()
 
 class Order(OrderBase):
-    order_numer = models.IntegerField()
-    offer = models.ForeignKey('Offer', related_name="orders")
+    order_number = models.IntegerField()
+    offer = models.ForeignKey('Offer', related_name="orders", null=True, blank=True)
 
     responsible = models.ForeignKey(User, related_name="orders_where_responsible", verbose_name=_("Responsible"),
                                     null=True, blank=True)

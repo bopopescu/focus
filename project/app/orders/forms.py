@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
+from app.customers.models import Customer
+from app.orders.models import Order, OrderLine
+from app.projects.models import Project
 from app.stock.forms import ProductField
+from core.auth.user.models import User
 from core.widgets import *
 from core.shortcuts import get_company_users
 from django.utils.translation import ugettext as _
-from app.orders.models import *
+
 
 class OrderForm(ModelForm):
     #delivery_date = forms.DateField(required=True, input_formats=["%d.%m.%Y"],
@@ -14,7 +18,7 @@ class OrderForm(ModelForm):
 
     class Meta:
         model = Order
-        fields = ("oid", "POnumber", "order_name", "customer", "project", "responsible", 'delivery_date',
+        fields = ("order_number", "PO_number", "title", "customer", "project", "responsible", 'delivery_date',
                   'delivery_date_deadline', 'description')
 
     def __init__(self, *args, **kwargs):
@@ -43,24 +47,24 @@ class OrderForm(ModelForm):
 
         return delivery_date
 
-    def clean_oid(self):
-        oid = self.cleaned_data['oid']
+    def clean_order_number(self):
+        order_number = self.cleaned_data['order_number']
 
         orders = Order.objects.filter_current_company()
         for i in orders:
             if self.id == i.id:
                 continue
 
-            if i.oid == oid:
+            if i.order_number == order_number:
                 raise forms.ValidationError("Det kreves unikt ordrenr")
 
-        return oid
+        return order_number
 
 
 class OfferForm(OrderForm):
     class Meta:
         model = Order
-        fields = ("order_name", "customer", "project", "responsible", 'delivery_date',
+        fields = ("title", "customer", "project", "responsible", 'delivery_date',
                   'delivery_date_deadline', 'description')
 
 

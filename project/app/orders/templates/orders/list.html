@@ -33,13 +33,11 @@
         {% for p in orders %}
             <tr>
                 <td>{{ p.oid }}</td>
-                <td><a href="{% url app.orders.views.view p.id %}">{{ p.order_name }}</a></td>
+                <td><a href="{% url app.orders.views.order.view p.id %}">{{ p.order_name }}</a></td>
                 <td>
                     <div class="tool">
-                        {% if p.state == "O" or p.state == "T" %}
-                            <a href="{% url app.orders.views.edit p.id %}"><img
+                            <a href="{% url app.orders.views.order.edit p.id %}"><img
                                     class="tool" src="/media/icons/edit.gif" alt=""></a>
-                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -48,4 +46,3 @@
     </table>
 
 {% endblock %}
-

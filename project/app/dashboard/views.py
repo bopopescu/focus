@@ -16,7 +16,7 @@ def overview(request):
 
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
     your_projects = Core.current_user().get_permitted_objects("VIEW", Project)
-    your_orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(state="Order")[::-1]
+    your_orders = Core.current_user().get_permitted_objects("VIEW", Order)[::-1]
 
     return render(request, 'dashboard/dashboard.html', {'title': title,
                                                         'announcements': announcements,
