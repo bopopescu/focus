@@ -3,9 +3,6 @@
 ;
 /* 	Super Simple Admin Theme By Jeff Adams		*/
 
-/* We first import a reset file to reset browser default styling */
-@import url("../css/reset.css");
-@import url("../css/navigation.css");
 
 /*This handles all the navigation items */
 

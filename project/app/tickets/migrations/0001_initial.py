@@ -8,16 +8,19 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Adding model 'TicketBase'
+        db.create_table('tickets_ticketbase', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('client_user', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='client_tickets', null=True, blank=True, to=orm['client.ClientUser'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='tickets', null=True, blank=True, to=orm['user.User'])),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('tickets', ['TicketBase'])
+
         # Adding model 'TicketStatus'
         db.create_table('tickets_ticketstatus', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599244))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599279))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketstatus_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketstatus_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketstatus_companies', null=True, blank=True, to=orm['company.Company'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('order_priority', self.gf('django.db.models.fields.IntegerField')()),
         ))
@@ -26,13 +29,6 @@ class Migration(SchemaMigration):
         # Adding model 'TicketPriority'
         db.create_table('tickets_ticketpriority', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599244))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599279))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketpriority_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketpriority_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketpriority_companies', null=True, blank=True, to=orm['company.Company'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
         db.send_create_signal('tickets', ['TicketPriority'])
@@ -40,27 +36,14 @@ class Migration(SchemaMigration):
         # Adding model 'TicketType'
         db.create_table('tickets_tickettype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599244))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599279))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='tickettype_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='tickettype_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='tickettype_companies', null=True, blank=True, to=orm['company.Company'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
         ))
         db.send_create_signal('tickets', ['TicketType'])
 
         # Adding model 'Ticket'
         db.create_table('tickets_ticket', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599244))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599279))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticket_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticket_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticket_companies', null=True, blank=True, to=orm['company.Company'])),
+            ('ticketbase_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tickets.TicketBase'], unique=True, primary_key=True)),
+            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['company.Company'])),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('status', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tickets.TicketStatus'])),
@@ -69,7 +52,8 @@ class Migration(SchemaMigration):
             ('spent_time', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('estimated_time', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('due_date', self.gf('django.db.models.fields.DateTimeField')(default=None, null=True, blank=True)),
-            ('customer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['customers.Customer'])),
+            ('customer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['customers.Customer'], null=True, blank=True)),
+            ('order', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='tickets', null=True, to=orm['orders.Order'])),
             ('assigned_to', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.User'], null=True, blank=True)),
             ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True)),
         ))
@@ -77,14 +61,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'TicketUpdate'
         db.create_table('tickets_ticketupdate', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599244))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599279))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketupdate_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketupdate_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketupdate_companies', null=True, blank=True, to=orm['company.Company'])),
+            ('ticketbase_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tickets.TicketBase'], unique=True, primary_key=True)),
             ('ticket', self.gf('django.db.models.fields.related.ForeignKey')(related_name='updates', to=orm['tickets.Ticket'])),
             ('comment', self.gf('django.db.models.fields.TextField')()),
             ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True)),
@@ -93,14 +70,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'TicketUpdateLine'
         db.create_table('tickets_ticketupdateline', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('trashed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599244))),
-            ('date_edited', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 4, 11, 1, 54, 42, 599279))),
-            ('creator', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketupdateline_created', null=True, blank=True, to=orm['user.User'])),
-            ('editor', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketupdateline_edited', null=True, blank=True, to=orm['user.User'])),
-            ('company', self.gf('django.db.models.fields.related.ForeignKey')(default=None, related_name='ticketupdateline_companies', null=True, blank=True, to=orm['company.Company'])),
+            ('ticketbase_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['tickets.TicketBase'], unique=True, primary_key=True)),
             ('update', self.gf('django.db.models.fields.related.ForeignKey')(related_name='update_lines', to=orm['tickets.TicketUpdate'])),
             ('change', self.gf('django.db.models.fields.CharField')(max_length=250)),
         ))
@@ -109,6 +79,9 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         
+        # Deleting model 'TicketBase'
+        db.delete_table('tickets_ticketbase')
+
         # Deleting model 'TicketStatus'
         db.delete_table('tickets_ticketstatus')
 
@@ -129,11 +102,29 @@ class Migration(SchemaMigration):
 
 
     models = {
+        'client.clientuser': {
+            'Meta': {'object_name': 'ClientUser'},
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'clientuser_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'clientuser_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211838)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211896)'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'clientuser_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128', 'blank': 'True'}),
+            'tickets': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'clients'", 'symmetrical': 'False', 'to': "orm['tickets.Ticket']"}),
+            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
         'company.company': {
             'Meta': {'object_name': 'Company'},
             'admin_group': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAdmin'", 'null': 'True', 'to': "orm['group.Group']"}),
             'all_employees_group': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'companiesWhereAllEmployeed'", 'null': 'True', 'to': "orm['group.Group']"}),
             'days_into_next_month_hourregistration': ('django.db.models.fields.IntegerField', [], {'default': '3'}),
+            'email_address': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'email_host': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'email_password': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'email_username': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'hours_needed_for_100_overtime_pay': ('django.db.models.fields.IntegerField', [], {'default': '240'}),
             'hours_needed_for_50_overtime_pay': ('django.db.models.fields.IntegerField', [], {'default': '160'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -141,21 +132,21 @@ class Migration(SchemaMigration):
         },
         'contacts.contact': {
             'Meta': {'object_name': 'Contact'},
-            'address': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'address': ('django.db.models.fields.CharField', [], {'max_length': '80', 'blank': 'True'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'contact_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'contact_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211838)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211896)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'description': ('django.db.models.fields.TextField', [], {'default': "''"}),
+            'description': ('django.db.models.fields.TextField', [], {'default': "''", 'blank': 'True'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'contact_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '80'}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20'}),
-            'phone_mobile': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20'}),
-            'phone_office': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20'}),
+            'phone': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20', 'blank': 'True'}),
+            'phone_mobile': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20', 'blank': 'True'}),
+            'phone_office': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20', 'blank': 'True'}),
             'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'contenttypes.contenttype': {
@@ -171,8 +162,8 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'comment_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']", 'null': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'comment_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211838)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211896)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'comment_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -188,8 +179,8 @@ class Migration(SchemaMigration):
             'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'customer_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
             'contacts': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'customers'", 'blank': 'True', 'to': "orm['contacts.Contact']"}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'customer_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211838)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211896)'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'customer_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '80'}),
@@ -212,90 +203,104 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'children'", 'null': 'True', 'to': "orm['group.Group']"})
         },
+        'orders.order': {
+            'Meta': {'object_name': 'Order'},
+            'POnumber': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'order_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
+            'contacts': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'orders'", 'blank': 'True', 'to': "orm['contacts.Contact']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'order_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
+            'customer': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'orders'", 'null': 'True', 'to': "orm['customers.Customer']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211838)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211896)'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'deliveryAddress': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True'}),
+            'delivery_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'delivery_date_deadline': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'order_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'oid': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'order_name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'price': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'orders'", 'null': 'True', 'to': "orm['projects.Project']"}),
+            'responsible': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'responsible_orders'", 'null': 'True', 'to': "orm['user.User']"}),
+            'state': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'type': ('django.db.models.fields.CharField', [], {'default': "'STANDARD'", 'max_length': '15'})
+        },
+        'projects.project': {
+            'Meta': {'object_name': 'Project'},
+            'POnumber': ('django.db.models.fields.CharField', [], {'max_length': '150', 'null': 'True', 'blank': 'True'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'project_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
+            'contact': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projects'", 'null': 'True', 'to': "orm['contacts.Contact']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'project_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
+            'customer': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'projects'", 'null': 'True', 'to': "orm['customers.Customer']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211838)'}),
+            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 5, 5, 0, 13, 27, 211896)'}),
+            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'deliveryAddress': ('django.db.models.fields.TextField', [], {'max_length': '150', 'null': 'True'}),
+            'deliveryDate': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'deliveryDateDeadline': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'project_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'pid': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
+            'project_name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
+            'responsible': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projectsWhereResponsible'", 'null': 'True', 'to': "orm['user.User']"}),
+            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
         'tickets.ticket': {
-            'Meta': {'ordering': "['status', 'date_created']", 'object_name': 'Ticket'},
+            'Meta': {'ordering': "['status', 'date_created']", 'object_name': 'Ticket', '_ormbases': ['tickets.TicketBase']},
             'assigned_to': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['user.User']", 'null': 'True', 'blank': 'True'}),
             'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True'}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticket_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticket_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'customer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['customers.Customer']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['company.Company']"}),
+            'customer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['customers.Customer']", 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'due_date': ('django.db.models.fields.DateTimeField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticket_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'estimated_time': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'order': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'tickets'", 'null': 'True', 'to': "orm['orders.Order']"}),
             'priority': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tickets.TicketPriority']"}),
             'spent_time': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'status': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tickets.TicketStatus']"}),
+            'ticketbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['tickets.TicketBase']", 'unique': 'True', 'primary_key': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['tickets.TicketType']"})
+        },
+        'tickets.ticketbase': {
+            'Meta': {'object_name': 'TicketBase'},
+            'client_user': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'client_tickets'", 'null': 'True', 'blank': 'True', 'to': "orm['client.ClientUser']"}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'tickets'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"})
         },
         'tickets.ticketpriority': {
             'Meta': {'object_name': 'TicketPriority'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketpriority_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketpriority_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketpriority_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'tickets.ticketstatus': {
             'Meta': {'ordering': "['order_priority']", 'object_name': 'TicketStatus'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketstatus_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketstatus_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketstatus_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'order_priority': ('django.db.models.fields.IntegerField', [], {}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'order_priority': ('django.db.models.fields.IntegerField', [], {})
         },
         'tickets.tickettype': {
             'Meta': {'object_name': 'TicketType'},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'tickettype_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'tickettype_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'tickettype_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'tickets.ticketupdate': {
-            'Meta': {'object_name': 'TicketUpdate'},
+            'Meta': {'object_name': 'TicketUpdate', '_ormbases': ['tickets.TicketBase']},
             'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True'}),
             'comment': ('django.db.models.fields.TextField', [], {}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketupdate_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketupdate_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketupdate_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ticket': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'updates'", 'to': "orm['tickets.Ticket']"}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'ticketbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['tickets.TicketBase']", 'unique': 'True', 'primary_key': 'True'})
         },
         'tickets.ticketupdateline': {
-            'Meta': {'object_name': 'TicketUpdateLine'},
+            'Meta': {'object_name': 'TicketUpdateLine', '_ormbases': ['tickets.TicketBase']},
             'change': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketupdateline_companies'", 'null': 'True', 'blank': 'True', 'to': "orm['company.Company']"}),
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketupdateline_created'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599244)'}),
-            'date_edited': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 4, 11, 1, 54, 42, 599279)'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'editor': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'related_name': "'ticketupdateline_edited'", 'null': 'True', 'blank': 'True', 'to': "orm['user.User']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'trashed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'ticketbase_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['tickets.TicketBase']", 'unique': 'True', 'primary_key': 'True'}),
             'update': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'update_lines'", 'to': "orm['tickets.TicketUpdate']"})
         },
         'user.user': {

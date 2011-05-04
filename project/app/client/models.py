@@ -8,6 +8,9 @@ class ClientUser(PersistentModel):
     email = models.EmailField()
     password = models.CharField(_('password'), max_length=128, blank=True)
     tickets = models.ManyToManyField(Ticket, related_name="clients")
+    
+    def __unicode__(self):
+        return self.email
 
     def set_password(self, password):
         self.password = sha1(password).hexdigest()

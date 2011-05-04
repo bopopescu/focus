@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from core.models import PersistentModel, Comment
+from core.auth.company.models import Company
 from core.auth.user.models import User
 from django.db import models
 from app.customers.models import Customer
@@ -10,7 +10,31 @@ import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
-class TicketStatus(PersistentModel):
+
+class TicketBase(models.Model):
+    """ Used as base class by Ticket and TicketUpdate instead of PersistentModel
+        Objects can be created be client users
+    """
+    client_user = models.ForeignKey('client.ClientUser', blank=True, null=True, default=None, related_name='client_tickets')
+    user = models.ForeignKey(User, blank=True, null=True, default=None, related_name='tickets')
+    date_created = models.DateTimeField(auto_now_add=True)
+    trashed = models.BooleanField(default=False)
+
+    def save(self, **kwargs):
+        action = 'EDIT'
+        if not self.id:
+            action = 'ADD'
+
+        super(TicketBase, self).save()
+
+        if action == 'ADD' and self.user:
+            self.user.grant_role('Admin', self)
+
+    @property
+    def creator(self):
+        return self.client_user or self.user
+
+class TicketStatus(models.Model):
     name = models.CharField(max_length=20)
     order_priority = models.IntegerField()
 
@@ -20,19 +44,21 @@ class TicketStatus(PersistentModel):
     def __unicode__(self):
         return unicode(self.name)
 
-class TicketPriority(PersistentModel):
+class TicketPriority(models.Model):
     name = models.CharField(max_length=20)
 
     def __unicode__(self):
         return unicode(self.name)
 
-class TicketType(PersistentModel):
+class TicketType(models.Model):
     name = models.CharField(max_length=20)
 
     def __unicode__(self):
         return unicode(self.name)
 
-class Ticket(PersistentModel):
+
+class Ticket(TicketBase):
+    company = models.ForeignKey(Company, default=None)
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), )
     status = models.ForeignKey(TicketStatus, verbose_name=_("Status"))
@@ -49,9 +75,23 @@ class Ticket(PersistentModel):
     def __unicode__(self):
         return unicode(self.title)
 
-
     class Meta:
         ordering = ['status', 'date_created']
+
+    def save(self, **kwargs):
+        action = 'EDIT'
+        if not self.id:
+            action = 'ADD'
+
+        super(TicketBase, self).save()
+
+        if action == 'ADD':
+            if self.company:
+                if self.company.admin_group:
+                    self.company.admin_group.grant_role('Admin', self)
+                if self.company.all_employees_group:
+                    self.company.all_employees_group.grant_role('Member', self)
+
 
     def can_be_deleted(self):
         can_be_deleted = True
@@ -84,7 +124,7 @@ class Ticket(PersistentModel):
 
     def create_model_dict(self):
         data = {}
-        ignore_list = ('_state', 'date_edited')
+        ignore_list = ('date_edited', )
 
         for field in self._meta.fields:
             if field.attname.startswith('_') or field.attname in ignore_list:
@@ -95,7 +135,7 @@ class Ticket(PersistentModel):
             if field.attname in self.foreign_key_dict:
 
                 #Check if foreign-key value is None
-                if field_value == None:
+                if field_value is None:
                     data[field.verbose_name] = None
                     continue
 
@@ -122,7 +162,7 @@ class Ticket(PersistentModel):
 
         return diff
 
-class TicketUpdate(PersistentModel):
+class TicketUpdate(TicketBase):
     ticket = models.ForeignKey(Ticket, related_name="updates")
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
@@ -146,7 +186,7 @@ class TicketUpdate(PersistentModel):
             return os.path.join("/file/", self.attachment.name)
         return None
 
-class TicketUpdateLine(PersistentModel):
+class TicketUpdateLine(TicketBase):
     update = models.ForeignKey(TicketUpdate, related_name='update_lines')
     change = models.CharField(max_length=250)
 
