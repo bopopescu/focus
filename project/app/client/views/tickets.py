@@ -28,13 +28,12 @@ def view(request, id):
         raise Http404
 
     if request.method == "POST":
-        old_ticket = copy.copy(ticket)
         ticket_form = ClientTicketForm(request.POST, request.FILES, instance=ticket)
 
         if ticket_form.is_valid():
             ticket, ticket_update = ticket_form.save()
-            differences = Ticket.find_differences(ticket, old_ticket)
-            ticket_update.create_update_lines(differences)
+            ticket_update.client_user = client
+            ticket_update.save()
             request.message_success(_("Ticket updated"))
 
             return redirect(view, ticket.id)

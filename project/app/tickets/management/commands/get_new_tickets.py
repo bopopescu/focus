@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from email.header import decode_header
-from email.mime.text import MIMEText
 from django.core.management.base import BaseCommand
-import poplib
-from email import parser
-from app.tickets.models import Ticket, TicketStatus, TicketPriority
+from app.tickets.models import Ticket, TicketStatus, TicketPriority, TicketType
 from app.client.models import ClientUser
 from core import Core
 from core.auth.company.models import Company
@@ -114,9 +111,13 @@ class Command(BaseCommand):
 
                     ticket.priority = TicketPriority.objects.all()[0]
                     ticket.status = TicketStatus.objects.all()[0]
+                    ticket.type = TicketType.objects.all()[0]
 
+                    ticket.client_user = ticketClient
+                    print company
                     ticket.company = company
                     ticket.save()
+                    print "blah"
 
                     ticketClient.tickets.add(ticket)
                     ticketClient.save()

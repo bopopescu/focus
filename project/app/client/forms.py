@@ -13,6 +13,7 @@ class ClientTicketForm(ModelForm):
 
     def save(self, *args, **kwargs):
         ticket = super(ClientTicketForm, self).save()
+
         ticketupdate = TicketUpdate.objects.create(ticket=ticket,
                                                    comment=self.cleaned_data['comment'],
                                                    attachment=self.cleaned_data['attachment'])
