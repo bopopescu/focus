@@ -34,7 +34,6 @@ CACHES = {
     }
 }
 
-
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
@@ -126,7 +125,7 @@ INSTALLED_APPS = (
 'app.search',
 'app.mail',
 'app.tickets',
-'app.tickets.tickets_client_site',
+'app.client',
 'app.migratefocus',
 
 #API

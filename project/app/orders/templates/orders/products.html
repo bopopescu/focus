@@ -36,7 +36,7 @@
         </thead>
         <tbody>
 
-        {% for orderline in orderlines.all %}
+        {% for orderline in order_lines.all %}
             <tr>
                 <td><a href="{% url app.stock.views.product.view orderline.product.id %}">{{ orderline.product }}</a></td>
                 <td>{{ orderline.count }} stk </td>

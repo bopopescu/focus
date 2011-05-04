@@ -30,7 +30,7 @@ urlpatterns = patterns('',
                        (r'^api/', include('api.urls')),
 
                        #client ticket site
-                       (r'^tickets/client/', include('app.tickets.tickets_client_site.urls')),
+                       (r'^client/', include('app.client.urls')),
 
                        #Suppliers
                        (r'^suppliers/', include('app.suppliers.urls')),
@@ -49,4 +49,5 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
     urlpatterns += staticfiles_urlpatterns()

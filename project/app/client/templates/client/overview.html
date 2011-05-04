@@ -1,0 +1,24 @@
+{% extends "client/client_base.html" %}
+
+{% block maincontent %}
+
+    <div class="in">
+        <table width="850" border="0" cellspacing="0" cellpadding="10" class="table_main">
+            <tr style="background-color:#d9d8d8; font-size:14px;">
+                <td width="20%"><strong>Tittel</strong></td>
+                <td width="10%"><strong>Status</strong></td>
+                <td width="70%"><strong>Beskrivelse</strong></td>
+            </tr>
+
+            {% for ticket in tickets %}
+                <tr class="gray">
+                    <td><a href="{% url app.client.views.tickets.view ticket.id %}">{{ ticket.title }}</a></td>
+                    <td>{{ ticket.status }}</td>
+                    <td>{{ ticket.description }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+{% endblock %}

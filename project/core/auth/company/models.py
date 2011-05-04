@@ -31,4 +31,4 @@ class Company(models.Model):
         self.save()
 
     def get_days_into_next_month(self):
-        return self.days_into_next_month_hourregistrationstration
+        return self.days_into_next_month_hourregistration

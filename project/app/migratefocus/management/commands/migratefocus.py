@@ -210,7 +210,7 @@ class Command(BaseCommand):
             u.company = company
             u.save()
 
-            company.all_employees_group.add(u)
+            company.all_employees_group.add_member(u)
             company.save()
 
             users.append((u, cu['brukerid']))

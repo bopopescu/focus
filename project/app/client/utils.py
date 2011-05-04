@@ -9,8 +9,7 @@ def client_login_required(view):
         if request.session.get('client_id'):
             return view(request, *args, **kwargs)
         else:
-            return redirect(reverse("client_login"))
+            return redirect(reverse("login.client_login"))
 
-    functools.update_wrapper(check_login, view  )
+    functools.update_wrapper(check_login, view)
     return check_login
-

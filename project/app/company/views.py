@@ -6,6 +6,7 @@ from app.orders.models import Order
 from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
+from app.tickets.models import Ticket
 from core.decorators import require_permission
 from core.views import update_timeout
 from core.auth.company.models import Company
@@ -101,6 +102,7 @@ def createNewCustomer(data):
     admin_group.grant_role("Admin", Product)
     admin_group.grant_role("Admin", Notification)
     admin_group.grant_role("Admin", User)
+    admin_group.grant_role("Admin", Ticket)
     admin_group.grant_role("Admin", Group)
     admin_group.grant_permissions("CONFIGURE", Company)
 
@@ -113,10 +115,11 @@ def createNewCustomer(data):
     all_employees_group.grant_role("Member", Order)
     all_employees_group.grant_role("Member", Announcement)
     all_employees_group.grant_role("Member", Log)
+    all_employees_group.grant_role("Member", Ticket)
     all_employees_group.grant_role("Member", Notification)
+
     #Manually give som other permissions
     all_employees_group.grant_permissions("CREATE", HourRegistration)
-    #Manually give som other permissions
     all_employees_group.grant_permissions("CREATE", Contact)
 
     return company, user

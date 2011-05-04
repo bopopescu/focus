@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from hashlib import sha1
 
-class TicketClient(PersistentModel):
+class ClientUser(PersistentModel):
     email = models.EmailField()
     password = models.CharField(_('password'), max_length=128, blank=True)
     tickets = models.ManyToManyField(Ticket, related_name="clients")
