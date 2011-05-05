@@ -8,6 +8,7 @@ urlpatterns = patterns('app.client.views',
                        #Login
                        url(r'^login/$', 'login.login', name='login.client_login'),
                        url(r'^logout/$', 'login.logout', name='login.client_logout'),
+                       url(r'^reset/$', 'login.new_password', name='login.client_new_password'),
 
                        #Tickets
                        url(r'^tickets/$', 'tickets.overview', name='tickets.client_overview'),

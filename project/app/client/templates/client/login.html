@@ -1,3 +1,11 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+</head>
+
+<body>
+
 <style>
     body {
         background-color: #EAEAEA;
@@ -107,8 +115,46 @@
             <input type="submit" value="Logg inn"/>
         </form>
 
+    <a id="new_pwd"href="#">Glemt passord?</a>
+    <div id="reset">
+        <p id="error_resp"></p>
+        <form id="resetForm" action="" method="POST">
+            <label for="email">Skriv inn din epostadresse, og få tilsendt nytt passord</label>
+            <input id="email" name="email" type="text" />
+            <input id="reset_submit" type="submit" value="Send Nytt Passord" />
+        </form>
+
+    </div>
 
 </div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#resetForm").submit(function(event) {
+            event.preventDefault()
+            $("body").css("cursor", "progress")
+            $("#reset_submit").attr("disabled", true)
+            $.post("{% url login.client_new_password %}", $("#resetForm").serialize(),
+            function(data) {
+                if (data.error) {
+                    $("#error_resp").html(data.text)
+                }
+                else {
+                    $("#reset").html(data.text)
+                }
+                $("body").css("cursor", "auto")
+                $("#reset_submit").attr("disabled", false)
+            }, "json")
+            
+        });
+
+        $("#reset").hide();
+        $("#new_pwd").click(function() {
+            $("#reset").show();
+            $(this).hide();
+        })
+    })
+</script>
 
 </body>
 </html>
