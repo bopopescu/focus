@@ -21,6 +21,25 @@ def view(request, id):
     return render(request, "offer/view.html", {'title': offer.title,
                                                'offer': offer})
 
+def create_order(request, id):
+    offer = Offer.objects.get(id=id)
+
+    if request.method == "POST":
+        #Create order based on offer
+        order_number = request.POST['order_number']
+        order = Order()
+        order.copy_from(offer)
+        order.order_number = int(order_number)
+        order.save()
+
+        #Archive the offer
+        offer.archived = True
+        offer.save()
+
+        return redirect('app.orders.views.order.view', order.id)
+
+    return render(request, "offer/create_order.html", {'title': offer.title,
+                                                   'offer': offer})
 
 def add(request):
     return form(request)
