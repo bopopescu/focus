@@ -1,0 +1,20 @@
+{% extends "client/client_base.html" %}
+
+{% block maincontent %}
+
+    <div class="in">
+        <table width="850" border="0" cellspacing="0" cellpadding="10" class="table_main">
+            <tr style="background-color:#d9d8d8; font-size:14px;">
+                <td width="20%"><strong>Tittel</strong></td>
+            </tr>
+
+            {% for offer in offers %}
+                <tr class="gray">
+                    <td><a href="{% url app.client.views.offers.view offer.id %}">{{ offer.title }}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+{% endblock %}

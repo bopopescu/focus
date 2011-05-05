@@ -1,3 +1,6 @@
+{% load menu_tags %}
+{% load i18n %}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,9 +21,8 @@
 
     <div class="navigation">
         <ul>
-            <li><a href="{% url app.client.views.tickets.overview %}" class="active">TICKETS</a></li>
-            <li><a href="{% url app.client.views.offers.overview %}">TILBUD</a></li>
-            <li><a href="{% url app.client.views.offers.overview %}">Ordrer</a></li>
+            <li><a href="{% url app.client.views.tickets.overview %}" class="{% active request "^/client/tickets/" %}">TICKETS</a></li>
+            <li><a href="{% url app.client.views.offers.overview %}" class="{% active request "^/client/offers/" %}">TILBUD</a></li>
             <li><a href="{% url app.client.views.offers.overview %}">Din profil</a></li>
         </ul>
     </div>
@@ -31,6 +33,7 @@
         {% block maincontent %}
         {% endblock %}
     </div>
+
 
 </div>
 </body>

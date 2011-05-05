@@ -1,0 +1,55 @@
+{% extends "client/client_base.html" %}
+
+{% block maincontent %}
+
+    <div class="in author">
+        <h2>{{ offer.title }}</h2>
+
+        <div style="margin-left:550px; margin-bottom:50px; font-size:30px; color:green;">
+
+
+            <div class="buttons">
+                <a href="" class="positive"><!-- class="regular"-->
+                    <img src="{{ STATIC_URL }}/img/accept.png" alt=""/>
+                    Godkjenn tilbud
+                </a>
+                <a href="#" class="negative">
+                    <img src="{{ STATIC_URL }}/img/trash.png" alt=""/>
+                    Avslå
+                </a>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <div class="line"></div>
+
+
+
+    <div class="in">
+
+        <div class="ticketBoxQ">
+
+            <div class="ticketBoxQInfo">
+
+                <div class="createInfo">
+                    Lagt inn av: Fredrik Carlsen<br>
+                    Opprettet: 29.10.2010 00:05
+                </div>
+
+            </div>
+            <br><br><br>
+            <hr>
+            {{ offer.description }}
+            <br><br>
+        </div>
+
+        <br><br><br>
+
+
+    </div>
+    </div>
+{% endblock %}

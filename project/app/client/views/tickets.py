@@ -12,7 +12,7 @@ import copy
 def overview(request):
     client = ClientUser.objects.get(id=request.session['client_id'])
     tickets = client.tickets.all()
-    return render(request, 'client/overview.html', {'client': client,
+    return render(request, 'client/tickets/overview.html', {'client': client,
                                                     'tickets': tickets})
 
 
@@ -41,7 +41,7 @@ def view(request, id):
     else:
         ticket_form = ClientTicketForm(instance=ticket)
 
-    return render(request, 'client/ticket_detail.html', {'client': client,
+    return render(request, 'client/tickets/ticket_detail.html', {'client': client,
                                                          'ticket': ticket,
                                                          'updates': updates,
                                                          'form': ticket_form,

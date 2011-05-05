@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from core import Core
 from core.models import PersistentModel

@@ -1,0 +1,22 @@
+{% load menu_tags %}
+{% load i18n %}
+
+<h3>{% trans "Offers" %}</h3>
+<ul>
+    <li><a class="{% active request "contacts/$" %}" href="{% url app.orders.views.offer.overview %}"><img
+            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ALL OFFERS" %}</a></li>
+
+
+    {% if offer.id %}
+        <li><a class="{% active request "view" %}" href="{% url app.orders.views.offer.view offer.id%}"><img
+                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
+        <li><a class="{% active request "edit" %}" href="{% url app.orders.views.offer.edit offer.id%}"><img
+                    src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Home"/>{% trans "EDIT" %}</a></li>
+            <li><a class="{% active request "client" %}" href="{% url app.orders.views.offer.client_management offer.id%}"><img
+                src="{{ STATIC_URL }}img/client.png" width="24" height="24" alt="Home"/>{% trans "CLIENTS" %}</a></li>
+    {% else %}
+        <li><a class="{% active request "new" %}" href="{% url app.orders.views.offer.add %}"><img
+                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW OFFER" %}</a></li>
+    {% endif %}
+
+</ul>

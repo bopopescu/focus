@@ -7,6 +7,7 @@ from core import Core
 from core.auth.company.models import Company
 import re
 from core.mail import send_mail
+from django.conf import settings
 
 class Command(BaseCommand):
     def get_new_emails(self):
@@ -83,14 +84,14 @@ class Command(BaseCommand):
 
                         Bruk din epostadresse og passordet: %s
 
-                                    """ % ("http://focus.fncit.no/tickets/client", password)
+                                    """ % (settings.CLIENT_LOGIN_SITE, password)
                     else:
                         message = """Hei. Takk for din henvendelse. \n Vi har opprettet en sak hos oss.
                         Du kan følge progresjon og komme med kommenterer ved å logge inn på %s
 
-                                    """ % ("http://focus.fncit.no/tickets/client")
+                                    """ % (settings.CLIENT_LOGIN_SITE)
 
-                    send_mail("Din henvendelse er registrert", message, "no-reply@focussecurity.no", [email_address])
+                    send_mail("Din henvendelse er registrert", message, settings.NO_REPLY_EMAIL, [email_address])
 
                     ticket = Ticket()
                     ticket.title = subject

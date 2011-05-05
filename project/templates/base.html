@@ -38,7 +38,7 @@
             {% if request.user.get_new_notifications %}
                 <br/><br/>
                 <b><a href="{% url app.dashboard.views.notifications %}">{{ request.user.get_new_notifications.count }}
-                </b> {% trans "changes since last time you were logged in" %}</a>
+                </b> {% trans "notifications" %}</a>
             {% endif %}
         </div>
     </div>

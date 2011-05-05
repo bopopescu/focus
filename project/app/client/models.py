@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from app.orders.models import Offer, Order
 from app.tickets.models import Ticket
 from core.models import PersistentModel
 from django.db import models
@@ -8,7 +10,9 @@ class ClientUser(PersistentModel):
     email = models.EmailField()
     password = models.CharField(_('password'), max_length=128, blank=True)
     tickets = models.ManyToManyField(Ticket, related_name="clients")
-    
+    offers = models.ManyToManyField(Offer, related_name="clients")
+    orders = models.ManyToManyField(Order, related_name="clients")
+
     def __unicode__(self):
         return self.email
 

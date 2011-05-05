@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "order/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <h1>{% trans "Client management" %}</h1>
+
+<b>{% trans "Send to new client" %}</b>
+<form action="" method="POST">
+    <input name="email_address">
+    <input type="submit">
+</form>
+<br><br><br>
+    <h4>{% trans "Clients who has access to view this offer" %}</h4>
+    <table>
+        {% for client in offer.clients.all %}
+            <tr>
+                <td>{{ client }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
