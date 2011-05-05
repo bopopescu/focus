@@ -31,6 +31,7 @@ class Command(BaseCommand):
                 for i in range(numMessages):
                     print "=" * 40
                     msg = M.retr(i + 1)
+                    M.dele(i+1)
                     str = string.join(msg[1], "\n")
                     str = re.sub(r'\r(?!=\n)', '\r\n', str)
 
@@ -117,13 +118,9 @@ class Command(BaseCommand):
                     print company
                     ticket.company = company
                     ticket.save()
-                    print "blah"
 
                     ticketClient.tickets.add(ticket)
                     ticketClient.save()
-
-                if numMessages>0:
-                    M.dele(numMessages)
 
                 M.quit()
 
