@@ -91,7 +91,6 @@ class Disbursement(PersistentModel):
     def __unicode__(self):
         return "Disbusment for %s" % self.HourRegistration
 
-
 class DrivingRegistration(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="drivingregistration")
     time_start = models.CharField(max_length=5)
@@ -99,111 +98,8 @@ class DrivingRegistration(PersistentModel):
     kilometres = models.IntegerField()
     description = models.CharField(max_length=100)
 
-
 def __unicode__(self):
     return "DrivingRegistration for %s" % self.HourRegistration
 
-
 def initial_data ():
-    #Create default time tracking types
-
-
-    a, created = User.objects.all().get_or_create(username="superadmin")
-    Core.set_test_user(a)
-
-    testCustomer, created = Customer.objects.get_or_create(cid="100", full_name="Per", email="test@test.com")
-    testOrder, created = Order.objects.get_or_create(order_number="100", title="TestOrdre", responsible=a,
-                                                     customer=testCustomer)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("10.10.2010", "%d.%m.%Y"),
-                                        order=testOrder,
-                                        time_start="20:10",
-
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("2.10.2010", "%d.%m.%Y"),
-                                        order=testOrder,
-
-                                        time_start="20:10",
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("15.10.2010", "%d.%m.%Y"),
-                                        order=testOrder,
-
-                                        time_start="20:10",
-                                        time_end="22:10",
-                                        description="Dette er en test")
-
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("10.5.2010", "%d.%m.%Y"),
-                                        order=testOrder,
-
-                                        time_start="20:10",
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("15.5.2010", "%d.%m.%Y"),
-                                        order=testOrder,
-                                        time_start="20:10",
-
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("1.5.2010", "%d.%m.%Y"),
-                                        order=testOrder,
-
-                                        time_start="20:10",
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
-                                        order=testOrder,
-
-                                        time_start="20:10",
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("4.08.2009", "%d.%m.%Y"),
-                                        order=testOrder,
-                                        time_start="20:10",
-
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-
-    t = HourRegistration.objects.create(date=datetime.strptime("10.08.2009", "%d.%m.%Y"),
-                                        order=testOrder,
-                                        time_start="20:10",
-
-                                        time_end="22:10",
-                                        description="Dette er en test")
-    t.creator = a
-    t.save()
-    a.grant_role("Owner", t)
-    
-
+    pass
