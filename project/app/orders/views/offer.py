@@ -86,6 +86,9 @@ def form(request, id=None):
         form = OfferForm(request.POST, instance=instance)
 
         if form.is_valid():
+
+            print request.POST.getlist('product_number')
+
             o = form.save(commit=False)
             o.save()
             request.message_success(_("Successfully saved offer"))

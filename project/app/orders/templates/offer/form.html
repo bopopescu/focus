@@ -1,1 +1,75 @@
 {% extends "order/form.html" %}
+{% load i18n %}
+
+{% block maincontent %}
+
+
+    <h1>{{ title }}</h1>
+    <br>
+    <br>
+
+    {% if form.errors %}
+
+        <div class="information" id="message">
+
+            <p>Fix before submit again</p>
+
+        </div>
+
+        {% for i in form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+    {% endif %}
+
+    <div style="width:605px;">
+        <form enctype="multipart/form-data" class="form label-inline" method="post">
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
+                    <br>{{ field }}
+                </div>
+            {% endfor %}
+
+
+            <div class="products">
+                <br><h5>{% trans "Products" %}</h5>
+
+                <div class="product">
+                    <input type="hidden" name="value">
+
+                    <div class="fieldWrapper">
+                        <input type="text" name="product_number">
+                    </div>
+
+                    <div class="fieldWrapper">
+                        <input type="text" name="product_description">
+                    </div>
+                </div>
+            </div>
+
+            <span id="add_product">Add product</span>
+
+            <br><br><br>
+
+            <div>
+                <input type="submit" value="Lagre" class="btn" name="save"/>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#add_product").live("click", function() {
+                var new_product = ($(".products").find(".product").first().html())
+                $("<div class='product'>" + new_product + "</div>").insertAfter($(".products").find(".product").last())
+            })
+        })
+    </script>
+
+
+
+{% endblock %}
