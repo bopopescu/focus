@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 from app.client.models import ClientUser
 from app.orders.forms import OfferForm
-from app.orders.models import Order, Offer
+from app.orders.models import Order, Offer, ProductLine
 from django.utils.translation import ugettext as _
 from core.decorators import require_permission
 from core.mail import send_mail
@@ -28,8 +28,8 @@ def create_order(request, id):
         #Create order based on offer
         order_number = request.POST['order_number']
         order = Order()
-        order.copy_from(offer)
         order.order_number = int(order_number)
+        order.copy_from(offer)
         order.save()
 
         #Archive the offer
@@ -43,7 +43,6 @@ def create_order(request, id):
 
 def add(request):
     return form(request)
-
 
 def client_management(request, id):
     offer = Offer.objects.get(id=id)
@@ -77,24 +76,38 @@ def edit(request, id):
     return form(request, id)
 
 def form(request, id=None):
+    products = []
+
     if id:
         instance = get_object_or_404(Offer, id=id)
+        products.extend(instance.product_lines.all())
     else:
         instance = Offer()
 
     if request.method == "POST":
         form = OfferForm(request.POST, instance=instance)
+        products = []
 
-        if form.is_valid():
+        i = 0
+        for p in request.POST.getlist('product_number'):
+            p = ProductLine()
+            p.description = request.POST.getlist('product_number')[i]
+            products.append(p)
+            i+=1
 
-            print request.POST.getlist('product_number')
+        print products
 
+        if form.is_valid():        
             o = form.save(commit=False)
             o.save()
+            o.update_products(products)
+            
             request.message_success(_("Successfully saved offer"))
 
             return redirect(view, o.id)
     else:
         form = OfferForm(instance=instance)
 
-    return render(request, "offer/form.html", {'form': form, 'offer':instance})
+    return render(request, "offer/form.html", {'form': form,
+                                               'offer':instance,
+                                               'products':products})

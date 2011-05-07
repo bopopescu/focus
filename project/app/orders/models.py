@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core import urlresolvers
 from django.db import models
 from app.orders.managers import OrderArchivedManager, OrderManager
@@ -6,14 +7,14 @@ from app.customers.models import Customer
 from core.models import User, PersistentModel
 from django.utils.translation import ugettext as _
 
-class ProductLine(PersistentModel):
+class ProductLine(models.Model):
     product = models.ForeignKey('stock.Product', related_name="product_lines")
     description = models.TextField()
     count = models.IntegerField()
     price = models.CharField(max_length=10)
 
     def __unicode__(self):
-        return "%s,%s" % (self.order, self.product)
+        return self.description
 
 class OrderBase(PersistentModel):
     title = models.CharField(_("Title"), max_length=80)
@@ -25,9 +26,8 @@ class OrderBase(PersistentModel):
     delivery_date = models.DateField(verbose_name=_("Delivery date"), null=True, blank=True)
     delivery_date_deadline = models.DateField(verbose_name=_("Delivery deadline"), null=True, blank=True)
     price = models.IntegerField(default=0)
-    product_lines = models.ManyToManyField(ProductLine, related_name="%(class)s")
     archived = models.BooleanField(default=False)
-
+    product_lines = models.ManyToManyField(ProductLine, related_name="%(class)s")
 
     def copy_from(self, object):
         self.title = object.title
@@ -40,6 +40,19 @@ class OrderBase(PersistentModel):
         self.delivery_date_deadline = object.delivery_date_deadline
         self.price = object.price
         self.archived = object.archived
+
+        self.save()
+
+        if self.id:
+            self.update_products(object.product_lines.all())
+
+    def update_products(self, products):
+        self.product_lines.clear()
+
+        for p in products:
+            p.save()
+            self.product_lines.add(p)
+        self.save()
 
     def __unicode__(self):
         return self.title

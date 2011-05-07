@@ -38,20 +38,61 @@
             <div class="products">
                 <br><h5>{% trans "Products" %}</h5>
 
-                <div class="product">
-                    <input type="hidden" name="value">
+                <span style="float:right;" id="add_product"><img src="{{ STATIC_URL }}/img/add.png">Add product</span>
 
-                    <div class="fieldWrapper">
-                        <input type="text" name="product_number">
-                    </div>
+                <table>
 
-                    <div class="fieldWrapper">
-                        <input type="text" name="product_description">
-                    </div>
-                </div>
+                    <thead>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Unit cost</th>
+                    <th>Qty</th>
+                    <th>Tax</th>
+                    <th>Total</th>
+                    <th></th>
+                    </thead>
+
+                    <tbody>
+                    {% for product in products %}
+
+                        <tr class="product">
+                            <td>
+                                <input type="text" class="field_input" name="product_number"
+                                       value="{{ product.description }}">
+                            </td>
+                            <td>
+                                <input type="text" class="field_input" style="width:330px;" name="product_description"
+                                       value="{{ product.description }}">
+                            </td>
+                            <td>
+                                <input type="text" class="field_input" style="width:40px;" name="product_unit_cost"
+                                       value="{{ product.description }}">
+                            </td>
+                            <td>
+                                <input type="text" class="field_input" style="width:30px;" name="product_qty"
+                                       value="{{ product.description }}">
+                            </td>
+                            <td>
+                                <input type="text" class="field_input" style="width:25px;" name="product_tax"
+                                       value="{{ product.description }}">
+                            </td>
+                            <td>
+                                100kr
+                            </td>
+
+                            <td>
+                                <div>
+                                    <a class="remove_product_button" href="#">Slett</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
             </div>
-
-            <span id="add_product">Add product</span>
 
             <br><br><br>
 
@@ -65,7 +106,10 @@
         $(document).ready(function() {
             $("#add_product").live("click", function() {
                 var new_product = ($(".products").find(".product").first().html())
-                $("<div class='product'>" + new_product + "</div>").insertAfter($(".products").find(".product").last())
+                $("<tr class='product'>" + new_product + "</tr>").insertAfter($(".products").find(".product").last())
+            })
+            $(".remove_product_button").live("click", function() {
+                $(this).parent().parent().parent().remove()
             })
         })
     </script>

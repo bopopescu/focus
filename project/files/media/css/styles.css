@@ -487,6 +487,17 @@ form p {
     margin: 0px;
 }
 
+.field_input {
+    width: 80px;
+    margin-top: 0px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    border: 1px solid #CCCCCC;
+    padding: 7px;
+    background-color: #F3F3F3;
+}
+
 .fieldWrapper {
     display: inline-table;
     width: 300px;

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 
 {% block sidebar %}
     {% include "order/sidebar.html" %}
@@ -9,5 +9,52 @@
 {% block maincontent %}
 
     {{ offer }}
+
+
+    <div class="products">
+        <br><h5>{% trans "Products" %}</h5>
+
+        <table>
+
+            <thead>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Unit cost</th>
+            <th>Qty</th>
+            <th>Tax</th>
+            <th>Total</th>
+            </thead>
+
+            <tbody>
+            {% for product in offer.product_lines.all %}
+
+                <tr class="product">
+                    <td>
+                        {{ product.description }}
+                    </td>
+                    <td>
+                        {{ product.description }}
+                    </td>
+                    <td>
+                        {{ product.description }}
+                    </td>
+                    <td>
+                        {{ product.description }}
+                    </td>
+<td>
+                        {{ product.description }}
+                    </td>
+
+                    <td>
+                        100kr
+                    </td>
+
+                </tr>
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
 
 {% endblock %}
