@@ -1,0 +1,9 @@
+
+
+<div id="type_selection" style="float:left">
+    <select id="type_box">
+        {% for type in types %}
+            <option value="{{ type.id }}">{{ type.name }}</option>
+        {% endfor %}
+    </select>
+</div>

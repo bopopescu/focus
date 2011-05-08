@@ -5,6 +5,8 @@ from django.db import models
 from app.customers.models import Customer
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
+from django.core import urlresolvers
+from core.models import PersistentModel
 import settings
 import os
 
@@ -28,7 +30,10 @@ class TicketBase(models.Model):
         super(TicketBase, self).save()
 
         if action == 'ADD' and self.user:
+            print "setting admin"
             self.user.grant_role('Admin', self)
+        else:
+            print action, self.user
 
     @property
     def creator(self):
@@ -50,11 +55,20 @@ class TicketPriority(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
-class TicketType(models.Model):
+class TicketType(PersistentModel):
     name = models.CharField(max_length=20)
+    description = models.TextField(default=None, blank=True, null=True)
 
     def __unicode__(self):
         return unicode(self.name)
+
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.tickets.views.add_ticket_type_ajax')
+
+    @staticmethod
+    def simpleform():
+        return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
 
 
 class Ticket(TicketBase):
@@ -83,7 +97,8 @@ class Ticket(TicketBase):
         if not self.id:
             action = 'ADD'
 
-        super(TicketBase, self).save()
+        print "ticket"
+        super(Ticket, self).save()
 
         if action == 'ADD':
             if self.company:
@@ -91,6 +106,11 @@ class Ticket(TicketBase):
                     self.company.admin_group.grant_role('Admin', self)
                 if self.company.all_employees_group:
                     self.company.all_employees_group.grant_role('Member', self)
+
+
+    def set_user(self, user):
+        self.user = user
+        self.company = user.get_company()
 
 
     def can_be_deleted(self):
@@ -202,3 +222,6 @@ def initial_data():
     TicketPriority.objects.get_or_create(name=_("High"))
 
     TicketType.objects.get_or_create(name="type")
+
+
+from app.tickets.forms import AddTicketTypeForm

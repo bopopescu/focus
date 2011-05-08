@@ -1,27 +1,35 @@
-from app.tickets.models import Ticket, TicketUpdate
+import simplejson
+from app.tickets.models import Ticket, TicketUpdate, TicketType, TicketStatus
 from core import Core
 from core.auth.user.models import User
 from core.decorators import require_permission
-from django.shortcuts import render
-from app.tickets.forms import TicketForm, EditTicketForm
+from django.shortcuts import render, get_object_or_404
+from app.tickets.forms import TicketForm, EditTicketForm, AddTicketTypeForm
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 import copy
+from django.http import HttpResponse
 
 
 @require_permission("LIST", Ticket)
-def overview(request):
+def overview(request, status_id=None):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False)
+    if status_id:
+        status = TicketStatus.objects.get(id=status_id)
+        tickets = tickets.filter(status=status)
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
 
 @require_permission("LIST", Ticket)
-def assigned_to_user(request, id=None):
+def assigned_to_user(request, id=None, status_id=None):
     user = Core.current_user()
     if id:
         user = User.objects.get(id=id)
 
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False, assigned_to=user)
+    if status_id:
+        status = TicketStatus.objects.get(id=status_id)
+        tickets = tickets.filter(status=status)
 
     return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
 
@@ -78,7 +86,9 @@ def edit(request, id):
         ticket_form = EditTicketForm(request.POST, request.FILES, instance=ticket)
 
         if ticket_form.is_valid():
-            ticket, ticket_update = ticket_form.save()
+            ticket, ticket_update = ticket_form.save(commit=False)
+            ticket.set_user(Core.current_user())
+            ticket.save()
             differences = Ticket.find_differences(ticket, old_ticket)
             ticket_update.create_update_lines(differences)
             request.message_success(_("Ticket updated"))
@@ -106,6 +116,7 @@ def form(request, id=False):
         form = TicketForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             ticket = form.save(commit=False)
+            ticket.set_user(Core.current_user())
             ticket.save()
             request.message_success(msg)
 
@@ -117,3 +128,26 @@ def form(request, id=False):
                                                  'ticket': instance,
                                                  'form': form,
                                                  })
+
+
+
+
+@require_permission("CREATE", Ticket)
+def add_ticket_type_ajax(request, id=None):
+    if id:
+        instance = get_object_or_404(TicketType, id=id)
+    else:
+        instance = TicketType()
+    form = AddTicketTypeForm(request.POST, instance=instance)
+    if form.is_valid():
+        print "blah"
+        ticket_type = form.save()
+        return HttpResponse(simplejson.dumps({'name': ticket_type.name,
+                                              'id': ticket_type.id,
+                                              'valid': True}), mimetype='application/json')
+    else:
+        print form.errors
+        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+        return HttpResponse(simplejson.dumps({'errors': errors,
+                                              'valid': False}), mimetype='application/json')
+

@@ -16,12 +16,31 @@
                 src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
     {% else %}
 
-        <li><a class="{% active request "assigned/$" %}" href="{% url app.tickets.views.assigned_to_user %}"><img
+        <li>
+            <a class="{% active request "assigned/$" %} menu_parent" href="{% url app.tickets.views.assigned_to_user %}"><img
                 src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ASSIGNED TO YOU" %}</a>
+            <div class="sidebar_submenu">
+                <ul>
+                    <li><a href="{% url app.tickets.views.assigned_to_user %}">{% trans "Alle" %}</a> </li>
+                {% for status in statuses %}
+                    <li><a href="{% url app.tickets.views.assigned_to_user status.id %}">{{ status.name }}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
         </li>
 
-        <li><a class="{% active request "tickets/overview/$" %}" href="{% url app.tickets.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+        <li>
+            <a class="{% active request "tickets/overview/$" %} menu_parent" href="{% url app.tickets.views.overview %}"><img
+                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a>
+            <div class="sidebar_submenu">
+                <ul>
+                    <li><a href="{% url app.tickets.views.overview %}">{% trans "Alle" %}</a> </li>
+                {% for status in statuses %}
+                    <li><a href="{% url app.tickets.views.overview status.id %}">{{ status.name }}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </li>
 
         <li><a class="{% active request "new" %}" href="{% url app.tickets.views.add %}"><img
                 src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW TICKET" %}</a></li>
@@ -30,3 +49,23 @@
                 src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
     {% endif %}
 </ul>
+
+<script type="text/javascript">
+
+    var last_clicked = null;
+    $(function() {
+        $(".sidebar_submenu").hide();
+
+        {% if statuses %}
+        $(".menu_parent").click(function() {
+            if (last_clicked != this && last_clicked != null) {
+                $(last_clicked).siblings(".sidebar_submenu").hide();
+            }
+            $(this).siblings(".sidebar_submenu").toggle('fast');
+            last_clicked = this;
+            return false;
+        });
+        {% endif %}
+    })
+
+</script>

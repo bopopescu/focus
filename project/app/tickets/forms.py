@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.forms.models import ModelForm
 from app.customers.models import Customer
-from app.tickets.models import Ticket, TicketUpdate
+from app.tickets.models import Ticket, TicketUpdate, TicketType
 from core import Core
 from core.models import User
 from django import forms
@@ -22,6 +22,8 @@ class TicketForm(ModelForm):
         self.fields['attachment'].required = False
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
+        self.fields['type'].widget = SelectWithPop(TicketType)
+        self.fields['type'].queryset = TicketType.objects.filter_current_company()
         self.fields['due_date'].required = True
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
@@ -42,6 +44,8 @@ class EditTicketForm(ModelForm):
         self.fields['assigned_to'].queryset = User.objects.filter_current_company()
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
+        self.fields['type'].widget = SelectWithPop(TicketType)
+        self.fields['type'].queryset = TicketType.objects.filter_current_company()
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y", )
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 
@@ -52,6 +56,14 @@ class EditTicketForm(ModelForm):
                                                    attachment=self.cleaned_data['attachment'])
 
         return ticket, ticketupdate
+
+
+
+class AddTicketTypeForm(ModelForm):
+    class Meta:
+        model = TicketType
+        fields = ('name', 'description')
+
 
 
 
