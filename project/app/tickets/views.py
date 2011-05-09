@@ -11,32 +11,21 @@ from django.http import HttpResponse
 import copy
 
 @require_permission("LIST", Ticket)
-def overview(request, status_id=None):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False)
-    if status_id:
-        status = TicketStatus.objects.get(id=status_id)
-        tickets = tickets.filter(status=status)
-    return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+def overview(request):
+    return render(request, 'tickets/list.html', {"title": "Tickets"})
+
 
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request, id=None, status_id=None):
-    user = Core.current_user()
-    if id:
-        user = User.objects.get(id=id)
-
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False, assigned_to=user)
-    if status_id:
-        status = TicketStatus.objects.get(id=status_id)
-        tickets = tickets.filter(status=status)
-
-    return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+    if not id:
+        id = Core.current_user().id
+    return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": id})
 
 
 @require_permission("LIST", Ticket)
 def overview_trashed(request):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True)
-    return render(request, 'tickets/list.html', {"title": "Tickets", "tickets": tickets})
+    return render(request, 'tickets/list.html', {"title": "Tickets", "trashed": True})
 
 
 @require_permission("VIEW", Ticket, "id")

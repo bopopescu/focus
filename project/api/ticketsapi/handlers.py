@@ -1,8 +1,9 @@
 from piston.handler import BaseHandler
 from piston.utils import rc
-from app.tickets.models import Ticket, TicketType
+from app.tickets.models import Ticket, TicketType, TicketStatus
 from core import Core
 from django.core import urlresolvers
+from core.auth.user.models import User
 
 class TicketHandler(BaseHandler):
     model = Ticket
@@ -25,6 +26,10 @@ class TicketHandler(BaseHandler):
     def ticket_url(cls, ticket):
         return urlresolvers.reverse('app.tickets.views.view', args=(ticket.id, ))
 
+    @classmethod
+    def date_edited(cls, ticket):
+        return ticket.date_edited.strftime("%d.%m.%Y %H:%S")
+
     def read(self, request, id=None):
         all = Core.current_user().get_permitted_objects("VIEW", Ticket)
         if id:
@@ -33,10 +38,29 @@ class TicketHandler(BaseHandler):
             except Ticket.DoesNotExist:
                 return rc.NOT_FOUND
         else:
-            type_id = int(request.GET.get('type_id', False))
-            if type_id:
-                type = TicketType.objects.get(id=type_id)
-                all = all.filter(type=type)
+            all = TicketHandler.filter_tickets(all, request.GET)
             return all
 
+    @staticmethod
+    def filter_tickets(tickets, filter):
+        type_id = int(filter.get('type_id', False))
+        if type_id:
+            type = TicketType.objects.get(id=type_id)
+            tickets = tickets.filter(type=type)
+
+        status_id = int(filter.get('status_id', False))
+        if status_id:
+            status = TicketStatus.objects.get(id=status_id)
+            tickets = tickets.filter(status=status)
+
+        assigned_to = int(filter.get('assigned_to', False))
+        if assigned_to:
+            assigned_to = User.objects.get(id=assigned_to)
+            tickets = tickets.filter(assigned_to=assigned_to)
+
+        trashed = int(filter.get('trashed', False))
+        if trashed:
+            tickets = tickets.filter(trashed=True)
+
+        return tickets
     
