@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "orders/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <h1>{% trans "Create invoice from this order" %}</h1>
+
+    <form action="" method="POST">
+        {% trans "Invoice number" %} <input name="invoice_number">
+        <input type="submit">
+    </form>
+
+{% endblock %}

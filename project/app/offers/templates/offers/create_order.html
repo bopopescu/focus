@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "offers/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <h1>{% trans "Create order from this offer" %}</h1>
+
+    <form action="" method="POST">
+        {% trans "Order number" %} <input name="order_number">
+        <input type="submit">
+    </form>
+
+{% endblock %}

@@ -12,7 +12,6 @@ import calendar
 
 @login_required()
 def form(request):
-
     id = int(request.POST['id'])
 
     instance = HourRegistration()
@@ -24,7 +23,7 @@ def form(request):
 
     if form.is_valid():
         a = form.save(commit=False)
-        a.date = datetime.strptime(request.POST['date'],"%Y-%m-%d")
+        a.date = datetime.strptime(request.POST['date'], "%Y-%m-%d")
         a.save()
 
         return HttpResponse(simplejson.dumps({'name': str(a.date),
@@ -37,7 +36,8 @@ def form(request):
                                               'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")
-    
+
+
 @login_required()
 def calendar_day_json(request, year, month, day):
     date = datetime.strptime("%s-%s-%s" % (year, month, day), "%Y-%m-%d")
@@ -51,7 +51,7 @@ def calendar_day_json(request, year, month, day):
                       'order': reg.order.id,
                       'pause': str(reg.pause),
                       'customer_name': reg.order.customer.full_name,
-                      'order_name': reg.order.order_name,
+                      'order_name': reg.order.title,
                       'description': reg.description
                      } for reg in listHourRegistrations]
 
@@ -88,23 +88,25 @@ def calendar_json(request, year, month):
                 temp_cal.append((CURRENT_WEEK, day, "", hours_count))
 
             hours_count = 0
-            
+
         if CURRENT_WEEK == 52:
             CURRENT_WEEK = 0
         CURRENT_WEEK += 1
 
     return HttpResponse(JSONEncoder().encode(temp_cal), mimetype='application/json')
 
+
 @login_required()
 def date_valid_for_edit(request, year, month, day):
-    response = Core.current_user().can_edit_hour_date("%s.%s.%s"%(day,month,year))
+    response = Core.current_user().can_edit_hour_date("%s.%s.%s" % (day, month, year))
     return HttpResponse(JSONEncoder().encode(response), mimetype='application/json')
+
 
 @login_required()
 def calendar_today(request):
     form = HourRegistrationForm()
+    return render(request, "hourregistrations/calendar.html", {"form": form})
 
-    return render(request, "hourregistrations/calendar.html", {"form":form})
 
 @login_required()
 def calendar_can_edit_form(request):

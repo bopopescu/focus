@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block sidebar %}
-    {% include "order/sidebar.html" %}
+    {% include "orders/sidebar.html" %}
 {% endblock %}
 
 
@@ -25,16 +25,17 @@
 
         <thead>
         <tr>
-            <th>{% trans "Offer number" %}</th>
-            <th>{% trans "Title" %}</th>
+            <th></th>
+            <th>{% trans "Order number" %}</th>
+            <th>{% trans "Order" %}</th>
         </tr>
         </thead>
 
         <tbody>
-        {% for offer in offers %}
+        {% for order in orders %}
             <tr>
-                <td>{{ offer.offer_number }}</td>
-                <td><a href="{% url app.orders.views.offer.view offer.id %}">{{ offer.title }}</a></td>
+                <td>{{ order.order_number }}</td>
+                <td><a href="{% url app.orders.views.order.view order.id %}">{{ order.title }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

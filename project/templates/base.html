@@ -3,12 +3,10 @@
 {% load menu_tags %}
 <!DOCTYPE HTML>
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
     <title>FocusTime</title>
-
     <!--  REQUIRED FOR IE6 SUPPORT -->
+
     <style type="text/css">
         img, div {
             behavior: url({{ STATIC_URL }}iepngfix.htc)
@@ -22,7 +20,6 @@
     <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
     <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="{{ STATIC_URL }}js/masked.js"></script>
-
 </head>
 
 <body>
@@ -63,10 +60,22 @@
                    href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
             </li>
 
+            <li class="{% active request "^/offers/" %}">
+                <a class="{% active request "^/offers/" %}"
+                   href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
+            </li>
+
             <li class="{% active request "^/orders/" %}">
                 <a class="{% active request "^/orders/" %}"
                    href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
             </li>
+
+            <li class="{% active request "^/invoices/" %}">
+                <a class="{% active request "^/invoices/" %}"
+                   href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
+            </li>
+
+
             <li class="{% active request "^/hourregistrations/" %}">
                 <a class="{% active request "^/hourregistrations/" %}"
                    href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Hour registration" %}</a>

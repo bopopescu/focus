@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load menu_tags %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "offers/sidebar.html" %}
+{% endblock %}
+
+
+{% block maincontent %}
+
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
+
+    </script>
+
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
+
+        <thead>
+        <tr>
+            <th>{% trans "Offer number" %}</th>
+            <th>{% trans "Title" %}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for offer in offers %}
+            <tr>
+                <td>{{ offer.offer_number }}</td>
+                <td><a href="{% url app.offers.views.view offer.id %}">{{ offer.title }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+
+{% endblock %}

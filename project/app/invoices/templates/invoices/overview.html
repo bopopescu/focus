@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block sidebar %}
-    {% include "order/sidebar.html" %}
+    {% include "invoices/sidebar.html" %}
 {% endblock %}
 
 
@@ -26,21 +26,16 @@
         <thead>
         <tr>
             <th></th>
-            <th>{% trans "Name" %}</th>
-            <th>{% trans "Address" %}</th>
-            <th>{% trans "Phone" %}</th>
-            <th>{% trans "E-mail" %}</th>
+            <th>{% trans "Invoice number" %}</th>
+            <th>{% trans "Invoice" %}</th>
         </tr>
         </thead>
 
         <tbody>
-        {% for customer in customers %}
+        {% for invoice in invoices %}
             <tr>
-                <td>{{ customer.cid }}</td>
-                <td><a href="{% url app.customers.views.view customer.id %}">{{ customer.full_name }}</a></td>
-                <td>{{ customer.address }}</td>
-                <td>{{ customer.phone }}</td>
-                <td>{{ customer.email }}</td>
+                <td>{{ invoice.invoice_number}}</td>
+                <td><a href="{% url app.invoices.views.view invoice.id %}">{{ invoice.title }}</a></td>
             </tr>
         {% endfor %}
         </tbody>

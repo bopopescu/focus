@@ -1,18 +1,18 @@
 from django.forms.models import ModelForm
 from app.customers.models import Customer
-from app.orders.models import Offer, Order
+from app.orders.models import Offer, Order, Invoice
 from app.projects.models import Project
 from core.auth.user.models import User
 from core.widgets import SelectWithPop, DatePickerField
 
-class OrderForm(ModelForm):
+class InvoiceForm(ModelForm):
     class Meta:
-        model = Order
-        fields = ("order_number", "title", "customer", "project", 'delivery_date',
+        model = Invoice
+        fields = ("invoice_number", "title", "customer", "project", 'delivery_date',
                   'delivery_date_deadline', 'description')
 
     def __init__(self, *args, **kwargs):
-        super(OrderForm, self).__init__(*args, **kwargs)
+        super(InvoiceForm, self).__init__(*args, **kwargs)
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
         self.fields['project'].widget = SelectWithPop(Project)

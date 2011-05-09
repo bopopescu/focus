@@ -41,12 +41,8 @@
                 <td>{{ ticket.updates.count }}</td>
                 <td>{{ ticket.status }}</td>
                 <td>{{ ticket.date_edited|date:"d.m.Y H:i" }} av {{ ticket.editor }}</td>
-
-
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-
 {% endblock %}
