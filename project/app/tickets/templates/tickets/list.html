@@ -11,12 +11,6 @@
 
 
     <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tbody tr");
-        });
-
-    </script>
 
     <h1>{{ title }}</h1>
     {% tickets_type_filter request %}
@@ -35,22 +29,11 @@
             <th>{% trans "Last edited" %}</th>
         </tr>
         </thead>
-
+        <!-- ajax -->
         <tbody>
-        {% for ticket in tickets %}
-            <!--
-            <tr>
-                <td><a href="{% url app.tickets.views.view ticket.id %}">{{ ticket.title }}</a></td>
-                <td>{{ ticket.priority }}</td>
-                <td>{{ ticket.updates.count }}</td>
-                <td>{{ ticket.status }}</td>
-                <td>{{ ticket.type }}</td>
-                <td>{{ ticket.date_edited|date:"d.m.Y H:i" }}</td>
 
-            </tr>
-            -->
-        {% endfor %}
         </tbody>
+    
     </table>
 
     <script type="text/javascript">
@@ -78,24 +61,53 @@
             $(tickets).each(function() {
                 tbody.append(getRowFromTicket(this))
             })
+            $('#filter').quicksearch("#dataTable tbody tr");
         }
-        
-        function getTickets(type) {
-            var type_data = type ? { type_id: parseInt(type)} : {};
-            $.get("/api/tickets/", type_data,
+
+        var current_user_id = {{ request.user.id }};
+        var assigned_to = 0;
+        var status = 0;
+        function getTickets(type, trashed) {
+            var data = type ? { type_id: parseInt(type)} : {};
+            data.status_id = status;
+            data.assigned_to = assigned_to;
+            data.trashed = trashed;
+            $.get("/api/tickets/", data,
             function(data) {
                 build_table(data);
             }, "json");
         }
 
         $(function() {
-            getTickets(0);
+            getTickets(0, 0);
 
             $("#type_selection").change(function() {
                 var typeId = parseInt($("#type_selection option:selected").val());
-                getTickets(typeId)
+                getTickets(typeId, 0)
+            });
+            
+            $("#assigned_links a").click(function() {
+                assigned_to = current_user_id;
+                status = this.href;
+                getTickets(0, 0);
+                return false;
+            });
+
+            $("#overview_links a").click(function() {
+                assigned_to = 0;
+                status = $(this).attr("class");
+                getTickets(0, 0);
+                return false;
+            });
+
+            $("#trashed").click(function() {
+                assigned_to = 0;
+                status = 0;
+                getTickets(0, 1);
+                return false
             })
-        })
+        });
+
     </script>
 
 
