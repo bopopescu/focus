@@ -2,8 +2,11 @@
 
 <div id="type_selection" style="float:left">
     <select id="type_box">
+        <option value="0">Alle</option>
         {% for type in types %}
             <option value="{{ type.id }}">{{ type.name }}</option>
         {% endfor %}
     </select>
 </div>
+
+

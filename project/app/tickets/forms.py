@@ -51,11 +51,13 @@ class EditTicketForm(ModelForm):
 
     def save(self, *args, **kwargs):
         ticket = super(EditTicketForm, self).save()
-        ticketupdate = TicketUpdate.objects.create(ticket=ticket,
-                                                   comment=self.cleaned_data['comment'],
-                                                   attachment=self.cleaned_data['attachment'])
+        ticket_update = TicketUpdate(ticket=ticket,
+                                    comment=self.cleaned_data['comment'],
+                                    attachment=self.cleaned_data['attachment'])
+        if kwargs.get('commit', False):
+            ticket_update.save()
 
-        return ticket, ticketupdate
+        return ticket, ticket_update
 
 
 

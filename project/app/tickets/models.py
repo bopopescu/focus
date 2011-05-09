@@ -20,6 +20,7 @@ class TicketBase(models.Model):
     client_user = models.ForeignKey('client.ClientUser', blank=True, null=True, default=None, related_name='client_tickets')
     user = models.ForeignKey(User, blank=True, null=True, default=None, related_name='tickets')
     date_created = models.DateTimeField(auto_now_add=True)
+    date_edited = models.DateTimeField(auto_now=True)
     trashed = models.BooleanField(default=False)
 
     def save(self, **kwargs):
