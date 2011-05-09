@@ -8,7 +8,7 @@ from core.models import User, PersistentModel
 from django.utils.translation import ugettext as _
 
 class ProductLine(models.Model):
-    product = models.ForeignKey('stock.Product', related_name="product_lines")
+    product = models.ForeignKey('stock.Product', related_name="product_lines", null=True, blank=True)
     description = models.TextField()
     count = models.IntegerField()
     price = models.CharField(max_length=10)

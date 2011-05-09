@@ -40,9 +40,3 @@ class TicketHandler(BaseHandler):
             return all
 
     
-
-
-
-
-
-    

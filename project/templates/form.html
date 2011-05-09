@@ -9,7 +9,7 @@
     <h1>{{ title }}</h1>
     <br>
     <br>
-    
+
     {% if form.errors %}
 
         <div class="information" id="message">
@@ -27,19 +27,31 @@
         <br><br>
     {% endif %}
 
-    <div style="width:605px;">
+    <div style="width:705px;">
         <form enctype="multipart/form-data" class="form label-inline" method="post">
             {% for field in form %}
                 <div class="fieldWrapper">
-                    <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
+                    {{ field.label }}
+                    <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
                     <br>{{ field }}
                 </div>
             {% endfor %}
             <div>
-                <input type="submit" value="Lagre" class="btn" name="save"/>
+                <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
+                <div id="loading">Loading...</div>
             </div>
         </form>
     </div>
+
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
 
 {% endblock %}
 

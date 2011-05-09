@@ -1,4 +1,3 @@
-import simplejson
 from app.tickets.models import Ticket, TicketUpdate, TicketType, TicketStatus
 from core import Core
 from core.auth.user.models import User
@@ -7,9 +6,9 @@ from django.shortcuts import render, get_object_or_404
 from app.tickets.forms import TicketForm, EditTicketForm, AddTicketTypeForm
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
-import copy
+from django.utils import simplejson
 from django.http import HttpResponse
-
+import copy
 
 @require_permission("LIST", Ticket)
 def overview(request, status_id=None):
