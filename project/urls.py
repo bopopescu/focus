@@ -14,13 +14,17 @@ urlpatterns = patterns('',
                        (r'^accounts/', include('app.accounts.urls')),
                        (r'^files/', include('app.files.files.urls')),
                        (r'^folders/', include('app.files.folders.urls')),
+
                        (r'^orders/', include('app.orders.urls')),
+                       (r'^offers/', include('app.offers.urls')),
+                       (r'^invoices/', include('app.invoices.urls')),
+
                        (r'^search/', include('app.search.urls')),
                        (r'^hourregistrations/', include('app.hourregistrations.urls')),
                        (r'^announcements/', include('app.announcements.urls')),
+
                        #settings for admin
                        (r'^admin/', include('app.admin.urls')),
-
                        (r'^profile/$', 'app.admin.views.profile.edit'),
 
                        #Stock

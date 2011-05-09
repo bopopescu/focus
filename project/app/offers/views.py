@@ -1,25 +1,27 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.translation import ugettext as _
 from app.client.models import ClientUser
-from app.orders.forms import OfferForm
+from app.offers.forms import OfferForm
 from app.orders.models import Order, Offer, ProductLine
 from django.utils.translation import ugettext as _
+from app.stock.models import Product
+from core import Core
 from core.decorators import require_permission
 from core.mail import send_mail
 from django.conf import settings
 
 def overview(request):
-    offers = Offer.objects.all()
-    return render(request, "offer/overview.html", {'title': _('Offers'),
-                                                   'offers': offers})
+    offers = Core.current_user().get_permitted_objects("VIEW", Offer).filter(trashed=False)
+    return render(request, "offers/overview.html", {'title': _('Offers'),
+                                                    'offers': offers})
 
 
 @require_permission("VIEW", Offer, "id")
 def view(request, id):
     offer = Offer.objects.get(id=id)
-    return render(request, "offer/view.html", {'title': offer.title,
-                                               'offer': offer})
+    return render(request, "offers/view.html", {'title': offer.title,
+                                                'offer': offer})
+
 
 def create_order(request, id):
     offer = Offer.objects.get(id=id)
@@ -38,11 +40,13 @@ def create_order(request, id):
 
         return redirect('app.orders.views.order.view', order.id)
 
-    return render(request, "offer/create_order.html", {'title': offer.title,
-                                                   'offer': offer})
+    return render(request, "offers/create_order.html", {'title': offer.title,
+                                                        'offer': offer})
+
 
 def add(request):
     return form(request)
+
 
 def client_management(request, id):
     offer = Offer.objects.get(id=id)
@@ -69,11 +73,12 @@ def client_management(request, id):
         """ % (settings.CLIENT_LOGIN_SITE, password_text)
         send_mail("Nytt tilbud", message, settings.NO_REPLY_EMAIL, [email_address])
 
-    return render(request, "offer/client_management.html", {'offer': offer})
+    return render(request, "offers/client_management.html", {'offer': offer})
 
 
 def edit(request, id):
     return form(request, id)
+
 
 def form(request, id=None):
     products = []
@@ -91,23 +96,29 @@ def form(request, id=None):
         i = 0
         for p in request.POST.getlist('product_number'):
             p = ProductLine()
-            p.description = request.POST.getlist('product_number')[i]
+            p.description = request.POST.getlist('product_description')[i]
+            p.price = request.POST.getlist('product_unit_cost')[i]
+            p.count = request.POST.getlist('product_qty')[i]
+            try:
+                product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))
+                p.product = product
+            except:
+                p.product = None
+
             products.append(p)
-            i+=1
+            i += 1
 
-        print products
-
-        if form.is_valid():        
+        if form.is_valid():
             o = form.save(commit=False)
             o.save()
             o.update_products(products)
-            
+
             request.message_success(_("Successfully saved offer"))
 
             return redirect(view, o.id)
     else:
         form = OfferForm(instance=instance)
 
-    return render(request, "offer/form.html", {'form': form,
-                                               'offer':instance,
-                                               'products':products})
+    return render(request, "offers/form.html", {'form': form,
+                                                'offer': instance,
+                                                'products': products})

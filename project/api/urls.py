@@ -5,11 +5,13 @@ from api.contactsapi.handlers import ContactHandler
 from api.customersapi.handlers import CustomersHandler
 from api.hourregistrationsapi.handlers import HourRegistrationHandler
 from api.ticketsapi.handlers import TicketHandler
+from api.productsapi.handlers import ProductsHandler
 
 auth = TimeBasicAPIAuthentication()
 
 contact = Resource(handler=ContactHandler, authentication=auth)
 customers = Resource(handler=CustomersHandler, authentication=auth)
+products = Resource(handler=ProductsHandler, authentication=auth)
 hours = Resource(handler=HourRegistrationHandler, authentication=auth)
 tickets = Resource(handler=TicketHandler, authentication=auth)
 
@@ -25,5 +27,7 @@ urlpatterns = patterns('',
 
                        url(r'tickets/$', tickets),
                        url(r'tickets/(?P<id>\d+)/$', tickets),
-                       
+
+                       url(r'products/$', products),
+                       url(r'products/(?P<id>\d+)/$', products),
 )

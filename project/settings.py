@@ -122,6 +122,8 @@ INSTALLED_APPS = (
 'app.dashboard',
 'app.stock',
 'app.orders',
+'app.offers',
+'app.invoices',
 'app.hourregistrations',
 'app.suppliers',
 'app.search',
