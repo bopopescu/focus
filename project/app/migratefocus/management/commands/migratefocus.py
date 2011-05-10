@@ -187,10 +187,13 @@ class Command(BaseCommand):
             u.area_code = cu['levpostnr'].decode('latin1')
 
             #Invoice
-            u.invoice_address = cu['faktadresse'].decode('latin1')
-            u.invoice_area_code = cu['faktpostnr'].decode('latin1')
+	    try:
+            	u.invoice_address = cu['faktadresse'].decode('latin1')
+                u.invoice_area_code = cu['faktpostnr'].decode('latin1')
+		u.save()
+	    except:
+		print "ERROR on %s " % u.cid
 
-            u.save()
 
             customers.append((u, cu['kundenr']))
 
