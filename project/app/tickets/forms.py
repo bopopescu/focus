@@ -25,7 +25,6 @@ class TicketForm(ModelForm):
         self.fields['due_date'].required = True
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
-        self.fields['order'].queryset = Customer.objects.filter_current_company()
 
 
 class EditTicketForm(ModelForm):
@@ -47,7 +46,6 @@ class EditTicketForm(ModelForm):
         self.fields['type'].queryset = TicketType.objects.filter_current_company()
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y", )
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
-        self.fields['order'].queryset = Customer.objects.filter_current_company()
 
     def save(self, *args, **kwargs):
         ticket = super(EditTicketForm, self).save()
