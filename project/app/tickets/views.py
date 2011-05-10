@@ -1,7 +1,6 @@
-import simplejson
-from app.tickets.models import Ticket, TicketUpdate, TicketType, TicketStatus
+from django.utils import simplejson
+from app.tickets.models import Ticket, TicketUpdate, TicketType
 from core import Core
-from core.auth.user.models import User
 from core.decorators import require_permission
 from django.shortcuts import render, get_object_or_404
 from app.tickets.forms import TicketForm, EditTicketForm, AddTicketTypeForm
@@ -14,7 +13,6 @@ from django.http import HttpResponse
 @require_permission("LIST", Ticket)
 def overview(request):
     return render(request, 'tickets/list.html', {"title": "Tickets"})
-
 
 
 @require_permission("LIST", Ticket)
@@ -119,8 +117,6 @@ def form(request, id=False):
                                                  'ticket': instance,
                                                  'form': form,
                                                  })
-
-
 
 
 @require_permission("CREATE", Ticket)

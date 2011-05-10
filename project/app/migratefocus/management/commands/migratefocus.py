@@ -391,12 +391,13 @@ class Command(BaseCommand):
 
         self.migrate_customers(cursor, contacts)
 
-        self.migrate_projects(company, cursor, users, contacts)
 
-        orders = self.migrate_orders(company, cursor, users)
+        #SKIP
+        #self.migrate_projects(company, cursor, users, contacts)
+        #orders = self.migrate_orders(company, cursor, users)
+        #self.migrate_timetracking(cursor, users, orders)
 
-        self.migrate_timetracking(cursor, users, orders)
-
+        
         #Set test user again
         Core.set_test_user(user)
 

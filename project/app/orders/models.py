@@ -16,6 +16,7 @@ class ProductLine(models.Model):
     def __unicode__(self):
         return self.description
 
+
 class OrderBase(PersistentModel):
     title = models.CharField(_("Title"), max_length=80)
     customer = models.ForeignKey(Customer, related_name="orders", verbose_name=_("Customer"), blank=True, null=True)
@@ -57,12 +58,15 @@ class OrderBase(PersistentModel):
     def __unicode__(self):
         return self.title
 
+
 class Invoice(OrderBase):
     invoice_number = models.IntegerField()
     order = models.ForeignKey('Order', related_name="invoices")
 
+
 class Offer(OrderBase):
     offer_number = models.IntegerField()
+
 
 class Order(OrderBase):
     order_number = models.IntegerField()

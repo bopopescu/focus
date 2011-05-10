@@ -18,4 +18,14 @@ class ProductsHandler(BaseHandler):
             except Contact.DoesNotExist:
                 return rc.NOT_FOUND
         else:
-            return all
+            all = ProductsHandler.filter_products(all, request.GET)
+
+        return all
+    
+    @staticmethod
+    def filter_products(products, filter):
+        name_startswith = (filter.get('name_startsWith', False))
+        if name_startswith:
+            products = products.filter(name__startswith=name_startswith)
+
+        return products

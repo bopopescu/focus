@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from app.orders.models import Order
 from core.auth.company.models import Company
 from core.auth.user.models import User
 from django.db import models
@@ -13,12 +12,12 @@ import os
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
-
 class TicketBase(models.Model):
     """ Used as base class by Ticket and TicketUpdate instead of PersistentModel
         Objects can be created be client users
     """
-    client_user = models.ForeignKey('client.ClientUser', blank=True, null=True, default=None, related_name='client_tickets')
+    client_user = models.ForeignKey('client.ClientUser', blank=True, null=True, default=None,
+                                    related_name='client_tickets')
     user = models.ForeignKey(User, blank=True, null=True, default=None, related_name='tickets')
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
@@ -41,6 +40,7 @@ class TicketBase(models.Model):
     def creator(self):
         return self.client_user or self.user
 
+
 class TicketStatus(models.Model):
     name = models.CharField(max_length=20)
     order_priority = models.IntegerField()
@@ -51,11 +51,13 @@ class TicketStatus(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
+
 class TicketPriority(models.Model):
     name = models.CharField(max_length=20)
 
     def __unicode__(self):
         return unicode(self.name)
+
 
 class TicketType(PersistentModel):
     name = models.CharField(max_length=20)
@@ -84,7 +86,8 @@ class Ticket(TicketBase):
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
     due_date = models.DateTimeField(null=True, blank=True, default=None)
     customer = models.ForeignKey(Customer, verbose_name=_("Customer"), null=True, blank=True)
-    order = models.ForeignKey(Order, null=True, blank=True, verbose_name=_("Order"), related_name="tickets")
+    order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"),
+                              related_name="tickets")
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 
@@ -155,7 +158,6 @@ class Ticket(TicketBase):
             field_value = getattr(self, field.attname)
 
             if field.attname in self.foreign_key_dict:
-
                 #Check if foreign-key value is None
                 if field_value is None:
                     data[field.verbose_name] = None
@@ -184,11 +186,12 @@ class Ticket(TicketBase):
 
         return diff
 
+
 class TicketUpdate(TicketBase):
     ticket = models.ForeignKey(Ticket, related_name="updates")
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
-    
+
     def get_attachment_url(self):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
@@ -207,6 +210,7 @@ class TicketUpdate(TicketBase):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
         return None
+
 
 class TicketUpdateLine(TicketBase):
     update = models.ForeignKey(TicketUpdate, related_name='update_lines')
