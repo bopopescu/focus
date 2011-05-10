@@ -72,6 +72,7 @@ class TicketType(PersistentModel):
 
     @staticmethod
     def simpleform():
+        from app.tickets.forms import AddTicketTypeForm
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
 
 
@@ -228,6 +229,3 @@ def initial_data():
     TicketPriority.objects.get_or_create(name=_("High"))
 
     TicketType.objects.get_or_create(name="type")
-
-
-from app.tickets.forms import AddTicketTypeForm
