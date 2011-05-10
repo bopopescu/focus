@@ -26,6 +26,6 @@ class ProductsHandler(BaseHandler):
     def filter_products(products, filter):
         name_startswith = (filter.get('name_startsWith', False))
         if name_startswith:
-            products = products.filter(name__startswith=name_startswith)
+            products = products.filter(name__icontains=name_startswith)
 
         return products
