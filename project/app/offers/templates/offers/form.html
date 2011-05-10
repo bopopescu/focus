@@ -49,11 +49,11 @@
                 <table>
 
                     <thead style="display:none;">
-                    <th style="width:100px; ">Item</th>
-                    <th style="width:330px;">Description</th>
-                    <th style="width:40px;">Unit cost</th>
-                    <th style="width:30px;">Qty</th>
-                    <th style="width:25px;">Tax</th>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Unit cost</th>
+                    <th>Qty</th>
+                    <th>Tax</th>
                     <th>Total</th>
                     <th></th>
                     </thead>
@@ -64,7 +64,7 @@
 
                         <tr class="product">
                             <td>
-                                <input type="text" class="field_input" name="product_number"
+                                <input type="text" class="field_input" style="width:80px;" name="product_number"
                                        value="{{ product.product.id }}">
                             </td>
                             <td>
@@ -109,7 +109,7 @@
         <table>
             <tr class="product">
                 <td>
-                    <input type="text" class="field_input" name="product_number">
+                    <input type="text" class="field_input" style="width:80px;" name="product_number">
                 </td>
                 <td>
                     <input type="text" class="field_input" style="width:170px;" name="product_description">
