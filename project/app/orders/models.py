@@ -66,7 +66,7 @@ class Offer(OrderBase):
 
 class Order(OrderBase):
     order_number = models.IntegerField()
-    offer = models.ForeignKey('Offer', related_name="orders", null=True, blank=True)
+    offer = models.ForeignKey('orders.Offer', related_name="orders", null=True, blank=True)
 
     #Managers
     objects = OrderManager()

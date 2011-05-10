@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from app.projects.models import Project
-from core.shortcuts import *
-from core.decorators import *
+from app.stock.forms import CurrencyForm
+from core.decorators import login_required, require_permission
 from core.views import  update_timeout
 from app.stock.models import Currency
 from django.utils import simplejson
-from django.utils.translation import ugettext as _
 
 
 @login_required()
@@ -16,16 +15,20 @@ def overview(request):
     currencies = Currency.objects.all()
     return render(request, 'stock/currencies/list.html', {'title': 'Produkter', 'currencies': currencies})
 
+
 @login_required()
 def add(request):
     return form(request)
 
+
 def edit(request, id):
     return form(request, id)
+
 
 def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
+
 
 @require_permission("CREATE", Currency)
 def add_ajax(request):
@@ -35,7 +38,7 @@ def add_ajax(request):
         a = form.save()
 
         return HttpResponse(simplejson.dumps({'name': a.name,
-                                              'valid':True,
+                                              'valid': True,
                                               'id': a.id}), mimetype='application/json')
 
     else:
@@ -45,6 +48,7 @@ def add_ajax(request):
                                               'valid': False}), mimetype='application/json')
 
         return HttpResponse("ERROR")
+
 
 @login_required()
 def form (request, id=False):
@@ -72,4 +76,3 @@ def form (request, id=False):
     return render(request, "form.html", {'title': 'Valuta', 'form': form})
 
 
-from app.stock.forms import CurrencyForm

@@ -27,6 +27,7 @@ class TicketForm(ModelForm):
         self.fields['due_date'].required = True
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
+        self.fields['order'].queryset = Customer.objects.filter_current_company()
 
 class EditTicketForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
@@ -36,8 +37,7 @@ class EditTicketForm(ModelForm):
         model = Ticket
         fields = (
         'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
-        'spent_time','order'
-        ,)
+        'spent_time','order',)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
@@ -48,6 +48,7 @@ class EditTicketForm(ModelForm):
         self.fields['type'].queryset = TicketType.objects.filter_current_company()
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y", )
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
+        self.fields['order'].queryset = Customer.objects.filter_current_company()
 
     def save(self, *args, **kwargs):
         ticket = super(EditTicketForm, self).save()

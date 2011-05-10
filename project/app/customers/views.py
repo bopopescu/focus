@@ -1,10 +1,11 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
+from app.customers.forms import CustomerFormSimple, CustomerForm, ContactToCustomerForm
+from app.customers.models import Customer
+from core import Core
+from core.decorators import require_permission, login_required
 from core.models import Log
-from django.shortcuts import get_object_or_404, render, render_to_response
-from forms import *
-from core.shortcuts import *
-from core.decorators import *
+from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _

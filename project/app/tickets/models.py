@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from app.orders.models import Order
 from core.auth.company.models import Company
 from core.auth.user.models import User
 from django.db import models
@@ -83,7 +84,7 @@ class Ticket(TicketBase):
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
     due_date = models.DateTimeField(null=True, blank=True, default=None)
     customer = models.ForeignKey(Customer, verbose_name=_("Customer"), null=True, blank=True)
-    order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"), related_name="tickets")
+    order = models.ForeignKey(Order, null=True, blank=True, verbose_name=_("Order"), related_name="tickets")
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.forms import forms
 from django.forms import ModelForm
-from app.contacts.models import *
+from app.contacts.models import Contact
 from core.widgets import JQueryAutoComplete
 from functools import partial
 from django.core.urlresolvers import reverse
