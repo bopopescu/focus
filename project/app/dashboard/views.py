@@ -10,16 +10,13 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from core.utils import get_permission
 
-from ho import pisa
+
 
 from django.conf import settings
 from django.template.loader import render_to_string
 
 @require_permission("LIST", Announcement)
 def overview(request):
-    filename = settings.BASE_PATH + "/uploads/pdf/hei.pdf"
-    content = render_to_string("orders/pdf.html")
-    pdf = pisa.CreatePDF(content, file(filename, "wb"))
 
     title = _("Welcome to TIME")
 
