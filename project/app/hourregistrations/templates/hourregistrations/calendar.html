@@ -307,7 +307,6 @@
 
 
     <style>
-
         #calender_table {
             width: 60%;
             float: left;
@@ -319,14 +318,14 @@
             float: left;
         }
 
-        #calender_list tbody {
+        #calender_list {
+            margin-top:430px;
             width: 100%;
         }
 
         .date_day {
             font-size: 9px;
         }
-
     </style>
 
 
@@ -455,6 +454,7 @@
         });
     </script>
 
+
     <div id="calender_table">
         <table id="calendar_table"></table>
     </div>
@@ -478,7 +478,6 @@
                 <button type="button" class="form_button">Lagre ny timeføring</button>
             </div>
         </form>
-
     </div>
 
     <div id="calender_list">
@@ -494,11 +493,7 @@
             </thead>
 
             <tbody>
-
             </tbody>
-
-
         </table>
     </div>
-
 {% endblock %}
