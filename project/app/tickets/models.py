@@ -36,6 +36,10 @@ class TicketBase(models.Model):
         else:
             print action, self.user
 
+    def trash(self):
+        self.trashed = True
+        self.save()
+
     @property
     def creator(self):
         return self.client_user or self.user
