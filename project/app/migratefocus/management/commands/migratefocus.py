@@ -100,7 +100,7 @@ class Command(BaseCommand):
         contacts = []
         for cu in cursor.fetchall():
             p = Contact()
-            p.full_name = cu['fult_navn'].decode('latin1')
+            p.name = cu['fult_navn'].decode('latin1')
             p.phone = cu['telefon'].decode('latin1')
 
             if cu['telefon_kontor']:

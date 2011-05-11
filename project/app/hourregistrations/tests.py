@@ -123,7 +123,7 @@ class TimeTrackingTesting(FocusTest):
         todayDate = "1.1.2011"
         now = datetime.strptime(todayDate, "%d.%m.%Y")
 
-        testCustomer = Customer.objects.create(cid="10432", full_name="testKunde", email="test@test.com")
+        testCustomer = Customer.objects.create(cid="10432", name="testKunde", email="test@test.com")
         testOrder = Order.objects.create(order_number="2342", title="test", customer=testCustomer)
         hourRegistration = HourRegistration.objects.create(date=now,
                                                            order=testOrder,

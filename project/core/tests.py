@@ -48,8 +48,8 @@ class FocusTest(TestCase):
 
         Core.set_test_user(self.user3)
 
-        self.customer1 = Customer.objects.get_or_create(full_name="Customer1", cid=1)[0]
-        self.customer2 = Customer.objects.get_or_create(full_name="Customer2", cid=2)[0]
+        self.customer1 = Customer.objects.get_or_create(name="Customer1", cid=1)[0]
+        self.customer2 = Customer.objects.get_or_create(name="Customer2", cid=2)[0]
 
         self.group1 = Group.objects.get_or_create(name="group1")[0]
         self.group2 = Group.objects.get_or_create(name="group2")[0]

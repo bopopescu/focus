@@ -6,8 +6,8 @@ from piston.utils import rc
 
 class ContactHandler(BaseHandler):
     model = Contact
-    fields = ('id', 'full_name', 'address', 'email', 'phone', 'phone_office', 'phone_mobile', 'description',
-              ('comments', ('text', ),), ('customers', ('id', 'full_name',),), )
+    fields = ('id', 'name', 'address', 'email', 'phone', 'phone_office', 'phone_mobile', 'description',
+              ('comments', ('text', ),), ('customers', ('id', 'name',),), )
 
 
     def read(self, request, id=None):

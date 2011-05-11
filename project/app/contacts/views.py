@@ -107,8 +107,8 @@ def autocomplete(request, query, limit):
     )[:limit]
 
     contacts = [{'id': contact.id,
-                 'label': "%s" % (contact.full_name),
-                 'value': contact.full_name} for contact in contacts]
+                 'label': "%s" % (contact.name),
+                 'value': contact.name} for contact in contacts]
 
     return HttpResponse(JSONEncoder().encode(contacts), mimetype='application/json')
 
@@ -120,7 +120,7 @@ def add_ajax(request):
     if form.is_valid():
         a = form.save()
 
-        return HttpResponse(simplejson.dumps({'name': a.full_name,
+        return HttpResponse(simplejson.dumps({'name': a.name,
                                               'valid': True,
                                               'id': a.id}), mimetype='application/json')
 

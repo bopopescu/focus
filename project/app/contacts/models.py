@@ -13,7 +13,7 @@ import os
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class Contact(PersistentModel):
-    full_name = models.CharField(_("Full name"), max_length=80)
+    name = models.CharField(_("Full name"), max_length=80,default="")
     email = models.EmailField(_("Email"), max_length=80)
     address = models.CharField(_("Address"), max_length=80, blank=True)
     phone = models.CharField(_("Phone"), max_length=20, default="", blank=True)
@@ -24,7 +24,7 @@ class Contact(PersistentModel):
     comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
-        return unicode(self.full_name)
+        return unicode(self.name)
 
     def can_be_deleted(self):
         return (True, "ok")

@@ -24,7 +24,7 @@ class ContactsTesting(TestCase):
 
         Core.set_test_user(self.user1)
 
-        self.contact1 = Contact.objects.get_or_create(full_name="Customer1")[0]
+        self.contact1 = Contact.objects.get_or_create(name="Customer1")[0]
 
         self.group1.add_member(self.user2)
 
