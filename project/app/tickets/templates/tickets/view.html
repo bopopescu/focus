@@ -25,12 +25,12 @@
 
             <div class="ticket_details">
                 <p class="ticket_author">{% trans "Added by" %} {{ ticket.creator }} <br />
-                {% trans "Last updated" %} {{ ticket.date_edited }}</p>
+                {% trans "Last updated" %} {{ ticket.date_edited|date:"d.m.Y H.i" }}</p>
     
                 <table class="ticket_attributes">
                     <tr>
                         <th>{% trans "status" %}</th> <td> {{ ticket.status }}</td>
-                        <th>{% trans "created" %}</th> <td> {{ ticket.date_created }}</td>
+                        <th>{% trans "created" %}</th> <td> {{ ticket.date_created|date:"d.m.Y H.i" }}</td>
                     </tr>
                     <tr>
                         <th>{% trans "priority" %}</th> <td> {{ ticket.priority }}</td>

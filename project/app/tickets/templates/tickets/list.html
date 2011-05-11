@@ -88,24 +88,29 @@
             
             $("#assigned_links a").click(function() {
                 assigned_to = current_user_id;
-                status = this.href;
+                status = $(this).attr("class")
                 getTickets(0, 0);
-                return false;
+                restoreDefaultType();
             });
 
             $("#overview_links a").click(function() {
                 assigned_to = 0;
                 status = $(this).attr("class");
                 getTickets(0, 0);
-                return false;
+                restoreDefaultType();
             });
 
             $("#trashed").click(function() {
                 assigned_to = 0;
                 status = 0;
                 getTickets(0, 1);
-                return false
+                restoreDefaultType();
             })
+
+            function restoreDefaultType() {
+                $("#type_selection option:selected").removeAttr("selected");
+                $("#type_selection option").first().attr("selected", "selected");
+            }
         });
 
     </script>

@@ -42,22 +42,21 @@ def view(request, id):
 
 @require_permission("DELETE", Ticket, "id")
 def trash(request, id):
-    customer = Ticket.objects.get(id=id)
+    ticket = Ticket.objects.get(id=id)
 
     if request.method == "POST":
-        if not customer.can_be_deleted()[0]:
-            request.message_error("You can't delete this customer because: ")
-            for reason in customer.can_be_deleted()[1]:
+        if not ticket.can_be_deleted()[0]:
+            request.message_error("You can't delete this ticket because: ")
+            for reason in ticket.can_be_deleted()[1]:
                 request.message_error(reason)
         else:
-            request.message_success("Successfully deleted this customer")
-            customer.trash()
+            request.message_success("Successfully deleted this ticket")
+            ticket.trash()
         return redirect(overview)
     else:
         return render(request, 'tickets/trash.html', {'title': _("Confirm delete"),
-                                                      'customer': customer,
-                                                      'can_be_deleted': customer.can_be_deleted()[0],
-                                                      'reasons': customer.can_be_deleted()[1],
+                                                      'can_be_deleted': ticket.can_be_deleted()[0],
+                                                      'reasons': ticket.can_be_deleted()[1],
                                                       })
 
 

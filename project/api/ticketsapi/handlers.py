@@ -60,10 +60,8 @@ class TicketHandler(BaseHandler):
             assigned_to = User.objects.get(id=assigned_to)
             tickets = tickets.filter(assigned_to=assigned_to)
 
-        trashed = int(filter.get('trashed', False))
-        if trashed:
-            tickets = tickets.filter(trashed=True)
-
+        trashed = bool(int(filter.get('trashed', False)))
+        tickets = tickets.filter(trashed=trashed)
 
         return tickets
 
