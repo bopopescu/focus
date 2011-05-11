@@ -46,7 +46,7 @@
         <li><a class="{% active request "new" %}" href="{% url app.tickets.views.add %}"><img
                 src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW TICKET" %}</a></li>
 
-        <li><a id="trashed" class="{% active request "trashed" %}" href="#"><img
+        <li><a id="trashed" class="{% active request "trashed" %}" href="{% url app.tickets.views.overview_trashed %}"><img
                 src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
     {% endif %}
 </ul>

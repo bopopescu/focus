@@ -11,19 +11,22 @@ import copy
 
 @require_permission("LIST", Ticket)
 def overview(request):
+    print "overview"
     return render(request, 'tickets/list.html', {"title": "Tickets"})
 
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request, id=None, status_id=None):
+    print "assigned"
     if not id:
         id = Core.current_user().id
-    return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": id})
+    return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": True})
 
 
 @require_permission("LIST", Ticket)
 def overview_trashed(request):
-    return render(request, 'tickets/list.html', {"title": "Tickets", "trashed": True})
+    print "trashed"
+    return render(request, 'tickets/list.html', {"title": "Tickets", "trashed_tickets": True})
 
 
 @require_permission("VIEW", Ticket, "id")

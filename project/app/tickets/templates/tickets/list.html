@@ -51,7 +51,7 @@
             row += getTdCell(ticket.status.name);
             row += getTdCell(ticket.type.name);
             row += getTdCell(ticket.date_edited);
-            row += "</tr>"
+            row += "</tr>";
             return row
         }
 
@@ -65,7 +65,7 @@
         }
 
         var current_user_id = {{ request.user.id }};
-        var assigned_to = 0;
+        var assigned_to = {% if assigned_to %} 1; {% else %} 0; {% endif %}
         var status = 0;
         function getTickets(type, trashed) {
             var data = type ? { type_id: parseInt(type)} : {};
@@ -79,7 +79,8 @@
         }
 
         $(function() {
-            getTickets(0, 0);
+            var trashed = {% if trashed_tickets %} 1; {% else %} 0; {% endif %}
+            getTickets(0, trashed);
 
             $("#type_selection").change(function() {
                 var typeId = parseInt($("#type_selection option:selected").val());
