@@ -60,7 +60,7 @@ def calendar_day_json(request, year, month, day):
                       'hours_worked': str(reg.hours_worked),
                       'order': reg.order.id,
                       'pause': str(reg.pause),
-                      'customer_name': reg.order.customer.full_name,
+                      'customer_name': reg.order.customer.name,
                       'order_name': reg.order.title,
                       'description': reg.description
                      } for reg in list_hour_registrations]

@@ -41,7 +41,7 @@ class ContactField(forms.Field):
         """Checks that the user exists, and returns a user object"""
         super(ContactField, self).clean(value)
         try:
-            product = Contact.objects.get(full_name=value)
+            product = Contact.objects.get(name=value)
         except:
             raise forms.ValidationError(_("Contact with name %(name)s does not exist") % {'name': value})
         return product

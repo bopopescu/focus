@@ -6,8 +6,8 @@ from core import Core
 
 class CustomersHandler(BaseHandler):
     model = Customer
-    fields = ('id', 'cid', 'full_name', 'email', 'phone', 'website', 'address', 'zip', 'city', 'invoice_address', 'invoice_zip',
-              'invoice_city', ('contacts', ('id', 'full_name'), ))
+    fields = ('id', 'cid', 'name', 'email', 'phone', 'website', 'address', 'zip', 'city', 'invoice_address', 'invoice_zip',
+              'invoice_city', ('contacts', ('id', 'name'), ))
 
 
     def read(self, request, id=None):

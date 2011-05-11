@@ -148,7 +148,7 @@ class Ticket(TicketBase):
         'status_id': (TicketStatus, 'name',),
         'priority_id': (TicketPriority, 'name',),
         'type_id': (TicketType, 'name',),
-        'customer_id': (Customer, 'full_name',),
+        'customer_id': (Customer, 'name',),
         'assigned_to_id': (User, 'username')
     }
 

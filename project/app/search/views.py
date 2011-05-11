@@ -14,9 +14,9 @@ def search(request):
 
     searchIn = {}
 
-    searchIn[Customer] = ["full_name", 'email', 'address', 'phone']
+    searchIn[Customer] = ["name", 'email', 'address', 'phone']
     searchIn[Project] = ["project_name", 'pid', 'responsible__first_name']
-    searchIn[Contact] = ["full_name", "email", 'address', 'phone']
+    searchIn[Contact] = ["name", "email", 'address', 'phone']
     searchIn[Order] = ["order_name", "customer__full_name", 'project__project_name', 'description']
     searchIn[Supplier] = ["name"]
     searchIn[Product] = ['name', 'description', 'productGroup__name']
