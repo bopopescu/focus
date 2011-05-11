@@ -26,9 +26,18 @@
 
     {% end_require %}
     {% require_permission EDIT customer %}
-    <li><a class="{% active request "trash" %}" href="{% url app.customers.views.trash customer.id %}"><img
-            src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
+
+    {% if customer.trashed %}
+        <li><a class="{% active request "trash" %}" href="{% url app.customers.views.restore customer.id %}"><img
+                src="{{ STATIC_URL }}img/restore.png" width="24" height="24" alt="Mail"/>{% trans "RESTORE" %}</a></li>
+
+    {% else %}
+        <li><a class="{% active request "trash" %}" href="{% url app.customers.views.trash customer.id %}"><img
+                src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
+    {% endif %}
+
     {% end_require %}
+
     {% require_permission EDIT customer %}
 
     <li><a class="{% active request "history" %}" href="{% url app.customers.views.history customer.id %}"><img

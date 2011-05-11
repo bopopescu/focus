@@ -98,7 +98,7 @@
                     {% for order in project.orders.all %}
                         <tr>
                             <td></td>
-                            <td><a href="{% url app.orders.views.view order.id %}">{{ order.order_name }}</a></td>
+                            <td><a href="{% url app.orders.views.order.view order.id %}">{{ order.order_name }}</a></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
