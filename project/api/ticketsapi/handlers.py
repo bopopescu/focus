@@ -62,4 +62,3 @@ class TicketHandler(BaseHandler):
         tickets = tickets.filter(trashed=trashed)
 
         return tickets
-    
