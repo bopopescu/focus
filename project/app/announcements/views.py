@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render
-from core.decorators import *
-from forms import *
+from app.announcements.forms import AnnouncementForm
+from app.announcements.models import Announcement
+from core import Core
+from core.decorators import login_required
 
 @login_required()
 def overview(request):

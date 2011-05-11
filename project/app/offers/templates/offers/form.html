@@ -1,4 +1,4 @@
-{% extends "form.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block sidebar %}
@@ -8,34 +8,14 @@
 
 {% block maincontent %}
 
-
     <h1>{{ title }}</h1>
-    <br>
-    <br>
 
-    {% if form.errors %}
-
-        <div class="information" id="message">
-
-            <p>Fix before submit again</p>
-
-        </div>
-
-        {% for i in form %}
-            {% if i.errors %}
-                {{ i.label }}{{ i.errors }}
-            {% endif %}
-        {% endfor %}
-
-        <br><br>
-
-    {% endif %}
-
-    <div style="width:605px;">
+    <div style="width:705px;">
         <form enctype="multipart/form-data" class="form label-inline" method="post">
             {% for field in form %}
                 <div class="fieldWrapper">
-                    <span {% if field.errors %}style="color:red;" {% endif %}>{{ field.label }} </span>
+                    {{ field.label }}
+                    <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
                     <br>{{ field }}
                 </div>
             {% endfor %}
@@ -49,11 +29,11 @@
                 <table>
 
                     <thead style="display:none;">
-                    <th style="width:100px; ">Item</th>
-                    <th style="width:330px;">Description</th>
-                    <th style="width:40px;">Unit cost</th>
-                    <th style="width:30px;">Qty</th>
-                    <th style="width:25px;">Tax</th>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Unit cost</th>
+                    <th>Qty</th>
+                    <th>Tax</th>
                     <th>Total</th>
                     <th></th>
                     </thead>
@@ -64,11 +44,11 @@
 
                         <tr class="product">
                             <td>
-                                <input type="text" class="field_input" name="product_number"
+                                <input type="text" class="field_input" style="width:80px;" name="product_number"
                                        value="{{ product.product.id }}">
                             </td>
                             <td>
-                                <input type="text" class="field_input" name="product_description"
+                                <input type="text" class="field_input" style="width:170px;" name="product_description"
                                        value="{{ product.description }}">
                             </td>
                             <td>
@@ -100,7 +80,9 @@
             <br><br><br>
 
             <div>
-                <input type="submit" value="Lagre" class="btn" name="save"/>
+                <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
+
+                <div id="loading">Loading...</div>
             </div>
         </form>
     </div>
@@ -109,10 +91,10 @@
         <table>
             <tr class="product">
                 <td>
-                    <input type="text" class="field_input" name="product_number">
+                    <input type="text" class="field_input" style="width:80px;" name="product_number">
                 </td>
                 <td>
-                    <input type="text" class="field_input" name="product_description">
+                    <input type="text" class="field_input" style="width:170px;" name="product_description">
                 </td>
                 <td>
                     <input type="text" class="field_input" name="product_unit_cost">
@@ -138,6 +120,14 @@
 
 
         $(document).ready(function() {
+
+
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+
 
             function setSelectBoxInPopup(currentID, currentText) {
 
@@ -211,13 +201,15 @@
                 $(".products thead").show();
                 var new_product = ($(".product_template").find(".product").first().html());
                 var new_element = "<tr class='product'>" + new_product + "</tr>"
-                var e = $(".products tbody").last().append(new_element)
+                $(".products tbody").last().append(new_element)
+
+                var e = $(".products tbody tr").last();
 
                 e.find("input[type=text][name=product_number]").autocomplete({
                             source: function(request, response) {
                                 $.ajax({
                                             url: "/api/products/",
-                                            dataType: "json",
+                                            dataType: "jsonp",
                                             data: {
                                                 featureClass: "P",
                                                 style: "full",
@@ -235,7 +227,10 @@
                                             }
                                         });
                             },
+                            minLength: 1,
+
                             select: function(event, ui) {
+                                console.log(new_product)
                                 e.find("input[type=text][name=product_description]").val(ui.item.item.description)
                                 e.find("input[type=text][name=product_unit_cost]").val(ui.item.item.price_out)
                                 e.find("input[type=text][name=product_qty]").val("1")

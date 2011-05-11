@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load timetracking_tags %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "hourregistrations/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+
+    <style>
+        .summary_number {
+            font-size: 40px;
+        }
+
+        .summary_desc {
+            font-size: 20px;
+        }
+
+    </style>
+
+    <h1>{{ title }}</h1>
+
+    <div id="calender_list">
+        <table>
+
+            <thead>
+            <tr>
+                <th>{% trans "Hours" %}</th>
+                <th>{% trans "Time" %}</th>
+                <th>{% trans "Order" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for registration in hourregistrations %}
+                <tr>
+                    <td>{{ registration.hours_worked }}</td>
+                    <td>{{ registration.date|date:"d.m.Y" }} {{ registration.time_start }}-{{ registration.time_end }}</td>
+                    <td>{{ registration.order }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="summary">
+        <div>
+            <span class="summary_number">{{ sumHours }}</span>
+            <span class="summary_desc">{% trans "hours total" %}</span>
+        </div>
+    </div>
+
+{% endblock %}

@@ -2,14 +2,16 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.translation import ugettext as _
+from app.contacts.forms import ContactForm, ContactImageForm
+from app.contacts.models import Contact
 from app.customers.models import Customer
+from core import Core
+from core.decorators import login_required, require_permission
 from core.models import Log
 from core.utils import suggest_ajax_parse_arguments
-from forms import *
 from core.shortcuts import comment_block
-from core.decorators import *
 from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.simplejson import JSONEncoder

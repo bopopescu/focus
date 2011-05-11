@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from app.customers.models import Customer
 from app.stock.models import Product
+from app.suppliers.forms import SupplierSimpleForm, SupplierForm
+from app.suppliers.models import Supplier
+from core import Core
+from core.decorators import login_required, require_permission
 from core.models import Log
 from django.contrib.contenttypes.models import ContentType
-from forms import *
-from core.shortcuts import *
-from core.decorators import *
 from django.utils import simplejson
 from core.views import update_timeout
 from django.utils.translation import ugettext as _
@@ -24,14 +25,14 @@ def overview_trashed(request):
     update_timeout(request)
     suppliers = Core.current_user().get_permitted_objects("VIEW", Supplier).filter(trashed=True)
     return render(request, 'suppliers/list.html',
-                               {'title': _("Deleted suppliers"), 'suppliers': suppliers})
+                  {'title': _("Deleted suppliers"), 'suppliers': suppliers})
 
 
 @login_required()
 def overview_all(request):
     suppliers = Supplier.objects.all()
     return render(request, 'suppliers/list.html',
-                               {'title': _("All active suppliers"), 'suppliers': suppliers})
+                  {'title': _("All active suppliers"), 'suppliers': suppliers})
 
 
 @require_permission("CREATE", Customer)
@@ -60,8 +61,8 @@ def view(request, id):
     supplier = Core.current_user().get_permitted_objects("VIEW", Supplier).get(id=id)
 
     return render(request, 'suppliers/view.html',
-                               {'title': _("Supplier"),
-                                'supplier': supplier})
+                  {'title': _("Supplier"),
+                   'supplier': supplier})
 
 
 @login_required()
@@ -70,8 +71,8 @@ def products(request, id):
     products = Core.current_user().get_permitted_objects("VIEW", Product).filter(supplier=supplier)
 
     return render(request, 'suppliers/products.html', {'title': _("Products"),
-                                                                    'supplier': supplier,
-                                                                    'products': products})
+                                                       'supplier': supplier,
+                                                       'products': products})
 
 
 @require_permission("EDIT", Supplier, "id")
@@ -82,8 +83,8 @@ def history(request, id):
                                  object_id=instance.id)
 
     return render(request, 'suppliers/log.html', {'title': _("Latest events"),
-                                                               'supplier': instance,
-                                                               'logs': history[::-1][0:150]})
+                                                  'supplier': instance,
+                                                  'logs': history[::-1][0:150]})
 
 
 @login_required()
@@ -110,10 +111,10 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'suppliers/trash.html', {'title': _("Confirm delete"),
-                                                                     'supplier': instance,
-                                                                     'can_be_deleted': instance.can_be_deleted()[0],
-                                                                     'reasons': instance.can_be_deleted()[1],
-                                                                     })
+                                                        'supplier': instance,
+                                                        'can_be_deleted': instance.can_be_deleted()[0],
+                                                        'reasons': instance.can_be_deleted()[1],
+                                                        })
 
 
 @login_required()
@@ -140,6 +141,6 @@ def form (request, id=False):
         form = SupplierForm(instance=instance)
 
     return render(request, "suppliers/form.html", {'title': _("Supplier"),
-                                                                'supplier': instance,
-                                                                'form': form,
-                                                                })
+                                                   'supplier': instance,
+                                                   'form': form,
+                                                   })

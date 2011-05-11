@@ -8,13 +8,14 @@ from core.models import User, PersistentModel
 from django.utils.translation import ugettext as _
 
 class ProductLine(models.Model):
-    product = models.ForeignKey('stock.Product', related_name="product_lines")
+    product = models.ForeignKey('stock.Product', related_name="product_lines", null=True, blank=True)
     description = models.TextField()
     count = models.IntegerField()
     price = models.CharField(max_length=10)
 
     def __unicode__(self):
         return self.description
+
 
 class OrderBase(PersistentModel):
     title = models.CharField(_("Title"), max_length=80)
@@ -57,16 +58,19 @@ class OrderBase(PersistentModel):
     def __unicode__(self):
         return self.title
 
+
 class Invoice(OrderBase):
     invoice_number = models.IntegerField()
     order = models.ForeignKey('Order', related_name="invoices")
 
+
 class Offer(OrderBase):
     offer_number = models.IntegerField()
 
+
 class Order(OrderBase):
     order_number = models.IntegerField()
-    offer = models.ForeignKey('Offer', related_name="orders", null=True, blank=True)
+    offer = models.ForeignKey('orders.Offer', related_name="orders", null=True, blank=True)
 
     #Managers
     objects = OrderManager()

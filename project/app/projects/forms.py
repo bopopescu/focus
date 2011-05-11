@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 import django.forms as forms
-from models import *
+from app.customers.models import Customer
+from app.projects.models import Milestone
+from core.auth.user.models import User
+from models import Project
 from core.widgets import SelectWithPop, DatePickerField
 from django.utils.translation import ugettext as _
 

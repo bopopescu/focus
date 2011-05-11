@@ -113,6 +113,7 @@ INSTALLED_APPS = (
 #Apps
 'app.admin',
 'app.company',
+
 'app.announcements',
 'app.contacts',
 'app.accounts',
@@ -121,16 +122,17 @@ INSTALLED_APPS = (
 'app.files',
 'app.dashboard',
 'app.stock',
-'app.orders',
-'app.offers',
-'app.invoices',
 'app.hourregistrations',
 'app.suppliers',
 'app.search',
 'app.mail',
-'app.tickets',
 'app.client',
 'app.migratefocus',
+'app.tickets',
+
+'app.orders',
+'app.offers',
+'app.invoices',
 
 #API
 'api',

@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
+from app.files.forms import FolderForm
 
-from app.files.forms import *
-from core.shortcuts import *
-from core.decorators import *
 from app.files.models import File, Folder
 from app.files.files.views import overview
+from core.decorators import login_required
 
 @login_required()
 def add(request, folderID=None):
     return form(request, False, folderID)
 
+
 @login_required()
 def edit(request, id):
     return form(request, id)
 
+
 @login_required()
 def delete(request, id):
     return form(request, id)
+
 
 @login_required()
 def view(request, id):
@@ -25,8 +27,9 @@ def view(request, id):
 
     who_can_see_this = file.who_has_permission_to('view')
     return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
-                                                            'file': file,
-                                                            'who_can_see_this': who_can_see_this})
+                                               'file': file,
+                                               'who_can_see_this': who_can_see_this})
+
 
 @login_required()
 def form (request, id=False, folderID=None):

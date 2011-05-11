@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+from app.files.forms import FileForm
+from core import Core
+from core.decorators import login_required
 
-from app.files.forms import *
-from core.shortcuts import *
 from core.views import update_timeout
-from core.decorators import *
 from app.files.models import File, Folder
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 
 @login_required()
 def overview(request):
@@ -15,9 +15,10 @@ def overview(request):
     update_timeout(request)
 
     return render(request, 'files/list.html', {'title': 'Filer',
-                                                            'files': files,
-                                                            'folders': folders,
-                                                            })
+                                               'files': files,
+                                               'folders': folders,
+                                               })
+
 
 def folder(request, folderID):
     folder = Folder.objects.get(id=folderID, creator=Core.current_user())
@@ -27,10 +28,11 @@ def folder(request, folderID):
     files = File.objects.filter(folder=folder, creator=Core.current_user())
 
     return render(request, 'files/list.html', {'title': 'Filer',
-                                                            'folder': folder,
-                                                            'files': files,
-                                                            'folders': folders,
-                                                            })
+                                               'folder': folder,
+                                               'files': files,
+                                               'folders': folders,
+                                               })
+
 
 def moveFile(request):
     fileID = request.GET.get("fileID")
@@ -41,6 +43,7 @@ def moveFile(request):
     file.save()
 
     return
+
 
 def moveFolder(request):
     folderID = request.GET.get("folderID")
@@ -63,9 +66,11 @@ def moveFolder(request):
 def add(request, folderID=None):
     return form(request, False, folderID)
 
+
 @login_required()
 def edit(request, id):
     return form(request, id)
+
 
 @login_required()
 def delete(request, id):
@@ -78,8 +83,8 @@ def view(request, id):
 
     who_can_see_this = file.who_has_permission_to('view')
     return render(request, 'files/view.html', {'title': 'Ordre: %s' % file.name,
-                                                            'file': file,
-                                                            'who_can_see_this': who_can_see_this})
+                                               'file': file,
+                                               'who_can_see_this': who_can_see_this})
 
 """
 @login_required()
@@ -132,5 +137,5 @@ def form (request, id=False, folderID=None):
         form = FileForm(instance=instance)
 
     return render(request, "form.html", {'title': 'Fil',
-                                                      'form': form,
-                                                      'folder': folder})
+                                         'form': form,
+                                         'folder': folder})

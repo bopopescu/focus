@@ -28,7 +28,6 @@ class TicketHandler(BaseHandler):
 
     @classmethod
     def date_edited(cls, ticket):
-        print ticket.date_edited.strftime("%d.%m.%Y %H:%S")
         return ticket.date_edited.strftime("%d.%m.%Y %H:%S")
 
     def read(self, request, id=None):
@@ -41,7 +40,6 @@ class TicketHandler(BaseHandler):
         else:
             all = TicketHandler.filter_tickets(all, request.GET)
             return all
-
 
     @staticmethod
     def filter_tickets(tickets, filter):
@@ -64,9 +62,4 @@ class TicketHandler(BaseHandler):
         tickets = tickets.filter(trashed=trashed)
 
         return tickets
-
-
-
-
-
     

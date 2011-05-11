@@ -34,6 +34,11 @@ def view(request, id):
                                                 'order': offer})
 
 
+def preview_order_html(request, id):
+    order = Order.objects.get(id=id)
+    return render(request, "orders/pdf.html", {'order': order})
+
+
 @require_permission("VIEW", Order, "id")
 def create_invoice(request, id):
     order = Order.objects.get(id=id)

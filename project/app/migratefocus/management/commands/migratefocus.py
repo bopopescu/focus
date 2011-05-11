@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
-from django.contrib.contenttypes.models import ContentType
 
 from django.core.management.base import BaseCommand
-import os
 import MySQLdb
 import MySQLdb.cursors
 from app.hourregistrations.models import HourRegistration
@@ -17,7 +15,6 @@ from core.auth.log.models import Log, Notification
 import random
 from app.admin.views.user import generate_new_password_for_user
 from core.utils import get_class
-
 
 Customer = get_class("customers", "customer")
 Project = get_class("projects", "project")
@@ -178,19 +175,21 @@ class Command(BaseCommand):
         for cu in cursor.fetchall():
             u = Customer()
             u.cid = cu['kundenr']
-            u.full_name = cu['kundenavn'].decode('latin1')
+            u.name = cu['kundenavn'].decode('latin1')
             u.email = cu['epostadresse'].decode('latin1')
             u.phone = cu['telefon'].decode('latin1')
 
             #Visit and delivery
             u.address = cu['leveringsadresse'].decode('latin1')
-            u.area_code = cu['levpostnr'].decode('latin1')
+            u.zip = cu['levpostnr'].decode('latin1')
 
             #Invoice
-            u.invoice_address = cu['faktadresse'].decode('latin1')
-            u.invoice_area_code = cu['faktpostnr'].decode('latin1')
-
-            u.save()
+            try:
+                u.invoice_address = cu['faktadresse'].decode('latin1')
+                u.invoice_zip = cu['faktpostnr'].decode('latin1')
+                u.save()
+            except:
+                print "ERROR on %s " % u.cid
 
             customers.append((u, cu['kundenr']))
 
@@ -214,7 +213,7 @@ class Command(BaseCommand):
             company.save()
 
             users.append((u, cu['brukerid']))
-            
+
         print "Done migrating users"
         return users
 
@@ -321,7 +320,7 @@ class Command(BaseCommand):
                 o.description = cu['beskrivelse_time'].decode("latin1")
             except:
                 pass
-            
+
             try:
                 o.save()
                 timetrackings.append(o)
@@ -391,11 +390,10 @@ class Command(BaseCommand):
 
         self.migrate_customers(cursor, contacts)
 
-        self.migrate_projects(company, cursor, users, contacts)
-
-        orders = self.migrate_orders(company, cursor, users)
-
-        self.migrate_timetracking(cursor, users, orders)
+        #SKIP
+        #self.migrate_projects(company, cursor, users, contacts)
+        #orders = self.migrate_orders(company, cursor, users)
+        #self.migrate_timetracking(cursor, users, orders)
 
         #Set test user again
         Core.set_test_user(user)
@@ -408,13 +406,4 @@ class Command(BaseCommand):
 
         self.migrate_products(cursor, productgroups, suppliers)
 
-        """
-
-        TODO: ADD CONTACTS TO PROJECT
-        TODO: ADD CONTACTS TO CUSTOMER
-        TODO: ADD CONTACTS TO ORDER
-
-        """
-
         print "Done!"
-

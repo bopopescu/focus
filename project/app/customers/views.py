@@ -1,10 +1,11 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
+from app.customers.forms import CustomerFormSimple, CustomerForm, ContactToCustomerForm
+from app.customers.models import Customer
+from core import Core
+from core.decorators import require_permission, login_required
 from core.models import Log
-from django.shortcuts import get_object_or_404, render, render_to_response
-from forms import *
-from core.shortcuts import *
-from core.decorators import *
+from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
@@ -33,7 +34,7 @@ def overview_all(request):
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
 
-    return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.full_name,
+    return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.name,
                                                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
@@ -48,7 +49,7 @@ def add_ajax(request, id=None):
     if form.is_valid():
         a = form.save()
 
-        return HttpResponse(simplejson.dumps({'name': a.full_name,
+        return HttpResponse(simplejson.dumps({'name': a.name,
                                               'id': a.id,
                                               'valid': True}), mimetype='application/json')
     else:
@@ -79,7 +80,7 @@ def list_contacts(request, id):
 
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
     return render(request, 'customers/contacts.html',
-                               {'title': unicode(customer.full_name) + " " + _('contacts'),
+                               {'title': unicode(customer.name) + " " + _('contacts'),
                                 'form': form,
                                 'customer': customer})
 

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from core.widgets import *
+
 from django.forms.models import ModelForm
 from django import forms
 from django.utils.translation import ugettext as _
 from core.auth.user.models import User
 from core.auth.group.models import Group
+from core.widgets import DatePickerField
 
 class UserForm(ModelForm):
     class Meta:

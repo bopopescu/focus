@@ -21,7 +21,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 select {
-    width: 260px;
+    width: 250px;
 }
 
 a {
@@ -500,7 +500,7 @@ form p {
 
 .fieldWrapper {
     display: inline-table;
-    width: 300px;
+    width: 350px;
     height: 60px;
 }
 
@@ -521,7 +521,7 @@ form p {
 }
 
 .fieldWrapper textarea {
-    width: 550px;
+    width: 595px;
 }
 
 .fieldWrapper button {
