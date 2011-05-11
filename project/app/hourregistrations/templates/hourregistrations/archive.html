@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load timetracking_tags %}
+
+
+{% block sidebar %}
+    {% include "hourregistrations/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+
+        <thead>
+        <tr>
+            <th>{% trans "Year" %}</th>
+            <th>{% trans "Months" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for year,months in year_with_months.items reversed %}
+            <tr>
+                <td>{{ year }}</td>
+                <td>{% links_for_archived_month year months %}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

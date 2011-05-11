@@ -10,6 +10,24 @@
 
 {% block maincontent %}
 
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            outputElement = $("#postal")
+            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + {{ customer.zip }} + '&callback=?',
+                    function(data) {
+                        outputElement.text(data.result);
+                    });
+            outputElement_invoice = $("#postal_invoice")
+            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + {{ customer.invoice_zip }} + '&callback=?',
+                    function(data) {
+                        outputElement_invoice.text(data.result);
+                    });
+
+        });
+    </script>
+
     <div class="portlet x7">
         <div class="portlet-header"><h4>{{ title }}</h4></div>
 
@@ -37,16 +55,19 @@
                     <td>{% trans "Address" %}</td>
                     <td>
                         {% if customer.address %}
-                            {{ customer.address }}, {{ customer.zip }} {{ customer.city }}
-                            {% else %}{% if customer.address %}
-                                {{ customer.address }} {{ customer.zip }} {{ customer.city }}
-                            {% endif %}{% endif %}
+                            {{ customer.address }}, {{ customer.zip }}
+                            <span id="postal"></span>
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
-                    <td>{% trans "Alternative address" %}</td>
-                    <td>{{ customer.alternative_address }}</td>
-                </tr>
+                    <td>{% trans "Invoice address" %}</td>
+                    <td>
+                        {% if customer.invoice_address %}
+                            {{ customer.invoice_address }}, {{ customer.invoice_zip }}
+                            <span id="postal_invoice"></span>
+                        {% endif %}
+                    </td>                </tr>
             </table>
 
 

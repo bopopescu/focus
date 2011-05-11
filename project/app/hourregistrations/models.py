@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime, date
 from decimal import Decimal
 from app.customers.models import Customer
 from helpers import calculateHoursWorked
-from app.orders.models import Order
 from core import Core
 from core.models import PersistentModel, User
 from django.db import models
@@ -15,7 +15,7 @@ decimal_places = 3
 
 class HourRegistration(PersistentModel):
     date = models.DateTimeField()
-    order = models.ForeignKey(Order, blank=True)
+    order = models.ForeignKey('orders.Order', blank=True)
     time_start = models.CharField(max_length=max_digits, null=True, blank=True, default="")
     time_end = models.CharField(max_length=max_digits, null=True, blank=True, default="")
     description = models.TextField(null=True, blank=True)

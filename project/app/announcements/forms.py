@@ -1,12 +1,9 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.forms import ModelForm
-from django import forms
-from django.contrib.admin import widgets                                       
-
-from models import *
+from app.announcements.models import Announcement
 
 class AnnouncementForm(ModelForm):
     class Meta:
         model = Announcement
-        fields = ("title","text","attachment",)
+        fields = ("title", "text", "attachment",)
         #exclude = ('deleted', 'date_created', 'date_edited', 'owner','creator','editor','company')

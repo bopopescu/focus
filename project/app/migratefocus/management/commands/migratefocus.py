@@ -175,19 +175,21 @@ class Command(BaseCommand):
         for cu in cursor.fetchall():
             u = Customer()
             u.cid = cu['kundenr']
-            u.full_name = cu['kundenavn'].decode('latin1')
+            u.name = cu['kundenavn'].decode('latin1')
             u.email = cu['epostadresse'].decode('latin1')
             u.phone = cu['telefon'].decode('latin1')
 
             #Visit and delivery
             u.address = cu['leveringsadresse'].decode('latin1')
-            u.area_code = cu['levpostnr'].decode('latin1')
+            u.zip = cu['levpostnr'].decode('latin1')
 
             #Invoice
-            u.invoice_address = cu['faktadresse'].decode('latin1')
-            u.invoice_area_code = cu['faktpostnr'].decode('latin1')
-
-            u.save()
+            try:
+                u.invoice_address = cu['faktadresse'].decode('latin1')
+                u.invoice_zip = cu['faktpostnr'].decode('latin1')
+                u.save()
+            except:
+                print "ERROR on %s " % u.cid
 
             customers.append((u, cu['kundenr']))
 
@@ -388,10 +390,9 @@ class Command(BaseCommand):
 
         self.migrate_customers(cursor, contacts)
 
+        #SKIP
         #self.migrate_projects(company, cursor, users, contacts)
-
         #orders = self.migrate_orders(company, cursor, users)
-
         #self.migrate_timetracking(cursor, users, orders)
 
         #Set test user again

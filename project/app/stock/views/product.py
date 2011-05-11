@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
 from django.shortcuts import get_object_or_404, redirect, render
-from core.shortcuts import *
+from core import Core
 from core.decorators import require_permission
 from core.utils import suggest_ajax_parse_arguments
 from core.views import  update_timeout

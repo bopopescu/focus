@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from app.projects.models import Project
-from core.shortcuts import *
-from core.decorators import *
+from core.decorators import login_required, require_permission
 from core.views import  update_timeout
 from app.stock.forms import UnitsForSizesForm
 from app.stock.models import UnitsForSizes
 from django.utils import simplejson
-from django.utils.translation import ugettext as _
 
 @login_required()
 def overview(request):
@@ -16,16 +14,20 @@ def overview(request):
     units = UnitsForSizes.objects.all()
     return render(request, 'stock/productUnits/list.html', {'title': 'Enheter', 'units': units})
 
+
 @login_required()
 def add(request):
     return form(request)
 
+
 def edit(request, id):
     return form(request, id)
+
 
 def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)
+
 
 @require_permission("CREATE", UnitsForSizes)
 def add_ajax(request):
@@ -46,6 +48,7 @@ def add_ajax(request):
                                               'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")
+
 
 @login_required()
 def form (request, id=False):

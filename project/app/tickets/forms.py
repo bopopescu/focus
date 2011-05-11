@@ -34,8 +34,7 @@ class EditTicketForm(ModelForm):
         model = Ticket
         fields = (
         'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
-        'spent_time', 'order'
-        ,)
+        'spent_time', 'order',)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
