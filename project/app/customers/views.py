@@ -34,7 +34,7 @@ def overview_all(request):
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
 
-    return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.full_name,
+    return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.name,
                                                                 'customer': customer})
 
 @require_permission("CREATE", Customer)
@@ -49,7 +49,7 @@ def add_ajax(request, id=None):
     if form.is_valid():
         a = form.save()
 
-        return HttpResponse(simplejson.dumps({'name': a.full_name,
+        return HttpResponse(simplejson.dumps({'name': a.name,
                                               'id': a.id,
                                               'valid': True}), mimetype='application/json')
     else:
@@ -80,7 +80,7 @@ def list_contacts(request, id):
 
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
     return render(request, 'customers/contacts.html',
-                               {'title': unicode(customer.full_name) + " " + _('contacts'),
+                               {'title': unicode(customer.name) + " " + _('contacts'),
                                 'form': form,
                                 'customer': customer})
 

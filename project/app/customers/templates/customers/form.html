@@ -1,6 +1,141 @@
-{% extends "form.html" %}
+{% extends "base.html" %}
 {% load auth %}
-
+{% load i18n %}
 {% block sidebar %}
-   {% include "customers/sidebar.html" %}
+    {% include "customers/sidebar.html" %}
+{% endblock %}
+
+
+{% block maincontent %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            inputField = $('#id_zip');
+            inputField_invoice = $('#id_invoice_zip');
+
+            $('#id_zip').parent().find("span").append("<span style='padding-left:90px;' id='postal'></span>");
+            $('#id_invoice_zip').parent().find("span").append("<span style='padding-left:90px;' id='postal_invoice'></span>");
+
+            outputElement = $("#postal")
+            outputElement_invoice = $("#postal_invoice")
+
+            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField.val() + '&callback=?',
+                    function(data) {
+                        outputElement.text(data.result);
+                    });
+
+            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField_invoice.val() + '&callback=?',
+                    function(data) {
+                        outputElement_invoice.text(data.result);
+                    });
+
+
+            inputField.keyup(function() {
+                if (inputField.val().length == 4) {
+                    $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField.val() + '&callback=?',
+                            function(data) {
+                                outputElement.text(data.result);
+                            });
+                }
+                else {
+                    outputElement.text('');
+                }
+            });
+            inputField_invoice.keyup(function() {
+                if (inputField.val().length == 4) {
+                    $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField_invoice.val() + '&callback=?',
+                            function(data) {
+                                outputElement_invoice.text(data.result);
+                            });
+                }
+                else {
+                    outputElement_invoice.text('');
+                }
+            });
+        });
+    </script>
+
+    {% if form.errors %}
+
+        <div class="information" id="message">
+
+            <p>Fix before submit again</p>
+
+        </div>
+
+        <div class="information" id="message">
+
+            <p>Fix before submit again</p>
+
+        </div>
+
+        {% for i in form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+    {% endif %}
+    <br><br>
+
+    <div style="width:905px;">
+        <form enctype="multipart/form-data" class="form label-inline" method="post">
+
+            <h1>{% trans "Customer" %}</h1>
+
+            <div class="fieldWrapper">
+                <span {% if form.cid.errors %}style="color:red;" {% endif %}>{{ form.cid.label }} </span>
+                <br>{{ form.cid }}
+            </div>
+
+            <div class="fieldWrapper">
+                <span {% if form.name.errors %}style="color:red;" {% endif %}>{{ form.name.label }} </span>
+                <br>{{ form.name }}
+            </div>
+            <div class="fieldWrapper">
+                <span {% if form.email.errors %}style="color:red;" {% endif %}>{{ form.email.label }} </span>
+                <br>{{ form.email }}
+            </div>
+            <div class="fieldWrapper">
+                <span {% if form.phone.errors %}style="color:red;" {% endif %}>{{ form.phone.label }} </span>
+                <br>{{ form.phone }}
+            </div>
+            <div class="fieldWrapper">
+                <span {% if form.website.errors %}style="color:red;" {% endif %}>{{ form.website.label }} </span>
+                <br>{{ form.website }}
+            </div>
+
+
+            <h3>{% trans "Contact" %}</h3>
+
+            <div class="fieldWrapper">
+                <span {% if form.address.errors %}style="color:red;" {% endif %}>{{ form.address.label }} </span>
+                <br>{{ form.address }}
+            </div>
+
+            <div class="fieldWrapper">
+                <span {% if form.zip.errors %}style="color:red;" {% endif %}>{{ form.zip.label }} </span>
+                <br>{{ form.zip }}
+            </div>
+
+            <h3>{% trans "Invoice" %}</h3>
+
+            <div class="fieldWrapper">
+                <span {% if form.invoice_address.errors %}style="color:red;" {% endif %}>{{ form.invoice_address.label }} </span>
+                <br>{{ form.invoice_address }}
+            </div>
+
+            <div class="fieldWrapper">
+                <span {% if form.invoice_zip.errors %}style="color:red;" {% endif %}>{{ form.invoice_zip.label }} </span>
+                <br>{{ form.invoice_zip }}
+            </div>
+
+
+            <div>
+                <input type="submit" value="Lagre" class="btn" name="save"/>
+            </div>
+        </form>
+    </div>
+
 {% endblock %}

@@ -178,7 +178,7 @@ class Command(BaseCommand):
         for cu in cursor.fetchall():
             u = Customer()
             u.cid = cu['kundenr']
-            u.full_name = cu['kundenavn'].decode('latin1')
+            u.name = cu['kundenavn'].decode('latin1')
             u.email = cu['epostadresse'].decode('latin1')
             u.phone = cu['telefon'].decode('latin1')
 
@@ -187,13 +187,12 @@ class Command(BaseCommand):
             u.area_code = cu['levpostnr'].decode('latin1')
 
             #Invoice
-	    try:
-            	u.invoice_address = cu['faktadresse'].decode('latin1')
+            try:
+                u.invoice_address = cu['faktadresse'].decode('latin1')
                 u.invoice_area_code = cu['faktpostnr'].decode('latin1')
-		u.save()
-	    except:
-		print "ERROR on %s " % u.cid
-
+                u.save()
+            except:
+                print "ERROR on %s " % u.cid
 
             customers.append((u, cu['kundenr']))
 
@@ -217,7 +216,7 @@ class Command(BaseCommand):
             company.save()
 
             users.append((u, cu['brukerid']))
-            
+
         print "Done migrating users"
         return users
 
@@ -324,7 +323,7 @@ class Command(BaseCommand):
                 o.description = cu['beskrivelse_time'].decode("latin1")
             except:
                 pass
-            
+
             try:
                 o.save()
                 timetrackings.append(o)
@@ -400,7 +399,7 @@ class Command(BaseCommand):
         #orders = self.migrate_orders(company, cursor, users)
         #self.migrate_timetracking(cursor, users, orders)
 
-        
+
         #Set test user again
         Core.set_test_user(user)
 

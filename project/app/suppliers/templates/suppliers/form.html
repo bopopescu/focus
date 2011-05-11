@@ -1,4 +1,35 @@
 {% extends "form.html" %}
 {% block sidebar %}
     {% include "suppliers/sidebar.html" %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            inputField = $('#id_zip');
+
+
+            $('#id_zip').parent().find("span").append("<span style='padding-left:90px;' id='postal'></span>");
+
+            outputElement = $("#postal")
+
+            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField.val() + '&callback=?',
+                    function(data) {
+                        outputElement.text(data.result);
+                    });
+
+
+            inputField.keyup(function() {
+                if (inputField.val().length == 4) {
+                    $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField.val() + '&callback=?',
+                            function(data) {
+                                outputElement.text(data.result);
+                            });
+                }
+                else {
+                    outputElement.text('');
+                }
+            });
+        });
+    </script>
+
+
 {% endblock %}

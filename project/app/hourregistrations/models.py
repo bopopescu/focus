@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime, date
 from decimal import Decimal
 from app.customers.models import Customer
