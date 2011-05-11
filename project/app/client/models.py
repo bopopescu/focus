@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from app.orders.models import Offer, Order
+from app.orders.models import Order, Offer
 from app.tickets.models import Ticket
 from core.models import PersistentModel
 from django.db import models
