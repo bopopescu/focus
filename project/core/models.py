@@ -66,7 +66,7 @@ class PersistentModel(models.Model):
         super(PersistentModel, self).save()
 
         #Clear cache
-        cache_key = "%s_%s" % (Core.current_user().id,self.__class__.__name__)
+        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
         cache.delete(cache_key)
 
         #GRANT PERMISSIONS
@@ -225,7 +225,7 @@ def initial_data ():
 
     a, created = User.all_objects.get_or_create(username="superadmin",
                                                 first_name="SuperAdmin",
-                                                last_name="",)
+                                                last_name="", )
 
     a.company = comp
     a.is_superuser = True

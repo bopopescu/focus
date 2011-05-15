@@ -14,7 +14,7 @@ from core.auth.user.models import User
 from core.auth.group.models import Group
 from core.auth.log.models import Log, Notification
 from django.shortcuts import render, redirect
-
+from django.utils.translation import ugettext as _
 
 @require_permission("MANAGE", Company)
 def overview(request):
@@ -30,7 +30,7 @@ def add(request):
     return newForm(request)
 
 
-@require_permission("MANAGE", Company, 'id')
+@require_permission("EDIT", Company, 'id')
 def edit(request, id):
     return form(request, id)
 
@@ -38,10 +38,10 @@ def edit(request, id):
 def form (request, id=False):
     if id:
         instance = Company.objects.all().get(id=id)
-        msg = "Velykket endret kunde"
+        msg = _("Successful edit")
     else:
         instance = Company()
-        msg = "Velykket lagt til ny kunde"
+        msg = _("Successful add")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -53,7 +53,7 @@ def form (request, id=False):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(edit, id)
     else:
         form = CompanyForm(instance=instance)
 
@@ -110,7 +110,6 @@ def createNewCustomer(data):
     admin_group.grant_role("Admin", User)
     admin_group.grant_role("Admin", Ticket)
     admin_group.grant_role("Admin", Group)
-    admin_group.grant_permissions("MANAGE", Company)
 
     #Give employee group some permissions on classes
     all_employees_group.grant_role("Member", Project)
