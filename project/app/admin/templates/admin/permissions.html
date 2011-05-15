@@ -14,24 +14,69 @@
 
     <h1>{{ title }}</h1>
 
+
+    {% if form.errors %}
+
+        <div class="information" id="message">
+
+            <p>Fix before submit again</p>
+
+        </div>
+
+        {% for i in form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+    {% endif %}
+
+    <div style="width:805px;">
+        <form enctype="multipart/form-data" class="form label-inline" method="post">
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.label }}
+                    <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                    <br>{{ field }}
+                </div>
+            {% endfor %}
+            <div>
+                <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
+
+                <div id="loading">Loading...</div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
+
     {% regroup permissions by get_content_type_display as Permissions %}
     <table style="text-align:center">
         <tr>
             <th></th>
             <th>{% trans "Object" %}</th>
+            <th>{% trans "Type" %}</th>
             <th>{% trans "Permissions" %}</th>
             <th>{% trans "Group" %}</th>
         </tr>
         {% for type in Permissions %}
-            <tr>
-                <td style="text-align:left;"><b>{{ type.grouper }}</b></td>
-                <td colspan=5></td>
-            </tr>
             {% for perm in type.list %}
                 <tr>
                     <td></td>
                     <td style="text-align:left;">{{ perm.id }} | <a
                             href='{{perm.get_object.get_view_url}}'>{{ perm.get_object }}</a>
+                    </td>
+                    <td>
+                        {{ perm.content_type }}
                     </td>
                     <td>
                         {% for action in perm.get_valid_actions %}

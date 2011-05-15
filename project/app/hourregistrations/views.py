@@ -5,7 +5,7 @@ from app.hourregistrations.forms import HourRegistrationForm
 from app.hourregistrations.models import HourRegistration
 from core import Core
 from core.auth.user.models import User
-from core.decorators import login_required
+from core.decorators import login_required, require_permission
 from datetime import datetime, date
 from django.utils import simplejson
 from django.utils.simplejson import JSONEncoder
@@ -41,14 +41,14 @@ def form(request):
     return HttpResponse("ERROR")
 
 
-@login_required()
+@require_permission("ADMINISTRATE", HourRegistration)
 def list_all_employees(request):
     persons = User.objects.filter_current_company()
 
     return render(request, 'hourregistrations/list_persons.html', {'persons': persons})
 
 
-@login_required()
+@require_permission("LIST", HourRegistration)
 def calendar_day_json(request, year, month, day):
     date = datetime.strptime("%s-%s-%s" % (year, month, day), "%Y-%m-%d")
 
@@ -68,7 +68,7 @@ def calendar_day_json(request, year, month, day):
     return HttpResponse(JSONEncoder().encode(registrations), mimetype='application/json')
 
 
-@login_required()
+@require_permission("LIST", HourRegistration)
 def calendar_json(request, year, month):
     year = int(year)
     month = int(month)
@@ -107,25 +107,26 @@ def calendar_json(request, year, month):
     return HttpResponse(JSONEncoder().encode(temp_cal), mimetype='application/json')
 
 
-@login_required()
+@require_permission("LIST", HourRegistration)
 def date_valid_for_edit(request, year, month, day):
     response = Core.current_user().can_edit_hour_date("%s.%s.%s" % (day, month, year))
     return HttpResponse(JSONEncoder().encode(response), mimetype='application/json')
 
 
-@login_required()
+@require_permission("LIST", HourRegistration)
 def calendar_today(request):
     form = HourRegistrationForm()
     return render(request, "hourregistrations/calendar.html", {"form": form})
 
 
-@login_required()
+@require_permission("LIST", HourRegistration)
 def calendar_can_edit_form(request):
     reg = HourRegistration.objects.get()
     print Core.current_user()
 
 ########ARCHIVE#############
 
+@require_permission("ADMINISTRATE", HourRegistration)
 def view_archived_month(request, year, month, user_id=None):
     year = int(year)
     month = int(month)
@@ -143,6 +144,7 @@ def view_archived_month(request, year, month, user_id=None):
     return list_hour_registrations(request, user, from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y"))
 
 
+@require_permission("ADMINISTRATE", HourRegistration)
 def list_hour_registrations(request, user, from_date, to_date):
     HourRegistrations = user.get_permitted_objects("VIEW", HourRegistration).filter(creator=user)
 
@@ -194,14 +196,15 @@ def list_hour_registrations(request, user, from_date, to_date):
                    'sumKilometers': round(sumKilometers, 2)})
 
 
+@require_permission("LIST", HourRegistration)
 def your_archive(request):
     return archive(request)
 
-
+@require_permission("ADMINISTRATE", HourRegistration)
 def user_archive(request, user_id):
     return archive(request, user_id)
 
-
+@require_permission("ADMINISTRATE", HourRegistration)
 def archive(request, user_id=None):
     year_with_months = {}
 

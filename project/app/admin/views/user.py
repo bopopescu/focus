@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.translation import ugettext as _
-from app.admin.forms import HourRegistrationManuallyForm, UserForm
+from app.admin.forms import HourRegistrationManuallyForm, UserForm, PermissionForm
 from core import Core
 from core.decorators import login_required, require_permission
 from core.views import update_timeout
@@ -10,37 +10,29 @@ from core.mail import send_mail
 from core.auth.user.models import User
 from core.auth.permission.models import Permission
 
-@login_required()
+@require_permission("MANAGE", User)
 def overview(request):
     update_timeout(request)
     Users = User.objects.filter_current_company()
     return render(request, 'admin/users/list.html', {'title': _("Users"), 'users': Users})
 
 
-@login_required()
-def grant_permissions(request):
-    Users = User.objects.all()
-    Permissions = Permission.objects.all()
-    return render(request, 'admin/users/grant_permssions.html',
-                  {'title': _("Users"), 'users': Users, 'permissions': Permissions})
-
-
-@login_required()
+@require_permission("CREATE", User)
 def add(request):
     return form(request)
 
 
-@login_required()
+@require_permission("EDIT", User, "id")
 def edit(request, id):
     return form(request, id)
 
 
-@login_required()
+@require_permission("EDIT", User, "id")
 def editProfile(request):
     pass
 
 
-@login_required()
+@require_permission("EDIT", User, "id")
 def changeCanLogin(request, id):
     u = User.objects.get(id=id)
 
@@ -78,17 +70,15 @@ def generate_new_password_for_user(user):
     return ret
 
 
-@login_required()
+@require_permission("EDIT", User, "id")
 def send_generated_password_to_user(request, id):
     user = get_object_or_404(User, id=id, company=Core.current_user().get_company())
-
-    ret = generate_new_password_for_user(user)
-
+    generate_new_password_for_user(user)
     request.message_success(_("Successfully sent new password"))
-
     return redirect(view, id)
 
 
+@require_permission("VIEW", User, "id")
 def history(request, id):
     user = User.objects.get(id=id)
     history = user.logs.all()
@@ -97,7 +87,7 @@ def history(request, id):
                                               'logs': history[::-1][0:150]})
 
 
-@login_required()
+@require_permission("VIEW", User, "id")
 def view(request, id):
     user = User.objects.get(id=id)
 
@@ -106,13 +96,16 @@ def view(request, id):
                                                      })
 
 
-@login_required()
+@require_permission("EDIT", User, "id")
 def permissions(request, id):
     user = User.objects.get(id=id)
-    Permissions = user.get_permissions()
+    Permissions = user.get_permissions().order_by("content_type","object_id")
+
+    permission_form = PermissionForm()
 
     return render(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
                                                       'userCard': user,
+                                                      'form': permission_form,
                                                       'permissions': Permissions,
                                                       })
 
@@ -132,12 +125,13 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'admin/users/trash.html', {'title': _("Confirm delete"),
-                                                        'userCard': instance,
-                                                        'can_be_deleted': instance.can_be_deleted()[0],
-                                                        'reasons': instance.can_be_deleted()[1],
-                                                        })
+                                                          'userCard': instance,
+                                                          'can_be_deleted': instance.can_be_deleted()[0],
+                                                          'reasons': instance.can_be_deleted()[1],
+                                                          })
 
-@login_required()
+
+@require_permission("EDIT", User, "id")
 def set_hourregistration_limits (request, id):
     instance = get_object_or_404(User, id=id)
     msg = _("User successfully edited")
@@ -162,7 +156,6 @@ def set_hourregistration_limits (request, id):
                                                      'userCard': instance,
                                                      'form': form})
 
-
 @login_required()
 def form (request, id=False):
     if id:
@@ -185,19 +178,19 @@ def form (request, id=False):
             o.save()
             form.save_m2m()
 
+            #Sets company to current_user company
             if not o.get_company():
                 o.set_company()
 
             if new:
                 #send new generated password to the new user
-                send_generated_password_to_user(request, o.id)
+                generate_new_password_for_user(o)
 
                 #Add the new user to allemployee group of the company
                 if Core.current_user().get_company_allemployeesgroup():
                     Core.current_user().get_company_allemployeesgroup().add_member(o)
 
             request.message_success(msg)
-
             #Redirects after save for direct editing
             return redirect(overview)
 

@@ -24,11 +24,13 @@ def overview(request):
     return render(request, 'company/list.html', {'title': 'Firmaer',
                                                  'companies': companies})
 
+
 @require_permission("MANAGE", Company)
 def add(request):
     return newForm(request)
 
-@require_permission("MANAGE", Company)
+
+@require_permission("MANAGE", Company, 'id')
 def edit(request, id):
     return form(request, id)
 
@@ -57,6 +59,7 @@ def form (request, id=False):
 
     return render(request, "company/form.html", {'title': 'Kunde', 'form': form})
 
+
 def createNewCustomer(data):
     admin_group = Group(name=data['admin_group'])
     admin_group.save_without_permissions()
@@ -69,7 +72,6 @@ def createNewCustomer(data):
     company.email_host = data['email_host']
     company.email_password = data['email_password']
     company.email_username = data['email_username']
-
     company.save()
 
     #Create the admin user
@@ -79,17 +81,21 @@ def createNewCustomer(data):
     user.save()
 
     #Manually give permission to the admin group
-    admin_group.grant_permissions("ALL", admin_group)
-    admin_group.grant_permissions("ALL", all_employees_group)
+    admin_group.grant_role("Admin", admin_group)
+    admin_group.grant_role("Admin", all_employees_group)
 
     #Add admin user to admin group
     admin_group.add_member(user)
+    admin_group.grant_role("Admin", user)
 
     #Set the company fields on groups
     admin_group.company = company
     admin_group.save()
     all_employees_group.company = company
     all_employees_group.save()
+
+    #Set permssion for admin_group on company
+    admin_group.grant_permissions("EDIT", company)
 
     #Give admin group all permissions on classes
     admin_group.grant_role("Admin", Project)
@@ -104,7 +110,7 @@ def createNewCustomer(data):
     admin_group.grant_role("Admin", User)
     admin_group.grant_role("Admin", Ticket)
     admin_group.grant_role("Admin", Group)
-    admin_group.grant_permissions("CONFIGURE", Company)
+    admin_group.grant_permissions("MANAGE", Company)
 
     #Give employee group some permissions on classes
     all_employees_group.grant_role("Member", Project)
@@ -123,6 +129,7 @@ def createNewCustomer(data):
     all_employees_group.grant_permissions("CREATE", Contact)
 
     return company, user
+
 
 @require_permission("MANAGE", Company)
 def newForm(request):
