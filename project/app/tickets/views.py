@@ -35,7 +35,6 @@ def view(request, id):
                                                  'updates': updates
     })
 
-
 @require_permission("DELETE", Ticket, "id")
 def trash(request, id):
     ticket = Ticket.objects.get(id=id)
@@ -55,7 +54,6 @@ def trash(request, id):
                                                       'reasons': ticket.can_be_deleted()[1],
                                                       })
 
-
 @require_permission("CREATE", Ticket)
 def add(request):
     return form(request)
@@ -72,7 +70,7 @@ def method_name(old_ticket, ticket_form):
     return ticket
 
 
-@require_permission("EDIT", Ticket, "id")
+@require_permission("CREATE", Ticket)
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
 
