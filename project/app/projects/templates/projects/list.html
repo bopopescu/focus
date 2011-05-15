@@ -37,7 +37,7 @@
                 <td><a href="{% url app.projects.views.project.view p.id %}">{{ p }}</a></td>
                 <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
                 <td>{{ p.responsible }}</td>
-                  </tr>
+            </tr>
         {% endfor %}
         </tbody>
     </table>

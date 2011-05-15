@@ -29,9 +29,9 @@ def archive(request):
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
-    offer = Order.all_objects.get(id=id)
-    return render(request, "orders/view.html", {'title': offer.title,
-                                                'order': offer})
+    order = Order.all_objects.get(id=id)
+    return render(request, "orders/view.html", {'title': order.title,
+                                                'order': order})
 
 
 def preview_order_html(request, id):
@@ -103,7 +103,7 @@ def form(request, id=None):
             o.save()
             o.update_products(products)
 
-            request.message_success(_("Successfully saved offer"))
+            request.message_success(_("Successfully saved order"))
 
             return redirect(view, o.id)
     else:

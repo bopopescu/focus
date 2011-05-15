@@ -16,31 +16,35 @@ def overview(request):
     customers = Core.current_user().get_permitted_objects("VIEW", Customer).filter(trashed=False)
 
     return render(request, 'customers/list.html', {'title': _('Customers'),
-                                                                'customers': customers})
+                                                   'customers': customers})
+
 
 @require_permission("LISTDELETED", Customer)
 def overview_trashed(request):
     customers = Customer.all_objects.filter(trashed=True, company=Core.current_user().get_company())
     return render(request, 'customers/list.html', {'title': _('Deleted customers'),
-                                                                'customers': customers})
+                                                   'customers': customers})
+
 
 @require_permission("LISTALL", Customer)
 def overview_all(request):
     customers = Customer.objects.all()
     return render(request, 'customers/list.html', {'title': _("All active customers"),
-                                                                'customers': customers})
+                                                   'customers': customers})
+
 
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
 
     return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.name,
-                                                                'customer': customer})
+                                                   'customer': customer})
+
 
 @require_permission("CREATE", Customer)
 def add_ajax(request, id=None):
     customer = Customer()
-    
+
     if id:
         customer = Customer.objects.filter_current_company().get(id=id)
 
@@ -60,6 +64,7 @@ def add_ajax(request, id=None):
 
     return HttpResponse("ERROR")
 
+
 @require_permission("EDIT", Customer, "id")
 def history(request, id):
     instance = get_object_or_404(Customer, id=id, deleted=False)
@@ -68,8 +73,9 @@ def history(request, id):
                                  object_id=instance.id)
 
     return render(request, 'customers/log.html', {'title': _("Latest events"),
-                                                               'customer': instance,
-                                                               'logs': history[::-1][0:150]})
+                                                  'customer': instance,
+                                                  'logs': history[::-1][0:150]})
+
 
 @require_permission("VIEW", Customer, "id")
 def list_contacts(request, id):
@@ -80,9 +86,10 @@ def list_contacts(request, id):
 
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
     return render(request, 'customers/contacts.html',
-                               {'title': unicode(customer.name) + " " + _('contacts'),
-                                'form': form,
-                                'customer': customer})
+                  {'title': unicode(customer.name) + " " + _('contacts'),
+                   'form': form,
+                   'customer': customer})
+
 
 @require_permission("CREATE", Customer)
 def add(request):
@@ -92,6 +99,7 @@ def add(request):
 @require_permission("EDIT", Customer, "id")
 def edit(request, id):
     return form(request, id)
+
 
 @require_permission("DELETE", Customer, "id")
 def trash(request, id):
@@ -108,17 +116,25 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'customers/trash.html', {'title': _("Confirm delete"),
-                                                                     'customer': customer,
-                                                                     'can_be_deleted': customer.can_be_deleted()[0],
-                                                                     'reasons': customer.can_be_deleted()[1],
-                                                                     })
+                                                        'customer': customer,
+                                                        'can_be_deleted': customer.can_be_deleted()[0],
+                                                        'reasons': customer.can_be_deleted()[1],
+                                                        })
+
 
 @require_permission("DELETE", Customer, "id")
-def recover(request, id):
-    c = Customer.objects.get(id=id)
-    c.recover()
+def restore(request, id):
+    customer = Customer.objects.get(id=id)
 
-    return redirect(overview)
+    if request.method == "POST":
+        request.message_success("Successfully restored this customer")
+        customer.restore()
+        return redirect(view, customer.id)
+    else:
+        return render(request, 'customers/restore.html', {'title': _("Confirm restore"),
+                                                          'customer': customer,
+                                                          })
+
 
 @login_required()
 def form (request, id=False):

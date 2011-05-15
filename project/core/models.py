@@ -97,7 +97,7 @@ class PersistentModel(models.Model):
         self.trashed = True
         super(PersistentModel, self).save()
 
-    def recover(self, *args, **kwargs):
+    def restore(self, *args, **kwargs):
         self.trashed = False
         super(PersistentModel, self).save()
 
