@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.cache import cache
 from core import Core
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
@@ -64,9 +65,11 @@ class PersistentModel(models.Model):
         changes = createTuple(self)
         super(PersistentModel, self).save()
 
-        """
-        GRANT PERMISSIONS
-        """
+        #Clear cache
+        cache_key = "%s_%s" % (Core.current_user().id,self.__class__.__name__)
+        cache.delete(cache_key)
+
+        #GRANT PERMISSIONS
         if action == "ADD":
             Core.current_user().grant_role("Admin", self)
             admin_group = Core.current_user().get_company_admingroup()

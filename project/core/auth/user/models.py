@@ -382,11 +382,11 @@ class User(models.Model):
         tree = {}
         permitted = []
 
-        cache_key = "%s_%s_%s" % (self.id, model.__name__, action_string)
-        cache_key = cache_key.upper()
 
-        if cache.get(cache_key):
-            permitted = cache.get(cache_key)
+        cache_key = "%s_%s" % (self.id, model.__name__)
+
+        if cache.get(cache_key) and action_string in cache.get(cache_key):
+            permitted = cache.get(cache_key)["%s"%action_string]
         else:
             permissions = self.get_permissions(content_type)
             for perm in permissions:
@@ -408,7 +408,7 @@ class User(models.Model):
                 elif action in tree[node]:
                     permitted.append(node)
 
-            cache.set(cache_key, permitted, 1200)
+            cache.set(cache_key, {'%s'%action_string: permitted}, 1200)
 
         result = model.objects.filter(id__in=permitted)
         return result
