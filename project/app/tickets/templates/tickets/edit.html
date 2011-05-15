@@ -122,6 +122,15 @@
                             </td>
                         </tr>
 
+                        <tr>
+                            <td>
+                                <span {% if ticket_form.attachment.errors %}style="color:red;" {% endif %}>
+                                    {{ ticket_form.attachment.label }} </span> <br />
+                                {{ ticket_form.attachment }}
+                            </td>
+                        </tr>
+
+
 
                     </table>
                 </div>
