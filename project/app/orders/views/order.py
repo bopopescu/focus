@@ -76,8 +76,10 @@ def form(request, id=None):
     if id:
         instance = get_object_or_404(Order, id=id)
         products.extend(instance.product_lines.all())
+        order_number = instance.order_number
     else:
         instance = Order()
+        order_number = Order.calculate_next_order_number()
 
     if request.method == "POST":
         form = OrderForm(request.POST, instance=instance)
@@ -107,7 +109,7 @@ def form(request, id=None):
 
             return redirect(view, o.id)
     else:
-        form = OrderForm(instance=instance)
+        form = OrderForm(instance=instance, initial={'order_number': order_number})
 
     return render(request, "orders/form.html", {'form': form,
                                                 'order': instance,

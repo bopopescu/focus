@@ -8,9 +8,12 @@
 
 {% block maincontent %}
 
-    <h1>{% trans "Update Ticket" %}</h1>
+    <h1>{% trans "Update Ticket" %}: {{ ticket.title }}</h1>
     <br>
-    <br>
+
+    {{ ticket.description }}
+
+    <br><br><br>
 
     {% if ticket_form.errors %}
 

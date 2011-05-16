@@ -86,8 +86,10 @@ def form(request, id=None):
     if id:
         instance = get_object_or_404(Offer, id=id)
         products.extend(instance.product_lines.all())
+        offer_number = instance.offer_number
     else:
         instance = Offer()
+        offer_number = Offer.calculate_next_offer_number()
 
     if request.method == "POST":
         form = OfferForm(request.POST, instance=instance)
@@ -117,7 +119,7 @@ def form(request, id=None):
 
             return redirect(view, o.id)
     else:
-        form = OfferForm(instance=instance)
+        form = OfferForm(instance=instance, initial={'offer_number':offer_number})
 
     return render(request, "offers/form.html", {'form': form,
                                                 'offer': instance,

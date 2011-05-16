@@ -144,9 +144,11 @@ def form (request, id=False):
     if id:
         instance = get_object_or_404(Product, id=id, deleted=False)
         msg = _("Successfully edited product")
+        pid = instance.pid
     else:
         instance = Product()
-        msg = _("Successfully added product")
+        instance.pid = Product.calculate_next_pid()
+        pid =  Product.calculate_next_pid()
 
     #Save and set to active, require valid form
     if request.method == 'POST':

@@ -19,61 +19,70 @@
 
 
 
-        <div class="ticket_info">
+    <div class="ticket_info">
 
-        <h2> {% trans "Ticket" %}  #{{ ticket.id }} - {{ ticket.title }}</h2>
+        <h2> {% trans "Ticket" %} #{{ ticket.id }} - {{ ticket.title }}</h2>
 
-            <div class="ticket_details">
-                <p class="ticket_author">{% trans "Added by" %} {{ ticket.creator }} <br />
+        <div class="ticket_details">
+            <p class="ticket_author">{% trans "Added by" %} {{ ticket.creator }} <br/>
                 {% trans "Last updated" %} {{ ticket.date_edited|date:"d.m.Y H.i" }}</p>
-    
-                <table class="ticket_attributes">
-                    <tr>
-                        <th>{% trans "status" %}</th> <td> {{ ticket.status }}</td>
-                        <th>{% trans "created" %}</th> <td> {{ ticket.date_created|date:"d.m.Y H.i" }}</td>
-                    </tr>
-                    <tr>
-                        <th>{% trans "priority" %}</th> <td> {{ ticket.priority }}</td>
-                        <th>{% trans "estimated time" %}</th> <td>{{ ticket.estimated_time }}</td>
-                    </tr>
-                    <tr>
-                        <th>{% trans "assigned to" %}</th> <td>{{ ticket.assigned_to }}</td>
-                        <th>{% trans "spent time" %}</th> <td>{{ ticket.spent_time }}</td>
-                    </tr>
-                    <tr>
-                        <th>{% trans "customer" %}</th> <td>
+
+            <table class="ticket_attributes">
+                <tr>
+                    <th>{% trans "status" %}</th>
+                    <td> {{ ticket.status }}</td>
+                    <th>{% trans "created" %}</th>
+                    <td> {{ ticket.date_created|date:"d.m.Y H.i" }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "priority" %}</th>
+                    <td> {{ ticket.priority }}</td>
+                    <th>{% trans "estimated time" %}</th>
+                    <td>{{ ticket.estimated_time }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "assigned to" %}</th>
+                    <td>{{ ticket.assigned_to }}</td>
+                    <th>{% trans "spent time" %}</th>
+                    <td>{{ ticket.spent_time }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "customer" %}</th>
+                    <td>
 
                         {% if ticket.customer %}
-                        <a href="{% url app.customers.views.view ticket.customer.id %}">{{ ticket.customer }}</a>
+                            <a href="{% url app.customers.views.view ticket.customer.id %}">{{ ticket.customer }}</a>
                         {% endif %}
 
                     </td>
-                    </tr>
+                </tr>
 
-                </table>
+            </table>
 
-                <div>
-                    <p><b>{% trans "Description" %}</b></p>
-                    <p class="ticket_description">{{ ticket.description|linebreaks }}</p>
-                </div>
+            <div>
+                <p><b>{% trans "Description" %}</b></p>
 
-                {% if ticket.attachment %}
-                <div>
-                    <p><b>{% trans "Attachment" %}</b></p>
-                        <a href="{{ ticket.get_attachment_url }}">
-                        <img src="{{ STATIC_URL }}img/download.png" style="width:30px; height:30px; vertical-align:middle;">
-                        {{ ticket.get_attachment_name }}</a>
-                </div>
-                {% endif %}
+                <p class="ticket_description">{{ ticket.description|linebreaks }}</p>
             </div>
 
+            {% if ticket.attachment %}
+                <div>
+                    <p><b>{% trans "Attachment" %}</b></p>
+                    <a target="_blank" href="{{ ticket.get_attachment_url }}">
+                        <img src="{{ STATIC_URL }}img/download.png"
+                             style="width:30px; height:30px; vertical-align:middle;">
+                        {{ ticket.get_attachment_name }}</a>
+                </div>
+            {% endif %}
         </div>
 
+    </div>
 
 
-        <h2>{% trans "History" %}</h2>
 
-        <table>
+    <h2>{% trans "History" %}</h2>
+
+    <table>
         {% for update in updates %}
 
             <tr>
@@ -84,33 +93,34 @@
                     <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
 
                     <p>
-                        {%  if update.update_lines.all %}
-                        <b>{% trans "Changes: " %}</b>
-                        <ul>
-                            {% for line in update.update_lines.all %}
-                            <li>{{ line.change }}</li>
-                            {% endfor %}
-                        </ul>
+                        {% if update.update_lines.all %}
+                            <b>{% trans "Changes: " %}</b>
+                            <ul>
+                                {% for line in update.update_lines.all %}
+                                    <li>{{ line.change }}</li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
                     </p>
                     {% if update.comment %}
-                    <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
+                        <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
                     {% endif %}
 
                     {% if update.attachment %}
                         <p>
-                        <b>{% trans "New Attachment:" %}</b>
-                            <a href="{{ update.get_attachment_url }}">
-                            <img src="{{ STATIC_URL }}img/download.png" style="width:30px; height:30px; vertical-align:middle;">
-                            {{ update.get_attachment_name }}</a>
+                            <b>{% trans "New Attachment:" %}</b>
+                            <a target="_blank" href="{{ update.get_attachment_url }}">
+                                <img src="{{ STATIC_URL }}img/download.png"
+                                     style="width:30px; height:30px; vertical-align:middle;">
+                                {{ update.get_attachment_name }}</a>
                         </p>
                     {% endif %}
 
 
                 </td>
             </tr>
-       {% endfor %}
-        </table>
-        
+        {% endfor %}
+    </table>
+
 
 {% endblock %}

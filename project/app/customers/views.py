@@ -142,10 +142,12 @@ def form (request, id=False):
         instance = Customer.objects.all().get(id=id)
         msg = _("Successfully edited customer")
         title = _("Edit customer")
+        cid = instance.cid
     else:
         instance = Customer()
         msg = _("Successfully added new customer")
         title = _("New custmer")
+        cid = Customer.calculate_next_cid()
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -159,6 +161,6 @@ def form (request, id=False):
 
             return redirect(view, o.id)
     else:
-        form = CustomerForm(instance=instance)
+        form = CustomerForm(instance=instance, initial={'cid':cid})
 
     return render(request, "customers/form.html", {'title': title, 'customer': instance, 'form': form})

@@ -19,14 +19,11 @@ def view(request, id):
     return render(request, "invoices/view.html", {'title': invoice.title,
                                                   'invoice': invoice})
 
-
 def add(request):
     return form(request)
 
-
 def edit(request, id):
     return form(request, id)
-
 
 def form(request, id=None):
     products = []
@@ -34,8 +31,11 @@ def form(request, id=None):
     if id:
         instance = get_object_or_404(Invoice, id=id)
         products.extend(instance.product_lines.all())
+        invoice_number = instance.invoice_number
+
     else:
         instance = Invoice()
+        invoice_number = Invoice.calculate_next_invoice_number()
 
     if request.method == "POST":
         form = InvoiceForm(request.POST, instance=instance)
@@ -66,7 +66,7 @@ def form(request, id=None):
 
             return redirect(view, o.id)
     else:
-        form = InvoiceForm(instance=instance)
+        form = InvoiceForm(instance=instance, initial={'invoice_number':invoice_number})
 
     return render(request, "orders/form.html", {'form': form,
                                                 'invoice': instance,
