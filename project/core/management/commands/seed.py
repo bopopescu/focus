@@ -21,6 +21,7 @@ class Command(BaseCommand):
                                           "Focus Security AS" + randomCompanyIdentifier)
 
         self.company = company
+        self.user = user
 
         Core.set_test_user(user)
         generate_new_password_for_user(user)
@@ -39,7 +40,7 @@ class Command(BaseCommand):
 
     def seed_customers(self):
         print "customers"
-        for i in range(1, 25):
+        for i in range(1, 12):
             Customer.objects.get_or_create(name="Customer %s" % i, company=self.company, cid=i)
 
     def seed_tickets(self):
@@ -48,17 +49,19 @@ class Command(BaseCommand):
         type, created = TicketType.objects.get_or_create(name="Type")
 
         print "tickets"
-        for i in range(1, 25):
-            Ticket.objects.get_or_create(title="Ticket %s" % i, type=type, company=self.company, priority=priority, status=status)
+        for i in range(1, 12):
+            ticket, created = Ticket.objects.get_or_create(title="Ticket %s" % i, type=type, company = self.company, priority=priority, status=status)
+            ticket.set_user(Core.current_user())
+            ticket.save()
 
     def seed_projects(self):
         print "projects"
-        for i in range(1, 25):
+        for i in range(1, 12):
             Project.objects.get_or_create(project_name="Project %s" % i, company=self.company, pid=i)
 
     def seed_orders(self):
         print "orders"
-        for i in range(1, 25):
+        for i in range(1, 12):
             order, created = Order.objects.get_or_create(title="Order %s" % i, order_number=i, company=self.company)
 
             if i % 3 == 0:
@@ -67,22 +70,22 @@ class Command(BaseCommand):
 
     def seed_offers(self):
         print "offers"
-        for i in range(1, 25):
+        for i in range(1, 12):
             Offer.objects.get_or_create(title="Offer %s" % i, offer_number=i, company=self.company)
 
     def seed_contacts(self):
         print "contacts"
-        for i in range(1, 25):
+        for i in range(1, 12):
             Contact.objects.get_or_create(name="Contact %s" % i, company=self.company)
 
     def seed_suppliers(self):
         print "suppliers"
-        for i in range(1, 25):
+        for i in range(1, 12):
             Supplier.objects.get_or_create(name="Supplier %s" % i, company=self.company)
 
     def seed_products(self):
         print "suppliers"
         price_val, created = Currency.objects.get_or_create(name="Norsk krone")
 
-        for i in range(1, 25):
+        for i in range(1, 12):
             Product.objects.get_or_create(name="Supplier %s" % i, company=self.company, priceVal=price_val)
