@@ -114,11 +114,13 @@ def form (request, id=False):
         instance = get_object_or_404(Project, id=id, deleted=False)
         title = _("Edit project")
         msg = "Vellykket endret prosjekt"
+        pid = instance.pid
     else:
         instance = Project()
         msg = "Vellykket lagt til nytt prosjekt"
         title = _("New project")
-
+        pid = Project.calculate_next_pid()
+        
     #Save and set to active, require valid form
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=instance)
@@ -131,6 +133,6 @@ def form (request, id=False):
             return redirect(view, o.id)
 
     else:
-        form = ProjectForm(instance=instance)
+        form = ProjectForm(instance=instance, initial={'pid':pid})
 
     return render(request, "projects/form.html", {'title': title, 'project': instance, 'form': form})

@@ -13,6 +13,7 @@ from core.widgets import get_hexdigest, check_password
 from core.auth.company.models import Company
 from core.auth.permission.models import Permission, Action, Role
 from django.utils.translation import ugettext as _
+from django.core import urlresolvers
 import time
 import os
 
@@ -72,6 +73,9 @@ class User(models.Model):
             return (True, "OK")
 
         return (False, reasons)
+
+    def get_view_url(self):
+        return urlresolvers.reverse('app.admin.views.user.view', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
         action = "EDIT"
@@ -314,7 +318,6 @@ class User(models.Model):
 
         content_type = ContentType.objects.get_for_model(object)
 
-
         if settings.DEBUG and Core.current_user().is_superuser:
             return True
 
@@ -371,8 +374,6 @@ class User(models.Model):
 
     def get_permitted_objects(self, action, model):
         content_type = ContentType.objects.get_for_model(model)
-        permissions = self.get_permissions(content_type)
-
         action_string = action
 
         action = Action.objects.get(name=action)
@@ -381,9 +382,13 @@ class User(models.Model):
         tree = {}
         permitted = []
 
-        if cache.get(self.id) and model.__name__ + action_string in cache.get(self.id):
-            permitted = cache.get(self.id)[model.__name__ + action_string]
+
+        cache_key = "%s_%s" % (self.id, model.__name__)
+
+        if cache.get(cache_key) and action_string in cache.get(cache_key):
+            permitted = cache.get(cache_key)["%s"%action_string]
         else:
+            permissions = self.get_permissions(content_type)
             for perm in permissions:
                 if not perm.object_id in tree:
                     tree[perm.object_id] = []
@@ -403,10 +408,9 @@ class User(models.Model):
                 elif action in tree[node]:
                     permitted.append(node)
 
-            cache.set(self.id, {model.__name__ + action_string: permitted}, 1200)
+            cache.set(cache_key, {'%s'%action_string: permitted}, 1200)
 
         result = model.objects.filter(id__in=permitted)
-
         return result
 
 class AnonymousUser(User):
@@ -416,8 +420,6 @@ class AnonymousUser(User):
     class Meta:
         proxy = True
 
-    # This is probably an ugly hack...
-    # but it got it working with django 1.2, anyway, its just for testing
     class State:
         db = "default"
 

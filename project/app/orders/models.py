@@ -4,8 +4,9 @@ from django.db import models
 from app.orders.managers import OrderArchivedManager, OrderManager
 from app.projects.models import Project
 from app.customers.models import Customer
-from core.models import User, PersistentModel
+from core.models import  PersistentModel
 from django.utils.translation import ugettext as _
+from django.db.models.aggregates import Max
 
 class ProductLine(models.Model):
     product = models.ForeignKey('stock.Product', related_name="product_lines", null=True, blank=True, default=None)
@@ -63,10 +64,22 @@ class Invoice(OrderBase):
     invoice_number = models.IntegerField()
     order = models.ForeignKey('Order', related_name="invoices")
 
+    @staticmethod
+    def calculate_next_invoice_number():
+        next = (Invoice.objects.filter_current_company().aggregate(Max("invoice_number"))['invoice_number__max'])
+        if next:
+            return next+1
+        return 1
 
 class Offer(OrderBase):
     offer_number = models.IntegerField()
 
+    @staticmethod
+    def calculate_next_offer_number():
+        next = (Offer.objects.filter_current_company().aggregate(Max("offer_number"))['offer_number__max'])
+        if next:
+            return next+1
+        return 1
 
 class Order(OrderBase):
     order_number = models.IntegerField()
@@ -76,6 +89,14 @@ class Order(OrderBase):
     objects = OrderManager()
     archived_objects = OrderArchivedManager()
     all_objects = models.Manager()
+
+    @staticmethod
+    def calculate_next_order_number():
+       next = (Order.objects.filter_current_company().aggregate(Max("order_number"))['order_number__max'])
+       if next:
+           return next+1
+       return 1
+
 
     def get_view_url(self):
         return urlresolvers.reverse('app.orders.views.view', args=("%s" % self.id,))

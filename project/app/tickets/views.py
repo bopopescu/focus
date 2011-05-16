@@ -28,7 +28,6 @@ def overview_trashed(request):
     print "trashed"
     return render(request, 'tickets/list.html', {"title": "Tickets", "trashed_tickets": True})
 
-
 @require_permission("VIEW", Ticket, "id")
 def view(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
@@ -38,7 +37,6 @@ def view(request, id):
                                                  'ticket': ticket,
                                                  'updates': updates
     })
-
 
 @require_permission("DELETE", Ticket, "id")
 def trash(request, id):
@@ -59,13 +57,23 @@ def trash(request, id):
                                                       'reasons': ticket.can_be_deleted()[1],
                                                       })
 
-
 @require_permission("CREATE", Ticket)
 def add(request):
     return form(request)
 
 
-@require_permission("EDIT", Ticket, "id")
+def method_name(old_ticket, ticket_form):
+    ticket, ticket_update = ticket_form.save(commit=False)
+    ticket.set_user(Core.current_user())
+    ticket_update.user = ticket.user
+    ticket.save()
+    ticket_update.save()
+    differences = Ticket.find_differences(ticket, old_ticket)
+    ticket_update.create_update_lines(differences)
+    return ticket
+
+
+@require_permission("CREATE", Ticket)
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
 
@@ -74,13 +82,8 @@ def edit(request, id):
         ticket_form = EditTicketForm(request.POST, request.FILES, instance=ticket)
 
         if ticket_form.is_valid():
-            ticket, ticket_update = ticket_form.save(commit=False)
-            ticket.set_user(Core.current_user())
-            ticket_update.user = ticket.user
-            ticket.save()
-            ticket_update.save()
-            differences = Ticket.find_differences(ticket, old_ticket)
-            ticket_update.create_update_lines(differences)
+            ticket = method_name(old_ticket, ticket_form)
+
             request.message_success(_("Ticket updated"))
 
             return redirect(view, ticket.id)

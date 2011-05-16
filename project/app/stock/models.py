@@ -2,14 +2,13 @@
 import os
 
 from django.db import models
-from django.db.models.query_utils import Q
 from core.models import PersistentModel
 from app.suppliers.models import Supplier
 from django.core import urlresolvers
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.translation import ugettext as _
-from core.utils import get_class
+from django.db.models.aggregates import Max
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -89,6 +88,10 @@ class Product(PersistentModel):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def calculate_next_pid():
+        return Product.objects.filter_current_company().count()+1
+
     def can_be_deleted(self):
         can_be_deleted = True
         reasons = []
@@ -125,6 +128,7 @@ class Product(PersistentModel):
         orders = cls.objects.filter(id__in=orderIDs)
         return orders
 
+
 class ProductFile(PersistentModel):
     product = models.ForeignKey(Product, related_name="files")
     name = models.CharField(max_length=200)
@@ -144,4 +148,4 @@ def initial_data ():
     Currency.objects.get_or_create(name="US Dollar", iso="USD")
     Currency.objects.get_or_create(name="Euro", iso="EUR")
 
-from app.stock.forms import ProductGroupForm, UnitsForSizesForm, CurrencyForm
+from app.stock.forms import UnitsForSizesForm, ProductGroupForm, CurrencyForm

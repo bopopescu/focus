@@ -3,6 +3,7 @@
 from django.forms.models import ModelForm
 from django import forms
 from django.utils.translation import ugettext as _
+from core.auth.permission.models import Permission
 from core.auth.user.models import User
 from core.auth.group.models import Group
 from core.widgets import DatePickerField
@@ -12,6 +13,10 @@ class UserForm(ModelForm):
         model = User
         fields = ("username", "first_name", "last_name", "email")
 
+class PermissionForm(ModelForm):
+    class Meta:
+        model = Permission
+        fields = ("content_type", "object_id", "role", "from_date","to_date")
 
 class HourRegistrationManuallyForm(ModelForm):
     class Meta:

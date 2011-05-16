@@ -10,9 +10,9 @@ urlpatterns = patterns('app.admin.views',
                        url(r'^user/(?P<id>\d+)/permissions/$', 'user.permissions'),
                        url(r'^user/(?P<id>\d+)/trash/$', 'user.trash'),
                        url(r'^user/(?P<id>\d+)/history/$', 'user.history'),
-                       url(r'^user/(?P<id>\d+)/changeCanLogin/$', 'user.changeCanLogin'),
-                       url(r'^user/(?P<id>\d+)/sendNewPassword/', 'user.send_generated_password_to_user'),
-                       url(r'^user/(?P<id>\d+)/manualSetTime/$', 'user.set_hourregistration_limits'),
+                       url(r'^user/(?P<id>\d+)/change_can_login/$', 'user.changeCanLogin'),
+                       url(r'^user/(?P<id>\d+)/send_new_password/', 'user.send_generated_password_to_user'),
+                       url(r'^user/(?P<id>\d+)/set_time/$', 'user.set_hourregistration_limits'),
 
                        #Group
                        url(r'^groups/$', 'group.overview'),
@@ -24,12 +24,8 @@ urlpatterns = patterns('app.admin.views',
                        url(r'^group/(?P<id>\d+)/view/$', 'group.view'),
                        url(r'^group/(?P<id>\d+)/delete/$', 'group.delete'),
 
-                       #Company
-                       url(r'^company/', 'company.edit_company'),
-
                        #Profle
                        url(r'^profile/edit/$', 'profile.edit'),
                        url(r'^profile/password/$', 'profile.change_password'),
                        url(r'^profile/image/$', 'profile.change_profile_image'),
                        )
-

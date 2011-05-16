@@ -22,7 +22,7 @@
     {% trans "E-mail" %}: {{ userCard.email }}
 
     <br>
-    {% trans "Company" %}: {{ userCard.get_profile.company }}
+    {% trans "Company" %}: {{ userCard.get_company }}
 
     <br><br>
     <a href="{% url app.admin.views.user.changeCanLogin userCard.id %}">{% trans "Permission to log in" %}:

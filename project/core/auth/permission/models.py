@@ -70,4 +70,8 @@ class Permission(models.Model):
         return []
 
     def get_object(self):
+
+        if not self.object_id:
+            return "any"
+
         return self.content_type.get_object_for_this_type(id=self.object_id)

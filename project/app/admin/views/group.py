@@ -12,7 +12,7 @@ from core.auth.group.models import Group
 def overview(request):
     update_timeout(request)
 
-    groups = Core.current_user().get_permitted_objects("VIEW", Group)
+    groups = Group.objects.filter_current_company()
     return render(request, 'admin/groups/list.html', {'title': _("Groups"), 'groups': groups})
 
 
@@ -50,13 +50,12 @@ def remove_user_from_group(request, group_id, user_id):
 
     return redirect(members, group_id)
 
+
 @login_required()
 def members(request, id):
-
     group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
-    
+
     if request.method == 'POST':
-        
         form = AddMemberToGroupForm(request.POST)
 
         if form.is_valid():
@@ -68,9 +67,10 @@ def members(request, id):
     addMemberToGroupForm.fields['user'].queryset = User.objects.filter_current_company()
 
     return render(request, 'admin/groups/members.html', {'title': _("Groups"),
-                                                      'group': group,
-                                                      'form':addMemberToGroupForm
-                                                      })
+                                                         'group': group,
+                                                         'form': addMemberToGroupForm
+    })
+
 
 @login_required()
 def delete(request, id):
@@ -79,6 +79,7 @@ def delete(request, id):
 
     request.message_success(_("Successfully deleted group"))
     return redirect(overview)
+
 
 @login_required()
 def form (request, id=False):

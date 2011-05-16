@@ -9,6 +9,7 @@ from django.core import urlresolvers
 from datetime import timedelta, datetime
 import time
 from django.utils.translation import ugettext as _
+from django.db.models import Max
 
 class Project(PersistentModel):
     pid = models.IntegerField(_("Project number"), null=True)
@@ -26,6 +27,14 @@ class Project(PersistentModel):
     def __unicode__(self):
         return self.project_name
 
+    @staticmethod
+    def calculate_next_pid():
+        projects = Project.objects.filter_current_company()
+        max_pid = (projects.aggregate(Max("pid"))['pid__max'])
+        if max_pid:
+            return max_pid+1
+        return 1
+    
     def can_be_deleted(self):
         can_be_deleted = True
         reasons = []

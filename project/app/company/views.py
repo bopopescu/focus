@@ -14,7 +14,7 @@ from core.auth.user.models import User
 from core.auth.group.models import Group
 from core.auth.log.models import Log, Notification
 from django.shortcuts import render, redirect
-
+from django.utils.translation import ugettext as _
 
 @require_permission("MANAGE", Company)
 def overview(request):
@@ -24,11 +24,13 @@ def overview(request):
     return render(request, 'company/list.html', {'title': 'Firmaer',
                                                  'companies': companies})
 
+
 @require_permission("MANAGE", Company)
 def add(request):
     return newForm(request)
 
-@require_permission("MANAGE", Company)
+
+@require_permission("EDIT", Company, 'id')
 def edit(request, id):
     return form(request, id)
 
@@ -36,10 +38,10 @@ def edit(request, id):
 def form (request, id=False):
     if id:
         instance = Company.objects.all().get(id=id)
-        msg = "Velykket endret kunde"
+        msg = _("Successful edit")
     else:
         instance = Company()
-        msg = "Velykket lagt til ny kunde"
+        msg = _("Successful add")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -51,11 +53,12 @@ def form (request, id=False):
             form.save_m2m()
             request.message_success(msg)
 
-            return redirect(overview)
+            return redirect(edit, id)
     else:
         form = CompanyForm(instance=instance)
 
     return render(request, "company/form.html", {'title': 'Kunde', 'form': form})
+
 
 def createNewCustomer(data):
     admin_group = Group(name=data['admin_group'])
@@ -69,7 +72,6 @@ def createNewCustomer(data):
     company.email_host = data['email_host']
     company.email_password = data['email_password']
     company.email_username = data['email_username']
-
     company.save()
 
     #Create the admin user
@@ -79,17 +81,21 @@ def createNewCustomer(data):
     user.save()
 
     #Manually give permission to the admin group
-    admin_group.grant_permissions("ALL", admin_group)
-    admin_group.grant_permissions("ALL", all_employees_group)
+    admin_group.grant_role("Admin", admin_group)
+    admin_group.grant_role("Admin", all_employees_group)
 
     #Add admin user to admin group
     admin_group.add_member(user)
+    admin_group.grant_role("Admin", user)
 
     #Set the company fields on groups
     admin_group.company = company
     admin_group.save()
     all_employees_group.company = company
     all_employees_group.save()
+
+    #Set permssion for admin_group on company
+    admin_group.grant_permissions("EDIT", company)
 
     #Give admin group all permissions on classes
     admin_group.grant_role("Admin", Project)
@@ -104,7 +110,6 @@ def createNewCustomer(data):
     admin_group.grant_role("Admin", User)
     admin_group.grant_role("Admin", Ticket)
     admin_group.grant_role("Admin", Group)
-    admin_group.grant_permissions("CONFIGURE", Company)
 
     #Give employee group some permissions on classes
     all_employees_group.grant_role("Member", Project)
@@ -123,6 +128,7 @@ def createNewCustomer(data):
     all_employees_group.grant_permissions("CREATE", Contact)
 
     return company, user
+
 
 @require_permission("MANAGE", Company)
 def newForm(request):
