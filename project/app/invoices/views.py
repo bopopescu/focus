@@ -10,7 +10,7 @@ from core.decorators import require_permission
 def overview(request):
     offers = Core.current_user().get_permitted_objects("VIEW", Invoice).filter(trashed=False)
     return render(request, "invoices/overview.html", {'title': _('Invoices'),
-                                                      'offers': offers})
+                                                      'invoices': offers})
 
 
 @require_permission("VIEW", Invoice, "id")
