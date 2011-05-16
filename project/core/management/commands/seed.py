@@ -46,7 +46,7 @@ class Command(BaseCommand):
     def seed_tickets(self):
         status, created = TicketStatus.objects.get_or_create(name="standard", order_priority=1)
         priority, created = TicketPriority.objects.get_or_create(name="standard")
-        type, created = TicketType.objects.get_or_create(name="Type")
+        type, created = TicketType.objects.get_or_create(name="Type", company=self.company)
 
         print "tickets"
         for i in range(1, 12):

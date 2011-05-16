@@ -68,6 +68,7 @@ def add(request):
 
 def method_name(old_ticket, ticket_form):
     ticket, ticket_update = ticket_form.save(commit=False)
+
     ticket.set_user(Core.current_user())
     ticket_update.user = ticket.user
     ticket.save()
