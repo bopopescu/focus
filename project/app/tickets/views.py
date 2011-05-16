@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from django.conf import settings
+from app.client.models import ClientUser
 from app.tickets.models import Ticket, TicketUpdate, TicketType
 from core import Core
 from core.decorators import require_permission
@@ -8,6 +11,7 @@ from django.utils.translation import ugettext as _
 from django.utils import simplejson
 from django.http import HttpResponse
 import copy
+from core.mail import send_mail
 
 @require_permission("LIST", Ticket)
 def overview(request):
@@ -142,3 +146,33 @@ def add_ticket_type_ajax(request, id=None):
         return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')
 
+
+
+def client_management(request, id):
+    ticket = Ticket.objects.get(id=id)
+
+    if request.method == "POST":
+        email_address = request.POST['email_address']
+        client, created = ClientUser.objects.get_or_create(email=email_address)
+
+        client.tickets.add(ticket)
+        client.save() # not needed?
+
+        if created:
+            password = client.generate_password()
+            client.set_password(password)
+            client.save()
+            password_text = "Bruk din epostadresse og passord: %s" % password
+
+        else:
+            password_text = "Bruk din epostadresse og passord fra tidligere. Du kan også be om å få tilsendt nytt."
+
+        message = """
+        Hei. Du har fått tilgang til å følge en sak hos oss. Logg inn på %s for å se detaljer.
+
+        %s
+
+        """ % (settings.CLIENT_LOGIN_SITE, password_text)
+        send_mail("Nytt tilbud", message, settings.NO_REPLY_EMAIL, [email_address])
+
+    return render(request, "tickets/client_management.html", {'ticket': ticket})

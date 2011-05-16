@@ -92,6 +92,7 @@
                 status = $(this).attr("class")
                 getTickets(0, 0);
                 restoreDefaultType();
+                return false;
             });
 
             $("#overview_links a").click(function() {
@@ -99,6 +100,7 @@
                 status = $(this).attr("class");
                 getTickets(0, 0);
                 restoreDefaultType();
+                return false;
             });
 
             $("#trashed").click(function() {
@@ -106,6 +108,7 @@
                 status = 0;
                 getTickets(0, 1);
                 restoreDefaultType();
+                return false;
             })
 
             function restoreDefaultType() {
