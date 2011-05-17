@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect, HttpResponse, render
-from app.admin.forms import GroupForm, AddMemberToGroupForm
+from app.admin.forms import GroupForm, AddMemberToGroupForm, PermissionForm
 from core import Core
+from core.auth.permission.models import Permission
 from core.auth.user.models import User
 from core.decorators import login_required
 from core.views import update_timeout
@@ -34,11 +35,32 @@ def view(request, id):
 
 
 @login_required()
+def delete_permission(request, id, permission_id):
+    group = Group.objects.get(id=id)
+    perm = group.get_permissions().filter(id=permission_id)
+    perm.delete()
+    return redirect(permissions, id)
+
+
+@login_required()
 def permissions(request, id):
     group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
 
+     #Save and set to active, require valid form
+    if request.method == 'POST':
+        permission_form = PermissionForm(request.POST, instance=Permission())
+        if permission_form.is_valid():
+            perm = permission_form.save(commit=False)
+            perm.group = group
+            perm.save()
+
+    else:
+        permission_form = PermissionForm(instance=Permission())
+
     return render(request, 'admin/permissions.html', {'title': _("Groups"),
                                                       'group': group,
+                                                      'form': permission_form,                                                      
+                                                      'permissions': group.get_permissions(),
                                                       })
 
 

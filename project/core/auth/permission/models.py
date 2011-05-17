@@ -37,7 +37,7 @@ class Role(models.Model):
 
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
-    object_id = models.PositiveIntegerField()
+    object_id = models.PositiveIntegerField(default=0)
     user = models.ForeignKey('user.User', blank=True, null=True, related_name="permissions")
     group = models.ForeignKey('group.Group', blank=True, null=True, related_name='permissions')
     role = models.ForeignKey(Role, blank=True, null=True, related_name="permissions")
@@ -47,6 +47,8 @@ class Permission(models.Model):
     negative = models.BooleanField()
     from_date = models.DateTimeField(null=True, blank=True)
     to_date = models.DateTimeField(null=True, blank=True)
+
+
 
     def get_actions(self):
         actions = []

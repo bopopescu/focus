@@ -32,6 +32,7 @@ def overview_trashed(request):
     print "trashed"
     return render(request, 'tickets/list.html', {"title": "Tickets", "trashed_tickets": True})
 
+
 @require_permission("VIEW", Ticket, "id")
 def view(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
@@ -41,6 +42,7 @@ def view(request, id):
                                                  'ticket': ticket,
                                                  'updates': updates
     })
+
 
 @require_permission("DELETE", Ticket, "id")
 def trash(request, id):
@@ -60,6 +62,7 @@ def trash(request, id):
                                                       'can_be_deleted': ticket.can_be_deleted()[0],
                                                       'reasons': ticket.can_be_deleted()[1],
                                                       })
+
 
 @require_permission("CREATE", Ticket)
 def add(request):
@@ -147,7 +150,6 @@ def add_ticket_type_ajax(request, id=None):
                                               'valid': False}), mimetype='application/json')
 
 
-
 @require_permission("CREATE", Ticket)
 def ajax_change_update_visibility(request):
     if request.is_ajax() and request.method == 'POST':
@@ -159,8 +161,8 @@ def ajax_change_update_visibility(request):
             update.public = False
         update.save()
 
-        return HttpResponse(simplejson.dumps({'visible' : update.public}))
-    
+        return HttpResponse(simplejson.dumps({'visible': update.public}))
+
     return HttpResponse(status=400)
 
 
@@ -192,7 +194,3 @@ def client_management(request, id):
         send_mail("Nytt tilbud", message, settings.NO_REPLY_EMAIL, [email_address])
 
     return render(request, "tickets/client_management.html", {'ticket': ticket})
-
-
-
-

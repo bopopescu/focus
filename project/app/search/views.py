@@ -17,7 +17,7 @@ def search(request):
     searchIn[Customer] = ["name", 'email', 'address', 'phone']
     searchIn[Project] = ["project_name", 'pid', 'responsible__first_name']
     searchIn[Contact] = ["name", "email", 'address', 'phone']
-    searchIn[Order] = ["order_name", "customer__full_name", 'project__project_name', 'description']
+    searchIn[Order] = ["title", "customer__name", 'project__project_name', 'description']
     searchIn[Supplier] = ["name"]
     searchIn[Product] = ['name', 'description', 'productGroup__name']
     searchIn[Announcement] = ["title", "text"]
@@ -36,6 +36,7 @@ def search(request):
                     result[s] = 1
 
     result = sorted(result.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)
+
     v = []
     for i in result:
         v.append(i[0])

@@ -41,7 +41,7 @@ def form(request):
     return HttpResponse("ERROR")
 
 
-@require_permission("MANAGE", HourRegistration)
+@require_permission("CONFIGURE", HourRegistration)
 def list_all_employees(request):
     persons = User.objects.filter_current_company()
 
@@ -146,7 +146,7 @@ def view_archived_month(request, year, month, user_id=None):
 
 @require_permission("MANAGE", HourRegistration)
 def list_hour_registrations(request, user, from_date, to_date):
-    HourRegistrations = user.get_permitted_objects("VIEW", HourRegistration).filter(creator=user)
+    HourRegistrations = HourRegistration.objects.filter(creator=user)
 
     unwanted = []
 
@@ -195,11 +195,9 @@ def list_hour_registrations(request, user, from_date, to_date):
                    'sumDisbursements': round(sumDisbursements, 2),
                    'sumKilometers': round(sumKilometers, 2)})
 
-
 @require_permission("LIST", HourRegistration)
 def your_archive(request):
     return archive(request)
-
 
 @require_permission("MANAGE", HourRegistration)
 def user_archive(request, user_id):
@@ -215,7 +213,7 @@ def archive(request, user_id=None):
     if user_id:
         user = User.objects.get(id=user_id)
 
-    HourRegistrations = user.get_permitted_objects("VIEW", HourRegistration).filter(creator=user)
+    HourRegistrations = HourRegistration.objects.filter(creator=user)
 
     for time in HourRegistrations:
         year_with_months[time.date.year] = set([])

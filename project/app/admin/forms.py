@@ -32,7 +32,6 @@ class HourRegistrationManuallyForm(ModelForm):
         self.fields['validEditHourRegistrationsFromDate'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['validEditHourRegistrationsFromDate'].input_formats = ["%d.%m.%Y"]
 
-
 class GroupForm(ModelForm):
     class Meta:
         model = Group

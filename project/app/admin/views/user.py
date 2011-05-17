@@ -97,18 +97,33 @@ def view(request, id):
 
 
 @require_permission("EDIT", User, "id")
+def delete_permission(request, id, permission_id):
+    user = User.objects.get(id=id)
+    perm = user.get_permissions().filter(id=permission_id)
+    perm.delete()
+    return redirect(permissions, id)
+
+@require_permission("EDIT", User, "id")
 def permissions(request, id):
     user = User.objects.get(id=id)
-    Permissions = user.get_permissions().order_by("content_type","object_id")
+    Permissions = user.get_permissions().order_by("group","content_type", "object_id")
 
-    permission_form = PermissionForm()
+    #Save and set to active, require valid form
+    if request.method == 'POST':
+        permission_form = PermissionForm(request.POST, instance=Permission())
+        if permission_form.is_valid():
+            perm = permission_form.save(commit=False)
+            perm.user = user
+            perm.save()
+            
+    else:
+        permission_form = PermissionForm(instance=Permission())
 
     return render(request, 'admin/permissions.html', {'title': _("Permissions for %s" % user),
                                                       'userCard': user,
                                                       'form': permission_form,
                                                       'permissions': Permissions,
                                                       })
-
 
 @require_permission("DELETE", User, "id")
 def trash(request, id):
@@ -155,6 +170,7 @@ def set_hourregistration_limits (request, id):
     return render(request, "admin/users/form.html", {'title': _("Change user"),
                                                      'userCard': instance,
                                                      'form': form})
+
 
 @login_required()
 def form (request, id=False):

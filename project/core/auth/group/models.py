@@ -86,13 +86,7 @@ class Group(models.Model):
 
 
     def get_permissions(self):
-        permissions = []
-        for p in Permission.objects.filter(group=self):
-            if not p in permissions:
-                permissions.append(p)
-
-        return permissions
-
+        return Permission.objects.filter(group = self)
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None

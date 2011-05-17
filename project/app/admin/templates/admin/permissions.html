@@ -65,8 +65,9 @@
             <th></th>
             <th>{% trans "Object" %}</th>
             <th>{% trans "Type" %}</th>
+            <th>{% trans "Role" %}</th>
             <th>{% trans "Permissions" %}</th>
-            <th>{% trans "Group" %}</th>
+            <th></th>
         </tr>
         {% for type in Permissions %}
             {% for perm in type.list %}
@@ -79,14 +80,27 @@
                         {{ perm.content_type }}
                     </td>
                     <td>
+                        {{ perm.role }}
+                    </td>
+                    <td>
                         {% for action in perm.get_valid_actions %}
                             {{ action }}
                         {% endfor %}
                     </td>
-                    <td>{% if perm.group %}
-                        {% trans "Through group" %} <a
-                                href="{% url app.admin.views.group.view perm.group.id %}">{{  perm.group }}</a>
-                    {% endif %}
+                    <td>
+                        {% if userCard %}
+                            {% if perm.group %}
+                                {% trans "Through group" %}
+                                <a href="{% url app.admin.views.group.view perm.group.id %}">{{ perm.group }}</a>
+                            {% else %}
+                                <a href="{% url app.admin.views.user.delete_permission perm.user.id perm.id %}">{% trans "Delete" %}</a>
+                            {% endif %}
+                        {% endif %}
+                        {% if group %}
+                            <a href="{% url app.admin.views.group.delete_permission perm.group.id perm.id %}">{% trans "Delete" %}</a>
+                        {% endif %}
+
+
                     </td>
                 </tr>
             {% endfor %}
