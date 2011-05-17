@@ -35,8 +35,6 @@ def form(request):
     else:
         errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-        print form.errors.items()
-
         return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')
 
