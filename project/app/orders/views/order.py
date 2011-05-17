@@ -15,33 +15,33 @@ def my_orders(request):
 
 @require_permission("VIEW", Order)
 def overview(request):
-    orders = Order.objects.all()
+    orders = Order.objects.filter_current_company()
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
 
 
 @require_permission("VIEW", Order)
 def archive(request):
-    orders = Order.archived_objects.all()
+    orders = Order.archived_objects.filter_current_company()
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
 
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
-    order = Order.all_objects.get(id=id)
+    order = Order.objects.filter_current_company().get(id=id)
     return render(request, "orders/view.html", {'title': order.title,
                                                 'order': order})
 
 
 def preview_order_html(request, id):
-    order = Order.objects.get(id=id)
+    order = Order.objects.filter_current_company().get(id=id)
     return render(request, "orders/pdf.html", {'order': order})
 
 
 @require_permission("VIEW", Order, "id")
 def create_invoice(request, id):
-    order = Order.objects.get(id=id)
+    order = Order.objects.filter_current_company().get(id=id)
 
     if request.method == "POST":
         #Create order based on offer

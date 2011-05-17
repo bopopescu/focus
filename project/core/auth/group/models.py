@@ -26,13 +26,15 @@ class Group(models.Model):
         self.members.add(user)
         self.save()
         #Invalidate cache for user
-        cache.delete(user.id)
+        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
+        cache.delete(cache_key)
 
     def remove_member(self, user):
         self.members.remove(user)
         self.save()
         #Invalidate cache for user
-        cache.delete(user.id)
+        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
+        cache.delete(cache_key)
 
     def grant_role(self, role, object):
         #Get info about the object

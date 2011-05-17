@@ -17,7 +17,6 @@
     var selected = null;
     var last_used_url_calendar = "";
     var timetracking_id = 0;
-
     var textbox;
 
     function set_title() {
@@ -189,11 +188,21 @@
         textbox.val("");
     }
 
+    function clean_form_errors() {
+        $("#error__for_order").html("");
+        $("#error__for_time_start").html("");
+        $("#error__for_time_end").html("");
+        $("#error__for_pause").html("");
+        $("#error__for_description").html("");
+        $("#error__for_hours_worked_in_form").html("");
+    }
+
     function calculate_hours_worked_in_form() {
 
         var hours_worked = 0;
         var time_start = $("#id_time_start").val();
         var time_end = $("#id_time_end").val();
+
 
         if (time_start.length == 5 && time_end.length == 5) {
 
@@ -204,6 +213,7 @@
                 return;
             }
         }
+
         $("#hours_worked_in_form").text(0 + " {% trans "hours" %}");
     }
 
@@ -230,10 +240,12 @@
 
         $("#id_time_start").change(function() {
             calculate_hours_worked_in_form();
-        });
+        })
+
         $("#id_time_end").change(function() {
             calculate_hours_worked_in_form();
         });
+
         $("#id_pause").change(function() {
             calculate_hours_worked_in_form();
         });
@@ -247,6 +259,7 @@
         });
 
         $("#cancel_edit").click(function() {
+            clean_form_errors();
             clean_form_and_id();
             show_div_form_new();
         });
@@ -265,11 +278,26 @@
                         type:"POST",
                         data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, pause:pause, description:description}),
                         success: function(data) {
-                            //Refresh calendar
+
+                            clean_form_errors()
+
+
+                            if (data.valid) {
+                                clean_form_and_id();
+                            } else {
+                                $.each(data['errors'], function(i, error) {
+                                    $("#error__for_" + i).text(error);
+                                });
+                            }
+
                             fill_table(last_used_url_calendar);
+                        },
+
+                        error: function(data) {
+                            $("#error__for_order").html("{% trans "Error occurred" %}");
                         }
+
                     });
-            clean_form_and_id();
         });
 
         $(".edit_hour_registration").live("click", function() {
@@ -319,7 +347,7 @@
         }
 
         #calender_list {
-            margin-top:430px;
+            margin-top: 430px;
             width: 100%;
         }
 

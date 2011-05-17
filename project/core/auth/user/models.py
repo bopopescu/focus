@@ -260,7 +260,8 @@ class User(models.Model):
         perm.save()
 
         #Invalidate cache for user
-        cache.delete(self.id)
+        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
+        cache.delete(cache_key)
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None
@@ -307,7 +308,8 @@ class User(models.Model):
         perm.save()
 
         #Invalidate cache for user
-        cache.delete(self.id)
+        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
+        cache.delete(cache_key)
 
         return perm
 

@@ -15,10 +15,10 @@ decimal_places = 3
 
 class HourRegistration(PersistentModel):
     date = models.DateTimeField()
-    order = models.ForeignKey('orders.Order', blank=True)
-    time_start = models.CharField(max_length=max_digits, null=True, blank=True, default="")
-    time_end = models.CharField(max_length=max_digits, null=True, blank=True, default="")
-    description = models.TextField(null=True, blank=True)
+    order = models.ForeignKey('orders.Order')
+    time_start = models.CharField(max_length=max_digits, null=True, default="")
+    time_end = models.CharField(max_length=max_digits, null=True, default="")
+    description = models.TextField(null=True, )
 
     pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.0"),
                                 blank=True)

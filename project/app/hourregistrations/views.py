@@ -30,18 +30,19 @@ def form(request):
         a.save()
 
         return HttpResponse(simplejson.dumps({'name': str(a.date),
-                                              'id': a.id,
                                               'valid': True}), mimetype='application/json')
+
     else:
         errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+
+        print form.errors.items()
 
         return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')
 
     return HttpResponse("ERROR")
 
-
-@require_permission("ADMINISTRATE", HourRegistration)
+@require_permission("MANAGE", HourRegistration)
 def list_all_employees(request):
     persons = User.objects.filter_current_company()
 
@@ -126,7 +127,7 @@ def calendar_can_edit_form(request):
 
 ########ARCHIVE#############
 
-@require_permission("ADMINISTRATE", HourRegistration)
+@require_permission("MANAGE", HourRegistration)
 def view_archived_month(request, year, month, user_id=None):
     year = int(year)
     month = int(month)
@@ -144,7 +145,7 @@ def view_archived_month(request, year, month, user_id=None):
     return list_hour_registrations(request, user, from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y"))
 
 
-@require_permission("ADMINISTRATE", HourRegistration)
+@require_permission("MANAGE", HourRegistration)
 def list_hour_registrations(request, user, from_date, to_date):
     HourRegistrations = user.get_permitted_objects("VIEW", HourRegistration).filter(creator=user)
 
@@ -200,11 +201,13 @@ def list_hour_registrations(request, user, from_date, to_date):
 def your_archive(request):
     return archive(request)
 
-@require_permission("ADMINISTRATE", HourRegistration)
+
+@require_permission("MANAGE", HourRegistration)
 def user_archive(request, user_id):
     return archive(request, user_id)
 
-@require_permission("ADMINISTRATE", HourRegistration)
+
+@require_permission("MANAGE", HourRegistration)
 def archive(request, user_id=None):
     year_with_months = {}
 

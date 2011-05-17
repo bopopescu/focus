@@ -20,3 +20,4 @@ class HourRegistrationForm(ModelForm):
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
+

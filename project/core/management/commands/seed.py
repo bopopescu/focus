@@ -50,7 +50,8 @@ class Command(BaseCommand):
 
         print "tickets"
         for i in range(1, 12):
-            ticket, created = Ticket.objects.get_or_create(title="Ticket %s" % i, type=type, company = self.company, priority=priority, status=status)
+            ticket, created = Ticket.objects.get_or_create(title="Ticket %s" % i, type=type, company=self.company,
+                                                           priority=priority, status=status)
             ticket.set_user(Core.current_user())
             ticket.save()
 
@@ -65,7 +66,9 @@ class Command(BaseCommand):
             order, created = Order.objects.get_or_create(title="Order %s" % i, order_number=i, company=self.company)
 
             if i % 3 == 0:
-                Invoice.objects.get_or_create(title="Invoice %s" % i, invoice_number=Invoice.calculate_next_invoice_number(), company=self.company,
+                Invoice.objects.get_or_create(title="Invoice %s" % i,
+                                              invoice_number=Invoice.calculate_next_invoice_number(),
+                                              company=self.company,
                                               order=order)
 
     def seed_offers(self):
