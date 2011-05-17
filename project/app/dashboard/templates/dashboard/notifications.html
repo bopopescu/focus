@@ -34,7 +34,13 @@
             <tr>
                 <td>{{ notification.log.date|date:"d.m.y H:i" }}</td>
                 <td><a href="{{ notification.get_object.get_view_url }}">{{ notification.get_object }}</a></td>
-                <td>{{ notification }}</td>
+                <td>
+                    <ul>
+                        {% for notification in notification.log.changed_since_last_time %}
+                            <li>{{ notification }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
         {% endfor %}
 

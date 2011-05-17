@@ -5,19 +5,12 @@ from app.announcements.models import Announcement
 from app.orders.models import Order
 from app.projects.models import Project
 from core.decorators import login_required, require_permission
-from core.models import Log, Notification
+from core.models import  Notification
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
-from core.utils import get_permission
-
-
-
-from django.conf import settings
-from django.template.loader import render_to_string
 
 @require_permission("LIST", Announcement)
 def overview(request):
-
     title = _("Welcome to TIME")
 
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
@@ -49,5 +42,4 @@ def notifications(request):
 
     return render(request, 'dashboard/notifications.html', {'title': _('Updates'),
                                                             'notifications': newNotifications,
-                                                            'oldNotifications': oldNotifications[::-1][
-                                                                                0:150]})
+                                                            'oldNotifications': oldNotifications})
