@@ -38,8 +38,6 @@ def form(request):
         return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')
 
-    return HttpResponse("ERROR")
-
 
 @require_permission("ADMINISTRATE", HourRegistration)
 def list_all_employees(request):

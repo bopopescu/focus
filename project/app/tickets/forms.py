@@ -29,6 +29,7 @@ class TicketForm(ModelForm):
 class EditTicketForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
     attachment = forms.FileField(label=_("Add Attachment"), required=False)
+    public = forms.BooleanField(label=_("Make comment public"), required=False)
 
     class Meta:
         model = Ticket
@@ -50,7 +51,8 @@ class EditTicketForm(ModelForm):
         ticket = super(EditTicketForm, self).save()
         ticket_update = TicketUpdate(ticket=ticket,
                                      comment=self.cleaned_data['comment'],
-                                     attachment=self.cleaned_data['attachment'])
+                                     attachment=self.cleaned_data['attachment'],
+                                     public=self.cleaned_data['public'])
         if kwargs.get('commit', False):
             ticket_update.save()
 

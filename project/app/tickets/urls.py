@@ -13,4 +13,5 @@ urlpatterns = patterns('app.tickets.views',
                        url(r'^(?P<id>\d+)/trash/$', 'trash'),
                        url(r'^add_type_ajax/$', 'add_ticket_type_ajax'),
                        url(r'^(?P<id>\d+)/client/$', 'client_management'),
+                       url(r'^visibility_update/$', 'ajax_change_update_visibility'),
                        )

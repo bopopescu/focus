@@ -68,7 +68,6 @@ def add(request):
 
 def method_name(old_ticket, ticket_form):
     ticket, ticket_update = ticket_form.save(commit=False)
-
     ticket.set_user(Core.current_user())
     ticket_update.user = ticket.user
     ticket.save()
@@ -149,6 +148,22 @@ def add_ticket_type_ajax(request, id=None):
 
 
 
+@require_permission("CREATE", Ticket)
+def ajax_change_update_visibility(request):
+    if request.is_ajax() and request.method == 'POST':
+        id = request.POST['id']
+        update = get_object_or_404(TicketUpdate, id=id)
+        if request.POST.get('visible', False) == '1':
+            update.public = True
+        else:
+            update.public = False
+        update.save()
+
+        return HttpResponse(simplejson.dumps({'visible' : update.public}))
+    
+    return HttpResponse(status=400)
+
+
 def client_management(request, id):
     ticket = Ticket.objects.get(id=id)
 
@@ -177,3 +192,7 @@ def client_management(request, id):
         send_mail("Nytt tilbud", message, settings.NO_REPLY_EMAIL, [email_address])
 
     return render(request, "tickets/client_management.html", {'ticket': ticket})
+
+
+
+

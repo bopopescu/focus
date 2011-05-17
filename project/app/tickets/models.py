@@ -224,6 +224,7 @@ class TicketUpdate(TicketBase):
     ticket = models.ForeignKey(Ticket, related_name="updates")
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
+    public = models.BooleanField(default=False, blank=True)
 
     def get_attachment_url(self):
         if self.attachment:

@@ -16,7 +16,14 @@
 
 {% block maincontent %}
 
-
+    <style type="text/css">
+        .visibility_form {
+            color: red;
+        }
+        .public_visibility {
+            color: green;
+        }
+    </style>
 
 
     <div class="ticket_info">
@@ -101,7 +108,9 @@
                                 {% endfor %}
                             </ul>
                         {% endif %}
+
                     </p>
+
                     {% if update.comment %}
                         <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
                     {% endif %}
@@ -116,11 +125,42 @@
                         </p>
                     {% endif %}
 
+                        <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
+                            <input type="hidden" value="{{ update.id }}" />
+                            {% trans "Public" %}<input type="checkbox" class="visibility_check"
+                                    {% if update.public %} checked="checked" {% endif %}/>
+                        </form>
+
 
                 </td>
             </tr>
         {% endfor %}
     </table>
+
+    <script type="text/javascript">
+
+        var visibility_update_url = "{% url app.tickets.views.ajax_change_update_visibility %}"
+        $(function() {
+            $(".visibility_check").change(function() {
+                $("body").css("cursor", "progress");
+                var update_id = $(this).prev("input").val();
+                var visible = $(this).attr("checked") ? 1 : 0;
+                var data = {id: update_id, visible: visible};
+                var parent_form = $(this).parent();
+                $.post(visibility_update_url, data,
+                    function(data) {
+                        var visible = data.visible;
+                        if (data.visible) {
+                            parent_form.addClass("public_visibility");
+                        }
+                        else {
+                            parent_form.removeClass("public_visibility");
+                        }
+                        $("body").css("cursor", "auto")
+                    }, "json" );
+            })
+        })
+    </script>
 
 
 {% endblock %}
