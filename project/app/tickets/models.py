@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from app.tickets.utils import send_assigned_mail
 from core import Core
 from core.auth.company.models import Company
 from core.auth.user.models import User
@@ -117,19 +118,32 @@ class Ticket(TicketBase):
         ordering = ['status', 'date_created']
 
     def save(self, **kwargs):
+        self.check_assigned_to();
         action = 'EDIT'
         if not self.id:
             action = 'ADD'
 
-        print "ticket"
         super(Ticket, self).save()
 
         if action == 'ADD':
+
             if self.company:
                 if self.company.admin_group:
                     self.company.admin_group.grant_role('Admin', self)
                 if self.company.all_employees_group:
                     self.company.all_employees_group.grant_role('Member', self)
+
+    def check_assigned_to(self):
+        try:
+            old = Ticket.objects.get(id=self.id).assigned_to
+        except Ticket.DoesNotExist:
+            old = False
+
+        if not old == self.assigned_to:
+            if self.assigned_to:
+                send_assigned_mail(self.assigned_to, self)
+            if old:
+                send_assigned_mail(old, self, assigned=False)
 
 
     def set_user(self, user):
@@ -210,6 +224,7 @@ class TicketUpdate(TicketBase):
     ticket = models.ForeignKey(Ticket, related_name="updates")
     comment = models.TextField()
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
+    public = models.BooleanField(default=False, blank=True)
 
     def get_attachment_url(self):
         if self.attachment:

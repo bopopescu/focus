@@ -40,6 +40,7 @@ def form(request):
 
     return HttpResponse("ERROR")
 
+
 @require_permission("MANAGE", HourRegistration)
 def list_all_employees(request):
     persons = User.objects.filter_current_company()

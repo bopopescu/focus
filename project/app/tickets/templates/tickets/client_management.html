@@ -1,23 +1,24 @@
+
 {% extends "base.html" %}
 {% load i18n %}
 
 {% block sidebar %}
-    {% include "offers/sidebar.html" %}
+    {% include "tickets/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
 
     <h1>{% trans "Client management" %}</h1>
 
-<b>{% trans "Send to new client" %}</b>
+<b>{% trans "Share with new client" %}</b>
 <form action="" method="POST">
     <input name="email_address">
     <input type="submit">
 </form>
 <br><br><br>
-    <h4>{% trans "Clients who have access to view this offer" %}</h4>
+    <h4>{% trans "Clients who have access to view this ticket" %}</h4>
     <table>
-        {% for client in offer.clients.all %}
+        {% for client in ticket.clients.all %}
             <tr>
                 <td>{{ client }}</td>
             </tr>

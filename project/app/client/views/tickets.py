@@ -22,7 +22,7 @@ def view(request, id):
 
     try:
         ticket = client.tickets.get(id=id)
-        updates = TicketUpdate.objects.filter(ticket=ticket).order_by("id")
+        updates = TicketUpdate.objects.filter(ticket=ticket).filter(public=True).order_by("id")
 
     except ClientUser.DoesNotExist:
         raise Http404

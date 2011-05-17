@@ -12,6 +12,11 @@
         <li><a class="{% active request "edit" %}" href="{% url app.tickets.views.edit ticket.id %}"><img
                 src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Mail"/>{% trans "UPDATE" %}</a></li>
 
+        <li><a class="{% active request "client" %}" href="{% url app.tickets.views.client_management ticket.id%}">
+                <img src="{{ STATIC_URL }}img/client.png" width="24" height="24" alt="Home"/>{% trans "CLIENTS" %}
+            </a>
+        </li>
+
         <li><a class="{% active request "trash" %}" href="{% url app.tickets.views.trash ticket.id %}"><img
                 src="{{ STATIC_URL }}img/delete.png" width="24" height="24" alt="Mail"/>{% trans "DELETE" %}</a></li>
     {% else %}
@@ -43,11 +48,16 @@
             </div>
         </li>
 
-        <li><a class="{% active request "new" %}" href="{% url app.tickets.views.add %}"><img
-                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW TICKET" %}</a></li>
+        <li>
+            <a class="{% active request "new" %}" href="{% url app.tickets.views.add %}"><img
+                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW TICKET" %}</a>
+        </li>
 
-        <li><a id="trashed" class="{% active request "trashed" %}" href="#"><img
-                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
+        <li>
+            <a id="trashed" class="{% active request "trashed" %}" href="{% url app.tickets.views.overview_trashed %}"><img
+                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a>
+        </li>
+
     {% endif %}
 </ul>
 

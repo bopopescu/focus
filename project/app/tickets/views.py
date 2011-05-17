@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from django.conf import settings
+from app.client.models import ClientUser
 from app.tickets.models import Ticket, TicketUpdate, TicketType
 from core import Core
 from core.decorators import require_permission
@@ -8,22 +11,26 @@ from django.utils.translation import ugettext as _
 from django.utils import simplejson
 from django.http import HttpResponse
 import copy
+from core.mail import send_mail
 
 @require_permission("LIST", Ticket)
 def overview(request):
+    print "overview"
     return render(request, 'tickets/list.html', {"title": "Tickets"})
 
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request, id=None, status_id=None):
+    print "assigned"
     if not id:
         id = Core.current_user().id
-    return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": id})
+    return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": True})
 
 
 @require_permission("LIST", Ticket)
 def overview_trashed(request):
-    return render(request, 'tickets/list.html', {"title": "Tickets", "trashed": True})
+    print "trashed"
+    return render(request, 'tickets/list.html', {"title": "Tickets", "trashed_tickets": True})
 
 @require_permission("VIEW", Ticket, "id")
 def view(request, id):
@@ -138,4 +145,54 @@ def add_ticket_type_ajax(request, id=None):
         errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
         return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')
+
+
+
+@require_permission("CREATE", Ticket)
+def ajax_change_update_visibility(request):
+    if request.is_ajax() and request.method == 'POST':
+        id = request.POST['id']
+        update = get_object_or_404(TicketUpdate, id=id)
+        if request.POST.get('visible', False) == '1':
+            update.public = True
+        else:
+            update.public = False
+        update.save()
+
+        return HttpResponse(simplejson.dumps({'visible' : update.public}))
+    
+    return HttpResponse(status=400)
+
+
+def client_management(request, id):
+    ticket = Ticket.objects.get(id=id)
+
+    if request.method == "POST":
+        email_address = request.POST['email_address']
+        client, created = ClientUser.objects.get_or_create(email=email_address)
+
+        client.tickets.add(ticket)
+        client.save() # not needed?
+
+        if created:
+            password = client.generate_password()
+            client.set_password(password)
+            client.save()
+            password_text = "Bruk din epostadresse og passord: %s" % password
+
+        else:
+            password_text = "Bruk din epostadresse og passord fra tidligere. Du kan også be om å få tilsendt nytt."
+
+        message = """
+        Hei. Du har fått tilgang til å følge en sak hos oss. Logg inn på %s for å se detaljer.
+
+        %s
+
+        """ % (settings.CLIENT_LOGIN_SITE, password_text)
+        send_mail("Nytt tilbud", message, settings.NO_REPLY_EMAIL, [email_address])
+
+    return render(request, "tickets/client_management.html", {'ticket': ticket})
+
+
+
 
