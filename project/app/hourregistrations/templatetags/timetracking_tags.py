@@ -155,34 +155,34 @@ class month_title_with_arrows_node(template.Node):
 
 @register.tag
 def links_for_archived_month(parser, token):
-    """
 
+    """
     Usage:
         {% link_for_archived_month year month %}
-
     """
 
     # Extract the params
     try:
-        tag_name, year, month = token.split_contents()
+        tag_name, user_id, year, month = token.split_contents()
 
     # Raise an error if we don't have the correct params
     except ValueError:
         raise template.TemplateSyntaxError, "%r tag requires exactly two argument (object)" % token.contents.split()[0]
 
-    return linksForArchivedMonth(year, month)
-
+    return linksForArchivedMonth(user_id, year, month)
 
 class linksForArchivedMonth(template.Node):
     """
     Node for require_permission tag
     """
 
-    def __init__(self, year, month):
+    def __init__(self, user_id, year, month):
         self.year = template.Variable(year)
         self.month = template.Variable(month)
+        self.user_id = template.Variable(user_id)
 
     def render(self, context):
+        user_id = int(self.user_id.resolve(context))
         months = (self.month.resolve(context))
         year = int(self.year.resolve(context))
 
@@ -191,7 +191,7 @@ class linksForArchivedMonth(template.Node):
             for month in sorted(months):
                 string += " <a href='%s'>%s</a>" % (
                 urlresolvers.reverse('app.hourregistrations.views.view_archived_month',
-                                     args=("%s" % year, "%s" % month)),
+                                     args=("%s" % user_id, "%s" % year, "%s" % month)),
                 get_month_by_number(month))
 
             return string

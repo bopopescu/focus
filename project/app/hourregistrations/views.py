@@ -60,8 +60,8 @@ def calendar_day_json(request, year, month, day):
                       'hours_worked': str(reg.hours_worked),
                       'order': reg.order.id,
                       'pause': str(reg.pause),
-                      'customer_name': reg.order.customer.name,
-                      'order_name': reg.order.title,
+                      'customer_name': reg.get_customer_name(),
+                      'order_name': reg.get_order_name(),
                       'description': reg.description
                      } for reg in list_hour_registrations]
 
@@ -195,9 +195,11 @@ def list_hour_registrations(request, user, from_date, to_date):
                    'sumDisbursements': round(sumDisbursements, 2),
                    'sumKilometers': round(sumKilometers, 2)})
 
+
 @require_permission("LIST", HourRegistration)
 def your_archive(request):
     return archive(request)
+
 
 @require_permission("MANAGE", HourRegistration)
 def user_archive(request, user_id):
@@ -222,4 +224,6 @@ def archive(request, user_id=None):
         year_with_months[time.date.year].add(time.date.month)
 
     return render(request, 'hourregistrations/archive.html',
-                  {'title': 'Arkiv', 'year_with_months': year_with_months})
+                  {'title': 'Arkiv',
+                   'user_id': user.id,
+                   'year_with_months': year_with_months})

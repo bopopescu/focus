@@ -21,10 +21,9 @@
         {% for year,months in year_with_months.items reversed %}
             <tr>
                 <td>{{ year }}</td>
-                <td>{% links_for_archived_month year months %}</td>
+                <td>{% links_for_archived_month user_id year months %}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
 {% endblock %}

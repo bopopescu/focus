@@ -35,6 +35,17 @@ class HourRegistration(PersistentModel):
     def __unicode__(self):
         return unicode(self.date)
 
+    def get_order_name(self):
+        if self.order:
+            return self.order.title
+        return ""
+
+    def get_customer_name(self):
+        if self.order:
+            if self.order.customer:
+                return self.order.customer.name
+        return ""
+
     def get_edit_url(self):
         return urlresolvers.reverse('app.hourregistrations.views.edit', args=("%s" % self.id,))
 
@@ -91,6 +102,7 @@ class Disbursement(PersistentModel):
     def __unicode__(self):
         return "Disbusment for %s" % self.HourRegistration
 
+
 class DrivingRegistration(PersistentModel):
     HourRegistration = models.ForeignKey(HourRegistration, related_name="drivingregistration")
     time_start = models.CharField(max_length=5)
@@ -98,8 +110,10 @@ class DrivingRegistration(PersistentModel):
     kilometres = models.IntegerField()
     description = models.CharField(max_length=100)
 
+
 def __unicode__(self):
     return "DrivingRegistration for %s" % self.HourRegistration
+
 
 def initial_data ():
     pass
