@@ -79,14 +79,14 @@ class HourRegistration(PersistentModel):
             self.hours_worked = Decimal(calculateHoursWorked(start_t, end_t)) - Decimal(self.pause)
             #self.hours_worked = calculateHoursWorked(start_t, end_t)-self.pause-(self.savedHours - self.usedOfSavedHours)
 
-        super(HourRegistration, self).save()
+        super(HourRegistration, self).save(noNotification=True)
 
         #Have to wait to set this, because creator is not set before first save
         if self.creator:
             self.hourly_rate = self.creator.hourly_rate
             self.percent_cover = self.creator.percent_cover
             #Save again
-        super(HourRegistration, self).save()
+        super(HourRegistration, self).save(noNotification=True)
 
 
 class HourRegisrationImage(PersistentModel):

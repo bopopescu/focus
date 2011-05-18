@@ -89,12 +89,13 @@ class PersistentModel(models.Model):
                       )
             log.save()
 
-            for us in self.who_has_permission_to('VIEW'):
-                if us == Core.current_user():
-                    continue
-                Notification(recipient=us,
-                             log=log,
-                             ).save()
+            if 'noNotification' not in kwargs:
+                for us in self.who_has_permission_to('VIEW'):
+                    if us == Core.current_user():
+                        continue
+                    Notification(recipient=us,
+                                 log=log,
+                                 ).save()
 
     def trash(self, **kwargs):
         self.trashed = True
