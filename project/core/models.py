@@ -201,6 +201,7 @@ def initial_data ():
     Action.objects.get_or_create(name='LISTDELETED', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTARCHIVE', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
+    Action.objects.get_or_create(name='VIEW_OWN_ARCHIVED_MONTH', verb='view own archived month', description='view own archived month')
     print "Done"
 
     print "creating Roles"
@@ -209,6 +210,8 @@ def initial_data ():
     Role.objects.get_or_create(name="Responsible", description="Ansvarlig, kan se,endre")
     Role.objects.get_or_create(name="Member", description="Typisk medlem, kan se")
     Role.objects.get_or_create(name="Owner", description="Typisk den som opprettet objektet")
+    Role.objects.get_or_create(name="Creator", description="Typisk den som opprettet objektet")
+    Role.objects.get_or_create(name="Editor", description="Typisk den som opprettet objektet")
     print "Done"
 
     leader = Role.objects.get(name="Admin")
@@ -216,6 +219,15 @@ def initial_data ():
 
     owner = Role.objects.get(name="Owner")
     owner.grant_actions(["EDIT", "VIEW", "DELETE"])
+
+    owner = Role.objects.get(name="Creator")
+    owner.grant_actions(["CREATE"])
+
+    owner = Role.objects.get(name="Editor")
+    owner.grant_actions(["VIEW","EDIT","DELETE"])
+
+    member = Role.objects.get(name="Responsible")
+    member.grant_actions(["VIEW", "EDIT", "DELETE"])
 
     member = Role.objects.get(name="Member")
     member.grant_actions(["VIEW", "LIST"])
