@@ -200,13 +200,10 @@ def list_hour_registrations(request, user, from_date, to_date):
 def your_archive(request):
     return archive(request)
 
-
 @require_permission("MANAGE", HourRegistration)
 def user_archive(request, user_id):
     return archive(request, user_id)
 
-
-@require_permission("MANAGE", HourRegistration)
 def archive(request, user_id=None):
     year_with_months = {}
 

@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, render, render_to_response, redi
 from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
+from core.shortcuts import comment_block
 
 @require_permission("LIST", Customer)
 def overview(request):
@@ -36,8 +37,10 @@ def overview_all(request):
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
+    comments = comment_block(request, customer)
 
     return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.name,
+                                                   'comments': comments,
                                                    'customer': customer})
 
 
@@ -161,6 +164,6 @@ def form (request, id=False):
 
             return redirect(view, o.id)
     else:
-        form = CustomerForm(instance=instance, initial={'cid':cid})
+        form = CustomerForm(instance=instance, initial={'cid': cid})
 
     return render(request, "customers/form.html", {'title': title, 'customer': instance, 'form': form})

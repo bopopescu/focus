@@ -10,18 +10,17 @@ from core.decorators import require_permission
 from core.mail import send_mail
 from django.conf import settings
 
+@require_permission("LIST", Offer)
 def overview(request):
     offers = Core.current_user().get_permitted_objects("VIEW", Offer).filter(trashed=False)
     return render(request, "offers/overview.html", {'title': _('Offers'),
                                                     'offers': offers})
-
 
 @require_permission("VIEW", Offer, "id")
 def view(request, id):
     offer = Offer.objects.get(id=id)
     return render(request, "offers/view.html", {'title': offer.title,
                                                 'offer': offer})
-
 
 def create_order(request, id):
     offer = Offer.objects.get(id=id)
@@ -119,7 +118,7 @@ def form(request, id=None):
 
             return redirect(view, o.id)
     else:
-        form = OfferForm(instance=instance, initial={'offer_number':offer_number})
+        form = OfferForm(instance=instance, initial={'offer_number': offer_number})
 
     return render(request, "offers/form.html", {'form': form,
                                                 'offer': instance,

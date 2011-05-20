@@ -18,5 +18,6 @@ urlpatterns = patterns('app.client.views',
                        #Offers
                        url(r'^offers/$', 'offers.overview', name='offers.client_overview'),
                        url(r'^offers/view/(?P<id>\d+)/$', 'offers.view', name='offers.client_view'),
-
+                       url(r'^offers/set_accepted/(?P<id>\d+)/(?P<status>\w+)/$', 'offers.setOfferAccepted',
+                           name='offers.setOfferAccepted'),
                        )

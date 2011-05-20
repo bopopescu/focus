@@ -8,7 +8,7 @@ class OfferForm(ModelForm):
     class Meta:
         model = Offer
         fields = ("offer_number", "title", "customer", "project", 'delivery_date',
-                  'delivery_date_deadline', 'description')
+                  'delivery_date_deadline', 'accepted', 'description')
 
     def __init__(self, *args, **kwargs):
         super(OfferForm, self).__init__(*args, **kwargs)

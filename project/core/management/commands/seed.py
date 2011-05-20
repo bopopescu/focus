@@ -50,7 +50,7 @@ class Command(BaseCommand):
 
         print "tickets"
         for i in range(1, 12):
-            ticket, created = Ticket.objects.get_or_create(title="Ticket %s" % i, type=type, company=self.company,
+            ticket, created = Ticket.objects.get_or_create(title="Ticket %s" % i, description="dummy text", type=type, company=self.company,
                                                            priority=priority, status=status)
             ticket.set_user(Core.current_user())
             ticket.save()

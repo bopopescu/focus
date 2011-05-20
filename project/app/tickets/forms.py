@@ -21,7 +21,7 @@ class TicketForm(ModelForm):
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
         self.fields['type'].widget = SelectWithPop(TicketType)
         self.fields['type'].queryset = TicketType.objects.filter_current_company()
-        self.fields['due_date'].required = True
+        self.fields['due_date'].required = False
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 

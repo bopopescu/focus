@@ -7,27 +7,34 @@
 
         <div style="margin-left:550px; margin-bottom:50px; font-size:30px; color:green;">
 
+            {% if offer.accepted == None %}
+                <span style="color:orange;">Pending</span>
+                {% else %}
+                {% if offer.accepted %}
+                    <span style="color:green">Akseptert</span>
+                {% else %}
+                    <span style="color:red">Avslått</span>
+                {% endif %}{% endif %}
+
+            <br><br>
 
             <div class="buttons">
-                <a href="" class="positive"><!-- class="regular"-->
+                <a href="{% url app.client.views.offers.setOfferAccepted offer.id,"true" %}" class="positive">
+                    <!-- class="regular"-->
                     <img src="{{ STATIC_URL }}/img/accept.png" alt=""/>
                     Godkjenn tilbud
                 </a>
-                <a href="#" class="negative">
+                <a href="{% url app.client.views.offers.setOfferAccepted offer.id,"false" %}" class="negative">
                     <img src="{{ STATIC_URL }}/img/trash.png" alt=""/>
                     Avslå
                 </a>
             </div>
 
-
         </div>
-
 
     </div>
 
     <div class="line"></div>
-
-
 
     <div class="in">
 
