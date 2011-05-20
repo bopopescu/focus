@@ -47,61 +47,91 @@
                 <a class="{% active request "^/dashboard/" %}"
                    href="{% url app.dashboard.views.overview %}">Dashboard</a>
             </li>
+
+            {% require_permission LIST customers.Customer %}
             <li class="{% active request "^/customers/" %}">
                 <a class="{% active request "^/customers/" %}"
                    href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
             </li>
+            {% end_require %}
+
+            {% require_permission LIST contacts.Contact %}
             <li class="{% active request "^/contacts/" %}">
                 <a class="{% active request "^/contacts/" %}"
                    href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
             </li>
+            {% end_require %}
 
+
+            {% require_permission LIST projects.Project %}
             <li class="{% active request "^/projects/" %}">
                 <a class="{% active request "^/projects/" %}"
                    href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
             </li>
+            {% end_require %}
 
+            {% require_permission LIST orders.Offer %}
             <li class="{% active request "^/offers/" %}">
                 <a class="{% active request "^/offers/" %}"
                    href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
             </li>
+            {% end_require %}
 
+            {% require_permission LIST orders.Order %}
             <li class="{% active request "^/orders/" %}">
                 <a class="{% active request "^/orders/" %}"
                    href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
             </li>
+            {% end_require %}
 
+
+            {% require_permission LIST orders.Invoice %}
             <li class="{% active request "^/invoices/" %}">
                 <a class="{% active request "^/invoices/" %}"
                    href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
             </li>
+            {% end_require %}
 
 
+            {% require_permission LIST hourregistrations.HourRegistration %}
             <li class="{% active request "^/hourregistrations/" %}">
                 <a class="{% active request "^/hourregistrations/" %}"
                    href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Hour registration" %}</a>
             </li>
+            {% end_require %}
 
+
+            {% require_permission LIST tickets.Ticket %}
             <li class="{% active request "^/tickets/" %}">
                 <a class="{% active request "^/tickets/" %}"
                    href="{% url app.tickets.views.overview %}">{% trans "Tickets" %}</a>
             </li>
+            {% end_require %}
 
+
+            {% require_permission LIST suppliers.Supplier %}
             <li class="{% active request "^/suppliers/" %}">
                 <a class="{% active request "^/suppliers/" %}"
                    href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a>
             </li>
+            {% end_require %}
 
 
+            {% require_permission LIST stock.Product %}
             <li class="{% active request "^/stock/" %}">
                 <a class="{% active request "^/stock/" %}"
                    href="{% url app.stock.views.product.overview %}">{% trans "Products" %}</a>
             </li>
+            {% end_require %}
 
+
+            {% require_permission MANAGE user.User %}
             <li class="{% active request "^/admin/" %}">
                 <a class="{% active request "^/admin/" %}"
                    href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
             </li>
+            {% end_require %}
+
 
         </ul>
     </div>

@@ -9,6 +9,7 @@ from app.customers.models import Customer
 from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 from django.core import urlresolvers
+from core.managers import PersistentManager
 from core.models import PersistentModel
 import settings
 import os
@@ -25,6 +26,7 @@ class TicketBase(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
     trashed = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
 
     def get_view_url(self):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
@@ -112,6 +114,9 @@ class Ticket(TicketBase):
                               related_name="tickets")
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
+
+    objects = PersistentManager()
+    all_objects = models.Manager()
 
     def __unicode__(self):
         return unicode(self.title)

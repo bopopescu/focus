@@ -19,7 +19,7 @@ fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 def createTuple(object):
     oldObject = object.get_object()
 
-    skip_list = ['password','editor']
+    skip_list = ['password', 'editor']
 
     data = {}
 
@@ -30,7 +30,8 @@ def createTuple(object):
         if i.attname in skip_list:
             continue
 
-        if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),                                                                    (int, long, float)):
+        if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
+                                                                                          (int, long, float)):
             data[i.attname] = [getattr(object, i.attname), unicode(i.verbose_name)]
         else:
             data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]
@@ -205,7 +206,8 @@ def initial_data ():
     Action.objects.get_or_create(name='LISTDELETED', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTARCHIVE', verb='listed deleted', description='list deleted')
     Action.objects.get_or_create(name='LISTREADYINVOICE', verb='listed deleted', description='list deleted')
-    Action.objects.get_or_create(name='VIEW_OWN_ARCHIVED_MONTH', verb='view own archived month', description='view own archived month')
+    Action.objects.get_or_create(name='VIEW_OWN_ARCHIVED_MONTH', verb='view own archived month',
+                                 description='view own archived month')
     print "Done"
 
     print "creating Roles"
@@ -228,7 +230,7 @@ def initial_data ():
     owner.grant_actions(["CREATE"])
 
     owner = Role.objects.get(name="Editor")
-    owner.grant_actions(["VIEW","EDIT","DELETE"])
+    owner.grant_actions(["VIEW", "EDIT", "DELETE"])
 
     member = Role.objects.get(name="Responsible")
     member.grant_actions(["VIEW", "EDIT", "DELETE"])
