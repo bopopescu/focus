@@ -2,7 +2,7 @@ from app.announcements.models import Announcement
 from app.company.forms import CompanyForm, newCompanyForm
 from app.contacts.models import Contact
 from app.customers.models import Customer
-from app.orders.models import Order
+from app.orders.models import Order, Offer, Invoice
 from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
@@ -102,6 +102,8 @@ def createNewCustomer(data):
     admin_group.grant_role("Admin", Customer)
     admin_group.grant_role("Admin", Contact)
     admin_group.grant_role("Admin", Order)
+    admin_group.grant_role("Admin", Invoice)
+    admin_group.grant_role("Admin", Offer)
     admin_group.grant_role("Admin", HourRegistration)
     admin_group.grant_role("Admin", Announcement)
     admin_group.grant_role("Admin", Log)
@@ -117,6 +119,8 @@ def createNewCustomer(data):
     all_employees_group.grant_role("Member", Contact)
     all_employees_group.grant_role("Member", HourRegistration)
     all_employees_group.grant_role("Member", Product)
+    all_employees_group.grant_role("Member", Offer)
+    all_employees_group.grant_role("Member", Invoice)
     all_employees_group.grant_role("Member", Order)
     all_employees_group.grant_role("Member", Announcement)
     all_employees_group.grant_role("Member", Log)
