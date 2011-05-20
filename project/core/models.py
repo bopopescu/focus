@@ -57,12 +57,17 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
+
+        if not Core.current_user():
+            super(PersistentModel, self).save()
+            return
+
         action = "EDIT"
         if not self.id:
             action = "ADD"
             self.date_created = datetime.now()
             self.creator = Core.current_user()
-            self.company = Core.current_user().company
+            self.company = Core.current_user().get_company()
 
         self.editor = Core.current_user()
         self.date_edited = datetime.now()

@@ -16,7 +16,6 @@ class ClientUser(models.Model):
     def __unicode__(self):
         return self.email
 
-
     def get_related_companys(self):
         """ returns queryset of companys """
         companys = set()    

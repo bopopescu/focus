@@ -36,23 +36,24 @@ class TicketBase(models.Model):
 
         super(TicketBase, self).save()
 
-        #Clear cache
-        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-        cache.delete(cache_key)
+        if Core.current_user():
+            #Clear cache
+            cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
+            cache.delete(cache_key)
 
-        if action == "ADD":
-            Core.current_user().grant_role("Admin", self)
-            admin_group = Core.current_user().get_company_admingroup()
-            allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
+            if action == "ADD":
+                Core.current_user().grant_role("Admin", self)
+                admin_group = Core.current_user().get_company_admingroup()
+                allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
-            if admin_group:
-                admin_group.grant_role("Admin", self)
+                if admin_group:
+                    admin_group.grant_role("Admin", self)
 
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
+                if allemployeesgroup:
+                    allemployeesgroup.grant_role("Member", self)
 
-        if self.user:
-            self.user.grant_role('Admin', self)
+            if self.user:
+                self.user.grant_role('Admin', self)
 
     def trash(self):
         self.trashed = True
