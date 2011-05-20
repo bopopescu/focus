@@ -26,8 +26,6 @@ class TicketBase(models.Model):
     date_edited = models.DateTimeField(auto_now=True)
     trashed = models.BooleanField(default=False)
 
-    def get_view_url(self):
-        return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
 
     def save(self, **kwargs):
         action = 'EDIT'
@@ -81,7 +79,7 @@ class TicketPriority(models.Model):
         return unicode(self.name)
 
 
-class TicketType(PersistentModel):
+class TicketType(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(default=None, blank=True, null=True)
 
@@ -118,6 +116,9 @@ class Ticket(TicketBase):
 
     class Meta:
         ordering = ['status', 'date_created']
+
+    def get_view_url(self):
+        return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
 
     def save(self, **kwargs):
         self.check_assigned_to();
