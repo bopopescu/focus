@@ -113,8 +113,8 @@ class Ticket(TicketBase):
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 
-    objects = PersistentManager()
-    all_objects = models.Manager()
+    #objects = PersistentManager()
+    #all_objects = models.Manager()
 
     def __unicode__(self):
         return unicode(self.title)
