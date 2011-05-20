@@ -57,6 +57,11 @@ class PersistentModel(models.Model):
         abstract = True
 
     def save(self, **kwargs):
+
+        if not Core.current_user():
+            super(PersistentModel, self).save()
+            return
+
         action = "EDIT"
         if not self.id:
             action = "ADD"
