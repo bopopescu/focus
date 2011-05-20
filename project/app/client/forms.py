@@ -43,7 +43,8 @@ class ClientNewTicketForm(ModelForm):
     def save(self, commit=True):
         ticket = super(ClientNewTicketForm, self).save(commit=False)
         ticket.client_user = self.client
-        ticket.type = TicketType.objects.get_or_create(name=_("Client ticket"), description=_("Submitted by a client"))[0]
+        ticket.type = TicketType.objects.all()[0]
+        #TicketType.objects.get_or_create(name=_("Client ticket"), description=_("Submitted by a client"))[0]
         ticket.save(commit=commit)
         self.client.tickets.add(ticket)
 
