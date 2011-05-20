@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from app.tickets.models import Ticket
+from core.auth.company.models import Company
 from core.models import PersistentModel
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -14,6 +15,15 @@ class ClientUser(PersistentModel):
 
     def __unicode__(self):
         return self.email
+
+
+    def get_related_companys(self):
+        """ returns queryset of companys """
+        companys = set()
+        for ticket in self.tickets.all():
+            companys.add(ticket.company.id)
+
+        return Company.objects.filter(id__in=companys)
 
     def set_password(self, password):
         self.password = sha1(password).hexdigest()

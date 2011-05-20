@@ -1,12 +1,9 @@
-from django.http import Http404
 from django.shortcuts import render, redirect
-from app.client.forms import ClientTicketForm
+from app.client.forms import ClientTicketForm, ClientNewTicketForm
 from app.client.models import ClientUser
 from app.client.utils import client_login_required
-from app.tickets.forms import EditTicketForm
 from app.tickets.models import TicketUpdate, Ticket
 from django.utils.translation import ugettext as _
-import copy
 
 @client_login_required
 def overview(request):
@@ -20,19 +17,17 @@ def overview(request):
 def view(request, id):
     client = ClientUser.objects.get(id=request.session['client_id'])
 
-    try:
-        ticket = client.tickets.get(id=id)
-        updates = TicketUpdate.objects.filter(ticket=ticket).filter(public=True).order_by("id")
+    ticket = client.tickets.get(id=id)
+    updates = TicketUpdate.objects.filter(ticket=ticket).filter(public=True).order_by("id")
 
-    except ClientUser.DoesNotExist:
-        raise Http404
 
     if request.method == "POST":
         ticket_form = ClientTicketForm(request.POST, request.FILES, instance=ticket)
 
         if ticket_form.is_valid():
-            ticket, ticket_update = ticket_form.save()
+            ticket_update = ticket_form.save()
             ticket_update.client_user = client
+            ticket_update.public = True
             ticket_update.save()
             request.message_success(_("Ticket updated"))
 
@@ -46,3 +41,21 @@ def view(request, id):
                                                          'updates': updates,
                                                          'form': ticket_form,
                                                          })
+
+@client_login_required
+def new_ticket(request):
+    client = ClientUser.objects.get(id=request.session['client_id'])
+    if request.method == 'POST':
+        form = ClientNewTicketForm(client, request.POST)
+        if form.is_valid():
+            ticket = form.save()
+
+
+    else:
+        form = ClientNewTicketForm(client)
+
+    print form.as_p()
+
+    return render(request, "client/tickets/create_ticket.html", {'form': form})
+
+

@@ -13,6 +13,7 @@ urlpatterns = patterns('app.client.views',
                        #Tickets
                        url(r'^tickets/$', 'tickets.overview', name='tickets.client_overview'),
                        url(r'^tickets/view/(?P<id>\d+)/$', 'tickets.view', name='tickets.client_view'),
+                       url(r'^tickets/create/', 'tickets.new_ticket', name='tickets.client_create'),
 
                        #Offers
                        url(r'^offers/$', 'offers.overview', name='offers.client_overview'),
