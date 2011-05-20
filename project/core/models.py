@@ -62,7 +62,7 @@ class PersistentModel(models.Model):
             action = "ADD"
             self.date_created = datetime.now()
             self.creator = Core.current_user()
-            self.company = Core.current_user().company
+            self.company = Core.current_user().get_company()
 
         self.editor = Core.current_user()
         self.date_edited = datetime.now()
