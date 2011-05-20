@@ -19,7 +19,7 @@ class ClientUser(PersistentModel):
 
     def get_related_companys(self):
         """ returns queryset of companys """
-        companys = set()
+        companys = set()    
         for ticket in self.tickets.all():
             companys.add(ticket.company.id)
 

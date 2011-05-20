@@ -48,13 +48,17 @@ def new_ticket(request):
     if request.method == 'POST':
         form = ClientNewTicketForm(client, request.POST)
         if form.is_valid():
+            print "valid"
             ticket = form.save()
+            print ticket, "???"
+            return redirect("tickets.client_view", id=ticket.id)
 
+
+        else:
+            print "not valid"
 
     else:
         form = ClientNewTicketForm(client)
-
-    print form.as_p()
 
     return render(request, "client/tickets/create_ticket.html", {'form': form})
 
