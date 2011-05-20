@@ -8,8 +8,19 @@
 
 {% block maincontent %}
 
+
+    <style>
+        #accepted_status {
+            position: absolute;
+            margin-left: 650px;
+        }
+    </style>
+
     <h1>{% trans "Offer" %}: {{ title }}</h1>
 
+    <div id="accepted_status" style="color:{{ offer.get_accepted_status.1 }}">
+        {{ offer.get_accepted_status.0 }}
+    </div>
 
     <div class="products">
         <br><h5>{% trans "Products" %}</h5>

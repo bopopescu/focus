@@ -20,6 +20,7 @@
         .visibility_form {
             color: red;
         }
+
         .public_visibility {
             color: green;
         }
@@ -125,11 +126,11 @@
                         </p>
                     {% endif %}
 
-                        <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
-                            <input type="hidden" value="{{ update.id }}" />
-                            {% trans "Public" %}<input type="checkbox" class="visibility_check"
-                                    {% if update.public %} checked="checked" {% endif %}/>
-                        </form>
+                    <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
+                        <input type="hidden" value="{{ update.id }}"/>
+                        {% trans "Public" %}<input type="checkbox" class="visibility_check"
+                                {% if update.public %} checked="checked" {% endif %}/>
+                    </form>
 
 
                 </td>
@@ -148,16 +149,16 @@
                 var data = {id: update_id, visible: visible};
                 var parent_form = $(this).parent();
                 $.post(visibility_update_url, data,
-                    function(data) {
-                        var visible = data.visible;
-                        if (data.visible) {
-                            parent_form.addClass("public_visibility");
-                        }
-                        else {
-                            parent_form.removeClass("public_visibility");
-                        }
-                        $("body").css("cursor", "auto")
-                    }, "json" );
+                        function(data) {
+                            var visible = data.visible;
+                            if (data.visible) {
+                                parent_form.addClass("public_visibility");
+                            }
+                            else {
+                                parent_form.removeClass("public_visibility");
+                            }
+                            $("body").css("cursor", "auto")
+                        }, "json");
             })
         })
     </script>

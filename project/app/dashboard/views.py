@@ -22,11 +22,13 @@ def overview(request):
                                                         'orders': your_orders,
                                                         'projects': your_projects})
 
+
 @login_required()
 def notifications(request):
     #Get all notifactions
-    notifications = Notification.objects.filter(recipient=Core.current_user(), read=False)
-    oldNotificationsS = Notification.objects.filter(recipient=Core.current_user(), read=True)
+    notifications = Notification.objects.filter(recipient=Core.current_user(), read=False).order_by("id").reverse()
+    oldNotificationsS = Notification.objects.filter(recipient=Core.current_user(), read=True).order_by("id").reverse()[
+                        0:10]
 
     newNotifications = []
     oldNotifications = []

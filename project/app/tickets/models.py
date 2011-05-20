@@ -26,6 +26,9 @@ class TicketBase(models.Model):
     date_edited = models.DateTimeField(auto_now=True)
     trashed = models.BooleanField(default=False)
 
+    def get_view_url(self):
+        return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
+
     def save(self, **kwargs):
         action = 'EDIT'
         if not self.id:
@@ -36,7 +39,7 @@ class TicketBase(models.Model):
         #Clear cache
         cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
         cache.delete(cache_key)
-        
+
         if action == "ADD":
             Core.current_user().grant_role("Admin", self)
             admin_group = Core.current_user().get_company_admingroup()
@@ -94,14 +97,13 @@ class TicketType(PersistentModel):
         from app.tickets.forms import AddTicketTypeForm
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
 
-
 class Ticket(TicketBase):
     company = models.ForeignKey(Company, default=None)
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), )
-    status = models.ForeignKey(TicketStatus, verbose_name=_("Status"))
-    priority = models.ForeignKey(TicketPriority, verbose_name=_("Priority"))
-    type = models.ForeignKey(TicketType, verbose_name=_("Type"))
+    status = models.ForeignKey(TicketStatus, verbose_name=_("Status"), default=0)
+    priority = models.ForeignKey(TicketPriority, verbose_name=_("Priority"),default=2)
+    type = models.ForeignKey(TicketType, verbose_name=_("Category"))
     spent_time = models.IntegerField(_("Spent time"), default=0)
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
     due_date = models.DateTimeField(null=True, blank=True, default=None)
@@ -126,7 +128,6 @@ class Ticket(TicketBase):
         super(Ticket, self).save()
 
         if action == 'ADD':
-
             if self.company:
                 if self.company.admin_group:
                     self.company.admin_group.grant_role('Admin', self)

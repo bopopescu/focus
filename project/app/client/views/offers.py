@@ -13,7 +13,28 @@ def overview(request):
     client = ClientUser.objects.get(id=request.session['client_id'])
     offers = client.offers.all()
     return render(request, 'client/offers/overview.html', {'client': client,
-                                                    'offers': offers})
+                                                           'offers': offers})
+
+
+@client_login_required
+def setOfferAccepted(request, id, status):
+    client = ClientUser.objects.get(id=request.session['client_id'])
+
+    try:
+        offer = client.offers.get(id=id)
+
+        if(status == "true"):
+            offer.accepted = True
+        elif (status == "false"):
+            offer.accepted = False
+
+        offer.save()
+
+    except ClientUser.DoesNotExist:
+        raise Http404
+
+    return redirect(view, id)
+
 
 @client_login_required
 def view(request, id):
@@ -25,5 +46,5 @@ def view(request, id):
         raise Http404
 
     return render(request, 'client/offers/view.html', {'client': client,
-                                                         'offer': offer,
-                                                         })
+                                                       'offer': offer,
+                                                       })

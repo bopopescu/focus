@@ -9,9 +9,7 @@
 {% endblock %}
 
 {% block maincontent %}
-
-
-
+    
     <script type="text/javascript">
         $(document).ready(function() {
             outputElement = $("#postal")
@@ -24,7 +22,6 @@
                     function(data) {
                         outputElement_invoice.text(data.result);
                     });
-
         });
     </script>
 
@@ -106,6 +103,9 @@
 
         </div>
     </div>
+
+
+    {% include "comments.html" %}
 
 
 

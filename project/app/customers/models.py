@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from core import Core
-from core.models import PersistentModel
+from core.models import PersistentModel, Comment
 from django.core import urlresolvers
 from core.models import User
 from django.utils.translation import ugettext as _
 from app.contacts.models import Contact
 from django.db.models.aggregates import Max
+from django.contrib.contenttypes import generic
 
 class Customer(PersistentModel):
     cid = models.IntegerField(_("Customer number"))
@@ -25,15 +26,18 @@ class Customer(PersistentModel):
 
     contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name=_("Contacts"))
 
+    comments = generic.GenericRelation(Comment)
+
+
     def __unicode__(self):
         return self.name
 
     @staticmethod
     def calculate_next_cid():
-       next = (Customer.objects.filter_current_company().aggregate(Max("cid"))['cid__max'])
-       if next:
-           return next+1
-       return 1
+        next = (Customer.objects.filter_current_company().aggregate(Max("cid"))['cid__max'])
+        if next:
+            return next + 1
+        return 1
 
     def can_be_deleted(self):
         can_be_deleted = True

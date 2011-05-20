@@ -37,14 +37,13 @@
         <td>
             <form action="" method="post">
                 <div class="field">
-                    {{ user }} says:<br>
                     {{ comments.form.text|escape }}
                 </div>
 
                 <br/>
 
                 <div class="buttonrow">
-                    <button name="new_comment" class="add_comment">{% trans "Submit" %}</button>
+                    <button name="new_comment" class="add_comment">{% trans "Add comment" %}</button>
                 </div>
             </form>
         </td>

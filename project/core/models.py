@@ -19,14 +19,18 @@ fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 def createTuple(object):
     oldObject = object.get_object()
 
+    skip_list = ['password','editor']
+
     data = {}
 
     for i in object._meta.fields:
         if i.attname.startswith('_'):
             continue
 
-        if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
-                                                                                          (int, long, float)):
+        if i.attname in skip_list:
+            continue
+
+        if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),                                                                    (int, long, float)):
             data[i.attname] = [getattr(object, i.attname), unicode(i.verbose_name)]
         else:
             data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]

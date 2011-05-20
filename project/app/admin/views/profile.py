@@ -42,7 +42,7 @@ def change_profile_image(request):
             o = form.save(commit=False)
             o.save()
             request.message_success(msg)
-            return redirect(edit)
+            return redirect(change_profile_image)
     else:
         form = UserProfileImageForm(instance=instance, initial={"profileImage": None})
 
