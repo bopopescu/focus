@@ -28,7 +28,6 @@ class TicketBase(models.Model):
     trashed = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-
     def save(self, **kwargs):
         action = 'EDIT'
         if not self.id:
@@ -85,7 +84,8 @@ class TicketPriority(models.Model):
 class TicketType(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(default=None, blank=True, null=True)
-
+    company = models.ForeignKey(Company, null=True, default = None)
+    
     def __unicode__(self):
         return unicode(self.name)
 
@@ -102,7 +102,7 @@ class Ticket(TicketBase):
     company = models.ForeignKey(Company, default=None)
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), )
-    status = models.ForeignKey(TicketStatus, verbose_name=_("Status"), default=0)
+    status = models.ForeignKey(TicketStatus, verbose_name=_("Status"), default=1)
     priority = models.ForeignKey(TicketPriority, verbose_name=_("Priority"),default=2)
     type = models.ForeignKey(TicketType, verbose_name=_("Category"))
     spent_time = models.IntegerField(_("Spent time"), default=0)
