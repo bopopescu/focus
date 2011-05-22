@@ -23,7 +23,6 @@ def view(request, id):
 
     if request.method == "POST":
         ticket_form = ClientTicketForm(request.POST, request.FILES, instance=ticket)
-
         if ticket_form.is_valid():
             ticket_update = ticket_form.save()
             ticket_update.client_user = client
@@ -60,6 +59,7 @@ def new_ticket(request):
     else:
         form = ClientNewTicketForm(client)
 
-    return render(request, "client/tickets/create_ticket.html", {'form': form})
+    return render(request, "client/tickets/create_ticket.html", {'form': form,
+                                                                 'client': client})
 
 

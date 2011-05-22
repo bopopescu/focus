@@ -1,6 +1,7 @@
 from django.forms.models import ModelForm
 from app.customers.models import Customer
 from app.tickets.models import Ticket, TicketUpdate, TicketType
+from core import Core
 from core.models import User
 from django import forms
 from django.utils.translation import ugettext as _
@@ -20,7 +21,7 @@ class TicketForm(ModelForm):
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
         self.fields['type'].widget = SelectWithPop(TicketType)
-        self.fields['type'].queryset = TicketType.objects.filter_current_company()
+        self.fields['type'].queryset = TicketType.objects.filter(company=Core.current_user().get_company())
         self.fields['due_date'].required = False
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y")
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
@@ -43,7 +44,7 @@ class EditTicketForm(ModelForm):
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
         self.fields['type'].widget = SelectWithPop(TicketType)
-        self.fields['type'].queryset = TicketType.objects.filter_current_company()
+        self.fields['type'].queryset = TicketType.objects.filter(company=Core.current_user().get_company())
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y", )
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 

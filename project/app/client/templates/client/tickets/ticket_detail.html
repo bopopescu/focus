@@ -56,10 +56,16 @@
                 </p>
 
                 <br><br>
-
+                {% if update.attachment %}
+                    <a target="_blank" href="{{ update.get_attachment_url }}">
+                    <img src="{{ STATIC_URL }}img/download.png"
+                         style="width:30px; height:30px; vertical-align:middle;">
+                        {{ update.get_attachment_name }}</a>
+                {% endif %}
             </div>
         {% endfor %}
 
+        {{ form.errors }}
         <div class="in forms">
             <form id="form1" name="form1" method="post" action="" enctype="multipart/form-data">
                 <div class="form-row">
@@ -69,7 +75,7 @@
                 </div>
                 <div class="form-row">
                     <div>
-                        {{ form.attachment }}
+                        {{ form.attach }}
                     </div>
                 </div>
                 <p><input name="submit" type="submit" id="submit" tabindex="5" class="com_btn" value="LAGRE"/></p>

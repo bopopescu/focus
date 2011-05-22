@@ -8,18 +8,20 @@ class ClientTicketForm(ModelForm):
     """
     Form for making comments
     """
-    comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
-    attachment = forms.FileField(label=_("Add Attachment"), required=False)
+    comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"))
+    attach = forms.FileField(label=_("Add Attachment"), required=False)
 
     class Meta:
         model = Ticket
         fields = ()
 
+
     def save(self, *args, **kwargs):
+        print "test"
         ticket = super(ClientTicketForm, self).save()
         ticketupdate = TicketUpdate.objects.create(ticket=ticket,
                                                    comment=self.cleaned_data['comment'],
-                                                   attachment=self.cleaned_data['attachment'])
+                                                   attachment=self.cleaned_data['attach'])
 
         return ticketupdate
 
