@@ -1,12 +1,41 @@
 
 {% extends "client/client_base.html" %}
+{% load i18n %}
 
 {% block maincontent %}
 
-    <form action="" method="post">
-        {{ form }}
-        <input type="submit" />
-    </form>
+    <div class="in author">
+        <h2>{% trans "Create a new Ticket" %}</h2>
+    </div>
+
+    <div class="in">
+    {% if form.errors %}
+        {% trans "Please corrent the errors below" %}
+        {{ form.errors }}
+    {% endif %}
+    </div>
+
+    <div class="in forms">
+        <form action="" method="post">
+            
+            <div class="form-row">
+                <label for="id_company"></label>{% trans "This ticket will be sent to:" %} <br />
+                {{ form.company }}
+            </div>
+
+            <div class="form-row">
+                <label for="id_title">{% trans "Subject" %}</label> <br />
+                {{ form.title }}
+            </div>
+            <div class="form-row">
+                <label for="id_description>">{% trans "Your Message" %}</label> <br />
+                {{ form.description }}
+            </div>
+
+            <input type="submit" />
+        </form>
+
+    </div>
 
 {% endblock %}
 

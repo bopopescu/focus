@@ -1,5 +1,5 @@
 {% extends "client/client_base.html" %}
-
+{% load i18n %}
 {% block maincontent %}
 
     <div class="in author">
@@ -24,8 +24,8 @@
             <div class="ticketBoxQInfo">
 
                 <div class="createInfo">
-                    Lagt inn av: Fredrik Carlsen<br>
-                    Opprettet: 29.10.2010 00:05
+                    {% trans "Created by" %}: {{ ticket.creator }}<br>
+                    {{ ticket.date_created|date:"d.m.Y H.i" }}
                 </div>
 
 
@@ -43,8 +43,8 @@
 
                 <div class="ticketBoxQInfo">
                     <div class="createInfo">
-                        Lagt inn av: {{ update.creator }}<br>
-                        Opprettet: {{ update.date_created }}
+                        {% trans "Created by" %}: {{ update.creator }}<br>
+                        {{ update.date_created|date:"d.m.Y H.i" }}
                     </div>
 
 
