@@ -84,7 +84,7 @@ class TicketPriority(models.Model):
 class TicketType(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(default=None, blank=True, null=True)
-    company = models.ForeignKey(Company, null=True, default = None)
+    company = models.ForeignKey(Company, null=True, default=None)
     
     def __unicode__(self):
         return unicode(self.name)

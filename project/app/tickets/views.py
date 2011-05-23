@@ -138,8 +138,10 @@ def add_ticket_type_ajax(request, id=None):
         instance = TicketType()
     form = AddTicketTypeForm(request.POST, instance=instance)
     if form.is_valid():
-        print "blah"
-        ticket_type = form.save()
+        ticket_type = form.save(commit=False)
+        ticket_type.company = Core.current_user().get_company()
+        ticket_type.save()
+        
         return HttpResponse(simplejson.dumps({'name': ticket_type.name,
                                               'id': ticket_type.id,
                                               'valid': True}), mimetype='application/json')
