@@ -84,6 +84,7 @@ ul { list-style-type: none; }
 ------------------------------- */
 
 #subnav {
+    min-width:1200px;
     height: 30px;
     background-color: #FFFFFF;
     border-bottom-width: 1px;

@@ -131,13 +131,11 @@
                    href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
             </li>
             {% end_require %}
-
-
         </ul>
     </div>
 
     <div id="subnav">
-        <div style="padding-top:5px; margin-right:5%; float:right;">
+        <div style="padding-top:5px; margin-left:50%; float:left;">
             <form action="{% url app.search.views.search %}">
                 <input type="text" placeholder="search" name="s"/>
                 <input type="submit" value="Søk"/>

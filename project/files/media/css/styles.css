@@ -150,6 +150,7 @@ dd {
 #header {
     height: 70px;
     background: url(../img/header_bg.png);
+    min-width:1200px;
     padding-left: 50px;
 }
 
