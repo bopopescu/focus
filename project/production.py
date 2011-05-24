@@ -20,6 +20,9 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
+CLIENT_LOGIN_SITE = "http://www.focustime.no/client/"
+
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
