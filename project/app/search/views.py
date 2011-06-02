@@ -1,7 +1,7 @@
 from app.customers.models import Customer
 from app.projects.models import Project
 from app.contacts.models import Contact
-from app.tickets.models import Ticket
+from app.tickets.models import Ticket, TicketUpdate
 from core.decorators import login_required
 from django.shortcuts import render
 from app.orders.models import Order
@@ -18,7 +18,8 @@ def search(request):
     searchIn[Customer] = ["name", 'email', 'address', 'phone']
     searchIn[Project] = ["project_name", 'pid', 'responsible__first_name']
     searchIn[Contact] = ["name", "email", 'address', 'phone']
-    searchIn[Ticket] = ["title"]
+    searchIn[Ticket] = ["title","description"]
+    searchIn[TicketUpdate] = ["comment"]
     searchIn[Order] = ["title", "customer__name", 'project__project_name', 'description']
     searchIn[Supplier] = ["name"]
     searchIn[Product] = ['name', 'description', 'productGroup__name']

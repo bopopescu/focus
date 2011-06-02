@@ -9,7 +9,7 @@ class TicketHandler(BaseHandler):
     model = Ticket
     allowed_methods = ('GET', )
     fields = ('id', 'ticket_creator', 'title', ('priority', ('name',)), 'update_count', ('status', ('name',)),
-              ('type', ('name',)), 'date_edited', ('assigned_to', ('username',)), 'ticket_url' )
+              ('type', ('name',)), 'date_edited', ('assigned_to', ('username','get_full_name')), 'ticket_url' )
 
     @classmethod
     def update_count(cls, ticket):

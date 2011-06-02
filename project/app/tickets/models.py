@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from app.tickets.utils import send_assigned_mail
 from core import Core
 from core.auth.company.models import Company
@@ -20,6 +21,7 @@ class TicketBase(models.Model):
     """ Used as base class by Ticket and TicketUpdate instead of PersistentModel
         Objects can be created be client users
     """
+    company = models.ForeignKey(Company, default=None, null=True)
     client_user = models.ForeignKey('client.ClientUser', blank=True, null=True, default=None,
                                     related_name='client_tickets')
     user = models.ForeignKey(User, blank=True, null=True, default=None, related_name='tickets')
@@ -99,7 +101,6 @@ class TicketType(models.Model):
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
 
 class Ticket(TicketBase):
-    company = models.ForeignKey(Company, default=None)
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), )
     status = models.ForeignKey(TicketStatus, verbose_name=_("Status"), default=1)
@@ -114,8 +115,8 @@ class Ticket(TicketBase):
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 
-    #objects = PersistentManager()
-    #all_objects = models.Manager()
+    objects = PersistentManager()
+    all_objects = models.Manager()
 
     def __unicode__(self):
         return unicode(self.title)
@@ -234,10 +235,16 @@ class TicketUpdate(TicketBase):
     attachment = models.FileField(upload_to="tickets/comments", storage=fs, null=True)
     public = models.BooleanField(default=False, blank=True)
 
+    objects = PersistentManager()
+    all_objects = models.Manager()
+
     def get_attachment_url(self):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
         return None
+
+    def get_view_url(self):
+       return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.ticket.id,))
 
     def get_attachment_name(self):
         return self.attachment.name.split(os.sep)[-1]
@@ -253,6 +260,8 @@ class TicketUpdate(TicketBase):
             return os.path.join("/file/", self.attachment.name)
         return None
 
+    def __unicode__(self):
+        return "Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
 
 class TicketUpdateLine(TicketBase):
     update = models.ForeignKey(TicketUpdate, related_name='update_lines')

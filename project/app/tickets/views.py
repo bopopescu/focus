@@ -69,10 +69,11 @@ def add(request):
     return form(request)
 
 
-def method_name(old_ticket, ticket_form):
+def create_update_for_ticket(old_ticket, ticket_form):
     ticket, ticket_update = ticket_form.save(commit=False)
     ticket.set_user(Core.current_user())
     ticket_update.user = ticket.user
+    ticket_update.company = ticket.company
     ticket.save()
     ticket_update.save()
     differences = Ticket.find_differences(ticket, old_ticket)
@@ -89,7 +90,7 @@ def edit(request, id):
         ticket_form = EditTicketForm(request.POST, request.FILES, instance=ticket)
 
         if ticket_form.is_valid():
-            ticket = method_name(old_ticket, ticket_form)
+            ticket = create_update_for_ticket(old_ticket, ticket_form)
 
             request.message_success(_("Ticket updated"))
 

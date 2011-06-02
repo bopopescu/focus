@@ -23,6 +23,7 @@
         <tr>
             <th>{% trans "Tickets" %}</th>
             <th>{% trans "Priority" %}</th>
+            <th>{% trans "Assigned" %}</th>
             <th>{% trans "Updates" %}</th>
             <th>{% trans "Status" %}</th>
             <th>{% trans "Type" %}</th>
@@ -47,6 +48,13 @@
             var row = "<tr>";
             row += getTdCell("<a href=\"" + ticket.ticket_url + "\">" + ticket.title +"</a>");
             row += getTdCell(ticket.priority.name);
+
+            if(ticket.assigned_to) {
+                row += getTdCell(ticket.assigned_to.get_full_name);
+            } else {
+                row += getTdCell("{% trans "None" %}");                
+            }
+
             row += getTdCell(ticket.update_count);
             row += getTdCell(ticket.status.name);
             row += getTdCell(ticket.type.name);

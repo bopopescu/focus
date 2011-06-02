@@ -54,7 +54,7 @@ class User(models.Model):
     all_objects = models.Manager()
 
     def __unicode__(self):
-        return self.username
+        return self.get_full_name()
 
     def get_company(self):
         if self.company:
@@ -197,6 +197,7 @@ class User(models.Model):
     def get_full_name(self):
         #Returns the first_name plus the last_name, with a space in between.
         name = u'%s %s' % (self.first_name, self.last_name)
+
         return name.strip()
 
     def set_password(self, raw_password):
