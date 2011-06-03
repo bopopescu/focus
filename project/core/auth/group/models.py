@@ -25,16 +25,10 @@ class Group(models.Model):
     def add_member(self, user):
         self.members.add(user)
         self.save()
-        #Invalidate cache for user
-        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-        cache.delete(cache_key)
-
+        
     def remove_member(self, user):
         self.members.remove(user)
         self.save()
-        #Invalidate cache for user
-        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-        cache.delete(cache_key)
 
     def grant_role(self, role, object):
         #Get info about the object
@@ -58,10 +52,6 @@ class Group(models.Model):
         )
 
         perm.save()
-
-        #Invalidate cache for users
-        for user in self.members.all():
-            cache.delete(user.id)
 
     def save_without_permissions(self):
         super(Group, self).save()
@@ -140,8 +130,6 @@ class Group(models.Model):
 
         perm.save()
 
-        #Invalidate cache for user
-        cache.delete(Core.current_user().id)
 
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):
