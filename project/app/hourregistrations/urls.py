@@ -14,4 +14,5 @@ urlpatterns = patterns('app.hourregistrations.views',
                        url(r'^archive/(?P<user_id>\d+)$', 'user_archive'),
                        url(r'^archive/(?P<year>\d+)/(?P<month>\d+)/$', 'view_archived_month'),
                        url(r'^(?P<user_id>\d+)/archive/(?P<year>\d+)/(?P<month>\d+)/$', 'view_archived_month'),
+                       url(r'^(?P<user_id>\d+)/archive/(?P<year>\d+)/(?P<month>\d+)/(?P<print_friendly>\d+)$', 'view_archived_month'),
                        )

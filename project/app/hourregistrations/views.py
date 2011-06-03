@@ -127,7 +127,7 @@ def calendar_can_edit_form(request):
 ########ARCHIVE#############
 
 @require_permission("MANAGE", HourRegistration)
-def view_archived_month(request, year, month, user_id=None):
+def view_archived_month(request, year, month, user_id=None, print_friendly=False):
     year = int(year)
     month = int(month)
 
@@ -141,24 +141,20 @@ def view_archived_month(request, year, month, user_id=None):
     if user_id:
         user = User.objects.get(id=user_id)
 
-    return list_hour_registrations(request, user, from_date.strftime("%d.%m.%Y"), to_date.strftime("%d.%m.%Y"))
+    template = "hourregistrations/list_hours.html"
+
+    if print_friendly:
+        template = "hourregistrations/list_hours_print_friendly.html"
+
+    return list_hour_registrations(request, user, from_date, to_date, template)
 
 
 @require_permission("MANAGE", HourRegistration)
-def list_hour_registrations(request, user, from_date, to_date):
-    HourRegistrations = HourRegistration.objects.filter(creator=user)
+def list_hour_registrations(request, user, from_date, to_date, template):
 
-    unwanted = []
-
-    from_date = time.mktime(time.strptime("%s" % (from_date), "%d.%m.%Y"))
-    to_date = time.mktime(time.strptime("%s" % (to_date), "%d.%m.%Y"))
-
-    for obj in HourRegistrations:
-        date = time.mktime(time.strptime(obj.date.strftime("%d.%m.%Y"), "%d.%m.%Y"))
-        if not (date >= from_date and date <= to_date):
-            unwanted.append(obj.id)
-
-    HourRegistrations = HourRegistrations.exclude(id__in=unwanted)
+    hourregistrations = HourRegistration.objects.filter(creator=user,
+                                                        date__gte = from_date,
+                                                        date__lte = to_date)
 
     sumHours = 0
     sumEarned = 0
@@ -167,7 +163,7 @@ def list_hour_registrations(request, user, from_date, to_date):
     sumKilometers = 0
     sumDisbursements = 0
 
-    for t in HourRegistrations:
+    for t in hourregistrations:
         if t.hours_worked:
             sumHours += Decimal(t.hours_worked)
         if t.hours_worked and t.hourly_rate:
@@ -186,8 +182,8 @@ def list_hour_registrations(request, user, from_date, to_date):
         sumCover = a * Decimal(sumEarned)
         sumTotalEarned = sumEarned - sumCover
 
-    return render(request, 'hourregistrations/list_hours.html',
-                  {'title': 'Timeføringer', 'hourregistrations': HourRegistrations,
+    return render(request, template,
+                  {'title': 'Timeføringer %s' % (user), 'hourregistrations': hourregistrations,
                    'sumHours': round(sumHours, 2),
                    'sumEarned': round(sumEarned, 2),
                    'sumCover': round(sumCover, 2),
