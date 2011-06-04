@@ -1,0 +1,76 @@
+{% load i18n %}
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <style>
+
+        body {
+            height: auto;
+            width: 500px;
+        }
+
+        .summary_number {
+            font-size: 40px;
+        }
+
+        .summary_desc {
+            font-size: 20px;
+        }
+
+        #tbl {
+
+            width: 500px;
+
+        }
+
+        #tbl th {
+            text-align: left;
+        }
+
+        #tbl td {
+            text-align: left;
+        }
+
+
+    </style>
+
+</head>
+
+<body onload="javascript:window.print()">
+
+<div align="right">Printet ut 03.06.2011</div>
+
+<h1>{{ title }}</h1>
+
+<table id="tbl">
+
+    <thead>
+    <tr>
+        <th>{% trans "Hours" %}</th>
+        <th>{% trans "Time" %}</th>
+        <th>{% trans "Order" %}</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for registration in hourregistrations %}
+        <tr>
+            <td>{{ registration.hours_worked }}</td>
+            <td>{{ registration.date|date:"d.m.Y" }} {{ registration.time_start }}-{{ registration.time_end }}</td>
+            <td>{{ registration.order }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br><br>
+
+<div id="summary">
+    <div>
+        <span class="summary_number">{{ sumHours }}</span>
+        <span class="summary_desc">{% trans "hours total" %}</span>
+    </div>
+</div>
+
+</body></html>
