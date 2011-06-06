@@ -60,16 +60,3 @@ class ContactHandler(BaseHandler):
         else:
             contact.trash()
             return rc.DELETED
-
-
-
-
-
-
-
-
-
-
-
-
-    

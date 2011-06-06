@@ -6,8 +6,9 @@ from core import Core
 
 class CustomersHandler(BaseHandler):
     model = Customer
-    fields = ('id', 'cid', 'name', 'email', 'phone', 'website', 'address', 'zip', 'city', 'invoice_address', 'invoice_zip',
-              'invoice_city', ('contacts', ('id', 'name'), ))
+    fields = (
+    'id', 'cid', 'name', 'email', 'phone', 'website', 'address', 'zip', 'city', 'invoice_address', 'invoice_zip',
+    'invoice_city', ('contacts', ('id', 'name'), ))
 
 
     def read(self, request, id=None):
@@ -62,6 +63,3 @@ class CustomersHandler(BaseHandler):
         else:
             customer.trash()
             return rc.DELETED
-
-
-
