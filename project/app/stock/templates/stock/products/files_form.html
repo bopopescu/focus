@@ -1,0 +1,29 @@
+{% extends "form.html" %}
+{% load i18n %}
+{% block maincontent %}
+
+{{ block.super }}
+<br><br>
+
+<h2>Last ned</h2>
+
+
+<td><a target="_blank" target="_blank" href="{{ file.get_file }}">{% trans "Download current file" %}</a></td>
+
+
+<h2>Historikk</h2>
+
+
+<table>
+    {% for file in file_history %}
+    <tr>
+        <td>{{ file.date_created|date:"d.m.Y H:i" }}</td>
+        <td>{{ file.name }}</td>
+        <td>{{ file.original_name }}</td>
+        <td><a target="_blank" target="_blank" href="{{ file.get_file }}">{% trans "download" %}</a></td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

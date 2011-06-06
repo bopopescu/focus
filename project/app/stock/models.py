@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from copy import deepcopy
 import os
 
 from django.db import models
@@ -133,6 +134,26 @@ class ProductFile(PersistentModel):
     product = models.ForeignKey(Product, related_name="files")
     name = models.CharField(max_length=200)
     file = models.FileField(upload_to="products", storage=fs)
+    parent = models.ForeignKey("ProductFile", related_name="history", null=True)
+
+    def clone(self):
+         CopiedFile = deepcopy(self)
+         CopiedFile.id = None
+         CopiedFile.trash = False
+         CopiedFile.deleted = False
+         CopiedFile.parent = self
+
+         return CopiedFile
+
+    def __unicode__(self):
+        return u'%s,%s' % (self.name, self.file.name)
+
+    def get_history(self):
+        return self.history.all().order_by("-date_created")
+
+    def original_name(self):
+        list = self.file.name.encode("UTF-8").split("/")
+        return list[len(list) - 1]
 
     def get_file(self):
         if self.file:

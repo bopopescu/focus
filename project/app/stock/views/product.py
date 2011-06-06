@@ -49,11 +49,12 @@ def orders(request, id):
 def files(request, id):
     product = Product.objects.get(id=id)
     productFileForm = ProductFileForm(instance=ProductFile())
-
+    files = product.files.filter(parent=None)
+    
     return render(request, 'stock/products/files.html',
                   {'title': _("Files"), 'product': product,
                    'productFileForm': productFileForm,
-                   'files': product.files})
+                   'files': files})
 
 
 @require_permission("EDIT", Product, "id")
@@ -79,6 +80,37 @@ def addFile(request, id):
     else:
         request.message_error(_("An error occoured"))
         return redirect(files, id)
+
+@require_permission("EDIT", Product, "id")
+def replaceFile (request, id, fileID):
+
+    product = get_object_or_404(Product, id=id, deleted=False)
+    
+    instance = get_object_or_404(ProductFile, id=fileID, deleted=False)
+    clone = instance.clone()
+
+    #Save and set to active
+    if request.method == 'POST':
+        form = ProductFileForm(request.POST, request.FILES, instance=instance)
+
+        if form.is_valid():
+            o = form.save(commit=False)
+            o.save()
+            clone.parent = o
+            clone.save()
+
+            #Redirects for direct editing
+            return redirect(replaceFile, id, fileID)
+
+    else:
+        form = ProductFileForm(instance=instance, initial={"file": None})
+
+    file_history = instance.get_history()
+
+    return render(request, 'stock/products/files_form.html', {'title': "Endre fil",
+                                        'form': form,
+                                        'file':instance,
+                                        'file_history':file_history})
 
 
 @require_permission("EDIT", Product, "id")

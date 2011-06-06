@@ -24,11 +24,16 @@
 
     <tbody>
 
-    {% for file in product.files.all %}
+    {% for file in files %}
 
     <tr>
         <td>{{ file.name }}</td>
         <td><a target="_blank" target="_blank" href="{{ file.get_file }}">{% trans "download" %}</a></td>
+        <td>
+            {% require_permission EDIT product %}
+            <a href="{% url app.stock.views.product.replaceFile product.id file.id %}">{% trans "update" %}</a>
+            {% end_require %}
+        </td>
         <td>
             {% require_permission EDIT product %}
             <a href="{% url app.stock.views.product.deleteFile product.id file.id %}">{% trans "delete" %}</a>

@@ -37,4 +37,3 @@ class TimeBasicAPIAuthentication(object):
         resp['WWW-Authenticate'] = 'Basic realm="%s"' % self.realm
         resp.status_code = 401
         return resp
-
