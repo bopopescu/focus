@@ -8,7 +8,7 @@ from piston.utils import rc
 
 class ProductsHandler(BaseHandler):
     model = Product
-    fields = ('id', 'name', 'description', 'price_out', ('files', ('id', 'name', 'date_created','date_edited', 'get_file')))
+    fields = ('id', 'name', 'description', 'price_out', ('files', ('id', 'name', ('editor', ('first_name','last_name')), 'date_created','date_edited', 'get_file')))
 
     def read(self, request, id=None):
         all = Core.current_user().get_permitted_objects("VIEW", Product).filter(trashed=False)
@@ -33,7 +33,7 @@ class ProductsHandler(BaseHandler):
 
 class ProductfilesHandler(BaseHandler):
     model = ProductFile
-    fields = ('id', 'name', 'trashed','date_created','date_edited', 'get_file',('history', ('id', 'name', 'trashed','date_created', 'date_edited','get_file')))
+    fields = ('id', 'name', 'trashed','date_created',('editor', ('first_name','last_name')),'date_edited', 'get_file',('history', ('id', 'name',('editor', ('first_name','last_name')), 'trashed','date_created', 'date_edited','get_file')))
 
     def read(self, request, id=None):
         all = Core.current_user().get_permitted_objects("VIEW", ProductFile).filter(trashed=False, parent=None)
