@@ -15,21 +15,16 @@ from core.mail import send_mail
 
 @require_permission("LIST", Ticket)
 def overview(request):
-    print "overview"
     return render(request, 'tickets/list.html', {"title": "Tickets"})
 
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request, id=None, status_id=None):
-    print "assigned"
-    if not id:
-        id = Core.current_user().id
     return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": True})
 
 
 @require_permission("LIST", Ticket)
 def overview_trashed(request):
-    print "trashed"
     return render(request, 'tickets/list.html', {"title": "Tickets", "trashed_tickets": True})
 
 
@@ -70,14 +65,16 @@ def add(request):
 
 
 def create_update_for_ticket(old_ticket, ticket_form):
+    print "blah"
     ticket, ticket_update = ticket_form.save(commit=False)
+    print "blah2"
     ticket.set_user(Core.current_user())
     ticket_update.user = ticket.user
     ticket_update.company = ticket.company
-    ticket.save()
     ticket_update.save()
     differences = Ticket.find_differences(ticket, old_ticket)
     ticket_update.create_update_lines(differences)
+    ticket.save(update=ticket_update)
     return ticket
 
 
