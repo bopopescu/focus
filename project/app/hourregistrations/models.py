@@ -22,6 +22,7 @@ class HourRegistration(PersistentModel):
 
     pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.0"),
                                 blank=True)
+
     hourly_rate = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
     percent_cover = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
     hours_worked = models.DecimalField(blank=True, decimal_places=decimal_places, max_digits=max_digits)
