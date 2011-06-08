@@ -19,7 +19,7 @@ def overview(request):
 
 
 @require_permission("LIST", Ticket)
-def assigned_to_user(request, id=None, status_id=None):
+def assigned_to_user(request):
     return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": True})
 
 
@@ -65,9 +65,7 @@ def add(request):
 
 
 def create_update_for_ticket(old_ticket, ticket_form):
-    print "blah"
     ticket, ticket_update = ticket_form.save(commit=False)
-    print "blah2"
     ticket.set_user(Core.current_user())
     ticket_update.user = ticket.user
     ticket_update.company = ticket.company

@@ -104,7 +104,7 @@
             {% require_permission LIST tickets.Ticket %}
             <li class="{% active request "^/tickets/" %}">
                 <a class="{% active request "^/tickets/" %}"
-                   href="{% url app.tickets.views.overview %}">{% trans "Tickets" %}</a>
+                   href="{% url app.tickets.views.assigned_to_user %}">{% trans "Tickets" %}</a>
             </li>
             {% end_require %}
 

@@ -73,7 +73,7 @@
         }
 
         var current_user_id = {{ request.user.id }};
-        var assigned_to = {% if assigned_to %} 1; {% else %} 0; {% endif %}
+        var assigned_to = {% if assigned_to %} current_user_id; {% else %} 0; {% endif %}
         var status = 0;
         function getTickets(type, trashed) {
             var data = type ? { type_id: parseInt(type)} : {};
