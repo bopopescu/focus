@@ -49,7 +49,7 @@ class EditTicketForm(ModelForm):
         self.fields['due_date'].input_formats = ["%d.%m.%Y"]
 
     def save(self, *args, **kwargs):
-        ticket = super(EditTicketForm, self).save()
+        ticket = super(EditTicketForm, self).save(*args, **kwargs)
         ticket_update = TicketUpdate(ticket=ticket,
                                      company=ticket.company,
                                      comment=self.cleaned_data['comment'],

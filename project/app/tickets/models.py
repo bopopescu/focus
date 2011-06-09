@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from app.tickets.utils import send_assigned_mail
+from app.tickets.utils import send_assigned_mail, send_update_mails
 from core import Core
 from core.auth.company.models import Company
 from core.auth.user.models import User
@@ -11,7 +11,6 @@ from django.utils.translation import ugettext as _
 from django.core.files.storage import FileSystemStorage
 from django.core import urlresolvers
 from core.managers import PersistentManager
-from core.models import PersistentModel
 import settings
 import os
 
@@ -113,6 +112,7 @@ class Ticket(TicketBase):
     order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"),
                               related_name="tickets")
     assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
+    #mail_excluded = models.ManyToManyField(User, null=True, blank=True)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 
     objects = PersistentManager()
@@ -128,7 +128,8 @@ class Ticket(TicketBase):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
 
     def save(self, **kwargs):
-        self.check_assigned_to();
+        if 'update' in kwargs:
+            send_update_mails(self, kwargs['update'])
         action = 'EDIT'
         if not self.id:
             action = 'ADD'
@@ -136,6 +137,7 @@ class Ticket(TicketBase):
         super(Ticket, self).save()
 
         if action == 'ADD':
+            send_assigned_mail(self.assigned_to, self, assigned=True)
             if self.company:
                 if self.company.admin_group:
                     self.company.admin_group.grant_role('Admin', self)
@@ -261,6 +263,7 @@ class TicketUpdate(TicketBase):
         return None
 
     def __unicode__(self):
+        return "Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
         return "Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
 
 class TicketUpdateLine(TicketBase):
