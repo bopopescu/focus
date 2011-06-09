@@ -6,8 +6,8 @@ import settings
 
 def send_update_mails(ticket, ticket_update):
     assigned_sent = check_assigned_to(ticket)
-    recipients = set([ticket.user.email, ticket.assigned_to.email])
-    if assigned_sent:
+    recipients = set([ticket.user.email])
+    if not assigned_sent and ticket.assigned_to:
         recipients.remove(ticket.assigned_to.email)
         
     for update in ticket.updates.all():
@@ -60,6 +60,8 @@ def check_assigned_to(ticket):
 
 
 def send_assigned_mail(user, ticket, assigned=True):
+    if not user.email:
+        return
     url = settings.SITE_URL + reverse("ticket_view", kwargs={'id': ticket.id})
     if assigned:
         msg = _("You have been assigned to the ticket %s\nLink: %s") % (ticket.title, url)

@@ -137,7 +137,8 @@ class Ticket(TicketBase):
         super(Ticket, self).save()
 
         if action == 'ADD':
-            send_assigned_mail(self.assigned_to, self, assigned=True)
+            if self.assigned_to:
+                send_assigned_mail(self.assigned_to, self, assigned=True)
             if self.company:
                 if self.company.admin_group:
                     self.company.admin_group.grant_role('Admin', self)
