@@ -124,13 +124,15 @@
                                      style="width:30px; height:30px; vertical-align:middle;">
                                 {{ update.get_attachment_name }}</a>
                         </p>
+                        
                     {% endif %}
-
-                    <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
-                        <input type="hidden" value="{{ update.id }}"/>
-                        {% trans "Public" %}<input type="checkbox" class="visibility_check"
-                                {% if update.public %} checked="checked" {% endif %}/>
-                    </form>
+                    {% if ticket.clients.all %}
+                        <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
+                            <input type="hidden" value="{{ update.id }}"/>
+                            {% trans "Public" %}<input type="checkbox" class="visibility_check"
+                                    {% if update.public %} checked="checked" {% endif %}/>
+                        </form>
+                    {% endif %}
 
 
                 </td>
