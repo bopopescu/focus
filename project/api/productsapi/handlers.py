@@ -33,7 +33,7 @@ class ProductsHandler(BaseHandler):
 
 class ProductfilesHandler(BaseHandler):
     model = ProductFile
-    fields = ('id', 'name', 'trashed','date_created',('editor', ('first_name','last_name')),'date_edited', 'get_file',('history', ('id', 'name',('editor', ('first_name','last_name')), 'trashed','date_created', 'date_edited','get_file')))
+    fields = ('id', 'name', ('product',('id', 'name')),'trashed','date_created',('editor', ('first_name','last_name')),'date_edited', 'get_file',('history', ('id', 'name',('editor', ('first_name','last_name')), 'trashed','date_created', 'date_edited','get_file')))
 
     def read(self, request, id=None):
         all = Core.current_user().get_permitted_objects("VIEW", ProductFile).filter(trashed=False, parent=None)
