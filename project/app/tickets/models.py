@@ -275,7 +275,7 @@ class TicketUpdateLine(TicketBase):
 def initial_data():
     TicketStatus.objects.get_or_create(name=_("New"), order_priority=1)
     TicketStatus.objects.get_or_create(name=_("In Progress"), order_priority=2)
-    TicketStatus.objects.get_or_create(name=_("Completed"), order_priority=3)
+    TicketStatus.objects.get_or_create(name=_("Need feedback"), order_priority=3)
     TicketStatus.objects.get_or_create(name=_("Closed"), order_priority=4)
 
     TicketPriority.objects.get_or_create(name=_("Low"))
