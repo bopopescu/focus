@@ -3,8 +3,10 @@ from core import Core
 from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from core.auth.user.models import User
 from core.auth.log.models import Log
+from django.conf import settings
 
 def login(request):
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -27,7 +29,7 @@ def login(request):
             except:
                 pass
 
-    return render_to_response('login.html')
+    return render_to_response('login.html', {'LOGIN_URL':settings.LOGIN_URL})
 
 def logout_view(request):
     logout(request)

@@ -20,8 +20,8 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
+SITE_URL = "http://www.focustime.no"
 CLIENT_LOGIN_SITE = "http://www.focustime.no/client/"
-
 
 CACHES = {
     'default': {
