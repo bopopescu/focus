@@ -1,0 +1,13 @@
+{% extends "files/list.html" %}
+
+{% block sidebar %}
+    {% include "projects/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+    {% for file in project.files.all %}
+        {{ file }}
+        <a href="{{ file.get_file }}" target="_blank">Last ned</a>
+        <a href="{% url app.projects.views.files.edit_file project.id,file.id %}">Endre fil</a>
+    {% endfor %}
+{% endblock %}

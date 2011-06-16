@@ -1,11 +1,12 @@
 from django.conf.urls.defaults import *
+from api.projectsapi.handlers import ProjectHandler
 from piston.resource import Resource
 from api.authentication import TimeBasicAPIAuthentication
 from api.contactsapi.handlers import ContactHandler
 from api.customersapi.handlers import CustomersHandler
 from api.hourregistrationsapi.handlers import HourRegistrationHandler
 from api.ticketsapi.handlers import TicketHandler
-from api.productsapi.handlers import ProductsHandler, ProductfilesHandler
+from api.productsapi.handlers import ProductsHandler
 
 auth = TimeBasicAPIAuthentication()
 
@@ -14,7 +15,7 @@ customers = Resource(handler=CustomersHandler, authentication=auth)
 hours = Resource(handler=HourRegistrationHandler, authentication=auth)
 tickets = Resource(handler=TicketHandler, authentication=auth)
 products = Resource(handler=ProductsHandler, authentication=auth)
-productfiles = Resource(handler=ProductfilesHandler, authentication=auth)
+projects = Resource(handler=ProjectHandler, authentication=auth)
 
 urlpatterns = patterns('',
                        url(r'contacts/$', contact),
@@ -22,6 +23,9 @@ urlpatterns = patterns('',
 
                        url(r'customers/$', customers),
                        url(r'customers/(?P<id>\d+)/$', customers),
+
+                       url(r'projects/$', projects),
+                       url(r'projects/(?P<id>\d+)/$', projects),
 
                        url(r'hourregistrations/$', hours),
                        url(r'hourregistrations/(?P<id>\d+)/$', hours),
@@ -34,7 +38,4 @@ urlpatterns = patterns('',
                        url(r'products/$', products),
                        url(r'products/(?P<id>\d+)/$', products),
 
-                       #ProductFiles
-                       url(r'productfiles/$', productfiles),
-                       url(r'productfiles/(?P<id>\d+)/$', productfiles),
-)
+                       )

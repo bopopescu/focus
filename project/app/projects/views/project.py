@@ -82,7 +82,6 @@ def history(request, id):
 def add(request):
     return form(request)
 
-
 @require_permission("EDIT", Project, 'id')
 def edit(request, id):
     return form(request, id)

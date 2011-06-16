@@ -86,21 +86,6 @@ def view(request, id):
                                                'file': file,
                                                'who_can_see_this': who_can_see_this})
 
-"""
-@login_required()
-def permissions(request, id):
-    type = File
-    file = type.objects.get(pk=id)
-
-    url = "files/"
-
-    if file.folder:
-        url = "files/folder/%s" % file.folder.id
-
-    message = "Vellykket endret tilgang for ordre: %s" % file
-    return form_perm(request, type, id, url, message)
-"""
-
 @login_required()
 def form (request, id=False, folderID=None):
     if id:

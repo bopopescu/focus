@@ -4,8 +4,8 @@ from core import Core
 from core.decorators import require_permission
 from core.utils import suggest_ajax_parse_arguments
 from core.views import  update_timeout
-from app.stock.forms import ProductForm, ProductFileForm
-from app.stock.models import Product, ProductFile
+from app.stock.forms import ProductForm
+from app.stock.models import Product
 from django.utils.simplejson import JSONEncoder
 from django.http import HttpResponse
 from django.db.models.query_utils import Q
@@ -44,84 +44,6 @@ def orders(request, id):
                   {'title': _("Product used in these orders"), 'product': product,
                    'orders': product.orders})
 
-
-@require_permission("EDIT", Product, "id")
-def files(request, id):
-    product = Product.objects.get(id=id)
-    productFileForm = ProductFileForm(instance=ProductFile())
-    files = product.files.filter(parent=None)
-    
-    return render(request, 'stock/products/files.html',
-                  {'title': _("Files"), 'product': product,
-                   'productFileForm': productFileForm,
-                   'files': files})
-
-
-@require_permission("EDIT", Product, "id")
-def addFile(request, id):
-    instance = ProductFile()
-
-    if request.method == 'POST':
-        form = ProductFileForm(request.POST, request.FILES, instance=instance)
-
-        if form.is_valid():
-            product = Product.objects.get(id=id)
-            o = form.save(commit=False)
-            o.product = product
-            o.save()
-            request.message_success(_("Successfully uploaded file"))
-
-            return redirect(files, id)
-
-        request.message_error(_("Invalid file"))
-
-        return redirect(files, id)
-
-    else:
-        request.message_error(_("An error occoured"))
-        return redirect(files, id)
-
-@require_permission("EDIT", Product, "id")
-def replaceFile (request, id, fileID):
-
-    product = get_object_or_404(Product, id=id, deleted=False)
-    
-    instance = get_object_or_404(ProductFile, id=fileID, deleted=False)
-    clone = instance.clone()
-
-    #Save and set to active
-    if request.method == 'POST':
-        form = ProductFileForm(request.POST, request.FILES, instance=instance)
-
-        if form.is_valid():
-            o = form.save(commit=False)
-            o.save()
-            clone.parent = o
-            clone.save()
-
-            #Redirects for direct editing
-            return redirect(replaceFile, id, fileID)
-
-    else:
-        form = ProductFileForm(instance=instance, initial={"file": None})
-
-    file_history = instance.get_history()
-
-    return render(request, 'stock/products/files_form.html', {'title': "Endre fil",
-                                        'form': form,
-                                        'file':instance,
-                                        'file_history':file_history})
-
-
-@require_permission("EDIT", Product, "id")
-def deleteFile(request, id, fileID):
-    product = get_object_or_404(Product, id=id, deleted=False)
-    file = product.files.get(id=fileID)
-    file.delete()
-
-    return redirect(files, id)
-
-
 @require_permission("DELETE", Product, "id")
 def trash(request, id):
     instance = Product.objects.get(id=id)
@@ -141,7 +63,6 @@ def trash(request, id):
                                                              'can_be_deleted': instance.can_be_deleted()[0],
                                                              'reasons': instance.can_be_deleted()[1],
                                                              })
-
 
 @require_permission("DELETE", Product, "id")
 def recover(request, id):
