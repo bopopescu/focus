@@ -264,13 +264,11 @@ class TicketUpdate(TicketBase):
         return None
 
     def __unicode__(self):
-        return "Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
-        return "Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
-
+        return u"Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
+        
 class TicketUpdateLine(TicketBase):
     update = models.ForeignKey(TicketUpdate, related_name='update_lines')
     change = models.CharField(max_length=250)
-
 
 def initial_data():
     TicketStatus.objects.get_or_create(name=_("New"), order_priority=1)
