@@ -1,13 +1,35 @@
 {% extends "files/list.html" %}
+{% load i18n %}
 
 {% block sidebar %}
     {% include "projects/sidebar.html" %}
 {% endblock %}
 
 {% block maincontent %}
-    {% for file in project.files.all %}
-        {{ file }}
-        <a href="{{ file.get_file }}" target="_blank">Last ned</a>
-        <a href="{% url app.projects.views.files.edit_file project.id,file.id %}">Endre fil</a>
-    {% endfor %}
+
+    <div style="float:right; margin-right: 200px;">
+        <a href="add"><img border="0px" style="vertical-align: middle" src="{{ STATIC_URL }}/img/add.png">Ny fil</a>
+    </div>
+
+    <br><br>
+
+    <table id="dataTable">
+
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for file in project.files.all %}
+            <tr>
+                <td>{{ file.name }}</td>
+                <td><a href="{{ file.get_file }}" target="_blank">Last ned</a></td>
+                <td><a href="{% url app.projects.views.files.edit_file project.id,file.id %}">Endre fil</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

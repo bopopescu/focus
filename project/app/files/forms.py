@@ -5,7 +5,8 @@ from models import *
 class FileForm(ModelForm):
     class Meta:
         model = File
-        exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'folder')
+        fields = ('name', 'file',)
+
 
 class FolderForm(ModelForm):
     class Meta:
