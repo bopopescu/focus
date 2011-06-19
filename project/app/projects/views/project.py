@@ -26,7 +26,7 @@ def timeline(request):
     update_timeout(request)
     projects = Core.current_user().get_permitted_objects("VIEW", Project).filter(trashed=False)
     return render(request, 'projects/timeline.html',
-                               {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
+            {'title': 'Tidslinje for alle prosjekter', 'projects': projects})
 
 
 @require_permission("LIST", Project)
@@ -53,10 +53,10 @@ def view(request, id):
     comments = comment_block(request, project)
     who_can_see_this = project.who_has_permission_to('view')
     return render(request, 'projects/view.html', {'title': 'Prosjekt: %s' % project,
-                                                               'comments': comments,
-                                                               'project': project,
-                                                               'who_can_see_this': who_can_see_this,
-                                                               })
+                                                  'comments': comments,
+                                                  'project': project,
+                                                  'who_can_see_this': who_can_see_this,
+                                                  })
 
 
 @require_permission("VIEW", Project, 'id')
@@ -64,9 +64,9 @@ def view_orders(request, id):
     project = Project.objects.get(id=id)
 
     return render(request, 'projects/orders.html', {'title': 'Prosjekt: %s orders' % project,
-                                                                 'project': project,
-                                                                 'orders': project.orders.all(),
-                                                                 })
+                                                    'project': project,
+                                                    'orders': project.orders.all(),
+                                                    })
 
 
 @require_permission("EDIT", Project, "id")
@@ -74,13 +74,14 @@ def history(request, id):
     instance = get_object_or_404(Project, id=id, deleted=False)
     history = instance.history()
     return render(request, 'projects/log.html', {'title': _("Latest events"),
-                                                              'project': instance,
-                                                              'logs': history[::-1][0:150]})
+                                                 'project': instance,
+                                                 'logs': history[::-1][0:150]})
 
 
 @require_permission("CREATE", Project)
 def add(request):
     return form(request)
+
 
 @require_permission("EDIT", Project, 'id')
 def edit(request, id):
@@ -102,10 +103,10 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'projects/trash.html', {'title': _("Confirm delete"),
-                                                                    'project': instance,
-                                                                    'can_be_deleted': instance.can_be_deleted()[0],
-                                                                    'reasons': instance.can_be_deleted()[1],
-                                                                    })
+                                                       'project': instance,
+                                                       'can_be_deleted': instance.can_be_deleted()[0],
+                                                       'reasons': instance.can_be_deleted()[1],
+                                                       })
 
 
 def form (request, id=False):
@@ -119,7 +120,7 @@ def form (request, id=False):
         msg = "Vellykket lagt til nytt prosjekt"
         title = _("New project")
         pid = Project.calculate_next_pid()
-        
+
     #Save and set to active, require valid form
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=instance)
@@ -132,6 +133,6 @@ def form (request, id=False):
             return redirect(view, o.id)
 
     else:
-        form = ProjectForm(instance=instance, initial={'pid':pid})
+        form = ProjectForm(instance=instance, initial={'pid': pid})
 
     return render(request, "projects/form.html", {'title': title, 'project': instance, 'form': form})

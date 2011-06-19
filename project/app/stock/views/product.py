@@ -41,8 +41,9 @@ def edit(request, id):
 def orders(request, id):
     product = Product.objects.get(id=id)
     return render(request, 'stock/products/orders.html',
-                  {'title': _("Product used in these orders"), 'product': product,
-                   'orders': product.orders})
+            {'title': _("Product used in these orders"), 'product': product,
+             'orders': product.orders})
+
 
 @require_permission("DELETE", Product, "id")
 def trash(request, id):
@@ -63,6 +64,7 @@ def trash(request, id):
                                                              'can_be_deleted': instance.can_be_deleted()[0],
                                                              'reasons': instance.can_be_deleted()[1],
                                                              })
+
 
 @require_permission("DELETE", Product, "id")
 def recover(request, id):
@@ -85,13 +87,11 @@ def autocomplete(request, query, limit):
 
 @require_permission("VIEW", Product, "id")
 def view(request, id):
-    instance = ProductFile()
     product = Product.objects.get(id=id)
 
     return render(request, 'stock/products/view.html', {'title': _("Product"),
                                                         'product': product,
                                                         })
-
 
 def form (request, id=False):
     if id:
@@ -101,7 +101,7 @@ def form (request, id=False):
     else:
         instance = Product()
         instance.pid = Product.calculate_next_pid()
-        pid =  Product.calculate_next_pid()
+        pid = Product.calculate_next_pid()
 
     #Save and set to active, require valid form
     if request.method == 'POST':

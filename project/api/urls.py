@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from api.filesapi.handlers import FileHandler
 from api.projectsapi.handlers import ProjectHandler
 from piston.resource import Resource
 from api.authentication import TimeBasicAPIAuthentication
@@ -16,6 +17,7 @@ hours = Resource(handler=HourRegistrationHandler, authentication=auth)
 tickets = Resource(handler=TicketHandler, authentication=auth)
 products = Resource(handler=ProductsHandler, authentication=auth)
 projects = Resource(handler=ProjectHandler, authentication=auth)
+files = Resource(handler=FileHandler, authentication=auth)
 
 urlpatterns = patterns('',
                        url(r'contacts/$', contact),
@@ -33,9 +35,10 @@ urlpatterns = patterns('',
                        url(r'tickets/$', tickets),
                        url(r'tickets/(?P<id>\d+)/$', tickets),
 
+                       url(r'files/$', files),
+                       url(r'files/(?P<id>\d+)/$', files),
 
                        #Products
                        url(r'products/$', products),
                        url(r'products/(?P<id>\d+)/$', products),
-
                        )

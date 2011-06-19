@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from copy import deepcopy
 import os
+from django.core import urlresolvers
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -13,6 +14,7 @@ class Folder(PersistentModel):
 
     def __unicode__(self):
         return self.name
+
 
 class File(PersistentModel):
     name = models.CharField(max_length=200)
@@ -41,3 +43,6 @@ class File(PersistentModel):
     def get_file(self):
         if self.file and os.path.join("/file/", self.file.name):
             return os.path.join("/file/", self.file.name)
+
+    def get_edit_url(self):
+        return urlresolvers.reverse('app.files.views.edit_file', args=("%s" % self.id,))

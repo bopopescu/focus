@@ -28,4 +28,5 @@ urlpatterns = patterns('app.projects.views',
                        #Milestone
                        url(r'^(?P<project_id>\d+)/add_milestone/$', 'milestone.add'),
                        url(r'^(?P<project_id>\d+)/edit_milestone/(?P<milestone_id>\d+)$', 'milestone.edit'),
-                    ) 
+
+                       )

@@ -13,6 +13,11 @@ urlpatterns = patterns('app.stock.views',
                        url(r'^product/(?P<id>\d+)/trash/$', 'product.trash'),
                        url(r'^ajax/product/$', 'product.autocomplete'),
 
+                       #ProductFiles
+                       url(r'^product/(?P<id>\d+)/files/$', 'files.overview'),
+                       url(r'^product/(?P<id>\d+)/files/add/$', 'files.add_file'),
+                       url(r'^product/(?P<id>\d+)/files/(?P<file_id>\d+)/edit/$', 'files.edit_file'),
+
                        #Units
                        url(r'^unit/$', 'productunit.overview'),
                        url(r'^unit/add/$', 'productunit.add'),
