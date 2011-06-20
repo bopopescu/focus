@@ -30,7 +30,7 @@ def login(request):
                 Log(message="ErrorLogin: %s, username: %s" % (err, username)).save()
 
         Log(message="Attempt to login width username: %s, password: %s, redirect_to: %s, but failed" % (
-            username, password, redirect_to)).save()
+            username, "******", redirect_to)).save()
 
     return render_to_response('login.html', {'LOGIN_URL': settings.LOGIN_URL})
 
