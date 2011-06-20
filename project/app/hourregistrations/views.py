@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from decimal import Decimal
 from django.shortcuts import render
+from api.hourregistrationsapi.forms import TimeTrackerForm
 from app.hourregistrations.forms import HourRegistrationForm
 from app.hourregistrations.models import HourRegistration
 from core import Core
@@ -117,6 +118,10 @@ def date_valid_for_edit(request, year, month, day):
 def calendar_today(request):
     form = HourRegistrationForm()
     return render(request, "hourregistrations/calendar.html", {"form": form})
+
+def timer(request):
+    form = TimeTrackerForm()
+    return render(request, 'hourregistrations/timer.html', {'form': form})
 
 
 @require_permission("LIST", HourRegistration)

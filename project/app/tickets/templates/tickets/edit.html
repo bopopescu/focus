@@ -1,6 +1,7 @@
 
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block extraHead %}
     {{ form.media }}
@@ -33,6 +34,52 @@
     {% endif %}
 
     <div style="width:605px;">
+
+    <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
+    <table id="last_updates">
+        {% for update in updates %}
+
+            <tr>
+                <td><img
+                        src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
+                        alt=""/></td>
+                <td>
+                    <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
+
+                    <p>
+                        {% if update.update_lines.all %}
+                            <b>{% trans "Changes: " %}</b>
+                            <ul>
+                                {% for line in update.update_lines.all %}
+                                    <li>{{ line.change }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                    </p>
+
+                    {% if update.comment %}
+                        <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
+                    {% endif %}
+
+                    {% if update.attachment %}
+                        <p>
+                            <b>{% trans "New Attachment:" %}</b>
+                            <a target="_blank" href="{{ update.get_attachment_url }}">
+                                <img src="{{ STATIC_URL }}img/download.png"
+                                     style="width:30px; height:30px; vertical-align:middle;">
+                                {{ update.get_attachment_name }}</a>
+                        </p>
+
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
 
         <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
@@ -155,10 +202,18 @@
 
 $(document).ready(function() {
     $(".ticket_hideable").hide();
-    $("#toggle_extra").click(function () {
+    $("#toggle_extra").click(function() {
         $(".ticket_hideable").toggle();
         $(this).html($(this).html() == "more" ? "{% trans 'less' %}" : "{% trans 'more' %}");
     });
+
+    $("#last_updates").hide()
+    $("#show_updates").click(function(e) {
+        e.preventDefault();
+        $("#last_updates").toggle();
+        $(this).html($("#last_updates").is(":visible") ?
+                "{% trans 'Hide updates' %}" : "{% trans 'Show most recent updates' %}");
+    })
 });
 
   </script>

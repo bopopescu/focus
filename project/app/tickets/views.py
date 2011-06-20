@@ -79,7 +79,8 @@ def create_update_for_ticket(old_ticket, ticket_form):
 @require_permission("CREATE", Ticket)
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
-
+    updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")[:3]
+    
     if request.method == "POST":
         old_ticket = copy.copy(ticket)
         ticket_form = EditTicketForm(request.POST, request.FILES, instance=ticket)
@@ -96,6 +97,7 @@ def edit(request, id):
 
     return render(request, "tickets/edit.html", {'title': _('Update Ticket'),
                                                  'ticket': ticket,
+                                                 'updates': updates,
                                                  'ticket_form': ticket_form,
                                                  })
 
