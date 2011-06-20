@@ -1,5 +1,5 @@
-from app.files.forms import FileForm
-from app.files.models import File
+from app.files.forms import FileForm, FileTagForm
+from app.files.models import File, FileTag
 from piston.handler import BaseHandler
 from app.contacts.models import Contact
 from app.stock.models import Product
@@ -44,5 +44,36 @@ class FileHandler(BaseHandler):
 
             return customer
 
+        else:
+            return form.errors
+
+
+class FileTagHandler(BaseHandler):
+    model = FileTag
+    fields = ('id', 'name')
+
+    def read(self, request, id=None):
+        all = Core.current_user().get_permitted_objects("VIEW", FileTag).filter(trashed=False, )
+        if id:
+            try:
+                return all.get(id=id)
+            except FileTag.DoesNotExist:
+                return rc.NOT_FOUND
+
+        return all
+
+    def create(self, request, id=None):
+        clone = None
+
+        if id:
+            instance = FileTag.objects.get(id=id)
+        else:
+            instance = FileTag()
+
+        form = FileTagForm(request.POST, instance=instance)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            return obj
         else:
             return form.errors

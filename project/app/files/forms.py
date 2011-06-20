@@ -5,4 +5,10 @@ from models import *
 class FileForm(ModelForm):
     class Meta:
         model = File
-        fields = ('name', 'file',)
+        fields = ('name', 'file','tags')
+
+
+class FileTagForm(ModelForm):
+    class Meta:
+        model = FileTag
+        fields = ('name',)
