@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('app.hourregistrations.views',
                        url(r'^$', 'calendar_today'),
+                       url(r'^timer/$', 'timer'),
                        url(r'^calendar/form/$', 'form'),
                        url(r'^calendar/employees/$', 'list_all_employees'),
                        url(r'^calendar/date_valid_for_edit/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/$',

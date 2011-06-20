@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "hourregistrations/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <a class="start" href="blah">test</a>
+
+    <form id="timer_form">
+       {{ form }}
+        <input type="submit" />
+    </form>
+
+    <table id="timers">
+        <thead>
+            <tr>
+                <th>{% trans "Timer" %}</th>
+                <th>{% trans "Total Time" %}</th>
+                <th>{% trans "Start" %}</th>
+                <th>{% trans "Pause" %}</th>
+                <th>{% trans "Stop and save" %}</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        </tbody>
+    </table>
+    
+    <script type="text/javascript">
+
+        function asTd(text) {
+            return "<td>" + text + "</td>"
+        }
+
+        var timer_url = "{% url timetracker_all  %}";
+        function addTimer(timer) {
+            var row = "<tr>";
+            row += asTd(timer.name);
+            row += asTd(timer.time_info[0]);
+            row += asTd("<a class='start' href=\""+timer_url + timer.id+"/\">start</a>");
+            row += asTd("<a class='pause' href=\""+timer_url + timer.id+"/\">pause</a>");
+            row += asTd("<a class='stop'  href=\""+timer_url + timer.id+"/\">stop</a>");
+            row += "</tr>";
+
+            $("#timers tbody").append(row)
+
+        }
+
+        $("#timer_form").submit(function() {
+            $.post(timer_url, $(this).serialize(),
+                function(timer) {
+                    addTimer(timer)
+                }, "json");
+            return false;
+        });
+
+        function getTimers() {
+            $.get(timer_url,
+                function(timers) {
+                    $(timers).each(function() {
+                        addTimer(this)
+                    })
+                }, "json");
+        }
+
+        $(function() {
+            getTimers();
+        });
+
+        $(".start").live('click', function(e) {
+            $.ajax({
+                type: "PUT",
+                url: this.href,
+                data: {action: "start" },
+                dataType: "json",
+                success: function() {
+                    alert("started timer")
+                }
+                
+            });
+            e.preventDefault()
+        });
+
+
+        $(".pause").live('click', function(e) {
+            $.ajax({
+                type: "PUT",
+                url: this.href,
+                data: {action: "pause" },
+                dataType: "json",
+                success: function() {
+                    alert("paused timer")
+                }
+
+            });
+            e.preventDefault()
+        });
+
+        $(".stop").live('click', function(e) {
+            $.ajax({
+                type: "PUT",
+                url: this.href,
+                data: {action: "stop" },
+                dataType: "json",
+                success: function() {
+                    alert("stopped timer")
+                }
+
+            });
+            e.preventDefault()
+        });
+
+    </script>
+
+{% endblock %}
+
