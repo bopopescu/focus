@@ -16,12 +16,19 @@ class Folder(PersistentModel):
         return self.name
 
 
+class FileTag(PersistentModel):
+    name = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.name
+
 class File(PersistentModel):
     name = models.CharField(max_length=200)
     folder = models.ForeignKey(Folder, related_name="files", null=True, default=None, blank=True)
     file = models.FileField(upload_to="uploaded_files", storage=fs)
     last_revision = models.ForeignKey("File", related_name="revisions", null=True, blank=True)
-
+    tags = models.ManyToManyField(FileTag, related_name="files")
+    
     def clone(self):
         cloned = deepcopy(self)
         cloned.id = None

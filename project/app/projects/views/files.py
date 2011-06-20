@@ -4,8 +4,9 @@ from app.files.models import File
 from app.files.views import generic_form as file_form
 from app.projects.models import Project
 from core import Core
-from core.decorators import login_required
+from core.decorators import require_permission
 
+@require_permission("VIEW", Project, 'id')
 def overview(request, id):
     """
     id is project_id
@@ -14,13 +15,14 @@ def overview(request, id):
 
     #Set URL for edit for files in project
     edit_file_url = "/projects/%s/files/" % project.id
-    
-    return render(request, "projects/files/list.html",
-                                                        {'project': project,
-                                                         'file_manager': project,
-                                                         'edit_file_url': edit_file_url})
 
-@login_required()
+    return render(request, "projects/files/list.html",
+            {'project': project,
+             'file_manager': project,
+             'edit_file_url': edit_file_url})
+
+
+@require_permission("VIEW", Project, 'id')
 def add_file(request, id):
     """
     id = project_id
@@ -30,7 +32,7 @@ def add_file(request, id):
     return file_form(request, project, file, redirect(overview, id))
 
 
-@login_required()
+@require_permission("VIEW", Project, 'id')
 def edit_file(request, id, file_id):
     """
     id = project_id

@@ -52,6 +52,6 @@ def generic_form(request, instance, file_instance, redirect_view):
     else:
         form = FileForm(instance=file_instance)
 
-    return render(request, "form.html", {'title': 'Fil',
+    return render(request, "files/form.html", {'title': 'Fil',
                                          'form': form,
                                          })
