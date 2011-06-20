@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
-from copy import deepcopy
-import os
 
 from django.db import models
+from app.files.models import File
 from core.models import PersistentModel
 from app.suppliers.models import Supplier
 from django.core import urlresolvers
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 from django.utils.translation import ugettext as _
-from django.db.models.aggregates import Max
-
-fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class UnitsForSizes(PersistentModel):
     name = models.CharField(max_length=100)
@@ -70,7 +64,6 @@ class Currency(PersistentModel):
     def __unicode__(self):
         return self.name
 
-
 class Product(PersistentModel):
     pid = models.CharField(_("ProductID"), max_length=50, null=True)
     name = models.CharField(max_length=100)
@@ -85,7 +78,8 @@ class Product(PersistentModel):
     priceVal = models.ForeignKey(Currency, related_name="products", verbose_name=_("Currency"))
     normalDeliveryTime = models.CharField(_("Expected delivery time"), max_length=10, null=True)
     productGroup = models.ForeignKey(ProductGroup, related_name="products", null=True)
-
+    files = models.ManyToManyField(File)
+        
     def __unicode__(self):
         return self.name
 
@@ -128,38 +122,6 @@ class Product(PersistentModel):
                 orderIDs.append(line.order.id)
         orders = cls.objects.filter(id__in=orderIDs)
         return orders
-
-
-class ProductFile(PersistentModel):
-    product = models.ForeignKey(Product, related_name="files")
-    name = models.CharField(max_length=200)
-    file = models.FileField(upload_to="products", storage=fs)
-    parent = models.ForeignKey("ProductFile", related_name="history", null=True)
-
-    def clone(self):
-         CopiedFile = deepcopy(self)
-         CopiedFile.id = None
-         CopiedFile.trash = False
-         CopiedFile.deleted = False
-         CopiedFile.parent = self
-
-         return CopiedFile
-
-    def __unicode__(self):
-        return u'%s,%s' % (self.name, self.file.name)
-
-    def get_history(self):
-        return self.history.all().order_by("-date_created")
-
-    def original_name(self):
-        list = self.file.name.encode("UTF-8").split("/")
-        return list[len(list) - 1]
-
-    def get_file(self):
-        if self.file:
-            if os.path.join("/file/", self.file.name):
-                return os.path.join("/file/", self.file.name)
-
 
 def initial_data ():
     Currency.objects.get_or_create(name="Norsk Krone", iso="NOK")

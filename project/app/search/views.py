@@ -27,6 +27,8 @@ def search(request):
 
     result = {}
 
+    terms = term.split(" ")
+    
     for o in searchIn.keys():
         for i in searchIn[o]:
             kwargs = {'%s__%s' % ('%s' % i, 'icontains'): '%s' % term}
@@ -37,6 +39,16 @@ def search(request):
                     result[s] += 1
                 else:
                     result[s] = 1
+            
+            for t in terms:
+                kwargs = {'%s__%s' % ('%s' % i, 'icontains'): '%s' % t}
+                k = o.objects.filter_current_company().filter(**kwargs)
+
+                for s in k:
+                    if s in result:
+                        result[s] += 1
+                    else:
+                        result[s] = 1
 
     result = sorted(result.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)
 

@@ -82,7 +82,7 @@ class Core:
             return False
 
     @staticmethod
-    def login (request, username, password, remember=False):
+    def login (request, username, password, remember = False):
         """
         Logs in with the given username/password
         Returns True and logs the user in if username/password is correct, False otherwise
@@ -93,21 +93,18 @@ class Core:
         if user:
             request.session['user_id'] = user.pk
             request.user = user
+
             Core.attach_user(request)
 
             # Remember me if I tell you to!
             if remember:
-                key, created = UserLoginKey.objects.get_or_create(user=user,
-                                                                  ip=request.META['REMOTE_ADDR'])
 
-                key.last_login = datetime.now()
-                key.save(log=False)
-
-                request.set_cookie('username', user.username, max_age=settings.LOGIN_REMEMBER_TIME);
-                request.set_cookie('userkey', key.key, max_age=settings.LOGIN_REMEMBER_TIME);
-
+                print "HELLO?"
+                request.session.set_expiry(settings.LOGIN_REMEMBER_TIME)
+            else:
+                request.session.set_expiry(0) # Expire on browser exit
             return True
-
+        
         return False
 
     @staticmethod

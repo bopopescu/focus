@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from app.contacts.models import Contact
+from app.files.models import File
 from core import Core
 from django.contrib.contenttypes import generic
 from core.models import PersistentModel, User, Comment
@@ -22,6 +23,7 @@ class Project(PersistentModel):
     deliveryDateDeadline = models.DateTimeField(verbose_name=_("Delivery deadline"), null=True, blank=True)
     responsible = models.ForeignKey(User, related_name="projectsWhereResponsible", verbose_name=_("Responsible"),                                null=True)
     contact = models.ForeignKey(Contact, related_name="projects", null=True)
+    files = models.ManyToManyField(File)
     comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
@@ -93,22 +95,5 @@ class Milestone(PersistentModel):
 
     def __unicode__(self):
         return "Milestone %s for project %s" % (self.name, self.project)
-
-class ProjectFolder(PersistentModel):
-    project_id = models.ForeignKey(Project, related_name="folders")
-    name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return "Prosjektmappe: %s" % self.name
-
-
-class ProjectFile(PersistentModel):
-    project_id = models.ForeignKey(Project, related_name="files")
-    name = models.CharField(max_length=100)
-    folder = models.ForeignKey(ProjectFolder, related_name="files")
-
-    def __unicode__(self):
-        return "Prosjektfil: %s" % self.name
-
 
 from app.projects.forms import ProjectFormSimple

@@ -6,12 +6,19 @@ import settings
 
 def send_update_mails(ticket, ticket_update):
     assigned_sent = check_assigned_to(ticket)
-    recipients = set([ticket.user.email])
+
+    recipients = set([])
+
+    if ticket.creator:
+        recipients.add(ticket.creator.email)
+
     if not assigned_sent and ticket.assigned_to:
         recipients.remove(ticket.assigned_to.email)
         
     for update in ticket.updates.all():
-        recipients.add(update.user.email)
+        if update.creator:
+            recipients.add(update.creator.email)
+
     if ticket_update.public and ticket_update.comment:
         _send_to_clients(ticket, ticket_update)
 

@@ -16,6 +16,11 @@ urlpatterns = patterns('app.projects.views',
                        url(r'^(?P<id>\d+)/history/?$', 'project.history'),
                        url(r'^(?P<id>\d+)/milestones/?$', 'project.milestones'),
 
+                       #Files
+                       url(r'^(?P<id>\d+)/files/$', 'files.overview'),
+                       url(r'^(?P<id>\d+)/files/add/$', 'files.add_file'),
+                       url(r'^(?P<id>\d+)/files/(?P<file_id>\d+)/edit/$', 'files.edit_file'),
+
                        #Project ajax
                        url(r'^add_ajax/$', 'project_ajax.add'),
                        url(r'^list_ajax/$', 'project_ajax.list_by_customer'),
@@ -23,4 +28,5 @@ urlpatterns = patterns('app.projects.views',
                        #Milestone
                        url(r'^(?P<project_id>\d+)/add_milestone/$', 'milestone.add'),
                        url(r'^(?P<project_id>\d+)/edit_milestone/(?P<milestone_id>\d+)$', 'milestone.edit'),
-                    ) 
+
+                       )

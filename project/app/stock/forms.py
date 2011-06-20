@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-
 from django.forms import ModelForm
 from functools import partial
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
-from app.stock.models import Product, UnitsForSizes, ProductGroup, Currency, ProductFile
+from app.stock.models import Product, UnitsForSizes, ProductGroup, Currency
 from app.suppliers.models import Supplier
 from core.widgets import SelectWithPop, JQueryAutoComplete
 from django.forms import forms
@@ -44,12 +43,6 @@ class UnitsForSizesForm(ModelForm):
     class Meta:
         model = UnitsForSizes
         fields = ('name',)
-
-
-class ProductFileForm(ModelForm):
-    class Meta:
-        model = ProductFile
-        fields = ('name', 'file',)
 
 
 class ProductAutocompleteWidget(JQueryAutoComplete):

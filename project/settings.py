@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 
 import os.path
 
@@ -10,8 +11,6 @@ TEMPLATE_DEBUG = DEBUG
 SERVER_EMAIL = 'fredrik+django@fncit.no'
 NO_REPLY_EMAIL = 'no-reply@focustime.no'
 DEBUG_EMAIL = "fredrik+debug@fncit.no"
-
-CLIENT_LOGIN_SITE = "http://localhost:8000/client/"
 
 ADMINS = (
 (u'Fredrik Nygård Carlsen', 'fredrik@fncit.no'),
@@ -36,6 +35,9 @@ CACHES = {
     }
 }
 
+LOGIN_REMEMBER_TIME = timedelta(days=90)
+
+
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
@@ -50,11 +52,12 @@ LANGUAGES = (
 )
 
 SITE_ID = 1
-SITE_URL = "http://focus.fncit.no"
+SITE_URL = "http://localhost:8000"
+LOGIN_URL = "/accounts/login/"
+CLIENT_LOGIN_SITE = "http://localhost:8000/client/"
 
 USE_I18N = True
 
-LOGIN_URL = "/accounts/login/"
 
 FORCE_SCRIPT_NAME = ""
 
@@ -74,6 +77,7 @@ MIDDLEWARE_CLASSES = (
 'django.middleware.common.CommonMiddleware',
 'django.middleware.doc.XViewMiddleware',
 
+'core.middleware.CookieMiddleware',
 'core.middleware.AuthenticationMiddleware',
 'core.middleware.MessageMiddleware',
 'core.middleware.SessionBasedLocaleMiddleware',
