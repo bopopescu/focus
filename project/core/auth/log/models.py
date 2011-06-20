@@ -15,8 +15,7 @@ class Log(models.Model):
     action = models.CharField(max_length=10, null=True)
 
     def __unicode__(self):
-        s = "%s, %s, %s:" % (self.date, (self.creator), self.content_type)
-        return s
+        return "%s, %s:" % (self.date, self.content_type)
 
     def get_changes(self):
         msg = ""

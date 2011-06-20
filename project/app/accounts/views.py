@@ -6,7 +6,6 @@ from core.auth.log.models import Log
 from django.conf import settings
 
 def login(request):
-
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -16,6 +15,7 @@ def login(request):
             user = User.objects.get(username=username)
 
             if user.canLogin:
+                Log(message="%s logget inn." % user).save(user=user)
                 if not redirect_to:
                     return HttpResponseRedirect("/dashboard/")
                 return HttpResponseRedirect('%s' % redirect_to)
@@ -26,10 +26,13 @@ def login(request):
             try:
                 user = User.objects.get(username=username)
                 Log(message="%s forsøkte å logge inn, men brukte feil passord." % user).save(user=user)
-            except:
-                pass
+            except Exception, err:
+                Log(message="ErrorLogin: %s, username: %s" % (err, username)).save()
 
-    return render_to_response('login.html', {'LOGIN_URL':settings.LOGIN_URL})
+        Log(message="Attempt to login width username: %s, password: %s, redirect_to: %s, but failed" % (
+            username, password, redirect_to)).save()
+
+    return render_to_response('login.html', {'LOGIN_URL': settings.LOGIN_URL})
 
 def logout_view(request):
     logout(request)
