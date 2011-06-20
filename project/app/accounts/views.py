@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from app.accounts.forms import LoginForm
 from core import Core
 from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from core.auth.user.models import User
@@ -7,32 +8,44 @@ from django.conf import settings
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        redirect_to = request.REQUEST.get('next', '')
 
-        if Core.login(request, username, password):
-            user = User.objects.get(username=username)
+        form = LoginForm(request.POST)
 
-            if user.canLogin:
-                Log(message="%s logget inn." % user).save(user=user)
-                if not redirect_to:
-                    return HttpResponseRedirect("/dashboard/")
-                return HttpResponseRedirect('%s' % redirect_to)
-            Log(message="%s forsøkte å logge inn, men er sperret!" % user).save(user=user)
-            return render_to_response('login.html')
+        if form.is_valid():
+            data = form.cleaned_data
 
-        else:
-            try:
-                user = User.objects.get(username=username)
-                Log(message="%s forsøkte å logge inn, men brukte feil passord." % user).save(user=user)
-            except Exception, err:
-                Log(message="ErrorLogin: %s, username: %s" % (err, username)).save()
+            username = data['username']
+            password = data['password']
+            remember = data['remember']
+            
+            redirect_to = request.REQUEST.get('next', '')
+    
+            if Core.login(request, username, password, remember):
+                user = request.user
 
-        Log(message="Attempt to login width username: %s, password: %s, redirect_to: %s, but failed" % (
-            username, "******", redirect_to)).save()
+                if user.canLogin:
+                    Log(message="%s logget inn." % user).save(user=user)
+                    if not redirect_to:
+                        return HttpResponseRedirect("/dashboard/")
 
-    return render_to_response('login.html', {'LOGIN_URL': settings.LOGIN_URL})
+                    return HttpResponseRedirect('%s' % redirect_to)
+                
+                Log(message="%s forsøkte å logge inn, men er sperret!" % user).save(user=user)
+                return render_to_response('login.html')
+
+            else:
+                try:
+                    user = User.objects.get(username=username)
+                    Log(message="%s forsøkte å logge inn, men brukte feil passord." % user).save(user=user)
+                except Exception, err:
+                    Log(message="ErrorLogin: %s, username: %s" % (err, username)).save()
+
+            Log(message="Attempt to login width username: %s, password: %s, redirect_to: %s, but failed" % (
+                username, "******", redirect_to)).save()
+
+    form  = LoginForm()
+
+    return render_to_response('login.html', {'form':form, 'LOGIN_URL': settings.LOGIN_URL})
 
 def logout_view(request):
     logout(request)

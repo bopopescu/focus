@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 
 import os.path
 
@@ -33,6 +34,9 @@ CACHES = {
         'LOCATION': 'unique-snowflake'
     }
 }
+
+LOGIN_REMEMBER_TIME = timedelta(days=90)
+
 
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
@@ -73,6 +77,7 @@ MIDDLEWARE_CLASSES = (
 'django.middleware.common.CommonMiddleware',
 'django.middleware.doc.XViewMiddleware',
 
+'core.middleware.CookieMiddleware',
 'core.middleware.AuthenticationMiddleware',
 'core.middleware.MessageMiddleware',
 'core.middleware.SessionBasedLocaleMiddleware',
