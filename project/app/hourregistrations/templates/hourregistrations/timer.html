@@ -38,14 +38,17 @@
 
         var timer_url = "{% url timetracker_all  %}";
         function addTimer(timer) {
-            var row = "<tr>";
+            var row = "<tr ";
+            if (timer.is_running) {
+                row += "class=\"running\""
+            }
+            row += ">"
             row += asTd(timer.name);
             row += asTd(timer.time_info[0]);
             row += asTd("<a class='start' href=\""+timer_url + timer.id+"/\">start</a>");
             row += asTd("<a class='pause' href=\""+timer_url + timer.id+"/\">pause</a>");
             row += asTd("<a class='stop'  href=\""+timer_url + timer.id+"/\">stop</a>");
             row += "</tr>";
-
             $("#timers tbody").append(row)
 
         }
@@ -72,13 +75,14 @@
         });
 
         $(".start").live('click', function(e) {
+            $(this).closest("tr").addClass("running")
             $.ajax({
                 type: "PUT",
                 url: this.href,
                 data: {action: "start" },
                 dataType: "json",
                 success: function() {
-                    alert("started timer")
+
                 }
                 
             });
@@ -87,13 +91,14 @@
 
 
         $(".pause").live('click', function(e) {
+            $(this).closest("tr").removeClass("running")
             $.ajax({
                 type: "PUT",
                 url: this.href,
                 data: {action: "pause" },
                 dataType: "json",
                 success: function() {
-                    alert("paused timer")
+
                 }
 
             });
@@ -107,14 +112,27 @@
                 data: {action: "stop" },
                 dataType: "json",
                 success: function() {
-                    alert("stopped timer")
+
                 }
 
             });
             e.preventDefault()
         });
 
+    function incTimers() {
+        $(".running td:nth-child(2)").each(function() {
+            var time = $(this).html()
+            time = parseInt(time) + 1
+            $(this).html(time)
+        })
+    }
+
+    setInterval("incTimers();", 1000)
+
     </script>
 
 {% endblock %}
+
+
+
 

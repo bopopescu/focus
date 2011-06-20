@@ -39,6 +39,9 @@ class TimeTracker(PersistentModel):
             current.stop_and_save()
 
     def stop_and_save(self):
+        """
+        stops the timer and creates an Hourregistration
+        """
         self.pause()
         self.active = False
         self.save()
@@ -46,8 +49,16 @@ class TimeTracker(PersistentModel):
         self.create_hour_reg()
 
 
+    def is_running(self):
+        current = self.current_period()
+        if current and not current.done:
+            return True
+        return False
+
+
     def create_hour_reg(self):
-        pass
+        periods = WorkPeriod.objects.filter(tracker=self).order_by("id")
+
         # TODO: create HourRegistration from this TimeTracker
 
 

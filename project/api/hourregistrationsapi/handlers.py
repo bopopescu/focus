@@ -34,12 +34,16 @@ class HourRegistrationHandler(BaseHandler):
 class TimeTrackerHandler(BaseHandler):
     model = TimeTracker
     allowed_methods = ('GET', 'POST', 'PUT', 'DELETE')
-    fields = ('id', 'name', 'active', 'time_info', ('time_periods', ('start', 'end', 'done',),),)
+    fields = ('id', 'name', 'active', 'time_info', 'is_running', ('time_periods', ('start', 'end', 'done',),),)
 
 
     @classmethod
     def time_info(cls, time_tracker):
         return time_tracker.time_info()
+
+    @classmethod
+    def is_running(cls, time_tracker):
+        return time_tracker.is_running()
 
 
     def read(self, request, id=None):
