@@ -15,9 +15,11 @@ decimal_places = 3
 
 class HourRegistration(PersistentModel):
     date = models.DateTimeField()
+
     order = models.ForeignKey('orders.Order')
     time_start = models.CharField(max_length=max_digits, null=True, default="")
     time_end = models.CharField(max_length=max_digits, null=True, default="")
+
     description = models.TextField(null=True, )
 
     pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.0"),
@@ -54,11 +56,11 @@ class HourRegistration(PersistentModel):
 
     def format_date(self):
         if re.match("\d\d:\d$", self.time_start):
-            self.time_start = self.time_start + "0"
+            self.time_start += "0"
         elif re.match("\d:\d\d", self.time_start):
             self.time_start = "0" + self.time_start
         if re.match("\d\d:\d$", self.time_end):
-            self.time_end = self.time_end + "0"
+            self.time_end += "0"
         elif re.match("\d:\d\d", self.time_end):
             self.time_end = "0" + self.time_end
 
