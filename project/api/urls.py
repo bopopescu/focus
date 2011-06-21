@@ -22,7 +22,6 @@ files = Resource(handler=FileHandler, authentication=auth)
 filetags = Resource(handler=FileTagHandler, authentication=auth)
 
 urlpatterns = patterns('',
-                       
                        #Contacts
                        url(r'contacts/$', contact),
                        url(r'contacts/(?P<id>\d+)/$', contact),
@@ -31,6 +30,7 @@ urlpatterns = patterns('',
                        url(r'customers/$', customers),
                        url(r'customers/(?P<id>\d+)/$', customers),
 
+                       #Projects
                        url(r'projects/$', projects),
                        url(r'projects/(?P<id>\d+)/$', projects),
 
@@ -48,12 +48,10 @@ urlpatterns = patterns('',
                        url(r'files/$', files),
                        url(r'files/(?P<id>\d+)/$', files),
 
-                       #FileTags
                        url(r'filetags/$', filetags),
                        url(r'filetags/(?P<id>\d+)/$', filetags),
 
                        #Products
                        url(r'products/$', products),
                        url(r'products/(?P<id>\d+)/$', products),
-
                     )

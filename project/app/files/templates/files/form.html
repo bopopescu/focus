@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block extraHead %}
+{% block extra_head %}
     {{ form.media }}
 {% endblock %}
 
@@ -36,6 +36,7 @@
                     <br>{{ field }}
                 </div>
             {% endfor %}
+        
             <div>
                 <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
 
@@ -50,8 +51,82 @@
             $("#form_button").click(function() {
                 $("#form_button").hide();
                 $("#loading").show();
-            })
+            });
         })
+    </script>
+
+    <style>
+        .ui-autocomplete-loading {
+            background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+        }
+    </style>
+    <script>
+        $(function() {
+            var availableTags = [
+                "ActionScript",
+                "AppleScript",
+                "Asp",
+                "BASIC",
+                "C",
+                "C++",
+                "Clojure",
+                "COBOL",
+                "ColdFusion",
+                "Erlang",
+                "Fortran",
+                "Groovy",
+                "Haskell",
+                "Java",
+                "JavaScript",
+                "Lisp",
+                "Perl",
+                "PHP",
+                "Python",
+                "Ruby",
+                "Scala",
+                "Scheme"
+            ];
+
+            function split(val) {
+                return val.split(/,\s*/);
+            }
+
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $("#id_tags")
+                // don't navigate away from the field on tab when selecting an item
+                    .bind("keydown", function(event) {
+                        if (event.keyCode === $.ui.keyCode.TAB &&
+                                $(this).data("autocomplete").menu.active) {
+                            event.preventDefault();
+                        }
+                    })
+                    .autocomplete({
+                        minLength: 0,
+                        source: function(request, response) {
+                            // delegate back to autocomplete, but extract the last term
+                            response($.ui.autocomplete.filter(
+                                    availableTags, extractLast(request.term)));
+                        },
+                        focus: function() {
+                            // prevent value inserted on focus
+                            return false;
+                        },
+                        select: function(event, ui) {
+                            var terms = split(this.value);
+                            // remove the current input
+                            terms.pop();
+                            // add the selected item
+                            terms.push(ui.item.value);
+                            // add placeholder to get the comma-and-space at the end
+                            terms.push("");
+                            this.value = terms.join(", ");
+                            return false;
+                        }
+                    });
+        });
     </script>
 
 
