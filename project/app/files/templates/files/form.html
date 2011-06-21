@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block extra_head %}
     {{ form.media }}
@@ -13,9 +14,7 @@
     {% if form.errors %}
 
         <div class="information" id="message">
-
             <p>Fix before submit again</p>
-
         </div>
 
         {% for i in form %}
@@ -36,7 +35,7 @@
                     <br>{{ field }}
                 </div>
             {% endfor %}
-        
+
             <div>
                 <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
 
@@ -62,30 +61,19 @@
     </style>
     <script>
         $(function() {
-            var availableTags = [
-                "ActionScript",
-                "AppleScript",
-                "Asp",
-                "BASIC",
-                "C",
-                "C++",
-                "Clojure",
-                "COBOL",
-                "ColdFusion",
-                "Erlang",
-                "Fortran",
-                "Groovy",
-                "Haskell",
-                "Java",
-                "JavaScript",
-                "Lisp",
-                "Perl",
-                "PHP",
-                "Python",
-                "Ruby",
-                "Scala",
-                "Scheme"
-            ];
+
+            var availableTags = []
+
+            $.getJSON("/api/filetags/",
+                    {
+                        format: "json"
+                    },
+                    function(data) {
+                        $.each(data, function(i, item) {
+                            availableTags.push(item.name);
+                        });
+                    }
+            );
 
             function split(val) {
                 return val.split(/,\s*/);
@@ -128,7 +116,68 @@
                     });
         });
     </script>
+    <br>
 
+    {% if file.id %}
+    <h2>{% trans "Download current version" %}</h2>
+
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th style="width:200px;">{% trans "Date" %}</th>
+            <th style="width:200px;">{% trans "Saved by" %}</th>
+            <th style="width:200px;">{% trans "Name" %}</th>
+            <th style="width:200px;">{% trans "Download" %}</th>
+            <th style="width:200px;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ file.date_edited|date:"d.m.Y H:i" }}</td>
+            <td>{{ file.editor }}</td>
+            <td><img class="icon_for_file" src="{{ file.get_file_icon}}"
+                     alt=""/> {{ file.name }}</td>
+            <td><a href="{{ file.get_file }}" target="_blank"><img
+                    style="vertical-align: middle; border:0px; width:30px; height: 30px;"
+                    src="{{ STATIC_URL }}img/download.png">{% trans "download" %}</a></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% if file.get_revisions %}
+        <h2>{% trans "View or recover revisions" %}</h2>
+
+        <table id="dataTable">
+            <thead>
+            <tr>
+                <th style="width:200px;">{% trans "Date" %}</th>
+                <th style="width:200px;">{% trans "Saved by" %}</th>
+                <th style="width:200px;">{% trans "Name" %}</th>
+                <th style="width:200px;">{% trans "Download" %}</th>
+                <th style="width:200px;">{% trans "Recover" %}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for f in file.get_revisions %}
+                <tr>
+                    <td>{{ f.date_created|date:"d.m.Y H:i" }}</td>
+                    <td>{{ f.editor }}</td>
+                    <td><img class="icon_for_file" src="{{ f.get_file_icon}}"
+                             alt=""/> {{ f.name }}</td>
+                    <td><a href="{{ f.get_file }}" target="_blank"><img
+                            style="vertical-align: middle; border:0px; width:30px; height: 30px;"
+                            src="{{ STATIC_URL }}img/download.png">{% trans "download" %}</a></td>
+                    <td><a href="{{ f.get_recover_url }}" target="_blank"><img
+                            style="vertical-align: middle; border:0px; width:30px; height: 30px;"
+                            src="{{ STATIC_URL }}img/backup.png">{% trans "recover" %}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 
 

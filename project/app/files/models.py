@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from copy import deepcopy
 import os
 from django.core import urlresolvers
+from core.templatetags.thumbnail import thumbnail_with_max_side
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -22,26 +23,63 @@ class FileTag(PersistentModel):
     def __unicode__(self):
         return self.name
 
+
 class File(PersistentModel):
     name = models.CharField(max_length=200)
     folder = models.ForeignKey(Folder, related_name="files", null=True, default=None, blank=True)
     file = models.FileField(upload_to="uploaded_files", storage=fs)
-    last_revision = models.ForeignKey("File", related_name="revisions", null=True, blank=True)
+    parent_file = models.ForeignKey("File", related_name="revisions", null=True, blank=True)
     tags = models.ManyToManyField(FileTag, related_name="files")
-    
+
     def clone(self):
-        cloned = deepcopy(self)
-        cloned.id = None
-        cloned.trash = False
-        cloned.deleted = False
-        cloned.last_revision = self
-        return cloned
+        copied_file = deepcopy(self)
+        copied_file.id = None
+        copied_file.trashed = True
+        copied_file.parent_file = self
+
+        return copied_file
+
+    def recover(self):
+        clone = self.parent_file.clone()
+        clone.save()
+
+        self.parent_file.name = self.name
+        self.parent_file.file = self.file
+        self.parent_file.save()
 
     def __unicode__(self):
         return u'%s,%s' % (self.name, self.file.name)
 
+    def get_file_extension(self):
+        basename, file_extension = os.path.splitext(self.file.name)
+        return file_extension
+
+    def get_file_icon(self):
+        file_extension = self.get_file_extension()
+
+        path = settings.STATIC_URL + "img/file_extensions/"
+
+        if file_extension == ".pdf":
+            return path + "pdf.png"
+        elif file_extension == ".xls" or file_extension == ".xlsx":
+            return path + "excel.png"
+        elif file_extension == ".zip" or file_extension == ".gzip":
+            return path + "zip.png"
+        elif file_extension == ".odt" or file_extension == ".doc" or file_extension == ".docx":
+            return path + "word.png"
+        elif file_extension == ".jpg" or file_extension == ".png" or file_extension == ".gif":
+            try:
+                return thumbnail_with_max_side(self.file, "25")
+            except Exception:
+                return path + "unknown.png"
+        else:
+            return path + "unknown.png"
+
+
     def get_revisions(self):
-        return self.revisions.all().order_by("-date_created")
+        if self.id:
+            return self.revisions.all().order_by("-date_created")
+        return []
 
     def original_name(self):
         list = self.file.name.encode("UTF-8").split("/")
@@ -53,3 +91,6 @@ class File(PersistentModel):
 
     def get_edit_url(self):
         return urlresolvers.reverse('app.files.views.edit_file', args=("%s" % self.id,))
+
+    def get_recover_url(self):
+        return urlresolvers.reverse('app.files.views.recover', args=("%s" % self.id,))

@@ -5,6 +5,7 @@ from django.conf import settings
 
 register = Library()
 
+
 def thumbnail(file, size='320x220'):
 
     if not file:

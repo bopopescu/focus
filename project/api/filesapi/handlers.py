@@ -8,9 +8,9 @@ from piston.utils import rc
 
 class FileHandler(BaseHandler):
     model = File
-    fields = ('id', 'name', 'date_created', 'date_edited', ('editor', ('id', 'first_name', 'last_name')), 'get_file',
+    fields = ('id', 'name', 'date_created', 'date_edited', 'tags', ('editor', ('id', 'first_name', 'last_name')), 'get_file',
                   ('revisions', (
-                  'id', 'name', ('editor', ('id', 'first_name', 'last_name')), 'date_created', 'date_edited',
+                  'id', 'name','tags', ('editor', ('id', 'first_name', 'last_name')), 'date_created', 'date_edited',
                   'get_file'))) 
 
     def read(self, request, id=None):

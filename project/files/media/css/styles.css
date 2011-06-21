@@ -772,3 +772,8 @@ ul.ui-autocomplete li span {
 .ticket_update textarea {
     width: 550px;
 }
+
+.icon_for_file {
+    width: 25px;
+    height: 25px;
+}
