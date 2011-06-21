@@ -3,7 +3,9 @@ from piston.utils import rc
 from api.hourregistrationsapi.forms import TimeTrackerForm
 from api.hourregistrationsapi.models import TimeTracker
 from app.hourregistrations.models import HourRegistration
+from app.orders.models import Order
 from core import Core
+from django.utils.translation import ugettext as _
 
 class HourRegistrationHandler(BaseHandler):
     model = HourRegistration
@@ -66,39 +68,40 @@ class TimeTrackerHandler(BaseHandler):
         else:
             return form.errors
 
-
-    _update_actions = {
-        'stop': lambda tracker: tracker.stop_and_save(),
-        'start': lambda tracker: tracker.start_new(),
-        'pause': lambda tracker: tracker.pause()
-    }
+        
     def update(self, request, id=None):
-        action = request.PUT.get('action', False)
-        print self._update_actions
-        if action not in self._update_actions:
-            return rc.BAD_REQUEST
+
         if id:
-            self._update_instance(action, id)
+            trackers = [Core.current_user().get_permitted_objects("EDIT", TimeTracker).get(id=id)]
         else:
-            self._update_all(action)
+            trackers = Core.current_user().get_permitted_objects("EDIT", TimeTracker).all()
+        for tracker in trackers:
+            try:
+                self._do_update(request, tracker)
+            except ValueError as e:
+                return {'error': str(e)}
+
         return {'success': True}
 
+    def _do_update(self, request, tracker):
+        action = request.PUT.get('action', False)
+        {
+        'stop': lambda: self._handle_stop(request, tracker),
+        'start': lambda: tracker.start_new(),
+        'pause': lambda: tracker.pause()
+        }[action]()
 
-    def _update_instance(self, action, id):
-        """
-        Updates a single timer
-        """
-        print "updating", id
-        try:
-            tracker = Core.current_user().get_permitted_objects("EDIT", TimeTracker).get(id=id)
-            self._update_actions[action](tracker)
-        except TimeTracker.DoesNotExist:
-            return rc.NOT_FOUND
 
-    def _update_all(self, action):
-        all = TimeTracker.objects.filter(active=True)
-        for tracker in all:
-            _update_actions[action](tracker)
+
+    def _handle_stop(self, request, tracker):
+        description = request.PUT.get('description', False)
+        order = int(request.PUT.get('order', False))
+        if description and order:
+            order = Order.objects.get(id=order)
+            tracker.stop_and_save(description, order)
+        else:
+            raise ValueError(_("Order or description missing"))
+        
 
     def delete(self, request, id):
         try:

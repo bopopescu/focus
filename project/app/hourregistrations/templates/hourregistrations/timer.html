@@ -110,7 +110,7 @@
             $.ajax({
                 type: "PUT",
                 url: this.href,
-                data: {action: "stop" },
+                data: {action: "stop", description: 'javascript auto description', order: 51 },
                 dataType: "json",
                 success: function() {
                     row.hide("fast")
