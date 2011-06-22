@@ -13,8 +13,9 @@ def send_update_mails(ticket, ticket_update):
         recipients.add(ticket.creator.email)
 
     if not assigned_sent and ticket.assigned_to:
-        recipients.remove(ticket.assigned_to.email)
-        
+        if ticket.assigned_to.email in recipients:
+            recipients.remove(ticket.assigned_to.email)
+
     for update in ticket.updates.all():
         if update.creator:
             recipients.add(update.creator.email)
