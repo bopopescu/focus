@@ -19,8 +19,9 @@
     <h1>{% trans "Offer" %}: {{ title }}</h1>
 
 
-    <b>{% trans "Description" %}</b><br>
-    {{ offer.description }}
+    <br><h5>{% trans "Description" %}</h5>
+      {{ offer.description|linebreaksbr }}
+
 
     <br>
 

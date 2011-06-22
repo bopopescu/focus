@@ -11,8 +11,8 @@
     {{ invoice }}
 
 
-    <b>{% trans "Description" %}</b><br>
-    {{ invoice.description }}
+    <br><h5>{% trans "Description" %}</h5>
+    {{ invoice.description|linebreaksbr }}
 
 
     <div class="products">

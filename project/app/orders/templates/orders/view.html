@@ -10,10 +10,8 @@
 
     <h1>{% trans "Order" %}: {{ title }}</h1>
 
-
-    <b>{% trans "Description" %}</b><br>
-    {{ order.description }}
-
+    <br><h5>{% trans "Description" %}</h5>
+    {{ order.description|linebreaksbr }}
 
     <br><br>
     <div class="products">
