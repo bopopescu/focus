@@ -170,7 +170,15 @@
 
             <div class="content_front">
 
+
                 <div class="pad">
+
+                    {% if message %}
+                    <div class="field">
+                        <label></label>
+                        <div class="" style="font-color:red;">{{ message }}</div>
+                    </div>
+                    {% endif %}
 
                     <div class="field">
                         <label>Username:</label>

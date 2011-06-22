@@ -123,13 +123,17 @@ class require_permission:
             else:
                 object = self.model
 
+            #If not user
+            if not request.user:
+                return redirect("/accounts/login/?next=%s" % (request.path))
+
             # If the user has permission to use this view, go ahead and use it! :)
-            if request.user.has_permission_to(self.action, object, any = self.any):
+            elif request.user.has_permission_to(self.action, object, any = self.any):
                 return func(request, *args, **kwargs)
 
             # Else, if the user isn't logged in, suggest doing so
             elif not request.user.logged_in():
-                return redirect("/user/login/?next=%s" % (request.path))
+                return redirect("/accounts/login/?next=%s" % (request.path))
 
             # Else, we just have to tell the user he just can't do this
             else:

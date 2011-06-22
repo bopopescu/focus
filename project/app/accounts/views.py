@@ -5,8 +5,11 @@ from django.shortcuts import render_to_response, redirect, HttpResponseRedirect
 from core.auth.user.models import User
 from core.auth.log.models import Log
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 def login(request):
+    message = ""
+
     if request.method == 'POST':
 
         form = LoginForm(request.POST)
@@ -43,9 +46,11 @@ def login(request):
             Log(message="Attempt to login width username: %s, password: %s, redirect_to: %s, but failed" % (
                 username, "******", redirect_to)).save()
 
-    form  = LoginForm()
+        message = _("Wrong username or password")
+    else:
+        form  = LoginForm()
 
-    return render_to_response('login.html', {'form':form, 'LOGIN_URL': settings.LOGIN_URL})
+    return render_to_response('login.html', {'form':form, 'message':message, 'LOGIN_URL': settings.LOGIN_URL})
 
 def logout_view(request):
     logout(request)
