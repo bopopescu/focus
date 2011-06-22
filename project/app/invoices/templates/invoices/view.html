@@ -8,7 +8,11 @@
 
 {% block maincontent %}
 
-    {{ offer }}
+    {{ invoice }}
+
+
+    <b>{% trans "Description" %}</b><br>
+    {{ invoice.description }}
 
 
     <div class="products">
@@ -26,7 +30,7 @@
             </thead>
 
             <tbody>
-            {% for product in offer.product_lines.all %}
+            {% for product in invoice.product_lines.all %}
 
                 <tr class="product">
                     <td>

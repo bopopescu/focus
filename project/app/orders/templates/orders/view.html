@@ -10,6 +10,12 @@
 
     <h1>{% trans "Order" %}: {{ title }}</h1>
 
+
+    <b>{% trans "Description" %}</b><br>
+    {{ order.description }}
+
+
+    <br><br>
     <div class="products">
         <br><h5>{% trans "Products" %}</h5>
 
@@ -25,7 +31,7 @@
             </thead>
 
             <tbody>
-            {% for product in offer.product_lines.all %}
+            {% for product in order.product_lines.all %}
 
                 <tr class="product">
                     <td>

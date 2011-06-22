@@ -18,6 +18,12 @@
 
     <h1>{% trans "Offer" %}: {{ title }}</h1>
 
+
+    <b>{% trans "Description" %}</b><br>
+    {{ offer.description }}
+
+    <br>
+
     <div id="accepted_status" style="color:{{ offer.get_accepted_status.1 }}">
         {{ offer.get_accepted_status.0 }}
     </div>
