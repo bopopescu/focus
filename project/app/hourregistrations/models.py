@@ -16,7 +16,7 @@ decimal_places = 3
 class HourRegistration(PersistentModel):
     date = models.DateTimeField()
 
-    order = models.ForeignKey('orders.Order')
+    order = models.ForeignKey('orders.Order', related_name="hourregistrations")
     time_start = models.CharField(max_length=max_digits, null=True, default="")
     time_end = models.CharField(max_length=max_digits, null=True, default="")
 

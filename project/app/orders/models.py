@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.core import urlresolvers
 from django.db import models
+from app.files.models import File
+from django.contrib.contenttypes import generic
 from app.orders.managers import OrderArchivedManager, OrderManager
 from app.projects.models import Project
 from app.customers.models import Customer
-from core.models import  PersistentModel
+from core.models import  PersistentModel, Comment
 from django.utils.translation import ugettext as _
 from django.db.models.aggregates import Max
 
@@ -16,7 +18,6 @@ class ProductLine(models.Model):
 
     def __unicode__(self):
         return self.description
-
 
 class OrderBase(PersistentModel):
     title = models.CharField(_("Title"), max_length=80)
@@ -30,6 +31,8 @@ class OrderBase(PersistentModel):
     price = models.IntegerField(default=0)
     archived = models.BooleanField(default=False)
     product_lines = models.ManyToManyField(ProductLine, related_name="%(class)s")
+    files = models.ManyToManyField(File)
+    comments = generic.GenericRelation(Comment)
 
     def copy_from(self, object):
         self.title = object.title

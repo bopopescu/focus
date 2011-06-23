@@ -28,6 +28,12 @@ def archive(request):
 
 
 @require_permission("VIEW", Order, "id")
+def view_statistics(request, id):
+    order = Order.objects.filter_current_company().get(id=id)
+    return render(request, "orders/statistics.html", {'title': order.title,
+                                                'order': order})
+
+@require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.filter_current_company().get(id=id)
     return render(request, "orders/view.html", {'title': order.title,
