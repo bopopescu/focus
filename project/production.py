@@ -1,6 +1,6 @@
 from settings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 import os
@@ -12,8 +12,8 @@ f.close()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'focus',
-        'USER': 'focus',
+        'NAME': 'focus_prod',
+        'USER': 'root',
         'PASSWORD': DB_PASSWORD,
     }
 }
