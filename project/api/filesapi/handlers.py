@@ -24,6 +24,7 @@ class FileHandler(BaseHandler):
         return all
 
     def create(self, request, id=None):
+
         clone = None
 
         if id:
@@ -36,7 +37,7 @@ class FileHandler(BaseHandler):
         form = FileForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             customer = form.save(commit=False)
-            customer.owner = request.user
+            customer.tags = ""
             form.save()
 
             if id:

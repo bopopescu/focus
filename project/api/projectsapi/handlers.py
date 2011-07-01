@@ -8,7 +8,7 @@ from core.auth.user.models import User
 class ProjectHandler(BaseHandler):
     model = Project
     fields = ('id', 'project_name', (
-        'files', ('id', 'name', ('editor', ('first_name', 'last_name')), 'get_file')))
+        'files', ('id', 'name', 'tags', ('editor', ('first_name', 'last_name')), 'get_file')))
 
     def read(self, request, id=None):
         all = Core.current_user().get_permitted_objects("VIEW", Project)

@@ -7,7 +7,7 @@ from piston.utils import rc
 class ProductsHandler(BaseHandler):
     model = Product
     fields = ('id', 'name', 'description', 'price_out', (
-        'files', ('id', 'name', ('editor', ('first_name', 'last_name')), 'date_created', 'date_edited', 'get_file')))
+        'files', ('id', 'name', 'tags', ('editor', ('first_name', 'last_name')), 'date_created', 'date_edited', 'get_file')))
 
     def read(self, request, id=None):
         all = Core.current_user().get_permitted_objects("VIEW", Product).filter(trashed=False)
