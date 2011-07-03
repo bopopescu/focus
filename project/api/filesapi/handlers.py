@@ -1,5 +1,6 @@
 from app.files.forms import FileForm, FileTagForm
 from app.files.models import File, FileTag
+from app.files.views import handle_file_tags
 from piston.handler import BaseHandler
 from app.contacts.models import Contact
 from app.stock.models import Product
@@ -36,14 +37,17 @@ class FileHandler(BaseHandler):
 
         form = FileForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
-            customer = form.save(commit=False)
-            customer.tags = ""
-            form.save()
+            file = form.save(commit=False)
+
+            file.tags = []
+            file.tags.add(*handle_file_tags(request.POST['tags']))
+
+            file.save()
 
             if id:
                 clone.save()
 
-            return customer
+            return file
 
         else:
             return form.errors

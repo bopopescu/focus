@@ -110,6 +110,8 @@
                         $('#calendar_table .day').find(".date_day").first().parent().click();
                     }
 
+                    $.ajaxSetup({ cache: false });
+
                 });
     }
 
@@ -139,6 +141,10 @@
                         $('#calender_list tbody tr').last().append("<td>" + item.customer_name + " - " + item.order_name + " </td>");
                         $('#calender_list tbody tr').last().append("<td> <a href='#' class='edit_hour_registration'> endre</a></td>");
                     });
+
+                    $.ajaxSetup({ cache: false });
+
+
                 });
     }
 
@@ -219,15 +225,15 @@
 
     function show_form_if_date_valid_for_edit() {
         $.ajax({
-                    url: '/hourregistrations/calendar/date_valid_for_edit/' + year + '/' + month + '/' + day + '/',
-                    success: function(data) {
-                        if (data) {
-                            $("#calender_form").show();
-                        } else {
-                            $("#calender_form").hide();
-                        }
-                    }
-                });
+            url: '/hourregistrations/calendar/date_valid_for_edit/' + year + '/' + month + '/' + day + '/',
+            success: function(data) {
+                if (data) {
+                    $("#calender_form").show();
+                } else {
+                    $("#calender_form").hide();
+                }
+            }
+        });
     }
 
     $(document).ready(function () {
@@ -274,30 +280,30 @@
             var description = $("#id_description").val();
 
             $.ajax({
-                        url: '/hourregistrations/calendar/form/',
-                        type:"POST",
-                        data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, pause:pause, description:description}),
-                        success: function(data) {
+                url: '/hourregistrations/calendar/form/',
+                type:"POST",
+                data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, pause:pause, description:description}),
+                success: function(data) {
 
-                            clean_form_errors()
+                    clean_form_errors()
 
 
-                            if (data.valid) {
-                                clean_form_and_id();
-                            } else {
-                                $.each(data['errors'], function(i, error) {
-                                    $("#error__for_" + i).text(error);
-                                });
-                            }
+                    if (data.valid) {
+                        clean_form_and_id();
+                    } else {
+                        $.each(data['errors'], function(i, error) {
+                            $("#error__for_" + i).text(error);
+                        });
+                    }
 
-                            fill_table(last_used_url_calendar);
-                        },
+                    fill_table(last_used_url_calendar);
+                },
 
-                        error: function(data) {
-                            $("#error__for_order").html("{% trans "Error occurred" %}");
-                        }
+                error: function(data) {
+                    $("#error__for_order").html("{% trans "Error occurred" %}");
+                }
 
-                    });
+            });
         });
 
         $(".edit_hour_registration").live("click", function() {
@@ -372,84 +378,84 @@
     <script>
         (function($) {
             $.widget("ui.combobox", {
-                        _create: function() {
-                            var self = this,
-                                    select = this.element.hide(),
-                                    selected = select.children(":selected"),
-                                    value = selected.val() ? selected.text() : "";
-                            var input = this.input = $("<input id='text_for_order'>")
-                                    .insertAfter(select)
-                                    .val(value)
-                                    .autocomplete({
-                                        delay: 0,
-                                        minLength: 0,
-                                        source: function(request, response) {
-                                            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-                                            response(select.children("option").map(function() {
-                                                var text = $(this).text();
-                                                if (this.value && ( !request.term || matcher.test(text) ))
-                                                    return {
-                                                        label: text.replace(
-                                                                new RegExp(
-                                                                        "(?![^&;]+;)(?!<[^<>]*)(" +
-                                                                                $.ui.autocomplete.escapeRegex(request.term) +
-                                                                                ")(?![^<>]*>)(?![^&;]+;)", "gi"
-                                                                ), "<strong>$1</strong>"),
-                                                        value: text,
-                                                        option: this
-                                                    };
-                                            }));
-                                        },
-                                        select: function(event, ui) {
-                                            ui.item.option.selected = true;
-                                            self._trigger("selected", event, {
-                                                        item: ui.item.option
-                                                    });
-                                        },
-                                        change: function(event, ui) {
-                                            if (!ui.item) {
-                                                var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
-                                                        valid = false;
-                                                select.children("option").each(function() {
-                                                    if ($(this).text().match(matcher)) {
-                                                        this.selected = valid = true;
-                                                        return false;
-                                                    }
-                                                });
-                                                if (!valid) {
-                                                    // remove invalid value, as it didn't match anything
-                                                    $(this).val("");
-                                                    select.val("");
-                                                    input.data("autocomplete").term = "";
-                                                    return false;
-                                                }
+                _create: function() {
+                    var self = this,
+                            select = this.element.hide(),
+                            selected = select.children(":selected"),
+                            value = selected.val() ? selected.text() : "";
+                    var input = this.input = $("<input id='text_for_order'>")
+                            .insertAfter(select)
+                            .val(value)
+                            .autocomplete({
+                                delay: 0,
+                                minLength: 0,
+                                source: function(request, response) {
+                                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                                    response(select.children("option").map(function() {
+                                        var text = $(this).text();
+                                        if (this.value && ( !request.term || matcher.test(text) ))
+                                            return {
+                                                label: text.replace(
+                                                        new RegExp(
+                                                                "(?![^&;]+;)(?!<[^<>]*)(" +
+                                                                        $.ui.autocomplete.escapeRegex(request.term) +
+                                                                        ")(?![^<>]*>)(?![^&;]+;)", "gi"
+                                                        ), "<strong>$1</strong>"),
+                                                value: text,
+                                                option: this
+                                            };
+                                    }));
+                                },
+                                select: function(event, ui) {
+                                    ui.item.option.selected = true;
+                                    self._trigger("selected", event, {
+                                        item: ui.item.option
+                                    });
+                                },
+                                change: function(event, ui) {
+                                    if (!ui.item) {
+                                        var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
+                                                valid = false;
+                                        select.children("option").each(function() {
+                                            if ($(this).text().match(matcher)) {
+                                                this.selected = valid = true;
+                                                return false;
                                             }
+                                        });
+                                        if (!valid) {
+                                            // remove invalid value, as it didn't match anything
+                                            $(this).val("");
+                                            select.val("");
+                                            input.data("autocomplete").term = "";
+                                            return false;
                                         }
-                                    })
-                                    .addClass("ui-widget ui-widget-content ui-corner-left");
+                                    }
+                                }
+                            })
+                            .addClass("ui-widget ui-widget-content ui-corner-left");
 
 
-                            //For getting the new textfield
-                            textbox = input;
+                    //For getting the new textfield
+                    textbox = input;
 
 
-                            input.data("autocomplete")._renderItem = function(ul, item) {
-                                return $("<li></li>")
-                                        .data("item.autocomplete", item)
-                                        .append("<a>" + item.label + "</a>")
-                                        .appendTo(ul);
-                            };
+                    input.data("autocomplete")._renderItem = function(ul, item) {
+                        return $("<li></li>")
+                                .data("item.autocomplete", item)
+                                .append("<a>" + item.label + "</a>")
+                                .appendTo(ul);
+                    };
 
-                            this.button = $("<button type='button'>&nbsp;</button>")
-                                    .attr("tabIndex", -1)
-                                    .attr("title", "Show All Items")
-                                    .insertAfter(input)
-                                    .button({
-                                        text: false
-                                    })
-                                    .removeClass("ui-corner-all")
-                                    .addClass("ui-corner-right ui-button-icon")
-                                    .click(function() {
+                    this.button = $("<button type='button'>&nbsp;</button>")
+                            .attr("tabIndex", -1)
+                            .attr("title", "Show All Items")
+                            .insertAfter(input)
+                            .button({
+                                text: false
+                            })
+                            .removeClass("ui-corner-all")
+                            .addClass("ui-corner-right ui-button-icon")
+                            .click(function() {
                                 // close if already visible
                                 if (input.autocomplete("widget").is(":visible")) {
                                     input.autocomplete("close");
@@ -463,15 +469,15 @@
                                 input.autocomplete("search", "");
                                 input.focus();
                             });
-                        },
+                },
 
-                        destroy: function() {
-                            this.input.remove();
-                            this.button.remove();
-                            this.element.show();
-                            $.Widget.prototype.destroy.call(this);
-                        }
-                    });
+                destroy: function() {
+                    this.input.remove();
+                    this.button.remove();
+                    this.element.show();
+                    $.Widget.prototype.destroy.call(this);
+                }
+            });
         })(jQuery);
 
         $(function() {
