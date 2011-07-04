@@ -16,8 +16,8 @@ class HourRegistrationForm(ModelForm):
         self.fields['time_end'].widget = MaskedField(format="99:99")
         self.fields['time_start'].widget.attrs['class'] = 'time_input'
         self.fields['time_end'].widget.attrs['class'] = 'time_input'
-        self.fields['order'].queryset = Core.current_user().get_permitted_objects("VIEW", Order)
+
+        self.fields['order'].queryset = Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False)
 
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
-
