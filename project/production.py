@@ -1,7 +1,8 @@
 from settings import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+SEND_BROKEN_LINK_EMAILS = DEBUG
 
 import os
 
@@ -36,5 +37,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'focustimeno@gmail.com'
 EMAIL_HOST_PASSWORD = '4th56y44g'
 EMAIL_PORT = 587
+SERVER_EMAIL = "fredrik@fncit.no"
 
 DEBUG_EMAIL = "fredrik@fncit.no"
