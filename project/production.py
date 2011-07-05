@@ -2,7 +2,7 @@ from settings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-SEND_BROKEN_LINK_EMAILS = DEBUG
+SEND_BROKEN_LINK_EMAILS = True
 
 import os
 
