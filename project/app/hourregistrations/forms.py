@@ -10,7 +10,7 @@ class HourRegistrationForm(ModelForm):
     order = forms.ModelChoiceField(
         queryset=Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False))
     type = forms.ModelChoiceField(
-        queryset=Core.current_user().get_permitted_objects("VIEW", HourRegistrationType).filter(trashed=False),
+        queryset=HourRegistrationType.objects.filter(trashed=False, company = Core.current_user().get_company()),
         empty_label=None)
 
     class Meta:
