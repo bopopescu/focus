@@ -7,11 +7,6 @@ from core.widgets import DatePickerField, MaskedField
 
 
 class HourRegistrationForm(ModelForm):
-    order = forms.ModelChoiceField(
-        queryset=Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False))
-    type = forms.ModelChoiceField(
-        queryset=HourRegistrationType.objects.filter(trashed=False, company = Core.current_user().get_company()),
-        empty_label=None)
 
     class Meta:
         model = HourRegistration
@@ -25,10 +20,13 @@ class HourRegistrationForm(ModelForm):
         self.fields['time_start'].widget.attrs['class'] = 'time_input'
         self.fields['time_end'].widget.attrs['class'] = 'time_input'
 
+        self.fields['type'].queryset = HourRegistrationType.objects.filter(trashed=False, company = Core.current_user().get_company())
+        self.fields['order'].queryset = Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False)
+
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
 
-
+            
 class HourRegistrationTypeForm(ModelForm):
     class Meta:
         model = HourRegistrationType
