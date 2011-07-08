@@ -145,7 +145,7 @@ def calendar_can_edit_form(request):
 @require_permission("EDIT", HourRegistrationType)
 def admin_hourregistrationtypes(request, id=None):
     instance = HourRegistrationType()
-    types = Core.current_user().get_permitted_objects("EDIT", HourRegistrationType).filter(trashed=False)
+    types = HourRegistrationType.objects.filter(trashed=False, company = Core.current_user().get_company())
 
     if id:
         instance = get_object_or_404(HourRegistrationType, id=id)
