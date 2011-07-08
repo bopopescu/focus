@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block sidebar %}
     {% include "orders/sidebar.html" %}
@@ -8,56 +9,87 @@
 
 {% block maincontent %}
 
-    <h1>{% trans "Order" %}: {{ title }}</h1>
+    <h1>{{ order }}</h1>
 
-    <br><h5>{% trans "Description" %}</h5>
-    {{ order.description|linebreaksbr }}
+    <h2>{% trans "Description" %}</h2>
+    {{ order.description }}
 
     <br><br>
-    <div class="products">
-        <br><h5>{% trans "Products" %}</h5>
 
-        <table>
+    <h2>{% trans "Participants" %}</h2>
 
-            <thead>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Unit cost</th>
-            <th>Qty</th>
-            <th>Tax</th>
-            <th>Total</th>
-            </thead>
+    <div>
+        {% for user in who_can_see_this %}
 
-            <tbody>
-            {% for product in order.product_lines.all %}
+            <div class="user-card">
 
-                <tr class="product">
-                    <td>
-                        {{ product.description }}
-                    </td>
-                    <td>
-                        {{ product.description }}
-                    </td>
-                    <td>
-                        {{ product.description }}
-                    </td>
-                    <td>
-                        {{ product.description }}
-                    </td>
-                    <td>
-                        {{ product.description }}
-                    </td>
+                <div class="avatar">
+                    <img src="{{ user.profileImage|thumbnail_with_max_side:"150" }}" title="User" alt=""/>
+                </div>
 
-                    <td>
-                        100kr
-                    </td>
+                <div class="details">
+                    <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>
+                        {% trans "Phone" %}: {{ user.phone }}<br/>
+                        {% trans "E-mail" %}: {{ user.email }}<br/>
+                        <a href="{% url app.admin.views.user.view user.id %}">Flere detaljer</a></p>
+                </div>
+                <!-- .user-card-content -->
 
-                </tr>
-            {% endfor %}
-
-            </tbody>
-
-        </table>
+            </div> <!-- .user-card -->
+        {% endfor %}
     </div>
+
+    <br><br>
+
+    {% include "comments.html" %}
+
+    <h2>{% trans "Products" %}</h2>
+    {% if order.product_lines.all %}
+        <div class="products">
+
+            <table>
+
+                <thead>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Unit cost</th>
+                <th>Qty</th>
+                <th>Tax</th>
+                <th>Total</th>
+                </thead>
+
+                <tbody>
+                {% for product in order.product_lines.all %}
+
+                    <tr class="product">
+                        <td>
+                            {{ product.description }}
+                        </td>
+                        <td>
+                            {{ product.description }}
+                        </td>
+                        <td>
+                            {{ product.description }}
+                        </td>
+                        <td>
+                            {{ product.description }}
+                        </td>
+                        <td>
+                            {{ product.description }}
+                        </td>
+
+                        <td>
+                            100kr
+                        </td>
+
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    {% endif %}
 
 {% endblock %}

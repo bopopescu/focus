@@ -40,8 +40,11 @@ def view_statistics(request, id):
 @require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.filter_current_company().get(id=id)
+    who_can_see_this = order.who_has_permission_to('view')
+
     return render(request, "orders/view.html", {'title': order.title,
-                                                'order': order})
+                                                'order': order,
+                                                'who_can_see_this':who_can_see_this})
 
 
 def preview_order_html(request, id):

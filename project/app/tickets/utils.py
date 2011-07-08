@@ -76,4 +76,4 @@ def send_assigned_mail(user, ticket, assigned=True):
     else:
         msg = (" %s %s \n %s: %s") % (_("You have been unassigned to the ticket"),ticket.title, _("Link"), url)
 
-    send_mail(ticket.title, msg, settings.NO_REPLY_EMAIL, [user.email])
+    send_mail(ticket.tgitle, msg, settings.NO_REPLY_EMAIL, [user.email])
