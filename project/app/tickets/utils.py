@@ -72,8 +72,8 @@ def send_assigned_mail(user, ticket, assigned=True):
         return
     url = settings.SITE_URL + reverse("ticket_view", kwargs={'id': ticket.id})
     if assigned:
-        msg = (" %s\n%s: %s") % (_("You have been assigned to the ticket"),ticket.title, _("Link"), url)
+        msg = (" %s %s \n %s: %s") % (_("You have been assigned to the ticket"),ticket.title, _("Link"), url)
     else:
-        msg = (" %s\n%s: %s") % (_("You have been unassigned to the ticket"),ticket.title, _("Link"), url)
+        msg = (" %s %s \n %s: %s") % (_("You have been unassigned to the ticket"),ticket.title, _("Link"), url)
 
     send_mail(ticket.title, msg, settings.NO_REPLY_EMAIL, [user.email])
