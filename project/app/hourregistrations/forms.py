@@ -26,7 +26,6 @@ class HourRegistrationForm(ModelForm):
         if 'instance' in kwargs:
             self.id = kwargs['instance'].id
 
-            
 class HourRegistrationTypeForm(ModelForm):
     class Meta:
         model = HourRegistrationType
