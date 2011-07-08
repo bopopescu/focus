@@ -21,7 +21,7 @@ fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class HourRegistrationType(PersistentModel):
     name = models.CharField(max_length=100)
-    rate = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits)
+    rate = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True)
 
     def __unicode__(self):
         return self.name
@@ -33,7 +33,7 @@ class HourRegistrationType(PersistentModel):
 class HourRegistration(PersistentModel):
     date = models.DateTimeField(verbose_name=_("Date"))
 
-    order = models.ForeignKey('orders.Order', related_name="hourregistrations", verbose_name=_("Order"))
+    order = models.ForeignKey('orders.Order', related_name="hourregistrations", verbose_name=_("Order"), null=True)
     ticket = models.ForeignKey("tickets.Ticket", related_name="hourregistrations", null=True, blank=True, verbose_name=_("Ticket"))
 
     type = models.ForeignKey(HourRegistrationType, related_name="hourregistrations",verbose_name=_("Type"))
@@ -43,7 +43,7 @@ class HourRegistration(PersistentModel):
 
     description = models.TextField(null=True, verbose_name=_("Description"))
 
-    hours = models.DecimalField(default="", decimal_places=decimal_places, max_digits=max_digits, verbose_name=_("Hours"))
+    hours = models.DecimalField(null=True, decimal_places=decimal_places, max_digits=max_digits, verbose_name=_("Hours"))
     hourly_rate = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits, verbose_name=_("Hourly rate"))
 
     def __unicode__(self):
@@ -74,11 +74,11 @@ class HourRegistration(PersistentModel):
 
 
 class Disbursement(PersistentModel):
-    date = models.DateField(default=datetime.now())
-    order = models.ForeignKey('orders.Order', related_name="disbursements", default="")
-    description = models.CharField(max_length=100, default="")
-    rate = models.DecimalField(max_digits=10, decimal_places=2, default="")
-    count = models.DecimalField(max_digits=10, decimal_places=1,default="")
+    date = models.DateField()
+    order = models.ForeignKey('orders.Order', related_name="disbursements", null=True)
+    description = models.CharField(max_length=100, default="", null=True)
+    rate = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    count = models.DecimalField(max_digits=10, decimal_places=1, null=True)
     attachment = models.ImageField(upload_to="disbursements", storage=fs, blank=True, null=True)
 
     def __unicode__(self):
