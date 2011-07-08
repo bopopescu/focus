@@ -16,6 +16,7 @@ from django.utils.translation import ugettext as _
 from django.core import urlresolvers
 import time
 import os
+from django.utils import translation
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -50,6 +51,8 @@ class User(models.Model):
     hourly_rate = models.IntegerField(null=True)
     percent_cover = models.IntegerField(null=True)
 
+    language = models.CharField(max_length=30, choices=settings.LANGUAGES, default="nb")
+    
     objects = PersistentManager()
     all_objects = models.Manager()
 
@@ -74,11 +77,23 @@ class User(models.Model):
 
         return (False, reasons)
 
+    def use_user_language(self, request):
+        language = "en"
+        for lang in settings.LANGUAGES:
+            if self.language in lang[0]:
+                language = lang[0]
+
+        request.session['language'] = language
+        translation.activate(language)
+        request.LANGUAGE_CODE = translation.get_language()
+
     def get_view_url(self):
         return urlresolvers.reverse('app.admin.views.user.view', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
+
         action = "EDIT"
+        
         if not self.id:
             action = "ADD"
 

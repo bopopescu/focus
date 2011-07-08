@@ -133,17 +133,19 @@
                         $('#calender_list tbody tr').last().append("<td class='time_end' style='display:none;'>" + item.time_end + "</td>");
                         $('#calender_list tbody tr').last().append("<td class='order' style='display:none;'>" + item.order + "</td>");
                         $('#calender_list tbody tr').last().append("<td class='order_name' style='display:none;'>" + item.order_name + "</td>");
-                        $('#calender_list tbody tr').last().append("<td class='pause' style='display:none;'>" + item.pause + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='type' style='display:none;'>" + item.type + "</td>");
                         $('#calender_list tbody tr').last().append("<td class='description' style='display:none;'>" + item.description + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='hours' style='display:none;'>" + item.hours + "</td>");
 
-                        $('#calender_list tbody tr').last().append("<td>" + item.hours_worked + " </td>");
+                        $('#calender_list tbody tr').last().append("<td>" + item.hours + " </td>");
                         $('#calender_list tbody tr').last().append("<td>" + item.time_start + " - " + item.time_end + " </td>");
                         $('#calender_list tbody tr').last().append("<td>" + item.customer_name + " - " + item.order_name + " </td>");
-                        $('#calender_list tbody tr').last().append("<td> <a href='#' class='edit_hour_registration'> endre</a></td>");
+                        $('#calender_list tbody tr').last().append("<td> <a href='#' class='edit_hour_registration'>{% trans "edit" %}</a> </td>");
+                        $('#calender_list tbody tr').last().append("<td> <a href='#' class='delete_hour_registration'>{% trans "delete" %}</a></td>");
+
                     });
 
                     $.ajaxSetup({ cache: false });
-
 
                 });
     }
@@ -188,9 +190,10 @@
         timetracking_id = 0;
         $("#id_time_start").val("");
         $("#id_time_end").val("");
-        $("#id_pause").val("0");
+        $("#id_type").val("0");
         $("#id_description").val("");
-        $("#hours_worked_in_form").text("");
+        $("#id_hours").val("");
+        $("#hours_in_form").text("");
         textbox.val("");
     }
 
@@ -198,30 +201,12 @@
         $("#error__for_order").html("");
         $("#error__for_time_start").html("");
         $("#error__for_time_end").html("");
-        $("#error__for_pause").html("");
+        $("#error__for_hours").html("");
+        $("#error__for_type").html("");
         $("#error__for_description").html("");
-        $("#error__for_hours_worked_in_form").html("");
+        $("#error__for_hours_in_form").html("");
     }
 
-    function calculate_hours_worked_in_form() {
-
-        var hours_worked = 0;
-        var time_start = $("#id_time_start").val();
-        var time_end = $("#id_time_end").val();
-
-
-        if (time_start.length == 5 && time_end.length == 5) {
-
-            var diff = new Date(new Date("2010-10-10 " + time_end) - new Date("2010-10-10 " + time_start));
-            hours_worked = (diff / 1000 / 60 / 60) - $("#id_pause").val();
-            if (hours_worked > 0) {
-                $("#hours_worked_in_form").text((hours_worked).toFixed(2) + " {% trans "hours" %}");
-                return;
-            }
-        }
-
-        $("#hours_worked_in_form").text(0 + " {% trans "hours" %}");
-    }
 
     function show_form_if_date_valid_for_edit() {
         $.ajax({
@@ -242,20 +227,6 @@
 
         show_div_form_new();
 
-        $("#id_pause").after("<span id='hours_worked_in_form'>0 {% trans "hours" %}</span>");
-
-        $("#id_time_start").change(function() {
-            calculate_hours_worked_in_form();
-        })
-
-        $("#id_time_end").change(function() {
-            calculate_hours_worked_in_form();
-        });
-
-        $("#id_pause").change(function() {
-            calculate_hours_worked_in_form();
-        });
-
         $("#decrement_month_arrow").click(function() {
             decrement_month();
         });
@@ -274,15 +245,16 @@
 
             var date = year + "-" + month + "-" + day;
             var order = $("#id_order").val();
+            var hours = $("#id_hours").val();
             var time_start = $("#id_time_start").val();
             var time_end = $("#id_time_end").val();
-            var pause = $("#id_pause").val();
+            var type = $("#id_type").val();
             var description = $("#id_description").val();
 
             $.ajax({
                 url: '/hourregistrations/calendar/form/',
                 type:"POST",
-                data: ({id:timetracking_id, date:date, order:order, time_start:time_start, time_end:time_end, pause:pause, description:description}),
+                data: ({id:timetracking_id, date:date, hours:hours, order:order, time_start:time_start, time_end:time_end, type:type, description:description}),
                 success: function(data) {
 
                     clean_form_errors()
@@ -302,7 +274,6 @@
                 error: function(data) {
                     $("#error__for_order").html("{% trans "Error occurred" %}");
                 }
-
             });
         });
 
@@ -313,10 +284,32 @@
             $("#id_time_end").val($(this).parent().parent().find(".time_end").text());
             $("#id_order").val($(this).parent().parent().find(".order").text());
             textbox.val($(this).parent().parent().find(".order_name").text());
-            $("#id_pause").val($(this).parent().parent().find(".pause").text());
+
+            $("#id_type").val($(this).parent().parent().find(".type").text());
+            $("#id_hours").val($(this).parent().parent().find(".hours").text());
             $("#id_description").val($(this).parent().parent().find(".description").text());
         });
 
+
+        $(".delete_hour_registration").live("click", function() {
+
+            var answer = confirm("{% trans "Are you shure you want to delete this?" %}")
+            var id = $(this).parent().parent().find(".id").text();
+
+            if (answer) {
+                $.ajax({
+                    url: '/hourregistrations/delete/' + id + '/',
+                    success: function(data) {
+
+                        fill_calendar_list(year, month, selected.find(".date_day").text());
+                        fill_table("/hourregistrations/calendar/" + year + "/" + month + "/");
+
+                    }
+                });
+            }
+
+
+        });
 
         $('.day').live("click", function() {
             lastSelected = selected;
@@ -504,12 +497,12 @@
             {% endfor %}
 
             <div id="div_form_edit">
-                <button type="button" class="form_button">{% trans "Save edit" %}</button>
-                <a href="#" id="cancel_edit">Avbryt</a>
+                <button type="button" class="form_button">{% trans "Save" %}</button>
+                <a href="#" id="cancel_edit">{% trans "Cancel" %}</a>
             </div>
 
             <div id="div_form_new">
-                <button type="button" class="form_button">{% trans "Create new" %}</button>
+                <button type="button" class="form_button">{% trans "Save" %}</button>
             </div>
         </form>
     </div>
@@ -522,6 +515,7 @@
                 <th>{% trans "Hours" %}</th>
                 <th>{% trans "Time" %}</th>
                 <th>{% trans "Order" %}</th>
+                <th></th>
                 <th></th>
             </tr>
             </thead>

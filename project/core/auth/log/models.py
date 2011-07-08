@@ -61,13 +61,13 @@ class Log(models.Model):
                         lastObj = fields[i].objects.get(id=eval(lastLog.message)[i][0])
                         newObj = fields[i].objects.get(id=eval(self.message)[i][0])
 
-                        diff.append(value[1] + _(" was changed from %s to %s \n") % (
-                        lastObj, newObj))
+                        diff.append(value[1] + ("%s %s %s %s \n") % (
+                        _("was changed from "), lastObj, _("to"),newObj))
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    diff.append(value[1] + _(" was changed from %s to: %s \n") % (
-                    eval(lastLog.message)[i][0], eval(self.message)[i][0]))
+                    diff.append(value[1] + ("%s %s %s: %s \n") % (
+                    _("was changed from"), eval(lastLog.message)[i][0], _("to"), eval(self.message)[i][0]))
 
             if len(diff) == 0:
                 diff.append(_("No changes"))

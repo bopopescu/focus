@@ -18,6 +18,11 @@
         <li><a class="{% active request "files" %}" href="{% url app.orders.views.files.overview order.id %}"><img
                 src="{{ STATIC_URL }}img/files.png" width="24" height="24" alt="Mail"/>{% trans "FILES" %}</a></li>
 
+        <li><a class="{% active request "participants" %}"
+               href="{% url app.orders.views.order.participants order.id%}"><img
+                src="{{ STATIC_URL }}img/user.png" width="24" height="24"
+                alt="Statistics"/>{% trans "PARTICIPANTS" %}</a></li>
+
         <li><a class="{% active request "statistics" %}"
                href="{% url app.orders.views.order.view_statistics order.id%}"><img
                 src="{{ STATIC_URL }}img/statistics.png" width="24" height="24"

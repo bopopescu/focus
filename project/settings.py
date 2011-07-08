@@ -42,14 +42,14 @@ TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
 TIME_FORMAT = 'H.i'
 
-LANGUAGE_CODE = 'en'
-
 _ = lambda s: s
 
 LANGUAGES = (
 ('en', _('English')),
 ('nb', _('Norwegian')),
 )
+
+LANGUAGE_CODE = 'nb'
 
 SITE_ID = 1
 SITE_URL = "http://localhost:8000"

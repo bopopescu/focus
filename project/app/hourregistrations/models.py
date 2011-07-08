@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, date
 from decimal import Decimal
+import os
+from django.conf import settings
 from app.customers.models import Customer
+from django.core.files.storage import FileSystemStorage
 from helpers import calculateHoursWorked
 from core import Core
 from core.models import PersistentModel, User
@@ -9,33 +12,39 @@ from django.db import models
 from django.core import urlresolvers
 import time
 import re
+from django.utils.translation import ugettext as _
 
 max_digits = 5
-decimal_places = 3
+decimal_places = 2
+
+fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
+
+class HourRegistrationType(PersistentModel):
+    name = models.CharField(max_length=100)
+    rate = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_edit_url(self):
+        return urlresolvers.reverse('app.hourregistrations.views.admin_hourregistrationtypes', args=("%s" % self.id,))
+
 
 class HourRegistration(PersistentModel):
-    date = models.DateTimeField()
+    date = models.DateTimeField(verbose_name=_("Date"))
 
-    order = models.ForeignKey('orders.Order', related_name="hourregistrations")
-    time_start = models.CharField(max_length=max_digits, null=True, default="")
-    time_end = models.CharField(max_length=max_digits, null=True, default="")
+    order = models.ForeignKey('orders.Order', related_name="hourregistrations", verbose_name=_("Order"))
+    ticket = models.ForeignKey("tickets.Ticket", related_name="hourregistrations", null=True, blank=True, verbose_name=_("Ticket"))
 
-    description = models.TextField(null=True, )
+    type = models.ForeignKey(HourRegistrationType, related_name="hourregistrations",verbose_name=_("Type"))
 
-    pause = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, default=Decimal("0.0"),
-                                blank=True)
+    time_start = models.CharField(max_length=max_digits, null=True, blank=True, default="", verbose_name=_("Time start"))
+    time_end = models.CharField(max_length=max_digits, null=True, blank=True, default="", verbose_name=_("Time end"))
 
-    hourly_rate = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
+    description = models.TextField(null=True, verbose_name=_("Description"))
 
-    percent_cover = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits)
-
-    hours_worked = models.DecimalField(blank=True, decimal_places=decimal_places, max_digits=max_digits)
-
-    savedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
-                                     default=Decimal("0.0"))
-
-    usedOfSavedHours = models.DecimalField(decimal_places=decimal_places, max_digits=max_digits, null=True, blank=True,
-                                           default=Decimal("0.0"))
+    hours = models.DecimalField(default="", decimal_places=decimal_places, max_digits=max_digits, verbose_name=_("Hours"))
+    hourly_rate = models.DecimalField(null=True, blank=True, decimal_places=decimal_places, max_digits=max_digits, verbose_name=_("Hourly rate"))
 
     def __unicode__(self):
         return unicode(self.date)
@@ -51,74 +60,32 @@ class HourRegistration(PersistentModel):
                 return self.order.customer.name
         return ""
 
-    def get_edit_url(self):
-        return urlresolvers.reverse('app.hourregistrations.views.edit', args=("%s" % self.id,))
-
-    def format_date(self):
-        if re.match("\d\d:\d$", self.time_start):
-            self.time_start += "0"
-        elif re.match("\d:\d\d", self.time_start):
-            self.time_start = "0" + self.time_start
-        if re.match("\d\d:\d$", self.time_end):
-            self.time_end += "0"
-        elif re.match("\d:\d\d", self.time_end):
-            self.time_end = "0" + self.time_end
-
     def save(self, *args, **kwargs):
-        """
-       Checks length of H:i, if in need of extend to a complete clock
-        """
-        self.format_date()
-
-        new = False
-        if not self.id:
-            new = True
-
-        if self.time_start and self.time_end:
-            start = time.strptime("%s %s" % (self.date.strftime("%d.%m.%Y"), self.time_start), "%d.%m.%Y  %H:%M")
-            end = time.strptime("%s %s" % (self.date.strftime("%d.%m.%Y"), self.time_end), "%d.%m.%Y  %H:%M")
-
-            start_t = time.mktime(start)
-            end_t = time.mktime(end)
-
-            self.hours_worked = Decimal(calculateHoursWorked(start_t, end_t)) - Decimal(self.pause)
-            #self.hours_worked = calculateHoursWorked(start_t, end_t)-self.pause-(self.savedHours - self.usedOfSavedHours)
-
         super(HourRegistration, self).save(noNotification=True)
 
         #Have to wait to set this, because creator is not set before first save
         if self.creator:
             self.hourly_rate = self.creator.hourly_rate
-            self.percent_cover = self.creator.percent_cover
-            #Save again
+
         super(HourRegistration, self).save(noNotification=True)
 
-
-class HourRegisrationImage(PersistentModel):
-    pass
+    def get_edit_url(self):
+        return urlresolvers.reverse('app.hourregistrations.views.edit', args=("%s" % self.id,))
 
 
 class Disbursement(PersistentModel):
-    HourRegistration = models.ForeignKey(HourRegistration, related_name="disbursements")
-    description = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to="uploads/disbursements/")
+    date = models.DateField(default=datetime.now())
+    order = models.ForeignKey('orders.Order', related_name="disbursements", default="")
+    description = models.CharField(max_length=100, default="")
+    rate = models.DecimalField(max_digits=10, decimal_places=2, default="")
+    count = models.DecimalField(max_digits=10, decimal_places=1,default="")
+    attachment = models.ImageField(upload_to="disbursements", storage=fs, blank=True, null=True)
 
     def __unicode__(self):
-        return "Disbusment for %s" % self.HourRegistration
+        return "Disbusment %s" % self.date
 
+    def get_sum(self):
+        return self.rate*self.count
 
-class DrivingRegistration(PersistentModel):
-    HourRegistration = models.ForeignKey(HourRegistration, related_name="drivingregistration")
-    time_start = models.CharField(max_length=5)
-    time_end = models.CharField(max_length=5)
-    kilometres = models.IntegerField()
-    description = models.CharField(max_length=100)
-
-
-def __unicode__(self):
-    return "DrivingRegistration for %s" % self.HourRegistration
-
-
-def initial_data ():
-    pass
+    def get_edit_url(self):
+        return urlresolvers.reverse('app.hourregistrations.views.disbursements', args=("%s" % self.id,))

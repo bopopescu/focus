@@ -43,12 +43,12 @@ class AddMemberToGroupForm(forms.Form):
 class UserProfileForm(ModelForm):
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','language')
 
 class UserProfileImageForm(ModelForm):
     class Meta:
         model = User
-        fields = ('profileImage',)
+        fields = ('profileImage','language')
 
 class UserProfilePasswordForm(forms.Form):
     old_password = forms.CharField(label="Gammelt passord", widget=forms.PasswordInput)

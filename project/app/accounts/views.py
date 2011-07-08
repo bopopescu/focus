@@ -6,6 +6,7 @@ from core.auth.user.models import User
 from core.auth.log.models import Log
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from django.utils import translation
 
 def login(request):
     message = ""
@@ -27,6 +28,9 @@ def login(request):
                 user = request.user
 
                 if user.canLogin:
+
+                    user.use_user_language(request)
+
                     Log(message="%s logget inn." % user).save(user=user)
                     if not redirect_to:
                         return HttpResponseRedirect("/dashboard/")

@@ -86,7 +86,7 @@ class TicketType(models.Model):
     name = models.CharField(max_length=20)
     description = models.TextField(default=None, blank=True, null=True)
     company = models.ForeignKey(Company, null=True, default=None)
-    
+
     def __unicode__(self):
         return unicode(self.name)
 
@@ -97,13 +97,15 @@ class TicketType(models.Model):
     @staticmethod
     def simpleform():
         from app.tickets.forms import AddTicketTypeForm
+
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
+
 
 class Ticket(TicketBase):
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), )
     status = models.ForeignKey(TicketStatus, verbose_name=_("Status"), default=1)
-    priority = models.ForeignKey(TicketPriority, verbose_name=_("Priority"),default=2)
+    priority = models.ForeignKey(TicketPriority, verbose_name=_("Priority"), default=2)
     type = models.ForeignKey(TicketType, verbose_name=_("Category"))
     spent_time = models.IntegerField(_("Spent time"), default=0)
     estimated_time = models.IntegerField(_("Estimated time"), default=0)
@@ -247,15 +249,15 @@ class TicketUpdate(TicketBase):
         return None
 
     def get_view_url(self):
-       return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.ticket.id,))
+        return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.ticket.id,))
 
     def get_attachment_name(self):
         return self.attachment.name.split(os.sep)[-1]
 
     def create_update_lines(self, differences):
         for diff in differences:
-            change_text = _("%s changed from %s to %s") %\
-                          (diff, differences[diff][1], differences[diff][0])
+            change_text = ("%s %s %s %s %s") %\
+                          (diff, _("changed_from"), differences[diff][1], _("to"), differences[diff][0])
             TicketUpdateLine.objects.create(update=self, change=change_text)
 
     def get_attachment(self):
@@ -265,10 +267,12 @@ class TicketUpdate(TicketBase):
 
     def __unicode__(self):
         return u"Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
-        
+
+
 class TicketUpdateLine(TicketBase):
     update = models.ForeignKey(TicketUpdate, related_name='update_lines')
     change = models.CharField(max_length=250)
+
 
 def initial_data():
     TicketStatus.objects.get_or_create(name=_("New"), order_priority=1)

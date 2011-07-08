@@ -20,8 +20,10 @@ def edit(request):
         if form.is_valid():
             o = form.save(commit=False)
             o.save()
+            o.use_user_language(request)
             request.message_success(msg)
             return redirect(edit)
+
     else:
         form = UserProfileForm(instance=instance, initial={"profileImage": None})
 

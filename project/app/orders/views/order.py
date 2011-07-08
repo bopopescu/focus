@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from app.orders.forms import OrderForm
+from app.orders.forms import OrderForm, AddParticipantToOrderForm
 from app.orders.models import Order, ProductLine, Invoice
 from app.stock.models import Product
 from core import Core
+from core.auth.permission.models import Permission
 from core.decorators import require_permission
 from django.utils.translation import ugettext as _
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.contenttypes.models import ContentType
 
 @require_permission("LIST", Order)
 def my_orders(request):
@@ -31,7 +34,8 @@ def archive(request):
 def view_statistics(request, id):
     order = Order.objects.filter_current_company().get(id=id)
     return render(request, "orders/statistics.html", {'title': order.title,
-                                                'order': order})
+                                                      'order': order})
+
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
@@ -98,9 +102,8 @@ def form(request, id=None):
             p.price = request.POST.getlist('product_unit_cost')[i]
             p.count = request.POST.getlist('product_qty')[i]
             try:
-                product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))
-                p.product = product
-            except:
+                p.product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))
+            except Exception, e:
                 p.product = None
 
             products.append(p)
@@ -120,3 +123,47 @@ def form(request, id=None):
     return render(request, "orders/form.html", {'form': form,
                                                 'order': instance,
                                                 'products': products})
+
+def delete_permission_from_participants(request, id, permission_id):
+    permission = Permission.objects.get(id=permission_id)
+    if not permission.user == Core.current_user():
+        permission.delete()
+        request.message_success("Deleted")
+    else:
+        request.message_error("You can't delete your own permissions")
+
+    return participants(request, id, permission_id)
+
+def participants(request, id, permission_id):
+
+    order = get_object_or_404(Order, id=id)
+    content_type = ContentType.objects.get_for_model(Order)
+
+    if permission_id:
+        permission = Permission.objects.get(id=permission_id)
+    else:
+        permission = Permission()
+
+    if request.method == 'POST':
+        form = AddParticipantToOrderForm(request.POST)
+
+        if form.is_valid():
+            user = form.cleaned_data['user']
+            role = form.cleaned_data['role']
+
+            perm = Permission()
+            perm.content_type = content_type
+            perm.object_id = id
+            perm.user = user
+            perm.role = role
+            perm.save()
+
+            request.message_success(_("Successfully add"))
+
+    add_participant_to_group_form = AddParticipantToOrderForm()
+
+    permissions = Permission.objects.filter(content_type=content_type, object_id=id)
+
+    return render(request, "orders/participants.html", {'form': add_participant_to_group_form,
+                                                        'order': order,
+                                                        'permissions': permissions})

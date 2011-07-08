@@ -122,15 +122,14 @@ class SessionBasedLocaleMiddleware(object):
     This Middleware saves the desired content language in the user session.
     The SessionMiddleware has to be activated.
     """
-    
     def process_request(self, request):
         if request.method == 'GET' and 'lang' in request.GET:
-            language = request.GET['lang']
-            request.session['language'] = language
+                language = request.GET['lang']
+                request.session['language'] = language
         elif 'language' in request.session:
-            language = request.session['language']
+                language = request.session['language']
         else:
-            language = translation.get_language_from_request(request)
+                language = translation.get_language_from_request(request)
 
         for lang in settings.LANGUAGES:
             if lang[0] == language:

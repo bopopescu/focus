@@ -43,7 +43,7 @@ def _create_msg(ticket, ticket_update):
 
 def _create_client_msg(ticket, ticket_update):
     url = settings.SITE_URL + reverse("ticket_view", kwargs={'id': ticket.id})
-    msg = _("The ticket %s (%s) has been updated:") % (ticket.title, url)
+    msg = ("%s %s (%s) %s:") % (_("The ticket "), ticket.title, url, _("has been updated"))
     if ticket_update.comment:
         msg += "\n\n" + _("Comment:") + "\n%s" % ticket_update.comment
 
@@ -72,8 +72,8 @@ def send_assigned_mail(user, ticket, assigned=True):
         return
     url = settings.SITE_URL + reverse("ticket_view", kwargs={'id': ticket.id})
     if assigned:
-        msg = _("You have been assigned to the ticket %s\nLink: %s") % (ticket.title, url)
+        msg = (" %s\n%s: %s") % (_("You have been assigned to the ticket"),ticket.title, _("Link"), url)
     else:
-        msg = _("You have been unassigned from the the ticket %s\nLink: %s u") % (ticket.title, url)
+        msg = (" %s\n%s: %s") % (_("You have been unassigned to the ticket"),ticket.title, _("Link"), url)
 
     send_mail(ticket.title, msg, settings.NO_REPLY_EMAIL, [user.email])

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from decimal import Decimal
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from api.hourregistrationsapi.forms import TimeTrackerForm
-from app.hourregistrations.forms import HourRegistrationForm
-from app.hourregistrations.models import HourRegistration
+from app.hourregistrations.forms import HourRegistrationForm, HourRegistrationTypeForm, DisbursementForm
+from app.hourregistrations.models import HourRegistration, HourRegistrationType, Disbursement
 from core import Core
 from core.auth.user.models import User
 from core.decorators import login_required, require_permission
@@ -11,6 +11,7 @@ from datetime import datetime, date
 from django.utils import simplejson
 from django.utils.simplejson import JSONEncoder
 from django.http import HttpResponse
+from django.utils.translation import ugettext as _
 import calendar
 import time
 
@@ -42,6 +43,16 @@ def form(request):
     return HttpResponse("ERROR")
 
 
+@login_required()
+def delete(request, id):
+    if id:
+        instance = HourRegistration.objects.get(id=id)
+        instance.delete()
+        return HttpResponse("OK")
+    else:
+        return HttpResponse("ERROR")
+
+
 @require_permission("CONFIGURE", HourRegistration)
 def list_all_employees(request):
     persons = User.objects.filter_current_company()
@@ -58,13 +69,13 @@ def calendar_day_json(request, year, month, day):
     registrations = [{'id': reg.id,
                       'time_start': reg.time_start,
                       'time_end': reg.time_end,
-                      'hours_worked': str(reg.hours_worked),
+                      'hours': str(reg.hours),
                       'order': reg.order.id,
-                      'pause': str(reg.pause),
+                      'type': str(reg.type.id),
                       'customer_name': reg.get_customer_name(),
                       'order_name': reg.get_order_name(),
                       'description': reg.description
-                     } for reg in list_hour_registrations]
+    } for reg in list_hour_registrations]
 
     return HttpResponse(JSONEncoder().encode(registrations), mimetype='application/json')
 
@@ -90,7 +101,7 @@ def calendar_json(request, year, month):
                 day_date = datetime.strptime("%s-%s-%s" % (year, month, int(day)), "%Y-%m-%d")
 
                 for reg in HourRegistration.objects.filter(date=day_date, creator=Core.current_user()):
-                    hours_count += float(reg.hours_worked)
+                    hours_count += float(reg.hours)
 
             if NOW == date:
                 temp_cal.append((CURRENT_WEEK, day, "day today", hours_count))
@@ -119,6 +130,7 @@ def calendar_today(request):
     form = HourRegistrationForm()
     return render(request, "hourregistrations/calendar.html", {"form": form})
 
+
 def timer(request):
     form = TimeTrackerForm()
     return render(request, 'hourregistrations/timer.html', {'form': form})
@@ -128,6 +140,57 @@ def timer(request):
 def calendar_can_edit_form(request):
     reg = HourRegistration.objects.get()
     print Core.current_user()
+
+
+@require_permission("EDIT", HourRegistrationType)
+def admin_hourregistrationtypes(request, id=None):
+    instance = HourRegistrationType()
+    types = Core.current_user().get_permitted_objects("EDIT", HourRegistrationType).filter(trashed=False)
+
+    if id:
+        instance = get_object_or_404(HourRegistrationType, id=id)
+
+    #Save and set to active, require valid form
+    if request.method == 'POST':
+        form = HourRegistrationTypeForm(request.POST, instance=instance)
+        if form.is_valid():
+            o = form.save(commit=False)
+            o.save()
+
+            request.message_success("Success")
+
+            return redirect(admin_hourregistrationtypes, o.id)
+    else:
+        form = HourRegistrationTypeForm(instance=instance)
+
+    return render(request, "hourregistrations/types.html",
+            {'title': _("Hour registrations types"), 'types': types, 'form': form})
+
+
+@require_permission("EDIT", Disbursement)
+def disbursements(request, id=None):
+    instance = Disbursement()
+    disb = Disbursement.objects.filter(trashed=False, creator=Core.current_user())
+
+    if id:
+        instance = get_object_or_404(Disbursement, id=id)
+
+    #Save and set to active, require valid form
+    if request.method == 'POST':
+        form = DisbursementForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid():
+            o = form.save(commit=False)
+            o.save()
+
+            request.message_success("Success")
+
+            return redirect(disbursements)
+
+    else:
+        form = DisbursementForm(instance=instance, initial={'attachment': None})
+
+    return render(request, "hourregistrations/disbursements.html",
+            {'title': _("Disbursements"), 'disbursements': disb, 'disbursement': instance, 'form': form})
 
 ########ARCHIVE#############
 
@@ -156,10 +219,9 @@ def view_archived_month(request, year, month, user_id=None, print_friendly=False
 
 @require_permission("MANAGE", HourRegistration)
 def list_hour_registrations(request, user, from_date, to_date, template):
-
     hourregistrations = HourRegistration.objects.filter(creator=user,
-                                                        date__gte = from_date,
-                                                        date__lte = to_date)
+                                                        date__gte=from_date,
+                                                        date__lte=to_date)
 
     sumHours = 0
     sumEarned = 0
@@ -169,10 +231,10 @@ def list_hour_registrations(request, user, from_date, to_date, template):
     sumDisbursements = 0
 
     for t in hourregistrations:
-        if t.hours_worked:
-            sumHours += Decimal(t.hours_worked)
-        if t.hours_worked and t.hourly_rate:
-            sumEarned += Decimal(t.hours_worked) * Decimal(t.hourly_rate)
+        if t.hours:
+            sumHours += Decimal(t.hours)
+        if t.hours and t.hourly_rate:
+            sumEarned += Decimal(t.hours) * Decimal(t.hourly_rate)
         if t.disbursements:
             for disb in t.disbursements.all():
                 sumDisbursements += disb.price
@@ -188,22 +250,24 @@ def list_hour_registrations(request, user, from_date, to_date, template):
         sumTotalEarned = sumEarned - sumCover
 
     return render(request, template,
-                  {'title': 'Timeføringer %s' % (user), 'hourregistrations': hourregistrations,
-                   'sumHours': round(sumHours, 2),
-                   'sumEarned': round(sumEarned, 2),
-                   'sumCover': round(sumCover, 2),
-                   'sumTotalEarned': round(sumTotalEarned, 2),
-                   'sumDisbursements': round(sumDisbursements, 2),
-                   'sumKilometers': round(sumKilometers, 2)})
+            {'title': 'Timeføringer %s' % (user), 'hourregistrations': hourregistrations,
+             'sumHours': round(sumHours, 2),
+             'sumEarned': round(sumEarned, 2),
+             'sumCover': round(sumCover, 2),
+             'sumTotalEarned': round(sumTotalEarned, 2),
+             'sumDisbursements': round(sumDisbursements, 2),
+             'sumKilometers': round(sumKilometers, 2)})
 
 
 @require_permission("LIST", HourRegistration)
 def your_archive(request):
     return archive(request)
 
+
 @require_permission("MANAGE", HourRegistration)
 def user_archive(request, user_id):
     return archive(request, user_id)
+
 
 def archive(request, user_id=None):
     year_with_months = {}
@@ -222,6 +286,6 @@ def archive(request, user_id=None):
         year_with_months[time.date.year].add(time.date.month)
 
     return render(request, 'hourregistrations/archive.html',
-                  {'title': 'Arkiv',
-                   'user_id': user.id,
-                   'year_with_months': year_with_months})
+            {'title': 'Arkiv',
+             'user_id': user.id,
+             'year_with_months': year_with_months})

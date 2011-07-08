@@ -93,7 +93,6 @@ def members(request, id):
                                                          'form': addMemberToGroupForm
     })
 
-
 @login_required()
 def delete(request, id):
     group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
