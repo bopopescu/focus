@@ -75,5 +75,7 @@ class Permission(models.Model):
 
         if not self.object_id:
             return "any"
-
-        return self.content_type.get_object_for_this_type(id=self.object_id)
+        try:
+            return self.content_type.get_object_for_this_type(id=self.object_id)
+        except Exception, e:
+            return "error, %s, %s" % (self.object_id, str(e))
