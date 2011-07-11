@@ -120,7 +120,7 @@ msgstr "VIS"
 #: app/stock/templates/stock/sidebar.html:15
 #: app/suppliers/templates/suppliers/sidebar.html:14
 msgid "EDIT"
-msgstr "EDIT"
+msgstr "ENDRE"
 
 #: app/admin/templates/admin/sidebar.html:21
 msgid "SEND NEW PASSWORD"
@@ -141,7 +141,7 @@ msgstr "HISTORIE"
 #: app/admin/templates/admin/sidebar.html:36
 #: app/admin/templates/admin/sidebar.html:60
 msgid "PERMISSIONS"
-msgstr "Tillatelser"
+msgstr "TILLATELSER"
 
 #: app/admin/templates/admin/sidebar.html:41
 #: app/admin/templates/admin/sidebar.html:63
@@ -153,7 +153,7 @@ msgstr "Tillatelser"
 #: app/suppliers/templates/suppliers/sidebar.html:24
 #: app/tickets/templates/tickets/sidebar.html:21
 msgid "DELETE"
-msgstr "DELETE"
+msgstr "SLETT"
 
 #: app/admin/templates/admin/sidebar.html:46
 #: app/admin/templates/admin/sidebar.html:77
@@ -170,7 +170,7 @@ msgstr "NY BRUKER"
 
 #: app/admin/templates/admin/sidebar.html:81
 msgid "NEW GROUP"
-msgstr "Ny gruppe"
+msgstr "NY GRUPPE"
 
 #: app/admin/templates/admin/sidebar.html:87
 msgid "COMPANIES"
@@ -182,7 +182,7 @@ msgstr "NYTT FIRMA"
 
 #: app/admin/templates/admin/sidebar.html:99
 msgid "COMPANY SETTINGS"
-msgstr "Firmainnstillinger"
+msgstr "FIRMAINSTLLINGER"
 
 #: app/admin/templates/admin/groups/list.html:17
 #: app/admin/templates/admin/groups/members.html:25
@@ -243,7 +243,7 @@ msgstr "ENDRE PASSORD"
 
 #: app/admin/templates/admin/profile/sidebar.html:18
 msgid "CHANGE PROFILE IMAGE"
-msgstr "ENDRE PROFILPROFILE"
+msgstr "ENDRE PROFILBILDE"
 
 #: app/admin/templates/admin/users/list.html:17
 #: app/admin/templates/admin/users/view.html:22
@@ -385,7 +385,7 @@ msgstr "Bruker lagt"
 
 #: app/admin/views/user.py:182
 msgid "New user successfully added"
-msgstr "Ny bruker lagt"
+msgstr "Ny bruker lagt til"
 
 #: app/announcements/models.py:14 app/offers/templates/offers/overview.html:29
 #: app/orders/models.py:23 app/tickets/models.py:105
