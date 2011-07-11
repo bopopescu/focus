@@ -70,9 +70,11 @@ def create_update_for_ticket(old_ticket, ticket_form):
     ticket_update.user = ticket.user
     ticket_update.company = ticket.company
     ticket_update.save()
+
     differences = Ticket.find_differences(ticket, old_ticket)
     ticket_update.create_update_lines(differences)
     ticket.save(update=ticket_update)
+
     return ticket
 
 
@@ -144,7 +146,6 @@ def add_ticket_type_ajax(request, id=None):
                                               'id': ticket_type.id,
                                               'valid': True}), mimetype='application/json')
     else:
-        print form.errors
         errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
         return HttpResponse(simplejson.dumps({'errors': errors,
                                               'valid': False}), mimetype='application/json')

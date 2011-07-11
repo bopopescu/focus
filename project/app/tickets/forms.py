@@ -29,7 +29,6 @@ class TicketForm(ModelForm):
 
 class EditTicketForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
-    attachment = forms.FileField(label=_("Add Attachment"), required=False)
     public = forms.BooleanField(label=_("Make comment public"), required=False)
 
     class Meta:

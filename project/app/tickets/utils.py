@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from core.mail import send_mail
