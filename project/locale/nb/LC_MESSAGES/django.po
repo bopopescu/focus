@@ -590,11 +590,11 @@ msgstr "Postnr"
 
 #: app/customers/models.py:24 app/customers/templates/customers/view.html:61
 msgid "Invoice address"
-msgstr "Faktura adresse"
+msgstr "Fakturaadresse"
 
 #: app/customers/models.py:25
 msgid "Invoice zip"
-msgstr "Faktura zip"
+msgstr "Fakturapostnr"
 
 #: app/customers/models.py:48
 msgid "Customer has active orders"
