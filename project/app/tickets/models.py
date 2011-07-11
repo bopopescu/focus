@@ -130,13 +130,18 @@ class Ticket(TicketBase):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
 
     def save(self, **kwargs):
+
         if 'update' in kwargs:
             send_update_mails(self, kwargs['update'])
+
         action = 'EDIT'
+
         if not self.id:
             action = 'ADD'
 
-        super(Ticket, self).save()
+
+
+        #super(Ticket, self).save()
 
         if action == 'ADD':
             if self.assigned_to:
