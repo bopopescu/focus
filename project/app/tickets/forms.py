@@ -29,17 +29,17 @@ class TicketForm(ModelForm):
 
 class EditTicketForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea, label=_("Add Comment"), required=False)
+    attachment = forms.FileField(label=_("Add Attachment"), required=False)
     public = forms.BooleanField(label=_("Make comment public"), required=False)
 
     class Meta:
         model = Ticket
         fields = (
         'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
-        'spent_time', 'attachment', 'order',)
+        'spent_time', 'order',)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
-        self.fields['attachment'].required = False
         self.fields['assigned_to'].queryset = User.objects.filter_current_company()
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()

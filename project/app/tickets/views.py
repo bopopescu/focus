@@ -70,11 +70,9 @@ def create_update_for_ticket(old_ticket, ticket_form):
     ticket_update.user = ticket.user
     ticket_update.company = ticket.company
     ticket_update.save()
-
     differences = Ticket.find_differences(ticket, old_ticket)
     ticket_update.create_update_lines(differences)
     ticket.save(update=ticket_update)
-
     return ticket
 
 
@@ -95,7 +93,7 @@ def edit(request, id):
             return redirect(view, ticket.id)
 
     else:
-        ticket_form = EditTicketForm(instance=ticket, initial={'attachment':None})
+        ticket_form = EditTicketForm(instance=ticket)
 
     return render(request, "tickets/edit.html", {'title': _('Update Ticket'),
                                                  'ticket': ticket,
