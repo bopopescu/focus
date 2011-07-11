@@ -35,10 +35,11 @@ class EditTicketForm(ModelForm):
         model = Ticket
         fields = (
         'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
-        'spent_time', 'order',)
+        'spent_time', 'attachment', 'order',)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
+        self.fields['attachment'].required = False
         self.fields['assigned_to'].queryset = User.objects.filter_current_company()
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
