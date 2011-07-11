@@ -17,11 +17,11 @@ class Customer(PersistentModel):
     website = models.CharField(_("Website"), max_length=150, blank=True, null=True)
 
     #Delivery and visit
-    address = models.CharField(_("Address"), max_length=80, blank=True)
+    address = models.TextField(_("Address"), blank=True)
     zip = models.CharField(_("Zip"), max_length=15, blank=True)
 
     #Invoice
-    invoice_address = models.CharField(_("Invoice address"), max_length=80, blank=True)
+    invoice_address = models.TextField(_("Invoice address"), blank=True)
     invoice_zip = models.CharField(_("Invoice zip"), max_length=15, blank=True)
 
     contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name=_("Contacts"))
