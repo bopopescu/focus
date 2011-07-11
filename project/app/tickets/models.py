@@ -133,15 +133,11 @@ class Ticket(TicketBase):
 
         if 'update' in kwargs:
             send_update_mails(self, kwargs['update'])
-
         action = 'EDIT'
-
         if not self.id:
             action = 'ADD'
 
-
-
-        #super(Ticket, self).save()
+        super(Ticket, self).save()
 
         if action == 'ADD':
             if self.assigned_to:
@@ -179,9 +175,9 @@ class Ticket(TicketBase):
             reasons.append(_("Ticket has comments"))
 
         if can_be_deleted:
-            return (True, "OK")
+            return True, "OK"
 
-        return (False, reasons)
+        return False, reasons
 
     def get_attachment_url(self):
         if self.attachment:

@@ -103,7 +103,7 @@ def trash(request, id):
 @suggest_ajax_parse_arguments()
 def autocomplete(request, query, limit):
     contacts = Contact.objects.filter_current_company().filter(
-        Q(full_name__startswith=query)
+        Q(name__startswith=query)
     )[:limit]
 
     contacts = [{'id': contact.id,
