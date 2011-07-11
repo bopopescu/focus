@@ -34,6 +34,8 @@ class TicketBase(models.Model):
         if not self.id:
             action = 'ADD'
 
+
+
         super(TicketBase, self).save()
 
         if Core.current_user():
