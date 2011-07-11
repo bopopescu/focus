@@ -1,7 +1,7 @@
 {% load menu_tags %}
 {% load i18n %}
 {% load auth %}
-<h3>Sidebar</h3>
+
 <ul>
     {% if project.id %}
     <li><a class="{% active request "projects/$" %}" href="{% url app.projects.views.project.overview %}"><img

@@ -1,6 +1,6 @@
 {% load menu_tags %}
 {% load i18n %}
-<h3>Sidebar</h3>
+
 <ul>
     {% if contact.id %}
         <li><a class="{% active request "contacts/$" %}" href="{% url app.contacts.views.overview %}"><img

@@ -235,7 +235,7 @@ msgstr "Lagre"
 
 #: app/admin/templates/admin/profile/sidebar.html:8
 msgid "EDIT DETAILS"
-msgstr "EDIT DETALJER"
+msgstr "ENDRE DETALJER"
 
 #: app/admin/templates/admin/profile/sidebar.html:12
 msgid "CHANGE PASSWORD"
@@ -243,7 +243,7 @@ msgstr "ENDRE PASSORD"
 
 #: app/admin/templates/admin/profile/sidebar.html:18
 msgid "CHANGE PROFILE IMAGE"
-msgstr "ENDRE PROFIL IMAGE"
+msgstr "ENDRE PROFILPROFILE"
 
 #: app/admin/templates/admin/users/list.html:17
 #: app/admin/templates/admin/users/view.html:22
@@ -287,7 +287,7 @@ msgstr "Slettet gruppe"
 
 #: app/admin/views/group.py:110
 msgid "Successfully edited group"
-msgstr "Vellykket redigert gruppe"
+msgstr "Vellykket endret gruppe"
 
 #: app/admin/views/group.py:113
 msgid "Successfully added new group"
@@ -315,7 +315,7 @@ msgstr "Vellykket endret profilbilde"
 
 #: app/admin/views/profile.py:62
 msgid "Successfully edited password"
-msgstr "Vellykket redigert passord"
+msgstr "Vellykket endret passord"
 
 #: app/admin/views/profile.py:70
 msgid "Change password"
@@ -373,7 +373,7 @@ msgstr "Bekreft sletting"
 
 #: app/admin/views/user.py:152
 msgid "User successfully edited"
-msgstr "Bruker redigert"
+msgstr "Bruker endret"
 
 #: app/admin/views/user.py:170
 msgid "Change user"
@@ -468,7 +468,7 @@ msgstr "Ticket oppdatert"
 
 #: app/company/views.py:41
 msgid "Successful edit"
-msgstr "Vellykket edit"
+msgstr "Vellykket endret"
 
 #: app/company/views.py:44
 msgid "Successful add"
@@ -529,7 +529,7 @@ msgstr "Vellykket endret image"
 
 #: app/contacts/views.py:164
 msgid "Successfully edited contact"
-msgstr "Vellykket redigert kontakt"
+msgstr "Vellykket endret kontakt"
 
 #: app/contacts/views.py:167
 msgid "Successfully added new contact"
@@ -630,11 +630,11 @@ msgstr "Bekreft gjenopprette"
 
 #: app/customers/views.py:146
 msgid "Successfully edited customer"
-msgstr "Vellykket redigert kunde"
+msgstr "Vellykket endret kunde"
 
 #: app/customers/views.py:147
 msgid "Edit customer"
-msgstr "Edit kunde"
+msgstr "Endre kunde"
 
 #: app/customers/views.py:151
 msgid "Successfully added new customer"
@@ -851,7 +851,7 @@ msgstr "Måneder"
 #: app/hourregistrations/templates/hourregistrations/calendar.html:143
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:74
 msgid "edit"
-msgstr "edit"
+msgstr "endre"
 
 #: app/hourregistrations/templates/hourregistrations/calendar.html:144
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:75
@@ -1156,7 +1156,7 @@ msgstr "Ny milepæl"
 
 #: app/projects/views/project.py:115
 msgid "Edit project"
-msgstr "Rediger prosjekt"
+msgstr "Endret prosjekt"
 
 #: app/projects/views/project.py:121
 msgid "New project"
@@ -1274,7 +1274,7 @@ msgstr "Produkt som brukes i disse ordrene"
 
 #: app/stock/views/product.py:99
 msgid "Successfully edited product"
-msgstr "Vellykket redigert produkt"
+msgstr "Vellykket endret produkt"
 
 #: app/suppliers/models.py:30
 msgid "Supplier has active products"
@@ -1294,7 +1294,7 @@ msgstr "Alle aktive leverandører"
 
 #: app/suppliers/views.py:124
 msgid "Successfully edited supplier"
-msgstr "Vellykket redigert leverandør"
+msgstr "Vellykket endret leverandør"
 
 #: app/suppliers/views.py:127
 msgid "Successfully addded new supplier"

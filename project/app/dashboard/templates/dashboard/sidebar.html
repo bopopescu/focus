@@ -1,6 +1,6 @@
 {% load menu_tags %}
 {% load i18n %}
-<h3>Sidebar</h3>
+
 <ul>
     {% if announcement.id %}
         <li><a class="{% active request "announcements/$" %}" href="{% url app.announcements.views.overview %}"><img

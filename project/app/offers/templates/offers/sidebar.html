@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load menu_tags %}
-<h3>{% trans "Offers" %}</h3>
+
 <ul>
     <li><a class="{% active request "contacts/$" %}" href="{% url app.offers.views.overview %}"><img
             src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ALL OFFERS" %}</a></li>
