@@ -95,7 +95,7 @@ def edit(request, id):
             return redirect(view, ticket.id)
 
     else:
-        ticket_form = EditTicketForm(instance=ticket)
+        ticket_form = EditTicketForm(instance=ticket, initial={'attachment':None})
 
     return render(request, "tickets/edit.html", {'title': _('Update Ticket'),
                                                  'ticket': ticket,
