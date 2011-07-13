@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-13 18:15+0200\n"
+"POT-Creation-Date: 2011-07-13 18:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,7 +102,7 @@ msgstr "BRUKERE"
 #: app/dashboard/templates/dashboard/sidebar.html:10
 #: app/invoices/templates/invoices/sidebar.html:13
 #: app/offers/templates/offers/sidebar.html:10
-#: app/orders/templates/orders/sidebar.html:12
+#: app/orders/templates/orders/sidebar.html:13
 #: app/projects/templates/projects/sidebar.html:11
 #: app/stock/templates/stock/sidebar.html:11
 #: app/suppliers/templates/suppliers/sidebar.html:11
@@ -117,7 +117,7 @@ msgstr "VIS"
 #: app/dashboard/templates/dashboard/sidebar.html:12
 #: app/invoices/templates/invoices/sidebar.html:15
 #: app/offers/templates/offers/sidebar.html:12
-#: app/orders/templates/orders/sidebar.html:15
+#: app/orders/templates/orders/sidebar.html:16
 #: app/projects/templates/projects/sidebar.html:24
 #: app/stock/templates/stock/sidebar.html:14
 #: app/suppliers/templates/suppliers/sidebar.html:13
@@ -135,6 +135,8 @@ msgstr "SET TIME DAGER GRENSER"
 #: app/admin/templates/admin/sidebar.html:29
 #: app/contacts/templates/contacts/sidebar.html:23
 #: app/customers/templates/customers/sidebar.html:44
+#: app/offers/templates/offers/sidebar.html:23
+#: app/orders/templates/orders/sidebar.html:37
 #: app/projects/templates/projects/sidebar.html:35
 #: app/suppliers/templates/suppliers/sidebar.html:20
 msgid "HISTORY"
@@ -360,7 +362,8 @@ msgid "Successfully sent new password"
 msgstr "Vellykket sendt nytt passord"
 
 #: app/admin/views/user.py:85 app/contacts/views.py:64
-#: app/customers/views.py:78 app/projects/views/project.py:76
+#: app/customers/views.py:78 app/offers/views.py:55
+#: app/orders/views/order.py:47 app/projects/views/project.py:76
 #: app/suppliers/views.py:85
 msgid "Latest events"
 msgstr "Siste events"
@@ -825,7 +828,8 @@ msgstr "Tid slutt"
 #: app/hourregistrations/models.py:44
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:61
 #: app/invoices/templates/invoices/view.html:14
-#: app/offers/templates/offers/view.html:21 app/orders/models.py:15
+#: app/offers/templates/offers/view.html:21
+#: app/offers/templates/offers/view.html:37 app/orders/models.py:15
 #: app/orders/models.py:26 app/orders/templates/orders/view.html:14
 #: app/projects/templates/projects/view.html:18 app/tickets/models.py:108
 #: app/tickets/utils.py:80 app/tickets/templates/tickets/view.html:71
@@ -885,7 +889,7 @@ msgstr "Avbryt"
 #: app/hourregistrations/templates/hourregistrations/list_hours.html:36
 #: app/hourregistrations/templates/hourregistrations/list_hours_print_friendly.html:52
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:37
 msgid "replace with new image"
@@ -893,7 +897,7 @@ msgstr "bytt med nytt bilde"
 
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:57
 msgid "Dato"
-msgstr ""
+msgstr "Dato"
 
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:58
 msgid "Antall"
@@ -961,11 +965,11 @@ msgstr "Pris"
 msgid "Invoices"
 msgstr "Fakturaer"
 
-#: app/invoices/views.py:65 app/offers/views.py:117
+#: app/invoices/views.py:65 app/offers/views.py:134
 msgid "Successfully saved offer"
 msgstr "Lagret tilby"
 
-#: app/invoices/templates/invoices/overview.html:29
+#: app/invoices/templates/invoices/overview.html:29 app/orders/models.py:68
 #: app/orders/templates/orders/create_invoice.html:13
 msgid "Invoice number"
 msgstr "Fakturanummer"
@@ -980,14 +984,14 @@ msgstr "NY FAKTURA"
 
 #: app/invoices/templates/invoices/view.html:19
 #: app/offers/templates/offers/form.html:25
-#: app/offers/templates/offers/view.html:32
+#: app/offers/templates/offers/view.html:31
 #: app/orders/templates/orders/view.html:46 app/stock/views/product.py:20
 #: app/stock/views/product.py:27 app/suppliers/views.py:73
 #: templates/base.html:124
 msgid "Products"
 msgstr "Produkter"
 
-#: app/offers/views.py:16 templates/base.html:77
+#: app/offers/views.py:18 templates/base.html:77
 msgid "Offers"
 msgstr "Tilbud"
 
@@ -1008,7 +1012,7 @@ msgstr "Klienter som har tilgang til å se dette tilbudet"
 msgid "Create order from this offer"
 msgstr "Opprett ordre fra dette tilbudet"
 
-#: app/offers/templates/offers/create_order.html:13
+#: app/offers/templates/offers/create_order.html:13 app/orders/models.py:112
 #: app/orders/templates/orders/overview.html:28
 msgid "Order number"
 msgstr "Ordrenummer"
@@ -1023,7 +1027,7 @@ msgstr "Produkt"
 msgid "You have to select a customer"
 msgstr "Du må velge en kunde"
 
-#: app/offers/templates/offers/overview.html:28
+#: app/offers/templates/offers/overview.html:28 app/orders/models.py:89
 msgid "Offer number"
 msgstr "Tilbudsnummer"
 
@@ -1040,7 +1044,7 @@ msgstr "KUNDER"
 msgid "CREATE ORDER"
 msgstr "OPPRETT ORDRE"
 
-#: app/offers/templates/offers/sidebar.html:22
+#: app/offers/templates/offers/sidebar.html:28
 msgid "NEW OFFER"
 msgstr "NYTT TILBUD"
 
@@ -1048,14 +1052,32 @@ msgstr "NYTT TILBUD"
 msgid "Offer"
 msgstr "Offer"
 
+#: app/offers/templates/offers/view.html:36
+msgid "Item"
+msgstr "Enhet"
+
+#: app/offers/templates/offers/view.html:38
+#, fuzzy
+msgid "Unit cost"
+msgstr "Enhetskostnad"
+
+#: app/offers/templates/offers/view.html:39 app/orders/models.py:16
+msgid "Count"
+msgstr "Antall"
+
+#: app/offers/templates/offers/view.html:40
+msgid "Tax"
+msgstr "Skatt"
+
+#: app/offers/templates/offers/view.html:41
+#, fuzzy
+msgid "Total"
+msgstr "Totaltid"
+
 #: app/orders/models.py:14 app/stock/templates/stock/products/list.html:26
 #: app/stock/views/product.py:92 app/stock/views/product.py:120
 msgid "Product"
 msgstr "Produkt"
-
-#: app/orders/models.py:16
-msgid "Count"
-msgstr ""
 
 #: app/orders/models.py:17 app/orders/models.py:31
 #, fuzzy
@@ -1085,31 +1107,19 @@ msgstr "Leveringsfrist"
 
 #: app/orders/models.py:32
 msgid "Archived"
-msgstr ""
+msgstr "Arkivert"
 
-#: app/orders/models.py:68
-msgid "Fakturanummer"
-msgstr ""
-
-#: app/orders/models.py:89
-msgid "Tilbudsnummer"
-msgstr ""
-
-#: app/orders/models.py:97
-msgid "Pending reply"
-msgstr "Pending svare"
-
-#: app/orders/models.py:99
+#: app/orders/models.py:90 app/orders/models.py:99
 msgid "Accepted"
 msgstr "Akseptert"
 
+#: app/orders/models.py:97
+msgid "Pending reply"
+msgstr "Avventer svar"
+
 #: app/orders/models.py:101
 msgid "Declined"
-msgstr "Avslåtte"
-
-#: app/orders/models.py:112
-msgid "Ordrenummer"
-msgstr ""
+msgstr "Avslått"
 
 #: app/orders/templates/orders/create_invoice.html:10
 msgid "Create invoice from this order"
@@ -1129,33 +1139,33 @@ msgstr ""
 msgid "Actions"
 msgstr "handling"
 
-#: app/orders/templates/orders/sidebar.html:6
+#: app/orders/templates/orders/sidebar.html:7
 msgid "MY ORDERS"
 msgstr "MINE ORDRER"
 
-#: app/orders/templates/orders/sidebar.html:8
+#: app/orders/templates/orders/sidebar.html:9
 msgid "ALL ORDERS"
 msgstr "ALLE ORDRER"
 
-#: app/orders/templates/orders/sidebar.html:18
+#: app/orders/templates/orders/sidebar.html:19
 #: app/projects/templates/projects/sidebar.html:17
 #: app/stock/templates/stock/sidebar.html:20
 msgid "FILES"
 msgstr "FILER"
 
-#: app/orders/templates/orders/sidebar.html:23
+#: app/orders/templates/orders/sidebar.html:24
 msgid "PARTICIPANTS"
 msgstr ""
 
-#: app/orders/templates/orders/sidebar.html:28
+#: app/orders/templates/orders/sidebar.html:29
 msgid "STATISTICS"
 msgstr "STATISTIKK"
 
-#: app/orders/templates/orders/sidebar.html:32
+#: app/orders/templates/orders/sidebar.html:33
 msgid "CREATE INVOICE"
 msgstr "OPPRETT FAKTURA"
 
-#: app/orders/templates/orders/sidebar.html:37
+#: app/orders/templates/orders/sidebar.html:42
 msgid "NEW ORDER"
 msgstr "NY ORDRE"
 
@@ -1163,11 +1173,11 @@ msgstr "NY ORDRE"
 msgid "Statistics"
 msgstr "Statistikk"
 
-#: app/orders/views/order.py:122
+#: app/orders/views/order.py:133
 msgid "Successfully saved order"
 msgstr "Lagret rekkefølge"
 
-#: app/orders/views/order.py:168
+#: app/orders/views/order.py:179
 #, fuzzy
 msgid "Successfully add"
 msgstr "Vellykket legge"

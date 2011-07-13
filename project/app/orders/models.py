@@ -65,7 +65,7 @@ class OrderBase(PersistentModel):
 
 
 class Invoice(OrderBase):
-    invoice_number = models.IntegerField(_("Fakturanummer"))
+    invoice_number = models.IntegerField(_("Invoice number"))
     order = models.ForeignKey("Order", verbose_name=_("Order"), related_name="invoices")
 
     def get_view_url(self):
@@ -86,7 +86,7 @@ accepted_choices = (
         )
 
 class Offer(OrderBase):
-    offer_number = models.IntegerField(_("Tilbudsnummer"))
+    offer_number = models.IntegerField(_("Offer number"))
     accepted = models.NullBooleanField(default=None, choices=accepted_choices, verbose_name=_("Accepted"))
 
     def get_view_url(self):
@@ -109,7 +109,7 @@ class Offer(OrderBase):
 
 
 class Order(OrderBase):
-    order_number = models.IntegerField(_("Ordrenummer"))
+    order_number = models.IntegerField(_("Order number"))
     offer = models.ForeignKey('orders.Offer', verbose_name=_("Offer"), related_name="orders", null=True, blank=True)
 
     #Managers

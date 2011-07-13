@@ -21,7 +21,6 @@
     <br><h5>{% trans "Description" %}</h5>
       {{ offer.description|linebreaksbr }}
 
-
     <br>
 
     <div id="accepted_status" style="color:{{ offer.get_accepted_status.1 }}">
@@ -34,12 +33,12 @@
         <table>
 
             <thead>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Unit cost</th>
-            <th>Qty</th>
-            <th>Tax</th>
-            <th>Total</th>
+            <th>{% trans "Item" %}</th>
+            <th>{% trans "Description" %}</th>
+            <th>{% trans "Unit cost" %}</th>
+            <th>{% trans "Count" %}</th>
+            <th>{% trans "Tax" %}</th>
+            <th>{% trans "Total" %}</th>
             </thead>
 
             <tbody>
