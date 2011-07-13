@@ -75,10 +75,12 @@ def create_invoice(request, id):
                                                           'order': order})
 
 
+@require_permission("VIEW", Order)
 def add(request):
     return form(request)
 
 
+@require_permission("EDIT", Order, "id")
 def edit(request, id):
     return form(request, id)
 
@@ -127,6 +129,7 @@ def form(request, id=None):
                                                 'order': instance,
                                                 'products': products})
 
+@require_permission("EDIT", Order, "id")
 def delete_permission_from_participants(request, id, permission_id):
     permission = Permission.objects.get(id=permission_id)
     if not permission.user == Core.current_user():
@@ -137,6 +140,7 @@ def delete_permission_from_participants(request, id, permission_id):
 
     return participants(request, id, permission_id)
 
+@require_permission("EDIT", Order, "id")
 def participants(request, id, permission_id):
 
     order = get_object_or_404(Order, id=id)
