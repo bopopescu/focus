@@ -6,9 +6,11 @@ from app.orders.models import Order, Offer, ProductLine
 from django.utils.translation import ugettext as _
 from app.stock.models import Product
 from core import Core
+from core.auth.log.models import Log
 from core.decorators import require_permission
 from core.mail import send_mail
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
 @require_permission("LIST", Offer)
 def overview(request):
@@ -43,10 +45,24 @@ def create_order(request, id):
                                                         'offer': offer})
 
 
+@require_permission("EDIT", Offer, "id")
+def history(request, id):
+    instance = get_object_or_404(Offer, id=id, deleted=False)
+
+    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+                                 object_id=instance.id)
+
+    return render(request, 'offers/log.html', {'title': _("Latest events"),
+                                                  'offer': instance,
+                                                  'logs': history[::-1][0:150]})
+
+
+@require_permission("ADD", Offer)
 def add(request):
     return form(request)
 
 
+@require_permission("EDIT", Offer, "id")
 def client_management(request, id):
     offer = Offer.objects.get(id=id)
 
@@ -75,6 +91,7 @@ def client_management(request, id):
     return render(request, "offers/client_management.html", {'offer': offer})
 
 
+@require_permission("EDIT", Offer, "id")
 def edit(request, id):
     return form(request, id)
 

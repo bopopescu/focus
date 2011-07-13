@@ -17,6 +17,12 @@
                href="{% url app.offers.views.create_order offer.id%}"><img
                 src="{{ STATIC_URL }}img/order.png" width="24" height="24" alt="Home"/>{% trans "CREATE ORDER" %}</a>
         </li>
+
+
+        <li><a class="{% active request "history" %}" href="{% url app.offers.views.history offer.id %}"><img
+                src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
+
+
     {% else %}
         <li><a class="{% active request "offer/new" %}" href="{% url app.offers.views.add %}"><img
                 src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW OFFER" %}</a></li>

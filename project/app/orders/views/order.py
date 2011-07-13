@@ -3,6 +3,7 @@ from app.orders.forms import OrderForm, AddParticipantToOrderForm
 from app.orders.models import Order, ProductLine, Invoice
 from app.stock.models import Product
 from core import Core
+from core.auth.log.models import Log
 from core.auth.permission.models import Permission
 from core.decorators import require_permission
 from django.utils.translation import ugettext as _
@@ -36,6 +37,16 @@ def view_statistics(request, id):
     return render(request, "orders/statistics.html", {'title': order.title,
                                                       'order': order})
 
+@require_permission("EDIT", Order, "id")
+def history(request, id):
+    instance = get_object_or_404(Order, id=id, deleted=False)
+
+    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+                                 object_id=instance.id)
+
+    return render(request, 'orders/log.html', {'title': _("Latest events"),
+                                                  'order': instance,
+                                                  'logs': history[::-1][0:150]})
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
