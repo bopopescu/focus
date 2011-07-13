@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-07 23:33+0200\n"
+"POT-Creation-Date: 2011-07-13 18:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,6 +72,7 @@ msgid "Type"
 msgstr "Type"
 
 #: app/admin/templates/admin/permissions.html:68
+#: app/orders/templates/orders/participants.html:25
 msgid "Role"
 msgstr "Rolle"
 
@@ -85,102 +86,103 @@ msgstr "Gjennom gruppe"
 
 #: app/admin/templates/admin/permissions.html:96
 #: app/admin/templates/admin/permissions.html:100
+#: app/orders/templates/orders/participants.html:57
 msgid "Delete"
 msgstr "Slett"
 
-#: app/admin/templates/admin/sidebar.html:10
-#: app/admin/templates/admin/sidebar.html:68
+#: app/admin/templates/admin/sidebar.html:9
+#: app/admin/templates/admin/sidebar.html:67
 msgid "USERS"
 msgstr "BRUKERE"
 
-#: app/admin/templates/admin/sidebar.html:14
-#: app/admin/templates/admin/sidebar.html:51
+#: app/admin/templates/admin/sidebar.html:13
+#: app/admin/templates/admin/sidebar.html:50
 #: app/contacts/templates/contacts/sidebar.html:10
-#: app/customers/templates/customers/sidebar.html:13
+#: app/customers/templates/customers/sidebar.html:12
 #: app/dashboard/templates/dashboard/sidebar.html:10
-#: app/invoices/templates/invoices/sidebar.html:14
+#: app/invoices/templates/invoices/sidebar.html:13
 #: app/offers/templates/offers/sidebar.html:10
-#: app/orders/templates/orders/sidebar.html:13
+#: app/orders/templates/orders/sidebar.html:12
 #: app/projects/templates/projects/sidebar.html:11
-#: app/stock/templates/stock/sidebar.html:12
-#: app/suppliers/templates/suppliers/sidebar.html:12
+#: app/stock/templates/stock/sidebar.html:11
+#: app/suppliers/templates/suppliers/sidebar.html:11
 #: app/tickets/templates/tickets/sidebar.html:10
 msgid "VIEW"
 msgstr "VIS"
 
-#: app/admin/templates/admin/sidebar.html:17
-#: app/admin/templates/admin/sidebar.html:57
+#: app/admin/templates/admin/sidebar.html:16
+#: app/admin/templates/admin/sidebar.html:56
 #: app/contacts/templates/contacts/sidebar.html:13
-#: app/customers/templates/customers/sidebar.html:18
+#: app/customers/templates/customers/sidebar.html:17
 #: app/dashboard/templates/dashboard/sidebar.html:12
-#: app/invoices/templates/invoices/sidebar.html:16
+#: app/invoices/templates/invoices/sidebar.html:15
 #: app/offers/templates/offers/sidebar.html:12
-#: app/orders/templates/orders/sidebar.html:16
+#: app/orders/templates/orders/sidebar.html:15
 #: app/projects/templates/projects/sidebar.html:24
-#: app/stock/templates/stock/sidebar.html:15
-#: app/suppliers/templates/suppliers/sidebar.html:14
+#: app/stock/templates/stock/sidebar.html:14
+#: app/suppliers/templates/suppliers/sidebar.html:13
 msgid "EDIT"
 msgstr "ENDRE"
 
-#: app/admin/templates/admin/sidebar.html:21
+#: app/admin/templates/admin/sidebar.html:20
 msgid "SEND NEW PASSWORD"
 msgstr "Send nytt passord"
 
-#: app/admin/templates/admin/sidebar.html:26
+#: app/admin/templates/admin/sidebar.html:25
 msgid "SET HOUR DAYS LIMITS"
 msgstr "SET TIME DAGER GRENSER"
 
-#: app/admin/templates/admin/sidebar.html:30
+#: app/admin/templates/admin/sidebar.html:29
 #: app/contacts/templates/contacts/sidebar.html:23
-#: app/customers/templates/customers/sidebar.html:45
+#: app/customers/templates/customers/sidebar.html:44
 #: app/projects/templates/projects/sidebar.html:35
-#: app/suppliers/templates/suppliers/sidebar.html:21
+#: app/suppliers/templates/suppliers/sidebar.html:20
 msgid "HISTORY"
 msgstr "HISTORIE"
 
-#: app/admin/templates/admin/sidebar.html:36
-#: app/admin/templates/admin/sidebar.html:60
+#: app/admin/templates/admin/sidebar.html:35
+#: app/admin/templates/admin/sidebar.html:59
 msgid "PERMISSIONS"
 msgstr "TILLATELSER"
 
-#: app/admin/templates/admin/sidebar.html:41
-#: app/admin/templates/admin/sidebar.html:63
+#: app/admin/templates/admin/sidebar.html:40
+#: app/admin/templates/admin/sidebar.html:62
 #: app/contacts/templates/contacts/sidebar.html:19
-#: app/customers/templates/customers/sidebar.html:37
+#: app/customers/templates/customers/sidebar.html:36
 #: app/dashboard/templates/dashboard/sidebar.html:14
 #: app/projects/templates/projects/sidebar.html:29
-#: app/stock/templates/stock/sidebar.html:24
-#: app/suppliers/templates/suppliers/sidebar.html:24
+#: app/stock/templates/stock/sidebar.html:23
+#: app/suppliers/templates/suppliers/sidebar.html:23
 #: app/tickets/templates/tickets/sidebar.html:21
 msgid "DELETE"
 msgstr "SLETT"
 
-#: app/admin/templates/admin/sidebar.html:46
-#: app/admin/templates/admin/sidebar.html:77
+#: app/admin/templates/admin/sidebar.html:45
+#: app/admin/templates/admin/sidebar.html:76
 msgid "GROUPS"
 msgstr "GRUPPER"
 
-#: app/admin/templates/admin/sidebar.html:54
+#: app/admin/templates/admin/sidebar.html:53
 msgid "MEMBERS"
 msgstr "MEDLEMMER"
 
-#: app/admin/templates/admin/sidebar.html:72
+#: app/admin/templates/admin/sidebar.html:71
 msgid "NEW USER"
 msgstr "NY BRUKER"
 
-#: app/admin/templates/admin/sidebar.html:81
+#: app/admin/templates/admin/sidebar.html:80
 msgid "NEW GROUP"
 msgstr "NY GRUPPE"
 
-#: app/admin/templates/admin/sidebar.html:87
+#: app/admin/templates/admin/sidebar.html:86
 msgid "COMPANIES"
 msgstr "SELSKAP"
 
-#: app/admin/templates/admin/sidebar.html:92
+#: app/admin/templates/admin/sidebar.html:91
 msgid "NEW COMPANY"
 msgstr "NYTT FIRMA"
 
-#: app/admin/templates/admin/sidebar.html:99
+#: app/admin/templates/admin/sidebar.html:98
 msgid "COMPANY SETTINGS"
 msgstr "FIRMAINSTLLINGER"
 
@@ -222,6 +224,9 @@ msgid "You can't delete this group because: "
 msgstr "Du kan ikke slette denne gruppen fordi:"
 
 #: app/admin/templates/admin/groups/view.html:20
+#: app/orders/templates/orders/participants.html:35
+#: app/orders/templates/orders/view.html:19
+#: app/projects/templates/projects/view.html:23
 msgid "Participants"
 msgstr "Deltakere"
 
@@ -230,6 +235,7 @@ msgstr "Deltakere"
 #: app/hourregistrations/templates/hourregistrations/calendar.html:505
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:43
 #: app/hourregistrations/templates/hourregistrations/types.html:16
+#: app/orders/templates/orders/participants.html:26
 msgid "Save"
 msgstr "Lagre"
 
@@ -252,6 +258,8 @@ msgstr "ENDRE PROFILBILDE"
 #: app/customers/templates/customers/contacts.html:37
 #: app/customers/templates/customers/list.html:31
 #: app/customers/templates/customers/view.html:41
+#: app/orders/templates/orders/view.html:33
+#: app/projects/templates/projects/view.html:37
 #: app/suppliers/templates/suppliers/view.html:21
 msgid "E-mail"
 msgstr "E-post"
@@ -260,6 +268,8 @@ msgstr "E-post"
 #: app/contacts/templates/contacts/list.html:31 app/customers/models.py:16
 #: app/customers/templates/customers/contacts.html:36
 #: app/customers/templates/customers/list.html:30
+#: app/orders/templates/orders/view.html:32
+#: app/projects/templates/projects/view.html:36
 #: app/suppliers/templates/suppliers/view.html:25
 msgid "Phone"
 msgstr "Telefon"
@@ -281,19 +291,19 @@ msgstr "Tillatelse til å logge inn"
 msgid "Groups"
 msgstr "Grupper"
 
-#: app/admin/views/group.py:102
+#: app/admin/views/group.py:101
 msgid "Successfully deleted group"
 msgstr "Slettet gruppe"
 
-#: app/admin/views/group.py:110
+#: app/admin/views/group.py:109
 msgid "Successfully edited group"
 msgstr "Vellykket endret gruppe"
 
-#: app/admin/views/group.py:113
+#: app/admin/views/group.py:112
 msgid "Successfully added new group"
 msgstr "Lagt ny gruppe"
 
-#: app/admin/views/group.py:131
+#: app/admin/views/group.py:130
 msgid "Group"
 msgstr "Gruppe"
 
@@ -356,6 +366,7 @@ msgid "Latest events"
 msgstr "Siste events"
 
 #: app/admin/views/user.py:94 app/admin/views/user.py:217
+#: app/orders/templates/orders/participants.html:24
 msgid "User"
 msgstr "Bruker"
 
@@ -388,7 +399,7 @@ msgid "New user successfully added"
 msgstr "Ny bruker lagt til"
 
 #: app/announcements/models.py:14 app/offers/templates/offers/overview.html:29
-#: app/orders/models.py:23 app/tickets/models.py:105
+#: app/orders/models.py:23 app/tickets/models.py:107
 msgid "Title"
 msgstr "Tittel"
 
@@ -396,7 +407,7 @@ msgstr "Tittel"
 msgid "Text"
 msgstr "Tekst"
 
-#: app/announcements/models.py:16 app/tickets/models.py:118
+#: app/announcements/models.py:16 app/tickets/models.py:120
 #: app/tickets/templates/tickets/view.html:78
 msgid "Attachment"
 msgstr "Vedlegg"
@@ -505,7 +516,7 @@ msgid "Mobile phone"
 msgstr "Mobiltelefon"
 
 #: app/contacts/views.py:23 app/customers/models.py:27
-#: app/customers/templates/customers/sidebar.html:24 templates/base.html:62
+#: app/customers/templates/customers/sidebar.html:23 templates/base.html:62
 msgid "Contacts"
 msgstr "Kontakter"
 
@@ -537,12 +548,12 @@ msgstr "Lagt ny kontakt"
 
 #: app/contacts/templates/contacts/sidebar.html:7
 #: app/contacts/templates/contacts/sidebar.html:26
-#: app/customers/templates/customers/sidebar.html:10
-#: app/customers/templates/customers/sidebar.html:51
+#: app/customers/templates/customers/sidebar.html:9
+#: app/customers/templates/customers/sidebar.html:50
 #: app/projects/templates/projects/sidebar.html:8
 #: app/projects/templates/projects/sidebar.html:38
-#: app/suppliers/templates/suppliers/sidebar.html:9
-#: app/suppliers/templates/suppliers/sidebar.html:28
+#: app/suppliers/templates/suppliers/sidebar.html:8
+#: app/suppliers/templates/suppliers/sidebar.html:27
 #: app/tickets/templates/tickets/sidebar.html:7
 #: app/tickets/templates/tickets/sidebar.html:39
 msgid "OVERVIEW"
@@ -557,9 +568,9 @@ msgid "NEW CONTACT"
 msgstr "Ny kontakt"
 
 #: app/contacts/templates/contacts/sidebar.html:32
-#: app/customers/templates/customers/sidebar.html:57
+#: app/customers/templates/customers/sidebar.html:56
 #: app/projects/templates/projects/sidebar.html:47
-#: app/suppliers/templates/suppliers/sidebar.html:34
+#: app/suppliers/templates/suppliers/sidebar.html:33
 #: app/tickets/templates/tickets/sidebar.html:58
 msgid "TRASHED"
 msgstr "Kastet"
@@ -646,7 +657,7 @@ msgstr "Ny kunde"
 
 #: app/customers/templates/customers/form.html:85 app/orders/models.py:24
 #: app/orders/templates/orders/overview.html:31 app/projects/models.py:18
-#: app/tickets/models.py:113
+#: app/tickets/models.py:115
 msgid "Customer"
 msgstr "Kunden"
 
@@ -659,11 +670,11 @@ msgstr "Faktura"
 msgid "Restore customer"
 msgstr "Gjenopprett kunde"
 
-#: app/customers/templates/customers/sidebar.html:33
+#: app/customers/templates/customers/sidebar.html:32
 msgid "RESTORE"
 msgstr "RESTORE"
 
-#: app/customers/templates/customers/sidebar.html:54
+#: app/customers/templates/customers/sidebar.html:53
 msgid "NEW CUSTOMER"
 msgstr "NY KUNDE"
 
@@ -791,8 +802,8 @@ msgstr "Desember"
 #: app/hourregistrations/templates/hourregistrations/calendar.html:517
 #: app/hourregistrations/templates/hourregistrations/list_hours.html:37
 #: app/hourregistrations/templates/hourregistrations/list_hours_print_friendly.html:53
-#: app/orders/templates/orders/overview.html:29
-#: app/orders/templates/orders/view.html:11 app/tickets/models.py:114
+#: app/orders/models.py:69 app/orders/templates/orders/overview.html:29
+#: app/tickets/models.py:116
 msgid "Order"
 msgstr "Ordre"
 
@@ -814,10 +825,10 @@ msgstr "Tid slutt"
 #: app/hourregistrations/models.py:44
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:61
 #: app/invoices/templates/invoices/view.html:14
-#: app/offers/templates/offers/view.html:21 app/orders/models.py:26
-#: app/orders/templates/orders/view.html:13
-#: app/projects/templates/projects/view.html:15 app/tickets/models.py:106
-#: app/tickets/templates/tickets/view.html:71
+#: app/offers/templates/offers/view.html:21 app/orders/models.py:15
+#: app/orders/models.py:26 app/orders/templates/orders/view.html:14
+#: app/projects/templates/projects/view.html:18 app/tickets/models.py:108
+#: app/tickets/utils.py:80 app/tickets/templates/tickets/view.html:71
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -910,7 +921,7 @@ msgid "YOUR TIMESHEET"
 msgstr "DIN TIMELISTE"
 
 #: app/hourregistrations/templates/hourregistrations/sidebar.html:13
-#: app/invoices/templates/invoices/sidebar.html:10
+#: app/invoices/templates/invoices/sidebar.html:9
 msgid "ARCHIVE"
 msgstr "ARKIV"
 
@@ -946,8 +957,7 @@ msgstr "Stopp og lagre"
 msgid "Rate"
 msgstr "Pris"
 
-#: app/invoices/views.py:12 app/invoices/templates/invoices/sidebar.html:4
-#: templates/base.html:92
+#: app/invoices/views.py:12 templates/base.html:92
 msgid "Invoices"
 msgstr "Fakturaer"
 
@@ -960,25 +970,24 @@ msgstr "Lagret tilby"
 msgid "Invoice number"
 msgstr "Fakturanummer"
 
-#: app/invoices/templates/invoices/sidebar.html:7
+#: app/invoices/templates/invoices/sidebar.html:6
 msgid "PENDING"
 msgstr "Ventende"
 
-#: app/invoices/templates/invoices/sidebar.html:20
+#: app/invoices/templates/invoices/sidebar.html:19
 msgid "NEW INVOICE"
 msgstr "NY FAKTURA"
 
 #: app/invoices/templates/invoices/view.html:19
 #: app/offers/templates/offers/form.html:25
 #: app/offers/templates/offers/view.html:32
-#: app/orders/templates/orders/view.html:18 app/stock/views/product.py:20
+#: app/orders/templates/orders/view.html:46 app/stock/views/product.py:20
 #: app/stock/views/product.py:27 app/suppliers/views.py:73
 #: templates/base.html:124
 msgid "Products"
 msgstr "Produkter"
 
-#: app/offers/views.py:16 app/offers/templates/offers/sidebar.html:3
-#: templates/base.html:77
+#: app/offers/views.py:16 templates/base.html:77
 msgid "Offers"
 msgstr "Tilbud"
 
@@ -1003,6 +1012,11 @@ msgstr "Opprett ordre fra dette tilbudet"
 #: app/orders/templates/orders/overview.html:28
 msgid "Order number"
 msgstr "Ordrenummer"
+
+#: app/offers/templates/offers/form.html:27
+#, fuzzy
+msgid "Add product"
+msgstr "Produkt"
 
 #: app/offers/templates/offers/form.html:171
 #: app/offers/templates/offers/form.html:177
@@ -1030,13 +1044,31 @@ msgstr "OPPRETT ORDRE"
 msgid "NEW OFFER"
 msgstr "NYTT TILBUD"
 
-#: app/offers/templates/offers/view.html:18
+#: app/offers/templates/offers/view.html:18 app/orders/models.py:113
 msgid "Offer"
 msgstr "Offer"
+
+#: app/orders/models.py:14 app/stock/templates/stock/products/list.html:26
+#: app/stock/views/product.py:92 app/stock/views/product.py:120
+msgid "Product"
+msgstr "Produkt"
+
+#: app/orders/models.py:16
+msgid "Count"
+msgstr ""
+
+#: app/orders/models.py:17 app/orders/models.py:31
+#, fuzzy
+msgid "Price"
+msgstr "Pris inn"
 
 #: app/orders/models.py:25 app/orders/templates/orders/overview.html:32
 msgid "Project"
 msgstr "Prosjekt"
+
+#: app/orders/models.py:27 app/projects/models.py:21
+msgid "Delivery address"
+msgstr "Leveringsadresse"
 
 #: app/orders/models.py:28 app/projects/models.py:17
 msgid "PO-number"
@@ -1051,6 +1083,18 @@ msgstr "Leveringsdato"
 msgid "Delivery deadline"
 msgstr "Leveringsfrist"
 
+#: app/orders/models.py:32
+msgid "Archived"
+msgstr ""
+
+#: app/orders/models.py:68
+msgid "Fakturanummer"
+msgstr ""
+
+#: app/orders/models.py:89
+msgid "Tilbudsnummer"
+msgstr ""
+
 #: app/orders/models.py:97
 msgid "Pending reply"
 msgstr "Pending svare"
@@ -1063,37 +1107,55 @@ msgstr "Akseptert"
 msgid "Declined"
 msgstr "Avslåtte"
 
+#: app/orders/models.py:112
+msgid "Ordrenummer"
+msgstr ""
+
 #: app/orders/templates/orders/create_invoice.html:10
 msgid "Create invoice from this order"
 msgstr "Lag faktura fra denne rekkefølgen"
 
-#: app/orders/templates/orders/sidebar.html:4 templates/base.html:84
-msgid "Orders"
-msgstr "Ordrer"
+#: app/orders/templates/orders/participants.html:22
+#, fuzzy
+msgid "Add participant"
+msgstr "Deltakere"
 
-#: app/orders/templates/orders/sidebar.html:7
+#: app/orders/templates/orders/participants.html:45
+msgid "Person"
+msgstr ""
+
+#: app/orders/templates/orders/participants.html:46
+#, fuzzy
+msgid "Actions"
+msgstr "handling"
+
+#: app/orders/templates/orders/sidebar.html:6
 msgid "MY ORDERS"
 msgstr "MINE ORDRER"
 
-#: app/orders/templates/orders/sidebar.html:9
+#: app/orders/templates/orders/sidebar.html:8
 msgid "ALL ORDERS"
 msgstr "ALLE ORDRER"
 
-#: app/orders/templates/orders/sidebar.html:19
+#: app/orders/templates/orders/sidebar.html:18
 #: app/projects/templates/projects/sidebar.html:17
-#: app/stock/templates/stock/sidebar.html:21
+#: app/stock/templates/stock/sidebar.html:20
 msgid "FILES"
 msgstr "FILER"
 
-#: app/orders/templates/orders/sidebar.html:24
+#: app/orders/templates/orders/sidebar.html:23
+msgid "PARTICIPANTS"
+msgstr ""
+
+#: app/orders/templates/orders/sidebar.html:28
 msgid "STATISTICS"
 msgstr "STATISTIKK"
 
-#: app/orders/templates/orders/sidebar.html:28
+#: app/orders/templates/orders/sidebar.html:32
 msgid "CREATE INVOICE"
 msgstr "OPPRETT FAKTURA"
 
-#: app/orders/templates/orders/sidebar.html:33
+#: app/orders/templates/orders/sidebar.html:37
 msgid "NEW ORDER"
 msgstr "NY ORDRE"
 
@@ -1101,17 +1163,18 @@ msgstr "NY ORDRE"
 msgid "Statistics"
 msgstr "Statistikk"
 
-#: app/orders/views/order.py:114
+#: app/orders/views/order.py:122
 msgid "Successfully saved order"
 msgstr "Lagret rekkefølge"
+
+#: app/orders/views/order.py:168
+#, fuzzy
+msgid "Successfully add"
+msgstr "Vellykket legge"
 
 #: app/projects/models.py:16 app/projects/templates/projects/list.html:27
 msgid "Project number"
 msgstr "Prosjektnummer"
-
-#: app/projects/models.py:21
-msgid "Delivery address"
-msgstr "Leveringsadresse"
 
 #: app/projects/models.py:24 app/projects/templates/projects/list.html:30
 msgid "Responsible"
@@ -1130,7 +1193,7 @@ msgid "MILESTONES"
 msgstr "MILEPÆLER"
 
 #: app/projects/templates/projects/sidebar.html:20
-#: app/stock/templates/stock/sidebar.html:18
+#: app/stock/templates/stock/sidebar.html:17
 msgid "ORDERS"
 msgstr "ORDRER"
 
@@ -1204,17 +1267,17 @@ msgstr "Forventet leveringstid"
 msgid "Product used in orders, see orders menu in sidebar."
 msgstr "Produktet brukes i ordre, se ordrer menyen i sidebar."
 
-#: app/stock/templates/stock/sidebar.html:9
-#: app/stock/templates/stock/sidebar.html:31
-#: app/suppliers/templates/suppliers/sidebar.html:17
+#: app/stock/templates/stock/sidebar.html:8
+#: app/stock/templates/stock/sidebar.html:30
+#: app/suppliers/templates/suppliers/sidebar.html:16
 msgid "PRODUCTS"
 msgstr "PRODUKTER"
 
-#: app/stock/templates/stock/sidebar.html:37
+#: app/stock/templates/stock/sidebar.html:36
 msgid "NEW PRODUCT"
 msgstr "NYTT PRODUKT"
 
-#: app/stock/templates/stock/sidebar.html:43
+#: app/stock/templates/stock/sidebar.html:42
 msgid "Trashed"
 msgstr "Slettede"
 
@@ -1233,11 +1296,6 @@ msgstr "Filer"
 #: app/stock/templates/stock/products/files_form.html:11
 msgid "Download current file"
 msgstr "Last ned dagens fil"
-
-#: app/stock/templates/stock/products/list.html:26
-#: app/stock/views/product.py:92 app/stock/views/product.py:120
-msgid "Product"
-msgstr "Produkt"
 
 #: app/stock/templates/stock/products/trash.html:15
 msgid "Delete product"
@@ -1300,7 +1358,7 @@ msgstr "Vellykket endret leverandør"
 msgid "Successfully addded new supplier"
 msgstr "Vellykket med viten og ny leverandør"
 
-#: app/suppliers/templates/suppliers/sidebar.html:31
+#: app/suppliers/templates/suppliers/sidebar.html:30
 msgid "NEW SUPPLIER"
 msgstr "Ny leverandør"
 
@@ -1316,68 +1374,68 @@ msgstr "Du kan ikke slette denne leverandøren fordi:"
 msgid "Make comment public"
 msgstr "Lag kommentar offentlige"
 
-#: app/tickets/models.py:107 app/tickets/templates/tickets/list.html:28
+#: app/tickets/models.py:109 app/tickets/templates/tickets/list.html:28
 msgid "Status"
 msgstr "Status"
 
-#: app/tickets/models.py:108 app/tickets/templates/tickets/list.html:25
+#: app/tickets/models.py:110 app/tickets/templates/tickets/list.html:25
 msgid "Priority"
 msgstr "Prioritet"
 
-#: app/tickets/models.py:109
+#: app/tickets/models.py:111
 msgid "Category"
 msgstr "Kategori"
 
-#: app/tickets/models.py:110
+#: app/tickets/models.py:112
 msgid "Spent time"
 msgstr "Tilbrakte tid"
 
-#: app/tickets/models.py:111
+#: app/tickets/models.py:113
 msgid "Estimated time"
 msgstr "Estimert tid"
 
-#: app/tickets/models.py:116
+#: app/tickets/models.py:118
 msgid "Assigned to"
 msgstr "Tildelt til"
 
-#: app/tickets/models.py:174
+#: app/tickets/models.py:177
 msgid "Ticket has comments"
 msgstr "Ticket har merknader"
 
-#: app/tickets/models.py:260
+#: app/tickets/models.py:263
 msgid "changed_from"
 msgstr "changed_from"
 
-#: app/tickets/models.py:260 core/auth/log/models.py:65
+#: app/tickets/models.py:263 core/auth/log/models.py:65
 #: core/auth/log/models.py:70
 msgid "to"
 msgstr "til"
 
-#: app/tickets/models.py:278
+#: app/tickets/models.py:281
 msgid "New"
 msgstr "Nytt"
 
-#: app/tickets/models.py:279
+#: app/tickets/models.py:282
 msgid "In Progress"
 msgstr "In Progress"
 
-#: app/tickets/models.py:280
+#: app/tickets/models.py:283
 msgid "Need feedback"
 msgstr "Trenger tilbakemelding"
 
-#: app/tickets/models.py:281
+#: app/tickets/models.py:284
 msgid "Closed"
 msgstr "Stengt"
 
-#: app/tickets/models.py:283
+#: app/tickets/models.py:286
 msgid "Low"
 msgstr "Lav"
 
-#: app/tickets/models.py:284
+#: app/tickets/models.py:287
 msgid "Medium"
 msgstr "Medium"
 
-#: app/tickets/models.py:285
+#: app/tickets/models.py:288
 msgid "High"
 msgstr "Høy"
 
@@ -1402,15 +1460,15 @@ msgstr "har blitt oppdatert"
 msgid "Comment:"
 msgstr "Kommentar:"
 
-#: app/tickets/utils.py:75
+#: app/tickets/utils.py:76
 msgid "You have been assigned to the ticket"
 msgstr "Du har blitt tildelt ticket"
 
-#: app/tickets/utils.py:75 app/tickets/utils.py:77
+#: app/tickets/utils.py:76 app/tickets/utils.py:78
 msgid "Link"
 msgstr "Link"
 
-#: app/tickets/utils.py:77
+#: app/tickets/utils.py:78
 msgid "You have been unassigned to the ticket"
 msgstr "Du har blitt tilordnet til ticket"
 
@@ -1594,6 +1652,10 @@ msgstr "varslinger"
 #: templates/base.html:70
 msgid "Projects"
 msgstr "Prosjekter"
+
+#: templates/base.html:84
+msgid "Orders"
+msgstr "Ordrer"
 
 #: templates/base.html:100
 msgid "Hour registration"

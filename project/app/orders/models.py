@@ -11,10 +11,10 @@ from django.utils.translation import ugettext as _
 from django.db.models.aggregates import Max
 
 class ProductLine(models.Model):
-    product = models.ForeignKey('stock.Product', related_name="product_lines", null=True, blank=True, default=None)
-    description = models.TextField()
-    count = models.IntegerField()
-    price = models.CharField(max_length=10)
+    product = models.ForeignKey('stock.Product', verbose_name=_("Product"), related_name="product_lines", null=True, blank=True, default=None)
+    description = models.TextField(_("Description"))
+    count = models.IntegerField(_("Count"))
+    price = models.CharField(_("Price"), max_length=10)
 
     def __unicode__(self):
         return self.description
@@ -24,12 +24,12 @@ class OrderBase(PersistentModel):
     customer = models.ForeignKey(Customer, related_name="orders", verbose_name=_("Customer"), blank=True, null=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
     description = models.TextField(_("Description"))
-    delivery_address = models.CharField(max_length=150, null=True)
+    delivery_address = models.CharField(_("Delivery address"), max_length=150, null=True)
     PO_number = models.CharField(_("PO-number"), max_length=150, blank=True, null=True)
     delivery_date = models.DateField(verbose_name=_("Delivery date"), null=True, blank=True)
     delivery_date_deadline = models.DateField(verbose_name=_("Delivery deadline"), null=True, blank=True)
-    price = models.IntegerField(default=0)
-    archived = models.BooleanField(default=False)
+    price = models.IntegerField(_("Price"), default=0)
+    archived = models.BooleanField(default=False, verbose_name=_("Archived"))
     product_lines = models.ManyToManyField(ProductLine, related_name="%(class)s")
     files = models.ManyToManyField(File)
     comments = generic.GenericRelation(Comment)
@@ -65,8 +65,8 @@ class OrderBase(PersistentModel):
 
 
 class Invoice(OrderBase):
-    invoice_number = models.IntegerField()
-    order = models.ForeignKey('Order', related_name="invoices")
+    invoice_number = models.IntegerField(_("Fakturanummer"))
+    order = models.ForeignKey(_("Order"), related_name="invoices")
 
     def get_view_url(self):
         return urlresolvers.reverse('app.invoices.views.view', args=("%s" % self.id,))
@@ -86,14 +86,14 @@ accepted_choices = (
         )
 
 class Offer(OrderBase):
-    offer_number = models.IntegerField()
-    accepted = models.NullBooleanField(default=None, choices=accepted_choices)
+    offer_number = models.IntegerField(_("Tilbudsnummer"))
+    accepted = models.NullBooleanField(default=None, choices=accepted_choices, verbose_name="Accepted")
 
     def get_view_url(self):
         return urlresolvers.reverse('app.offers.views.view', args=("%s" % self.id,))
 
     def get_accepted_status(self):
-        if self.accepted == None:
+        if self.accepted is None:
             return _("Pending reply"), "orange"
         if self.accepted:
             return _("Accepted"), "green"
@@ -109,8 +109,8 @@ class Offer(OrderBase):
 
 
 class Order(OrderBase):
-    order_number = models.IntegerField()
-    offer = models.ForeignKey('orders.Offer', related_name="orders", null=True, blank=True)
+    order_number = models.IntegerField(_("Ordrenummer"))
+    offer = models.ForeignKey('orders.Offer', verbose_name=_("Offer"), related_name="orders", null=True, blank=True)
 
     #Managers
     objects = OrderManager()
