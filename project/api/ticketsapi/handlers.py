@@ -8,8 +8,10 @@ from core.auth.user.models import User
 class TicketHandler(BaseHandler):
     model = Ticket
     allowed_methods = ('GET', )
-    fields = ('id', 'ticket_creator', 'title', ('priority', ('name',)), 'update_count', ('status', ('name',)),
-              ('type', ('name',)), 'date_edited', ('assigned_to', ('username','get_full_name')), 'ticket_url' )
+    fields = (
+        'id', 'ticket_creator', 'title', 'mark_as_unread_for_current_user','get_recipients', ('priority', ('name',)), 'update_count',
+            ('status', ('name',)),
+            ('type', ('name',)), 'date_edited', ('assigned_to', ('username', 'get_full_name')), 'ticket_url' )
 
     @classmethod
     def update_count(cls, ticket):

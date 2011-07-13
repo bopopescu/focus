@@ -34,8 +34,6 @@ class TicketBase(models.Model):
         if not self.id:
             action = 'ADD'
 
-
-
         super(TicketBase, self).save()
 
         if Core.current_user():
@@ -115,9 +113,11 @@ class Ticket(TicketBase):
     customer = models.ForeignKey(Customer, verbose_name=_("Customer"), null=True, blank=True)
     order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"),
                               related_name="tickets")
-    assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"))
+    assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"), related_name="assigned_tickets")
     #mail_excluded = models.ManyToManyField(User, null=True, blank=True)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
+
+    visited_by_since_last_edit = models.ManyToManyField(User)
 
     objects = PersistentManager()
     all_objects = models.Manager()
@@ -127,6 +127,31 @@ class Ticket(TicketBase):
 
     class Meta:
         ordering = ['status', 'date_created']
+
+    def add_user_to_visited_by_since_last_edit(self, user):
+        if user not in self.visited_by_since_last_edit.all():
+            self.visited_by_since_last_edit.add(user)
+        
+    def mark_as_unread_for_current_user(self):
+        return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
+            
+    def get_recipients(self):
+        """
+        Return list of users who have commented or created this ticket
+        """
+        recipients = set([])
+
+        if self.creator:
+            recipients.add(self.creator)
+
+        if self.assigned_to:
+            recipients.add(self.assigned_to)
+            
+        for update in self.updates.all():
+            if update.creator:
+                recipients.add(update.creator)
+
+        return recipients
 
     def get_view_url(self):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
@@ -138,6 +163,10 @@ class Ticket(TicketBase):
         action = 'EDIT'
         if not self.id:
             action = 'ADD'
+
+        if self.id:
+            self.visited_by_since_last_edit = []
+            self.visited_by_since_last_edit.add(Core.current_user())
 
         super(Ticket, self).save()
 

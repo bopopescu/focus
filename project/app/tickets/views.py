@@ -31,6 +31,8 @@ def overview_trashed(request):
 @require_permission("VIEW", Ticket, "id")
 def view(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
+    ticket.add_user_to_visited_by_since_last_edit(Core.current_user())
+
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
 
     return render(request, "tickets/view.html", {'title': _('Ticket'),

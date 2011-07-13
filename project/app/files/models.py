@@ -6,30 +6,34 @@ from copy import deepcopy
 import os
 from django.core import urlresolvers
 from core.templatetags.thumbnail import thumbnail_with_max_side
+from django.utils.translation import ugettext as _
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class Folder(PersistentModel):
-    name = models.CharField(max_length=150)
-    parent = models.ForeignKey('self', related_name="folders", null=True, default=None, blank=True)
+    name = models.CharField(_("Name"), max_length=150)
+    parent = models.ForeignKey('self', related_name="folders", verbose_name=_("Parent"), null=True, default=None,
+                               blank=True)
 
     def __unicode__(self):
         return self.name
 
 
 class FileTag(PersistentModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(_("Name"), max_length=50)
 
     def __unicode__(self):
         return self.name
 
 
 class File(PersistentModel):
-    name = models.CharField(max_length=200)
-    folder = models.ForeignKey(Folder, related_name="files", null=True, default=None, blank=True)
-    file = models.FileField(upload_to="uploaded_files", storage=fs)
-    parent_file = models.ForeignKey("File", related_name="revisions", null=True, blank=True)
-    tags = models.ManyToManyField(FileTag, related_name="files")
+    name = models.CharField(_("Name"), max_length=200)
+    folder = models.ForeignKey(Folder, related_name="files", verbose_name=_("Folder"), null=True, default=None,
+                               blank=True)
+    file = models.FileField(upload_to="uploaded_files", verbose_name=_("File"), storage=fs)
+    parent_file = models.ForeignKey("File", related_name="revisions", verbose_name=_("Parent file"), null=True,
+                                    blank=True)
+    tags = models.ManyToManyField(FileTag, related_name="files", verbose_name=_("Merkelapper"))
 
     def clone(self):
         copied_file = deepcopy(self)

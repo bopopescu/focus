@@ -8,18 +8,13 @@
 
 {% block maincontent %}
 
-    <h1>test- {% trans "Update Ticket" %}: {{ ticket.title }}</h1>
+    <h1>{% trans "Update Ticket" %}: {{ ticket.title }}</h1>
     <br>
 
     <b>{{ ticket.creator }}</b>:<br>
     {{ ticket.description|linebreaks }}
 
-    <br>
-
-    {% trans "Last updated" %} {{ ticket.date_edited|date:"d.m.Y H.i" }}<br>
-
-
-    <br><br><br>
+    <br><br>
 
     {% if ticket_form.errors %}
 

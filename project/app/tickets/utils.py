@@ -5,20 +5,20 @@ from core.mail import send_mail
 from django.conf import settings
 
 def send_update_mails(ticket, ticket_update):
+    """
+    Sends email to all users who av commented or created this ticket
+    """
     assigned_sent = check_assigned_to(ticket)
 
     recipients = set([])
 
-    if ticket.creator:
-        recipients.add(ticket.creator.email)
+    for recipient in ticket.get_recipients():
+        if recipient.email:
+            recipients.add(recipient.email)
 
     if not assigned_sent and ticket.assigned_to:
         if ticket.assigned_to.email in recipients:
             recipients.remove(ticket.assigned_to.email)
-
-    for update in ticket.updates.all():
-        if update.creator:
-            recipients.add(update.creator.email)
 
     if ticket_update.public and ticket_update.comment:
         _send_to_clients(ticket, ticket_update)

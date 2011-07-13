@@ -793,4 +793,9 @@ ul.ui-autocomplete li span {
     float: left;
     margin-left:10px;
 }
+.ticket_marked_as_unread_for_current_user {
+}
 
+.ticket_marked_as_unread_for_current_user td {
+    background-color: #e4eaf2;
+}
