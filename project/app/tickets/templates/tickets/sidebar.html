@@ -3,6 +3,10 @@
 
 <ul>
     {% if ticket.id %}
+
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.assigned_to_user %}"><img
+                       src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ASSIGNED TO YOU" %}</a></li>
+
         <li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.overview %}"><img
                 src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
 
