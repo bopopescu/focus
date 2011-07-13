@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 from django.db.models.aggregates import Max
 
 class ProductLine(models.Model):
-    product = models.ForeignKey('stock.Product', verbose_name=_("Product"), related_name="product_lines", null=True, blank=True, default=None)
+    product = models.ForeignKey('stock.Product', related_name="product_lines", verbose_name=_("Product"), null=True, blank=True, default=None)
     description = models.TextField(_("Description"))
     count = models.IntegerField(_("Count"))
     price = models.CharField(_("Price"), max_length=10)
@@ -66,7 +66,7 @@ class OrderBase(PersistentModel):
 
 class Invoice(OrderBase):
     invoice_number = models.IntegerField(_("Fakturanummer"))
-    order = models.ForeignKey(_("Order"), related_name="invoices")
+    order = models.ForeignKey("Order", verbose_name=_("Order"), related_name="invoices")
 
     def get_view_url(self):
         return urlresolvers.reverse('app.invoices.views.view', args=("%s" % self.id,))
@@ -87,7 +87,7 @@ accepted_choices = (
 
 class Offer(OrderBase):
     offer_number = models.IntegerField(_("Tilbudsnummer"))
-    accepted = models.NullBooleanField(default=None, choices=accepted_choices, verbose_name="Accepted")
+    accepted = models.NullBooleanField(default=None, choices=accepted_choices, verbose_name=_("Accepted"))
 
     def get_view_url(self):
         return urlresolvers.reverse('app.offers.views.view', args=("%s" % self.id,))
