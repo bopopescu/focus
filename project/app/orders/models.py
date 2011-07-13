@@ -55,7 +55,9 @@ class OrderBase(PersistentModel):
         self.product_lines.clear()
 
         for p in products:
-            p.save()
+            if not p.id:
+                p.save()
+            
             self.product_lines.add(p)
 
         self.save()

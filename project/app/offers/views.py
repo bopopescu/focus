@@ -41,7 +41,10 @@ def create_order(request, id):
 
         return redirect('app.orders.views.order.view', order.id)
 
+
+
     return render(request, "offers/create_order.html", {'title': offer.title,
+                                                        'next_order_number':Order.calculate_next_order_number(),
                                                         'offer': offer})
 
 
@@ -57,7 +60,7 @@ def history(request, id):
                                                   'logs': history[::-1][0:150]})
 
 
-@require_permission("ADD", Offer)
+@require_permission("CREATE", Offer)
 def add(request):
     return form(request)
 

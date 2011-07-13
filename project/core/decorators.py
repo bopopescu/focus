@@ -3,6 +3,7 @@ from django.http import Http404
 from django.core import urlresolvers
 from django.shortcuts import redirect, render
 from django.conf import settings
+from app.orders.models import Order
 
 def permission_denied (request, permission_info=None):
     return render(request, 'permission_denied.html', permission_info)
@@ -123,12 +124,15 @@ class require_permission:
             else:
                 object = self.model
 
+
+
             #If not user
             if not request.user:
                 return redirect("/accounts/login/?next=%s" % (request.path))
 
             # If the user has permission to use this view, go ahead and use it! :)
             elif request.user.has_permission_to(self.action, object, any = self.any):
+               
                 return func(request, *args, **kwargs)
 
             # Else, if the user isn't logged in, suggest doing so
