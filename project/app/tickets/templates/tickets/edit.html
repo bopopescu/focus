@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load i18n %}
 {% load thumbnail %}
@@ -9,11 +8,11 @@
 
 {% block maincontent %}
 
-    <h1>{% trans "Update Ticket" %}: {{ ticket.title }}</h1>
+    <h1>test- {% trans "Update Ticket" %}: {{ ticket.title }}</h1>
     <br>
 
     <b>{{ ticket.creator }}</b>:<br>
-    {{ ticket.description|linebreaks  }}
+    {{ ticket.description|linebreaks }}
 
     <br>
 
@@ -41,156 +40,152 @@
 
     <div style="width:605px;">
 
-    <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
-    <table id="last_updates">
-        {% for update in updates %}
+        <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
+        <table id="last_updates">
+            {% for update in updates %}
 
-            <tr>
-                <td><img
-                        src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
-                        alt=""/></td>
-                <td>
-                    <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
+                <tr>
+                    <td><img
+                            src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
+                            alt=""/></td>
+                    <td>
+                        <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
 
-                    <p>
-                        {% if update.update_lines.all %}
-                            <b>{% trans "Changes: " %}</b>
-                            <ul>
-                                {% for line in update.update_lines.all %}
-                                    <li>{{ line.change }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-
-                    </p>
-
-                    {% if update.comment %}
-                        <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
-                    {% endif %}
-
-                    {% if update.attachment %}
                         <p>
-                            <b>{% trans "New Attachment:" %}</b>
-                            <a target="_blank" href="{{ update.get_attachment_url }}">
-                                <img src="{{ STATIC_URL }}img/download.png"
-                                     style="width:30px; height:30px; vertical-align:middle;">
-                                {{ update.get_attachment_name }}</a>
+                            {% if update.update_lines.all %}
+                                <b>{% trans "Changes: " %}</b>
+                                <ul>
+                                    {% for line in update.update_lines.all %}
+                                        <li>{{ line.change }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
                         </p>
 
-                    {% endif %}
+                        {% if update.comment %}
+                            <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
+                        {% endif %}
 
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+                        {% if update.attachment %}
+                            <p>
+                                <b>{% trans "New Attachment:" %}</b>
+                                <a target="_blank" href="{{ update.get_attachment_url }}">
+                                    <img src="{{ STATIC_URL }}img/download.png"
+                                         style="width:30px; height:30px; vertical-align:middle;">
+                                    {{ update.get_attachment_name }}</a>
+                            </p>
 
+                        {% endif %}
 
-
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
 
         <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
 
-            <div class="ticket_update" >
+            <div class="ticket_update">
                 <h3>{% trans "Comment: " %}</h3>
-                {{ ticket_form.comment }} <br />
+                {{ ticket_form.comment }} <br/>
                 {{ ticket_form.public.label }} {{ ticket_form.public }}
             </div>
 
             <div class="ticket_update">
 
-                <h3 >{% trans "Change details" %}</h3>
+                <h3>{% trans "Change details" %}</h3>
 
-                    <table class="ticket_attributes">
-                        <a href="javascript: void(0)" id="toggle_extra">{% trans "more" %}</a>
-                        <tr class="ticket_hideable">
-                            <td>
+                <table class="ticket_attributes">
+                    <a href="javascript: void(0)" id="toggle_extra">{% trans "more" %}</a>
+                    <tr class="ticket_hideable">
+                        <td>
                                 <span {% if ticket_form.title.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.title.label }} </span> <br />
-                                {{ ticket_form.title }}
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr class="ticket_hideable">
+                                    {{ ticket_form.title.label }} </span> <br/>
+                            {{ ticket_form.title }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="ticket_hideable">
 
-                            <td>
+                        <td>
                                 <span {% if ticket_form.customer.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.customer.label }} </span> <br />
-                                {{ ticket_form.customer }}
-                            </td>
-                             <td>
+                                    {{ ticket_form.customer.label }} </span> <br/>
+                            {{ ticket_form.customer }}
+                        </td>
+                        <td>
                                 <span {% if ticket_form.order.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.order.label }} </span> <br />
-                                {{ ticket_form.order }}
-                            </td>
-                        </tr>
+                                    {{ ticket_form.order.label }} </span> <br/>
+                            {{ ticket_form.order }}
+                        </td>
+                    </tr>
 
-                        <tr class="ticket_hideable">
-                            <td colspan="2">
-                                {{ ticket_form.description.label }} <br />
-                                {{ ticket_form.description }}
-                            </td>
-                        </tr>
+                    <tr class="ticket_hideable">
+                        <td colspan="2">
+                            {{ ticket_form.description.label }} <br/>
+                            {{ ticket_form.description }}
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
                                 <span {% if ticket_form.status.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.status.label }} </span> <br />
-                                {{ ticket_form.status }}
-                            </td>
+                                    {{ ticket_form.status.label }} </span> <br/>
+                            {{ ticket_form.status }}
+                        </td>
 
-                            <td>
+                        <td>
                              <span {% if ticket_form.due_date.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.due_date.label }} </span> <br />
-                                {{ ticket_form.due_date }}
-                            </td>
-                        </tr>
+                                    {{ ticket_form.due_date.label }} </span> <br/>
+                            {{ ticket_form.due_date }}
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
                                 <span {% if ticket_form.priority.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.priority.label }} </span> <br />
-                                {{ ticket_form.priority }}
-                            </td>
-                            <td>
+                                    {{ ticket_form.priority.label }} </span> <br/>
+                            {{ ticket_form.priority }}
+                        </td>
+                        <td>
                                 <span {% if ticket_form.spent_time.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.spent_time.label }} </span> <br />
-                                {{ ticket_form.spent_time }}
-                            </td>
-                        </tr>
+                                    {{ ticket_form.spent_time.label }} </span> <br/>
+                            {{ ticket_form.spent_time }}
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
                                 <span {% if ticket_form.assigned_to.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.assigned_to.label }} </span> <br />
-                                {{ ticket_form.assigned_to }}
-                            </td>
-                            <td>
+                                    {{ ticket_form.assigned_to.label }} </span> <br/>
+                            {{ ticket_form.assigned_to }}
+                        </td>
+                        <td>
                                 <span {% if ticket_form.estimated_time.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.estimated_time.label }} </span> <br />
-                                {{ ticket_form.estimated_time }}
-                            </td>
-                        </tr>
+                                    {{ ticket_form.estimated_time.label }} </span> <br/>
+                            {{ ticket_form.estimated_time }}
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
                                 <span {% if ticket_form.type.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.type.label }} </span> <br />
-                                {{ ticket_form.type }}
-                            </td>
-                        </tr>
+                                    {{ ticket_form.type.label }} </span> <br/>
+                            {{ ticket_form.type }}
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td>
+                    <tr>
+                        <td>
                                 <span {% if ticket_form.attachment.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.attachment.label }} </span> <br />
-                                {{ ticket_form.attachment }}
-                            </td>
-                        </tr>
+                                    {{ ticket_form.attachment.label }} </span> <br/>
+                            {{ ticket_form.attachment }}
+                        </td>
+                    </tr>
 
 
-
-                    </table>
-                </div>
+                </table>
+            </div>
 
 
             <div>
@@ -201,34 +196,34 @@
     </div>
 
 
-  <script>
-  $(document).ready(function () {
-      $("#id_comment").focus();
-  });
+    <script>
+        $(document).ready(function () {
+            $("#id_comment").focus();
+        });
 
-$(document).ready(function() {
-    $(".ticket_hideable").hide();
-    $("#toggle_extra").click(function() {
-        $(".ticket_hideable").toggle();
-        $(this).html($(this).html() == "more" ? "{% trans 'less' %}" : "{% trans 'more' %}");
-    });
+        $(document).ready(function() {
+            $(".ticket_hideable").hide();
+            $("#toggle_extra").click(function() {
+                $(".ticket_hideable").toggle();
+                $(this).html($(this).html() == "more" ? "{% trans 'less' %}" : "{% trans 'more' %}");
+            });
 
-    $("#last_updates").hide()
-    $("#show_updates").click(function(e) {
-        e.preventDefault();
-        $("#last_updates").toggle();
-        $(this).html($("#last_updates").is(":visible") ?
-                "{% trans 'Hide updates' %}" : "{% trans 'Show most recent updates' %}");
-    })
-});
+            $("#last_updates").hide()
+            $("#show_updates").click(function(e) {
+                e.preventDefault();
+                $("#last_updates").toggle();
+                $(this).html($("#last_updates").is(":visible") ?
+                        "{% trans 'Hide updates' %}" : "{% trans 'Show most recent updates' %}");
+            })
+        });
 
-  </script>
-    
+    </script>
+
 {% endblock %}
 
 {% block sidebar %}
     {% include "tickets/sidebar.html" %}
 
 
- {% endblock %}
+{% endblock %}
 
