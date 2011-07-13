@@ -68,8 +68,7 @@ def add(request):
 
 def create_update_for_ticket(old_ticket, ticket_form):
     ticket, ticket_update = ticket_form.save(commit=False)
-    ticket.set_user(Core.current_user())
-    ticket_update.user = ticket.user
+    ticket_update.user = Core.current_user()
     ticket_update.company = ticket.company
     ticket_update.save()
     differences = Ticket.find_differences(ticket, old_ticket)

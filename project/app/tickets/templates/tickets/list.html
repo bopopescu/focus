@@ -24,6 +24,7 @@
             <th>{% trans "Tickets" %}</th>
             <th>{% trans "Priority" %}</th>
             <th>{% trans "Assigned" %}</th>
+            <th>{% trans "Created by" %}</th>
             <th>{% trans "Updates" %}</th>
             <th>{% trans "Status" %}</th>
             <th>{% trans "Type" %}</th>
@@ -59,6 +60,12 @@
                 row += getTdCell(ticket.assigned_to.get_full_name);
             } else {
                 row += getTdCell("{% trans "None" %}");                
+            }
+
+            if(ticket.user) {
+                row += getTdCell(ticket.user.get_full_name);
+            } else {
+                row += getTdCell("{% trans "Client" %}");
             }
 
             row += getTdCell(ticket.update_count);

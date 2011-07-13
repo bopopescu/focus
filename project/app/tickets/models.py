@@ -63,7 +63,6 @@ class TicketBase(models.Model):
     def creator(self):
         return self.client_user or self.user
 
-
 class TicketStatus(models.Model):
     name = models.CharField(max_length=20)
     order_priority = models.IntegerField()
@@ -141,12 +140,9 @@ class Ticket(TicketBase):
         """
         recipients = set([])
 
-        if self.creator:
-            recipients.add(self.creator)
+        if self.user:
+            recipients.add(self.user)
 
-        if self.editor:
-            recipients.add(self.editor)
-    
         if self.assigned_to:
             recipients.add(self.assigned_to)
             
@@ -267,7 +263,6 @@ class Ticket(TicketBase):
                 pass
 
         return diff
-
 
 class TicketUpdate(TicketBase):
     ticket = models.ForeignKey(Ticket, related_name="updates")

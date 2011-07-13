@@ -9,7 +9,7 @@ class TicketHandler(BaseHandler):
     model = Ticket
     allowed_methods = ('GET', )
     fields = (
-        'id', 'ticket_creator', 'title', 'mark_as_unread_for_current_user','get_recipients', ('priority', ('name',)), 'update_count',
+        'id', 'ticket_creator', 'title', 'mark_as_unread_for_current_user', ('user',('id','get_full_name')),'get_recipients', ('priority', ('name',)), 'update_count',
             ('status', ('name',)),
             ('type', ('name',)), 'date_edited', ('assigned_to', ('username', 'get_full_name')), 'ticket_url' )
 
