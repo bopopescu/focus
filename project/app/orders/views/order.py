@@ -9,6 +9,7 @@ from core.decorators import require_permission
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
+from core.shortcuts import comment_block
 
 @require_permission("LIST", Order)
 def my_orders(request):
@@ -51,12 +52,13 @@ def history(request, id):
 @require_permission("VIEW", Order, "id")
 def view(request, id):
     order = Order.objects.filter_current_company().get(id=id)
+    comments = comment_block(request, order)
     who_can_see_this = order.who_has_permission_to('view')
 
     return render(request, "orders/view.html", {'title': order.title,
                                                 'order': order,
+                                                'comments': comments,
                                                 'who_can_see_this':who_can_see_this})
-
 
 def preview_order_html(request, id):
     order = Order.objects.filter_current_company().get(id=id)
