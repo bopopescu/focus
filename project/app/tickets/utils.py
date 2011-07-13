@@ -2,8 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from core.mail import send_mail
-import settings
-
+from django.conf import settings
 
 def send_update_mails(ticket, ticket_update):
     assigned_sent = check_assigned_to(ticket)
