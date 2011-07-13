@@ -100,6 +100,7 @@ def form (request, id=False):
         pid = instance.pid
     else:
         instance = Product()
+        msg = _("Successfully added new product")
         instance.pid = Product.calculate_next_pid()
         pid = Product.calculate_next_pid()
 
