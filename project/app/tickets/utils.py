@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from core import Core
 from core.mail import send_mail
 from django.conf import settings
 
 def send_update_mails(ticket, ticket_update):
     """
-    Sends email to all users who av commented or created this ticket
+    Sends email to all users who commented or created ticket
     """
     assigned_sent = check_assigned_to(ticket)
 
@@ -19,6 +20,10 @@ def send_update_mails(ticket, ticket_update):
     if not assigned_sent and ticket.assigned_to:
         if ticket.assigned_to.email in recipients:
             recipients.remove(ticket.assigned_to.email)
+
+    if Core.current_user().email:
+        if Core.current_user().email in recipients:
+            recipients.remove(Core.current_user().email)
 
     if ticket_update.public and ticket_update.comment:
         _send_to_clients(ticket, ticket_update)
