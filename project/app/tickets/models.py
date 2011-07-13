@@ -147,7 +147,7 @@ class Ticket(TicketBase):
             recipients.add(self.assigned_to)
             
         for update in self.updates.all():
-            if update.creator:
+            if update.user:
                 recipients.add(update.creator)
 
         return recipients

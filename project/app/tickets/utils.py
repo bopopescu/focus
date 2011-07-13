@@ -13,13 +13,17 @@ def send_update_mails(ticket, ticket_update):
 
     recipients = set([])
 
-    for recipient in ticket.get_recipients():
-        if recipient.email:
-            recipients.add(recipient.email)
+    if ticket.assigned_to:
+        if ticket.assigned_to.email:
+            recipients.add(ticket.assigned_to.email)
 
     if not assigned_sent and ticket.assigned_to:
         if ticket.assigned_to.email in recipients:
             recipients.remove(ticket.assigned_to.email)
+
+    for recipient in ticket.get_recipients():
+        if recipient.email:
+            recipients.add(recipient.email)
 
     if Core.current_user().email:
         if Core.current_user().email in recipients:
