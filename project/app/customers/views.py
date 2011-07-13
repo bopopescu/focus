@@ -89,9 +89,9 @@ def list_contacts(request, id):
 
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
     return render(request, 'customers/contacts.html',
-                  {'title': unicode(customer.name) + " " + _('contacts'),
-                   'form': form,
-                   'customer': customer})
+            {'title': unicode(customer.name) + " " + _('contacts'),
+             'form': form,
+             'customer': customer})
 
 
 @require_permission("CREATE", Customer)
