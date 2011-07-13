@@ -52,7 +52,7 @@
                     <td>{% trans "Address" %}</td>
                     <td>
                         {% if customer.address %}
-                            {{ customer.address|linebreaksbr }}, {{ customer.zip }}
+                            {{ customer.address|linebreaksbr }} {{ customer.zip }}
                             <span id="postal"></span>
                         {% endif %}
                     </td>
@@ -61,7 +61,7 @@
                     <td>{% trans "Invoice address" %}</td>
                     <td>
                         {% if customer.invoice_address %}
-                            {{ customer.invoice_address|linebreaksbr }}, {{ customer.invoice_zip }}
+                            {{ customer.invoice_address|linebreaksbr }} {{ customer.invoice_zip }}
                             <span id="postal_invoice"></span>
                         {% endif %}
                     </td>                </tr>
