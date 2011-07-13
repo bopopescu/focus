@@ -144,6 +144,9 @@ class Ticket(TicketBase):
         if self.creator:
             recipients.add(self.creator)
 
+        if self.editor:
+            recipients.add(self.editor)
+    
         if self.assigned_to:
             recipients.add(self.assigned_to)
             
