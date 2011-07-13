@@ -13,9 +13,6 @@
             inputField = $('#id_zip');
             inputField_invoice = $('#id_invoice_zip');
 
-            $('#id_zip').parent().find("span").append("<span style='padding-left:90px;' id='postal'></span>");
-            $('#id_invoice_zip').parent().find("span").append("<span style='padding-left:90px;' id='postal_invoice'></span>");
-
             outputElement = $("#postal")
             outputElement_invoice = $("#postal_invoice")
 
@@ -116,7 +113,8 @@
 
             <div class="fieldWrapper">
                 <span {% if form.zip.errors %}style="color:red;" {% endif %}>{{ form.zip.label }} </span>
-                <br>{{ form.zip }}
+                <br><input id="id_zip" type="text" name="zip" style="width:35px;" value="{{ form.zip.value }} " maxlength="15"/> <span
+                    id='postal'></span>
             </div>
 
             <h3>{% trans "Invoice" %}</h3>
@@ -128,7 +126,8 @@
 
             <div class="fieldWrapper">
                 <span {% if form.invoice_zip.errors %}style="color:red;" {% endif %}>{{ form.invoice_zip.label }} </span>
-                <br>{{ form.invoice_zip }}
+                <br><input id="id_invoice_zip" type="text" name="invoice_zip"
+                           value="{{ form.invoice_zip.value }}" style="width:35px;" maxlength="15"/> <span id='postal_invoice'></span>
             </div>
 
 
