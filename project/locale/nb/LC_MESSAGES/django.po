@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 16:47+0200\n"
+"POT-Creation-Date: 2011-07-14 16:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1472,6 +1472,11 @@ msgstr "Tildelt til"
 #: app/tickets/models.py:206
 msgid "Ticket has comments"
 msgstr "Ticket har merknader"
+
+#: app/tickets/models.py:291
+#, fuzzy
+msgid "changed from"
+msgstr "ble endret fra"
 
 #: app/tickets/models.py:291 core/auth/log/models.py:65
 #: core/auth/log/models.py:70
