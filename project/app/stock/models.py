@@ -71,7 +71,7 @@ class Product(PersistentModel):
     price = models.CharField(_("Price in"), max_length=100, null=True)
     price_out = models.CharField(_("Price out"), max_length=100, null=True)
     max_discount = models.CharField(_("Max discount"), max_length=5, null=True)
-    countOfAvailableInStock = models.CharField(_("Avaiable in stock"), max_length=10)
+    countOfAvailableInStock = models.CharField(_("Available in stock"), max_length=10)
     supplier = models.ForeignKey(Supplier, related_name="products", null=True)
     size = models.CharField(max_length=100, null=True)
     unitForSize = models.ForeignKey(UnitsForSizes, verbose_name=_("Unit"), null=True)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 16:33+0200\n"
+"POT-Creation-Date: 2011-07-14 16:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1312,7 +1312,8 @@ msgid "Max discount"
 msgstr "Maks avslag"
 
 #: app/stock/models.py:74
-msgid "Avaiable in stock"
+#, fuzzy
+msgid "Available in stock"
 msgstr "Tilgjengelig på lager"
 
 #: app/stock/models.py:77 app/stock/templates/stock/products/view.html:50
@@ -1640,7 +1641,7 @@ msgstr "TILDELT DEG"
 
 #: app/tickets/templates/tickets/sidebar.html:17
 msgid "UPDATE"
-msgstr "OPPDATERING"
+msgstr "OPPDATER"
 
 #: app/tickets/templates/tickets/sidebar.html:33
 #: app/tickets/templates/tickets/sidebar.html:46
