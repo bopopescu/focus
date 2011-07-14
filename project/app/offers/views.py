@@ -18,11 +18,13 @@ def overview(request):
     return render(request, "offers/overview.html", {'title': _('Offers'),
                                                     'offers': offers})
 
+
 @require_permission("VIEW", Offer, "id")
 def view(request, id):
     offer = Offer.objects.get(id=id)
     return render(request, "offers/view.html", {'title': offer.title,
                                                 'offer': offer})
+
 
 def create_order(request, id):
     offer = Offer.objects.get(id=id)
@@ -41,10 +43,8 @@ def create_order(request, id):
 
         return redirect('app.orders.views.order.view', order.id)
 
-
-
     return render(request, "offers/create_order.html", {'title': offer.title,
-                                                        'next_order_number':Order.calculate_next_order_number(),
+                                                        'next_order_number': Order.calculate_next_order_number(),
                                                         'offer': offer})
 
 
@@ -56,8 +56,8 @@ def history(request, id):
                                  object_id=instance.id)
 
     return render(request, 'offers/log.html', {'title': _("Latest events"),
-                                                  'offer': instance,
-                                                  'logs': history[::-1][0:150]})
+                                               'offer': instance,
+                                               'logs': history[::-1][0:150]})
 
 
 @require_permission("CREATE", Offer)
@@ -70,7 +70,6 @@ def client_management(request, id):
     offer = Offer.objects.get(id=id)
 
     if request.method == "POST":
-
         form = AddClientForm(request.POST)
 
         if form.is_valid():
@@ -98,7 +97,7 @@ def client_management(request, id):
     else:
         form = AddClientForm()
 
-    return render(request, "offers/client_management.html", {'offer': offer,'form':form})
+    return render(request, "offers/client_management.html", {'offer': offer, 'form': form})
 
 
 @require_permission("EDIT", Offer, "id")

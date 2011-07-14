@@ -165,7 +165,8 @@ class Ticket(TicketBase):
 
         if self.id:
             self.visited_by_since_last_edit = []
-            self.visited_by_since_last_edit.add(Core.current_user())
+            if Core.current_user():
+                self.visited_by_since_last_edit.add(Core.current_user())
 
         super(Ticket, self).save()
 
