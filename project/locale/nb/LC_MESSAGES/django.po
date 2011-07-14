@@ -1473,10 +1473,6 @@ msgstr "Tildelt til"
 msgid "Ticket has comments"
 msgstr "Ticket har merknader"
 
-#: app/tickets/models.py:291
-msgid "changed_from"
-msgstr "changed_from"
-
 #: app/tickets/models.py:291 core/auth/log/models.py:65
 #: core/auth/log/models.py:70
 msgid "to"

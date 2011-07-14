@@ -288,7 +288,7 @@ class TicketUpdate(TicketBase):
     def create_update_lines(self, differences):
         for diff in differences:
             change_text = ("%s %s %s %s %s") %\
-                          (diff, _("changed_from"), differences[diff][1], _("to"), differences[diff][0])
+                          (diff, _("changed from"), differences[diff][1], _("to"), differences[diff][0])
             TicketUpdateLine.objects.create(update=self, change=change_text)
 
     def get_attachment(self):
