@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 16:20+0200\n"
+"POT-Creation-Date: 2011-07-14 16:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1704,15 +1704,10 @@ msgid "Comment added successfully!"
 msgstr "Kommentar lagt til!"
 
 #: core/views.py:59
-#, fuzzy
 msgid "invalid zip"
-msgstr "Fakturapostnr"
+msgstr "ugyldig postnr"
 
-#: core/auth/log/models.py:65
-msgid "was changed from "
-msgstr "ble endret fra"
-
-#: core/auth/log/models.py:70
+#: core/auth/log/models.py:65 core/auth/log/models.py:70
 msgid "was changed from"
 msgstr "ble endret fra"
 
@@ -1721,8 +1716,7 @@ msgid "No changes"
 msgstr "Ingen endringer"
 
 #: core/auth/log/models.py:77
-#, fuzzy, python-format
-msgid "%s was created"
+msgid "was created"
 msgstr "ble opprettet"
 
 #: core/auth/user/models.py:73
@@ -1801,9 +1795,3 @@ msgstr "noen"
 #: templates/permission_denied.html:34
 msgid "user"
 msgstr "bruker"
-
-#~ msgid "Send to new client"
-#~ msgstr "Send til ny klient"
-
-#~ msgid "Changes"
-#~ msgstr "Endringer"

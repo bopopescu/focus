@@ -62,7 +62,7 @@ class Log(models.Model):
                         newObj = fields[i].objects.get(id=eval(self.message)[i][0])
 
                         diff.append(value[1] + (" %s %s %s %s \n") % (
-                        _("was changed from "), lastObj, _("to"),newObj))
+                        _("was changed from"), lastObj, _("to"),newObj))
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
@@ -74,7 +74,7 @@ class Log(models.Model):
 
             return diff
 
-        diff.append(_("%s was created") % self.get_object())
+        diff.append("%s" % self.get_object() + " " + _("was created"))
 
         return diff
 
