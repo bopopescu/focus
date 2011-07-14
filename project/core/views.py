@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import mimetypes
 import os
+import urllib
+import json
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from core.decorators import login_required
@@ -10,6 +12,8 @@ from django.core.servers.basehttp import FileWrapper
 from settings import BASE_PATH
 from core.auth.user.models import User
 from core.auth.group.models import Group
+from django.utils.translation import ugettext as _
+from django.utils import simplejson
 
 STATIC_ROOT = os.path.join(BASE_PATH, "uploads")
 
@@ -33,6 +37,28 @@ def retrieve_file(request, filename=''):
     response['Content-Length'] = os.path.getsize(abs_filename)
     return response
 
+def view_postal_by_zip(request, zip):
+    if request.is_ajax():
+            return HttpResponse(simplejson.dumps({'zip':zip, 'postal': str(get_postal_by_zip(zip)),}), mimetype='application/json')
+    return HttpResponse(get_postal_by_zip(zip))
+ 
+def get_postal_by_zip(zip):
+
+    zip = zip.strip()
+
+    if len(zip)<4:
+           zip = (4-(len(zip)))*"0"+zip
+
+    url = "http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=" + zip + "&callback=?"
+    f = urllib.urlopen(url)
+    result = json.loads(f.read())
+
+    if result['valid']:
+        result= str(result['result']).capitalize()
+    else:
+        result = _("invalid zip")
+
+    return result
 
 @login_required()
 def update_timeout(request):

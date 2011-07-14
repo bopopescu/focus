@@ -7,48 +7,11 @@
 
 
 {% block maincontent %}
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            inputField = $('#id_zip');
-            inputField_invoice = $('#id_invoice_zip');
-
-            outputElement = $("#postal")
-            outputElement_invoice = $("#postal_invoice")
-
-            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField.val() + '&callback=?',
-                    function(data) {
-                        outputElement.text(data.result);
-                    });
-
-            $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField_invoice.val() + '&callback=?',
-                    function(data) {
-                        outputElement_invoice.text(data.result);
-                    });
-
-
-            inputField.keyup(function() {
-                if (inputField.val().length == 4) {
-                    $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField.val() + '&callback=?',
-                            function(data) {
-                                outputElement.text(data.result);
-                            });
-                }
-                else {
-                    outputElement.text('');
-                }
-            });
-            inputField_invoice.keyup(function() {
-                if (inputField.val().length == 4) {
-                    $.getJSON('http://fraktguide.bring.no/fraktguide/postalCode.json?pnr=' + inputField_invoice.val() + '&callback=?',
-                            function(data) {
-                                outputElement_invoice.text(data.result);
-                            });
-                }
-                else {
-                    outputElement_invoice.text('');
-                }
-            });
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/utils.js"></script>
+    <script>
+        $(function() {
+            set_postal_by_zip("id_zip", "postal");
+            set_postal_by_zip("id_invoice_zip", "postal_invoice");
         });
     </script>
 
@@ -113,7 +76,8 @@
 
             <div class="fieldWrapper">
                 <span {% if form.zip.errors %}style="color:red;" {% endif %}>{{ form.zip.label }} </span>
-                <br><input id="id_zip" type="text" name="zip" style="width:35px;" value="{{ form.zip.value }} " maxlength="15"/> <span
+                <br><input id="id_zip" type="text" name="zip" style="width:35px;" value="{{ form.zip.value }} "
+                           maxlength="4"/> <span
                     id='postal'></span>
             </div>
 
@@ -127,7 +91,8 @@
             <div class="fieldWrapper">
                 <span {% if form.invoice_zip.errors %}style="color:red;" {% endif %}>{{ form.invoice_zip.label }} </span>
                 <br><input id="id_invoice_zip" type="text" name="invoice_zip"
-                           value="{{ form.invoice_zip.value }}" style="width:35px;" maxlength="15"/> <span id='postal_invoice'></span>
+                           value="{{ form.invoice_zip.value }}" style="width:35px;" maxlength="4"/> <span
+                    id='postal_invoice'></span>
             </div>
 
             <div>
