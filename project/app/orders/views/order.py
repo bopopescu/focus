@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from app.orders.forms import OrderForm, AddParticipantToOrderForm
+from app.orders.forms import OrderForm, AddParticipantToOrderForm, CreateInvoiceForm
 from app.orders.models import Order, ProductLine, Invoice
 from app.stock.models import Product
 from core import Core
@@ -70,22 +70,31 @@ def create_invoice(request, id):
     order = Order.objects.filter_current_company().get(id=id)
 
     if request.method == "POST":
-        #Create order based on offer
-        invoice_number = request.POST['invoice_number']
-        invoice = Invoice()
-        invoice.invoice_number = int(invoice_number)
-        invoice.order_id = order.id
-        invoice.copy_from(order)
-        invoice.save()
 
-        #Archive the offer
-        order.archived = True
-        order.save()
+        form = CreateInvoiceForm(request.POST)
 
-        return redirect('app.invoices.views.view', invoice.id)
+        if form.is_valid():
+            #Create order based on offer
+            invoice_number = request.POST['invoice_number']
+            invoice = Invoice()
+            invoice.invoice_number = int(invoice_number)
+            invoice.order_id = order.id
+            invoice.copy_from(order)
+            invoice.save()
+
+            #Archive the offer
+            order.archived = True
+            order.save()
+
+            return redirect('app.invoices.views.view', invoice.id)
+
+    else:
+        form = CreateInvoiceForm()
 
     return render(request, "orders/create_invoice.html", {'title': order.title,
-                                                          'order': order})
+                                                          'order': order,
+                                                          'next_invoice_number':Invoice.calculate_next_invoice_number(),
+                                                          'form':form})
 
 
 @require_permission("VIEW", Order)

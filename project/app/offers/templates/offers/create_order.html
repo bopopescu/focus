@@ -10,16 +10,29 @@
     <h1>{% trans "Create order from this offer" %}</h1>
 
     {% if offer.archived %}
-
         <h3>{% trans "This offer is archived." %}</h3>
+    {% endif %}
 
+     {% if form.errors %}
+
+        <div class="information" id="message">
+            <p>Fix before submit again</p>
+        </div>
+
+        {% for i in form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
     {% endif %}
 
     <form action="" method="POST">
         {% trans "Order number" %}
         <input name="order_number" value="{% if not offer.archived %} {{ next_order_number }} {% endif  %}"{% if offer.archived %} disabled="disabled" {% endif %}>
 
-        <input type="submit" {% if offer.archived %} disabled="disabled" {% endif %}>
+        <input value="{% trans "Save" %}" type="submit" {% if offer.archived %} disabled="disabled" {% endif %}>
 
     </form>
 

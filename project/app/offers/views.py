@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
 from app.client.models import ClientUser
-from app.offers.forms import OfferForm, AddClientForm
+from app.offers.forms import OfferForm, AddClientForm, CreateOrderForm
 from app.orders.models import Order, Offer, ProductLine
 from django.utils.translation import ugettext as _
 from app.stock.models import Product
@@ -30,23 +30,29 @@ def create_order(request, id):
     offer = Offer.objects.get(id=id)
 
     if request.method == "POST":
-        #Create order based on offer
-        order_number = request.POST['order_number']
-        order = Order()
-        order.order_number = int(order_number)
-        order.copy_from(offer)
-        order.save()
 
-        #Archive the offer
-        offer.archived = True
-        offer.save()
+        form = CreateOrderForm(request.POST)
 
-        return redirect('app.orders.views.order.view', order.id)
+        if form.is_valid():
+            order_number = request.POST['order_number']
+            order = Order()
+            order.order_number = int(order_number)
+            order.copy_from(offer)
+            order.save()
+
+            #Archive the offer
+            offer.archived = True
+            offer.save()
+
+            return redirect('app.orders.views.order.view', order.id)
+
+    else:
+        form = CreateOrderForm()
 
     return render(request, "offers/create_order.html", {'title': offer.title,
                                                         'next_order_number': Order.calculate_next_order_number(),
-                                                        'offer': offer})
-
+                                                        'offer': offer,
+                                                        'form': form,})
 
 @require_permission("EDIT", Offer, "id")
 def history(request, id):
@@ -59,11 +65,9 @@ def history(request, id):
                                                'offer': instance,
                                                'logs': history[::-1][0:150]})
 
-
 @require_permission("CREATE", Offer)
 def add(request):
     return form(request)
-
 
 @require_permission("EDIT", Offer, "id")
 def client_management(request, id):

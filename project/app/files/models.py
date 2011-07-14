@@ -33,7 +33,7 @@ class File(PersistentModel):
     file = models.FileField(upload_to="uploaded_files", verbose_name=_("File"), storage=fs)
     parent_file = models.ForeignKey("File", related_name="revisions", verbose_name=_("Parent file"), null=True,
                                     blank=True)
-    tags = models.ManyToManyField(FileTag, related_name="files", verbose_name=_("Merkelapper"))
+    tags = models.ManyToManyField(FileTag, related_name="files", verbose_name=_("Tags"))
 
     def clone(self):
         copied_file = deepcopy(self)

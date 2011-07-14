@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core import urlresolvers
+from django.core.exceptions import ValidationError
 from django.db import models
 from app.files.models import File
 from django.contrib.contenttypes import generic
@@ -108,7 +109,6 @@ class Offer(OrderBase):
         if next:
             return next + 1
         return 1
-
 
 class Order(OrderBase):
     order_number = models.IntegerField(_("Order number"))
