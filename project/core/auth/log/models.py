@@ -50,7 +50,7 @@ class Log(models.Model):
             msg = ""
             lastLog = lastLog[len(lastLog) - 1]
             for i, value in eval(self.message).iteritems():
-                if i == "id" or i == "date_created" or i == "date_edited":
+                if i == "id" or i == "date_created" or i == "date_edited" or i:
                     continue
 
                 if i not in eval(lastLog.message):
@@ -61,12 +61,12 @@ class Log(models.Model):
                         lastObj = fields[i].objects.get(id=eval(lastLog.message)[i][0])
                         newObj = fields[i].objects.get(id=eval(self.message)[i][0])
 
-                        diff.append(value[1] + ("%s %s %s %s \n") % (
+                        diff.append(value[1] + (" %s %s %s %s \n") % (
                         _("was changed from "), lastObj, _("to"),newObj))
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    diff.append(value[1] + ("%s %s %s: %s \n") % (
+                    diff.append(value[1] + (" %s %s %s: %s \n") % (
                     _("was changed from"), eval(lastLog.message)[i][0], _("to"), eval(self.message)[i][0]))
 
             if len(diff) == 0:
@@ -83,7 +83,7 @@ class Log(models.Model):
             o = ContentType.objects.get(model=self.content_type)
             k = o.get_object_for_this_type(id=self.object_id)
             return k
-        except:
+        except Exception, e:
             return None
         
     def save(self, *args, **kwargs):
