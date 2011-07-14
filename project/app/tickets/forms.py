@@ -66,3 +66,6 @@ class AddTicketTypeForm(ModelForm):
     class Meta:
         model = TicketType
         fields = ('name', 'description')
+
+class AddClientForm(forms.Form):
+    email = forms.EmailField()

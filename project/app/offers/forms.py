@@ -1,4 +1,5 @@
 from django.forms.models import ModelForm
+from django import forms
 from app.customers.models import Customer
 from app.orders.models import Offer
 from app.projects.models import Project
@@ -22,3 +23,6 @@ class OfferForm(ModelForm):
         self.fields['delivery_date_deadline'].required = False
         self.fields['delivery_date_deadline'].input_formats = ["%d.%m.%Y"]
         self.fields['delivery_date_deadline'].widget = DatePickerField(format="%d.%m.%Y")
+
+class AddClientForm(forms.Form):
+    email = forms.EmailField()

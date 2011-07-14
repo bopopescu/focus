@@ -9,12 +9,30 @@
 
     <h1>{% trans "Client management" %}</h1>
 
-<b>{% trans "Send to new client" %}</b>
-<form action="" method="POST">
-    <input name="email_address">
-    <input type="submit">
-</form>
-<br><br><br>
+    <b>{% trans "Share with new client" %}</b>
+
+
+    {% if form.errors %}
+
+        <div class="information" id="message">
+            <p>Fix before submit again</p>
+        </div>
+
+        {% for i in form %}
+            {% if i.errors %}
+                {{ i.label }}{{ i.errors }}
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+    {% endif %}
+
+    <form action="" method="POST">
+        {{ form.email }}
+
+        <input type="submit" value="{% trans "Save" %}">
+    </form>
+    <br><br><br>
     <h4>{% trans "Clients who have access to view this offer" %}</h4>
     <table>
         {% for client in offer.clients.all %}

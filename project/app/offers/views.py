@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404, redirect
 from app.client.models import ClientUser
-from app.offers.forms import OfferForm
+from app.offers.forms import OfferForm, AddClientForm
 from app.orders.models import Order, Offer, ProductLine
 from django.utils.translation import ugettext as _
 from app.stock.models import Product
@@ -70,28 +70,35 @@ def client_management(request, id):
     offer = Offer.objects.get(id=id)
 
     if request.method == "POST":
-        email_address = request.POST['email_address']
-        client, created = ClientUser.objects.get_or_create(email=email_address)
 
-        client.offers.add(offer)
-        client.save()
+        form = AddClientForm(request.POST)
 
-        password_text = "Bruk din epostadresse og passord fra tidligere. Du kan også be om å få tilsendt nytt."
-        if created:
-            password = client.generate_password()
-            client.set_password(password)
+        if form.is_valid():
+            email_address = request.POST['email']
+            client, created = ClientUser.objects.get_or_create(email=email_address)
+
+            client.offers.add(offer)
             client.save()
-            password_text = "Bruk din epostadresse og passord: %s" % (password)
 
-        message = """
-        Hei. Du har fått tilsendt et nytt tilbud. Logg inn på %s for å se detaljer.
+            password_text = "Bruk din epostadresse og passord fra tidligere. Du kan også be om å få tilsendt nytt."
+            if created:
+                password = client.generate_password()
+                client.set_password(password)
+                client.save()
+                password_text = "Bruk din epostadresse og passord: %s" % (password)
 
-        %s
+            message = """
+            Hei. Du har fått tilsendt et nytt tilbud. Logg inn på %s for å se detaljer.
 
-        """ % (settings.CLIENT_LOGIN_SITE, password_text)
-        send_mail("Nytt tilbud", message, settings.NO_REPLY_EMAIL, [email_address])
+            %s
 
-    return render(request, "offers/client_management.html", {'offer': offer})
+            """ % (settings.CLIENT_LOGIN_SITE, password_text)
+            send_mail(_("New offer"), message, settings.NO_REPLY_EMAIL, [email_address])
+
+    else:
+        form = AddClientForm()
+
+    return render(request, "offers/client_management.html", {'offer': offer,'form':form})
 
 
 @require_permission("EDIT", Offer, "id")

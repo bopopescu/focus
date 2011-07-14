@@ -37,7 +37,7 @@
                     <td>{% trans "Address" %}</td>
                     <td>
                         {% if customer.address %}
-                            {{ customer.address|linebreaksbr }} {{ customer.zip }}
+                            {{ customer.address|linebreaksbr }} {{ customer.zip }} {{ customer.zip|postal_by_zip }}
                             <span id="postal"></span>
                         {% endif %}
                     </td>
