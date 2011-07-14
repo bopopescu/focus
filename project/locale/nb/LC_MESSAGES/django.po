@@ -1476,7 +1476,7 @@ msgstr "Ticket har merknader"
 #: app/tickets/models.py:291
 #, fuzzy
 msgid "changed from"
-msgstr "ble endret fra"
+msgstr "endret fra"
 
 #: app/tickets/models.py:291 core/auth/log/models.py:65
 #: core/auth/log/models.py:70
