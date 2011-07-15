@@ -46,6 +46,9 @@ def get_postal_by_zip(zip):
 
     zip = zip.strip()
 
+    if not len(zip):
+        return ""
+    
     if len(zip)<4:
            zip = (4-(len(zip)))*"0"+zip
 
