@@ -258,7 +258,7 @@ class User(models.Model):
         """
         Make it possible to set permissions for classes
         """
-
+        
         object_id = 0
         if not isclass(object):
             object_id = object.id
@@ -380,15 +380,21 @@ class User(models.Model):
         return False
 
     def get_permissions(self, content_type=None):
-        permissions = []
-
         groups = self.groups.all()
 
+
+        permitted = Permission.objects.filter(Q(user=self) | Q(group__in=groups))
+
         if content_type:
-            return Permission.objects.filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups))
+            permitted.filter(content_type=content_type)
 
-        return Permission.objects.filter(Q(user=self) | Q(group__in=groups))
+        if cache.get(self.id):
+            permitted = cache.get(self.id)['%s'%content_type]
+        else:
+            cache.set(self.id, {'%s'%content_type: permitted}, 1200)
 
+
+        return permitted
 
     def get_permitted_objects(self, action, model):
         content_type = ContentType.objects.get_for_model(model)
@@ -399,7 +405,6 @@ class User(models.Model):
 
         tree = {}
         permitted = []
-
 
         cache_key = "%s_%s" % (self.id, model.__name__)
 

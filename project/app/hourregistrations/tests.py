@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from app.customers.models import Customer
-from app.hourregistrations.models import HourRegistration
+from app.hourregistrations.models import HourRegistration, HourRegistrationType
 from app.orders.models import Order
 from core.tests import FocusTest
 
@@ -125,12 +126,13 @@ class TimeTrackingTesting(FocusTest):
 
         testCustomer = Customer.objects.create(cid="10432", name="testKunde", email="test@test.com")
         testOrder = Order.objects.create(order_number="2342", title="test", customer=testCustomer)
+        testType = HourRegistrationType.objects.create(name="TestType",rate=1)
         hourRegistration = HourRegistration.objects.create(date=now,
                                                            order=testOrder,
                                                            time_start="15:00",
                                                            time_end="16:00",
                                                            description="testTime",
-                                                           pause="0",
+                                                           type = testType
                                                            )
 
         user.set_valid_period(fromDate="", toDate="")

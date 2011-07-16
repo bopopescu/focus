@@ -32,7 +32,7 @@ def createTuple(object):
 
         if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
                                                                                           (int, long, float)):
-            data[i.attname] = [getattr(object, i.attname), unicode(i.verbose_name)]
+            data[i.attname] = [getattr(object, i.attname), (i.verbose_name)]
         else:
             data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]
 

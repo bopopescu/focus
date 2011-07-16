@@ -32,12 +32,8 @@ class Log(models.Model):
 
         try:
             obj = self.content_type.get_object_for_this_type(id=self.object_id)
-        except:
+        except Exception:
             return ""
-
-        """
-        Needs optimalization
-        """
 
         diff = []
 
@@ -50,7 +46,7 @@ class Log(models.Model):
             msg = ""
             lastLog = lastLog[len(lastLog) - 1]
             for i, value in eval(self.message).iteritems():
-                if i == "id" or i == "date_created" or i == "date_edited" or i:
+                if i == "id" or i == "date_created" or i == "date_edited" or i == 'editor' or i == 'user':
                     continue
 
                 if i not in eval(lastLog.message):

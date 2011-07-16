@@ -48,8 +48,6 @@ class Permission(models.Model):
     from_date = models.DateTimeField(null=True, blank=True)
     to_date = models.DateTimeField(null=True, blank=True)
 
-
-
     def get_actions(self):
         actions = []
         if self.actions:
