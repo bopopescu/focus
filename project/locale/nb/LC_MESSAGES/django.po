@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-14 16:51+0200\n"
+"POT-Creation-Date: 2011-07-16 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -420,6 +420,7 @@ msgstr "Tekst"
 
 #: app/announcements/models.py:16 app/tickets/models.py:117
 #: app/tickets/templates/tickets/view.html:78
+#: app/tickets/templates/tickets/view.html:120
 msgid "Attachment"
 msgstr "Vedlegg"
 
@@ -1572,18 +1573,15 @@ msgid "Show most recent updates"
 msgstr "Vis siste oppdateringer"
 
 #: app/tickets/templates/tickets/edit.html:51
-#: app/tickets/templates/tickets/view.html:105
 msgid "Changes: "
 msgstr "Endringer:"
 
 #: app/tickets/templates/tickets/edit.html:62
 #: app/tickets/templates/tickets/edit.html:85
-#: app/tickets/templates/tickets/view.html:116
 msgid "Comment: "
 msgstr "Kommentar:"
 
 #: app/tickets/templates/tickets/edit.html:67
-#: app/tickets/templates/tickets/view.html:121
 msgid "New Attachment:"
 msgstr "Nytt Vedlegg:"
 
@@ -1697,7 +1695,17 @@ msgstr "kunde"
 msgid "History"
 msgstr "Historie"
 
-#: app/tickets/templates/tickets/view.html:132
+#: app/tickets/templates/tickets/view.html:105
+#, fuzzy
+msgid "Changes"
+msgstr "Endringer:"
+
+#: app/tickets/templates/tickets/view.html:115
+#, fuzzy
+msgid "Comment"
+msgstr "Kommentar"
+
+#: app/tickets/templates/tickets/view.html:131
 msgid "Public"
 msgstr "Offentlig"
 
@@ -1705,7 +1713,7 @@ msgstr "Offentlig"
 msgid "Comment added successfully!"
 msgstr "Kommentar lagt til!"
 
-#: core/views.py:59
+#: core/views.py:62
 msgid "invalid zip"
 msgstr "ugyldig postnr"
 

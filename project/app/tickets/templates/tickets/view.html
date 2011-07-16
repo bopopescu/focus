@@ -102,29 +102,28 @@
 
                     <p>
                         {% if update.update_lines.all %}
-                            <b>{% trans "Changes: " %}</b>
+                            <b>{% trans "Changes" %}</b>
                             <ul>
                                 {% for line in update.update_lines.all %}
                                     <li>{{ line.change }}</li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
-
                     </p>
 
                     {% if update.comment %}
-                        <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
+                        <p><b>{% trans "Comment" %}</b> <br> {{ update.comment|linebreaks }}</p>
                     {% endif %}
 
                     {% if update.attachment %}
                         <p>
-                            <b>{% trans "New Attachment:" %}</b>
+                            <b>{% trans "Attachment" %}</b><br>
                             <a target="_blank" href="{{ update.get_attachment_url }}">
                                 <img src="{{ STATIC_URL }}img/download.png"
                                      style="width:30px; height:30px; vertical-align:middle;">
                                 {{ update.get_attachment_name }}</a>
                         </p>
-                        
+
                     {% endif %}
                     {% if ticket.clients.all %}
                         <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
@@ -133,7 +132,6 @@
                                     {% if update.public %} checked="checked" {% endif %}/>
                         </form>
                     {% endif %}
-
 
                 </td>
             </tr>
