@@ -80,6 +80,10 @@
             src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW GROUP" %}</a>
     </li>
 
+    <li><a class="{% active request "logs/" %}" href="{% url app.admin.views.log.overview  %}"><img
+            src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Home"/>{% trans "LOG" %}
+    </a></li>
+
 
     {% require_permission MANAGE company.Company %}
     <li><a class="{% active request "company/$" %}" href="{% url app.company.views.overview %}"><img

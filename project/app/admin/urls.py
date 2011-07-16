@@ -30,4 +30,7 @@ urlpatterns = patterns('app.admin.views',
                        url(r'^profile/edit/$', 'profile.edit'),
                        url(r'^profile/password/$', 'profile.change_password'),
                        url(r'^profile/image/$', 'profile.change_profile_image'),
+
+                       #Log
+                       url(r'^logs/$', 'log.overview'),
                        )

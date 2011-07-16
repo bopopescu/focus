@@ -98,6 +98,9 @@ class Log(models.Model):
         else:
             self.creator = Core.current_user()
 
+        if Core.current_user() and Core.current_user().get_company():
+            self.company = Core.current_user().get_company()
+            
         super(Log, self).save()
 
 
