@@ -74,8 +74,12 @@ class Log(models.Model):
 
             return diff
 
-        diff.append("%s" % self.get_object() + " " + _("was created"))
-
+        try:
+            diff.append(u"%s" % self.get_object() + " " + _("was created"))
+        except Exception, e:
+            l = Log(message=str(e))
+            l.save()
+        
         return diff
 
     def get_object(self, *args, **kwargs):
