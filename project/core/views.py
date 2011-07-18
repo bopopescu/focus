@@ -39,7 +39,7 @@ def retrieve_file(request, filename=''):
 
 def view_postal_by_zip(request, zip):
     if request.is_ajax():
-            return HttpResponse(simplejson.dumps({'zip':zip, 'postal': str(get_postal_by_zip(zip)),}), mimetype='application/json')
+            return HttpResponse(simplejson.dumps({'zip':zip, 'postal': get_postal_by_zip(zip),}), mimetype='application/json')
     return HttpResponse(get_postal_by_zip(zip))
  
 def get_postal_by_zip(zip):
@@ -57,7 +57,9 @@ def get_postal_by_zip(zip):
     result = json.loads(f.read())
 
     if result['valid']:
-        result= str(result['result']).capitalize()
+        result = result['result']
+        result.encode("utf-8")
+        result = result.capitalize()
     else:
         result = _("invalid zip")
 

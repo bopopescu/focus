@@ -5,7 +5,15 @@
     <script>
         $(function() {
             $('#id_zip').parent().find("span").append("<span style='padding-left:90px;' id='postal'></span>");
-            set_postal_by_zip("id_zip", "postal");
+
+            input_field_invoice = $('#' + "id_zip");
+            output_field_invoice = $("#" + "postal");
+
+            get_postal_from_zip(input_field_invoice, output_field_invoice);
+            input_field_invoice.keyup(function() {
+                get_postal_from_zip(input_field_invoice, output_field_invoice);
+            });
+
         });
     </script>
 {% endblock %}
