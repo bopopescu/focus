@@ -44,7 +44,7 @@ def delete_permission(request, id, permission_id):
 
 @login_required()
 def permissions(request, id):
-    group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
+    group = Group.objects.filter_current_company().get(id=id)
 
      #Save and set to active, require valid form
     if request.method == 'POST':
@@ -75,14 +75,13 @@ def remove_user_from_group(request, group_id, user_id):
 
 @login_required()
 def members(request, id):
-    group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
+    group = Group.objects.filter_current_company().get(id=id)
 
     if request.method == 'POST':
         form = AddMemberToGroupForm(request.POST)
-
+        
         if form.is_valid():
             user = form.cleaned_data['user']
-
             group.add_member(user)
 
     addMemberToGroupForm = AddMemberToGroupForm()
@@ -95,7 +94,7 @@ def members(request, id):
 
 @login_required()
 def delete(request, id):
-    group = Core.current_user().get_permitted_objects("VIEW", Group).get(id=id)
+    group = Group.objects.filter_current_company().get(id=id)
     group.delete()
 
     request.message_success(_("Successfully deleted group"))
