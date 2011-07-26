@@ -62,7 +62,7 @@ class Customer(PersistentModel):
 
     @staticmethod
     def simpleform():
-        return CustomerFormSimple(instance=Customer(), prefix="customers")
+        return CustomerFormSimple(instance=Customer(), prefix="customers", initial= {'cid':Customer.calculate_next_cid()})
 
     def save(self, *args, **kwargs):
         new = False

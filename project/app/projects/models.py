@@ -71,7 +71,7 @@ class Project(PersistentModel):
 
     @staticmethod
     def simpleform():
-        return ProjectFormSimple(instance=Project(), prefix="projects")
+        return ProjectFormSimple(instance=Project(), prefix="projects",initial= {'pid':Project.calculate_next_pid()})
 
     def save(self, *args, **kwargs):
         new = False
