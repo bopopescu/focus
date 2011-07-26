@@ -12,7 +12,7 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         fields = ('pid', 'name', 'productGroup', 'countOfAvailableInStock', 'normalDeliveryTime', 'unitForSize', 'size',
-                  'price', 'price_out', 'max_discount', 'priceVal', 'supplier',)
+                  'price', 'price_out', 'max_discount', 'priceVal', 'supplier','description')
 
     def __init__(self, *args, **kwrds):
         super(ProductForm, self).__init__(*args, **kwrds)

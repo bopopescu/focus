@@ -16,6 +16,12 @@
         <tbody>
 
         <tr>
+            <td style="width:300px;">{% trans "Name" %}</td>
+            <td>{{ product.name }}</td>
+        </tr>
+
+
+        <tr>
             <td>{% trans "Number" %}</td>
             <td>{{ product.pid }}</td>
         </tr>
@@ -65,8 +71,16 @@
             <td>{% trans "Product group" %}</td>
             <td><a href="{{ product.productGroup.get_view_url }}">{{ product.productGroup }}</a></td>
         </tr>
-
         </tbody>
     </table>
+    <br>
+
+    {% if product.description %}
+
+        <b>{% trans "Description" %}</b>
+        <br><br>
+
+        {{ product.description|linebreaksbr }}
+    {% endif %}
 
 {% endblock %}

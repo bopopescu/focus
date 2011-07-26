@@ -66,18 +66,18 @@ class Currency(PersistentModel):
 
 class Product(PersistentModel):
     pid = models.CharField(_("ProductID"), max_length=50, null=True)
-    name = models.CharField(max_length=100)
-    description = models.TextField(null=True)
+    name = models.CharField(_("Name"), max_length=100)
+    description = models.TextField(_("Description"), null=True)
     price = models.CharField(_("Price in"), max_length=100, null=True)
     price_out = models.CharField(_("Price out"), max_length=100, null=True)
     max_discount = models.CharField(_("Max discount"), max_length=5, null=True)
-    countOfAvailableInStock = models.CharField(_("Available in stock"), max_length=10)
-    supplier = models.ForeignKey(Supplier, related_name="products", null=True)
-    size = models.CharField(max_length=100, null=True)
+    countOfAvailableInStock = models.CharField(_("Available in store (count)"), max_length=10)
+    supplier = models.ForeignKey(Supplier, related_name="products", verbose_name=_("Supplier"), null=True)
+    size = models.CharField(_("Size"), max_length=100, null=True)
     unitForSize = models.ForeignKey(UnitsForSizes, verbose_name=_("Unit"), null=True)
     priceVal = models.ForeignKey(Currency, related_name="products", verbose_name=_("Currency"))
     normalDeliveryTime = models.CharField(_("Expected delivery time"), max_length=10, null=True)
-    productGroup = models.ForeignKey(ProductGroup, related_name="products", null=True)
+    productGroup = models.ForeignKey(ProductGroup, related_name="products", verbose_name=_("Product group"), null=True)
     files = models.ManyToManyField(File)
         
     def __unicode__(self):

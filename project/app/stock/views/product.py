@@ -14,18 +14,14 @@ from django.utils.translation import ugettext as _
 @require_permission("LIST", Product)
 def overview(request):
     update_timeout(request)
-    #products = Product.objects.filter(trashed=False)
     products = Core.current_user().get_permitted_objects("VIEW", Product)
-
     return render(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
-
 
 @require_permission("LISTDELETED", Product)
 def overview_trashed(request):
     update_timeout(request)
     products = Product.objects.filter(trashed=True)
     return render(request, 'stock/products/list.html', {'title': _("Products"), 'products': products})
-
 
 @require_permission("CREATE", Product)
 def add(request):
@@ -64,7 +60,6 @@ def trash(request, id):
                                                              'can_be_deleted': instance.can_be_deleted()[0],
                                                              'reasons': instance.can_be_deleted()[1],
                                                              })
-
 
 @require_permission("DELETE", Product, "id")
 def recover(request, id):
