@@ -38,7 +38,6 @@ def create_order(request, id):
             order = Order()
             order.order_number = int(order_number)
             order.copy_from(offer)
-            order.save()
 
             #Archive the offer
             offer.archived = True

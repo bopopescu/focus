@@ -61,11 +61,8 @@ class OrderBase(PersistentModel):
             
             self.product_lines.add(p)
 
-        self.save()
-
     def __unicode__(self):
         return self.title
-
 
 class Invoice(OrderBase):
     invoice_number = models.IntegerField(_("Invoice number"))

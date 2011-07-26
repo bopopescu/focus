@@ -80,7 +80,6 @@ def create_invoice(request, id):
             invoice.invoice_number = int(invoice_number)
             invoice.order_id = order.id
             invoice.copy_from(order)
-            invoice.save()
 
             #Archive the offer
             order.archived = True
