@@ -233,10 +233,11 @@ def list_hour_registrations(request, user, from_date, to_date, template):
         if t.hours:
 
             if not sum_totals.has_key('%s' % t.type.name):
-                sum_totals['%s' % t.type.name] = 0.0
+                sum_totals['%s' % t.type.name] = 0
 
-            sum_totals['%s' % t.type.name] += 3
-            sumHours += Decimal(t.hours)
+            sum_totals['%s' % t.type.name] += Decimal(t.hours)
+            
+            sumHours += Decimal(t.hours)*t.type.rate
 
         if t.hours and t.hourly_rate:
             sumEarned += Decimal(t.hours) * Decimal(t.hourly_rate)
@@ -255,7 +256,6 @@ def list_hour_registrations(request, user, from_date, to_date, template):
              'sumCover': round(sumCover, 2),
              'sum_totals':sum_totals,
              'sumTotalEarned': round(sumTotalEarned, 2)})
-
 
 @require_permission("LIST", HourRegistration)
 def your_archive(request):

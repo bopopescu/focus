@@ -52,14 +52,19 @@
 
     <div id="summary">
 
-        {% for key,value in sum_totals.items %}
-            <div>
-                <span class="summary_number">{{ value }}</span>
-                <span class="summary_desc">{{ key }}</span>
-            </div>
-        {% endfor %}
+        <h3>Summering</h3>
+        <table>
+            {% for key,value in sum_totals.items %}
 
-        {{ sumHours }}
+                <tr>
+                    <td style="width:150px;">{{ key }}</td>
+                    <td>{{ value }} timer</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+        <b>Tilsvarer {{ sumHours }} timer </b>
 
     </div>
 {% endblock %}
