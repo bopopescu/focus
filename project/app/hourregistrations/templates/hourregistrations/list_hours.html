@@ -41,7 +41,7 @@
             <tbody>
             {% for registration in hourregistrations %}
                 <tr>
-                    <td>{{ registration.hours_worked }}</td>
+                    <td>{{ registration.hours }}</td>
                     <td>{{ registration.date|date:"d.m.Y" }} {{ registration.time_start }}-{{ registration.time_end }}</td>
                     <td>{{ registration.order }}</td>
                 </tr>
@@ -51,10 +51,14 @@
     </div>
 
     <div id="summary">
+
+        {% for key,value in sum_totals.items %}
         <div>
-            <span class="summary_number">{{ sumHours }}</span>
-            <span class="summary_desc">{% trans "hours total" %}</span>
+            <span class="summary_number">{{ value }}</span>
+            <span class="summary_desc">{{ key }}</span>
         </div>
+        {% endfor %}
+    
     </div>
 
 {% endblock %}

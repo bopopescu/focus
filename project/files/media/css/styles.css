@@ -3,7 +3,6 @@
 ;
 /* 	Super Simple Admin Theme By Jeff Adams		*/
 
-
 /*This handles all the navigation items */
 
 /* ----------------------------
@@ -150,7 +149,7 @@ dd {
 #header {
     height: 70px;
     background: url(../img/header_bg.png);
-    min-width:1200px;
+    min-width: 1200px;
     padding-left: 50px;
 }
 
@@ -789,13 +788,22 @@ ul.ui-autocomplete li span {
 .user-card .avatar {
     float: left;
 }
+
 .user-card .details {
     float: left;
-    margin-left:10px;
+    margin-left: 10px;
 }
+
 .ticket_marked_as_unread_for_current_user {
 }
 
 .ticket_marked_as_unread_for_current_user td {
     background-color: #e4eaf2;
 }
+
+#calendar_summary {
+    padding: 10px;
+    margin: 10px;
+    background-color: #F3F3F3;
+    border: 1px solid black;
+ }

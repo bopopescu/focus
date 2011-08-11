@@ -226,21 +226,20 @@ def list_hour_registrations(request, user, from_date, to_date, template):
     sumHours = 0
     sumEarned = 0
     sumCover = 0
-    sumTotalEarned = 0
-    sumKilometers = 0
-    sumDisbursements = 0
+
+    sum_totals = {}
 
     for t in hourregistrations:
         if t.hours:
+
+            if not sum_totals.has_key('%s' % t.type.name):
+                sum_totals['%s' % t.type.name] = 0.0
+
+            sum_totals['%s' % t.type.name] += 3
             sumHours += Decimal(t.hours)
+
         if t.hours and t.hourly_rate:
             sumEarned += Decimal(t.hours) * Decimal(t.hourly_rate)
-        if t.disbursements:
-            for disb in t.disbursements.all():
-                sumDisbursements += disb.price
-        if t.drivingregistration:
-            for driving in t.drivingregistration.all():
-                sumKilometers += driving.kilometres
 
     sumTotalEarned = sumEarned
 
@@ -254,9 +253,8 @@ def list_hour_registrations(request, user, from_date, to_date, template):
              'sumHours': round(sumHours, 2),
              'sumEarned': round(sumEarned, 2),
              'sumCover': round(sumCover, 2),
-             'sumTotalEarned': round(sumTotalEarned, 2),
-             'sumDisbursements': round(sumDisbursements, 2),
-             'sumKilometers': round(sumKilometers, 2)})
+             'sum_totals':sum_totals,
+             'sumTotalEarned': round(sumTotalEarned, 2)})
 
 
 @require_permission("LIST", HourRegistration)

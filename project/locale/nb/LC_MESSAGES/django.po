@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-26 17:35+0200\n"
+"POT-Creation-Date: 2011-08-11 16:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,6 +209,7 @@ msgstr "FIRMAINSTLLINGER"
 #: app/hourregistrations/templates/hourregistrations/types.html:28
 #: app/projects/models.py:19 app/projects/templates/projects/list.html:28
 #: app/stock/models.py:69 app/stock/templates/stock/files/list.html:20
+#: app/stock/templates/stock/products/view.html:19
 #: app/suppliers/templates/suppliers/list.html:26
 #: app/suppliers/templates/suppliers/view.html:17
 msgid "Name"
@@ -878,8 +879,8 @@ msgstr "Tid slutt"
 #: app/offers/templates/offers/view.html:37 app/orders/models.py:16
 #: app/orders/models.py:27 app/orders/templates/orders/view.html:14
 #: app/projects/templates/projects/view.html:18 app/stock/models.py:70
-#: app/tickets/models.py:105 app/tickets/utils.py:89
-#: app/tickets/templates/tickets/view.html:71
+#: app/stock/templates/stock/products/view.html:80 app/tickets/models.py:105
+#: app/tickets/utils.py:89 app/tickets/templates/tickets/view.html:71
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -961,26 +962,31 @@ msgstr ""
 #: app/hourregistrations/templates/hourregistrations/list_hours.html:56
 #: app/hourregistrations/templates/hourregistrations/list_hours_print_friendly.html:72
 msgid "hours total"
-msgstr "timer totlat"
+msgstr "timer totalt"
 
 #: app/hourregistrations/templates/hourregistrations/list_persons.html:11
 msgid "Select person"
 msgstr "Velg en person"
 
 #: app/hourregistrations/templates/hourregistrations/sidebar.html:9
+msgid "CALENDAR"
+msgstr "KALENDER"
+
+#: app/hourregistrations/templates/hourregistrations/sidebar.html:13
 msgid "YOUR TIMESHEET"
 msgstr "DIN TIMELISTE"
 
-#: app/hourregistrations/templates/hourregistrations/sidebar.html:13
+#: app/hourregistrations/templates/hourregistrations/sidebar.html:17
 #: app/invoices/templates/invoices/sidebar.html:9
 msgid "ARCHIVE"
 msgstr "ARKIV"
 
-#: app/hourregistrations/templates/hourregistrations/sidebar.html:19
-msgid "ALL TIMESHEET"
+#: app/hourregistrations/templates/hourregistrations/sidebar.html:22
+#, fuzzy
+msgid "ALL TIMESHEETS"
 msgstr "ALLE TIMELISTER"
 
-#: app/hourregistrations/templates/hourregistrations/sidebar.html:25
+#: app/hourregistrations/templates/hourregistrations/sidebar.html:27
 msgid "DISBURSEMENTS"
 msgstr "UTLEGG"
 
@@ -1006,7 +1012,7 @@ msgstr "Stopp og lagre"
 
 #: app/hourregistrations/templates/hourregistrations/types.html:29
 msgid "Rate"
-msgstr "Pris"
+msgstr "Sats"
 
 #: app/invoices/views.py:12 templates/base.html:92
 msgid "Invoices"
@@ -1146,7 +1152,7 @@ msgstr "Du må bruke et unikt kundenummer"
 msgid "Product"
 msgstr "Produkt"
 
-#: app/orders/models.py:18 app/orders/models.py:32 app/stock/models.py:76
+#: app/orders/models.py:18 app/orders/models.py:32
 #, fuzzy
 msgid "Price"
 msgstr "Pris"
@@ -1315,34 +1321,37 @@ msgstr "Produkt med navn %(name)s finnes ikke"
 msgid "ProductID"
 msgstr "Produktnr"
 
-#: app/stock/models.py:71 app/stock/templates/stock/products/view.html:24
+#: app/stock/models.py:71 app/stock/templates/stock/products/view.html:30
 msgid "Price in"
 msgstr "Pris inn"
 
-#: app/stock/models.py:72 app/stock/templates/stock/products/view.html:29
+#: app/stock/models.py:72 app/stock/templates/stock/products/view.html:35
 msgid "Price out"
 msgstr "Pris ut"
 
-#: app/stock/models.py:73 app/stock/templates/stock/products/view.html:33
+#: app/stock/models.py:73 app/stock/templates/stock/products/view.html:39
 msgid "Max discount"
 msgstr "Maks avslag"
 
-#: app/stock/models.py:74
-#, fuzzy
-msgid "Available in stock"
-msgstr "Tilgjengelig på lager"
+#: app/stock/models.py:74 app/stock/templates/stock/products/view.html:43
+msgid "Available in store (count)"
+msgstr "Tilgjengelig i butikken (antall)"
 
-#: app/stock/models.py:75 app/stock/templates/stock/products/view.html:41
+#: app/stock/models.py:75 app/stock/templates/stock/products/view.html:47
 #: app/suppliers/views.py:64 app/suppliers/views.py:143
 msgid "Supplier"
 msgstr "Leverandør"
 
-#: app/stock/models.py:77 app/stock/templates/stock/products/view.html:50
+#: app/stock/models.py:76 app/stock/templates/stock/products/view.html:51
+msgid "Size"
+msgstr "Størrelse"
+
+#: app/stock/models.py:77 app/stock/templates/stock/products/view.html:56
 msgid "Unit"
 msgstr "Enhet"
 
 #: app/stock/models.py:78 app/stock/templates/stock/currencies/list.html:26
-#: app/stock/templates/stock/products/view.html:55
+#: app/stock/templates/stock/products/view.html:61
 msgid "Currency"
 msgstr "Valuta"
 
@@ -1350,7 +1359,7 @@ msgstr "Valuta"
 msgid "Expected delivery time"
 msgstr "Forventet leveringstid"
 
-#: app/stock/models.py:80 app/stock/templates/stock/products/view.html:65
+#: app/stock/models.py:80 app/stock/templates/stock/products/view.html:71
 msgid "Product group"
 msgstr "Produktgruppe"
 
@@ -1392,19 +1401,11 @@ msgstr "Last ned dagens fil"
 msgid "Delete product"
 msgstr "Slett produkt"
 
-#: app/stock/templates/stock/products/view.html:19
+#: app/stock/templates/stock/products/view.html:25
 msgid "Number"
 msgstr "Number"
 
-#: app/stock/templates/stock/products/view.html:37
-msgid "Available in store (count)"
-msgstr "Tilgjengelig i butikken (antall)"
-
-#: app/stock/templates/stock/products/view.html:45
-msgid "Size"
-msgstr "Størrelse"
-
-#: app/stock/templates/stock/products/view.html:60
+#: app/stock/templates/stock/products/view.html:66
 msgid "Normal delivery time"
 msgstr "Normal leveringstid"
 
@@ -1820,3 +1821,7 @@ msgstr "noen"
 #: templates/permission_denied.html:34
 msgid "user"
 msgstr "bruker"
+
+#, fuzzy
+#~ msgid "Available in stock"
+#~ msgstr "Tilgjengelig på lager"
