@@ -22,7 +22,7 @@
 
     <h1>{{ title }}</h1>
 
-    <div style="position:absolute; margin-left:650px; margin-top:-40px;" >
+    <div style="position:absolute; margin-left:650px; margin-top:-40px;">
         <a target="_blank" href="1"><img src="{{ STATIC_URL }}/img/printer.png"></a>
     </div>
 
@@ -53,12 +53,13 @@
     <div id="summary">
 
         {% for key,value in sum_totals.items %}
-        <div>
-            <span class="summary_number">{{ value }}</span>
-            <span class="summary_desc">{{ key }}</span>
-        </div>
+            <div>
+                <span class="summary_number">{{ value }}</span>
+                <span class="summary_desc">{{ key }}</span>
+            </div>
         {% endfor %}
-    
-    </div>
 
+        {{ sumHours }}
+
+    </div>
 {% endblock %}
