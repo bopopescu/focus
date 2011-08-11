@@ -67,10 +67,23 @@
 <br><br>
 
 <div id="summary">
-    <div>
-        <span class="summary_number">{{ sumHours }}</span>
-        <span class="summary_desc">{% trans "hours total" %}</span>
-    </div>
+
+    <h3>Summering</h3>
+    <table>
+        {% for key,value in sum_totals.items %}
+
+            <tr>
+                <td style="width:150px;">{{ key }}</td>
+                <td>{{ value }} timer</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    <b>Tilsvarer {{ sumHours }} timer </b>
+
 </div>
+
+
 
 </body></html>
