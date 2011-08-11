@@ -57,7 +57,7 @@
     <tbody>
     {% for registration in hourregistrations %}
         <tr>
-            <td>{{ registration.hours_worked }}</td>
+            <td>{{ registration.hours }}</td>
             <td>{{ registration.date|date:"d.m.Y" }} {{ registration.time_start }}-{{ registration.time_end }}</td>
             <td>{{ registration.order }}</td>
         </tr>
