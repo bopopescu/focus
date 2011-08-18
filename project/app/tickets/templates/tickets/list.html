@@ -76,27 +76,38 @@
             return row
         }
 
-        function build_table(tickets) {
+        function build_table(tickets, deleteExisting) {
+            var start = new Date().getTime();
             var tbody = $("#dataTable tbody");
-            tbody.children("tr").remove()
+            if(deleteExisting) {
+                tbody.children("tr").remove();
+            }
             $(tickets).each(function() {
                 tbody.append(getRowFromTicket(this))
-            })
+            });
             $('#filter').quicksearch("#dataTable tbody tr");
+            console.log("Table built in: " + (new Date().getTime() - start));
         }
 
         var current_user_id = {{ request.user.id }};
         var assigned_to = {% if assigned_to %} current_user_id; {% else %} 0; {% endif %}
         var status = 0;
-        function getTickets(type, trashed) {
+        function getTickets(type, trashed, range) {
+            if(range == undefined) {
+                range = 0;
+            }
             var data = type ? { type_id: parseInt(type)} : {};
             data.status_id = status;
             data.assigned_to = assigned_to;
             data.trashed = trashed;
-            
+            data.range = range;
+
             $.get("/api/tickets/", data,
             function(data) {
-                build_table(data);
+                if(data.length > 0) {
+                    build_table(data, (range==0));
+                    getTickets(type, trashed, range + 12)
+                }
             }, "json");
         }
 

@@ -45,6 +45,10 @@ class TicketHandler(BaseHandler):
 
     @staticmethod
     def filter_tickets(tickets, filter):
+
+        trashed = bool(int(filter.get('trashed', False)))
+        tickets = tickets.filter(trashed=trashed)
+
         type_id = int(filter.get('type_id', False))
         if type_id:
             type = TicketType.objects.get(id=type_id)
@@ -60,7 +64,10 @@ class TicketHandler(BaseHandler):
             assigned_to = User.objects.get(id=assigned_to)
             tickets = tickets.filter(assigned_to=assigned_to)
 
-        trashed = bool(int(filter.get('trashed', False)))
-        tickets = tickets.filter(trashed=trashed)
+        range = int(filter.get('range', -1))
+        if range >= 0:
+            print range
+            tickets = tickets[range: range+12] # returns 12 tickets, some other number might be better...
+                                               # the number is also hardcoded in the javascript code
 
         return tickets
