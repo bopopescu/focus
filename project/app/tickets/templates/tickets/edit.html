@@ -35,6 +35,7 @@
 
     <div style="width:605px;">
 
+    {% if updates %}
         <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
         <table id="last_updates">
             {% for update in updates %}
@@ -77,6 +78,7 @@
                 </tr>
             {% endfor %}
         </table>
+    {% endif %}
 
         <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
 
@@ -84,7 +86,9 @@
             <div class="ticket_update">
                 <h3>{% trans "Comment: " %}</h3>
                 {{ ticket_form.comment }} <br/>
-                {{ ticket_form.public.label }} {{ ticket_form.public }}
+                {% if ticket.clients.all %}
+                    {{ ticket_form.public.label }} {{ ticket_form.public }}
+                {% endif %}
             </div>
 
             <div class="ticket_update">
