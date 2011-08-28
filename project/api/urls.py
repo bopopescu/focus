@@ -8,6 +8,7 @@ from api.customersapi.handlers import CustomersHandler
 from api.hourregistrationsapi.handlers import HourRegistrationHandler, TimeTrackerHandler
 from api.ticketsapi.handlers import TicketHandler
 from api.productsapi.handlers import ProductsHandler
+import api.emitters # Needed!
 
 auth = TimeBasicAPIAuthentication()
 
@@ -41,8 +42,8 @@ urlpatterns = patterns('',
                        url(r'timetracker/(?P<id>\d+)/$', timetracker, name='timetracker_instance'),
 
                        #Tickets
-                       url(r'tickets/$', tickets),
-                       url(r'tickets/(?P<id>\d+)/$', tickets),
+                       url(r'tickets/$', tickets, {'emitter_format': 'json'}),
+                       url(r'tickets/(?P<id>\d+)/$', tickets, {'emitter_format': 'json'}),
 
                        #Files
                        url(r'files/$', files),

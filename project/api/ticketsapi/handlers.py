@@ -66,7 +66,6 @@ class TicketHandler(BaseHandler):
 
         range = int(filter.get('range', -1))
         if range >= 0:
-            print range
             tickets = tickets[range: range+12] # returns 12 tickets, some other number might be better...
                                                # the number is also hardcoded in the javascript code
 
