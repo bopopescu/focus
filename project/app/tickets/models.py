@@ -63,6 +63,7 @@ class TicketBase(models.Model):
     def creator(self):
         return self.client_user or self.user
 
+
 class TicketStatus(models.Model):
     name = models.CharField(max_length=20)
     order_priority = models.IntegerField()
@@ -112,7 +113,8 @@ class Ticket(TicketBase):
     customer = models.ForeignKey(Customer, verbose_name=_("Customer"), null=True, blank=True)
     order = models.ForeignKey('orders.Order', null=True, blank=True, verbose_name=_("Order"),
                               related_name="tickets")
-    assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"), related_name="assigned_tickets")
+    assigned_to = models.ForeignKey(User, null=True, blank=True, verbose_name=_("Assigned to"),
+                                    related_name="assigned_tickets")
     #mail_excluded = models.ManyToManyField(User, null=True, blank=True)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
 
@@ -130,10 +132,10 @@ class Ticket(TicketBase):
     def add_user_to_visited_by_since_last_edit(self, user):
         if user not in self.visited_by_since_last_edit.all():
             self.visited_by_since_last_edit.add(user)
-        
+
     def mark_as_unread_for_current_user(self):
         return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
-            
+
     def get_recipients(self):
         """
         Return list of users who have commented or created this ticket
@@ -145,7 +147,7 @@ class Ticket(TicketBase):
 
         if self.assigned_to:
             recipients.add(self.assigned_to)
-            
+
         for update in self.updates.all():
             if update.user:
                 recipients.add(update.creator)
@@ -156,7 +158,6 @@ class Ticket(TicketBase):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
 
     def save(self, **kwargs):
-
         if 'update' in kwargs:
             send_update_mails(self, kwargs['update'])
         action = 'EDIT'
@@ -264,6 +265,7 @@ class Ticket(TicketBase):
                 pass
 
         return diff
+
 
 class TicketUpdate(TicketBase):
     ticket = models.ForeignKey(Ticket, related_name="updates")

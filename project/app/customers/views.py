@@ -43,7 +43,6 @@ def view(request, id):
                                                    'comments': comments,
                                                    'customer': customer})
 
-
 @require_permission("CREATE", Customer)
 def add_ajax(request, id=None):
     customer = Customer()
@@ -55,18 +54,15 @@ def add_ajax(request, id=None):
 
     if form.is_valid():
         a = form.save()
-
         return HttpResponse(simplejson.dumps({'name': a.name,
                                               'id': a.id,
                                               'valid': True}), mimetype='application/json')
-    else:
-        errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
-        return HttpResponse(simplejson.dumps({'errors': errors,
-                                              'valid': False}), mimetype='application/json')
 
-    return HttpResponse("ERROR")
+    errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
 
+    return HttpResponse(simplejson.dumps({'errors': errors,
+                                          'valid': False}), mimetype='application/json')
 
 @require_permission("EDIT", Customer, "id")
 def history(request, id):
@@ -96,7 +92,6 @@ def list_contacts(request, id):
             {'title': unicode(customer.name) + " " + _('contacts'),
              'form': form,
              'customer': customer})
-
 
 @require_permission("CREATE", Customer)
 def add(request):

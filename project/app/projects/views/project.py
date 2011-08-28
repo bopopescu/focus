@@ -58,7 +58,6 @@ def view(request, id):
                                                   'who_can_see_this': who_can_see_this,
                                                   })
 
-
 @require_permission("VIEW", Project, 'id')
 def view_orders(request, id):
     project = Project.objects.get(id=id)

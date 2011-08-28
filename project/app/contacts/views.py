@@ -20,6 +20,7 @@ from django.utils.simplejson import JSONEncoder
 def overview(request):
     update_timeout(request)
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False)
+
     return render(request, 'contacts/list.html', {'title': _('Contacts'), 'contacts': contacts})
 
 
@@ -98,6 +99,19 @@ def trash(request, id):
                                                                     'can_be_deleted': instance.can_be_deleted()[0],
                                                                     'reasons': instance.can_be_deleted()[1],
                                                                     })
+
+@require_permission("DELETE", Contact, "id")
+def restore(request, id):
+    contact = Contact.objects.get(id=id)
+
+    if request.method == "POST":
+        request.message_success("Successfully restored this customer")
+        contact.restore()
+        return redirect(view, contact.id)
+    else:
+        return render(request, 'contacts/restore.html', {'title': _("Confirm restore"),
+                                                          'contact': contact,
+                                                          })
 
 
 @suggest_ajax_parse_arguments()

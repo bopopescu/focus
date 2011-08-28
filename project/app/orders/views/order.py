@@ -17,13 +17,11 @@ def my_orders(request):
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
 
-
 @require_permission("VIEW", Order)
 def overview(request):
     orders = Order.objects.filter_current_company()
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
-
 
 @require_permission("VIEW", Order)
 def archive(request):
@@ -38,6 +36,7 @@ def view_statistics(request, id):
     return render(request, "orders/statistics.html", {'title': order.title,
                                                       'order': order})
 
+
 @require_permission("EDIT", Order, "id")
 def history(request, id):
     instance = get_object_or_404(Order, id=id, deleted=False)
@@ -46,8 +45,8 @@ def history(request, id):
                                  object_id=instance.id)
 
     return render(request, 'orders/log.html', {'title': _("Latest events"),
-                                                  'order': instance,
-                                                  'logs': history[::-1][0:150]})
+                                               'order': instance,
+                                               'logs': history[::-1][0:150]})
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
@@ -58,7 +57,8 @@ def view(request, id):
     return render(request, "orders/view.html", {'title': order.title,
                                                 'order': order,
                                                 'comments': comments,
-                                                'who_can_see_this':who_can_see_this})
+                                                'who_can_see_this': who_can_see_this})
+
 
 def preview_order_html(request, id):
     order = Order.objects.filter_current_company().get(id=id)
@@ -70,7 +70,6 @@ def create_invoice(request, id):
     order = Order.objects.filter_current_company().get(id=id)
 
     if request.method == "POST":
-
         form = CreateInvoiceForm(request.POST)
 
         if form.is_valid():
@@ -92,8 +91,9 @@ def create_invoice(request, id):
 
     return render(request, "orders/create_invoice.html", {'title': order.title,
                                                           'order': order,
-                                                          'next_invoice_number':Invoice.calculate_next_invoice_number(),
-                                                          'form':form})
+                                                          'next_invoice_number': Invoice.calculate_next_invoice_number()
+        ,
+                                                          'form': form})
 
 
 @require_permission("VIEW", Order)
@@ -150,6 +150,7 @@ def form(request, id=None):
                                                 'order': instance,
                                                 'products': products})
 
+
 @require_permission("EDIT", Order, "id")
 def delete_permission_from_participants(request, id, permission_id):
     permission = Permission.objects.get(id=permission_id)
@@ -161,9 +162,9 @@ def delete_permission_from_participants(request, id, permission_id):
 
     return participants(request, id, permission_id)
 
+
 @require_permission("EDIT", Order, "id")
 def participants(request, id, permission_id):
-
     order = get_object_or_404(Order, id=id)
     content_type = ContentType.objects.get_for_model(Order)
 

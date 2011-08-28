@@ -25,14 +25,14 @@ def overview_trashed(request):
     update_timeout(request)
     suppliers = Core.current_user().get_permitted_objects("VIEW", Supplier).filter(trashed=True)
     return render(request, 'suppliers/list.html',
-                  {'title': _("Deleted suppliers"), 'suppliers': suppliers})
+            {'title': _("Deleted suppliers"), 'suppliers': suppliers})
 
 
 @login_required()
 def overview_all(request):
     suppliers = Supplier.objects.all()
     return render(request, 'suppliers/list.html',
-                  {'title': _("All active suppliers"), 'suppliers': suppliers})
+            {'title': _("All active suppliers"), 'suppliers': suppliers})
 
 
 @require_permission("CREATE", Customer)
@@ -61,8 +61,8 @@ def view(request, id):
     supplier = Core.current_user().get_permitted_objects("VIEW", Supplier).get(id=id)
 
     return render(request, 'suppliers/view.html',
-                  {'title': _("Supplier"),
-                   'supplier': supplier})
+            {'title': _("Supplier"),
+             'supplier': supplier})
 
 
 @login_required()
@@ -108,6 +108,7 @@ def trash(request, id):
         else:
             request.message_success("Successfully deleted this supplier")
             instance.trash()
+
         return redirect(overview)
     else:
         return render(request, 'suppliers/trash.html', {'title': _("Confirm delete"),
@@ -115,6 +116,20 @@ def trash(request, id):
                                                         'can_be_deleted': instance.can_be_deleted()[0],
                                                         'reasons': instance.can_be_deleted()[1],
                                                         })
+
+
+@require_permission("DELETE", Customer, "id")
+def restore(request, id):
+    instance = Supplier.objects.get(id=id)
+
+    if request.method == "POST":
+        request.message_success("Successfully restored this customer")
+        instance.restore()
+        return redirect(view, instance.id)
+    else:
+        return render(request, 'suppliers/restore.html', {'title': _("Confirm restore"),
+                                                          'supplier': instance,
+                                                          })
 
 
 @login_required()

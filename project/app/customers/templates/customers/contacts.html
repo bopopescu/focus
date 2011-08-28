@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load auth %}
 {% load i18n %}
-
+{% load thumbnail %}
 
 {% block sidebar %}
     {% include "customers/sidebar.html" %}
@@ -18,12 +18,13 @@
 
     <h1>{{ title }} </h1>
 
-    <div class="ui-widget" style="width:100px;">
-        <form action="" method="POST">
-            {{ form }}
-            <input type="submit" value="{% trans "Add contact" %}">
-        </form>
-    </div>
+    <form action="" method="POST">
+        {{ form }}
+        <input type="submit" value="{% trans "Save" %}">
+    </form>
+
+    <br><br><br>
+    <h1>{% trans "Participants" %}</h1>
 
     <div class="searchBox">
         <input class="search" type="text" value="" id="filter" placeholder="Filtrér">

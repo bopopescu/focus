@@ -11,6 +11,8 @@ from django.utils import translation
 def login(request):
     message = ""
 
+    redirect_to = request.REQUEST.get('next', '')
+
     if request.method == 'POST':
 
         form = LoginForm(request.POST)
@@ -22,8 +24,7 @@ def login(request):
             password = data['password']
             remember = data['remember']
             
-            redirect_to = request.REQUEST.get('next', '')
-    
+
             if Core.login(request, username, password, remember):
                 user = request.user
 
@@ -32,6 +33,7 @@ def login(request):
                     user.use_user_language(request)
 
                     Log(message="%s logget inn." % user).save(user=user)
+
                     if not redirect_to:
                         return HttpResponseRedirect("/dashboard/")
 

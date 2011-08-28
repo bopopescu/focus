@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+from app.contacts.models import Contact
+from core import Core
 from django.forms import ModelForm
-from app.contacts.forms import ContactField
 from models import Customer
 from django.utils.translation import ugettext as _
-from django.forms import forms
-
+from django import forms
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -42,4 +42,9 @@ class CustomerFormSimple(ModelForm):
 
 
 class ContactToCustomerForm(forms.Form):
-    contact = ContactField()
+    contact = forms.ModelChoiceField(queryset=Contact.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(ContactToCustomerForm, self).__init__(args, kwargs)
+        contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False)
+        self.fields['contact'].queryset = contacts

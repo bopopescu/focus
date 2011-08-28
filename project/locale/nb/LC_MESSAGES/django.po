@@ -901,7 +901,7 @@ msgstr "Timeregistreringstyper"
 
 #: app/hourregistrations/views.py:193
 msgid "Disbursements"
-msgstr "Utbetalinger"
+msgstr "Utlegg"
 
 #: app/hourregistrations/templates/hourregistrations/archive.html:16
 msgid "Year"
@@ -941,7 +941,7 @@ msgstr "Tid"
 
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:37
 msgid "replace with new image"
-msgstr "bytt med nytt bilde"
+msgstr "Nytt bilde"
 
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:57
 msgid "Dato"

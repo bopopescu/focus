@@ -11,4 +11,5 @@ urlpatterns = patterns('app.suppliers.views',
                        url(r'^(?P<id>\d+)/products/$', 'products'),
                        url(r'^(?P<id>\d+)/history/$', 'history'),
                        url(r'^(?P<id>\d+)/trash/$', 'trash'),
+                       url(r'^(?P<id>\d+)/restore/$', 'restore'),
                        )
