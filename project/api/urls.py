@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from piston.emitters import Emitter
 from api.filesapi.handlers import FileHandler, FileTagHandler
 from api.projectsapi.handlers import ProjectHandler
 from piston.resource import Resource
@@ -8,7 +9,6 @@ from api.customersapi.handlers import CustomersHandler
 from api.hourregistrationsapi.handlers import HourRegistrationHandler, TimeTrackerHandler
 from api.ticketsapi.handlers import TicketHandler
 from api.productsapi.handlers import ProductsHandler
-import api.emitters # Needed!
 
 auth = TimeBasicAPIAuthentication()
 
@@ -42,8 +42,8 @@ urlpatterns = patterns('',
                        url(r'timetracker/(?P<id>\d+)/$', timetracker, name='timetracker_instance'),
 
                        #Tickets
-                       url(r'tickets/$', tickets, {'emitter_format': 'json'}),
-                       url(r'tickets/(?P<id>\d+)/$', tickets, {'emitter_format': 'json'}),
+                       url(r'tickets/$', tickets, {'emitter_format': 'json-cached'}),
+                       url(r'tickets/(?P<id>\d+)/$', tickets, {'emitter_format': 'json-cached'}),
 
                        #Files
                        url(r'files/$', files),
