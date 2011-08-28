@@ -42,7 +42,6 @@ def form(request):
 
     return HttpResponse("ERROR")
 
-
 @login_required()
 def delete(request, id):
     if id:
@@ -167,7 +166,7 @@ def admin_hourregistrationtypes(request, id=None):
             {'title': _("Hour registrations types"), 'types': types, 'form': form})
 
 
-@require_permission("EDIT", Disbursement)
+@require_permission("LIST", HourRegistration)
 def disbursements(request, id=None):
     instance = Disbursement()
     disb = Disbursement.objects.filter(trashed=False, creator=Core.current_user())
