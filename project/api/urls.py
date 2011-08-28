@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from piston.emitters import Emitter
 from api.filesapi.handlers import FileHandler, FileTagHandler
 from api.projectsapi.handlers import ProjectHandler
 from piston.resource import Resource
@@ -41,8 +42,8 @@ urlpatterns = patterns('',
                        url(r'timetracker/(?P<id>\d+)/$', timetracker, name='timetracker_instance'),
 
                        #Tickets
-                       url(r'tickets/$', tickets),
-                       url(r'tickets/(?P<id>\d+)/$', tickets),
+                       url(r'tickets/$', tickets, {'emitter_format': 'json-cached'}),
+                       url(r'tickets/(?P<id>\d+)/$', tickets, {'emitter_format': 'json-cached'}),
 
                        #Files
                        url(r'files/$', files),
