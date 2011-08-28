@@ -3,10 +3,10 @@ from django.conf import settings
 import thread
 
 
-def _send_mail(*args, **kwargs):
+def send_mail(*args, **kwargs):
     thread.start_new_thread(_send_mail, args, kwargs)
 
-def send_mail(subject, message, fromMail, toMails, fail_silently=False):
+def _send_mail(subject, message, fromMail, toMails, fail_silently=False):
     recipients = []
     recipients.extend(toMails)
 
