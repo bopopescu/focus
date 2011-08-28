@@ -192,7 +192,6 @@ def disbursements(request, id=None):
             {'title': _("Disbursements"), 'disbursements': disb, 'disbursement': instance, 'form': form})
 
 ########ARCHIVE#############
-
 @require_permission("MANAGE", HourRegistration)
 def view_archived_month(request, year, month, user_id=None, print_friendly=False):
     year = int(year)

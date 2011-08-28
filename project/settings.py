@@ -37,13 +37,11 @@ CACHES = {
 
 LOGIN_REMEMBER_TIME = timedelta(days=90)
 
-#EMAIL DEBUG
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'focustimeno@gmail.com'
 EMAIL_HOST_PASSWORD = '4th56y44g!'
 EMAIL_PORT = 587
-
 
 TIME_ZONE = 'Europe/Oslo'
 DATE_FORMAT = 'd.m.Y'
