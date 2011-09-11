@@ -1,0 +1,144 @@
+{% load menu_tags %}
+{% load i18n %}
+{% load auth %}
+{% load thumbnail %}
+
+<header>
+    <a href="/" title="Back to Homepage"></a>
+
+    <h1>{{ user.get_company }}</h1>
+</header>
+<section id="user-info">
+
+    <img src="{{ user.profileImage|thumbnail_with_max_side:"50" }}">
+
+    <div>
+        <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a>
+
+        <em>Administrator</em>
+        <ul>
+            <li><a class="button-link" href="{% url app.accounts.views.logout_view %}">Logg ut</a></li>
+        </ul>
+    </div>
+</section>
+
+<nav id="main-nav">
+
+    <ul>
+        <li><a class="dashboard no-submenu" href="{% url app.dashboard.views.overview %}">Dashboard</a></li>
+
+        {% require_permission LIST customers.Customer %}
+
+        <li class="{% active request "^/customers/" %}">
+            <a href="" title="" class="products">{% trans "Customers" %}</a>
+            {% include "customers/sidebar.html" %}
+        </li>
+        {% end_require %}
+
+
+        <li class="{% active request "^/stock/" %}">
+            <a href="" title="" class="products">{% trans "Products" %}</a>
+            {% include "stock/sidebar.html" %}
+        </li>
+
+          {% require_permission LIST contacts.Contact %}
+        <li class="{% active request "^/contacts/" %}">
+            <a class="products {% active request "^/contacts/" %}"
+               href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
+            {% include "contacts/sidebar.html" %}
+        </li>
+        {% end_require %}
+
+
+        {% require_permission LIST projects.Project %}
+        <li class="{% active request "^/projects/" %}">
+            <a class="{% active request "^/projects/" %}"
+               href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
+
+            {% include "projects/sidebar.html" %}
+
+        </li>
+        {% end_require %}
+
+
+        {% require_permission LIST orders.Offer %}
+        <li class="{% active request "^/offers/" %}">
+            <a class="{% active request "^/offers/" %}"
+               href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
+
+            {% include "orders/sidebar.html" %}
+
+        </li>
+        {% end_require %}
+
+        {% require_permission LIST orders.Order %}
+        <li class="{% active request "^/orders/" %}">
+            <a class="{% active request "^/orders/" %}"
+               href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
+
+            {% include "orders/sidebar.html" %}
+
+        </li>
+        {% end_require %}
+
+        {% require_permission LIST orders.Invoice %}
+        <li class="{% active request "^/invoices/" %}">
+            <a class="{% active request "^/invoices/" %}"
+               href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
+            {% include "orders/sidebar.html" %}
+        </li>
+
+        {% end_require %}
+
+
+        {% require_permission LIST hourregistrations.HourRegistration %}
+        <li class="{% active request "^/hourregistrations/" %}">
+            <a class="{% active request "^/hourregistrations/" %}"
+               href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Hour registration" %}</a>
+            {% include "hourregistrations/sidebar.html" %}
+        </li>
+
+        {% end_require %}
+
+        {% require_permission LIST tickets.Ticket %}
+        <li class="{% active request "^/tickets/" %}">
+            <a class="{% active request "^/tickets/" %}"
+               href="{% url app.tickets.views.assigned_to_user %}">{% trans "Tickets" %}</a>
+            {% include "tickets/sidebar.html" %}
+
+        </li>
+        {% end_require %}
+
+        {% require_permission LIST suppliers.Supplier %}
+        <li class="{% active request "^/suppliers/" %}">
+            <a class="{% active request "^/suppliers/" %}"
+               href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a>
+            {% include "suppliers/sidebar.html" %}
+
+        </li>
+        {% end_require %}
+
+
+        {% require_permission MANAGE user.User %}
+        <li class="{% active request "^/admin/" %}">
+            <a class="{% active request "^/admin/" %}"
+               href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
+            {% include "admin/sidebar.html" %}
+        </li>
+        {% end_require %}
+
+    </ul>
+
+</nav>
+
+<section class="sidebar nested">
+    <h2>Nested Section</h2>
+
+    <p>Lorem ipsum dolor sit amet, conse ctetur adipiscing elit. Maec enas id augue ac metu aliquam.</p>
+
+    <p>Sed pharetra placerat est suscipit sagittis. Phasellus <a href="#">aliquam</a> males uada blandit. Donec
+        adipiscing sem erat.</p>
+</section>
+<section class="sidebar">
+    {% block sidebar %}{% endblock %}
+</section>

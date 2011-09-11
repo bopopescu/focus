@@ -27,23 +27,6 @@
         <br><br>
     {% endif %}
 
-    <div style="width:805px;">
-        <form enctype="multipart/form-data" class="form label-inline" method="post">
-            {% for field in form %}
-                <div class="fieldWrapper">
-                    {{ field.label }}
-                    <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
-                    <br>{{ field }}
-                </div>
-            {% endfor %}
-            <div>
-                <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
-
-                <div id="loading">Loading...</div>
-            </div>
-        </form>
-    </div>
-
     <script>
         $(function() {
             $("#loading").hide();
@@ -53,6 +36,31 @@
             })
         })
     </script>
+
+
+    <form enctype="multipart/form-data" method="post">
+        <!-- Inputs -->
+        <!-- Use class .small, .medium or .large for predefined size -->
+        <fieldset>
+            <legend>Legend</legend>
+            <dl>
+                {% for field in form %}
+                    <dt>
+                        <label>{{ field.label }}</label>
+                    </dt>
+                    <dd>
+                        <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                        {{ field }}
+                        <p>Short description of event</p>
+                    </dd>
+                {% endfor %}
+            </dl>
+        </fieldset>
+
+        <button type="submit">Submit</button>
+        or <a href="#">Cancel</a>
+    </form>
+
 
 {% endblock %}
 

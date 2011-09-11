@@ -1,170 +1,73 @@
 {% load i18n %}
 {% load auth %}
-{% load menu_tags %}
-<!DOCTYPE HTML>
-<html>
+
+<!doctype html>
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js"> <!--<![endif]-->
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>FocusTime</title>
-    <!--  REQUIRED FOR IE6 SUPPORT -->
+    <title>Focus24</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style type="text/css">
-        img, div {
-            behavior: url({{ STATIC_URL }}iepngfix.htc)
-        }</style>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/colors.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.tipsy.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.wysiwyg.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.datatables.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.nyromodal.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.datepicker.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fileinput.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.fullcalendar.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.visualize.css">
+
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet'
+          type='text/css'>
+
+
+    <script src="{{ STATIC_URL }}js/libs/modernizr-1.7.min.js"></script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script>!window.jQuery && document.write(unescape('%3Cscript src="{{ STATIC_URL }}js/jquery/jquery-1.5.1.min.js"%3E%3C/script%3E'))</script>
+    <script src="{{ STATIC_URL }}js/libs/selectivizr.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.nyromodal.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.tipsy.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.wysiwyg.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.datatables.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.datepicker.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.fileinput.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.fullcalendar.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/excanvas.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.visualize.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery/jquery.visualize.tooltip.js"></script>
+    <script src="{{ STATIC_URL }}js/script.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-min.js"></script>
 
-    <link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ STATIC_URL }}css/navigation.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
-    <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/masked.js"></script>
-    {% block extra_head %}{% endblock %}
 </head>
 
 <body>
 
-<div id="wrapper">
+<div class="fixed-wraper">
 
-    <div id="header">
-        <div style="float:left"><h1>{{ user.get_company }}</h1></div>
-        <div class="profile">
-            Logget inn som
-            <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a> | <a
-                href="{% url app.accounts.views.logout_view %}">Logg ut</a>
-            {% if request.user.get_new_notifications %}
-                <br/><br/>
-                <b><a href="{% url app.dashboard.views.notifications %}">{{ request.user.get_new_notifications.count }}
-                </b> {% trans "notifications" %}</a>
-            {% endif %}
-        </div>
-    </div>
+    <section role="navigation">
+        {% include "menu.html" %}
+    </section>
 
-    <div id="nav">
-        <ul>
-            <li class="{% active request "^/dashboard/" %}">
-                <a class="{% active request "^/dashboard/" %}"
-                   href="{% url app.dashboard.views.overview %}">Dashboard</a>
-            </li>
+    <section role="main">
+        {% block maincontent %}
+        {% endblock %}
+    </section>
 
-            {% require_permission LIST customers.Customer %}
-            <li class="{% active request "^/customers/" %}">
-                <a class="{% active request "^/customers/" %}"
-                   href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
-            </li>
-            {% end_require %}
-
-            {% require_permission LIST contacts.Contact %}
-            <li class="{% active request "^/contacts/" %}">
-                <a class="{% active request "^/contacts/" %}"
-                   href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission LIST projects.Project %}
-            <li class="{% active request "^/projects/" %}">
-                <a class="{% active request "^/projects/" %}"
-                   href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
-            </li>
-            {% end_require %}
-
-            {% require_permission LIST orders.Offer %}
-            <li class="{% active request "^/offers/" %}">
-                <a class="{% active request "^/offers/" %}"
-                   href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
-            </li>
-            {% end_require %}
-
-            {% require_permission LIST orders.Order %}
-            <li class="{% active request "^/orders/" %}">
-                <a class="{% active request "^/orders/" %}"
-                   href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission LIST orders.Invoice %}
-            <li class="{% active request "^/invoices/" %}">
-                <a class="{% active request "^/invoices/" %}"
-                   href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission LIST hourregistrations.HourRegistration %}
-            <li class="{% active request "^/hourregistrations/" %}">
-                <a class="{% active request "^/hourregistrations/" %}"
-                   href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Hour registration" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission LIST tickets.Ticket %}
-            <li class="{% active request "^/tickets/" %}">
-                <a class="{% active request "^/tickets/" %}"
-                   href="{% url app.tickets.views.assigned_to_user %}">{% trans "Tickets" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission LIST suppliers.Supplier %}
-            <li class="{% active request "^/suppliers/" %}">
-                <a class="{% active request "^/suppliers/" %}"
-                   href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission LIST stock.Product %}
-            <li class="{% active request "^/stock/" %}">
-                <a class="{% active request "^/stock/" %}"
-                   href="{% url app.stock.views.product.overview %}">{% trans "Products" %}</a>
-            </li>
-            {% end_require %}
-
-
-            {% require_permission MANAGE user.User %}
-            <li class="{% active request "^/admin/" %}">
-                <a class="{% active request "^/admin/" %}"
-                   href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
-            </li>
-            {% end_require %}
-        </ul>
-    </div>
-
-    <div id="subnav">
-        <div style="padding-top:5px; margin-left:50%; float:left;">
-            <form action="{% url app.search.views.search %}">
-                <input type="text" placeholder="search" name="s"/>
-                <input type="submit" value="Søk"/>
-            </form>
-        </div>
-    </div>
-
-    <div id="content_wrapper">
-
-        <div id="primary_content">
-            {% include "messages.html" %}
-            {% block maincontent %}
-            {% endblock %}
-        </div>
-
-        <div id="sidebar">
-            {% block sidebar %}{% endblock %}
-        </div>
-
-        <div id="footer">FocusTime
-            {% if debug and sql_queries %}
-                {{ sql_queries|length }}
-            {% endif %}
-        </div>
-    </div>
 </div>
+
+
 
 </body>
 </html>
-
-

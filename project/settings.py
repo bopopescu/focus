@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
-
 import os.path
 
 BASE_PATH = os.path.dirname(__file__)

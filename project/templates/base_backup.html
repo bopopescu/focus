@@ -1,0 +1,170 @@
+{% load i18n %}
+{% load auth %}
+{% load menu_tags %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>FocusTime</title>
+    <!--  REQUIRED FOR IE6 SUPPORT -->
+
+    <style type="text/css">
+        img, div {
+            behavior: url({{ STATIC_URL }}iepngfix.htc)
+        }</style>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-min.js"></script>
+
+    <link href="{{ STATIC_URL }}css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ STATIC_URL }}css/navigation.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ STATIC_URL }}css/jqueryui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/masked.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <div id="header">
+        <div style="float:left"><h1>{{ user.get_company }}</h1></div>
+        <div class="profile">
+            Logget inn som
+            <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a> | <a
+                href="{% url app.accounts.views.logout_view %}">Logg ut</a>
+            {% if request.user.get_new_notifications %}
+                <br/><br/>
+                <b><a href="{% url app.dashboard.views.notifications %}">{{ request.user.get_new_notifications.count }}
+                {% trans "notifications" %}</a> </b>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="nav">
+        <ul>
+            <li class="{% active request "^/dashboard/" %}">
+                <a class="{% active request "^/dashboard/" %}"
+                   href="{% url app.dashboard.views.overview %}">Dashboard</a>
+            </li>
+
+            {% require_permission LIST customers.Customer %}
+            <li class="{% active request "^/customers/" %}">
+                <a class="{% active request "^/customers/" %}"
+                   href="{% url app.customers.views.overview %}">{% trans "Customers" %}</a>
+            </li>
+            {% end_require %}
+
+            {% require_permission LIST contacts.Contact %}
+            <li class="{% active request "^/contacts/" %}">
+                <a class="{% active request "^/contacts/" %}"
+                   href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission LIST projects.Project %}
+            <li class="{% active request "^/projects/" %}">
+                <a class="{% active request "^/projects/" %}"
+                   href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
+            </li>
+            {% end_require %}
+
+            {% require_permission LIST orders.Offer %}
+            <li class="{% active request "^/offers/" %}">
+                <a class="{% active request "^/offers/" %}"
+                   href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
+            </li>
+            {% end_require %}
+
+            {% require_permission LIST orders.Order %}
+            <li class="{% active request "^/orders/" %}">
+                <a class="{% active request "^/orders/" %}"
+                   href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission LIST orders.Invoice %}
+            <li class="{% active request "^/invoices/" %}">
+                <a class="{% active request "^/invoices/" %}"
+                   href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission LIST hourregistrations.HourRegistration %}
+            <li class="{% active request "^/hourregistrations/" %}">
+                <a class="{% active request "^/hourregistrations/" %}"
+                   href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Hour registration" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission LIST tickets.Ticket %}
+            <li class="{% active request "^/tickets/" %}">
+                <a class="{% active request "^/tickets/" %}"
+                   href="{% url app.tickets.views.assigned_to_user %}">{% trans "Tickets" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission LIST suppliers.Supplier %}
+            <li class="{% active request "^/suppliers/" %}">
+                <a class="{% active request "^/suppliers/" %}"
+                   href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission LIST stock.Product %}
+            <li class="{% active request "^/stock/" %}">
+                <a class="{% active request "^/stock/" %}"
+                   href="{% url app.stock.views.product.overview %}">{% trans "Products" %}</a>
+            </li>
+            {% end_require %}
+
+
+            {% require_permission MANAGE user.User %}
+            <li class="{% active request "^/admin/" %}">
+                <a class="{% active request "^/admin/" %}"
+                   href="{% url app.admin.views.user.overview %}">{% trans "Admin" %}</a>
+            </li>
+            {% end_require %}
+        </ul>
+    </div>
+
+    <div id="subnav">
+        <div style="padding-top:5px; margin-left:50%; float:left;">
+            <form action="{% url app.search.views.search %}">
+                <input type="text" placeholder="search" name="s"/>
+                <input type="submit" value="Søk"/>
+            </form>
+        </div>
+    </div>
+
+    <div id="content_wrapper">
+
+        <div id="primary_content">
+            {% include "messages.html" %}
+            {% block maincontent %}
+            {% endblock %}
+        </div>
+
+        <div id="sidebar">
+            {% block sidebar %}{% endblock %}
+        </div>
+
+        <div id="footer">FocusTime
+            {% if debug and sql_queries %}
+                {{ sql_queries|length }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
