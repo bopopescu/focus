@@ -1,54 +1,33 @@
-{% extends "base.html" %}
+
+{% extends "customers/base.html" %}
 {% load i18n %}
 
-{% block sidebar %}
-    {% include "customers/sidebar.html" %}
-{% endblock %}
 
-{% block maincontent %}
+{% block content %}
+<table class="datatable">
 
+    <thead>
+    <tr>
+        <th></th>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Address" %}</th>
+        <th>{% trans "Phone" %}</th>
+        <th>{% trans "E-mail" %}</th>
+    </tr>
+    </thead>
 
-    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tbody tr");
-        });
-
-    </script>
-
-    <h1>{{ title }}</h1>
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
-
-        <thead>
+    <tbody>
+    {% for customer in customers %}
         <tr>
-            <th></th>
-            <th>{% trans "Name" %}</th>
-            <th>{% trans "Address" %}</th>
-            <th>{% trans "Phone" %}</th>
-            <th>{% trans "E-mail" %}</th>
+            <td>{{ customer.cid }}</td>
+            <td><a href="{% url app.customers.views.view customer.id %}">{{ customer.name }}</a></td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.email }}</td>
         </tr>
-        </thead>
+    {% endfor %}
+    </tbody>
 
-        <tbody>
-        {% for customer in customers %}
-            <tr>
-                <td>{{ customer.cid }}</td>
-                <td><a href="{% url app.customers.views.view customer.id %}">{{ customer.name }}</a></td>
-                <td>{{ customer.address }}</td>
-                <td>{{ customer.phone }}</td>
-                <td>{{ customer.email }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-
-
-    </table>
-
-
-
-
-
+</table>
+    
 {% endblock %}

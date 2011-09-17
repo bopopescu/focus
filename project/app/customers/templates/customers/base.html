@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "customers/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <article class="full-block clearfix">
+
+        <div class="article-container">
+
+            <header>
+                <h2>{% trans "Customers" %}</h2>
+            </header>
+
+            <section>
+                {% block content %}{% endblock %}
+            </section>
+
+        </div>
+    </article>
+
+{% endblock %}

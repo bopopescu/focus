@@ -38,10 +38,12 @@ def overview_all(request):
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
     comments = comment_block(request, customer)
+    form = CustomerForm(instance=customer, initial={'cid': customer.cid})
 
     return render(request, 'customers/view.html', {'title': _('Customer: ') + customer.name,
                                                    'comments': comments,
-                                                   'customer': customer})
+                                                   'customer': customer,
+                                                   'form':form})
 
 @require_permission("CREATE", Customer)
 def add_ajax(request, id=None):

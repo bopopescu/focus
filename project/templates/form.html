@@ -1,31 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block extraHead %}
     {{ form.media }}
 {% endblock %}
 
 {% block maincontent %}
-
-    <h1>{{ title }}</h1>
-    <br>
-    <br>
-
-    {% if form.errors %}
-
-        <div class="information" id="message">
-
-            <p>Fix before submit again</p>
-
-        </div>
-
-        {% for i in form %}
-            {% if i.errors %}
-                {{ i.label }}{{ i.errors }}
-            {% endif %}
-        {% endfor %}
-
-        <br><br>
-    {% endif %}
 
     <script>
         $(function() {
@@ -37,30 +17,31 @@
         })
     </script>
 
-
     <form enctype="multipart/form-data" method="post">
-        <!-- Inputs -->
-        <!-- Use class .small, .medium or .large for predefined size -->
+
         <fieldset>
-            <legend>Legend</legend>
+            <legend>{{ title }}</legend>
             <dl>
                 {% for field in form %}
                     <dt>
                         <label>{{ field.label }}</label>
                     </dt>
                     <dd>
-                        <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
                         {{ field }}
-                        <p>Short description of event</p>
+                        <p><span
+                                {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                        </p>
                     </dd>
                 {% endfor %}
             </dl>
         </fieldset>
 
-        <button type="submit">Submit</button>
-        or <a href="#">Cancel</a>
+        <div id="loading">
+            <span class="loader red" title="Loading, please wait…"></span>
+        </div>
+
+        <button id="form_button" type="submit">{% trans "Save" %}</button>
+
     </form>
 
-
 {% endblock %}
-

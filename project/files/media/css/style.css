@@ -220,6 +220,8 @@ section[role=navigation] header h1 {
 /*  Sample Icons  */
 #main-nav ul li a.dashboard { background-image:url('../img/icons/icon_nav_dashboard.png'); }
 #main-nav ul li a.projects { background-image:url('../img/icons/icon_nav_projects.png'); }
+#main-nav ul li a.customers { background-image:url('../img/icons/icon_nav_customers.png'); }
+#main-nav ul li a.contactsnav { background-image:url('../img/icons/icon_nav_contacts.png'); }
 #main-nav ul li a.products { background-image:url('../img/icons/icon_nav_products.png'); }
 #main-nav ul li a.events { background-image:url('../img/icons/icon_nav_events.png'); }
 #main-nav ul li a.articles { background-image:url('../img/icons/icon_nav_articles.png'); }

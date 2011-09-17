@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "customers/base.html" %}
 {% load auth %}
 {% load i18n %}
 {% block sidebar %}
@@ -6,7 +6,7 @@
 {% endblock %}
 
 
-{% block maincontent %}
+{% block content %}
     <script type="text/javascript" src="{{ STATIC_URL }}/js/utils.js"></script>
     <script>
         $(function() {
@@ -53,7 +53,7 @@
     {% endif %}
     <br><br>
 
-   
+
 
     <div style="width:905px;">
         <form enctype="multipart/form-data" class="table-form" method="post">

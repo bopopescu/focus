@@ -1,35 +1,35 @@
 <script type="text/javascript">
     $(function() {
 
-        {% for field in form %}
-            var {{ field_id }}_{{ field.name }} = $("#id_{{ field.html_name }}");
-        {% endfor %}
+                {% for field in form %}
+                    var {{ field_id }}_{{ field.name }} = $("#id_{{ field.html_name }}");
+                {% endfor %}
 
 
-        function validateForm(data) {
+                function validateForm(data) {
 
-            if (data['valid'] == true) {
-                $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
-                $('#id_{{ field_id }} option[value=' + data['id'] + ']').attr('selected', 'selected');
-                $("#id_{{ field_id }}").change();
+                    if (data['valid'] == true) {
+                        $("#id_{{ field_id }}").append("<option value='" + data["id"] + "'>" + data["name"] + "</option>");
+                        $('#id_{{ field_id }} option[value=' + data['id'] + ']').attr('selected', 'selected');
+                        $("#id_{{ field_id }}").change();
 
-                $("#dialog-form{{ field_id }}").dialog("close");
+                        $("#dialog-form{{ field_id }}").dialog("close");
 
-            }
-            else {
-                var K = data['errors']
-                obj = eval(K);
+                    }
+                    else {
+                        var K = data['errors']
+                        obj = eval(K);
 
-                //Clean all error-fiels
-                $(".errormessage").text("")
+                        //Clean all error-fiels
+                        $(".errormessage").text("")
 
-                $.each(obj, function(i, error) {
-                    $("#error_{{ field_id }}_for_" + i).text(error);
-                });
-            }
-        }
+                        $.each(obj, function(i, error) {
+                            $("#error_{{ field_id }}_for_" + i).text(error);
+                        });
+                    }
+                }
 
-        $("#dialog-form{{ field_id }}").dialog({
+                $("#dialog-form{{ field_id }}").dialog({
                     autoOpen: false,
                     width: 550,
                     modal: true,
@@ -39,35 +39,40 @@
                             $.post("{{ add_ajax_url }}",
                                     {
 
-                                        {% for field in form %}
-                                            {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
-                                        {% endfor %}
+                            {% for field in form %}
+                                {{ field.name }}: {{ field_id }}_{{ field.name }}.val(),
+                            {% endfor %}
 
-                                    },
-                                    function(data) {
-                                        validateForm(data);
-                                    }
-                            );
                         },
-                        Cancel: function() {
-                            $(this).dialog("close");
-                        }
-                    },
+                function(data) {
+                    validateForm(data);
+                }
 
-                    close:
-                            function() {
-                            }
+                )
+                ;
+            },
+            Cancel:
+    function() {
+        $(this).dialog("close");
+    }
+    },
 
-                });
+    close:
+            function() {
+            }
 
-        $("#create_{{ field_id }}")
-                .click(function() {
-            $("#dialog-form{{ field_id }}").dialog("open");
-        });
+    })
+    ;
 
-        $("#dialog-form{{ field_id }}").hide();
+    $("#create_{{ field_id }}")
+            .click(function() {
+                $("#dialog-form{{ field_id }}").dialog("open");
+            });
 
-    });
+    $("#dialog-form{{ field_id }}").hide();
+
+    })
+    ;
 </script>
 
 <div id="dialog-form{{ field_id }}">
