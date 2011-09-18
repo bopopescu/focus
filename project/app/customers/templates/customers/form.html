@@ -7,11 +7,11 @@
 
 
 {% block content %}
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/utils.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
     <script>
         $(function() {
             input_field = $('#' + "id_zip");
-            output_field = $("#" + "postal");
+            output_field = input_field.parent().find("p");
 
             get_postal_from_zip(input_field, output_field);
             input_field.keyup(function() {
@@ -19,7 +19,7 @@
             });
 
             input_field_invoice = $('#' + "id_invoice_zip");
-            output_field_invoice = $("#" + "postal_invoice");
+            output_field_invoice = input_field_invoice.parent().find("p");
 
             get_postal_from_zip(input_field_invoice, output_field_invoice);
             input_field_invoice.keyup(function() {
@@ -29,92 +29,6 @@
         });
     </script>
 
-    {% if form.errors %}
-
-        <div class="information" id="message">
-
-            <p>Fix before submit again</p>
-
-        </div>
-
-        <div class="information" id="message">
-
-            <p>Fix before submit again</p>
-
-        </div>
-
-        {% for i in form %}
-            {% if i.errors %}
-                {{ i.label }}{{ i.errors }}
-            {% endif %}
-        {% endfor %}
-
-        <br><br>
-    {% endif %}
-    <br><br>
-
-
-
-    <div style="width:905px;">
-        <form enctype="multipart/form-data" class="table-form" method="post">
-
-            <h1>{% trans "Customer" %}</h1>
-
-            <div class="fieldWrapper">
-                <span {% if form.cid.errors %}style="color:red;" {% endif %}>{{ form.cid.label }} </span>
-                <br>{{ form.cid }}
-            </div>
-
-            <div class="fieldWrapper">
-                <span {% if form.name.errors %}style="color:red;" {% endif %}>{{ form.name.label }} </span>
-                <br>{{ form.name }}
-            </div>
-            <div class="fieldWrapper">
-                <span {% if form.email.errors %}style="color:red;" {% endif %}>{{ form.email.label }} </span>
-                <br>{{ form.email }}
-            </div>
-            <div class="fieldWrapper">
-                <span {% if form.phone.errors %}style="color:red;" {% endif %}>{{ form.phone.label }} </span>
-                <br>{{ form.phone }}
-            </div>
-            <div class="fieldWrapper">
-                <span {% if form.website.errors %}style="color:red;" {% endif %}>{{ form.website.label }} </span>
-                <br>{{ form.website }}
-            </div>
-
-
-            <h3>{% trans "Contact" %}</h3>
-
-            <div class="fieldWrapper">
-                <span {% if form.address.errors %}style="color:red;" {% endif %}>{{ form.address.label }} </span>
-                <br>{{ form.address }}
-            </div>
-
-            <div class="fieldWrapper">
-                <span {% if form.zip.errors %}style="color:red;" {% endif %}>{{ form.zip.label }} </span>
-                <br><input id="id_zip" type="text" name="zip" style="width:35px;" value="{{ form.zip.value }} "
-                           maxlength="4"/> <span
-                    id='postal'></span>
-            </div>
-
-            <h3>{% trans "Invoice" %}</h3>
-
-            <div class="fieldWrapper">
-                <span {% if form.invoice_address.errors %}style="color:red;" {% endif %}>{{ form.invoice_address.label }} </span>
-                <br>{{ form.invoice_address }}
-            </div>
-
-            <div class="fieldWrapper">
-                <span {% if form.invoice_zip.errors %}style="color:red;" {% endif %}>{{ form.invoice_zip.label }} </span>
-                <br><input id="id_invoice_zip" type="text" name="invoice_zip"
-                           value="{{ form.invoice_zip.value }}" style="width:35px;" maxlength="4"/> <span
-                    id='postal_invoice'></span>
-            </div>
-
-            <div>
-                <input type="submit" value="Lagre" class="btn" name="save"/>
-            </div>
-        </form>
-    </div>
+    {% include "form_fields.html" %}
 
 {% endblock %}

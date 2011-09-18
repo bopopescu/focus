@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load menu_tags %}
 
 {% block sidebar %}
     {% include "customers/sidebar.html" %}
@@ -16,7 +17,51 @@
             </header>
 
             <section>
+                {% if customer.id %}
+
+                    <div class="sidetabs">
+                    <nav class="sidetab-switch">
+                        <ul>
+                            <li>
+                                <a class="{% active request "view" %}"
+                                   href="{% url app.customers.views.view customer.id %}">Vis kunde</a>
+                            </li>
+                            <li>
+                                <a class="{% active request "contacts" %}"
+                                   href="{% url app.customers.views.list_contacts customer.id %}">Kontakter</a>
+                            </li>
+                            <li>
+                                <a class="{% active request "edit" %}"
+                                   href="{% url app.customers.views.edit customer.id %}">{% trans "Edit customer" %}</a>
+                            </li>
+                            {% if customer.trashed %}
+                                <li>
+                                    <a class="{% active request "restore" %}"
+                                       href="{% url app.customers.views.restore customer.id %}">{% trans "Restore customer" %}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a class="{% active request "trash" %}"
+                                       href="{% url app.customers.views.trash customer.id %}">{% trans "Delete customer" %}</a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a class="{% active request "history" %}"
+                                   href="{% url app.customers.views.history customer.id %}">{% trans "History" %}</a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                    <div class="sidetab default-sidetab" id="sidetab1">
+                {% endif %}
+
+
                 {% block content %}{% endblock %}
+
+                {% if customer.id %}
+                    </div> </div>
+                {% endif %}
+
             </section>
 
         </div>

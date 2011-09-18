@@ -1,14 +1,10 @@
-{% extends "base.html" %}
+{% extends "customers/base.html" %}
 {% load auth %}
 {% load util %}
 {% load i18n %}
 
 
-{% block sidebar %}
-    {% include "customers/sidebar.html" %}
-{% endblock %}
-
-{% block maincontent %}
+{% block content %}
     <h1>{{ title }}</h1>
     <form action="" method="POST">
         <input type="submit" value="{% trans "Restore customer" %}">

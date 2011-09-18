@@ -1,7 +1,10 @@
-{% extends "log.html" %}
+{% extends "customers/base.html" %}
 {% load auth %}
 {% load i18n %}
 
-{% block sidebar %}
-    {% include "customers/sidebar.html" %}
+
+{% block content %}
+
+    {% include "log.html" %}
+
 {% endblock %}

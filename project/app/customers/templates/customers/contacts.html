@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "customers/base.html" %}
 {% load auth %}
 {% load i18n %}
 {% load thumbnail %}
@@ -7,16 +7,7 @@
     {% include "customers/sidebar.html" %}
 {% endblock %}
 
-{% block maincontent %}
-
-    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tbody tr");
-        });
-    </script>
-
-    <h1>{{ title }} </h1>
+{% block content %}
 
     <form action="" method="POST">
         {{ form }}
@@ -26,10 +17,7 @@
     <br><br><br>
     <h1>{% trans "Participants" %}</h1>
 
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
+    <table class="datatable">
         <thead>
         <tr>
             <th></th>

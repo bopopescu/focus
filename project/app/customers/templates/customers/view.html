@@ -11,92 +11,46 @@
 {% block content %}
 
 
-    <div class="sidetabs">
-        <nav class="sidetab-switch">
-            <ul>
-                <li><a class="default-sidetab" href="#sidetab1">Vis kunde</a></li>
-                <li><a href="#sidetab2">Prosjekter</a></li>
-            </ul>
-            <ul>
-                <li><a href="{% url app.customers.views.edit customer.id %}">{% trans "Edit customer" %}</a></li>
-                <li><a href="{% url app.customers.views.trash customer.id %}">{% trans "Delete customer" %}</a></li>
-            </ul>
-        </nav>
 
-        <div class="sidetab default-sidetab" id="sidetab1">
+    <table>
+        <tr>
+            <td width="100px">{% trans "Name" %}</td>
+            <td>{{ customer.name }}</td>
+        </tr>
 
-            <table>
-                <tr>
-                    <td width="100px">{% trans "Name" %}</td>
-                    <td>{{ customer.name }}</td>
-                </tr>
+        <tr>
+            <td>{% trans "E-mail" %}</td>
+            <td>{{ customer.email }}</td>
+        </tr>
 
-                <tr>
-                    <td>{% trans "E-mail" %}</td>
-                    <td>{{ customer.email }}</td>
-                </tr>
-
-                <tr>
-                    <td>{% trans "Website" %}</td>
-                    <td>
-                        {{ customer.website|urlize|url_target_blank|safe }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{% trans "Address" %}</td>
-                    <td>
-                        {% if customer.address %}
-                            {{ customer.address|linebreaksbr }} {{ customer.zip }} {{ customer.zip|postal_by_zip }}
-                            <span id="postal"></span>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{% trans "Invoice address" %}</td>
-                    <td>
-                        {% if customer.invoice_address %}
-                            {{ customer.invoice_address|linebreaksbr }} {{ customer.invoice_zip }} {{ customer.invoice_zip|postal_by_zip }}
-                            <span id="postal_invoice"></span>
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="sidetab" id="sidetab2">
-            <table>
-                <tr>
-                    <th>Prosjekt</th>
-                    <th>Ordrer</th>
-                </tr>
-
-                {% for project in customer.projects.all %}
-                    <tr>
-                        <td>
-                            <a href="{% url app.projects.views.project.view project.id %}">{{ project.project_name }}</a>
-                        </td>
-                        <td></td>
-                    </tr>
-
-                    {% for order in project.orders.all %}
-                        <tr>
-                            <td></td>
-                            <td><a href="{% url app.orders.views.order.view order.id %}">{{ order.title }}</a></td>
-                        </tr>
-                    {% endfor %}
-                {% endfor %}
-            </table>
-        </div>
-
-        <div class="sidetab" id="sidetab3">
-            {% include "customers/form.html" %}
-        </div>
-    </div>
+        <tr>
+            <td>{% trans "Website" %}</td>
+            <td>
+                {{ customer.website|urlize|url_target_blank|safe }}
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans "Address" %}</td>
+            <td>
+                {% if customer.address %}
+                    {{ customer.address|linebreaksbr }} {{ customer.zip }} {{ customer.zip|postal_by_zip }}
+                    <span id="postal"></span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans "Invoice address" %}</td>
+            <td>
+                {% if customer.invoice_address %}
+                    {{ customer.invoice_address|linebreaksbr }} {{ customer.invoice_zip }} {{ customer.invoice_zip|postal_by_zip }}
+                    <span id="postal_invoice"></span>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
 
     <div id="comments" style="margin-top:100px;">
         {% include "comments.html" %}
     </div>
 
-
-
-{% endblock %}	
+{% endblock %}

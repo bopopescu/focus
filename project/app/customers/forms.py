@@ -10,7 +10,7 @@ class CustomerForm(ModelForm):
     class Meta:
         model = Customer
         #exclude = ('deleted', 'date_created', 'date_edited', 'owner', 'creator', 'editor', 'company')
-        fields = ("cid", "name", "email", "address", "phone", "zip", "website",'invoice_zip','invoice_address')
+        fields = ("cid", "name", "email", "phone", "website", "address", "zip", 'invoice_address', 'invoice_zip',)
 
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
@@ -30,10 +30,11 @@ class CustomerForm(ModelForm):
                 raise forms.ValidationError(_("You need to use a unique customer number"))
         return cid
 
+
 class CustomerFormSimple(ModelForm):
     class Meta:
         model = Customer
-        fields = ("cid", "name", "email", "phone", "website","address", "zip", 'invoice_zip','invoice_address' )
+        fields = ("cid", "name", "email", "phone", "website", "address", "zip", 'invoice_address', 'invoice_zip', )
         #exclude = ('deleted', 'trashed','date_created', 'date_edited', 'owner', 'creator', 'editor', 'company', 'projects', )
 
     def __init__(self, *args, **kwrds):
