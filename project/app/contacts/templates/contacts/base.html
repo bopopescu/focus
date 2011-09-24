@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load menu_tags %}
+
+{% block maincontent %}
+
+    <article class="full-block clearfix">
+
+        <div class="article-container">
+
+            <header>
+                <h2>{% trans "Contacts" %}</h2>
+            </header>
+
+            <section>
+                {% if contact.id %}
+                    <div class="sidetabs">
+                    <nav class="sidetab-switch">
+                        <ul>
+                        {% include "contacts/submenu.html" %}
+                        </ul>
+                    </nav>
+                    
+                    <div class="sidetab default-sidetab">
+
+                {% endif %}
+                {% block content %}{% endblock %}
+
+                {% if contact.id %}
+                    </div> </div>
+                {% endif %}
+
+            </section>
+
+        </div>
+    </article>
+
+{% endblock %}
