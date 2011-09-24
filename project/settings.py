@@ -7,6 +7,7 @@ BASE_PATH = os.path.dirname(__file__)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
 SERVER_EMAIL = 'fredrik+django@fncit.no'
 NO_REPLY_EMAIL = 'no-reply@focustime.no'
 DEBUG_EMAIL = "fredrik+debug@fncit.no"
