@@ -1,4 +1,3 @@
-{% extends "form.html" %}
-{% block sidebar %}
-    {% include "stock/sidebar.html" %}
-{% endblock %}
+{% extends "stock/base.html" %}
+
+{% block content %}{% include "form_fields.html" %}{% endblock %}

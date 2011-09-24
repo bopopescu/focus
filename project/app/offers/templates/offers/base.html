@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load menu_tags %}
+
+
+{% block maincontent %}
+
+    <article class="full-block clearfix">
+
+        <div class="article-container">
+
+            <header>
+                <h2>{% trans "Offers" %}</h2>
+            </header>
+
+            <section>
+                {% if offer.id %}
+
+                    <div class="sidetabs">
+                    <nav class="sidetab-switch">
+                        <ul>
+                        {% include "offers/submenu.html" %}
+                        </ul>
+                    </nav>
+                    
+                    <div class="sidetab default-sidetab">
+                {% endif %}
+
+
+                {% block content %}{% endblock %}
+
+                {% if offer.id %}
+                    </div> </div>
+                {% endif %}
+
+            </section>
+
+        </div>
+    </article>
+
+{% endblock %}
