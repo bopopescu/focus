@@ -64,7 +64,7 @@
             <a class="{% active request "^/offers/" %}"
                href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
 
-            {% include "orders/sidebar.html" %}
+            {% include "offers/sidebar.html" %}
 
         </li>
         {% end_require %}
@@ -83,7 +83,7 @@
         <li class="{% active request "^/invoices/" %}">
             <a class="{% active request "^/invoices/" %}"
                href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
-            {% include "orders/sidebar.html" %}
+            {% include "invoices/sidebar.html" %}
         </li>
 
         {% end_require %}
