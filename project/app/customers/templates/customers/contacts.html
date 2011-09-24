@@ -10,13 +10,14 @@
 {% block content %}
 
     <form action="" method="POST">
-        {{ form }}
-        <input type="submit" value="{% trans "Save" %}">
+        {{ form.as_table }}
+        <button id="form_button" type="submit">{% trans "Save" %}</button>
     </form>
 
     <br><br><br>
     <h1>{% trans "Participants" %}</h1>
-
+    <br>
+    
     <table class="datatable">
         <thead>
         <tr>

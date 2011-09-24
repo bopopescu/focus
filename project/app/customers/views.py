@@ -85,7 +85,6 @@ def list_contacts(request, id):
 
     if request.method == "POST":
         form = ContactToCustomerForm(request.POST)
-
         customer.contacts.add(form.contact)
 
     else:
