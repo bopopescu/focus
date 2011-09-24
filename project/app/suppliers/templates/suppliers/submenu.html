@@ -1,0 +1,29 @@
+{% load menu_tags %}
+{% load i18n %}
+{% load auth %}
+
+<li><a class="{% active request "customers/$" %}" href="{% url app.suppliers.views.overview %}">
+            {% trans "OVERVIEW" %}</a></li>
+
+        <li><a class="{% active request "view" %}" href="{{ supplier.get_view_url }}">
+            {% trans "VIEW" %}</a></li>
+        <li><a class="{% active request "edit" %}" href="{{ supplier.get_edit_url }}">
+            {% trans "EDIT" %}</a></li>
+
+        <li><a class="{% active request "products" %}" href="{% url app.suppliers.views.products supplier.id %}">
+            {% trans "PRODUCTS" %}</a></li>
+
+
+        <li><a class="{% active request "history" %}" href="{{ supplier.get_history_url }}">
+            {% trans "HISTORY" %}</a></li>
+
+        {% if supplier.trashed %}
+            <li><a class="{% active request "trash" %}" href="{% url app.suppliers.views.restore supplier.id %}">
+                {% trans "RESTORE" %}</a>
+            </li>
+
+        {% else %}
+            <li><a class="{% active request "trash" %}" href="{% url app.suppliers.views.trash supplier.id %}">
+                {% trans "DELETE" %}</a>
+            </li>
+        {% endif %}
