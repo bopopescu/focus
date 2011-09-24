@@ -19,5 +19,3 @@ def tickets_type_filter(request):
         'types': TicketType.objects.filter(company=Core.current_user().get_company()),
         'request': request,
     }
-
-

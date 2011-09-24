@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load menu_tags %}
+
+{% block sidebar %}
+    {% include "customers/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    <article class="full-block clearfix">
+
+        <div class="article-container">
+
+            <header>
+                <h2>{% trans "Tickets" %}</h2>
+            </header>
+
+            <section>
+                {% if ticket.id %}
+
+                    <div class="sidetabs">
+                    <nav class="sidetab-switch">
+                        <ul>
+                            {% include "tickets/submenu.html" %}
+                        </ul>
+                    </nav>
+
+                    <div class="sidetab default-sidetab">
+                {% endif %}
+
+
+                {% block content %}{% endblock %}
+
+                {% if customer.id %}
+                    </div> </div>
+                {% endif %}
+
+            </section>
+
+        </div>
+    </article>
+
+{% endblock %}

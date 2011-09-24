@@ -1,14 +1,10 @@
-{% extends "base.html" %}
+{% extends "tickets/base.html" %}
 {% load auth %}
 {% load util %}
 {% load i18n %}
 
 
-{% block sidebar %}
-    {% include "tickets/sidebar.html" %}
-{% endblock %}
-
-{% block maincontent %}
+{% block content %}
     <h1>{{ title }}</h1>
     {% if can_be_deleted %}
         <form action="" method="POST">

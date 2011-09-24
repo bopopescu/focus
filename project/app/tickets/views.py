@@ -15,7 +15,8 @@ import copy
 
 @require_permission("LIST", Ticket)
 def overview(request):
-    return render(request, 'tickets/list.html', {"title": "Tickets"})
+    return render(request, 'tickets/list.html',
+            {"title": "Tickets", 'tickets': Core.current_user().get_permitted_objects("VIEW", Ticket)})
 
 
 @require_permission("LIST", Ticket)
@@ -56,6 +57,7 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'tickets/trash.html', {'title': _("Confirm delete"),
+                                                      'ticket': ticket,
                                                       'can_be_deleted': ticket.can_be_deleted()[0],
                                                       'reasons': ticket.can_be_deleted()[1],
                                                       })
@@ -81,7 +83,7 @@ def create_update_for_ticket(old_ticket, ticket_form):
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")[:3]
-    
+
     if request.method == "POST":
         old_ticket = copy.copy(ticket)
         ticket_form = EditTicketForm(request.POST, request.FILES, instance=ticket)
@@ -140,7 +142,7 @@ def add_ticket_type_ajax(request, id=None):
         ticket_type = form.save(commit=False)
         ticket_type.company = Core.current_user().get_company()
         ticket_type.save()
-        
+
         return HttpResponse(simplejson.dumps({'name': ticket_type.name,
                                               'id': ticket_type.id,
                                               'valid': True}), mimetype='application/json')
@@ -175,7 +177,7 @@ def client_management(request, id):
         if form.is_valid():
             email_address = request.POST['email']
             client, created = ClientUser.objects.get_or_create(email=email_address)
-    
+
             client.tickets.add(ticket)
             client.save() # not needed?
 
@@ -199,4 +201,4 @@ def client_management(request, id):
     else:
         form = AddClientForm()
 
-    return render(request, "tickets/client_management.html", {'ticket': ticket,'form':form})
+    return render(request, "tickets/client_management.html", {'ticket': ticket, 'form': form})
