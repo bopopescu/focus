@@ -1,5 +1,3 @@
-{% extends "offers/form.html" %}
+{% extends "invoices/base.html" %}
 
-{% block sidebar %}
-    {% include "invoices/sidebar.html" %}
-{% endblock %}
+{% block content %}{% include "form_fields.html" %}{% endblock %}

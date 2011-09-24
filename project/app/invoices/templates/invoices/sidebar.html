@@ -3,19 +3,11 @@
 
 <ul>
     <li><a class="{% active request "pending/$" %}" href="{% url app.invoices.views.overview %}">
-        {% trans "PENDING" %}</a></li>
+        {% trans "Pending" %}</a></li>
 
     <li><a class="{% active request "archive/$" %}" href="{% url app.invoices.views.overview %}">
-        {% trans "ARCHIVE" %}</a></li>
+        {% trans "Archive" %}</a></li>
 
-    {% if invoice.id %}
-        <li><a class="{% active request "view/$" %}" href="{% url app.invoices.views.view invoice.id %}">
-            {% trans "VIEW" %}</a></li>
-        <li><a class="{% active request "edit/$" %}" href="{% url app.invoices.views.edit invoice.id %}">
-            {% trans "EDIT" %}</a></li>
-
-    {% else %}
         <li><a class="{% active request "new/$" %}" href="{% url app.invoices.views.add %}">
-            {% trans "NEW INVOICE" %}</a></li>
-    {% endif %}
+            {% trans "New invoice" %}</a></li>
 </ul>
