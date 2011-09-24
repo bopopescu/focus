@@ -3,11 +3,12 @@
 {% load i18n %}
 {% load tickets_includetags %}
 
-{% block sidebar %}
-    {% tickets_sidebar request %}
-{% endblock %}
 
 {% block content %}
+
+
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+
 
     <h1>{{ title }}</h1>
     {% tickets_type_filter request %}
