@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "projects/base.html" %}
 {% load i18n %}
 
 
@@ -7,7 +7,7 @@
 {% endblock %}
 
 
-{% block maincontent %}
+{% block content %}
 
     <div style="float:right; margin-right: 200px;">
         <a href="{% url app.projects.views.milestone.add project.id %}"><img border="0px" style="vertical-align: middle"

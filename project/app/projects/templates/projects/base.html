@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load menu_tags %}
+
+{% block maincontent %}
+
+    <article class="full-block clearfix">
+
+        <div class="article-container">
+
+            <header>
+                <h2>{% trans "Projects" %}</h2>
+            </header>
+
+            <section>
+                {% if project.id %}
+
+                    <div class="sidetabs">
+                    <nav class="sidetab-switch">
+                        <ul>
+                        {% include "projects/submenu.html" %}
+                        </ul>
+                    </nav>
+                    
+                    <div class="sidetab default-sidetab">
+                {% endif %}
+
+
+                {% block content %}{% endblock %}
+
+                {% if project.id %}
+                    </div> </div>
+                {% endif %}
+
+            </section>
+
+        </div>
+    </article>
+
+{% endblock %}

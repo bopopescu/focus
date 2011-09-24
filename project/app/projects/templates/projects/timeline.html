@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "projects/base.html" %}
 {% load i18n %}
 
 {% block sidebar %}
     {% include "projects/sidebar.html" %}
 {% endblock %}
 
-{% block maincontent %}
+{% block content %}
     <link rel="stylesheet" href="{{ STATIC_URL }}ui-lightness/jquery-ui-1.8.6.custom.css">
 
     <h1>{{ title }}</h1>
