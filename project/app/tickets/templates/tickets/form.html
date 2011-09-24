@@ -1,7 +1,6 @@
-{% extends "form.html" %}
+{% extends "tickets/base.html" %}
 {% load auth %}
 {% load i18n %}
 
-{% block sidebar %}
-    {% include "tickets/sidebar.html" %}
-{% endblock %}
+
+{% block content %}{% include "form_fields.html" %}{% endblock %}

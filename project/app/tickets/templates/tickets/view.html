@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "tickets/base.html" %}
 {% load auth %}
 {% load i18n %}
 {% load thumbnail %}
@@ -14,7 +14,7 @@
     {% include "tickets/sidebar.html" %}
 {% endblock %}
 
-{% block maincontent %}
+{% block content %}
 
     <style type="text/css">
         .visibility_form {

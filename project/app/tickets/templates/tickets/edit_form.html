@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "tickets/base.html" %}
 {% load i18n %}
 
 {% block extraHead %}
     {{ form.media }}
 {% endblock %}
 
-{% block maincontent %}
+{% block content %}
 
     <h1>{% trans "Update Ticket" %}</h1>
     <br>
