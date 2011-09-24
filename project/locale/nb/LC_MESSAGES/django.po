@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-24 21:38+0200\n"
+"POT-Creation-Date: 2011-09-24 22:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,42 +61,82 @@ msgstr "Nye passord må avvike fra den gamle."
 msgid "New passord copy dont match new password. Try again."
 msgstr "Nytt passord kopi Dont matche nytt passord. Prøv igjen."
 
-#: app/admin/templates/admin/permissions.html:66
+#: app/admin/templates/admin/base.html:12 templates/base_backup.html:132
+#: templates/menu.html:123
+msgid "Admin"
+msgstr "Admin"
+
+#: app/admin/templates/admin/permissions.html:62
 msgid "Object"
 msgstr "Object"
 
-#: app/admin/templates/admin/permissions.html:67
+#: app/admin/templates/admin/permissions.html:63
 #: app/hourregistrations/models.py:39
 #: app/tickets/templates/tickets/list.html:27
 msgid "Type"
 msgstr "Type"
 
-#: app/admin/templates/admin/permissions.html:68
+#: app/admin/templates/admin/permissions.html:64
 #: app/orders/templates/orders/participants.html:21
 msgid "Role"
 msgstr "Rolle"
 
-#: app/admin/templates/admin/permissions.html:69
+#: app/admin/templates/admin/permissions.html:65
 msgid "Permissions"
 msgstr "Tillatelser"
 
-#: app/admin/templates/admin/permissions.html:93
+#: app/admin/templates/admin/permissions.html:89
 msgid "Through group"
 msgstr "Gjennom gruppe"
 
+#: app/admin/templates/admin/permissions.html:92
 #: app/admin/templates/admin/permissions.html:96
-#: app/admin/templates/admin/permissions.html:100
 #: app/orders/templates/orders/participants.html:53
 msgid "Delete"
 msgstr "Slett"
 
-#: app/admin/templates/admin/sidebar.html:8
-#: app/admin/templates/admin/sidebar.html:61
-msgid "USERS"
-msgstr "BRUKERE"
+#: app/admin/templates/admin/sidebar.html:8 app/admin/views/user.py:17
+msgid "Users"
+msgstr "Brukere"
 
 #: app/admin/templates/admin/sidebar.html:12
-#: app/admin/templates/admin/sidebar.html:44
+#, fuzzy
+msgid "New user"
+msgstr "Ny kunde"
+
+#: app/admin/templates/admin/sidebar.html:17
+#: app/admin/templates/admin/users/view.html:31 app/admin/views/group.py:17
+#: app/admin/views/group.py:60 app/admin/views/group.py:90
+msgid "Groups"
+msgstr "Grupper"
+
+#: app/admin/templates/admin/sidebar.html:21
+#, fuzzy
+msgid "New group"
+msgstr "Nytt prosjekt"
+
+#: app/admin/templates/admin/sidebar.html:25 app/admin/views/log.py:8
+#, fuzzy
+msgid "Log"
+msgstr "Lav"
+
+#: app/admin/templates/admin/sidebar.html:31
+#, fuzzy
+msgid "Companies"
+msgstr "Firma"
+
+#: app/admin/templates/admin/sidebar.html:36
+#, fuzzy
+msgid "New company"
+msgstr "Firma"
+
+#: app/admin/templates/admin/sidebar.html:43
+#, fuzzy
+msgid "Company settings"
+msgstr "Firma"
+
+#: app/admin/templates/admin/submenu.html:8
+#: app/admin/templates/admin/submenu.html:37
 #: app/contacts/templates/contacts/submenu.html:7
 #: app/customers/templates/customers/submenu.html:5
 #: app/dashboard/templates/dashboard/sidebar.html:10
@@ -110,8 +150,8 @@ msgstr "BRUKERE"
 msgid "VIEW"
 msgstr "VIS"
 
-#: app/admin/templates/admin/sidebar.html:15
-#: app/admin/templates/admin/sidebar.html:50
+#: app/admin/templates/admin/submenu.html:11
+#: app/admin/templates/admin/submenu.html:43
 #: app/contacts/templates/contacts/submenu.html:9
 #: app/customers/templates/customers/submenu.html:10
 #: app/dashboard/templates/dashboard/sidebar.html:12
@@ -124,15 +164,15 @@ msgstr "VIS"
 msgid "EDIT"
 msgstr "ENDRE"
 
-#: app/admin/templates/admin/sidebar.html:18
+#: app/admin/templates/admin/submenu.html:14
 msgid "SEND NEW PASSWORD"
 msgstr "Send nytt passord"
 
-#: app/admin/templates/admin/sidebar.html:22
+#: app/admin/templates/admin/submenu.html:18
 msgid "SET HOUR DAYS LIMITS"
 msgstr "SET TIME DAGER GRENSER"
 
-#: app/admin/templates/admin/sidebar.html:25
+#: app/admin/templates/admin/submenu.html:21
 #: app/contacts/templates/contacts/submenu.html:24
 #: app/customers/templates/customers/submenu.html:26
 #: app/offers/templates/offers/submenu.html:14
@@ -142,13 +182,13 @@ msgstr "SET TIME DAGER GRENSER"
 msgid "HISTORY"
 msgstr "HISTORIE"
 
-#: app/admin/templates/admin/sidebar.html:30
-#: app/admin/templates/admin/sidebar.html:53
+#: app/admin/templates/admin/submenu.html:26
+#: app/admin/templates/admin/submenu.html:46
 msgid "PERMISSIONS"
 msgstr "TILLATELSER"
 
-#: app/admin/templates/admin/sidebar.html:35
-#: app/admin/templates/admin/sidebar.html:56
+#: app/admin/templates/admin/submenu.html:31
+#: app/admin/templates/admin/submenu.html:49
 #: app/contacts/templates/contacts/submenu.html:19
 #: app/customers/templates/customers/submenu.html:39
 #: app/dashboard/templates/dashboard/sidebar.html:14
@@ -159,43 +199,14 @@ msgstr "TILLATELSER"
 msgid "DELETE"
 msgstr "SLETT"
 
-#: app/admin/templates/admin/sidebar.html:39
-#: app/admin/templates/admin/sidebar.html:70
-msgid "GROUPS"
-msgstr "GRUPPER"
-
-#: app/admin/templates/admin/sidebar.html:47
+#: app/admin/templates/admin/submenu.html:40
 msgid "MEMBERS"
 msgstr "MEDLEMMER"
 
-#: app/admin/templates/admin/sidebar.html:65
-msgid "NEW USER"
-msgstr "NY BRUKER"
-
-#: app/admin/templates/admin/sidebar.html:74
-msgid "NEW GROUP"
-msgstr "NY GRUPPE"
-
-#: app/admin/templates/admin/sidebar.html:78
-msgid "LOG"
-msgstr "LOGG"
-
-#: app/admin/templates/admin/sidebar.html:84
-msgid "COMPANIES"
-msgstr "SELSKAP"
-
-#: app/admin/templates/admin/sidebar.html:89
-msgid "NEW COMPANY"
-msgstr "NYTT FIRMA"
-
-#: app/admin/templates/admin/sidebar.html:96
-msgid "COMPANY SETTINGS"
-msgstr "FIRMAINSTLLINGER"
-
-#: app/admin/templates/admin/groups/list.html:17
-#: app/admin/templates/admin/groups/members.html:25
-#: app/admin/templates/admin/users/list.html:16
-#: app/admin/templates/admin/users/view.html:20
+#: app/admin/templates/admin/groups/list.html:13
+#: app/admin/templates/admin/groups/members.html:21
+#: app/admin/templates/admin/users/list.html:12
+#: app/admin/templates/admin/users/view.html:16
 #: app/contacts/templates/contacts/list.html:29
 #: app/contacts/templates/contacts/view.html:54 app/customers/models.py:14
 #: app/customers/templates/customers/contacts.html:25
@@ -217,23 +228,23 @@ msgstr "FIRMAINSTLLINGER"
 msgid "Name"
 msgstr "Navn"
 
-#: app/admin/templates/admin/groups/members.html:26
-#: app/admin/templates/admin/groups/members.html:35
-#: app/admin/templates/admin/groups/view.html:31
+#: app/admin/templates/admin/groups/members.html:22
+#: app/admin/templates/admin/groups/members.html:31
+#: app/admin/templates/admin/groups/view.html:27
 #: app/contacts/templates/contacts/view.html:49
 msgid "Details"
 msgstr "Detaljer"
 
-#: app/admin/templates/admin/groups/trash.html:15
-#: app/admin/templates/admin/users/trash.html:15
+#: app/admin/templates/admin/groups/trash.html:11
+#: app/admin/templates/admin/users/trash.html:11
 msgid "Delete user"
 msgstr "Slett bruker"
 
-#: app/admin/templates/admin/groups/trash.html:18
+#: app/admin/templates/admin/groups/trash.html:14
 msgid "You can't delete this group because: "
 msgstr "Du kan ikke slette denne gruppen fordi:"
 
-#: app/admin/templates/admin/groups/view.html:20
+#: app/admin/templates/admin/groups/view.html:16
 #: app/customers/templates/customers/contacts.html:18
 #: app/orders/templates/orders/participants.html:31
 #: app/orders/templates/orders/view.html:15
@@ -271,8 +282,8 @@ msgstr "ENDRE PASSORD"
 msgid "CHANGE PROFILE IMAGE"
 msgstr "ENDRE PROFILBILDE"
 
-#: app/admin/templates/admin/users/list.html:17
-#: app/admin/templates/admin/users/view.html:22
+#: app/admin/templates/admin/users/list.html:13
+#: app/admin/templates/admin/users/view.html:18
 #: app/contacts/templates/contacts/list.html:32
 #: app/contacts/templates/contacts/view.html:59 app/customers/models.py:15
 #: app/customers/templates/customers/contacts.html:28
@@ -284,7 +295,7 @@ msgstr "ENDRE PROFILBILDE"
 msgid "E-mail"
 msgstr "E-post"
 
-#: app/admin/templates/admin/users/list.html:18 app/contacts/models.py:19
+#: app/admin/templates/admin/users/list.html:14 app/contacts/models.py:19
 #: app/contacts/templates/contacts/list.html:31 app/customers/models.py:16
 #: app/customers/templates/customers/contacts.html:27
 #: app/customers/templates/customers/list.html:14
@@ -294,22 +305,17 @@ msgstr "E-post"
 msgid "Phone"
 msgstr "Telefon"
 
-#: app/admin/templates/admin/users/trash.html:18
+#: app/admin/templates/admin/users/trash.html:14
 msgid "You can't delete this user because: "
 msgstr "Du kan ikke slette denne brukeren fordi:"
 
-#: app/admin/templates/admin/users/view.html:25
+#: app/admin/templates/admin/users/view.html:21
 msgid "Company"
 msgstr "Firma"
 
-#: app/admin/templates/admin/users/view.html:28
+#: app/admin/templates/admin/users/view.html:24
 msgid "Permission to log in"
 msgstr "Tillatelse til å logge inn"
-
-#: app/admin/templates/admin/users/view.html:35 app/admin/views/group.py:17
-#: app/admin/views/group.py:60 app/admin/views/group.py:90
-msgid "Groups"
-msgstr "Grupper"
 
 #: app/admin/views/group.py:100
 msgid "Successfully deleted group"
@@ -326,11 +332,6 @@ msgstr "Lagt ny gruppe"
 #: app/admin/views/group.py:129
 msgid "Group"
 msgstr "Gruppe"
-
-#: app/admin/views/log.py:8
-#, fuzzy
-msgid "Log"
-msgstr "Lav"
 
 #: app/admin/views/profile.py:12
 msgid "Successfully changed your profile"
@@ -355,10 +356,6 @@ msgstr "Vellykket endret passord"
 #: app/admin/views/profile.py:70
 msgid "Change password"
 msgstr "Endre passord"
-
-#: app/admin/views/user.py:17
-msgid "Users"
-msgstr "Brukere"
 
 #: app/admin/views/user.py:40
 msgid "You can't change your own login status"
@@ -579,24 +576,31 @@ msgid "Restore contact"
 msgstr "Slett kontakt"
 
 #: app/contacts/templates/contacts/sidebar.html:6
-#: app/contacts/templates/contacts/submenu.html:5
 #: app/customers/templates/customers/sidebar.html:6
 #: app/projects/templates/projects/sidebar.html:7
-#: app/suppliers/templates/suppliers/submenu.html:6
+#: app/suppliers/templates/suppliers/sidebar.html:7
 #: app/tickets/templates/tickets/sidebar.html:23
-#: app/tickets/templates/tickets/submenu.html:7
-msgid "OVERVIEW"
-msgstr "OVERSIKT"
+msgid "Overview"
+msgstr "Oversikt"
 
 #: app/contacts/templates/contacts/sidebar.html:8
-msgid "NEW CONTACT"
-msgstr "Ny kontakt"
+#, fuzzy
+msgid "New contact"
+msgstr "kontakter"
 
 #: app/contacts/templates/contacts/sidebar.html:10
 #: app/projects/templates/projects/sidebar.html:16
+#: app/stock/templates/stock/sidebar.html:19
+#: app/suppliers/templates/suppliers/sidebar.html:13
 #: app/tickets/templates/tickets/sidebar.html:41
-msgid "TRASHED"
-msgstr "Kastet"
+msgid "Trashed"
+msgstr "Slettede"
+
+#: app/contacts/templates/contacts/submenu.html:5
+#: app/suppliers/templates/suppliers/submenu.html:6
+#: app/tickets/templates/tickets/submenu.html:7
+msgid "OVERVIEW"
+msgstr "OVERSIKT"
 
 #: app/contacts/templates/contacts/submenu.html:11
 msgid "CHANGE IMAGE"
@@ -648,7 +652,7 @@ msgstr "Kunden har aktive ordrer"
 msgid "Customer has active projects"
 msgstr "Kunden har aktive prosjekter"
 
-#: app/customers/views.py:19 app/customers/templates/customers/base.html:16
+#: app/customers/views.py:19 app/customers/templates/customers/base.html:13
 #: templates/base_backup.html:55 templates/menu.html:32
 msgid "Customers"
 msgstr "Kunder"
@@ -690,8 +694,9 @@ msgid "Restore customer"
 msgstr "Gjenopprett kunde"
 
 #: app/customers/templates/customers/sidebar.html:7
-msgid "NEW CUSTOMER"
-msgstr "NY KUNDE"
+#, fuzzy
+msgid "New customer"
+msgstr "Ny kunde"
 
 #: app/customers/templates/customers/submenu.html:16
 #, fuzzy
@@ -1221,16 +1226,19 @@ msgid "Actions"
 msgstr "handling"
 
 #: app/orders/templates/orders/sidebar.html:7
-msgid "MY ORDERS"
-msgstr "MINE ORDRER"
+#, fuzzy
+msgid "My orders"
+msgstr "Ordrer"
 
 #: app/orders/templates/orders/sidebar.html:9
-msgid "ALL ORDERS"
-msgstr "ALLE ORDRER"
+#, fuzzy
+msgid "All orders"
+msgstr "Ny kunde"
 
 #: app/orders/templates/orders/sidebar.html:11
-msgid "NEW ORDER"
-msgstr "NY ORDRE"
+#, fuzzy
+msgid "New order"
+msgstr "Ny kunde"
 
 #: app/orders/templates/orders/statistics.html:8
 msgid "Statistics"
@@ -1285,12 +1293,14 @@ msgid "Milestones"
 msgstr "Milepæler"
 
 #: app/projects/templates/projects/sidebar.html:10
-msgid "TIMELINE"
-msgstr "TIDSLINJE"
+#, fuzzy
+msgid "Timeline"
+msgstr "Tid"
 
 #: app/projects/templates/projects/sidebar.html:13
-msgid "NEW PROJECT"
-msgstr "NYTT PROSJEKT"
+#: app/projects/views/project.py:120
+msgid "New project"
+msgstr "Nytt prosjekt"
 
 #: app/projects/templates/projects/submenu.html:8
 msgid "MILESTONES"
@@ -1316,10 +1326,6 @@ msgstr "Ny milepæl"
 #: app/projects/views/project.py:114
 msgid "Edit project"
 msgstr "Endret prosjekt"
-
-#: app/projects/views/project.py:120
-msgid "New project"
-msgstr "Nytt prosjekt"
 
 #: app/stock/forms.py:66
 #, python-format
@@ -1380,11 +1386,6 @@ msgstr "Produktet brukes i ordre, se ordrer menyen i sidebar."
 #, fuzzy
 msgid "New product"
 msgstr "Nytt prosjekt"
-
-#: app/stock/templates/stock/sidebar.html:19
-#: app/suppliers/templates/suppliers/sidebar.html:13
-msgid "Trashed"
-msgstr "Slettede"
 
 #: app/stock/templates/stock/submenu.html:5
 #: app/suppliers/templates/suppliers/submenu.html:14
@@ -1461,10 +1462,6 @@ msgstr "Vellykket med viten og ny leverandør"
 #, fuzzy
 msgid "Restore supplier"
 msgstr "Slett leverandør"
-
-#: app/suppliers/templates/suppliers/sidebar.html:7
-msgid "Overview"
-msgstr "Oversikt"
 
 #: app/suppliers/templates/suppliers/sidebar.html:10
 #, fuzzy
@@ -1595,7 +1592,7 @@ msgstr "Ticket endret"
 msgid "Ticket added"
 msgstr "Ticket lagt"
 
-#: app/tickets/views.py:199
+#: app/tickets/views.py:199 app/tickets/templates/tickets/sidebar.html:36
 #, fuzzy
 msgid "New ticket"
 msgstr "Ticket"
@@ -1668,18 +1665,18 @@ msgid "Client"
 msgstr "Klientticket"
 
 #: app/tickets/templates/tickets/sidebar.html:9
-#: app/tickets/templates/tickets/submenu.html:5
-msgid "ASSIGNED TO YOU"
-msgstr "TILDELT DEG"
+#, fuzzy
+msgid "Assigned to you"
+msgstr "Tildelt til"
 
 #: app/tickets/templates/tickets/sidebar.html:12
 #: app/tickets/templates/tickets/sidebar.html:26
 msgid "Alle"
 msgstr "Alle"
 
-#: app/tickets/templates/tickets/sidebar.html:36
-msgid "NEW TICKET"
-msgstr "NY TICKET"
+#: app/tickets/templates/tickets/submenu.html:5
+msgid "ASSIGNED TO YOU"
+msgstr "TILDELT DEG"
 
 #: app/tickets/templates/tickets/submenu.html:11
 msgid "UPDATE"
@@ -1775,10 +1772,6 @@ msgstr "varslinger"
 msgid "Hour registration"
 msgstr "Timeregistrering"
 
-#: templates/base_backup.html:132 templates/menu.html:123
-msgid "Admin"
-msgstr "Admin"
-
 #: templates/comments.html:8
 msgid "comments"
 msgstr "kommentarer"
@@ -1831,6 +1824,57 @@ msgstr "noen"
 #: templates/permission_denied.html:34
 msgid "user"
 msgstr "bruker"
+
+#~ msgid "USERS"
+#~ msgstr "BRUKERE"
+
+#~ msgid "GROUPS"
+#~ msgstr "GRUPPER"
+
+#~ msgid "NEW USER"
+#~ msgstr "NY BRUKER"
+
+#~ msgid "NEW GROUP"
+#~ msgstr "NY GRUPPE"
+
+#~ msgid "LOG"
+#~ msgstr "LOGG"
+
+#~ msgid "COMPANIES"
+#~ msgstr "SELSKAP"
+
+#~ msgid "NEW COMPANY"
+#~ msgstr "NYTT FIRMA"
+
+#~ msgid "COMPANY SETTINGS"
+#~ msgstr "FIRMAINSTLLINGER"
+
+#~ msgid "NEW CONTACT"
+#~ msgstr "Ny kontakt"
+
+#~ msgid "TRASHED"
+#~ msgstr "Kastet"
+
+#~ msgid "NEW CUSTOMER"
+#~ msgstr "NY KUNDE"
+
+#~ msgid "MY ORDERS"
+#~ msgstr "MINE ORDRER"
+
+#~ msgid "ALL ORDERS"
+#~ msgstr "ALLE ORDRER"
+
+#~ msgid "NEW ORDER"
+#~ msgstr "NY ORDRE"
+
+#~ msgid "TIMELINE"
+#~ msgstr "TIDSLINJE"
+
+#~ msgid "NEW PROJECT"
+#~ msgstr "NYTT PROSJEKT"
+
+#~ msgid "NEW TICKET"
+#~ msgstr "NY TICKET"
 
 #, fuzzy
 #~ msgid "Add contact"
