@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load auth %}
 
-<li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.assigned_to_user %}">{% trans "ASSIGNED TO YOU" %}</a></li>
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.assigned_to_user %}">{% trans "ASSIGNED TO YOU" %}</a></li>
 
         <li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.overview %}">{% trans "OVERVIEW" %}</a></li>
 

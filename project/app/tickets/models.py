@@ -157,6 +157,9 @@ class Ticket(TicketBase):
     def get_view_url(self):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.id,))
 
+    def get_update_url(self):
+        return urlresolvers.reverse('app.tickets.views.edit', args=("%s" % self.id,))
+
     def save(self, **kwargs):
         if 'update' in kwargs:
             send_update_mails(self, kwargs['update'])

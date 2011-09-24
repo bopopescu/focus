@@ -9,7 +9,8 @@
         <div class="article-container">
 
             <header>
-                <h2>{% trans "Customers" %}</h2>
+
+                <h2>{% trans "Tickets" %}</h2>
             </header>
 
             <section>
@@ -18,10 +19,12 @@
                     <div class="sidetabs">
                     <nav class="sidetab-switch">
                         <ul>
-                        {% include "tickets/submenu.html" %}
+
+                            {% include "tickets/submenu.html" %}
                         </ul>
                     </nav>
-                    
+
+
                     <div class="sidetab default-sidetab">
                 {% endif %}
 
@@ -29,6 +32,7 @@
                 {% block content %}{% endblock %}
 
                 {% if ticket.id %}
+
                     </div> </div>
                 {% endif %}
 

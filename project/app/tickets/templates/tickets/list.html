@@ -3,37 +3,89 @@
 {% load i18n %}
 {% load tickets_includetags %}
 
+
 {% block content %}
 
 
     <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
 
+
     <h1>{{ title }}</h1>
     {% tickets_type_filter request %}
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
 
-        <thead>
-        <tr>
-            <th>{% trans "Tickets" %}</th>
-            <th>{% trans "Priority" %}</th>
-            <th>{% trans "Assigned" %}</th>
-            <th>{% trans "Created by" %}</th>
-            <th>{% trans "Updates" %}</th>
-            <th>{% trans "Status" %}</th>
-            <th>{% trans "Type" %}</th>
-            <th>{% trans "Last edited" %}</th>
-        </tr>
-        </thead>
-        <!-- ajax -->
-        <tbody>
+    <br><br>
 
-        </tbody>
+    <!-- Tickets -->
+    <ul class="tickets">
+
+    <!-- Ticket Headers -->
+    <li class="ticket-header">
+        <ul>
+            <li >{% trans "Priority" %}</li>
+            <li>{% trans "Assigned" %}</li>
+            <li>{% trans "Status" %}</li>
+            <li>{% trans "Type" %}</li>
+        </ul>
+    </li>
+    <!-- /Ticket Headers -->
+
+    <!-- Ticket Data -->
+
+    {% for ticket in tickets %}
+
+    <li class="ticket-data">
+        <div class="ticket-overview">
+            <ul>
+                <li class="ticket-data-ticket">
+                    #{{ ticket.id }}
+                </li>
+                <li class="ticket-data-activity">
+                    <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
+
+                    <p>{{ ticket.description }}</p>
+                </li>
+                <li class="ticket-data-user">
+                    <strong>{{ ticket.creator }}</strong>
+                    Best Deals Ltd.
+                </li>
+                <li class="ticket-data-priority">
+                    <span class="tag red">{{ ticket.priority }}</span>
+                </li>
+                <li class="ticket-data-age">
+                    {{ ticket.date_created }}
+                </li>
+            </ul>
+        </div>
+        <div class="ticket-details">
+            <h4>Donec porta interdum placerat</h4>
+            <dl>
+                <dt>Opened:</dt>
+                <dd><strong>16 hours ago</strong></dd>
+                <dt>Last updated:</dt>
+                <dd><strong>11 hours ago</strong></dd>
+                <dt>Milestone:</dt>
+                <dd><strong>N/A</strong></dd>
+                <dt class="clear">Reported by:</dt>
+                <dd><strong>Jamie</strong></dd>
+                <dt>Assigned to:</dt>
+                <dd><strong>Anybody</strong></dd>
+                <dt>Tags:</dt>
+                <dd><strong>N/A</strong></dd>
+            </dl>
+            <h5>Description</h5>
+
+            <p>{{ ticket.description }}</p>
+            <ul class="ticket-details-actions">
+                <li><a href="{{ ticket.get_update_url }}" class="button gray">Update ticket</a></li>
+                <li><a href="#" class="button red">Close ticket</a></li>
+            </ul>
+        </div>
+        <!-- /Ticket Details -->
+    </li>
+    {% endfor %}
+
+    </ul>
     
-    </table>
-
     <script type="text/javascript">
 
         function getTdCell(value) {
@@ -42,23 +94,22 @@
 
 
         function getRowFromTicket(ticket) {
-            if(ticket.mark_as_unread_for_current_user)
-            {
+            if (ticket.mark_as_unread_for_current_user) {
                 var row = "<tr class='ticket_marked_as_unread_for_current_user'>";
-            }else {
+            } else {
                 var row = "<tr>";
             }
 
-            row += getTdCell("<a href=\"" + ticket.ticket_url + "\">" + ticket.title +"</a>");
+            row += getTdCell("<a href=\"" + ticket.ticket_url + "\">" + ticket.title + "</a>");
             row += getTdCell(ticket.priority.name);
 
-            if(ticket.assigned_to) {
+            if (ticket.assigned_to) {
                 row += getTdCell(ticket.assigned_to.get_full_name);
             } else {
-                row += getTdCell("{% trans "None" %}");                
+                row += getTdCell("{% trans "None" %}");
             }
 
-            if(ticket.user) {
+            if (ticket.user) {
                 row += getTdCell(ticket.user.get_full_name);
             } else {
                 row += getTdCell("{% trans "Client" %}");
@@ -75,7 +126,7 @@
         function build_table(tickets, deleteExisting) {
             var start = new Date().getTime();
             var tbody = $("#dataTable tbody");
-            if(deleteExisting) {
+            if (deleteExisting) {
                 tbody.children("tr").remove();
             }
             $(tickets).each(function() {
@@ -89,7 +140,7 @@
         var assigned_to = {% if assigned_to %} current_user_id; {% else %} 0; {% endif %}
         var status = 0;
         function getTickets(type, trashed, range) {
-            if(range == undefined) {
+            if (range == undefined) {
                 range = 0;
             }
             var data = type ? { type_id: parseInt(type)} : {};
@@ -99,12 +150,12 @@
             data.range = range;
 
             $.get("/api/tickets/", data,
-            function(data) {
-                if(data.length > 0) {
-                    build_table(data, (range==0));
-                    getTickets(type, trashed, range + 12)
-                }
-            }, "json");
+                    function(data) {
+                        if (data.length > 0) {
+                            build_table(data, (range == 0));
+                            getTickets(type, trashed, range + 12)
+                        }
+                    }, "json");
         }
 
         $(function() {
@@ -115,7 +166,7 @@
                 var typeId = parseInt($("#type_selection option:selected").val());
                 getTickets(typeId, 0)
             });
-            
+
             $("#assigned_links a").click(function() {
                 assigned_to = current_user_id;
                 status = $(this).attr("class")

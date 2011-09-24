@@ -3,42 +3,43 @@
 
 <ul>
 
+
         <li>
             <a class="{% active request "assigned/$" %} menu_parent" href="{% url app.tickets.views.assigned_to_user %}"><img
                 src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ASSIGNED TO YOU" %}</a>
             <div class="sidebar_submenu">
                 <ul id="assigned_links">
                     <li><a class="0" href="#">{% trans "Alle" %}</a> </li>
+
                 {% for status in statuses %}
                     <li><a class="{{ status.id }}" href="#">{{ status.name }}</a></li>
                 {% endfor %}
-                </ul>
-            </div>
-        </li>
+            </ul>
+        </div>
+    </li>
 
-        <li>
-            <a class="{% active request "tickets/overview/$" %} menu_parent" href="{% url app.tickets.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a>
-            <div class="sidebar_submenu">
-                <ul id="overview_links">
-                    <li><a class="0" href="#">{% trans "Alle" %}</a> </li>
+    <li>
+        <a class="{% active request "tickets/overview/$" %} menu_parent"
+           href="{% url app.tickets.views.overview %}">{% trans "OVERVIEW" %}</a>
+        <div class="sidebar_submenu">
+            <ul id="overview_links">
+                <li><a class="0" href="#">{% trans "Alle" %}</a></li>
                 {% for status in statuses %}
                     <li>
                         <a class="{{ status.id }}" href="#">{{ status.name }}</a></li>
                 {% endfor %}
-                </ul>
-            </div>
-        </li>
+            </ul>
+        </div>
+    </li>
 
-        <li>
-            <a class="{% active request "new" %}" href="{% url app.tickets.views.add %}"><img
-                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW TICKET" %}</a>
-        </li>
+    <li>
+        <a class="{% active request "new" %}" href="{% url app.tickets.views.add %}">{% trans "NEW TICKET" %}</a>
+    </li>
 
-        <li>
-            <a id="trashed" class="{% active request "trashed" %}" href="{% url app.tickets.views.overview_trashed %}"><img
-                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a>
-        </li>
+    <li>
+        <a id="trashed" class="{% active request "trashed" %}"
+           href="{% url app.tickets.views.overview_trashed %}">{% trans "TRASHED" %}</a>
+    </li>
 
 </ul>
 
@@ -49,14 +50,14 @@
         $(".sidebar_submenu").hide();
 
         {% if statuses %}
-        $(".menu_parent").click(function() {
-            if (last_clicked != this && last_clicked != null) {
-                $(last_clicked).siblings(".sidebar_submenu").hide();
-            }
-            $(this).siblings(".sidebar_submenu").toggle('fast');
-            last_clicked = this;
-            return false;
-        });
+            $(".menu_parent").click(function() {
+                if (last_clicked != this && last_clicked != null) {
+                    $(last_clicked).siblings(".sidebar_submenu").hide();
+                }
+                $(this).siblings(".sidebar_submenu").toggle('fast');
+                last_clicked = this;
+                return false;
+            });
         {% endif %}
     })
 
