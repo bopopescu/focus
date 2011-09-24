@@ -2,29 +2,7 @@
 {% load menu_tags %}
 
 <ul>
-    <li><a class="{% active request "contacts/$" %}" href="{% url app.offers.views.overview %}"><img
-            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ALL OFFERS" %}</a></li>
+    <li><a class="{% active request "contacts/$" %}" href="{% url app.offers.views.overview %}">{% trans "All offers" %}</a></li>
 
-    {% if offer.id %}
-        <li><a class="{% active request "view" %}" href="{% url app.offers.views.view offer.id%}"><img
-                src="{{ STATIC_URL }}img/view.png" width="24" height="24" alt="Home"/>{% trans "VIEW" %}</a></li>
-        <li><a class="{% active request "edit" %}" href="{% url app.offers.views.edit offer.id%}"><img
-                src="{{ STATIC_URL }}img/edit.png" width="24" height="24" alt="Home"/>{% trans "EDIT" %}</a></li>
-        <li><a class="{% active request "client" %}"
-               href="{% url app.offers.views.client_management offer.id%}"><img
-                src="{{ STATIC_URL }}img/client.png" width="24" height="24" alt="Home"/>{% trans "CLIENTS" %}</a></li>
-        <li><a class="{% active request "order" %}"
-               href="{% url app.offers.views.create_order offer.id%}"><img
-                src="{{ STATIC_URL }}img/order.png" width="24" height="24" alt="Home"/>{% trans "CREATE ORDER" %}</a>
-        </li>
-
-
-        <li><a class="{% active request "history" %}" href="{% url app.offers.views.history offer.id %}"><img
-                src="{{ STATIC_URL }}img/history.png" width="24" height="24" alt="Mail"/>{% trans "HISTORY" %}</a></li>
-
-
-    {% else %}
-        <li><a class="{% active request "offer/new" %}" href="{% url app.offers.views.add %}"><img
-                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW OFFER" %}</a></li>
-    {% endif %}
+    <li><a class="{% active request "offer/new" %}" href="{% url app.offers.views.add %}">{% trans "New offer" %}</a></li>
 </ul>

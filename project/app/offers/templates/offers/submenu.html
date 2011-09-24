@@ -1,0 +1,14 @@
+{% load menu_tags %}
+{% load i18n %}
+{% load auth %}
+
+       <li><a class="{% active request "view" %}"
+              href="{% url app.offers.views.view offer.id%}">{% trans "VIEW" %}</a></li>
+       <li><a class="{% active request "edit" %}"
+              href="{% url app.offers.views.edit offer.id%}">{% trans "EDIT" %}</a></li>
+       <li><a class="{% active request "client" %}"
+              href="{% url app.offers.views.client_management offer.id%}">{% trans "CLIENTS" %}</a></li>
+       <li><a class="{% active request "order" %}"
+              href="{% url app.offers.views.create_order offer.id%}">{% trans "CREATE ORDER" %}</a></li>
+       <li><a class="{% active request "history" %}"
+              href="{% url app.offers.views.history offer.id %}">{% trans "HISTORY" %}</a></li>
