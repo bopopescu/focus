@@ -1,5 +1,4 @@
-{% extends "form.html" %}
+{% extends "admin/base.html" %}
 
-{% block sidebar %}
-    {% include "admin/sidebar.html" %}
-{% endblock %}
+
+{% block content %}{% include "form_fields.html" %}{% endblock %}

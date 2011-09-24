@@ -1,7 +1,9 @@
-{% extends "log.html" %}
+{% extends "admin/base.html" %}
 {% load auth %}
 {% load i18n %}
 
-{% block sidebar %}
-    {% include "admin/sidebar.html" %}
+{% block content %}
+
+    {% include "log.html" %}
+
 {% endblock %}
