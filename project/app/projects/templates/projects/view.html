@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "projects/base.html" %}
 {% load auth %}
 {% load i18n %}
 {% load thumbnail %}
@@ -10,7 +10,7 @@
     {% include "projects/sidebar.html" %}
 {% endblock %}
 
-{% block maincontent %}
+{% block content %}
 
     <h1>{{ project }}</h1>
 

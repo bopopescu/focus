@@ -1,6 +1,30 @@
-{% extends "files/list.html" %}
+{% extends "projects/base.html" %}
 {% load i18n %}
 
-{% block sidebar %}
-    {% include "projects/sidebar.html" %}
+{% block content %}
+    <div style="float:right; margin-right: 200px;">
+        <a href="add"><img border="0px" style="vertical-align: middle" src="{{ STATIC_URL }}/img/add.png">Ny fil</a>
+    </div>
+
+    <br><br>
+
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for file in file_manager.files.all %}
+            <tr>
+                <td><img class="icon_for_file" src="{{ file.get_file_icon}}"
+                         alt=""/> {{ file.name }}</td>
+                <td><a href="{{ file.get_file }}" target="_blank">Last ned</a></td>
+                <td><a href="{{ edit_file_url }}{{ file.id }}/edit/">Endre fil</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

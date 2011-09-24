@@ -1,0 +1,24 @@
+{% load menu_tags %}
+{% load i18n %}
+{% load auth %}
+
+
+    <li><a class="{% active request "view" %}" href="{% url app.projects.views.project.view project.id %}">{% trans "VIEW" %}</a></li>
+
+    <li><a class="{% active request "milestone" %}" href="{% url app.projects.views.project.milestones project.id %}">{% trans "MILESTONES" %}</a></li>
+
+    <li><a class="{% active request "files" %}" href="{% url app.projects.views.files.overview project.id %}">{% trans "FILES" %}</a></li>
+
+    <li><a class="{% active request "orders" %}" href="{% url app.projects.views.project.view_orders project.id %}">{% trans "ORDERS" %}</a></li>
+
+    {% require_permission EDIT project %}
+    <li><a class="{% active request "edit$" %}" href="{% url app.projects.views.project.edit project.id %}">{% trans "EDIT" %}</a></li>
+    {% end_require %}
+
+    {% require_permission DELETE project %}
+      <li><a class="{% active request "trash" %}" href="{% url app.projects.views.project.trash project.id %}">{% trans "DELETE" %}</a></li>
+      {% end_require %}
+
+
+    <li><a class="{% active request "history" %}"
+           href="{% url app.projects.views.project.history project.id %}">{% trans "HISTORY" %}</a></li>

@@ -1,13 +1,9 @@
-{% extends "base.html" %}
+{% extends "orders/base.html" %}
 {% load menu_tags %}
 {% load i18n %}
 
-{% block sidebar %}
-    {% include "orders/sidebar.html" %}
-{% endblock %}
 
-
-{% block maincontent %}
+{% block content %}
 
     <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
     <script>

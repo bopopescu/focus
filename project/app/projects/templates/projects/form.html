@@ -1,7 +1,5 @@
-{% extends "form.html" %}
+{% extends "projects/base.html" %}
 {% load auth %}
 {% load i18n %}
 
-{% block sidebar %}
-   {% include "projects/sidebar.html" %}
-{% endblock %}
+{% block content %} {% include "form_fields.html" %} {% endblock %}
