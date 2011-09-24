@@ -6,7 +6,7 @@
 
     <li>
         <a class="{% active request "assigned/$" %} menu_parent"
-           href="{% url app.tickets.views.assigned_to_user %}">{% trans "ASSIGNED TO YOU" %}</a>
+           href="{% url app.tickets.views.assigned_to_user %}">{% trans "Assigned to you" %}</a>
         <div class="sidebar_submenu">
             <ul id="assigned_links">
                 <li><a class="0" href="#">{% trans "Alle" %}</a></li>
@@ -20,7 +20,7 @@
 
     <li>
         <a class="{% active request "tickets/overview/$" %} menu_parent"
-           href="{% url app.tickets.views.overview %}">{% trans "OVERVIEW" %}</a>
+           href="{% url app.tickets.views.overview %}">{% trans "Overview" %}</a>
         <div class="sidebar_submenu">
             <ul id="overview_links">
                 <li><a class="0" href="#">{% trans "Alle" %}</a></li>
@@ -33,12 +33,12 @@
     </li>
 
     <li>
-        <a class="{% active request "new" %}" href="{% url app.tickets.views.add %}">{% trans "NEW TICKET" %}</a>
+        <a class="{% active request "new" %}" href="{% url app.tickets.views.add %}">{% trans "New ticket" %}</a>
     </li>
 
     <li>
         <a id="trashed" class="{% active request "trashed" %}"
-           href="{% url app.tickets.views.overview_trashed %}">{% trans "TRASHED" %}</a>
+           href="{% url app.tickets.views.overview_trashed %}">{% trans "Trashed" %}</a>
     </li>
 
 </ul>

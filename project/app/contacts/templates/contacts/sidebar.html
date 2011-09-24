@@ -3,10 +3,10 @@
 
 <ul>
     {% if not contact.id %}
-        <li><a class="{% active request "contacts/$" %}" href="{% url app.contacts.views.overview %}">{% trans "OVERVIEW" %}</a></li>
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.contacts.views.overview %}">{% trans "Overview" %}</a></li>
 
-        <li><a class="{% active request "new" %}" href="{% url app.contacts.views.add %}">{% trans "NEW CONTACT" %}</a></li>
+        <li><a class="{% active request "new" %}" href="{% url app.contacts.views.add %}">{% trans "New contact" %}</a></li>
 
-        <li><a class="{% active request "trashed" %}" href="{% url app.contacts.views.overview_trashed %}">{% trans "TRASHED" %}</a></li>
+        <li><a class="{% active request "trashed" %}" href="{% url app.contacts.views.overview_trashed %}">{% trans "Trashed" %}</a></li>
     {% endif %}
 </ul>

@@ -4,14 +4,14 @@
 
 <ul>
     <li><a class="{% active request "projects/$" %}" href="{% url app.projects.views.project.overview %}">
-        {% trans "OVERVIEW" %}</a></li>
+        {% trans "Overview" %}</a></li>
 
     <li><a class="{% active request "timeline" %}" href="{% url app.projects.views.project.timeline %}">
-        {% trans "TIMELINE" %}</a></li>
+        {% trans "Timeline" %}</a></li>
 
     <li><a class="{% active request "new" %}" href="{% url app.projects.views.project.add %}">
-        {% trans "NEW PROJECT" %}</a></li>
+        {% trans "New project" %}</a></li>
 
     <li><a class="{% active request "trashed" %}" href="{% url app.projects.views.project.overview_trashed %}">
-        {% trans "TRASHED" %}</a></li>
+        {% trans "Trashed" %}</a></li>
 </ul>
