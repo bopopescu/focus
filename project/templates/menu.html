@@ -50,7 +50,7 @@
 
         {% require_permission LIST projects.Project %}
         <li class="{% active request "^/projects/" %}">
-            <a class="{% active request "^/projects/" %}"
+            <a class="projects {% active request "^/projects/" %}"
                href="{% url app.projects.views.project.overview %}">{% trans "Projects" %}</a>
 
             {% include "projects/sidebar.html" %}
@@ -61,7 +61,7 @@
 
         {% require_permission LIST orders.Offer %}
         <li class="{% active request "^/offers/" %}">
-            <a class="{% active request "^/offers/" %}"
+            <a class="offer {% active request "^/offers/" %}"
                href="{% url app.offers.views.overview %}">{% trans "Offers" %}</a>
 
             {% include "offers/sidebar.html" %}
@@ -71,7 +71,7 @@
 
         {% require_permission LIST orders.Order %}
         <li class="{% active request "^/orders/" %}">
-            <a class="{% active request "^/orders/" %}"
+            <a class="order {% active request "^/orders/" %}"
                href="{% url app.orders.views.order.overview %}">{% trans "Orders" %}</a>
 
             {% include "orders/sidebar.html" %}
@@ -81,7 +81,7 @@
 
         {% require_permission LIST orders.Invoice %}
         <li class="{% active request "^/invoices/" %}">
-            <a class="{% active request "^/invoices/" %}"
+            <a class="invoice {% active request "^/invoices/" %}"
                href="{% url app.invoices.views.overview %}">{% trans "Invoices" %}</a>
             {% include "invoices/sidebar.html" %}
         </li>

@@ -402,6 +402,17 @@ section[role=navigation] header h1 {
     background-image: url('../img/icons/icon_nav_products.png');
 }
 
+#main-nav ul li a.offer {
+    background-image: url('../img/icons/icon_nav_offer.png');
+}
+
+#main-nav ul li a.order {
+    background-image: url('../img/icons/icon_nav_order.png');
+}
+#main-nav ul li a.invoice {
+    background-image: url('../img/icons/icon_nav_invoice.png');
+}
+
 #main-nav ul li a.events {
     background-image: url('../img/icons/icon_nav_events.png');
 }
