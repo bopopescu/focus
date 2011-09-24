@@ -1,7 +1,5 @@
-{% extends "offers/form.html" %}
+{% extends "orders/base.html" %}
 {% load i18n %}
 {% load auth %}
 
-{% block sidebar %}
-    {% include "orders/sidebar.html" %}
-{% endblock %}
+{% block content %} {% include "form_fields.html" %}{% endblock %}
