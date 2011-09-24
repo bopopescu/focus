@@ -5,30 +5,24 @@
 <ul>
 
     <li><a class="{% active request "hourregistrations/$" %}"
-           href="{% url app.hourregistrations.views.calendar_today %}"><img
-            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "CALENDAR" %}</a></li>
+           href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Calendar" %}</a></li>
 
     <li><a class="{% active request "hourregistrations/$" %}"
-           href="{% url app.hourregistrations.views.calendar_today %}"><img
-            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "YOUR TIMESHEET" %}</a></li>
+           href="{% url app.hourregistrations.views.calendar_today %}">{% trans "Your timesheet" %}</a></li>
 
     <li><a class="{% active request "archive" %}"
-           href="{% url app.hourregistrations.views.your_archive %}"><img
-            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ARCHIVE" %}</a></li>
+           href="{% url app.hourregistrations.views.your_archive %}">{% trans "Archive" %}</a></li>
 
     {% require_permission MANAGE hourregistrations.HourRegistration %}
     <li><a class="{% active request "/employees/$" %}"
-           href="{% url app.hourregistrations.views.list_all_employees %}"><img
-            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "ALL TIMESHEETS" %}</a></li>
+           href="{% url app.hourregistrations.views.list_all_employees %}">{% trans "All timesheets" %}</a></li>
 
     <li><a class="{% active request "/types/$" %}"
-           href="{% url app.hourregistrations.views.admin_hourregistrationtypes %}"><img
-            src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "TYPES" %}</a></li>
+           href="{% url app.hourregistrations.views.admin_hourregistrationtypes %}">{% trans "Types" %}</a></li>
     
     {% end_require %}
     
     <li><a class="{% active request "hourregistrations/disbursements/" %}"
-           href="{% url app.hourregistrations.views.disbursements %}"><img
-            src="{{ STATIC_URL }}img/disbursements.png" width="24" height="24" alt="Home"/>{% trans "DISBURSEMENTS" %}
+           href="{% url app.hourregistrations.views.disbursements %}">{% trans "Disbursements" %}
     </a></li>
 </ul>

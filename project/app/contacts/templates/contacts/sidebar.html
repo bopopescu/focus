@@ -3,13 +3,10 @@
 
 <ul>
     {% if not contact.id %}
-        <li><a class="{% active request "contacts/$" %}" href="{% url app.contacts.views.overview %}"><img
-                src="{{ STATIC_URL }}img/list.png" width="24" height="24" alt="Home"/>{% trans "OVERVIEW" %}</a></li>
+        <li><a class="{% active request "contacts/$" %}" href="{% url app.contacts.views.overview %}">{% trans "OVERVIEW" %}</a></li>
 
-        <li><a class="{% active request "new" %}" href="{% url app.contacts.views.add %}"><img
-                src="{{ STATIC_URL }}img/add.png" width="24" height="24" alt="Home"/>{% trans "NEW CONTACT" %}</a></li>
+        <li><a class="{% active request "new" %}" href="{% url app.contacts.views.add %}">{% trans "NEW CONTACT" %}</a></li>
 
-        <li><a class="{% active request "trashed" %}" href="{% url app.contacts.views.overview_trashed %}"><img
-                src="{{ STATIC_URL }}img/trash.png" width="24" height="24" alt="Home"/>{% trans "TRASHED" %}</a></li>
+        <li><a class="{% active request "trashed" %}" href="{% url app.contacts.views.overview_trashed %}">{% trans "TRASHED" %}</a></li>
     {% endif %}
 </ul>

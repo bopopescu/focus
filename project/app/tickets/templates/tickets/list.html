@@ -18,74 +18,74 @@
     <!-- Tickets -->
     <ul class="tickets">
 
-    <!-- Ticket Headers -->
-    <li class="ticket-header">
-        <ul>
-            <li >{% trans "Priority" %}</li>
-            <li>{% trans "Assigned" %}</li>
-            <li>{% trans "Status" %}</li>
-            <li>{% trans "Type" %}</li>
-        </ul>
-    </li>
-    <!-- /Ticket Headers -->
-
-    <!-- Ticket Data -->
-
-    {% for ticket in tickets %}
-
-    <li class="ticket-data">
-        <div class="ticket-overview">
+        <!-- Ticket Headers -->
+        <li class="ticket-header">
             <ul>
-                <li class="ticket-data-ticket">
-                    #{{ ticket.id }}
-                </li>
-                <li class="ticket-data-activity">
-                    <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
+                <li>{% trans "Priority" %}</li>
+                <li>{% trans "Assigned" %}</li>
+                <li>{% trans "Status" %}</li>
+                <li>{% trans "Type" %}</li>
+            </ul>
+        </li>
+        <!-- /Ticket Headers -->
+
+        <!-- Ticket Data -->
+
+        {% for ticket in tickets %}
+
+            <li class="ticket-data">
+                <div class="ticket-overview">
+                    <ul>
+                        <li class="ticket-data-ticket">
+                            #{{ ticket.id }}
+                        </li>
+                        <li class="ticket-data-activity">
+                            <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
+
+                            <p>{{ ticket.description }}</p>
+                        </li>
+                        <li class="ticket-data-user">
+                            <strong>{{ ticket.creator }}</strong>
+
+                        </li>
+                        <li class="ticket-data-priority">
+                            <span class="tag red">{{ ticket.priority }}</span>
+                        </li>
+                        <li class="ticket-data-age">
+                            {{ ticket.date_created }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="ticket-details">
+                    <h4>{{ ticket.title }}</h4>
+                    <dl>
+                        <dt>Opened:</dt>
+                        <dd><strong>{{ ticket.date_created }}</strong></dd>
+                        <dt>Last updated:</dt>
+                        <dd><strong>{{ ticket.date_edited }}</strong></dd>
+                        <dt>Milestone:</dt>
+                        <dd><strong>N/A</strong></dd>
+                        <dt class="clear">Reported by:</dt>
+                        <dd><strong>{{ ticket.creator }}</strong></dd>
+                        <dt>Assigned to:</dt>
+                        <dd><strong>{{ ticket.assigned_to }}</strong></dd>
+                        <dt>Order:</dt>
+                        <dd><strong>{{ ticket.order }}</strong></dd>
+                    </dl>
+                    <h5>Description</h5>
 
                     <p>{{ ticket.description }}</p>
-                </li>
-                <li class="ticket-data-user">
-                    <strong>{{ ticket.creator }}</strong>
-                    Best Deals Ltd.
-                </li>
-                <li class="ticket-data-priority">
-                    <span class="tag red">{{ ticket.priority }}</span>
-                </li>
-                <li class="ticket-data-age">
-                    {{ ticket.date_created }}
-                </li>
-            </ul>
-        </div>
-        <div class="ticket-details">
-            <h4>Donec porta interdum placerat</h4>
-            <dl>
-                <dt>Opened:</dt>
-                <dd><strong>16 hours ago</strong></dd>
-                <dt>Last updated:</dt>
-                <dd><strong>11 hours ago</strong></dd>
-                <dt>Milestone:</dt>
-                <dd><strong>N/A</strong></dd>
-                <dt class="clear">Reported by:</dt>
-                <dd><strong>Jamie</strong></dd>
-                <dt>Assigned to:</dt>
-                <dd><strong>Anybody</strong></dd>
-                <dt>Tags:</dt>
-                <dd><strong>N/A</strong></dd>
-            </dl>
-            <h5>Description</h5>
-
-            <p>{{ ticket.description }}</p>
-            <ul class="ticket-details-actions">
-                <li><a href="{{ ticket.get_update_url }}" class="button gray">Update ticket</a></li>
-                <li><a href="#" class="button red">Close ticket</a></li>
-            </ul>
-        </div>
-        <!-- /Ticket Details -->
-    </li>
-    {% endfor %}
+                    <ul class="ticket-details-actions">
+                        <li><a href="{{ ticket.get_update_url }}" class="button gray">Update ticket</a></li>
+                        <li><a href="#" class="button red">Close ticket</a></li>
+                    </ul>
+                </div>
+                <!-- /Ticket Details -->
+            </li>
+        {% endfor %}
 
     </ul>
-    
+
     <script type="text/javascript">
 
         function getTdCell(value) {
