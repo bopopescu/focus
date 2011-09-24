@@ -166,7 +166,7 @@ msgstr "ENDRE"
 
 #: app/admin/templates/admin/submenu.html:14
 msgid "SEND NEW PASSWORD"
-msgstr "Send nytt passord"
+msgstr "SEND NYTT PASSORD"
 
 #: app/admin/templates/admin/submenu.html:18
 msgid "SET HOUR DAYS LIMITS"
