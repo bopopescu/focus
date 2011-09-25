@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load auth %}
+{% load i18n %}
 
 {% block sidebar %}
     {% include "admin/sidebar.html" %}
@@ -12,13 +13,17 @@
 <table cellpadding="0" cellspacing="0" border="0" class="display" rel="datatable" id="example">
     <thead>
     <tr>
-        <th>Navn</th>
+        <th>{% trans "Name" %}</th><th>{% trans "Email" %}</th><th>{% trans "Hours before 50%" %}</th><th>{% trans "Hours before 100%" %}</th><th>{% trans "Delivery deadline for hours" %}</th>
     </tr>
     </thead>
     <tbody>
     {% for company in companies %}
     <tr>
         <td><a href="{% url app.company.views.edit company.id  %}">{{ company.name }}</a></td>
+        <td>{{ company.email_address }}</td>
+        <td>{{ company.hours_needed_for_50_overtime_pay }}</td>
+        <td>{{ company.hours_needed_for_100_overtime_pay }}</td>
+        <td>{{ company.days_into_next_month_hourregistration }}</td>
        </tr>
     {% endfor %}
     </tbody>
