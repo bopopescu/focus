@@ -1,0 +1,18 @@
+{% load menu_tags %}
+{% load i18n %}
+{% load auth %}
+
+<li><a class="{% active request "view" %}" href="{% url app.orders.views.order.view order.id%}">{% trans "VIEW" %}</a></li>
+
+    <li><a class="{% active request "edit" %}" href="{% url app.orders.views.order.edit order.id%}">{% trans "EDIT" %}</a></li>
+
+    <li><a class="{% active request "files" %}" href="{% url app.orders.views.files.overview order.id %}">{% trans "FILES" %}</a></li>
+
+    <li><a class="{% active request "participants" %}" href="{% url app.orders.views.order.participants order.id%}">{% trans "PARTICIPANTS" %}</a></li>
+
+    <li><a class="{% active request "statistics" %}" href="{% url app.orders.views.order.view_statistics order.id%}">{% trans "STATISTICS" %}</a></li>
+
+    <li><a class="{% active request "invoice" %}" href="{% url app.orders.views.order.create_invoice order.id%}">{% trans "CREATE INVOICE" %}
+    </a></li>
+
+    <li><a class="{% active request "history" %}" href="{% url app.orders.views.order.history order.id %}">{% trans "HISTORY" %}</a></li>

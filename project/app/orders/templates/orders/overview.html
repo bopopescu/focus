@@ -1,0 +1,43 @@
+{% extends "orders/base.html" %}
+{% load menu_tags %}
+{% load i18n %}
+
+
+{% block content %}
+    <table class="datatable">
+
+
+        <thead>
+        <tr>
+            <th>{% trans "Order number" %}</th>
+            <th>{% trans "Order" %}</th>
+            <th>{% trans "Delivery date" %}</th>
+            <th>{% trans "Customer" %}</th>
+            <th>{% trans "Project" %}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.order_number }}</td>
+                <td><a href="{% url app.orders.views.order.view order.id %}">{{ order.title }}</a></td>
+                <td>{{ order.delivery_date }}</td>
+                <td>
+                    {% if order.customer %}
+                        <a href="{% url app.customers.views.view order.customer.id %}">{{ order.customer }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if order.project %}
+                        <a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+
+{% endblock %}

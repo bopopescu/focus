@@ -1,0 +1,58 @@
+{% extends "orders/base.html" %}
+{% load auth %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block content %}
+
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
+    </script>
+
+    <h1>{{ title }} </h1>
+
+
+    <h1>{% trans "Add participant" %}</h1>
+    <form action="" method="POST">
+        {% trans "User" %} {{ form.user }}
+        {% trans "Role" %} {{ form.role }}
+        <input type="submit" value="{% trans "Save" %}">
+    </form>
+
+    <br>
+    <b>Forklaring roller</b>
+    <br>Hvis bruker kun skal kunne se og registrere timer på ordre, bruk "Member"
+    <br>Om bruker skal ha flere rettigheter som å kunne endre den, velg "Admin".
+
+    <br><br><br>
+    <h1>{% trans "Participants" %}</h1>
+
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
+        <thead>
+
+        <tr>
+            <th></th>
+            <th>{% trans "Person" %}</th>
+            <th>{% trans "Actions" %}</th>
+            <th></th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for permission in permissions %}
+            <tr>
+                <td><img style="vertical-align:middle;" src="{{ permission.user.profileImage|thumbnail_with_max_side:"50" }}"></td>
+                <td><a href="{{ user.get_view_url }}">{{ permission.user }}</a></td>
+                <td>{{ permission.role }}</td>
+                <td><a href="{% url app.orders.views.order.delete_permission_from_participants order.id, permission.id %}">{% trans "Delete" %}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
