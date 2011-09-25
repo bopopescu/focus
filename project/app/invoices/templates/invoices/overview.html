@@ -3,21 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-
-    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tbody tr");
-        });
-
-    </script>
-
-    <h1>{{ title }}</h1>
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
-
+    <table class="datatable">
         <thead>
         <tr>
             <th></th>
@@ -25,17 +11,13 @@
             <th>{% trans "Invoice" %}</th>
         </tr>
         </thead>
-
         <tbody>
         {% for invoice in invoices %}
             <tr>
-                <td>{{ invoice.invoice_number}}</td>
+                <td>{{ invoice.invoice_number }}</td>
                 <td><a href="{% url app.invoices.views.view invoice.id %}">{{ invoice.title }}</a></td>
             </tr>
         {% endfor %}
         </tbody>
-
-
     </table>
-
 {% endblock %}

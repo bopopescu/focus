@@ -19,11 +19,14 @@ def view(request, id):
     return render(request, "invoices/view.html", {'title': invoice.title,
                                                   'invoice': invoice})
 
+
 def add(request):
     return form(request)
 
+
 def edit(request, id):
     return form(request, id)
+
 
 def form(request, id=None):
     products = []
@@ -66,7 +69,7 @@ def form(request, id=None):
 
             return redirect(view, o.id)
     else:
-        form = InvoiceForm(instance=instance, initial={'invoice_number':invoice_number})
+        form = InvoiceForm(instance=instance, initial={'invoice_number': invoice_number})
 
     return render(request, "orders/form.html", {'form': form,
                                                 'invoice': instance,

@@ -39,7 +39,7 @@ LOGIN_REMEMBER_TIME = timedelta(days=90)
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'focustimeno@gmail.com'
-EMAIL_HOST_PASSWORD = '34534fgbfgh!'
+EMAIL_HOST_PASSWORD = '34534fgbfgh'
 EMAIL_PORT = 587
 
 TIME_ZONE = 'Europe/Oslo'

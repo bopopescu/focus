@@ -9,20 +9,7 @@
 {% endblock %}
 
 {% block content %}
-
-    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tbody tr");
-        });
-
-    </script>
-
-    <h1>{{ title }}</h1>
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
+    <table class="datatable">
         <thead>
         <tr>
             <th></th>
