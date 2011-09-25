@@ -51,7 +51,7 @@ class Project(PersistentModel):
         return (False, reasons)
 
     def get_view_url(self):
-        return urlresolvers.reverse('app.projects.views.view', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.projects.views.project.view', args=("%s" % self.id,))
 
     def percentDone(self):
         if self.date_created and self.deliveryDate:

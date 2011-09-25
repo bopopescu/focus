@@ -102,12 +102,13 @@ class MessageMiddleware (object):
 
         request.session['messages'].append(msg)
 
+
     @staticmethod
     def get_messages (request):
         """
         Get the messages waiting for this request
         """
-
+        
         if not 'messages' in request.session:
             request.session['messages'] = []
 

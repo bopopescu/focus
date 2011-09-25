@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from app.tickets.models import Ticket
 
 from core import Core
 from app.announcements.models import Announcement
@@ -16,10 +17,12 @@ def overview(request):
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
     your_projects = Core.current_user().get_permitted_objects("VIEW", Project)
     your_orders = Core.current_user().get_permitted_objects("VIEW", Order)[::-1]
+    tickets = Core.current_user().get_permitted_objects("VIEW",Ticket)
 
     return render(request, 'dashboard/dashboard.html', {'title': title,
                                                         'announcements': announcements,
                                                         'orders': your_orders,
+                                                        'tickets':tickets,
                                                         'projects': your_projects})
 
 

@@ -10,25 +10,114 @@
 
 {% block maincontent %}
 
-    {% for announcement in announcements %}
-        <h2>{{ announcement.title }}</h2>
+
+    <article class="full-block clearfix">
+        <div class="article-container">
+            <header>
+                <h2>{{ request.user.company }} - {% trans "Dashboard" %}</h2>
+            </header>
+            <article class="half-block">
+
+                {% for announcement in announcements %}
+                    <h2>{{ announcement.title }}</h2>
 
 
-        {{ announcement.text|linebreaks }}
+                    {{ announcement.text|linebreaks }}
 
-        <p>
-            Skrevet av {{ announcement.creator.first_name }}, {{ announcement.date_created|date:"d.m.Y H:i" }}
-        </p>
+                    <p>
+                        Skrevet
+                        av {{ announcement.creator.first_name }}, {{ announcement.date_created|date:"d.m.Y H:i" }}
+                    </p>
 
-        {% if announcement.attachment %}
-            <img src="{{ STATIC_URL }}img/download.png"
-                 style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank"
-                                                                             href="{{announcement.get_attachment}}">Last
-            ned vedlegg</a>
-        {% endif %}
+                    {% if announcement.attachment %}
+                        <img src="{{ STATIC_URL }}img/download.png"
+                             style="width:30px; height:30px; vertical-align:middle;"> <a target="_blank"
+                                                                                         href="{{announcement.get_attachment}}">Last
+                        ned vedlegg</a>
+                    {% endif %}
 
-    {% endfor %}
+                {% endfor %}
+            </article>
+
+            <article class="half-block clearrm">
+                <h1>{% trans "Tickets" %}</h1>
+                <ul class="tickets">
+                    <li class="ticket-header">
+                        <ul>
+                            <li style="width: 250px;">{% trans "Title" %}</li>
+                            <li>{% trans "Priority" %}</li>
+                        </ul>
+                    </li>
+                    {% for ticket in tickets %}
+                        <li class="ticket-data">
+                            <div class="ticket-overview">
+                                <ul>
+                                    <li style="width: 250px;">
+                                        <a href="{{ ticket.get_view_url }}">{{ ticket.title }}</a>
+                                    </li>
+                                    <li>
+                                        <span class="tag red">{{ ticket.priority }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
 
 
+                <br><br><br>
+
+                <h1>{% trans "Orders" %}</h1>
+                <ul class="tickets">
+                    <li class="ticket-header">
+                        <ul>
+                            <li style="width: 100%;">{% trans "Title" %}</li>
+                        </ul>
+                    </li>
+                    {% for order in orders %}
+                        <li class="ticket-data">
+                            <div class="ticket-overview">
+                                <ul>
+                                    <li style="width: 100%">
+                                        <a href="{{ order.get_view_url }}">{{ order.title }}</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <br><br><br>
+
+                <h1>{% trans "Projects" %}</h1>
+                <ul class="tickets">
+                    <li class="ticket-header">
+                        <ul>
+                            <li style="width: 100%;">{% trans "Title" %}</li>
+                        </ul>
+                    </li>
+                    {% for project in projects %}
+                        <li class="ticket-data">
+                            <div class="ticket-overview">
+                                <ul>
+                                    <li style="width: 100%">
+                                        <a href="{{ project.get_view_url }}">{{ project.project_name }}</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
+
+            </article>
+
+
+
+        </div>
+    </article>
 
 {% endblock %}  

@@ -140,7 +140,6 @@ def restore(request, id):
                                                           'customer': customer,
                                                           })
 
-
 @login_required()
 def form (request, id=False):
     if id:
@@ -161,7 +160,7 @@ def form (request, id=False):
             o = form.save(commit=False)
             o.owner = request.user
             o.save()
-            form.save_m2m()
+
             request.message_success(msg)
 
             return redirect(view, o.id)

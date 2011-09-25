@@ -1,6 +1,8 @@
 {% if messages %}
     {% for message in messages %}
-        <div class="{{ message.type }}" id="message">
+        <div class="notification {{ message.type }}">
+            <a href="#" class="close-notification" title="Hide Notification" rel="tooltip">x</a>
+
             <p>{{ message.text }}</p>
         </div>
     {% endfor %}
