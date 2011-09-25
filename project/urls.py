@@ -24,7 +24,6 @@ urlpatterns = patterns('',
 
                        #settings for admin
         (r'^admin/', include('app.admin.urls')),
-        (r'^qprofile/$', 'app.admin.views.profile.edit'),
 
                        #Stock
         (r'^stock/', include('app.stock.urls')),

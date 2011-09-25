@@ -27,7 +27,7 @@ def edit(request):
     else:
         form = UserProfileForm(instance=instance, initial={"profileImage": None})
 
-    return render(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form})
+    return render(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form, 'userCard': instance})
 
 def change_profile_image(request):
     try:
@@ -51,8 +51,9 @@ def change_profile_image(request):
     return render(request, "admin/profile/formimage.html", {'title': _('Profile picture'), 'form': form, 'userCard': instance})
 
 def change_password(request):
+    instance = request.user
     if request.method == 'POST':
-        form = UserProfilePasswordForm(request.POST, user=request.user)
+        form = UserProfilePasswordForm(request.POST, user=instance)
 
         if form.is_valid():
             u = request.user
@@ -67,4 +68,4 @@ def change_password(request):
         form = UserProfilePasswordForm(user=request.user)
 
     return render(request, "admin/profile/formpassword.html",
-                               {"title": _("Change password"), 'form': form})
+                               {"title": _("Change password"), 'form': form, 'userCard': instance})
