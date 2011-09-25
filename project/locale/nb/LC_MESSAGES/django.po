@@ -123,7 +123,7 @@ msgstr "Firma"
 
 #: app/admin/templates/admin/sidebar.html:36
 msgid "New company"
-msgstr "New firma"
+msgstr "Nytt firma"
 
 #: app/admin/templates/admin/sidebar.html:43
 msgid "Company settings"
