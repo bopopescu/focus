@@ -48,7 +48,7 @@ class UserProfileForm(ModelForm):
 class UserProfileImageForm(ModelForm):
     class Meta:
         model = User
-        fields = ('profileImage','language')
+        fields = ('profileImage',)
 
 class UserProfilePasswordForm(forms.Form):
     old_password = forms.CharField(label="Gammelt passord", widget=forms.PasswordInput)

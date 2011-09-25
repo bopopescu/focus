@@ -1,15 +1,12 @@
-{% extends "base.html" %}
+{% extends "admin/base.html" %}
 {% load i18n %}
 {% load thumbnail %}
 {% block extrahead %}
 
 {% endblock %}
 
-{% block sidebar %}
-    {% include "admin/profile/sidebar.html" %}
-{% endblock %}
 
-{% block maincontent %}
+{% block content %}
 
     <h1>{{ title }}</h1><br><br>
 

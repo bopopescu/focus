@@ -48,7 +48,7 @@ def change_profile_image(request):
     else:
         form = UserProfileImageForm(instance=instance, initial={"profileImage": None})
 
-    return render(request, "admin/profile/formimage.html", {'title': _('Profile'), 'form': form})
+    return render(request, "admin/profile/formimage.html", {'title': _('Profile picture'), 'form': form, 'userCard': instance})
 
 def change_password(request):
     if request.method == 'POST':

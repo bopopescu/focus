@@ -13,19 +13,17 @@
     <li><a class="{% active request "new_password" %}"
            href="{% url app.admin.views.user.send_generated_password_to_user userCard.id %}">{% trans "SEND NEW PASSWORD" %}
     </a></li>
-
+    {% if userCard.id == request.user.id %}
+        <li><a class="{% active request "image" %}"
+           href="{% url app.admin.views.profile.change_profile_image %}">{% trans "CHANGE PROFILE PICTURE" %}</a></li>
+    {% endif %}
     <li><a class="{% active request "manualSetTime" %}"
-           href="{% url app.admin.views.user.set_hourregistration_limits userCard.id %}">{% trans "SET HOUR DAYS LIMITS" %}
-    </a>
+           href="{% url app.admin.views.user.set_hourregistration_limits userCard.id %}">{% trans "SET HOUR DAYS LIMITS" %}</a></li>
     <li><a class="{% active request "history" %}"
-           href="{% url app.admin.views.user.history userCard.id %}">{% trans "HISTORY" %}
-    </a>
-    </li>
+           href="{% url app.admin.views.user.history userCard.id %}">{% trans "HISTORY" %}</a></li>
 
     <li><a class="{% active request "permissions" %}"
-           href="{% url app.admin.views.user.permissions userCard.id %}">{% trans "PERMISSIONS" %}
-    </a>
-    </li>
+           href="{% url app.admin.views.user.permissions userCard.id %}">{% trans "PERMISSIONS" %}</a></li>
 
     <li><a class="{% active request "trash" %}"
            href="{% url app.admin.views.user.trash userCard.id %}">{% trans "DELETE" %}</a></li>
