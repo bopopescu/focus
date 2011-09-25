@@ -1318,12 +1318,12 @@ div.tab > img, div.tab > .image-frame img {
     margin: 0;
     padding: 0;
 }
-
+.logs ul {
+    list-style-type: none;
+}
 .logs li {
-    background-position: 10px 8px;
-    background-repeat: no-repeat;
-    background-image: url('../img/icons/icon_event.png');
-    list-style: none;
+    background: none;
+    list-style-type: none;
     display: block;
     padding: 10px 10px 10px 35px;
     overflow: hidden;
@@ -1334,18 +1334,13 @@ div.tab > img, div.tab > .image-frame img {
     border-radius: 3px;
     line-height: 100%;
 }
+.logs li .avatar_img{
+    margin: 0 10px 0 0;
+}
 
 .logs li h4 {
     text-shadow: none;
     font-size: 100%;
-}
-
-.logs li.event {
-    background-image: url('../img/icons/icon_event_log.png');
-}
-
-.logs li.bomb {
-    background-image: url('../img/icons/icon_event_bomb.png');
 }
 
 .logs li .logs-timestamp {

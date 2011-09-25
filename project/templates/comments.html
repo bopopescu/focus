@@ -18,7 +18,9 @@
 
 
             <li>
-
+                {% if comment.creator.profileImage %}
+                <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img left" alt=""/>
+                {% endif %}
                 <span class="logs-timestamp">{{ comment.date_created }}</span>
 
                 <p>
