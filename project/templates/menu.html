@@ -5,13 +5,11 @@
 
 <header>
     <a href="/" title="Back to Homepage"></a>
-
     <h1>{{ user.get_company }}</h1>
 </header>
+
 <section id="user-info">
-
     {% if user.profileImage %}<img src="{{ user.profileImage|thumbnail_with_max_side:"50" }}">{% endif %}
-
     <div>
         <a href="{% url app.admin.views.profile.edit %}">{{ user }}</a>
 
@@ -34,10 +32,6 @@
         </li>
         {% end_require %}
 
-        <li class="{% active request "^/stock/" %}">
-            <a href="" title="" class="products">{% trans "Products" %}</a>
-            {% include "stock/sidebar.html" %}
-        </li>
 
         {% require_permission LIST contacts.Contact %}
         <li class="{% active request "^/contacts/" %}">
@@ -46,7 +40,6 @@
             {% include "contacts/sidebar.html" %}
         </li>
         {% end_require %}
-
 
         {% require_permission LIST projects.Project %}
         <li class="{% active request "^/projects/" %}">
@@ -57,7 +50,6 @@
 
         </li>
         {% end_require %}
-
 
         {% require_permission LIST orders.Offer %}
         <li class="{% active request "^/offers/" %}">
@@ -108,12 +100,20 @@
         {% end_require %}
 
         {% require_permission LIST suppliers.Supplier %}
+
+        <li class="{% active request "^/stock/" %}">
+            <a href="" title="" class="products">{% trans "Products" %}</a>
+            {% include "stock/sidebar.html" %}
+        </li>
+
         <li class="{% active request "^/suppliers/" %}">
             <a class="supplier {% active request "^/suppliers/" %}"
                href="{% url app.suppliers.views.overview %}">{% trans "Suppliers" %}</a>
             {% include "suppliers/sidebar.html" %}
 
         </li>
+
+
         {% end_require %}
 
 

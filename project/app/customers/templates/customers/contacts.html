@@ -9,10 +9,7 @@
 
 {% block content %}
 
-    <form action="" method="POST">
-        {{ form.as_table }}
-        <button id="form_button" type="submit">{% trans "Save" %}</button>
-    </form>
+    {% include "form_fields.html" %}
 
     <br><br><br>
     <h1>{% trans "Participants" %}</h1>

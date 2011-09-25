@@ -1,3 +1,4 @@
+from app.orders.models import Order
 from django.forms.models import ModelForm
 from app.customers.models import Customer
 from app.tickets.models import Ticket, TicketUpdate, TicketType
@@ -20,6 +21,7 @@ class TicketForm(ModelForm):
         self.fields['attachment'].required = False
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
+        self.fields['order'].queryset = Order.objects.filter_current_company()
         self.fields['type'].widget = SelectWithPop(TicketType)
         self.fields['type'].queryset = TicketType.objects.filter(company=Core.current_user().get_company())
         self.fields['due_date'].required = False
@@ -43,6 +45,7 @@ class EditTicketForm(ModelForm):
         self.fields['assigned_to'].queryset = User.objects.filter_current_company()
         self.fields['customer'].widget = SelectWithPop(Customer)
         self.fields['customer'].queryset = Customer.objects.filter_current_company()
+        self.fields['order'].queryset = Order.objects.filter_current_company()
         self.fields['type'].widget = SelectWithPop(TicketType)
         self.fields['type'].queryset = TicketType.objects.filter(company=Core.current_user().get_company())
         self.fields['due_date'].widget = DatePickerField(format="%d.%m.%Y", )

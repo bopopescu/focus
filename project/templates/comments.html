@@ -12,49 +12,37 @@
 </h2>
 
 <ul class="logs">
-
     {% if comments.list %}
         {% for comment in comments.list %}
-
-
             <li>
                 {% if comment.creator.profileImage %}
-                <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img left" alt=""/>
+                    <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}" class="avatar_img left"
+                         alt=""/>
                 {% endif %}
                 <span class="logs-timestamp">{{ comment.date_created }}</span>
-
                 <p>
                     {{ comment.text|linebreaks }}
                 </p>
-
                 <em class="logs-meta">Posted by <a href="#">{{ comment.creator }}</a></em>
-
             </li>
-
         {% endfor %}
-
     {% endif %}
-
 </ul>
-
 <table>
     <tr>
         <td>
             {% if request.user.profileImage %}
-                <img src="{{ request.user.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img" alt=""/>
+                <img src="{{ request.user.profileImage|thumbnail_with_max_side:"60" }}" class="avatar_img" alt=""/>
             {% else %}
                 <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>
             {% endif %}
         </td>
-
         <td>
             <form action="" method="post">
                 <div class="field">
                     {{ comments.form.text|escape }}
                 </div>
-
                 <br/>
-
                 <div class="buttonrow">
                     <button name="new_comment" class="add_comment">{% trans "Add comment" %}</button>
                 </div>

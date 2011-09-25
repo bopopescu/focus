@@ -43,9 +43,7 @@ class CustomerFormSimple(ModelForm):
 
 
 class ContactToCustomerForm(forms.Form):
-    contact = forms.ModelChoiceField(queryset=Contact.objects.all())
-
+    contact = forms.ModelChoiceField(queryset=Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False))
     def __init__(self, *args, **kwargs):
         super(ContactToCustomerForm, self).__init__(args, kwargs)
-        contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False)
-        self.fields['contact'].queryset = contacts
+        self.fields['contact'].queryset = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False)
