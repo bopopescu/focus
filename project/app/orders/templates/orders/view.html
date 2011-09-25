@@ -19,9 +19,11 @@
 
             <div class="user-card">
 
+                {% if user.profileImage %}
                 <div class="avatar">
                     <img src="{{ user.profileImage|thumbnail_with_max_side:"70" }}" title="User" alt=""/>
                 </div>
+                {% endif %}
 
                 <div class="details">
                     <p><strong>{{ user.first_name }} {{ user.last_name }}</strong><br/>

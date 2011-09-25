@@ -1,3 +1,53 @@
 {% extends "projects/base.html" %}
 {% load i18n %}
 
+{% block content %}
+
+    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#filter').quicksearch("#dataTable tbody tr");
+        });
+
+    </script>
+
+    <h1>{{ title }}</h1>
+    <div class="searchBox">
+        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
+    </div>
+    <table id="dataTable">
+
+        <thead>
+        <tr>
+            <th>{% trans "Order number" %}</th>
+            <th>{% trans "Order" %}</th>
+            <th>{% trans "Delivery date" %}</th>
+            <th>{% trans "Customer" %}</th>
+            <th>{% trans "Project" %}</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.order_number }}</td>
+                <td><a href="{% url app.orders.views.order.view order.id %}">{{ order.title }}</a></td>
+                <td>{{ order.delivery_date }}</td>
+                <td>
+                    {% if order.customer %}
+                        <a href="{% url app.customers.views.view order.customer.id %}">{{ order.customer }}</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if order.project %}
+                        <a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+
+{% endblock %}

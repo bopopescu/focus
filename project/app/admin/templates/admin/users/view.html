@@ -10,7 +10,7 @@
 
     <h1>{{ title }}</h1>
 
-    <img src="{{ userCard.profileImage|thumbnail_with_max_side:"350" }}">
+    {% if userCard.profileImage %}<img src="{{ userCard.profileImage|thumbnail_with_max_side:"350" }}"> {% endif %}
 
     <br>
     {% trans "Name" %}: {{ userCard.first_name }} {{ userCard.last_name }}

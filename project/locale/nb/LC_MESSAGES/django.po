@@ -100,9 +100,8 @@ msgid "Users"
 msgstr "Brukere"
 
 #: app/admin/templates/admin/sidebar.html:12
-#, fuzzy
 msgid "New user"
-msgstr "Ny kunde"
+msgstr "Ny bruker"
 
 #: app/admin/templates/admin/sidebar.html:17
 #: app/admin/templates/admin/users/view.html:31 app/admin/views/group.py:17
@@ -111,29 +110,24 @@ msgid "Groups"
 msgstr "Grupper"
 
 #: app/admin/templates/admin/sidebar.html:21
-#, fuzzy
 msgid "New group"
-msgstr "Nytt prosjekt"
+msgstr "Nytt gruppe"
 
 #: app/admin/templates/admin/sidebar.html:25 app/admin/views/log.py:8
-#, fuzzy
 msgid "Log"
-msgstr "Lav"
+msgstr "Logg"
 
 #: app/admin/templates/admin/sidebar.html:31
-#, fuzzy
 msgid "Companies"
 msgstr "Firma"
 
 #: app/admin/templates/admin/sidebar.html:36
-#, fuzzy
 msgid "New company"
-msgstr "Firma"
+msgstr "Nytt firma"
 
 #: app/admin/templates/admin/sidebar.html:43
-#, fuzzy
 msgid "Company settings"
-msgstr "Firma"
+msgstr "Firmainstillinger"
 
 #: app/admin/templates/admin/submenu.html:8
 #: app/admin/templates/admin/submenu.html:37
@@ -371,11 +365,8 @@ msgid "Your username is: %s"
 msgstr "Brukernavnet ditt er:%s"
 
 #: app/admin/views/user.py:64
-#, fuzzy
-msgid ""
-"\n"
-"Your password is: "
-msgstr "Ditt passord er:"
+msgid "Your password is: "
+msgstr "Ditt passord er: "
 
 #: app/admin/views/user.py:77
 msgid "Successfully sent new password"
@@ -571,9 +562,8 @@ msgid "Successfully added new contact"
 msgstr "Lagt ny kontakt"
 
 #: app/contacts/templates/contacts/restore.html:14
-#, fuzzy
 msgid "Restore contact"
-msgstr "Slett kontakt"
+msgstr "Gjennopprett kontakt"
 
 #: app/contacts/templates/contacts/sidebar.html:6
 #: app/customers/templates/customers/sidebar.html:6
@@ -584,9 +574,8 @@ msgid "Overview"
 msgstr "Oversikt"
 
 #: app/contacts/templates/contacts/sidebar.html:8
-#, fuzzy
 msgid "New contact"
-msgstr "kontakter"
+msgstr "Ny kontakt"
 
 #: app/contacts/templates/contacts/sidebar.html:10
 #: app/projects/templates/projects/sidebar.html:16
@@ -694,14 +683,12 @@ msgid "Restore customer"
 msgstr "Gjenopprett kunde"
 
 #: app/customers/templates/customers/sidebar.html:7
-#, fuzzy
 msgid "New customer"
 msgstr "Ny kunde"
 
 #: app/customers/templates/customers/submenu.html:16
-#, fuzzy
 msgid "CONTACTS"
-msgstr "Ny kontakt"
+msgstr "KONTAKTER"
 
 #: app/customers/templates/customers/trash.html:10
 msgid "Delete customer"
@@ -713,9 +700,8 @@ msgid "You can't delete this customer because: "
 msgstr "Du kan ikke slette denne kunden fordi:"
 
 #: app/dashboard/views.py:14
-#, fuzzy
 msgid "Welcome to TIME"
-msgstr "Velkommen til min side"
+msgstr "Velkommen til TIME"
 
 #: app/dashboard/views.py:45
 msgid "Updates"
@@ -739,14 +725,12 @@ msgid "Folder"
 msgstr "Mappe"
 
 #: app/files/models.py:33
-#, fuzzy
 msgid "File"
-msgstr "Filer"
+msgstr "Fil"
 
 #: app/files/models.py:34
-#, fuzzy
 msgid "Parent file"
-msgstr "Profil"
+msgstr "Overordnet fil"
 
 #: app/files/models.py:36
 msgid "Tags"
@@ -856,12 +840,10 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: app/hourregistrations/models.py:41
-#, fuzzy
 msgid "Time start"
 msgstr "Tid start"
 
 #: app/hourregistrations/models.py:42
-#, fuzzy
 msgid "Time end"
 msgstr "Tid slutt"
 
@@ -962,24 +944,21 @@ msgid "Calendar"
 msgstr "Kalender"
 
 #: app/hourregistrations/templates/hourregistrations/sidebar.html:11
-#, fuzzy
 msgid "Your timesheet"
 msgstr "Din timeliste"
 
 #: app/hourregistrations/templates/hourregistrations/sidebar.html:14
 #: app/invoices/templates/invoices/sidebar.html:9
-#, fuzzy
 msgid "Archive"
-msgstr "Arkivert"
+msgstr "Arkiv"
 
 #: app/hourregistrations/templates/hourregistrations/sidebar.html:18
 msgid "All timesheets"
 msgstr "Alle timelister"
 
 #: app/hourregistrations/templates/hourregistrations/sidebar.html:21
-#, fuzzy
 msgid "Types"
-msgstr "Type"
+msgstr "Typer"
 
 #: app/hourregistrations/templates/hourregistrations/timer.html:20
 msgid "Timer"
@@ -1024,14 +1003,12 @@ msgid "Invoice"
 msgstr "Faktura"
 
 #: app/invoices/templates/invoices/sidebar.html:6
-#, fuzzy
 msgid "Pending"
 msgstr "Avventer svar"
 
 #: app/invoices/templates/invoices/sidebar.html:12
-#, fuzzy
 msgid "New invoice"
-msgstr "Faktura"
+msgstr "Ny faktura"
 
 #: app/invoices/templates/invoices/view.html:15
 #: app/offers/templates/offers/form.html:20
@@ -1045,9 +1022,8 @@ msgid "Products"
 msgstr "Produkter"
 
 #: app/offers/forms.py:41 app/orders/forms.py:42
-#, fuzzy
 msgid "You need to use a unique order number"
-msgstr "Du må bruke et unikt kundenummer"
+msgstr "Du må bruke et unikt ordrenummer"
 
 #: app/offers/views.py:18 app/offers/templates/offers/base.html:13
 #: templates/base_backup.html:77 templates/menu.html:65
@@ -1055,9 +1031,8 @@ msgid "Offers"
 msgstr "Tilbud"
 
 #: app/offers/views.py:98 app/offers/templates/offers/sidebar.html:7
-#, fuzzy
 msgid "New offer"
-msgstr "Ny kunde"
+msgstr "Nytt tilbud"
 
 #: app/offers/templates/offers/client_management.html:7
 #: app/tickets/templates/tickets/client_management.html:7
@@ -1087,9 +1062,8 @@ msgid "Order number"
 msgstr "Ordrenummer"
 
 #: app/offers/templates/offers/form.html:22
-#, fuzzy
 msgid "Add product"
-msgstr "Produkt"
+msgstr "Legg til produkt"
 
 #: app/offers/templates/offers/form.html:166
 #: app/offers/templates/offers/form.html:172
@@ -1101,9 +1075,8 @@ msgid "Offer number"
 msgstr "Tilbudsnummer"
 
 #: app/offers/templates/offers/sidebar.html:5
-#, fuzzy
 msgid "All offers"
-msgstr "Ny kunde"
+msgstr "Alle tilbud"
 
 #: app/offers/templates/offers/submenu.html:10
 #: app/tickets/templates/tickets/submenu.html:13
@@ -1123,7 +1096,6 @@ msgid "Item"
 msgstr "Enhet"
 
 #: app/offers/templates/offers/view.html:34
-#, fuzzy
 msgid "Unit cost"
 msgstr "Enhetskostnad"
 
@@ -1136,14 +1108,12 @@ msgid "Tax"
 msgstr "Skatt"
 
 #: app/offers/templates/offers/view.html:37
-#, fuzzy
 msgid "Total"
 msgstr "Totaltid"
 
 #: app/orders/forms.py:59
-#, fuzzy
 msgid "You need to use a unique invoice number"
-msgstr "Du må bruke et unikt kundenummer"
+msgstr "Du må bruke et unikt fakturanummer"
 
 #: app/orders/models.py:15 app/stock/templates/stock/products/list.html:26
 #: app/stock/views/product.py:87 app/stock/views/product.py:116
@@ -1151,7 +1121,6 @@ msgid "Product"
 msgstr "Produkt"
 
 #: app/orders/models.py:19 app/orders/models.py:38
-#, fuzzy
 msgid "Price"
 msgstr "Pris"
 
@@ -1212,33 +1181,28 @@ msgid "This order is archived."
 msgstr "Denne ordren er arkivert"
 
 #: app/orders/templates/orders/participants.html:18
-#, fuzzy
 msgid "Add participant"
-msgstr "Deltakere"
+msgstr "Legg til deltakere"
 
 #: app/orders/templates/orders/participants.html:41
 msgid "Person"
 msgstr "Person"
 
 #: app/orders/templates/orders/participants.html:42
-#, fuzzy
 msgid "Actions"
-msgstr "handling"
+msgstr "Handling"
 
 #: app/orders/templates/orders/sidebar.html:7
-#, fuzzy
 msgid "My orders"
-msgstr "Ordrer"
+msgstr "Mine ordre"
 
 #: app/orders/templates/orders/sidebar.html:9
-#, fuzzy
 msgid "All orders"
-msgstr "Ny kunde"
+msgstr "Alle ordre"
 
 #: app/orders/templates/orders/sidebar.html:11
-#, fuzzy
 msgid "New order"
-msgstr "Ny kunde"
+msgstr "Ny ordre"
 
 #: app/orders/templates/orders/statistics.html:8
 msgid "Statistics"
@@ -1267,9 +1231,8 @@ msgid "Successfully saved order"
 msgstr "Lagret rekkefølge"
 
 #: app/orders/views/order.py:190
-#, fuzzy
 msgid "Successfully add"
-msgstr "Vellykket legge"
+msgstr "Vellykket lagret"
 
 #: app/projects/models.py:16 app/projects/templates/projects/list.html:27
 msgid "Project number"
@@ -1293,9 +1256,8 @@ msgid "Milestones"
 msgstr "Milepæler"
 
 #: app/projects/templates/projects/sidebar.html:10
-#, fuzzy
 msgid "Timeline"
-msgstr "Tid"
+msgstr "Tidslinje"
 
 #: app/projects/templates/projects/sidebar.html:13
 #: app/projects/views/project.py:120
@@ -1383,9 +1345,8 @@ msgid "Product used in orders, see orders menu in sidebar."
 msgstr "Produktet brukes i ordre, se ordrer menyen i sidebar."
 
 #: app/stock/templates/stock/sidebar.html:14
-#, fuzzy
 msgid "New product"
-msgstr "Nytt prosjekt"
+msgstr "Nytt produkt"
 
 #: app/stock/templates/stock/submenu.html:5
 #: app/suppliers/templates/suppliers/submenu.html:14
@@ -1429,7 +1390,6 @@ msgid "Successfully edited product"
 msgstr "Vellykket endret produkt"
 
 #: app/stock/views/product.py:98
-#, fuzzy
 msgid "Successfully added new product"
 msgstr "Lagt ny gruppe"
 
@@ -1459,14 +1419,12 @@ msgid "Successfully addded new supplier"
 msgstr "Vellykket med viten og ny leverandør"
 
 #: app/suppliers/templates/suppliers/restore.html:14
-#, fuzzy
 msgid "Restore supplier"
-msgstr "Slett leverandør"
+msgstr "Gjennopprett leverandør"
 
 #: app/suppliers/templates/suppliers/sidebar.html:10
-#, fuzzy
 msgid "New supplier"
-msgstr "Slett leverandør"
+msgstr "Ny leverandør"
 
 #: app/suppliers/templates/suppliers/trash.html:11
 msgid "Delete supplier"
@@ -1509,7 +1467,6 @@ msgid "Ticket has comments"
 msgstr "Ticket har merknader"
 
 #: app/tickets/models.py:296
-#, fuzzy
 msgid "changed from"
 msgstr "endret fra"
 
@@ -1551,9 +1508,8 @@ msgid "Ticket update"
 msgstr "Ticket oppdatere"
 
 #: app/tickets/utils.py:47
-#, fuzzy
 msgid "Changes: \n"
-msgstr "Endringer:"
+msgstr "Endringer: \n"
 
 #: app/tickets/utils.py:55
 msgid "The ticket "
@@ -1593,9 +1549,8 @@ msgid "Ticket added"
 msgstr "Ticket lagt"
 
 #: app/tickets/views.py:199 app/tickets/templates/tickets/sidebar.html:36
-#, fuzzy
 msgid "New ticket"
-msgstr "Ticket"
+msgstr "Ny ticket"
 
 #: app/tickets/templates/tickets/base.html:13 templates/base_backup.html:108
 #: templates/menu.html:104
@@ -1625,9 +1580,8 @@ msgid "New Attachment:"
 msgstr "Nytt Vedlegg:"
 
 #: app/tickets/templates/tickets/edit.html:96
-#, fuzzy
 msgid "Change details"
-msgstr "Endre egenskaper"
+msgstr "Endre detaljer"
 
 #: app/tickets/templates/tickets/edit.html:99
 #: app/tickets/templates/tickets/edit.html:207
@@ -1660,14 +1614,12 @@ msgid "None"
 msgstr "Ingen"
 
 #: app/tickets/templates/tickets/list.html:115
-#, fuzzy
 msgid "Client"
-msgstr "Klientticket"
+msgstr "Klient"
 
 #: app/tickets/templates/tickets/sidebar.html:9
-#, fuzzy
 msgid "Assigned to you"
-msgstr "Tildelt til"
+msgstr "Tildelt deg"
 
 #: app/tickets/templates/tickets/sidebar.html:12
 #: app/tickets/templates/tickets/sidebar.html:26
@@ -1727,12 +1679,10 @@ msgid "History"
 msgstr "Historie"
 
 #: app/tickets/templates/tickets/view.html:105
-#, fuzzy
 msgid "Changes"
 msgstr "Endringer:"
 
 #: app/tickets/templates/tickets/view.html:115
-#, fuzzy
 msgid "Comment"
 msgstr "Kommentar"
 
