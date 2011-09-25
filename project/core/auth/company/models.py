@@ -14,7 +14,7 @@ class Company(models.Model):
                                    blank=True)
     all_employees_group = models.ForeignKey("group.Group", verbose_name="Ansattegruppe",
                                           related_name="companiesWhereAllEmployeed", null=True, blank=True)
-    days_into_next_month_hourregistration = models.IntegerField("Leveringsfrist", default=3)
+    days_into_next_month_hourregistration = models.IntegerField("Leveringsfrist for timer", default=3)
     hours_needed_for_50_overtime_pay = models.IntegerField("Timer før 50%", default=160)
     hours_needed_for_100_overtime_pay = models.IntegerField("Timer før 100%", default=240)
 

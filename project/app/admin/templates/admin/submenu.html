@@ -16,7 +16,7 @@
 </a></li>
 {% end_require %}
 {% if userCard.id == request.user.id %}
-    <li><a class="{% active request "edit" %}"
+    <li><a class="{% active request "profile/edit" %}"
            href="{% url app.admin.views.profile.edit %}">{% trans "CHANGE PROFILE" %}</a></li>
     <li><a class="{% active request "image" %}"
            href="{% url app.admin.views.profile.change_profile_image %}">{% trans "CHANGE PROFILE PICTURE" %}</a></li>
