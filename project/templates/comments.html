@@ -37,8 +37,13 @@
 
 <table>
     <tr>
-        <td><img src="{{ request.user.profileImage|thumbnail_with_max_side:"130" }}"
-                 class="avatar_img" alt=""/></td>
+        <td>
+            {% if request.user.profileImage %}
+                <img src="{{ request.user.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img" alt=""/>
+            {% else %}
+                <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>
+            {% endif %}
+        </td>
 
         <td>
             <form action="" method="post">
