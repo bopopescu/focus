@@ -11,6 +11,7 @@
         <tr>
             <th>{% trans "Project number" %}</th>
             <th>{% trans "Name" %}</th>
+            <th>{% trans "Customer" %}</th>
             <th>{% trans "Delivery date" %}</th>
             <th>{% trans "Responsible" %}</th>
         </tr>
@@ -20,6 +21,7 @@
             <tr>
                 <td>{{ p.pid }}</td>
                 <td><a href="{% url app.projects.views.project.view p.id %}">{{ p }}</a></td>
+                <td>{{ p.customer}}</td>
                 <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
                 <td>{{ p.responsible }}</td>
             </tr>
