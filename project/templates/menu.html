@@ -28,8 +28,10 @@
 
         <li class="{% active request "^/dashboard/" %} {% active request "^/announcements/" %}">
 
-            <a href="{% url app.dashboard.views.overview %}" title="" class="no-submenu dashboard">{% trans "Dashboard" %}</a>
+            <a href="{% url app.dashboard.views.overview %}" title=""
+               class="no-submenu dashboard">{% trans "Dashboard" %}</a>
 
+            {% require_permission CREATE announcements.Announcement %}
 
             <ul>
                 <li>
@@ -38,6 +40,7 @@
                 </li>
             </ul>
 
+            {% end_require %}
 
         </li>
 
