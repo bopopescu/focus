@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from app.contacts.models import Contact
 from core import Core
+from django.db.models.query_utils import Q
 from django.forms import ModelForm
 from models import Customer
 from django.utils.translation import ugettext as _
@@ -42,8 +43,22 @@ class CustomerFormSimple(ModelForm):
         #self.fields['contacts'].queryset = Contact.objects.all()
 
 
-class ContactToCustomerForm(forms.Form):
-    contact = forms.ModelChoiceField(queryset=None)
+class ContactParticipantToCustomerForm(forms.Form):
+    contact = forms.ModelChoiceField(queryset=Contact.objects.none())
+
     def __init__(self, *args, **kwargs):
-        super(ContactToCustomerForm, self).__init__(args, kwargs)
-        self.fields['contact'].queryset = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=False)
+        existing_contacts = Q()
+
+        if 'existing_contacts' in kwargs:
+            existing_contacts = kwargs.get('existing_contacts')
+            del kwargs['existing_contacts']
+
+        super(ContactParticipantToCustomerForm, self).__init__(*args, **kwargs)
+        qs = Core.current_user().get_permitted_objects("VIEW", Contact).filter(
+            trashed=False)
+
+
+        if existing_contacts:
+            qs = qs.exclude(id__in=[contact.id for contact in existing_contacts])
+
+        self.fields['contact'].queryset = qs

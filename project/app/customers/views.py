@@ -1,6 +1,7 @@
+from app.contacts.models import Contact
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
-from app.customers.forms import CustomerFormSimple, CustomerForm, ContactToCustomerForm
+from app.customers.forms import CustomerFormSimple, CustomerForm, ContactParticipantToCustomerForm
 from app.customers.models import Customer
 from core import Core
 from core.decorators import require_permission, login_required
@@ -84,16 +85,31 @@ def list_contacts(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
 
     if request.method == "POST":
-        form = ContactToCustomerForm(request.POST)
-        customer.contacts.add(form.contact)
+        form = ContactParticipantToCustomerForm(request.POST, existing_contacts=customer.contacts.all())
+        if form.is_valid():
+            contact = form.cleaned_data['contact']
+            customer.contacts.add(contact)
 
     else:
-        form = ContactToCustomerForm()
+        form = ContactParticipantToCustomerForm(existing_contacts=customer.contacts.all())
 
     return render(request, 'customers/contacts.html',
             {'title': unicode(customer.name) + " " + _('contacts'),
              'form': form,
              'customer': customer})
+
+@require_permission("EDIT", Customer, "id")
+def remove_contact_from_customer(request, id, contact_id):
+    customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
+
+    try:
+        contact = customer.contacts.get(id=contact_id)
+        customer.contacts.remove(contact)
+
+        return redirect(list_contacts, id)
+
+    except Exception, e:
+        return False
 
 
 @require_permission("CREATE", Customer)
@@ -139,6 +155,7 @@ def restore(request, id):
         return render(request, 'customers/restore.html', {'title': _("Confirm restore"),
                                                           'customer': customer,
                                                           })
+
 
 @login_required()
 def form (request, id=False):

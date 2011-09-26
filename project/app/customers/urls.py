@@ -14,6 +14,7 @@ urlpatterns = patterns('app.customers.views',
                        url(r'^(?P<id>\d+)/history/?$', 'history'),
                        url(r'^(?P<id>\d+)/view/?$', 'view'),
                        url(r'^(?P<id>\d+)/contacts/?$', 'list_contacts'),
+                       url(r'^(?P<id>\d+)/contacts/remove/(?P<contact_id>\d+)$', 'remove_contact_from_customer'),
                        url(r'^(?P<id>\d+)/trash/?$', 'trash'),
                        url(r'^(?P<id>\d+)/restore/?$', 'restore'),
                        )

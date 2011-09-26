@@ -5,12 +5,6 @@
 
 {% block content %}
 
-    <script src="{{ STATIC_URL }}js/quicksearch.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#filter').quicksearch("#dataTable tbody tr");
-        });
-    </script>
 
     <h1>{{ title }} </h1>
 
@@ -30,10 +24,8 @@
     <br><br><br>
     <h1>{% trans "Participants" %}</h1>
 
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
+
+    <table class="datatable">
         <thead>
 
         <tr>
@@ -47,10 +39,17 @@
         <tbody>
         {% for permission in permissions %}
             <tr>
-                <td><img style="vertical-align:middle;" src="{{ permission.user.profileImage|thumbnail_with_max_side:"50" }}"></td>
+                <td>
+                    {% if permission.user.profileImage %}
+                        <img style="vertical-align:middle;"
+                             src="{{ permission.user.profileImage|thumbnail_with_max_side:"50" }}">
+                    {% endif %}
+                </td>
                 <td><a href="{{ user.get_view_url }}">{{ permission.user }}</a></td>
                 <td>{{ permission.role }}</td>
-                <td><a href="{% url app.orders.views.order.delete_permission_from_participants order.id, permission.id %}">{% trans "Delete" %}</a></td>
+                <td>
+                    <a href="{% url app.orders.views.order.delete_permission_from_participants order.id, permission.id %}">{% trans "Delete" %}</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

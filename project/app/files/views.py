@@ -14,12 +14,14 @@ def add_file(request, id):
 def edit_file(request, id ):
     return file_form(request, id)
 
+
 @login_required()
 def recover(request, id ):
     file = File.objects.get(id=id)
     file.recover()
 
     return HttpResponseRedirect("/")
+
 
 @login_required()
 def delete(request, id):
@@ -28,8 +30,9 @@ def delete(request, id):
 
     if file.parent_file:
         return edit_file(request, file.parent_file.id)
-        
+
     return HttpResponseRedirect("/")
+
 
 def file_form(request, file_id=None):
     if file_id:
@@ -70,12 +73,15 @@ def handle_file_tags(tags):
         return []
 
 
-def generic_form(request, instance, file_instance, redirect_view):
+def generic_form(request, instance, file_instance, redirect_view, additional_data, template=None):
     """
     instance = Project, Product etc
     file_instance = File.objects.get(id=?)
     redirect_view = redirect(overview,id)
     """
+
+    if not template:
+        template = "files/form.html"
 
     clone = file_instance.clone()
 
@@ -104,7 +110,12 @@ def generic_form(request, instance, file_instance, redirect_view):
 
         form = FileForm(instance=file_instance, initial={'tags': tags, 'file': None})
 
-    return render(request, "files/form.html", {'title': _("File form"),
-                                               'file': file_instance,
-                                               'form': form,
-                                               })
+    data = {'title': _("File form"),
+            'file': file_instance,
+            'form': form,
+            }
+
+    for key in additional_data:
+        data[key] = additional_data[key]
+
+    return render(request, template, data)

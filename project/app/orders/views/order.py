@@ -17,11 +17,13 @@ def my_orders(request):
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
 
+
 @require_permission("VIEW", Order)
 def overview(request):
     orders = Order.objects.filter_current_company()
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
+
 
 @require_permission("VIEW", Order)
 def archive(request):
@@ -47,6 +49,7 @@ def history(request, id):
     return render(request, 'orders/log.html', {'title': _("Latest events"),
                                                'order': instance,
                                                'logs': history[::-1][0:150]})
+
 
 @require_permission("VIEW", Order, "id")
 def view(request, id):
@@ -160,11 +163,11 @@ def delete_permission_from_participants(request, id, permission_id):
     else:
         request.message_error("You can't delete your own permissions")
 
-    return participants(request, id, permission_id)
+    return participants(request, id)
 
 
 @require_permission("EDIT", Order, "id")
-def participants(request, id, permission_id):
+def participants(request, id, permission_id=None):
     order = get_object_or_404(Order, id=id)
     content_type = ContentType.objects.get_for_model(Order)
 

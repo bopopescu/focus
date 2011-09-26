@@ -14,7 +14,7 @@
     <br><br><br>
     <h1>{% trans "Participants" %}</h1>
     <br>
-    
+
     <table class="datatable">
         <thead>
         <tr>
@@ -23,6 +23,7 @@
             <th>{% trans "Address" %}</th>
             <th>{% trans "Phone" %}</th>
             <th>{% trans "E-mail" %}</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -33,6 +34,9 @@
                 <td>{{ contact.address }}</td>
                 <td>{{ contact.phone }}</td>
                 <td>{{ contact.email }}</td>
+                <td>
+                    <a href="{% url app.customers.views.remove_contact_from_customer customer.id contact.id %}">{% trans "Remove" %}</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -29,7 +29,10 @@ def add_file(request, id):
     """
     order = Core.current_user().get_permitted_objects("VIEW", Order).all().get(id=id)
     file = File()
-    return file_form(request, order, file, redirect(overview, id))
+
+    additional_data = {'order': order}
+
+    return file_form(request, order, file, redirect(overview, id), additional_data, template="orders/files/form.html")
 
 
 @require_permission("VIEW", Order, 'id')
@@ -40,4 +43,6 @@ def edit_file(request, id, file_id):
     """
     order = Core.current_user().get_permitted_objects("VIEW", Order).all().get(id=id)
     file = order.files.get(id=file_id)
-    return file_form(request, order, file, redirect(overview, id))
+    additional_data = {'order': order}
+
+    return file_form(request, order, file, redirect(overview, id), additional_data, template="orders/files/form.html")
