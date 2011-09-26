@@ -88,8 +88,8 @@ class Command(BaseCommand):
             Supplier.objects.get_or_create(name="Supplier %s" % i, company=self.company)
 
     def seed_products(self):
-        print "suppliers"
+        print "products"
         price_val, created = Currency.objects.get_or_create(name="Norsk krone")
 
         for i in range(1, 12):
-            Product.objects.get_or_create(name="Supplier %s" % i, company=self.company, priceVal=price_val)
+            Product.objects.get_or_create(name="Product %s" % i, company=self.company, priceVal=price_val)

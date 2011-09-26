@@ -64,8 +64,7 @@ class OrderBase(PersistentModel):
         for p in products:
             if not p.id:
                 p.save()
-
-            self.product_lines.add(p)
+                self.product_lines.add(p)
 
     def __unicode__(self):
         return self.title

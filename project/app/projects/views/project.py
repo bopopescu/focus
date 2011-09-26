@@ -126,7 +126,7 @@ def form (request, id=False):
         if form.is_valid():
             o = form.save(commit=False)
             o.owner = request.user
-            o.save()
+            o.save(no_allemployee_group_permissions=True)
             request.message_success(msg)
 
             return redirect(view, o.id)

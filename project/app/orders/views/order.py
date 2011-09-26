@@ -131,6 +131,7 @@ def form(request, id=None):
             p.description = request.POST.getlist('product_description')[i]
             p.price = request.POST.getlist('product_unit_cost')[i]
             p.count = request.POST.getlist('product_qty')[i]
+
             try:
                 p.product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))
             except Exception, e:
@@ -153,7 +154,6 @@ def form(request, id=None):
     return render(request, "orders/form.html", {'form': form,
                                                 'order': instance,
                                                 'products': products})
-
 
 @require_permission("EDIT", Order, "id")
 def delete_permission_from_participants(request, id, permission_id):

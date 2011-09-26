@@ -132,7 +132,7 @@ def form(request, id=None):
             try:
                 product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))
                 p.product = product
-            except:
+            except Exception, e:
                 p.product = None
 
             products.append(p)
@@ -140,7 +140,7 @@ def form(request, id=None):
 
         if form.is_valid():
             o = form.save(commit=False)
-            o.save()
+            o.save(no_allemployee_group_permissions=True)
             o.update_products(products)
 
             request.message_success(_("Successfully saved offer"))

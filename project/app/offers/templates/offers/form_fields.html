@@ -34,14 +34,12 @@
 <h1>{{ title }}</h1>
 
 <div style="width:705px;">
-
     <div class="products">
         <br><h5>{% trans "Products" %}</h5>
 
-                <span style="float:right;" id="add_product">{% trans "Add product" %}</span>
+        <span style="float:right;" id="add_product">{% trans "Add product" %}</span>
 
         <table>
-
             <thead style="display:none;">
             <th>Item</th>
             <th>Description</th>
@@ -58,23 +56,23 @@
 
                 <tr class="product">
                     <td>
-                        <input type="text" class="field_input" style="width:40px;" name="product_number"
+                        <input type="text" class="field_input" style="width:80px;" name="product_number"
                                value="{{ product.product.id }}">
                     </td>
                     <td>
-                        <input type="text" class="field_input" style="width:100px;" name="product_description"
+                        <input type="text" class="field_input" style="width:200px;" name="product_description"
                                value="{{ product.description }}">
                     </td>
                     <td>
-                        <input type="text" class="field_input" name="product_unit_cost"
+                        <input type="text" class="field_input" style="width:60px;" name="product_unit_cost"
                                value="{{ product.price }}">
                     </td>
                     <td>
-                        <input type="text" class="field_input" name="product_qty"
+                        <input type="text" class="field_input" style="width:15px;" name="product_qty"
                                value="{{ product.count }}">
                     </td>
                     <td>
-                        <input type="text" class="field_input" name="product_tax"
+                        <input type="text" class="field_input" style="width:30px;" name="product_tax"
                                value="{{ product.tax }}">
                     </td>
                     <td>
@@ -98,19 +96,19 @@
     <table>
         <tr class="product">
             <td>
-                <input type="text" class="field_input" style="width:40px;" name="product_number">
+                <input type="text" class="field_input" style="width:80px;" name="product_number">
             </td>
             <td>
-                <input type="text" class="field_input" style="width:100px;" name="product_description">
+                <input type="text" class="field_input" style="width:200px;" name="product_description">
             </td>
             <td>
-                <input type="text" class="field_input" name="product_unit_cost">
+                <input type="text" class="field_input" style="width:60px;" name="product_unit_cost">
             </td>
             <td>
-                <input type="text" class="field_input" name="product_qty">
+                <input type="text" class="field_input" style="width:15px;" name="product_qty">
             </td>
             <td>
-                <input type="text" class="field_input" name="product_tax">
+                <input type="text" class="field_input" style="width:30px;" name="product_tax">
             </td>
             <td>
             </td>
