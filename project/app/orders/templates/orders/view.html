@@ -24,7 +24,9 @@
 
 
                     <li>
+                        {% if user.profileImage %}
                         <img src="{{ user.profileImage|thumbnail_with_max_side:"40" }}" title="User" alt=""/>
+                        {% endif %}
                         <a href="{% url app.admin.views.user.view user.id %}"
                            class="contacts-user">{{ user.first_name }} {{ user.last_name }}</a>
                         <em>{{ user.email }}</em>
@@ -39,10 +41,9 @@
 
     <br><br>
 
-    {% include "comments.html" %}
 
-    <h2>{% trans "Products" %}</h2>
     {% if order.product_lines.all %}
+    <h2>{% trans "Products" %}</h2>
         <div class="products">
 
             <table>
@@ -87,6 +88,12 @@
             </table>
         </div>
 
+        <br><br>
+
     {% endif %}
+
+
+    {% include "comments.html" %}
+
 
 {% endblock %}

@@ -95,10 +95,8 @@ def create_invoice(request, id):
 
     return render(request, "orders/create_invoice.html", {'title': order.title,
                                                           'order': order,
-                                                          'next_invoice_number': Invoice.calculate_next_invoice_number()
-        ,
+                                                          'next_invoice_number': Invoice.calculate_next_invoice_number(),
                                                           'form': form})
-
 
 @require_permission("VIEW", Order)
 def add(request):
@@ -138,6 +136,7 @@ def form(request, id=None):
                 p.product = None
 
             products.append(p)
+
             i += 1
 
         if form.is_valid():
