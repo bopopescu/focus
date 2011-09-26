@@ -20,3 +20,5 @@ media/uploads
 static_media
 .idea
 development.py
+
+/project/uploads/
