@@ -31,9 +31,7 @@ class Role(models.Model):
             self.actions.add(p)
 
         self.save()
-
         cache.clear()
-
 
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
@@ -70,7 +68,6 @@ class Permission(models.Model):
         return []
 
     def get_object(self):
-
         if not self.object_id:
             return "any"
         try:

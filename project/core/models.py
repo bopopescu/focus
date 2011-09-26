@@ -82,14 +82,17 @@ class PersistentModel(models.Model):
         #GRANT PERMISSIONS
         if action == "ADD":
             Core.current_user().grant_role("Admin", self)
+
             admin_group = Core.current_user().get_company_admingroup()
             allemployeesgroup = Core.current_user().get_company_allemployeesgroup()
 
-            if admin_group:
-                admin_group.grant_role("Admin", self)
+            if 'no_admin_group_permissions' not in kwargs:
+                if admin_group:
+                    admin_group.grant_role("Admin", self)
 
-            if allemployeesgroup:
-                allemployeesgroup.grant_role("Member", self)
+            if 'no_allemployee_group_permissions' not in kwargs:
+                if allemployeesgroup:
+                    allemployeesgroup.grant_role("Member", self)
 
         if 'noLog' not in kwargs:
             log = Log(message=changes,

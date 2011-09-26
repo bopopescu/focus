@@ -14,6 +14,7 @@ from core.shortcuts import comment_block
 @require_permission("LIST", Order)
 def my_orders(request):
     orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False)
+
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
 
@@ -140,7 +141,7 @@ def form(request, id=None):
 
         if form.is_valid():
             o = form.save(commit=False)
-            o.save()
+            o.save(no_allemployee_group_permissions=True)
             o.update_products(products)
 
             request.message_success(_("Successfully saved order"))

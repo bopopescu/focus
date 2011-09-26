@@ -1,38 +1,42 @@
 {% load i18n %}
 
 <script>
-        $(function() {
-            $("#loading").hide();
-            $("#form_button").click(function() {
-                $("#form_button").hide();
-                $("#loading").show();
-            })
+    $(function() {
+        $("#loading").hide();
+        $("#form_button").click(function() {
+            $("#form_button").hide();
+            $("#loading").show();
         })
-    </script>
+    })
+</script>
 
-    <form enctype="multipart/form-data" method="post">
+<form enctype="multipart/form-data" method="post">
 
-        <fieldset>
-            <legend>{{ title }}</legend>
-            <dl>
-                {% for field in form %}
-                    <dt>
-                        <label>{{ field.label }}</label>
-                    </dt>
-                    <dd>
-                        {{ field }}
-                        <p><span
-                                {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
-                        </p>
-                    </dd>
-                {% endfor %}
-            </dl>
-        </fieldset>
+    <fieldset>
+        <legend>{{ title }}</legend>
+        <dl>
+            {% for field in form %}
+                <dt>
+                    <label>{{ field.label }}</label>
+                </dt>
+                <dd>
+                    {{ field }}
+                    <p><span
+                            {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                    </p>
+                </dd>
+            {% endfor %}
 
-        <div id="loading">
-            <span class="loader red" title="Loading, please wait…"></span>
-        </div>
 
-        <button id="form_button" type="submit">{% trans "Save" %}</button>
 
-    </form>
+        </dl>
+
+    </fieldset>
+
+    <div id="loading">
+        <span class="loader red" title="Loading, please wait…"></span>
+    </div>
+
+    <button id="form_button" type="submit">{% trans "Save" %}</button>
+
+</form>

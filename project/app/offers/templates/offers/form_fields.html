@@ -1,0 +1,266 @@
+{% load i18n %}
+
+<script>
+    $(function() {
+        $("#loading").hide();
+        $("#form_button").click(function() {
+            $("#form_button").hide();
+            $("#loading").show();
+        })
+    })
+</script>
+
+<form enctype="multipart/form-data" method="post">
+
+<fieldset>
+    <legend>{{ title }}</legend>
+    <dl>
+        {% for field in form %}
+            <dt>
+                <label>{{ field.label }}</label>
+            </dt>
+            <dd>
+                {{ field }}
+                <p><span
+                        {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                </p>
+            </dd>
+        {% endfor %}
+
+    </dl>
+
+</fieldset>
+
+<h1>{{ title }}</h1>
+
+<div style="width:705px;">
+
+    <div class="products">
+        <br><h5>{% trans "Products" %}</h5>
+
+                <span style="float:right;" id="add_product">{% trans "Add product" %}</span>
+
+        <table>
+
+            <thead style="display:none;">
+            <th>Item</th>
+            <th>Description</th>
+            <th>Unit cost</th>
+            <th>Qty</th>
+            <th>Tax</th>
+            <th>Total</th>
+            <th></th>
+            </thead>
+
+            <tbody>
+
+            {% for product in products %}
+
+                <tr class="product">
+                    <td>
+                        <input type="text" class="field_input" style="width:40px;" name="product_number"
+                               value="{{ product.product.id }}">
+                    </td>
+                    <td>
+                        <input type="text" class="field_input" style="width:100px;" name="product_description"
+                               value="{{ product.description }}">
+                    </td>
+                    <td>
+                        <input type="text" class="field_input" name="product_unit_cost"
+                               value="{{ product.price }}">
+                    </td>
+                    <td>
+                        <input type="text" class="field_input" name="product_qty"
+                               value="{{ product.count }}">
+                    </td>
+                    <td>
+                        <input type="text" class="field_input" name="product_tax"
+                               value="{{ product.tax }}">
+                    </td>
+                    <td>
+                        100kr
+                    </td>
+                    <td>
+                        <div>
+                            <a class="remove_product_button" href="#">Slett</a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <br><br><br>
+</div>
+
+<div class="product_template" style="display:none;">
+    <table>
+        <tr class="product">
+            <td>
+                <input type="text" class="field_input" style="width:40px;" name="product_number">
+            </td>
+            <td>
+                <input type="text" class="field_input" style="width:100px;" name="product_description">
+            </td>
+            <td>
+                <input type="text" class="field_input" name="product_unit_cost">
+            </td>
+            <td>
+                <input type="text" class="field_input" name="product_qty">
+            </td>
+            <td>
+                <input type="text" class="field_input" name="product_tax">
+            </td>
+            <td>
+            </td>
+            <td>
+                <div>
+                    <a class="remove_product_button" href="#">Slett</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+
+
+    $(document).ready(function() {
+
+
+        $("#loading").hide();
+        $("#form_button").click(function() {
+            $("#form_button").hide();
+            $("#loading").show();
+        })
+
+
+        function setSelectBoxInPopup(currentID, currentText) {
+
+            var exists = 0 != $('#id_projects-customer option[value=' + currentID + ']').length;
+
+            if (!exists) {
+                $('#id_projects-customer').
+                        append($("<option></option>").
+                        attr("value", currentID).
+                        text(currentText));
+            }
+
+            $("#id_projects-customer").val(currentID);
+        }
+
+
+        function getProjects() {
+
+            //Populate belonging projects in select
+            var currentID = $("select#id_customer").val();
+            var currentText = $("select#id_customer :selected").text();
+
+            $.getJSON("{% url app.projects.views.project_ajax.list_by_customer %}", {id: currentID}, function(data) {
+
+                var options = '';
+                for (var i = 0; i < data.length; i++) {
+                    options += "<option value=" + data[i].pk + ">" + data[i].fields.project_name + "</option>";
+                }
+
+                $("select#id_project").html(options);
+
+                setSelectBoxInPopup(currentID, currentText);
+
+                $("#error_project_for_customer").replaceWith("<div id='error_project_for_customer'>" + currentText + "</div>");
+
+            })
+        }
+
+        function setNeedCustomerMessage() {
+            $("select#id_project").html("<option value=''>---------</option>");
+            $("#projectcustomer").replaceWith("<div id='projectcustomer'>{% trans 'You have to select a customer' %}</div>");
+        }
+
+        $("select#id_project").html("<option value=''>---------</option>");
+        $("#id_projects-customer").hide();
+
+        $("#error_project_for_customer").replaceWith("<div id='error_project_for_customer'>{% trans 'You have to select a customer' %}</div>");
+
+        //Check if customer
+        if ($("select#id_customer").val() != "") {
+            getProjects();
+        } else {
+            setNeedCustomerMessage();
+        }
+
+        $("select#id_customer").change(function() {
+            if ($(this).val()) {
+                getProjects();
+            }
+            else {
+                setNeedCustomerMessage();
+            }
+        })
+
+        if ($(".products tbody tr").length > 0) {
+            $(".products thead").show();
+        }
+
+        $("#add_product").live("click", function() {
+            $(".products thead").show();
+            var new_product = ($(".product_template").find(".product").first().html());
+            var new_element = "<tr class='product'>" + new_product + "</tr>"
+            $(".products tbody").last().append(new_element)
+
+            var e = $(".products tbody tr").last();
+
+            e.find("input[type=text][name=product_number]").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "/api/products/",
+                        dataType: "jsonp",
+                        data: {
+                            featureClass: "P",
+                            style: "full",
+                            maxRows: 12,
+                            name_startsWith: request.term
+                        },
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.name,
+                                    value: item.id,
+                                    item:item
+                                }
+                            }));
+                        }
+                    });
+                },
+                minLength: 1,
+
+                select: function(event, ui) {
+                    console.log(new_product)
+                    e.find("input[type=text][name=product_description]").val(ui.item.item.description)
+                    e.find("input[type=text][name=product_unit_cost]").val(ui.item.item.price_out)
+                    e.find("input[type=text][name=product_qty]").val("1")
+                    e.find("input[type=text][name=product_tax]").val("0")
+                }
+            });
+
+            e.find("input[type=text][name=product_number]").focus();
+
+        })
+        $(".remove_product_button").live("click", function() {
+            $(this).parent().parent().parent().remove()
+            if ($(".products tbody tr").length == 0) {
+                $(".products thead").hide();
+            }
+        })
+    })
+</script>
+
+<div id="loading">
+    <span class="loader red" title="Loading, please wait…"></span>
+</div>
+
+
+<button id="form_button" type="submit">{% trans "Save" %}</button>
+
+</form>

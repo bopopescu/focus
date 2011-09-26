@@ -29,7 +29,12 @@ def add_file(request, id):
     """
     project = Core.current_user().get_permitted_objects("VIEW", Project).all().get(id=id)
     file = File()
-    return file_form(request, project, file, redirect(overview, id))
+
+    additional_data = {'project': project}
+
+
+    return file_form(request, project, file, redirect(overview, id), additional_data,
+                     template="projects/files/form.html")
 
 
 @require_permission("VIEW", Project, 'id')
@@ -40,4 +45,8 @@ def edit_file(request, id, file_id):
     """
     project = Core.current_user().get_permitted_objects("VIEW", Project).all().get(id=id)
     file = project.files.get(id=file_id)
-    return file_form(request, project, file, redirect(overview, id))
+
+    additional_data = {'project': project}
+
+    return file_form(request, project, file, redirect(overview, id), additional_data,
+                     template="projects/files/form.html")

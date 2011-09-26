@@ -385,10 +385,12 @@ class Command(BaseCommand):
                                           "Focus Security AS")
 
         Core.set_test_user(user)
-        generate_new_password_for_user(user)
+        password = generate_new_password_for_user(user)
 
         print "Company: %s " % company
         print "Current user is: %s " % Core.current_user()
+        print "Current user is: %s " % Core.current_user().username
+        print "Current users password: %s " % password
 
         users = self.migrate_users(company, cursor, randomCompanyIdentifier)
 

@@ -15,9 +15,9 @@ def overview(request):
     title = _("Welcome to TIME")
 
     announcements = Core.current_user().get_permitted_objects("VIEW", Announcement)[::-1]
-    your_projects = Core.current_user().get_permitted_objects("VIEW", Project)
-    your_orders = Core.current_user().get_permitted_objects("VIEW", Order)[::-1]
-    tickets = Core.current_user().get_permitted_objects("VIEW",Ticket)
+    your_projects = Core.current_user().get_permitted_objects("VIEW", Project).order_by('?')[0:3]
+    your_orders = Core.current_user().get_permitted_objects("VIEW", Order).order_by('?')[0:3]
+    tickets = Core.current_user().get_permitted_objects("VIEW",Ticket).order_by('?')[0:3]
 
     return render(request, 'dashboard/dashboard.html', {'title': title,
                                                         'announcements': announcements,

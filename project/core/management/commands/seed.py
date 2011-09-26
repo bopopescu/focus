@@ -24,10 +24,11 @@ class Command(BaseCommand):
         self.user = user
 
         Core.set_test_user(user)
-        generate_new_password_for_user(user)
-
+        password = generate_new_password_for_user(user)
         print "Company: %s " % company
         print "Current user is: %s " % Core.current_user()
+        print "Current user is: %s " % Core.current_user().username
+        print "Current users password: %s " % password
 
         self.seed_customers()
         self.seed_contacts()
