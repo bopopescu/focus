@@ -5,6 +5,7 @@
 
 <header>
     <a href="/" title="Back to Homepage"></a>
+
     <h1>{{ user.get_company }}</h1>
 </header>
 
@@ -23,7 +24,25 @@
 <nav id="main-nav">
 
     <ul>
-        <li><a class="dashboard no-submenu" href="{% url app.dashboard.views.overview %}">Dashboard</a></li>
+
+
+        <li class="{% active request "^/dashboard/" %} {% active request "^/announcements/" %}">
+
+            <a href="{% url app.dashboard.views.overview %}" title="" class="no-submenu dashboard">{% trans "Dashboard" %}</a>
+
+            {% require_permission ADD announcements.Announcement %}
+
+            <ul>
+                <li>
+                    <a class="{% active request "announcements" %}"
+                       href="{% url app.announcements.views.add %}">{% trans "New announcement" %}</a>
+                </li>
+            </ul>
+
+            {% end_require %}
+
+        </li>
+
 
         {% require_permission LIST customers.Customer %}
         <li class="{% active request "^/customers/" %}">

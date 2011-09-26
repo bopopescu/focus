@@ -5,11 +5,7 @@ from app.announcements.forms import AnnouncementForm
 from app.announcements.models import Announcement
 from core import Core
 from core.decorators import login_required
-
-@login_required()
-def overview(request):
-    announcements = Core.current_user().get_permitted_objects("VIEW", Announcement).filter(trashed=False)
-    return render(request, 'announcements/list.html', {'title': 'Oppslag', 'announcements': announcements})
+from app.dashboard.views import overview
 
 @login_required()
 def overview_trashed(request):
@@ -54,7 +50,7 @@ def form (request, id=False):
             o.save()
             form.save_m2m()
             request.message_success(msg)
-            return redirect(view, o.id)
+            return redirect(overview)
 
     else:
         form = AnnouncementForm(instance=instance, initial={"attachment":None})
