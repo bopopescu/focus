@@ -30,7 +30,6 @@
 
             <a href="{% url app.dashboard.views.overview %}" title="" class="no-submenu dashboard">{% trans "Dashboard" %}</a>
 
-            {% require_permission ADD announcements.Announcement %}
 
             <ul>
                 <li>
@@ -39,7 +38,6 @@
                 </li>
             </ul>
 
-            {% end_require %}
 
         </li>
 
