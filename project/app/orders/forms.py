@@ -59,7 +59,12 @@ class CreateInvoiceForm(ModelForm):
                 raise forms.ValidationError(_("You need to use a unique invoice number"))
 
         return invoice_number
-    
+
 class AddParticipantToOrderForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.filter_current_company())
-    role = forms.ModelChoiceField(queryset=Role.objects.all())
+    user = forms.ModelChoiceField(queryset=User.objects.none)
+    role = forms.ModelChoiceField(queryset=Role.objects.none)
+
+    def __init__(self, *args, **kwargs):
+        super(AddParticipantToOrderForm, self).__init__(*args, **kwargs)
+        self.fields['user'].queryset= User.objects.filter_current_company()
+        self.fields['role'].queryset = Role.objects.all()

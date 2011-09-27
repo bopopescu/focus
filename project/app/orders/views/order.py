@@ -157,12 +157,17 @@ def form(request, id=None):
 
 @require_permission("EDIT", Order, "id")
 def delete_permission_from_participants(request, id, permission_id):
-    permission = Permission.objects.get(id=permission_id)
-    if not permission.user == Core.current_user():
-        permission.delete()
-        request.message_success("Deleted")
-    else:
-        request.message_error("You can't delete your own permissions")
+
+    try:
+        permission = Permission.objects.get(id=permission_id)
+
+        if not permission.user == Core.current_user():
+            permission.delete()
+            request.message_success("Deleted")
+        else:
+            request.message_error("You can't delete your own permissions")
+    except Exception, e:
+        request.message_error("You can't delete this permission")
 
     return participants(request, id)
 
