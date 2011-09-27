@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db import models
 from datetime import datetime, timedelta
+from django.utils.translation import ugettext as _
 
 class Action(models.Model):
     name = models.CharField(max_length=40)
@@ -45,6 +46,12 @@ class Permission(models.Model):
     negative = models.BooleanField()
     from_date = models.DateTimeField(null=True, blank=True)
     to_date = models.DateTimeField(null=True, blank=True)
+
+    def __unicode__(self):
+        if self.user:
+            return _("User") + ":" + " " + unicode(self.user)
+
+        return _("Group") + ":" + " " + unicode(self.group)
 
     def get_actions(self):
         actions = []

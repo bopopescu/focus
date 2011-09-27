@@ -4,10 +4,8 @@
 {% load thumbnail %}
 
 {% block content %}
-
-
+    
     <h1>{{ title }} </h1>
-
 
     <h1>{% trans "Add participant" %}</h1>
     <form action="" method="POST">
@@ -24,13 +22,12 @@
     <br><br><br>
     <h1>{% trans "Participants" %}</h1>
 
-
     <table class="datatable">
         <thead>
 
         <tr>
             <th></th>
-            <th>{% trans "Person" %}</th>
+            <th></th>
             <th>{% trans "Actions" %}</th>
             <th></th>
         </tr>
@@ -45,7 +42,7 @@
                              src="{{ permission.user.profileImage|thumbnail_with_max_side:"50" }}">
                     {% endif %}
                 </td>
-                <td><a href="{{ user.get_view_url }}">{{ permission.user }}</a></td>
+                <td><a href="{{ user.get_view_url }}">{{ permission }}</a></td>
                 <td>{{ permission.role }}</td>
                 <td>
                     <a href="{% url app.orders.views.order.delete_permission_from_participants order.id, permission.id %}">{% trans "Delete" %}</a>
