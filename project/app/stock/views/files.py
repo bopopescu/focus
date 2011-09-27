@@ -27,7 +27,12 @@ def add_file(request, id):
     """
     instance = Core.current_user().get_permitted_objects("VIEW", Product).all().get(id=id)
     file = File()
-    return file_form(request, instance, file, redirect(overview, id))
+
+    additional_data = {'product': instance}
+
+    return file_form(request, instance, file, redirect(overview, id), additional_data,
+                     template="stock/files/form.html")
+
 
 
 @login_required()
@@ -38,4 +43,7 @@ def edit_file(request, id, file_id):
     """
     instance = Core.current_user().get_permitted_objects("VIEW", Product).all().get(id=id)
     file = instance.files.get(id=file_id)
-    return file_form(request, instance, file, redirect(overview, id))
+    additional_data = {'product': instance}
+
+    return file_form(request, instance, file, redirect(overview, id), additional_data,
+                     template="stock/files/form.html")
