@@ -89,6 +89,7 @@ def list_contacts(request, id):
         if form.is_valid():
             contact = form.cleaned_data['contact']
             customer.contacts.add(contact)
+            request.message_success(_("Successfully added contact"))
 
     else:
         form = ContactParticipantToCustomerForm(existing_contacts=customer.contacts.all())
@@ -105,8 +106,9 @@ def remove_contact_from_customer(request, id, contact_id):
     try:
         contact = customer.contacts.get(id=contact_id)
         customer.contacts.remove(contact)
+        request.message_success(_("Successfully removed contact"))
 
-        return redirect(list_contacts, id)
+        return list_contacts(request, id)
 
     except Exception, e:
         return False

@@ -27,7 +27,7 @@
 
     <form action="" method="POST">
         {% trans "Invoice number" %}
-        <input name="order_number" value="{% if not order.archived %} {{ next_invoice_number }} {% endif  %}"{% if order.archived %} disabled="disabled" {% endif %}>
+        <input name="invoice_number" value="{% if not order.archived %} {{ next_invoice_number }} {% endif  %}"{% if order.archived %} disabled="disabled" {% endif %}>
         <input value="{% trans "Save" %}" type="submit" {% if order.archived %} disabled="disabled" {% endif %}>
     </form>
 

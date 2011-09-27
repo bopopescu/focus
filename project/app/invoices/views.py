@@ -71,6 +71,6 @@ def form(request, id=None):
     else:
         form = InvoiceForm(instance=instance, initial={'invoice_number': invoice_number})
 
-    return render(request, "orders/form.html", {'form': form,
+    return render(request, "invoices/form.html", {'form': form,
                                                 'invoice': instance,
                                                 'products': products})

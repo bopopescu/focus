@@ -15,7 +15,7 @@ def overview(request, id):
     #Set URL for edit for files in project
     edit_file_url = "/stock/product/%s/files/" % instance.id
 
-    return render(request, "projects/files/list.html",
+    return render(request, "stock/files/list.html",
                                                         {'product': instance,
                                                          'file_manager': instance,
                                                          'edit_file_url': edit_file_url})

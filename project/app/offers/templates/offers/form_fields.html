@@ -76,7 +76,9 @@
                                value="{{ product.tax }}">
                     </td>
                     <td>
-                        100kr
+                        <div class="total_sum">
+                            {{ product.get_total_sum }}
+                        </div>
                     </td>
                     <td>
                         <div>
@@ -111,6 +113,9 @@
                 <input type="text" class="field_input" style="width:30px;" name="product_tax">
             </td>
             <td>
+                <div class="total_sum">
+                    {{ product.get_total_sum }}
+                </div>
             </td>
             <td>
                 <div>
@@ -147,6 +152,24 @@
 
             $("#id_projects-customer").val(currentID);
         }
+
+
+        function calc_total_sum_for_row(obj) {
+            var product_unit_cost = obj.parent().parent().find('input[name="product_unit_cost"]').val();
+            var product_qty = obj.parent().parent().find('input[name="product_qty"]').val();
+
+            var total_sum = product_unit_cost * product_qty;
+
+            obj.parent().parent().find(".total_sum").html(total_sum);
+        }
+
+        $('input[name="product_qty"]').live("change", function() {
+            calc_total_sum_for_row($(this));
+        });
+
+        $('input[name="product_unit_cost"]').live("change", function() {
+            calc_total_sum_for_row($(this));
+        });
 
 
         function getProjects() {

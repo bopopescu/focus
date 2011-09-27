@@ -17,6 +17,7 @@
             <th>{% trans "Name" %}</th>
             <th></th>
             <th></th>
+            <th>Tags</th>
         </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@
                          alt=""/> {{ file.name }}</td>
                 <td><a href="{{ file.get_file }}" target="_blank">Last ned</a></td>
                 <td><a href="{{ edit_file_url }}{{ file.id }}/edit/">Endre fil</a></td>
+                <td>{% for tag in file.tags.all %} {{ tag }} {% endfor %}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -15,8 +15,9 @@ class ProductLine(models.Model):
     product = models.ForeignKey('stock.Product', related_name="product_lines", verbose_name=_("Product"), null=True,
                                 blank=True, default=None)
     description = models.TextField(_("Description"))
-    count = models.IntegerField(_("Count"))
-    price = models.CharField(_("Price"), max_length=10)
+    count = models.IntegerField(_("Count"), default=0)
+    price = models.CharField(_("Price"), max_length=10, default=0)
+    tax = models.CharField(_("Price"), max_length=10, default=0)
 
     def __unicode__(self):
         return self.description
@@ -26,6 +27,10 @@ class ProductLine(models.Model):
             return self.product
         return "Item"
 
+    def get_total_sum(self):
+        if self.count and self.price:
+            return int(self.count)*int(self.price)
+        return 0
 
 class OrderBase(PersistentModel):
     title = models.CharField(_("Title"), max_length=80)
@@ -63,7 +68,19 @@ class OrderBase(PersistentModel):
 
         for p in products:
             if not p.id:
-                p.save()
+                if p.product or p.description:
+                    if not p.count:
+                        p.count = 1
+
+                    if not p.price:
+                        p.price = 0
+                        
+                    if not p.tax:
+                        p.price = 0
+
+                    p.save()
+                    
+            if p.id:
                 self.product_lines.add(p)
 
     def __unicode__(self):

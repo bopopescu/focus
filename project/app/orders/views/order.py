@@ -129,6 +129,7 @@ def form(request, id=None):
             p.description = request.POST.getlist('product_description')[i]
             p.price = request.POST.getlist('product_unit_cost')[i]
             p.count = request.POST.getlist('product_qty')[i]
+            p.tax = request.POST.getlist('product_tax')[i]
 
             try:
                 p.product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))

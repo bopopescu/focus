@@ -115,13 +115,20 @@ class Product(PersistentModel):
     def orders(self):
         orderIDs = []
         cls = None
-        for line in self.order_lines.all():
+
+        for line in self.product_lines.all():
+            print line.__dict__
+
             if not cls:
                 cls = line.order.__class__
             if not line.order.id in orderIDs:
                 orderIDs.append(line.order.id)
-        orders = cls.objects.filter(id__in=orderIDs)
-        return orders
+
+        if cls:
+            orders = cls.objects.filter(id__in=orderIDs)
+            return orders
+        
+        return []
 
 def initial_data ():
     Currency.objects.get_or_create(name="Norsk Krone", iso="NOK")
