@@ -91,7 +91,7 @@ class Product(PersistentModel):
         can_be_deleted = True
         reasons = []
 
-        if self.orders().all().count() > 0:
+        if self.product_lines.all().count() > 0:
             can_be_deleted = False
             reasons.append(_("Product used in orders, see orders menu in sidebar."))
 

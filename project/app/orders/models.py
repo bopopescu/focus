@@ -87,14 +87,20 @@ class OrderBase(PersistentModel):
         return self.title
 
 
+invoice_status_choices = (
+    ("0", _("New")),
+    ("1", _("Sent")),
+    ("2", _("Paid")),
+)
+
 class Invoice(OrderBase):
     invoice_number = models.IntegerField(_("Invoice number"))
     order = models.ForeignKey("Order", verbose_name=_("Order"), related_name="invoices")
     project = models.ForeignKey(Project, related_name="invoices", verbose_name=_("Project"), blank=True, null=True)
+    status = models.CharField(default=None, null=True, max_length=10, choices=invoice_status_choices, verbose_name=_("Status"))
 
     def get_view_url(self):
         return urlresolvers.reverse('app.invoices.views.view', args=("%s" % self.id,))
-
 
     @staticmethod
     def calculate_next_invoice_number():
@@ -131,11 +137,18 @@ class Offer(OrderBase):
             return next + 1
         return 1
 
+order_status_choices = (
+    ("0", _("New")),
+    ("1", _("In progress")),
+    ("2", _("Done")),
+    )
 
 class Order(OrderBase):
     order_number = models.IntegerField(_("Order number"))
     offer = models.ForeignKey('orders.Offer', verbose_name=_("Offer"), related_name="orders", null=True, blank=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
+
+    status = models.CharField(default=None, null=True, max_length=10, choices=order_status_choices, verbose_name=_("Status"))
 
     #Managers
     objects = OrderManager()

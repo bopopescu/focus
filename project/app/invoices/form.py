@@ -8,7 +8,7 @@ from core.widgets import SelectWithPop, DatePickerField
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
-        fields = ("invoice_number", "title", "customer", "project", 'delivery_date',
+        fields = ("invoice_number", "title", "status", "customer", "project", 'delivery_date',
                   'delivery_date_deadline', 'description')
 
     def __init__(self, *args, **kwargs):

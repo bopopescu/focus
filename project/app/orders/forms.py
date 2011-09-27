@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ("order_number", "title", "customer", "project", 'delivery_date',
+        fields = ("order_number", "title", "status", "customer", "project", 'delivery_date',
                   'delivery_date_deadline', 'description')
 
     def __init__(self, *args, **kwargs):
