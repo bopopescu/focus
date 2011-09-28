@@ -20,7 +20,7 @@ class Command(BaseCommand):
             if company.admin_group and company.email_host and company.email_password and company.email_username:
 
                 print company.email_host
-                
+
                 Core.set_test_user(company.admin_group.members.all()[0])
 
                 M = poplib.POP3(company.email_host)
@@ -28,6 +28,8 @@ class Command(BaseCommand):
                 M.pass_(company.email_password)
 
                 numMessages = len(M.list()[1])
+
+                print numMessages
 
                 for i in range(numMessages):
                     print "=" * 40

@@ -34,6 +34,7 @@
                     $.each(data, function(i, item) {
                         availableTags.push(item.name);
                     });
+
                 }
         );
 
@@ -48,12 +49,14 @@
         $("#id_tags")
             // don't navigate away from the field on tab when selecting an item
                 .bind("keydown", function(event) {
+
                     if (event.keyCode === $.ui.keyCode.TAB &&
                             $(this).data("autocomplete").menu.active) {
                         event.preventDefault();
                     }
                 })
                 .autocomplete({
+                    
                     minLength: 0,
                     source: function(request, response) {
                         // delegate back to autocomplete, but extract the last term

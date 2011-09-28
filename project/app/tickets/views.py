@@ -21,7 +21,9 @@ def overview(request):
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request):
-    return render(request, 'tickets/list.html', {"title": "Tickets", "assigned_to": True})
+    return render(request, 'tickets/list.html', {"title": "Tickets",
+                                                 "assigned_to": True,
+                                                 'tickets': Core.current_user().get_permitted_objects("VIEW", Ticket).filter(assigned_to=request.user)})
 
 
 @require_permission("LIST", Ticket)
