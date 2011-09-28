@@ -158,7 +158,7 @@ def admin_hourregistrationtypes(request, id=None):
 
             request.message_success("Success")
 
-            return redirect(admin_hourregistrationtypes, o.id)
+            return redirect(admin_hourregistrationtypes)
     else:
         form = HourRegistrationTypeForm(instance=instance)
 
@@ -183,13 +183,27 @@ def disbursements(request, id=None):
 
             request.message_success("Success")
 
-            return redirect(disbursements)
+            instance = Disbursement()
+            form = DisbursementForm(instance=instance, initial={'attachment': None})
 
     else:
         form = DisbursementForm(instance=instance, initial={'attachment': None})
 
+
     return render(request, "hourregistrations/disbursements.html",
             {'title': _("Disbursements"), 'disbursements': disb, 'disbursement': instance, 'form': form})
+
+
+@require_permission("LIST", HourRegistration)
+def delete_disbursements(request, id):
+    try:
+        instance = get_object_or_404(Disbursement, id=id)
+        instance.delete()
+        request.message_success("Successfully deleted disbursement")
+    except Exception, e:
+        request.message_error("Error during deleteing disbursement")
+
+    return disbursements(request)
 
 ########ARCHIVE#############
 @require_permission("MANAGE", HourRegistration)

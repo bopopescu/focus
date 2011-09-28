@@ -4,6 +4,16 @@
 
 {% block content %}
 
+    <script>
+    $(function() {
+        $("#loading").hide();
+        $("#form_button").click(function() {
+            $("#form_button").hide();
+            $("#loading").show();
+        })
+    })
+</script>
+
     <h1>{% trans "Create invoice from this order" %}</h1>
 
     {% if order.archived %}

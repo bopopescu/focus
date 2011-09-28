@@ -61,7 +61,7 @@ class File(PersistentModel):
     def get_file_icon(self):
         file_extension = self.get_file_extension()
 
-        path = settings.STATIC_URL + "img/file_extensions/"
+        path = settings.STATIC_URL + "img/icons/extensions/page_"
 
         if file_extension == ".pdf":
             return path + "pdf.png"

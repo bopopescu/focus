@@ -10,18 +10,10 @@
 
     <h1>{{ title }} </h1>
 
-    <div class="ui-widget" style="width:100px;">
-        <form action="" method="POST">
-            {{ form }}
-            <input type="submit" value="{% trans "Save" %}">
-        </form>
+        {% include "form_fields.html" %}
 
-    </div>
-
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
+<br><br><br><br>
+    <table class="datatable">
         <thead>
         <tr>
             <th>{% trans "Name" %}</th>

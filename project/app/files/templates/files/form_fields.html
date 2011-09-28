@@ -1,40 +1,9 @@
 {% load i18n %}
 
 <h1>{{ title }}</h1>
-<br>
-<br>
-
-{% if form.errors %}
-
-    <div class="information" id="message">
-        <p>Fix before submit again</p>
-    </div>
-
-    {% for i in form %}
-        {% if i.errors %}
-            {{ i.label }}{{ i.errors }}
-        {% endif %}
-    {% endfor %}
-
-    <br><br>
-{% endif %}
 
 <div style="width:805px;">
-    <form enctype="multipart/form-data" class="form label-inline" method="post">
-        {% for field in form %}
-            <div class="fieldWrapper">
-                {{ field.label }}
-                <span {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
-                <br>{{ field }}
-            </div>
-        {% endfor %}
-
-        <div>
-            <input type="submit" value="Lagre" id="form_button" class="btn" name="save"/>
-
-            <div id="loading">Loading...</div>
-        </div>
-    </form>
+    {% include "form_fields.html" %}
 </div>
 
 <script>
@@ -114,7 +83,7 @@
 {% if file.id %}
     <h2>{% trans "Download current version" %}</h2>
 
-    <table id="dataTable">
+    <table>
         <thead>
         <tr>
             <th style="width:200px;">{% trans "Date" %}</th>
@@ -130,9 +99,9 @@
             <td>{{ file.editor }}</td>
             <td><img class="icon_for_file" src="{{ file.get_file_icon}}"
                      alt=""/> {{ file.name }}</td>
-            <td><a href="{{ file.get_file }}" target="_blank"><img
-                    style="vertical-align: middle; border:0px; width:30px; height: 30px;"
-                    src="{{ STATIC_URL }}img/download.png">{% trans "download" %}</a></td>
+            <td><a href="{{ file.get_file }}" target="_blank"><img class="icon_for_file"
+                                                                   src="{{ STATIC_URL }}img/icons/icon_download.png">{% trans "download" %}
+            </a></td>
             <td></td>
         </tr>
         </tbody>
@@ -160,12 +129,12 @@
                 <td>{{ f.editor }}</td>
                 <td><img class="icon_for_file" src="{{ f.get_file_icon}}"
                          alt=""/> {{ f.name }}</td>
-                <td><a href="{{ f.get_file }}" target="_blank"><img
-                        style="vertical-align: middle; border:0px; width:30px; height: 30px;"
-                        src="{{ STATIC_URL }}img/download.png">{% trans "download" %}</a></td>
-                <td><a href="{{ f.get_recover_url }}" target="_blank"><img
-                        style="vertical-align: middle; border:0px; width:30px; height: 30px;"
-                        src="{{ STATIC_URL }}img/backup.png">{% trans "recover" %}</a></td>
+                <td><a href="{{ f.get_file }}" target="_blank"><img class="icon_for_file"
+                                                                    src="{{ STATIC_URL }}img/icons/icon_download.png">{% trans "download" %}
+                </a></td>
+                <td><a href="{{ f.get_recover_url }}" target="_blank"><img class="icon_for_file"
+                                                                           src="{{ STATIC_URL }}img/icons/icon_restore.png">{% trans "recover" %}
+                </a></td>
             </tr>
         {% endfor %}
         </tbody>

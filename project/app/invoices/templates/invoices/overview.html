@@ -4,19 +4,53 @@
 
 {% block content %}
     <table class="datatable">
-        <thead>
-        <tr>
-            <th>{% trans "Invoice number" %}</th>
-            <th>{% trans "Invoice" %}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for invoice in invoices %}
+
+
+            <thead>
             <tr>
-                <td>{{ invoice.invoice_number }}</td>
-                <td><a href="{% url app.invoices.views.view invoice.id %}">{{ invoice.title }}</a></td>
+                <th>{% trans "Invoice number" %}</th>
+                <th>{% trans "Invoice" %}</th>
+                <th>{% trans "Delivery date" %}</th>
+                <th>{% trans "Customer" %}</th>
+                <th>{% trans "Project" %}</th>
+                <th>{% trans "Status" %}</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.invoice_number }}</td>
+                    <td><a href="{% url app.invoices.views.view invoice.id %}">{{ invoice.title }}</a></td>
+                    <td>{{ invoice.delivery_date }}</td>
+                    <td>
+                        {% if invoice.customer %}
+                            <a href="{% url app.customers.views.view invoice.customer.id %}">{{ invoice.customer }}</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if invoice.project %}
+                            <a href="{% url app.projects.views.project.view invoice.project.id %}">{{ invoice.project }}</a>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if invoice.status == "0" %}
+                            <span class="tag gray">{% trans "New" %}</span>
+                        {% endif %}
+                        {% if invoice.status == "1" %}
+                            <span class="tag blue">{% trans "Sent" %}</span>
+                        {% endif %}
+                        {% if invoice.status == "2" %}
+                            <span class="tag green">{% trans "Paid" %}</span>
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+
+
+        </table>
+
 {% endblock %}

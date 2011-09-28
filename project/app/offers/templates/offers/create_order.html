@@ -3,13 +3,24 @@
 
 {% block content %}
 
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
+
+
     <h1>{% trans "Create order from this offer" %}</h1>
 
     {% if offer.archived %}
         <h3>{% trans "This offer is archived." %}</h3>
     {% endif %}
 
-     {% if form.errors %}
+    {% if form.errors %}
 
         <div class="information" id="message">
             <p>Fix before submit again</p>
@@ -26,9 +37,15 @@
 
     <form action="" method="POST">
         {% trans "Order number" %}
-        <input name="order_number" value="{% if not offer.archived %} {{ next_order_number }} {% endif  %}"{% if offer.archived %} disabled="disabled" {% endif %}>
+        <input name="order_number"
+               value="{% if not offer.archived %} {{ next_order_number }} {% endif  %}"{% if offer.archived %}
+               disabled="disabled" {% endif %}>
 
-        <input value="{% trans "Save" %}" type="submit" {% if offer.archived %} disabled="disabled" {% endif %}>
+        <div id="loading">
+            <span class="loader red" title="Loading, please wait…"></span>
+        </div>
+
+        <button id="form_button" type="submit">{% trans "Save" %}</button>
 
     </form>
 

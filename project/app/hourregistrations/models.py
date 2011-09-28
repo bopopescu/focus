@@ -89,3 +89,6 @@ class Disbursement(PersistentModel):
 
     def get_edit_url(self):
         return urlresolvers.reverse('app.hourregistrations.views.disbursements', args=("%s" % self.id,))
+
+    def get_delete_url(self):
+        return urlresolvers.reverse('app.hourregistrations.views.delete_disbursements', args=("%s" % self.id,))

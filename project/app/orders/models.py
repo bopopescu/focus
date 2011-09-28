@@ -109,14 +109,15 @@ class Invoice(OrderBase):
             return next + 1
         return 1
 
-accepted_choices = (
-    (True, "True"),
-    (False, "False"),
-    )
+offer_status_choices = (
+    ("0", _("Pending")),
+    ("1", _("Accepted")),
+    ("2", _("Declined")),
+)
 
 class Offer(OrderBase):
     offer_number = models.IntegerField(_("Offer number"))
-    accepted = models.NullBooleanField(default=None, choices=accepted_choices, verbose_name=_("Accepted"))
+    accepted = models.CharField(max_length=5, null=True, default=None, choices=offer_status_choices, verbose_name=_("Accepted"))
     project = models.ForeignKey(Project, related_name="offers", verbose_name=_("Project"), blank=True, null=True)
 
     def get_view_url(self):

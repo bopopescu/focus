@@ -4,24 +4,48 @@
 
 {% block content %}
     <table class="datatable">
-
         <thead>
         <tr>
             <th>{% trans "Offer number" %}</th>
             <th>{% trans "Title" %}</th>
+            <th>{% trans "Delivery date" %}</th>
+
+            <th>{% trans "Customer" %}</th>
+            <th>{% trans "Project" %}</th>
+            <th>Status</th>
         </tr>
         </thead>
-
         <tbody>
         {% for offer in offers %}
             <tr>
                 <td>{{ offer.offer_number }}</td>
                 <td><a href="{% url app.offers.views.view offer.id %}">{{ offer.title }}</a></td>
+                <td>{{ offer.delivery_date }}</td>
+                <td>
+                    {% if offer.customer %}
+                    <a href="{{ offer.customer.get_view_url }}">{{ offer.customer }}</a>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if offer.project%}
+                    <a href="{{ offer.project.get_view_url }}">{{ offer.project }}</a>
+                    {% endif %}
+                </td>
+               
+                <td>
+                    {% if offer.accepted == "0" %}
+                        <span class="tag gray">{% trans "Pending" %}</span>
+                    {% endif %}
+                    {% if offer.accepted == "1" %}
+                        <span class="tag green">{% trans "Accepted" %}</span>
+                    {% endif %}
+                    {% if offer.accepted == "2" %}
+                        <span class="tag red">{% trans "Declined" %}</span>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
-
-
     </table>
-
 {% endblock %}

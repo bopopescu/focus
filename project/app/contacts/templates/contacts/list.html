@@ -22,7 +22,10 @@
         <tbody>
         {% for contact in contacts %}
             <tr>
-                <td><img style="vertical-align:middle;" src="{{ contact.image|thumbnail_with_max_side:"130" }}"></td>
+                <td>{% if contact.image %}
+                    <img style="vertical-align:middle;" src="{{ contact.image|thumbnail_with_max_side:"130" }}">
+                    {% endif %}
+                </td>
                 <td><a href="{{ contact.get_view_url }}">{{ contact.name }}</a></td>
                 <td>{{ contact.address }}</td>
                 <td>{{ contact.phone }}</td>

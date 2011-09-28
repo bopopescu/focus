@@ -9,6 +9,17 @@
 
 {% block maincontent %}
 
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
+
+
     <h1>{{ title }} </h1>
 
     <div style="width: 800px">
@@ -32,15 +43,23 @@
                     <td>{{ form.description }}</td>
                     <td>Image</td>
                     <td>
-                        {%  if disbursement %}
-                            <a target="_blank" href="/file/{{ disbursement.attachment}}"><img src='{{ disbursement.attachment|thumbnail_with_max_side:"150"  }}'></a>
-                            <br> {% trans "replace with new image" %}
+                        {% if disbursement %}
+                            <a target="_blank" href="/file/{{ disbursement.attachment}}">
+                                {% if disbursement.attachment %}
+                                    <img src='{{ disbursement.attachment|thumbnail_with_max_side:"150"  }}'>
+                                {% endif %}
+                            </a>
+                            <br>
                         {% endif %}
-
                         {{ form.attachment }}</td>
                 </tr>
                 <tr>
-                    <td colspan="4"><input type="submit" value="{% trans "Save" %}"></td>
+                    <td>
+                        <div id="loading">
+                            <span class="loader red" title="Loading, please wait…"></span>
+                        </div>
+                        <button id="form_button" type="submit">{% trans "Save" %}</button>
+                    </td>
                 </tr>
             </table>
         </form>
@@ -48,10 +67,7 @@
 
     <br><br>
 
-    <div class="searchBox">
-        <input class="search" type="text" value="" id="filter" placeholder="Filtrér">
-    </div>
-    <table id="dataTable">
+    <table class="datatable">
         <thead>
         <tr>
             <th>{% trans "Dato" %}</th>
@@ -59,6 +75,7 @@
             <th>{% trans "Sats" %}</th>
             <th>{% trans "Beløp" %}</th>
             <th>{% trans "Description" %}</th>
+            <th></th>
             <th></th>
             <th></th>
         </tr>
@@ -71,6 +88,15 @@
                 <td>{{ disb.rate }}</td>
                 <td>{{ disb.get_sum }} kr</td>
                 <td>{{ disb.description }}</td>
+                <td>
+                    {% if disb.attachment %}
+                        <a target="_blank" href="/file/{{ disb.attachment}}">
+
+                            <img src='{{ disb.attachment|thumbnail_with_max_side:"50"  }}'>
+                        </a>
+                    {% endif %}
+
+                </td>
                 <td><a href="{{ disb.get_edit_url }}">{% trans "edit" %}</a></td>
                 <td><a href="{{ disb.get_delete_url }}">{% trans "delete" %}</a></td>
             </tr>

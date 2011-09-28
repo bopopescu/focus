@@ -21,8 +21,7 @@
         <tbody>
         {% for file in file_manager.files.all %}
             <tr>
-                <td><img class="icon_for_file" src="{{ file.get_file_icon}}"
-                         alt=""/> {{ file.name }}</td>
+                <td><img class="icon_for_file" src="{{ file.get_file_icon}}" alt=""/> {{ file.name }}</td>
                 <td><a href="{{ file.get_file }}" target="_blank">Last ned</a></td>
                 <td><a href="{{ edit_file_url }}{{ file.id }}/edit/">Endre fil</a></td>
                 <td>{% for tag in file.tags.all %} {{ tag }} {% endfor %}</td>

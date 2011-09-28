@@ -4,23 +4,22 @@
 
 {% block content %}
 
-    <style>
-        #accepted_status {
-            position: absolute;
-            margin-left: 650px;
-        }
-    </style>
-
-    <h1>{% trans "Offer" %}: {{ title }}</h1>
-
 
     <br><h5>{% trans "Description" %}</h5>
-      {{ offer.description|linebreaksbr }}
+    {{ offer.description|linebreaksbr }}
 
     <br>
 
-    <div id="accepted_status" style="color:{{ offer.get_accepted_status.1 }}">
-        {{ offer.get_accepted_status.0 }}
+    <div id="accepted_status">
+        {% if offer.accepted == "0" %}
+            <span class="tag gray">{% trans "Pending" %}</span>
+        {% endif %}
+        {% if offer.accepted == "1" %}
+            <span class="tag green">{% trans "Accepted" %}</span>
+        {% endif %}
+        {% if offer.accepted == "2" %}
+            <span class="tag red">{% trans "Declined" %}</span>
+        {% endif %}
     </div>
 
     <div class="products">
@@ -34,31 +33,31 @@
             <th>{% trans "Unit cost" %}</th>
             <th>{% trans "Count" %}</th>
             <th>{% trans "Tax" %}</th>
-            <th>{% trans "Total" %}</th>
+            <th>{% trans "Total price" %}</th>
             </thead>
 
             <tbody>
-            {% for product in offer.product_lines.all %}
+            {% for product_line in offer.product_lines.all %}
 
                 <tr class="product">
                     <td>
-                        {{ product.description }}
+                        {{ product_line.product }}
                     </td>
                     <td>
-                        {{ product.description }}
+                        {{ product_line.description }}
                     </td>
                     <td>
-                        {{ product.description }}
+                        {{ product_line.price }}
                     </td>
                     <td>
-                        {{ product.description }}
+                        {{ product_line.count }}
                     </td>
                     <td>
-                        {{ product.description }}
+                        {{ product_line.tax }}
                     </td>
 
                     <td>
-                        100kr
+                        {{ product_line.get_total_sum }}
                     </td>
 
                 </tr>

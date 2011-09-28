@@ -14,6 +14,7 @@
             <th>{% trans "Delivery date" %}</th>
             <th>{% trans "Customer" %}</th>
             <th>{% trans "Project" %}</th>
+            <th>{% trans "Status" %}</th>
         </tr>
         </thead>
 
@@ -33,6 +34,19 @@
                         <a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
                     {% endif %}
                 </td>
+
+                <td>
+                    {% if order.status == "0" %}
+                        <span class="tag gray">{% trans "New" %}</span>
+                    {% endif %}
+                    {% if order.status == "1" %}
+                        <span class="tag blue">{% trans "In progress" %}</span>
+                    {% endif %}
+                    {% if order.status == "2" %}
+                        <span class="tag green">{% trans "Done" %}</span>
+                    {% endif %}
+                </td>
+
             </tr>
         {% endfor %}
         </tbody>

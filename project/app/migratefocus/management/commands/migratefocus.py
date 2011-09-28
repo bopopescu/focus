@@ -14,6 +14,7 @@ from core.auth.log.models import Log, Notification
 
 import random
 from app.admin.views.user import generate_new_password_for_user
+from core.management.commands.seed import createNewCustomer
 from core.utils import get_class
 
 Customer = get_class("customers", "customer")
@@ -29,68 +30,6 @@ Currency = get_class("stock", "currency")
 ProductCategory = get_class("stock", "productcategory")
 ProductGroup = get_class("stock", "productgroup")
 Ticket = get_class("tickets", "ticket")
-
-def createNewCustomer(admin_group, adminuser_name, adminuser_password, adminuser_username, all_employees_group, name):
-    admin_group = Group(name=admin_group)
-    admin_group.save_without_permissions()
-    all_employees_group = Group(name=all_employees_group)
-    all_employees_group.save_without_permissions()
-    company = Company(name=name, admin_group=admin_group, all_employees_group=all_employees_group)
-    company.save()
-
-    #Create the admin user
-    user = User(first_name=adminuser_name, username=adminuser_username)
-    user.set_password(adminuser_password)
-    user.company = company
-    user.save()
-
-    #Manually give permission to the admin group
-    admin_group.grant_permissions("ALL", admin_group)
-    admin_group.grant_permissions("ALL", all_employees_group)
-
-    #Add admin user to admin group
-    admin_group.add_member(user)
-
-    #Set the company fields on groups
-    admin_group.company = company
-    admin_group.save()
-    all_employees_group.company = company
-    all_employees_group.save()
-
-    #Give admin group all permissions on classes
-    admin_group.grant_role("Admin", Project)
-    admin_group.grant_role("Admin", Customer)
-    admin_group.grant_role("Admin", Contact)
-    admin_group.grant_role("Admin", Offer)
-    admin_group.grant_role("Admin", Invoice)
-    admin_group.grant_role("Admin", Order)
-    admin_group.grant_role("Admin", get_class("hourregistrations", "hourregistration"))
-    admin_group.grant_role("Admin", get_class("announcements", "announcement"))
-    admin_group.grant_role("Admin", Product)
-    admin_group.grant_role("Admin", Log)
-    admin_group.grant_role("Admin", Supplier)
-    admin_group.grant_role("Admin", Notification)
-    admin_group.grant_role("Admin", User)
-    admin_group.grant_role("Admin", Group)
-    admin_group.grant_role("Admin", Ticket)
-    admin_group.grant_permissions("CONFIGURE", Company)
-
-    #Give employee group some permissions on classes
-    all_employees_group.grant_role("Member", Project)
-    all_employees_group.grant_role("Member", Customer)
-    all_employees_group.grant_role("Member", Contact)
-    all_employees_group.grant_role("Member", Order)
-    all_employees_group.grant_role("Member", Invoice)
-    all_employees_group.grant_role("Member", Offer)
-    all_employees_group.grant_role("Member", get_class("hourregistrations", "hourregistration"))
-    all_employees_group.grant_role("Member", get_class("announcements", "announcement"))
-    all_employees_group.grant_role("Member", Product)
-    all_employees_group.grant_role("Member", Log)
-    all_employees_group.grant_role("Member", Supplier)
-    all_employees_group.grant_role("Member", Ticket)
-    all_employees_group.grant_role("Member", Notification)
-
-    return company, user
 
 
 def findElementByOldID(elements, id):
