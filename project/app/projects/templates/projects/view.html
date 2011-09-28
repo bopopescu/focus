@@ -22,27 +22,33 @@
 
     <h2>{% trans "Participants" %}</h2>
 
-        <div class="clearfix"></div>
-        <article>
-            <div class="article-container">
+    <div class="clearfix"></div>
 
+    <article>
 
-                <ul class="contacts">
-                    {% for user in who_can_see_this %}
+        <div class="article-container">
 
+            <ul class="contacts">
 
-                        <li>
+                {% for user in who_can_see_this %}
+
+                    <li>
+                        {% if user.profileImage %}
                             <img src="{{ user.profileImage|thumbnail_with_max_side:"40" }}" title="User" alt=""/>
-                            <a href="{% url app.admin.views.user.view user.id %}"
-                               class="contacts-user">{{ user.first_name }} {{ user.last_name }}</a>
-                            <em>{{ user.email }}</em>
+                        {% endif %}
 
-                        </li>
-                    {% endfor %}
-                </ul>
+                        <a href="{% url app.admin.views.user.view user.id %}"
+                           class="contacts-user">{{ user.first_name }} {{ user.last_name }}</a>
+                        <em>{{ user.email }}</em>
+                    </li>
 
-            </div>
-        </article>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </article>
 
     <br><br><br><br><br><br><br><br>
 

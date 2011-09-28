@@ -7,6 +7,18 @@
 
 {% block content %}
 
+
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
+
+
     <h1>{% trans "Update Ticket" %}</h1>
     <br>
     <br>
@@ -28,9 +40,9 @@
         <br><br>
     {% endif %}
 
-    <div style="width:605px;">
+    <div style="width:605px; ">
 
-        <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
+        <form enctype="multipart/form-data" method="post">
 
             <fieldset>
                 <legend>{% trans "change properties" %}</legend>
@@ -51,10 +63,12 @@
 
             {% endfor %}
 
-
-            <div>
-                <input type="submit" value="{% trans "Save" %}" class="btn" name="save"/>
+            <div id="loading">
+                <span class="loader red" title="Loading, please wait…"></span>
             </div>
+
+            <button id="form_button" type="submit">{% trans "Save" %}</button>
+
 
         </form>
     </div>

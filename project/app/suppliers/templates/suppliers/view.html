@@ -7,8 +7,8 @@
 {% block content %}
 
     <h2>{{ title }}</h2>
-    <table>
 
+    <table>
         <tr>
             <td width="100px">{% trans "Name" %}</td>
             <td>{{ supplier.name }}</td>
@@ -21,11 +21,10 @@
             <td>{% trans "Phone" %}</td>
             <td>{{ supplier.phone }}</td>
         </tr>
-
         <tr>
             <td>{% trans "Address" %}</td>
             <td>{{ supplier.address|linebreaksbr }} {{ supplier.zip }} {{ supplier.zip|postal_by_zip }}</td>
         </tr>
     </table>
-    
+
 {% endblock %}	

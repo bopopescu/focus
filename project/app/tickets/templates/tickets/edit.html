@@ -8,6 +8,16 @@
 
 {% block content %}
 
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
+
     <h1>{% trans "Update Ticket" %}: {{ ticket.title }}</h1>
     <br>
 
@@ -35,53 +45,52 @@
 
     <div style="width:605px;">
 
-    {% if updates %}
-        <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
-        <table id="last_updates">
-            {% for update in updates %}
+        {% if updates %}
+            <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
+            <table id="last_updates">
+                {% for update in updates %}
 
-                <tr>
-                    <td><img
-                            src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
-                            alt=""/></td>
-                    <td>
-                        <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
+                    <tr>
+                        <td><img
+                                src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
+                                alt=""/></td>
+                        <td>
+                            <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
 
-                        <p>
-                            {% if update.update_lines.all %}
-                                <b>{% trans "Changes: " %}</b>
-                                <ul>
-                                    {% for line in update.update_lines.all %}
-                                        <li>{{ line.change }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                        </p>
-
-                        {% if update.comment %}
-                            <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
-                        {% endif %}
-
-                        {% if update.attachment %}
                             <p>
-                                <b>{% trans "New Attachment:" %}</b>
-                                <a target="_blank" href="{{ update.get_attachment_url }}">
-                                    <img src="{{ STATIC_URL }}img/download.png"
-                                         style="width:30px; height:30px; vertical-align:middle;">
-                                    {{ update.get_attachment_name }}</a>
+                                {% if update.update_lines.all %}
+                                    <b>{% trans "Changes: " %}</b>
+                                    <ul>
+                                        {% for line in update.update_lines.all %}
+                                            <li>{{ line.change }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
                             </p>
 
-                        {% endif %}
+                            {% if update.comment %}
+                                <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
+                            {% endif %}
 
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+                            {% if update.attachment %}
+                                <p>
+                                    <b>{% trans "New Attachment:" %}</b>
+                                    <a target="_blank" href="{{ update.get_attachment_url }}">
+                                        <img src="{{ STATIC_URL }}img/download.png"
+                                             style="width:30px; height:30px; vertical-align:middle;">
+                                        {{ update.get_attachment_name }}</a>
+                                </p>
+
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
 
         <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
-
 
             <div class="ticket_update">
                 <h3>{% trans "Comment: " %}</h3>
@@ -186,10 +195,13 @@
                 </table>
             </div>
 
-
-            <div>
-                <input type="submit" value="{% trans "Save" %}" class="btn" name="save"/>
+            <div id="loading">
+                <span class="loader red" title="Loading, please wait…"></span>
             </div>
+
+            <button id="form_button" type="submit">{% trans "Save" %}</button>
+
+
 
         </form>
     </div>

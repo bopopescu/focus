@@ -30,9 +30,9 @@ class Supplier(PersistentModel):
             reasons.append(_("Supplier has active products"))
 
         if can_be_deleted:
-            return (True, "OK")
+            return True, "OK"
 
-        return (False, reasons)
+        return False, reasons
 
     @staticmethod
     def add_ajax_url():

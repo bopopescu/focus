@@ -83,60 +83,79 @@
                 </div>
             {% endif %}
         </div>
-
+    
     </div>
 
-
+    <br>
+    <br>
+    <br>
+    <br>
 
     <h2>{% trans "History" %}</h2>
 
-    <table>
+
+    <ul class="logs">
+
         {% for update in updates %}
 
-            <tr>
-                <td><img
-                        src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
-                        alt=""/></td>
-                <td>
-                    <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
 
+            <li>
+
+                {% if comment.creator.profileImage %}
+                    <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}" class="avatar_img left"
+                         alt=""/>
+                {% endif %}
+                <span class="logs-timestamp">{{ update.date_created|date:"Y.m.d H:i" }}</span>
+
+                <p>
+                    {{ comment.text|linebreaks }}
+                </p>
+            
+                <em class="logs-meta">Posted by <a href="#">{{ update.creator }}</a></em>
+
+                <br><br>
+
+                <p>
+                    {% if update.update_lines.all %}
+                        <b>{% trans "Changes" %}</b>
+                                <br>
+                            {% for line in update.update_lines.all %}
+                                 - {{ line.change }}<br>
+                            {% endfor %}
+
+                    {% endif %}
+                </p>
+
+                {% if update.comment %}
+                    <p><b>{% trans "Comment" %}</b> <br> {{ update.comment|linebreaks }}</p>
+                {% endif %}
+
+                {% if update.attachment %}
                     <p>
-                        {% if update.update_lines.all %}
-                            <b>{% trans "Changes" %}</b>
-                            <ul>
-                                {% for line in update.update_lines.all %}
-                                    <li>{{ line.change }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                        <b>{% trans "Attachment" %}</b><br>
+                        <a target="_blank" href="{{ update.get_attachment_url }}">
+                            <img src="{{ STATIC_URL }}img/download.png"
+                                 style="width:30px; height:30px; vertical-align:middle;">
+                            {{ update.get_attachment_name }}</a>
                     </p>
 
-                    {% if update.comment %}
-                        <p><b>{% trans "Comment" %}</b> <br> {{ update.comment|linebreaks }}</p>
-                    {% endif %}
+                {% endif %}
+                {% if ticket.clients.all %}
+                    <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
+                        <input type="hidden" value="{{ update.id }}"/>
+                        {% trans "Public" %}<input type="checkbox" class="visibility_check"
+                                {% if update.public %} checked="checked" {% endif %}/>
+                    </form>
+                {% endif %}
 
-                    {% if update.attachment %}
-                        <p>
-                            <b>{% trans "Attachment" %}</b><br>
-                            <a target="_blank" href="{{ update.get_attachment_url }}">
-                                <img src="{{ STATIC_URL }}img/download.png"
-                                     style="width:30px; height:30px; vertical-align:middle;">
-                                {{ update.get_attachment_name }}</a>
-                        </p>
+               
+            </li>
 
-                    {% endif %}
-                    {% if ticket.clients.all %}
-                        <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
-                            <input type="hidden" value="{{ update.id }}"/>
-                            {% trans "Public" %}<input type="checkbox" class="visibility_check"
-                                    {% if update.public %} checked="checked" {% endif %}/>
-                        </form>
-                    {% endif %}
 
-                </td>
-            </tr>
         {% endfor %}
-    </table>
+
+    </ul>
+
 
     <script type="text/javascript">
 

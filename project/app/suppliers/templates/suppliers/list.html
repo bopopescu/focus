@@ -6,12 +6,18 @@
         <thead>
         <tr>
             <th>{% trans "Name" %}</th>
+            <th>{% trans "Email" %}</th>
+            <th>{% trans "Phone" %}</th>
+            <th>{% trans "Address" %}</th>
         </tr>
         </thead>
         <tbody>
         {% for supplier in suppliers %}
             <tr>
                 <td><a href="{{ supplier.get_view_url }}">{{ supplier.name }}</a></td>
+                <td>{{ supplier.email }}</td>
+                <td>{{ supplier.phone }}</td>
+                <td>{{ supplier.address }}</td>
             </tr>
         {% endfor %}
         </tbody>
