@@ -15,43 +15,47 @@
 
     <br><br>
 
-    <!-- Tickets -->
     <ul class="tickets">
 
-        <!-- Ticket Headers -->
         <li class="ticket-header">
             <ul>
-                <li>{% trans "Priority" %}</li>
-                <li>{% trans "Assigned" %}</li>
-                <li>{% trans "Status" %}</li>
-                <li>{% trans "Type" %}</li>
+                <li class="ticket-data-priority" style="width: 10px;"></li>
+                <li class="ticket-data-activity" style="width:35%;">{% trans "Title" %}</li>
+                <li class="ticket-data-activity">{% trans "Assigned" %}</li>
+                <li class="ticket-data-activity">{% trans "Priority" %}</li>
+                <li class="ticket-data-activity">{% trans "Status" %}</li>
+                <li class="ticket-data-activity">{% trans "Date created" %}</li>
             </ul>
         </li>
-        <!-- /Ticket Headers -->
-
-        <!-- Ticket Data -->
 
         {% for ticket in tickets %}
 
             <li class="ticket-data">
                 <div class="ticket-overview">
                     <ul>
-                        <li class="ticket-data-ticket">
-                            #{{ ticket.id }}
+                        <li class="ticket-data-priority" style="width: 10px;">
+                            {% if ticket.mark_as_unread_for_current_user %}
+                                <span style="color:red; font-size: 20px;"> * </span>
+                            {% endif %}
                         </li>
-                        <li class="ticket-data-activity">
-                            <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
 
-                            <p>{{ ticket.description }}</p>
+                        <li class="ticket-data-ticket" style="width:35%;">
+
+                            <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
+                            <p>{{ ticket.description|truncatewords:15 }}</p>
+
                         </li>
-                        <li class="ticket-data-user">
+                        <li class="ticket-data-priority">
                             <strong>{{ ticket.creator }}</strong>
 
                         </li>
                         <li class="ticket-data-priority">
-                            <span class="tag red">{{ ticket.priority }}</span>
+                            <span class="tag {{ ticket.get_priority_color }}">{{ ticket.priority }}</span>
                         </li>
-                        <li class="ticket-data-age">
+                        <li class="ticket-data-priority">
+                            <span class="tag {{ ticket.get_status_color }}">{{ ticket.status }}</span>
+                        </li>
+                        <li class="ticket-data-priority">
                             {{ ticket.date_created }}
                         </li>
                     </ul>
@@ -86,118 +90,6 @@
 
     </ul>
 
-    <script type="text/javascript">
-
-        function getTdCell(value) {
-            return "<td>" + value + "</td>"
-        }
-
-
-        function getRowFromTicket(ticket) {
-            if (ticket.mark_as_unread_for_current_user) {
-                var row = "<tr class='ticket_marked_as_unread_for_current_user'>";
-            } else {
-                var row = "<tr>";
-            }
-
-            row += getTdCell("<a href=\"" + ticket.ticket_url + "\">" + ticket.title + "</a>");
-            row += getTdCell(ticket.priority.name);
-
-            if (ticket.assigned_to) {
-                row += getTdCell(ticket.assigned_to.get_full_name);
-            } else {
-                row += getTdCell("{% trans "None" %}");
-            }
-
-            if (ticket.user) {
-                row += getTdCell(ticket.user.get_full_name);
-            } else {
-                row += getTdCell("{% trans "Client" %}");
-            }
-
-            row += getTdCell(ticket.update_count);
-            row += getTdCell(ticket.status.name);
-            row += getTdCell(ticket.type.name);
-            row += getTdCell(ticket.date_edited);
-            row += "</tr>";
-            return row
-        }
-
-        function build_table(tickets, deleteExisting) {
-            var start = new Date().getTime();
-            var tbody = $("#dataTable tbody");
-            if (deleteExisting) {
-                tbody.children("tr").remove();
-            }
-            $(tickets).each(function() {
-                tbody.append(getRowFromTicket(this))
-            });
-            $('#filter').quicksearch("#dataTable tbody tr");
-            console.log("Table built in: " + (new Date().getTime() - start));
-        }
-
-        var current_user_id = {{ request.user.id }};
-        var assigned_to = {% if assigned_to %} current_user_id; {% else %} 0; {% endif %}
-        var status = 0;
-        function getTickets(type, trashed, range) {
-            if (range == undefined) {
-                range = 0;
-            }
-            var data = type ? { type_id: parseInt(type)} : {};
-            data.status_id = status;
-            data.assigned_to = assigned_to;
-            data.trashed = trashed;
-            data.range = range;
-
-            $.get("/api/tickets/", data,
-                    function(data) {
-                        if (data.length > 0) {
-                            build_table(data, (range == 0));
-                            getTickets(type, trashed, range + 12)
-                        }
-                    }, "json");
-        }
-
-        $(function() {
-            var trashed = {% if trashed_tickets %} 1; {% else %} 0; {% endif %}
-            getTickets(0, trashed);
-
-            $("#type_selection").change(function() {
-                var typeId = parseInt($("#type_selection option:selected").val());
-                getTickets(typeId, 0)
-            });
-
-            $("#assigned_links a").click(function() {
-                assigned_to = current_user_id;
-                status = $(this).attr("class")
-                getTickets(0, 0);
-                restoreDefaultType();
-                return false;
-            });
-
-            $("#overview_links a").click(function() {
-                assigned_to = 0;
-                status = $(this).attr("class");
-                getTickets(0, 0);
-                restoreDefaultType();
-                return false;
-            });
-
-            $("#trashed").click(function() {
-                assigned_to = 0;
-                status = 0;
-                getTickets(0, 1);
-                restoreDefaultType();
-                return false;
-            })
-
-            function restoreDefaultType() {
-                $("#type_selection option:selected").removeAttr("selected");
-                $("#type_selection option").first().attr("selected", "selected");
-            }
-        });
-
-    </script>
 
 
 {% endblock %}

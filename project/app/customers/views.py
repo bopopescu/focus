@@ -15,7 +15,7 @@ from core.shortcuts import comment_block
 @require_permission("LIST", Customer)
 def overview(request):
     update_timeout(request)
-    customers = Core.current_user().get_permitted_objects("VIEW", Customer).filter(trashed=False)
+    customers = Core.current_user().get_permitted_objects("VIEW", Customer)
 
     return render(request, 'customers/list.html', {'title': _('Customers'),
                                                    'customers': customers})

@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 
 register = template.Library()
 
@@ -77,10 +78,18 @@ class PermissionNode(template.Node):
         # Else, the object is just a string. We find the model corrosponding to that string,
         # and check if the user has permission to do something with all of those objects
         except template.VariableDoesNotExist:
-            
+
+        
             # Make a function that's cached
             def get_content_type(app, model):
-                return ContentType.objects.get(app_label = app, model = model)
+                cache_key = "%s_%s" % (app, model.__class__.__name__)
+
+                if cache.get(cache_key):
+                    return cache.get(cache_key)
+                else:
+                    result = ContentType.objects.get(app_label = app, model = model)
+                    cache.set(cache_key, result)
+                    return result
             
             if not 'user' in context:
                 return ''

@@ -15,15 +15,20 @@ import copy
 
 @require_permission("LIST", Ticket)
 def overview(request):
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket)
+
     return render(request, 'tickets/list.html',
-            {"title": "Tickets", 'tickets': Core.current_user().get_permitted_objects("VIEW", Ticket)})
+            {"title": "Tickets", 'tickets': tickets})
 
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request):
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).order_by("date_edited").reverse().filter(
+        assigned_to=request.user)
+
     return render(request, 'tickets/list.html', {"title": "Tickets",
                                                  "assigned_to": True,
-                                                 'tickets': Core.current_user().get_permitted_objects("VIEW", Ticket).filter(assigned_to=request.user)})
+                                                 'tickets': tickets})
 
 
 @require_permission("LIST", Ticket)
@@ -85,6 +90,8 @@ def create_update_for_ticket(old_ticket, ticket_form):
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")[:3]
+
+    ticket.add_user_to_visited_by_since_last_edit(Core.current_user())
 
     if request.method == "POST":
         old_ticket = copy.copy(ticket)

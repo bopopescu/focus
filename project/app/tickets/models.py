@@ -129,12 +129,50 @@ class Ticket(TicketBase):
     class Meta:
         ordering = ['status', 'date_created']
 
+    def get_priority_color(self):
+
+        if self.priority.name == ("Low"):
+            return "gray"
+
+        elif self.priority.name == ("Medium"):
+            return "blue"
+
+        elif self.priority.name == ("High"):
+            return "red"
+
+    def get_status_color(self):
+
+        if self.status.name == ("New"):
+            return "green"
+
+        elif self.status.name == ("In progress"):
+            return "blue"
+
+        elif self.status.name == ("Need feedback"):
+            return "red"
+
+        elif self.status.name == ("Closed"):
+            return "gray"
+
+
     def add_user_to_visited_by_since_last_edit(self, user):
         if user not in self.visited_by_since_last_edit.all():
             self.visited_by_since_last_edit.add(user)
 
     def mark_as_unread_for_current_user(self):
-        return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
+
+        cache_key = "%s_%s_%s" % (Core.current_user().id, self.id, "marked")
+
+        result = 0
+
+        if cache.get(cache_key):
+            print cache_key
+            result = cache.get(cache_key)
+        else:
+            result = Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
+            cache.set(cache_key, "%s"%result)
+
+        return result
 
     def get_recipients(self):
         """

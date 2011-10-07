@@ -60,9 +60,16 @@ class User(models.Model):
         return self.get_full_name()
 
     def get_company(self):
-        if self.company:
-            return self.company
-        return None
+        cache_key = "%s_%s_%s" % ("USER",self.id, "COMPANY")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+        else:
+            result = None
+            if self.company:
+                result = self.company
+            cache.set(cache_key, result)
+            return result
 
     def can_be_deleted(self):
         can_be_deleted = True
@@ -334,9 +341,18 @@ class User(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
+        try:
+            cache_key = "%s_%s_%s" % (Core.current_user().id, action, object.__name__)
+        except Exception, e:
+            cache_key = "%s_%s_%s" % (Core.current_user().id, action, object.__class__.__name__)
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
         content_type = ContentType.objects.get_for_model(object)
 
         if settings.DEBUG and Core.current_user().is_superuser:
+            cache.set(cache_key, True, 5000)
             return True
 
         object_id = 0
@@ -355,8 +371,11 @@ class User(models.Model):
 
         for perm in negativePerms:
             if action in perm.get_valid_actions():
+                cache.set(cache_key, False, 5000)
                 return False
             if allAction in perm.get_valid_actions():
+                cache.set(cache_key, False, 5000)
+
                 return False
 
         #Checks if the user is permitted manually
@@ -368,15 +387,22 @@ class User(models.Model):
 
         for perm in perms:
             if action in perm.get_valid_actions():
+                cache.set(cache_key, True, 5000)
+
                 return True
 
             if allAction in perm.get_valid_actions():
+                cache.set(cache_key, True, 5000)
+
                 return True
 
         for group in self.groups.all():
             if group.has_permission_to(action, object, id=id, any=any):
+                cache.set(cache_key, True, 5000)
+
                 return True
 
+        cache.set(cache_key, False, 5000)
         return False
 
     def get_permissions(self, content_type=None):
@@ -394,22 +420,23 @@ class User(models.Model):
         content_type = ContentType.objects.get_for_model(model)
         action_string = action
 
-        action = Action.objects.get(name=action)
-        allAction = Action.objects.get(name="ALL")
-
-        tree = {}
-        permitted = []
-
-
-        cache_key = "%s_%s" % (self.id, model.__name__)
+        cache_key = "%s_%s_%s" % (self.id, model.__name__, action_string)
 
         if cache.get(cache_key) and action_string in cache.get(cache_key):
             permitted = cache.get(cache_key)["%s"%action_string]
         else:
+
+            action = Action.objects.get(name=action)
+            allAction = Action.objects.get(name="ALL")
+
+            tree = {}
+            permitted = []
+
             permissions = self.get_permissions(content_type)
             for perm in permissions:
                 if not perm.object_id in tree:
                     tree[perm.object_id] = []
+
 
                 if perm.actions:
                     tree[perm.object_id].extend(perm.actions.all())
@@ -426,10 +453,11 @@ class User(models.Model):
                 elif action in tree[node]:
                     permitted.append(node)
 
+            permitted = list(model.objects.filter(id__in=permitted).select_related())
+            
             cache.set(cache_key, {'%s'%action_string: permitted}, 1200)
 
-        result = model.objects.filter(id__in=permitted)
-        return result
+        return permitted
 
 class AnonymousUser(User):
     id = 0
