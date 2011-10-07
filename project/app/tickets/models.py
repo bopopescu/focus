@@ -166,8 +166,8 @@ class Ticket(TicketBase):
         result = 0
 
         if cache.get(cache_key):
-            print cache_key
-            result = cache.get(cache_key)
+            result = cache.get(cache_key) == "True"
+
         else:
             result = Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
             cache.set(cache_key, "%s"%result)
