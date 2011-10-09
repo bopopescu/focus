@@ -147,11 +147,7 @@ class Group(models.Model):
 
 
         #Checks if the group is permitted
-        perms = Permission.objects.filter(content_type=content_type,
-                                          object_id=object_id,
-                                          group=self,
-                                          negative=False,
-                                          )
+        perms = object.permissions(object_id, group=self)
 
         for perm in perms:
             if action in perm.get_valid_actions():

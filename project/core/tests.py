@@ -42,10 +42,8 @@ class FocusTest(TestCase):
         self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
         self.user3 = User.objects.get_or_create(username="test3", company=self.user1.get_company())[0]
 
-        cache.delete(self.user1.id)
-        cache.delete(self.user2.id)
-        cache.delete(self.user3.id)
-
+        cache.clear()
+        
         Core.set_test_user(self.user3)
 
         self.customer1 = Customer.objects.get_or_create(name="Customer1", cid=1)[0]

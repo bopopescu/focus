@@ -341,18 +341,10 @@ class User(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
-        try:
-            cache_key = "%s_%s_%s" % (Core.current_user().id, action, object.__name__)
-        except Exception, e:
-            cache_key = "%s_%s_%s" % (Core.current_user().id, action, object.__class__.__name__)
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
 
         content_type = ContentType.objects.get_for_model(object)
 
         if settings.DEBUG and Core.current_user().is_superuser:
-            cache.set(cache_key, True, 5000)
             return True
 
         object_id = 0
@@ -371,38 +363,25 @@ class User(models.Model):
 
         for perm in negativePerms:
             if action in perm.get_valid_actions():
-                cache.set(cache_key, False, 5000)
                 return False
             if allAction in perm.get_valid_actions():
-                cache.set(cache_key, False, 5000)
 
                 return False
 
         #Checks if the user is permitted manually
-        perms = Permission.objects.filter(content_type=content_type,
-                                          object_id=object_id,
-                                          user=self,
-                                          negative=False,
-                                          )
+        perms = object.permissions(object_id, user=self)
 
         for perm in perms:
             if action in perm.get_valid_actions():
-                cache.set(cache_key, True, 5000)
-
                 return True
 
             if allAction in perm.get_valid_actions():
-                cache.set(cache_key, True, 5000)
-
                 return True
 
         for group in self.groups.all():
             if group.has_permission_to(action, object, id=id, any=any):
-                cache.set(cache_key, True, 5000)
-
                 return True
 
-        cache.set(cache_key, False, 5000)
         return False
 
     def get_permissions(self, content_type=None):

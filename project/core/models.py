@@ -31,7 +31,7 @@ def createTuple(object):
             continue
 
         if unicode(getattr(object, i.attname)) in ('True', 'False', 'None') or isinstance(getattr(object, i.attname),
-                                                                                          (int, long, float)):
+            (int, long, float)):
             data[i.attname] = [getattr(object, i.attname), (i.verbose_name)]
         else:
             data[i.attname] = [unicode(getattr(object, i.attname)), unicode(i.verbose_name)]
@@ -56,8 +56,22 @@ class PersistentModel(models.Model):
     class Meta:
         abstract = True
 
-    def save(self, **kwargs):
+    @classmethod
+    def permissions(cls, object_id, user=None, group=None):
+        permissions = Permission.objects.filter(content_type=ContentType.objects.get_for_model(cls),
+                                                object_id=object_id,
+                                                )
+        
+        if user:
+            permissions.filter(user=user)
+        if group:
+            permissions.filter(group=group)
 
+        permissions = list(permissions)
+
+        return permissions
+
+    def save(self, **kwargs):
         if not Core.current_user():
             super(PersistentModel, self).save()
             return
@@ -74,10 +88,6 @@ class PersistentModel(models.Model):
 
         changes = createTuple(self)
         super(PersistentModel, self).save()
-
-        #Clear cache
-        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-        cache.delete(cache_key)
 
         #GRANT PERMISSIONS
         if action == "ADD":
