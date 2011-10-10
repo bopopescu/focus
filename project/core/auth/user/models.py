@@ -340,6 +340,9 @@ class User(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
+        if Core.current_user().id == 1 and settings.DEBUG  == True:
+            return True
+        
         object_id = 0
 
         if not isclass(object):
@@ -397,7 +400,7 @@ class User(models.Model):
     def invalidate_permission_tree(self):
         cache.delete("%s_%s" % (self.id, "permission_tree"))
         cache.delete("%s_%s" % (self.id, "permitted_objects"))
-
+       
     def get_permission_tree(self):
         cache_key = "%s_%s" %  (self.id, "permission_tree")
 
@@ -407,14 +410,15 @@ class User(models.Model):
             return self.build_permission_tree()
             
     def get_permitted_objects(self, action, model, order_by=None):
-
+        
         #content_type = ContentType.objects.get_for_model(model)
         #action_string = action
 
         cache_key = "%s_%s" % (self.id, "permitted_objects")
 
         if cache.get(cache_key) and '%s' % model.__name__ in cache.get(cache_key):
-            return cache.get(cache_key)['%s' % model.__name__]
+            pass
+            #return cache.get(cache_key)['%s' % model.__name__]
 
         result = model.objects.all().select_related()
 
@@ -427,11 +431,11 @@ class User(models.Model):
             if self.has_permission_to(action, obj):
                 permitted.append(obj)
 
-        result = {'%s' % model.__name__:list(permitted)}
+        result = {'%s' % model.__name__ :list(permitted)}
 
         cache.set(cache_key, result, 3600)
-
-        return result['%s' % model.__name__:]
+        
+        return result['%s' % model.__name__]
 
 class AnonymousUser(User):
     id = 0
@@ -461,7 +465,6 @@ class AnonymousUser(User):
     def logged_in (self):
         """ Anonymous users are never logged in, duh! :) """
         return False
-
 
     def is_authenticated(self):
         return False

@@ -63,7 +63,6 @@ class Group(models.Model):
             object_id=object_id
         )
 
-
         perm.save()
 
         for user in self.members.all():
