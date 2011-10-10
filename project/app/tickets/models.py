@@ -61,7 +61,16 @@ class TicketBase(models.Model):
 
     @property
     def creator(self):
-        return self.client_user or self.user
+
+        cache_key = "%s_ %s_%s" % ("ticket_creator", self.id, "creator")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
+        creator = self.client_user or self.user
+        cache.set(cache_key, creator)
+
+        return creator
 
 
 class TicketStatus(models.Model):

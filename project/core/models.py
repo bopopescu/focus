@@ -56,21 +56,6 @@ class PersistentModel(models.Model):
     class Meta:
         abstract = True
 
-    @classmethod
-    def permissions(cls, object_id, user=None, group=None):
-        permissions = Permission.objects.filter(content_type=ContentType.objects.get_for_model(cls),
-                                                object_id=object_id,
-                                                )
-        
-        if user:
-            permissions.filter(user=user)
-        if group:
-            permissions.filter(group=group)
-
-        permissions = list(permissions)
-
-        return permissions
-
     def save(self, **kwargs):
         if not Core.current_user():
             super(PersistentModel, self).save()
@@ -186,7 +171,7 @@ class PersistentModel(models.Model):
                                 users.append(user)
 
             return users
-        except:
+        except Exception, e:
             return []
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))

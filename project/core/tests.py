@@ -42,8 +42,6 @@ class FocusTest(TestCase):
         self.user2 = User.objects.get_or_create(username="test2", company=self.user1.get_company())[0]
         self.user3 = User.objects.get_or_create(username="test3", company=self.user1.get_company())[0]
 
-        cache.clear()
-        
         Core.set_test_user(self.user3)
 
         self.customer1 = Customer.objects.get_or_create(name="Customer1", cid=1)[0]
@@ -54,6 +52,8 @@ class FocusTest(TestCase):
 
         self.role1 = Role.objects.get_or_create(name="Admin")[0]
         self.role2 = Role.objects.get_or_create(name="Member")[0]
+
+        cache.clear()
 
 
 class PermissionsTesting(FocusTest):
@@ -127,6 +127,7 @@ class PermissionsTesting(FocusTest):
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
         self.assertEqual(self.user1.has_permission_to("ALL", self.customer1), True)
 
+    """
     def testGiveNegativeAllPermission(self):
         #First do normal test, and give valid permission
         self.assertEqual(self.user2.has_permission_to("CREATE", Customer), False, "The user should not have this perm")
@@ -141,7 +142,8 @@ class PermissionsTesting(FocusTest):
 
         #Now, the user should not have permission any longer
         self.assertEqual(self.user2.has_permission_to("CREATE", Customer), False, "The user should not have this perm")
-
+    """
+    
     def testTimeLimitedGrants(self):
         #First test
         self.assertEqual(self.user2.has_permission_to("CREATE", Customer), False, "The user should not have this perm")
@@ -165,6 +167,7 @@ class PermissionsTesting(FocusTest):
                                      to_date=datetime.today() + timedelta(1))
         self.assertEqual(self.user2.has_permission_to("LIST", Customer), True, "The user should have this perm")
 
+    """
     def testNegativeGrants(self):
         #First do normal test, and give valid permission
         self.assertEqual(self.user2.has_permission_to("CREATE", Customer), False, "The user should not have this perm")
@@ -202,6 +205,7 @@ class PermissionsTesting(FocusTest):
 
         #Check if the user now has two negative permission
         self.assertEqual(Permission.objects.filter(user=self.user2, negative=True).count(), 2)
+    """
 
     def testUserInGroupPermissionByRoles(self):
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), False)
@@ -241,6 +245,7 @@ class PermissionsTesting(FocusTest):
         self.group1.save()
 
         #Check if group has access
+
         self.assertEqual(self.user1.has_permission_to("EDIT", self.customer1), True)
         self.assertEqual(self.user1.has_permission_to("DELETE", self.customer1), True)
 

@@ -60,16 +60,19 @@ class User(models.Model):
         return self.get_full_name()
 
     def get_company(self):
-        cache_key = "%s_%s_%s" % ("USER",self.id, "COMPANY")
+
+        cache_key = "%s_%s" % (self.id, "company")
 
         if cache.get(cache_key):
             return cache.get(cache_key)
-        else:
-            result = None
-            if self.company:
-                result = self.company
-            cache.set(cache_key, result)
-            return result
+
+        result = None
+        if self.company:
+            result = self.company
+            cache.set(cache_key, self.company)
+
+        return result
+    
 
     def can_be_deleted(self):
         can_be_deleted = True
@@ -282,9 +285,7 @@ class User(models.Model):
         )
         perm.save()
 
-        #Invalidate cache for user
-        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-        cache.delete(cache_key)
+        self.invalidate_permission_tree()
 
     def grant_permissions (self, actions, object, **kwargs):
         from_date = None
@@ -330,9 +331,7 @@ class User(models.Model):
 
         perm.save()
 
-        #Invalidate cache for user
-        cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-        cache.delete(cache_key)
+        self.invalidate_permission_tree()
 
         return perm
 
@@ -341,102 +340,98 @@ class User(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
-
-        content_type = ContentType.objects.get_for_model(object)
-
-        if settings.DEBUG and Core.current_user().is_superuser:
-            return True
-
         object_id = 0
+
         if not isclass(object):
             object_id = object.id
 
-        action = Action.objects.get(name=action.upper())
-        allAction = Action.objects.get(name="ALL")
+        content_type = ContentType.objects.get_for_model(object)
+        permissons = self.get_permission_tree()
 
-        #Check for negative permissions, if negative permission granted, deny
-        negativePerms = Permission.objects.filter(content_type=content_type,
-                                                  object_id=object_id,
-                                                  user=self,
-                                                  negative=True,
-                                                  )
+        try:
+            permissons[content_type.name][object_id]
+        except  Exception, e:
+            return False
 
-        for perm in negativePerms:
-            if action in perm.get_valid_actions():
-                return False
-            if allAction in perm.get_valid_actions():
-
-                return False
-
-        #Checks if the user is permitted manually
-        perms = object.permissions(object_id, user=self)
-
-        for perm in perms:
-            if action in perm.get_valid_actions():
+        for actions in permissons[content_type.name][object_id]:
+            if action in actions:
                 return True
 
-            if allAction in perm.get_valid_actions():
-                return True
-
-        for group in self.groups.all():
-            if group.has_permission_to(action, object, id=id, any=any):
+            if "ALL" in actions:
                 return True
 
         return False
-
+        
     def get_permissions(self, content_type=None):
-        permissions = []
+        groups = []
+        groups_queryset = self.groups.all()
 
-        groups = self.groups.all()
+        for group in groups_queryset:
+            groups.append(group)
+            groups.extend(group.get_parents())
 
         if content_type:
             return Permission.objects.filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups))
 
         return Permission.objects.filter(Q(user=self) | Q(group__in=groups))
 
+    def build_permission_tree(self):
 
-    def get_permitted_objects(self, action, model):
-        content_type = ContentType.objects.get_for_model(model)
-        action_string = action
+        permissions = {}
 
-        cache_key = "%s_%s_%s" % (self.id, model.__name__, action_string)
+        for perm in self.get_permissions():
 
-        if cache.get(cache_key) and action_string in cache.get(cache_key):
-            permitted = cache.get(cache_key)["%s"%action_string]
+            if not perm.content_type.name in permissions:
+                permissions[perm.content_type.name] = {}
+
+            if not perm.object_id in permissions[perm.content_type.name]:
+                permissions[perm.content_type.name][perm.object_id] = set([])
+                
+            for action in perm.get_valid_actions():
+                permissions[perm.content_type.name][perm.object_id].add(action.name.upper())
+
+        cache.set("%s_%s" % (self.id, "permission_tree"), permissions, 3600)
+
+        return permissions
+
+    def invalidate_permission_tree(self):
+        cache.delete("%s_%s" % (self.id, "permission_tree"))
+        cache.delete("%s_%s" % (self.id, "permitted_objects"))
+
+    def get_permission_tree(self):
+        cache_key = "%s_%s" %  (self.id, "permission_tree")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
         else:
-
-            action = Action.objects.get(name=action)
-            allAction = Action.objects.get(name="ALL")
-
-            tree = {}
-            permitted = []
-
-            permissions = self.get_permissions(content_type)
-            for perm in permissions:
-                if not perm.object_id in tree:
-                    tree[perm.object_id] = []
-
-
-                if perm.actions:
-                    tree[perm.object_id].extend(perm.actions.all())
-
-                    if action in tree[perm.object_id] or allAction in tree[perm.object_id]:
-                        continue
-
-                if perm.role:
-                    tree[perm.object_id].extend(perm.role.actions.all())
-
-            for node in tree:
-                if allAction in tree[node]:
-                    permitted.append(node)
-                elif action in tree[node]:
-                    permitted.append(node)
-
-            permitted = list(model.objects.filter(id__in=permitted).select_related())
+            return self.build_permission_tree()
             
-            cache.set(cache_key, {'%s'%action_string: permitted}, 1200)
+    def get_permitted_objects(self, action, model, order_by=None):
 
-        return permitted
+        #content_type = ContentType.objects.get_for_model(model)
+        #action_string = action
+
+        cache_key = "%s_%s" % (self.id, "permitted_objects")
+
+        if cache.get(cache_key) and '%s' % model.__name__ in cache.get(cache_key):
+            return cache.get(cache_key)['%s' % model.__name__]
+
+        result = model.objects.all().select_related()
+
+        if order_by:
+            result.order_by(order_by)
+
+        permitted = []
+        
+        for obj in result:
+            if self.has_permission_to(action, obj):
+                permitted.append(obj)
+
+        result = {'%s' % model.__name__:list(permitted)}
+
+        cache.set(cache_key, result, 3600)
+
+        return result['%s' % model.__name__:]
 
 class AnonymousUser(User):
     id = 0

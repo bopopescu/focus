@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.db import models
 from datetime import datetime, timedelta
 from django.utils.translation import ugettext as _
+from core import Core
 
 class Action(models.Model):
     name = models.CharField(max_length=40)
@@ -32,7 +33,9 @@ class Role(models.Model):
             self.actions.add(p)
 
         self.save()
-        cache.clear()
+
+        for perm in self.permissions.all():
+            perm.invalidate_cache_for_user_and_members_of_groups()
 
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
@@ -52,6 +55,15 @@ class Permission(models.Model):
             return _("User") + ":" + " " + unicode(self.user)
 
         return _("Group") + ":" + " " + unicode(self.group)
+
+    def invalidate_cache_for_user_and_members_of_groups(self):
+
+        if self.user_id != 0 and self.user:
+            self.user.invalidate_permission_tree()
+
+        if self.group:
+            for user in self.group.members.all():
+                user.invalidate_permission_tree()
 
     def get_actions(self):
         actions = []

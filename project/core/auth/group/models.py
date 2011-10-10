@@ -25,11 +25,23 @@ class Group(models.Model):
     def add_member(self, user):
         self.members.add(user)
         self.save()
+
+        user.invalidate_permission_tree()
         
     def remove_member(self, user):
         self.members.remove(user)
         self.save()
 
+        user.invalidate_permission_tree()
+
+    def get_parents(self):
+        groups = []
+        if self.parent:
+            groups.append(self)
+            groups.append(self.parent)
+            groups.extend(self.parent.get_parents())
+        return groups
+        
     def grant_role(self, role, object):
         #Get info about the object
 
@@ -51,8 +63,12 @@ class Group(models.Model):
             object_id=object_id
         )
 
+
         perm.save()
 
+        for user in self.members.all():
+            user.invalidate_permission_tree()
+            
     def save_without_permissions(self):
         super(Group, self).save()
 
@@ -130,6 +146,8 @@ class Group(models.Model):
 
         perm.save()
 
+        for user in self.members.all():
+            user.invalidate_permission_tree()
 
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):
@@ -147,7 +165,11 @@ class Group(models.Model):
 
 
         #Checks if the group is permitted
-        perms = object.permissions(object_id, group=self)
+        perms = Permission.objects.filter(content_type=content_type,
+                                          object_id=object_id,
+                                          group=self,
+                                          negative=False,
+                                          )
 
         for perm in perms:
             if action in perm.get_valid_actions():
