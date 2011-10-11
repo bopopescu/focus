@@ -1,3 +1,4 @@
+from core.utils import get_content_type_for_model
 from django.shortcuts import render, get_object_or_404, redirect
 from app.orders.forms import OrderForm, AddParticipantToOrderForm, CreateInvoiceForm
 from app.orders.models import Order, ProductLine, Invoice
@@ -44,7 +45,7 @@ def view_statistics(request, id):
 def history(request, id):
     instance = get_object_or_404(Order, id=id, deleted=False)
 
-    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+    history = Log.objects.filter(content_type=get_content_type_for_model(instance),
                                  object_id=instance.id)
 
     return render(request, 'orders/log.html', {'title': _("Latest events"),

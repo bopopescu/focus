@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.utils import get_content_type_for_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from app.customers.models import Customer
@@ -79,7 +80,7 @@ def products(request, id):
 def history(request, id):
     instance = get_object_or_404(Supplier, id=id, deleted=False)
 
-    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+    history = Log.objects.filter(content_type=get_content_type_for_model(instance),
                                  object_id=instance.id)
 
     return render(request, 'suppliers/log.html', {'title': _("Latest events"),

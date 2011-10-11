@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.utils import get_content_type_for_model
 from django.shortcuts import render, get_object_or_404, redirect
 from app.client.models import ClientUser
 from app.offers.forms import OfferForm, AddClientForm, CreateOrderForm
@@ -14,7 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 
 @require_permission("LIST", Offer)
 def overview(request):
-    offers = Core.current_user().get_permitted_objects("VIEW", Offer).filter(trashed=False)
+    offers = Core.current_user().get_permitted_objects("VIEW", Offer).filter(trashed=False).select_related("project",
+                                                                                                           "customer")
     return render(request, "offers/overview.html", {'title': _('Offers'),
                                                     'offers': offers})
 
@@ -30,7 +32,6 @@ def create_order(request, id):
     offer = Offer.objects.get(id=id)
 
     if request.method == "POST":
-
         form = CreateOrderForm(request.POST)
 
         if form.is_valid():
@@ -51,22 +52,25 @@ def create_order(request, id):
     return render(request, "offers/create_order.html", {'title': offer.title,
                                                         'next_order_number': Order.calculate_next_order_number(),
                                                         'offer': offer,
-                                                        'form': form,})
+                                                        'form': form, })
+
 
 @require_permission("EDIT", Offer, "id")
 def history(request, id):
     instance = get_object_or_404(Offer, id=id, deleted=False)
 
-    history = Log.objects.filter(content_type=ContentType.objects.get_for_model(instance.__class__),
+    history = Log.objects.filter(content_type=get_content_type_for_model(instance),
                                  object_id=instance.id)
 
     return render(request, 'offers/log.html', {'title': _("Latest events"),
                                                'offer': instance,
                                                'logs': history[::-1][0:150]})
 
+
 @require_permission("CREATE", Offer)
 def add(request):
     return form(request)
+
 
 @require_permission("EDIT", Offer, "id")
 def client_management(request, id):
@@ -130,7 +134,6 @@ def form(request, id=None):
             p.price = request.POST.getlist('product_unit_cost')[i]
             p.tax = request.POST.getlist('product_tax')[i]
 
-            
             try:
                 product = Product.objects.get(id=int(request.POST.getlist('product_number')[i]))
                 p.product = product
