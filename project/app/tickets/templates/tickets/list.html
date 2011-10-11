@@ -50,10 +50,10 @@
 
                         </li>
                         <li class="ticket-data-priority">
-                            <span class="tag {{ ticket.get_priority_color }}">{{ ticket.priority }}</span>
+                            <span class="tag {{ ticket.get_priority.color }}">{{ ticket.get_priority.name }}</span>
                         </li>
                         <li class="ticket-data-priority">
-                            <span class="tag {{ ticket.get_status_color }}">{{ ticket.status }}</span>
+                            <span class="tag {{ ticket.get_status.color }}">{{ ticket.get_status.name }}</span>
                         </li>
                         <li class="ticket-data-priority">
                             {{ ticket.date_created }}
