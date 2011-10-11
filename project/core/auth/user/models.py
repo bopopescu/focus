@@ -17,6 +17,7 @@ from django.core import urlresolvers
 import time
 import os
 from django.utils import translation
+import thread
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
@@ -119,6 +120,8 @@ class User(models.Model):
 
             if allemployeesgroup:
                 allemployeesgroup.grant_role("Member", self)
+
+        self.invalidate_permission_tree()
 
     def set_valid_period(self, **kwargs):
         if 'toDate' in kwargs:
@@ -397,10 +400,9 @@ class User(models.Model):
 
         return permissions
 
-    def invalidate_permission_tree(self):
+    def invalidate_permission_tree(self, *args, **kwargs):
         cache.delete("%s_%s" % (self.id, "permission_tree"))
-        cache.delete("%s_%s" % (self.id, "permitted_objects"))
-       
+
     def get_permission_tree(self):
         cache_key = "%s_%s" %  (self.id, "permission_tree")
 
@@ -410,29 +412,30 @@ class User(models.Model):
             return self.build_permission_tree()
             
     def get_permitted_objects(self, action, model, order_by=None):
-        
-        #content_type = ContentType.objects.get_for_model(model)
-        #action_string = action
 
-        cache_key = "%s_%s" % (self.id, "permitted_objects")
+        content_type = ContentType.objects.get_for_model(model)
 
-        if cache.get(cache_key) and '%s' % model.__name__ in cache.get(cache_key):
-            pass
-            #return cache.get(cache_key)['%s' % model.__name__]
+        try:
+            self.get_permission_tree()[content_type.name]
+        except Exception, e:
+            return model.objects.none()
 
-        result = model.objects.all().select_related()
+        permission_tree = self.get_permission_tree()
 
-        if order_by:
-            result.order_by(order_by)
+        ids = []
+        for key,obj in permission_tree.items():
+            for id, actions in obj.items():
 
-        permitted = []
-        
-        for obj in result:
-            if self.has_permission_to(action, obj):
-                permitted.append(obj)
+                if action in actions and int(id)>0:
+                    ids.append(id)
+                    break
 
-        cache.set(cache_key, result, 3600)
-        
+                if "ALL" in actions and int(id)>0:
+                    ids.append(id)
+                    break
+
+        result = model.objects.filter(id__in=ids).select_related()
+
         return result
 
 class AnonymousUser(User):
