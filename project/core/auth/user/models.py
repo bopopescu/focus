@@ -431,11 +431,9 @@ class User(models.Model):
             if self.has_permission_to(action, obj):
                 permitted.append(obj)
 
-        result = {'%s' % model.__name__ :list(permitted)}
-
         cache.set(cache_key, result, 3600)
         
-        return result['%s' % model.__name__]
+        return result
 
 class AnonymousUser(User):
     id = 0
