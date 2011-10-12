@@ -55,8 +55,6 @@ class TicketBase(models.Model):
             if self.user:
                 self.user.grant_role('Admin', self)
 
-
-
         cache_key = "%s_%s_%s" % ("get_priority_color", self.id, "ticket")
         cache.delete(cache_key)
         cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")

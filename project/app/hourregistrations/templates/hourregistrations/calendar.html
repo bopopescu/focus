@@ -75,7 +75,7 @@
                         }
 
                         if (item[1] > 0) {
-                            $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + item[3].toFixed(2) + "</div></td>")
+                            $('#calendar_table tr').last().append("<td class='" + item[2] + "'><div class='date_day'>" + item[1] + "</div><div class='date_hours'>" + roundNumber(item[3],2) + "</div></td>")
                         } else {
                             $('#calendar_table tr').last().append("<td></td>");
                         }
@@ -115,6 +115,11 @@
                 });
     }
 
+    function roundNumber(num, dec) {
+    	var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	    return result;
+    }
+
     function fill_calendar_list(year, month, day) {
 
         var url = "/hourregistrations/calendar/" + year + "/" + month + "/" + day + "/";
@@ -137,7 +142,7 @@
                         $('#calender_list tbody tr').last().append("<td class='description' style='display:none;'>" + item.description + "</td>");
                         $('#calender_list tbody tr').last().append("<td class='hours' style='display:none;'>" + item.hours + "</td>");
 
-                        $('#calender_list tbody tr').last().append("<td>" + item.hours + " </td>");
+                        $('#calender_list tbody tr').last().append("<td>" + roundNumber(item.hours, 2) + " </td>");
                         $('#calender_list tbody tr').last().append("<td>" + item.time_start + " - " + item.time_end + " </td>");
                         $('#calender_list tbody tr').last().append("<td>" + item.customer_name + " - " + item.order_name + " </td>");
                         $('#calender_list tbody tr').last().append("<td> <a href='#' class='edit_hour_registration'>{% trans "edit" %}</a> </td>");
@@ -246,7 +251,7 @@
 
             var date = year + "-" + month + "-" + day;
             var order = $("#id_order").val();
-            var hours = $("#id_hours").val();
+            var hours = roundNumber($("#id_hours").val(),2);
             var time_start = $("#id_time_start").val();
             var time_end = $("#id_time_end").val();
             var type = $("#id_type").val();
@@ -308,8 +313,6 @@
                     }
                 });
             }
-
-
         });
 
         $('.day').live("click", function() {
