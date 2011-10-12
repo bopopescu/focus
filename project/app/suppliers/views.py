@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
-from app.customers.models import Customer
 from app.stock.models import Product
 from app.suppliers.forms import SupplierSimpleForm, SupplierForm
 from app.suppliers.models import Supplier
@@ -35,7 +34,7 @@ def overview_all(request):
             {'title': _("All active suppliers"), 'suppliers': suppliers})
 
 
-@require_permission("CREATE", Customer)
+@require_permission("CREATE", Supplier)
 def add_ajax(request):
     form = SupplierSimpleForm(request.POST, instance=Supplier())
 
@@ -96,7 +95,7 @@ def edit(request, id):
     return form(request, id)
 
 
-@require_permission("DELETE", Customer, "id")
+@require_permission("DELETE", Supplier, "id")
 def trash(request, id):
     instance = Supplier.objects.get(id=id)
 
@@ -118,7 +117,7 @@ def trash(request, id):
                                                         })
 
 
-@require_permission("DELETE", Customer, "id")
+@require_permission("DELETE", Supplier, "id")
 def restore(request, id):
     instance = Supplier.objects.get(id=id)
 
