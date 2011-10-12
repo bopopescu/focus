@@ -61,6 +61,8 @@ class TicketBase(models.Model):
         cache.delete(cache_key)
         cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")
         cache.delete(cache_key)
+        cache_key = "%s_%s_%s" % (Core.current_user().id, self.id, "marked")
+        cache.delete(cache_key)
         
     def trash(self):
         self.trashed = True
@@ -193,7 +195,7 @@ class Ticket(TicketBase):
         elif self.status.name == ("standard"):
             result =  "gray"
 
-        cache.set(cache_key, {'status':result, 'name': self.status.name})
+        cache.set(cache_key, {'color':result, 'name': self.status.name})
         return {'color':result, 'name': self.status.name}
 
     def add_user_to_visited_by_since_last_edit(self, user):
