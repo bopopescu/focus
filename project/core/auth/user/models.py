@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.utils import get_content_type_for_model
 from django.core.cache import cache
 from django.db.models import Q
 from django.conf import settings
@@ -276,7 +277,8 @@ class User(models.Model):
         if not isclass(object):
             object_id = object.id
 
-        content_type = ContentType.objects.get_for_model(object)
+
+        content_type = get_content_type_for_model(object)
 
         act = Role.objects.get(name=role)
 
@@ -317,7 +319,7 @@ class User(models.Model):
             act = Action.objects.filter(name__in=actions)
 
         #Get info about the object
-        content_type = ContentType.objects.get_for_model(object)
+        content_type = get_content_type_for_model(object)
 
         perm = Permission(
             user=self,
@@ -351,7 +353,7 @@ class User(models.Model):
         if not isclass(object):
             object_id = object.id
 
-        content_type = ContentType.objects.get_for_model(object)
+        content_type = get_content_type_for_model(object)
         permissons = self.get_permission_tree()
 
         try:
@@ -370,16 +372,16 @@ class User(models.Model):
         
     def get_permissions(self, content_type=None):
         groups = []
-        groups_queryset = self.groups.all()
+        groups_queryset = self.groups.select_related().all()
 
         for group in groups_queryset:
             groups.append(group)
             groups.extend(group.get_parents())
 
         if content_type:
-            return Permission.objects.filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups))
+            return Permission.objects.select_related("content_type","role").filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups))
 
-        return Permission.objects.filter(Q(user=self) | Q(group__in=groups))
+        return Permission.objects.select_related("content_type","role").filter(Q(user=self) | Q(group__in=groups))
 
     def build_permission_tree(self):
 
@@ -387,14 +389,16 @@ class User(models.Model):
 
         for perm in self.get_permissions():
 
-            if not perm.content_type.name in permissions:
-                permissions[perm.content_type.name] = {}
+            content_type = perm.content_type
 
-            if not perm.object_id in permissions[perm.content_type.name]:
-                permissions[perm.content_type.name][perm.object_id] = set([])
-                
+            if not content_type.name in permissions:
+                permissions[content_type.name] = {}
+
+            if not perm.object_id in permissions[content_type.name]:
+                permissions[content_type.name][perm.object_id] = set([])
+
             for action in perm.get_valid_actions():
-                permissions[perm.content_type.name][perm.object_id].add(action.name.upper())
+                permissions[content_type.name][perm.object_id].add(action.name.upper())
 
         cache.set("%s_%s" % (self.id, "permission_tree"), permissions, 3600)
 
@@ -413,28 +417,30 @@ class User(models.Model):
             
     def get_permitted_objects(self, action, model, order_by=None):
 
-        content_type = ContentType.objects.get_for_model(model)
-
+        content_type = get_content_type_for_model(model)
+            
         try:
             self.get_permission_tree()[content_type.name]
         except Exception, e:
             return model.objects.none()
 
-        permission_tree = self.get_permission_tree()
+        permission_tree = self.get_permission_tree()[content_type.name]
 
-        ids = []
-        for key,obj in permission_tree.items():
-            for id, actions in obj.items():
 
-                if action in actions and int(id)>0:
-                    ids.append(id)
-                    break
+        ids = set([])
+        for id,actions in permission_tree.items():
 
-                if "ALL" in actions and int(id)>0:
-                    ids.append(id)
-                    break
+            if not int(id)>0:
+                continue
 
-        result = model.objects.filter(id__in=ids).select_related()
+            if action in actions:
+                ids.add(id)
+                continue
+
+            if "ALL" in actions:
+                ids.add(id)
+
+        result = model.objects.filter(id__in=ids)
 
         return result
 

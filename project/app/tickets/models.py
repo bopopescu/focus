@@ -55,6 +55,13 @@ class TicketBase(models.Model):
             if self.user:
                 self.user.grant_role('Admin', self)
 
+
+
+        cache_key = "%s_%s_%s" % ("get_priority_color", self.id, "ticket")
+        cache.delete(cache_key)
+        cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")
+        cache.delete(cache_key)
+        
     def trash(self):
         self.trashed = True
         self.save()
@@ -62,7 +69,7 @@ class TicketBase(models.Model):
     @property
     def creator(self):
 
-        cache_key = "%s_ %s_%s" % ("ticket_creator", self.id, "creator")
+        cache_key = "%s_%s_%s" % ("ticket_creator", self.id, "creator")
 
         if cache.get(cache_key):
             return cache.get(cache_key)
@@ -138,31 +145,56 @@ class Ticket(TicketBase):
     class Meta:
         ordering = ['status', 'date_created']
 
-    def get_priority_color(self):
+    def get_priority(self):
 
+        cache_key = "%s_%s_%s" % ("get_priority_color", self.id, "ticket")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
+        result = ""
         if self.priority.name == ("Low"):
-            return "gray"
+            result = "gray"
 
         elif self.priority.name == ("Medium"):
-            return "blue"
+            result = "blue"
 
         elif self.priority.name == ("High"):
-            return "red"
+            result =  "red"
 
-    def get_status_color(self):
+        elif self.priority.name == ("standard"):
+            result =  "gray"
+
+        cache.set(cache_key, {'color':result, 'name':self.priority.name})
+        return {'color':result, 'name':self.priority.name}
+
+
+    def get_status(self):
+
+        cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
+        result = "red"
 
         if self.status.name == ("New"):
-            return "green"
+            result = "green"
 
-        elif self.status.name == ("In progress"):
-            return "blue"
+        elif self.status.name == ("In Progress"):
+            result = "blue"
 
         elif self.status.name == ("Need feedback"):
-            return "red"
+            result = "red"
 
         elif self.status.name == ("Closed"):
-            return "gray"
+            result =  "gray"
 
+        elif self.status.name == ("standard"):
+            result =  "gray"
+
+        cache.set(cache_key, {'status':result, 'name': self.status.name})
+        return {'color':result, 'name': self.status.name}
 
     def add_user_to_visited_by_since_last_edit(self, user):
         if user not in self.visited_by_since_last_edit.all():

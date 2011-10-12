@@ -64,16 +64,22 @@ class Permission(models.Model):
         if self.group:
             for user in self.group.members.all():
                 user.invalidate_permission_tree()
-
+    
     def get_actions(self):
         actions = []
         if self.actions:
-            actions.extend(self.actions.all())
+            actions.extend(self.actions.select_related().all())
         if self.role:
-            actions.extend(self.role.actions.all())
+            actions.extend(self.role.actions.select_related().all())
         return actions
 
     def get_valid_actions(self):
+
+        cache_key = "%s_%s" % ("permission_valid_actions", self.id)
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
         actions = self.get_actions()
         today = datetime.today()
 
@@ -83,6 +89,7 @@ class Permission(models.Model):
             self.to_date = today + timedelta(days=1)
 
         if today > self.from_date and today < self.to_date:
+            cache.set(cache_key, actions, 3600*24)
             return actions
         return []
 

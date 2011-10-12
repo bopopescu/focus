@@ -7,7 +7,7 @@ from core import Core
 from core.auth.company.models import Company
 from core.auth.permission.models import Permission, Role, Action
 from core.managers import PersistentManager
-from core.utils import get_class
+from core.utils import get_class, get_content_type_for_model
 
 class Group(models.Model):
     name = models.CharField(max_length=50)
@@ -52,7 +52,7 @@ class Group(models.Model):
         if not isclass(object):
             object_id = object.id
 
-        content_type = ContentType.objects.get_for_model(object)
+        content_type = get_content_type_for_model(object)
 
         act = Role.objects.get(name=role)
 
@@ -128,7 +128,7 @@ class Group(models.Model):
             act = Action.objects.filter(name__in=actions)
 
         #Get info about the object
-        content_type = ContentType.objects.get_for_model(object)
+        content_type = get_content_type_for_model(object)
 
         perm = Permission(
             group=self,
@@ -153,7 +153,7 @@ class Group(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
-        content_type = ContentType.objects.get_for_model(object)
+        content_type = get_content_type_for_model(object)
 
         object_id = 0
         if not isclass(object):

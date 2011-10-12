@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.utils import get_content_type_for_model
 from django.core.cache import cache
 from core import Core
 from django.contrib.contenttypes import generic
@@ -92,7 +93,7 @@ class PersistentModel(models.Model):
         if 'noLog' not in kwargs:
             log = Log(message=changes,
                       object_id=self.id,
-                      content_type=ContentType.objects.get_for_model(self.__class__),
+                      content_type=get_content_type_for_model(self),
                       action=action,
                       )
             log.save()
@@ -104,6 +105,8 @@ class PersistentModel(models.Model):
                     Notification(recipient=us,
                                  log=log,
                                  ).save()
+
+        Core.current_user().invalidate_permission_tree()
 
     def trash(self, **kwargs):
         self.trashed = True
@@ -142,7 +145,7 @@ class PersistentModel(models.Model):
 
     def who_has_permission_to(self, perm):
         try:
-            content_type = ContentType.objects.get_for_model(self)
+            content_type = get_content_type_for_model(self)
             id = self.id
             users = []
 
