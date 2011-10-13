@@ -15,7 +15,7 @@ import copy
 
 @require_permission("LIST", Ticket)
 def overview(request):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket)
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False).order_by("status", "-priority", "-date_edited")
 
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
@@ -23,8 +23,7 @@ def overview(request):
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).order_by("date_edited").reverse().filter(
-        assigned_to=request.user)
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False, assigned_to=request.user).order_by("status", "-priority", "-date_edited")
 
     return render(request, 'tickets/list.html', {"title": "Tickets",
                                                  "assigned_to": True,
