@@ -16,11 +16,12 @@ class Contact(PersistentModel):
     name = models.CharField(_("Full name"), max_length=80,default="")
     email = models.EmailField(_("Email"), max_length=80)
     address = models.CharField(_("Address"), max_length=80, blank=True)
+    zip = models.CharField(_("Zip"), max_length=80, blank=True)
     phone = models.CharField(_("Phone"), max_length=20, default="", blank=True)
     phone_office = models.CharField(_("Phone office"), max_length=20, default="", blank=True)
     phone_mobile = models.CharField(_("Mobile phone"), max_length=20, default="", blank=True)
-    description = models.TextField(default="", blank=True)
-    image = models.ImageField(upload_to="contacts", storage=fs, null=True, blank=True)
+    description = models.TextField(default="", blank=True, verbose_name=_("Description"))
+    image = models.ImageField(upload_to="contacts", verbose_name=_("Image"), storage=fs, null=True, blank=True)
     comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):

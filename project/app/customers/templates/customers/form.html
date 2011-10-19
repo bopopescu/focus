@@ -14,7 +14,7 @@
             output_field = input_field.parent().find("p");
 
             get_postal_from_zip(input_field, output_field);
-            input_field.keyup(function() {
+            input_field.bind('change keyup input mouseover', function() {
                 get_postal_from_zip(input_field, output_field);
             });
 
@@ -22,7 +22,7 @@
             output_field_invoice = input_field_invoice.parent().find("p");
 
             get_postal_from_zip(input_field_invoice, output_field_invoice);
-            input_field_invoice.keyup(function() {
+            input_field_invoice.bind('change keyup input mouseover', function() {
                 get_postal_from_zip(input_field_invoice, output_field_invoice);
             });
 

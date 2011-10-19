@@ -16,6 +16,9 @@
 
 {% block content %}
 
+    <script type="text/javascript" src="{{ STATIC_URL }}js/utils.js"></script>
+
+
     <style>
 
         .topPart {
@@ -39,7 +42,7 @@
     <div class="topPart">
         <div class="left">
             {% if contact.image %}
-            <img src="{{ contact.image|thumbnail_with_max_side:"220" }}">
+                <img src="{{ contact.image|thumbnail_with_max_side:"220" }}">
             {% endif %}
         </div>
 
@@ -67,9 +70,18 @@
                     <td>{{ contact.phone }} {{ contact.phone_office }} {{ contact.mobile }} </td>
                 </tr>
 
+                <input type="hidden" id="id_zip" value="{{ contact.zip }}">
+                <script>
+                    $(function() {
+                        var input_field = $('#' + "id_zip");
+                        get_postal_from_zip(input_field, $("#postal"));
+                    });
+
+                </script>
+
                 <tr>
                     <td>{% trans "Address" %}</td>
-                    <td> {{ contact.address }}</td>
+                    <td> {{ contact.address }} {{ contact.zip }} <span id="postal"></span></td>
                 </tr>
 
                 <tr>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-19 03:50+0200\n"
+"POT-Creation-Date: 2011-10-19 04:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,7 +216,7 @@ msgstr "MEDLEMMER"
 #: app/admin/templates/admin/users/view.html:16
 #: app/company/templates/company/list.html:16
 #: app/contacts/templates/contacts/list.html:16
-#: app/contacts/templates/contacts/view.html:54 app/customers/models.py:14
+#: app/contacts/templates/contacts/view.html:56 app/customers/models.py:14
 #: app/customers/templates/customers/contacts.html:22
 #: app/customers/templates/customers/list.html:12
 #: app/customers/templates/customers/view.html:17 app/files/models.py:14
@@ -239,7 +239,7 @@ msgstr "Navn"
 #: app/admin/templates/admin/groups/members.html:22
 #: app/admin/templates/admin/groups/members.html:31
 #: app/admin/templates/admin/groups/view.html:27
-#: app/contacts/templates/contacts/view.html:49
+#: app/contacts/templates/contacts/view.html:51
 msgid "Details"
 msgstr "Detaljer"
 
@@ -288,7 +288,7 @@ msgstr "ENDRE PROFILBILDE"
 #: app/admin/templates/admin/users/list.html:11
 #: app/admin/templates/admin/users/view.html:18
 #: app/contacts/templates/contacts/list.html:19
-#: app/contacts/templates/contacts/view.html:59 app/customers/models.py:15
+#: app/contacts/templates/contacts/view.html:61 app/customers/models.py:15
 #: app/customers/templates/customers/contacts.html:25
 #: app/customers/templates/customers/list.html:15
 #: app/customers/templates/customers/view.html:22
@@ -297,7 +297,8 @@ msgid "E-mail"
 msgstr "E-post"
 
 #: app/admin/templates/admin/users/list.html:12 app/contacts/models.py:19
-#: app/contacts/templates/contacts/list.html:18 app/customers/models.py:16
+#: app/contacts/templates/contacts/list.html:18
+#: app/contacts/templates/contacts/view.html:66 app/customers/models.py:16
 #: app/customers/templates/customers/contacts.html:24
 #: app/customers/templates/customers/list.html:14
 #: app/suppliers/templates/suppliers/list.html:10
@@ -375,7 +376,10 @@ msgid "Your username is: %s"
 msgstr "Brukernavnet ditt er:%s"
 
 #: app/admin/views/user.py:64
-msgid "Your password is"
+#, fuzzy
+msgid ""
+"\n"
+"Your password is: "
 msgstr "Ditt passord er"
 
 #: app/admin/views/user.py:77
@@ -538,7 +542,7 @@ msgid "Full name"
 msgstr "Fullt navn"
 
 #: app/contacts/models.py:18 app/contacts/templates/contacts/list.html:17
-#: app/contacts/templates/contacts/view.html:64 app/customers/models.py:20
+#: app/contacts/templates/contacts/view.html:71 app/customers/models.py:20
 #: app/customers/templates/customers/contacts.html:23
 #: app/customers/templates/customers/list.html:13
 #: app/customers/templates/customers/view.html:33
@@ -555,6 +559,23 @@ msgstr "Telefon kontor"
 msgid "Mobile phone"
 msgstr "Mobiltelefon"
 
+#: app/contacts/models.py:22 app/contacts/templates/contacts/view.html:76
+#: app/hourregistrations/models.py:44
+#: app/hourregistrations/templates/hourregistrations/disbursements.html:77
+#: app/invoices/templates/invoices/view.html:10
+#: app/offers/templates/offers/view.html:8
+#: app/offers/templates/offers/view.html:32 app/orders/models.py:17
+#: app/orders/models.py:38 app/orders/templates/orders/view.html:10
+#: app/projects/templates/projects/view.html:18 app/stock/models.py:70
+#: app/stock/templates/stock/products/view.html:76 app/tickets/models.py:122
+#: app/tickets/utils.py:89 app/tickets/templates/tickets/view.html:71
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: app/contacts/models.py:23
+msgid "Image"
+msgstr "Bilde"
+
 #: app/contacts/views.py:24 app/contacts/templates/contacts/base.html:12
 #: app/customers/models.py:27 templates/base_backup.html:62
 #: templates/menu.html:59
@@ -570,7 +591,7 @@ msgid "All deleted contacts"
 msgstr "Alle slettede kontakter"
 
 #: app/contacts/views.py:80 app/contacts/views.py:168
-#: app/contacts/views.py:197 app/contacts/templates/contacts/view.html:48
+#: app/contacts/views.py:197 app/contacts/templates/contacts/view.html:50
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -916,18 +937,6 @@ msgstr "Tid start"
 #: app/hourregistrations/models.py:42
 msgid "Time end"
 msgstr "Tid slutt"
-
-#: app/hourregistrations/models.py:44
-#: app/hourregistrations/templates/hourregistrations/disbursements.html:77
-#: app/invoices/templates/invoices/view.html:10
-#: app/offers/templates/offers/view.html:8
-#: app/offers/templates/offers/view.html:32 app/orders/models.py:17
-#: app/orders/models.py:38 app/orders/templates/orders/view.html:10
-#: app/projects/templates/projects/view.html:18 app/stock/models.py:70
-#: app/stock/templates/stock/products/view.html:76 app/tickets/models.py:122
-#: app/tickets/utils.py:89 app/tickets/templates/tickets/view.html:71
-msgid "Description"
-msgstr "Beskrivelse"
 
 #: app/hourregistrations/models.py:46
 #: app/hourregistrations/templates/hourregistrations/calendar.html:519
