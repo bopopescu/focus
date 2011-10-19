@@ -38,7 +38,9 @@
 
     <div class="topPart">
         <div class="left">
+            {% if contact.image %}
             <img src="{{ contact.image|thumbnail_with_max_side:"220" }}">
+            {% endif %}
         </div>
 
         <div class="right">
@@ -61,8 +63,18 @@
                 </tr>
 
                 <tr>
+                    <td>{% trans "Phone" %}</td>
+                    <td>{{ contact.phone }} {{ contact.phone_office }} {{ contact.mobile }} </td>
+                </tr>
+
+                <tr>
                     <td>{% trans "Address" %}</td>
                     <td> {{ contact.address }}</td>
+                </tr>
+
+                <tr>
+                    <td>{% trans "Description" %}</td>
+                    <td> {{ contact.description }}</td>
                 </tr>
                 </tbody>
 

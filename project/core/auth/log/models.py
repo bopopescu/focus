@@ -45,6 +45,7 @@ class Log(models.Model):
         if lastLog:
             msg = ""
             lastLog = lastLog[len(lastLog) - 1]
+            print lastLog.message
             for i, value in eval(self.message).iteritems():
                 if i == "id" or i == "date_created" or i == "date_edited" or i == 'editor' or i == 'user':
                     continue
@@ -65,7 +66,7 @@ class Log(models.Model):
                     diff.append(value[1] + (" %s %s %s: %s \n") % (
                     _("was changed from"), eval(lastLog.message)[i][0], _("to"), eval(self.message)[i][0]))
 
-            if len(diff) == 0:
+            if not len(diff):
                 diff.append(_("No changes"))
 
             return diff
