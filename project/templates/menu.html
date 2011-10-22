@@ -22,10 +22,10 @@
 </section>
 
 <nav id="main-nav">
-
-     <form action="/search/search/" id="searchform">
-            <input size="9" type="text" name="s"> <input id="search_button" type="submit" value="{% trans "Search" %}">
-        </form>
+    <form action="/search/search/">
+        <input style="width:150px; margin-left:15px;" type="text" name="s">
+        <input id="search_button" type="submit" value="{% trans "Search" %}">
+    </form>
 
     <ul>
         <li class="{% active request "^/dashboard/" %} {% active request "^/announcements/" %}">
