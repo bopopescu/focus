@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <ul class="logs">
     {% for log in logs %}
         <li>
@@ -7,7 +9,7 @@
                 - {{ change }}<br>
             {% endfor %}
             <br>
-            <em class="logs-meta">Changes by <a href="#">{{ log.creator }}</a></em>
+            <em class="logs-meta">{% trans "Changes by" %} <a href="#">{{ log.creator }}</a></em>
         </li>
     {% endfor %}
 </ul>

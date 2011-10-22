@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-19 04:03+0200\n"
+"POT-Creation-Date: 2011-10-22 18:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,7 +216,7 @@ msgstr "MEDLEMMER"
 #: app/admin/templates/admin/users/view.html:16
 #: app/company/templates/company/list.html:16
 #: app/contacts/templates/contacts/list.html:16
-#: app/contacts/templates/contacts/view.html:56 app/customers/models.py:14
+#: app/contacts/templates/contacts/view.html:59 app/customers/models.py:14
 #: app/customers/templates/customers/contacts.html:22
 #: app/customers/templates/customers/list.html:12
 #: app/customers/templates/customers/view.html:17 app/files/models.py:14
@@ -239,7 +239,7 @@ msgstr "Navn"
 #: app/admin/templates/admin/groups/members.html:22
 #: app/admin/templates/admin/groups/members.html:31
 #: app/admin/templates/admin/groups/view.html:27
-#: app/contacts/templates/contacts/view.html:51
+#: app/contacts/templates/contacts/view.html:54
 msgid "Details"
 msgstr "Detaljer"
 
@@ -288,7 +288,7 @@ msgstr "ENDRE PROFILBILDE"
 #: app/admin/templates/admin/users/list.html:11
 #: app/admin/templates/admin/users/view.html:18
 #: app/contacts/templates/contacts/list.html:19
-#: app/contacts/templates/contacts/view.html:61 app/customers/models.py:15
+#: app/contacts/templates/contacts/view.html:64 app/customers/models.py:15
 #: app/customers/templates/customers/contacts.html:25
 #: app/customers/templates/customers/list.html:15
 #: app/customers/templates/customers/view.html:22
@@ -296,9 +296,9 @@ msgstr "ENDRE PROFILBILDE"
 msgid "E-mail"
 msgstr "E-post"
 
-#: app/admin/templates/admin/users/list.html:12 app/contacts/models.py:19
+#: app/admin/templates/admin/users/list.html:12 app/contacts/models.py:20
 #: app/contacts/templates/contacts/list.html:18
-#: app/contacts/templates/contacts/view.html:66 app/customers/models.py:16
+#: app/contacts/templates/contacts/view.html:69 app/customers/models.py:16
 #: app/customers/templates/customers/contacts.html:24
 #: app/customers/templates/customers/list.html:14
 #: app/suppliers/templates/suppliers/list.html:10
@@ -330,7 +330,7 @@ msgstr "Vellykket endret gruppe"
 msgid "Successfully added new group"
 msgstr "Lagt ny gruppe"
 
-#: app/admin/views/group.py:129 core/auth/permission/models.py:57
+#: app/admin/views/group.py:129 core/auth/permission/models.py:58
 msgid "Group"
 msgstr "Gruppe"
 
@@ -376,11 +376,12 @@ msgid "Your username is: %s"
 msgstr "Brukernavnet ditt er:%s"
 
 #: app/admin/views/user.py:64
-#, fuzzy
 msgid ""
 "\n"
 "Your password is: "
-msgstr "Ditt passord er"
+msgstr ""
+"\n"
+"Ditt passord er"
 
 #: app/admin/views/user.py:77
 msgid "Successfully sent new password"
@@ -395,7 +396,7 @@ msgstr "Siste events"
 
 #: app/admin/views/user.py:94 app/admin/views/user.py:217
 #: app/orders/templates/orders/participants.html:12
-#: core/auth/permission/models.py:55
+#: core/auth/permission/models.py:56
 msgid "User"
 msgstr "Bruker"
 
@@ -542,7 +543,7 @@ msgid "Full name"
 msgstr "Fullt navn"
 
 #: app/contacts/models.py:18 app/contacts/templates/contacts/list.html:17
-#: app/contacts/templates/contacts/view.html:71 app/customers/models.py:20
+#: app/contacts/templates/contacts/view.html:83 app/customers/models.py:20
 #: app/customers/templates/customers/contacts.html:23
 #: app/customers/templates/customers/list.html:13
 #: app/customers/templates/customers/view.html:33
@@ -551,15 +552,19 @@ msgstr "Fullt navn"
 msgid "Address"
 msgstr "Adresse"
 
-#: app/contacts/models.py:20
+#: app/contacts/models.py:19 app/customers/models.py:21
+msgid "Zip"
+msgstr "Postnr"
+
+#: app/contacts/models.py:21
 msgid "Phone office"
 msgstr "Telefon kontor"
 
-#: app/contacts/models.py:21
+#: app/contacts/models.py:22
 msgid "Mobile phone"
 msgstr "Mobiltelefon"
 
-#: app/contacts/models.py:22 app/contacts/templates/contacts/view.html:76
+#: app/contacts/models.py:23 app/contacts/templates/contacts/view.html:88
 #: app/hourregistrations/models.py:44
 #: app/hourregistrations/templates/hourregistrations/disbursements.html:77
 #: app/invoices/templates/invoices/view.html:10
@@ -572,7 +577,7 @@ msgstr "Mobiltelefon"
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: app/contacts/models.py:23
+#: app/contacts/models.py:24
 msgid "Image"
 msgstr "Bilde"
 
@@ -591,7 +596,7 @@ msgid "All deleted contacts"
 msgstr "Alle slettede kontakter"
 
 #: app/contacts/views.py:80 app/contacts/views.py:168
-#: app/contacts/views.py:197 app/contacts/templates/contacts/view.html:50
+#: app/contacts/views.py:197 app/contacts/templates/contacts/view.html:53
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -671,10 +676,6 @@ msgstr "Kundenummer"
 #: app/customers/models.py:17 app/customers/templates/customers/view.html:27
 msgid "Website"
 msgstr "Nettsted"
-
-#: app/customers/models.py:21
-msgid "Zip"
-msgstr "Postnr"
 
 #: app/customers/models.py:24 app/customers/templates/customers/view.html:42
 msgid "Invoice address"
@@ -1758,6 +1759,11 @@ msgstr "kunde"
 msgid "History"
 msgstr "Historie"
 
+#: app/tickets/templates/tickets/view.html:114
+#, fuzzy
+msgid "Posted by"
+msgstr "Opprettet av"
+
 #: app/tickets/templates/tickets/view.html:120
 msgid "Changes"
 msgstr "Endringer:"
@@ -1802,17 +1808,21 @@ msgstr "varslinger"
 msgid "Hour registration"
 msgstr "Timeregistrering"
 
-#: templates/comments.html:8
+#: templates/comments.html:9
 msgid "comments"
 msgstr "kommentarer"
 
-#: templates/comments.html:10
+#: templates/comments.html:11
 msgid "Comments"
 msgstr "Kommentarer"
 
-#: templates/comments.html:47
+#: templates/comments.html:51
 msgid "Add comment"
 msgstr "Legg til kommentar"
+
+#: templates/log.html:12
+msgid "Changes by"
+msgstr "Endringer av"
 
 #: templates/menu.html:39
 msgid "New announcement"
