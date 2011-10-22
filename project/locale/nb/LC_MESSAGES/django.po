@@ -376,11 +376,12 @@ msgid "Your username is: %s"
 msgstr "Brukernavnet ditt er:%s"
 
 #: app/admin/views/user.py:64
-#, fuzzy
 msgid ""
 "\n"
 "Your password is: "
-msgstr "Ditt passord er"
+msgstr ""
+"\n"
+"Ditt passord er"
 
 #: app/admin/views/user.py:77
 msgid "Successfully sent new password"
@@ -1758,6 +1759,11 @@ msgstr "kunde"
 msgid "History"
 msgstr "Historie"
 
+#: app/tickets/templates/tickets/view.html:114
+#, fuzzy
+msgid "Posted by"
+msgstr "Opprettet av"
+
 #: app/tickets/templates/tickets/view.html:120
 msgid "Changes"
 msgstr "Endringer:"
@@ -1814,7 +1820,11 @@ msgstr "Kommentarer"
 msgid "Add comment"
 msgstr "Legg til kommentar"
 
-#: templates/menu.html:27
+#: templates/log.html:12
+msgid "Changes by"
+msgstr "Endringer av"
+
+#: templates/menu.html:39
 msgid "Search"
 msgstr "Søk"
 
