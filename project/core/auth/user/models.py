@@ -414,7 +414,7 @@ class User(models.Model):
             return cache.get(cache_key)
         else:
             return self.build_permission_tree()
-            
+
     def get_permitted_objects(self, action, model, order_by=None):
 
         content_type = get_content_type_for_model(model)

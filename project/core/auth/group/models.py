@@ -37,17 +37,16 @@ class Group(models.Model):
     def get_parents(self):
         groups = []
         if self.parent:
-            groups.append(self)
             groups.append(self.parent)
             groups.extend(self.parent.get_parents())
         return groups
-        
-    def grant_role(self, role, object):
-        #Get info about the object
 
-        """
-        Make it possible to set permissions for classes
-        """
+    def invalidate_permission_tree_for_members(self):
+        for user in self.members.all():
+            user.invalidate_permission_tree()
+
+    def grant_role(self, role, object):
+        
         object_id = 0
         if not isclass(object):
             object_id = object.id
@@ -65,9 +64,8 @@ class Group(models.Model):
 
         perm.save()
 
-        for user in self.members.all():
-            user.invalidate_permission_tree()
-            
+        self.invalidate_permission_tree_for_members()
+
     def save_without_permissions(self):
         super(Group, self).save()
 
@@ -145,8 +143,7 @@ class Group(models.Model):
 
         perm.save()
 
-        for user in self.members.all():
-            user.invalidate_permission_tree()
+        self.invalidate_permission_tree_for_members()
 
     def has_permission_to (self, action, object, id=None, any=False):
         if isinstance(object, str):

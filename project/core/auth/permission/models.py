@@ -24,6 +24,7 @@ class Role(models.Model):
         return unicode(self.name)
 
     def grant_actions (self, actions):
+
         if(isinstance(actions, str)):
             act = Action.objects.filter(name=actions)
         else:
@@ -62,9 +63,11 @@ class Permission(models.Model):
             self.user.invalidate_permission_tree()
 
         if self.group:
-            for user in self.group.members.all():
-                user.invalidate_permission_tree()
-    
+            self.group.invalidate_permission_tree_for_members()
+
+        cache_key = "%s_%s" % ("permission_valid_actions", self.id)
+        cache.delete(cache_key)
+
     def get_actions(self):
         actions = []
         if self.actions:
