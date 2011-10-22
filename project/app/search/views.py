@@ -15,7 +15,8 @@ from app.announcements.models import Announcement
 def search(request):
     term = request.GET.get('s')
 
-    cache_key = "%s_%s" % (Core.current_user().get_company().id, term)
+    cache_term = term.replace(" ", "_")
+    cache_key = "%s_%s" % (Core.current_user().get_company().id, cache_term)
 
     if cache.get(cache_key):
         return render(request, 'search/list.html', {'title': 'Resultat',
