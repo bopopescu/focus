@@ -56,11 +56,14 @@
 
 
         {% require_permission LIST contacts.Contact %}
+
+
         <li class="{% active request "^/contacts/" %}">
-            <a class="contactsnav {% active request "^/contacts/" %}"
-               href="{% url app.contacts.views.overview %}">{% trans "Contacts" %}</a>
+            <a href="" title="" class="contactsnav">{% trans "Contacts" %}</a>
             {% include "contacts/sidebar.html" %}
         </li>
+
+
         {% end_require %}
 
         {% require_permission LIST projects.Project %}
