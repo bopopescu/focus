@@ -61,6 +61,7 @@ input.valid, textarea.valid { background-color:#eef4e4; }
 input.invalid, textarea.invalid { background-color:#f4e9e7; }
 input:focus, textarea:focus { background-color:#ededed; }
 #main-nav ul li span { background-color:#d1d1d1; }
+.tickets .logs li { background-color: #fafafa; }
 
 /*  Background Images  */
 a.outside { background-image:url('../img/icons/icon_outside_link.png'); }

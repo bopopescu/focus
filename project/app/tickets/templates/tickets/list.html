@@ -2,6 +2,7 @@
 {% load auth %}
 {% load i18n %}
 {% load tickets_includetags %}
+{% load thumbnail %}
 
 
 {% block content %}
@@ -60,31 +61,105 @@
                         </li>
                     </ul>
                 </div>
-                <div class="ticket-details">
+                <div class="ticket-details"> 
                     <h4>{{ ticket.title }}</h4>
                     <dl>
-                        <dt>Opened:</dt>
+                        <dt>{% trans "Opened" %}:</dt>
                         <dd><strong>{{ ticket.date_created }}</strong></dd>
-                        <dt>Last updated:</dt>
+                        <dt>{% trans "Last updated" %}:</dt>
                         <dd><strong>{{ ticket.date_edited }}</strong></dd>
-                        <dt>Milestone:</dt>
-                        <dd><strong>N/A</strong></dd>
+                        <dt>{% trans "Milestone" %}:</dt>
+                        <dd><strong>{{ ticket }}</strong></dd>
                         <dt class="clear">Reported by:</dt>
                         <dd><strong>{{ ticket.creator }}</strong></dd>
-                        <dt>Assigned to:</dt>
-                        <dd><strong>{{ ticket.assigned_to }}</strong></dd>
-                        <dt>Order:</dt>
-                        <dd><strong>{{ ticket.order }}</strong></dd>
+                        <dt>{% trans "Assigned to" %}:</dt>
+                        <dd>{% if ticket.assigne_to %}<strong>{{ ticket.assigned_to }}</strong>{% endif %}</dd>
+                        <dt>{% trans "Order" %}:</dt>
+                        <dd><strong>{% if ticket.order %}{{ ticket.order }}{% endif %}</strong></dd>
                     </dl>
-                    <h5>Description</h5>
+                    <h5>{% trans "Description" %}</h5>
 
                     <p>{{ ticket.description }}</p>
                     <ul class="ticket-details-actions">
-                        <li><a href="{{ ticket.get_update_url }}" class="button gray">Update ticket</a></li>
-                        <li><a href="#" class="button red">Close ticket</a></li>
+                        <li><a href="{{ ticket.get_update_url }}" class="button gray">{% trans "Update ticket" %}</a></li>
+                        <li><a href="#" class="button red">{% trans "Close ticket" %}</a></li>
                     </ul>
+                    <div class="ticket_update">
+                        <h3>{% trans "Comment: " %}</h3>
+                        {{ ticket.ticket_form.comment }} <br/>
+                        {% if ticket.clients.all %}
+                            {{ ticket.ticket_form.public.label }} {{ ticket.ticket_form.public }}
+                        {% endif %}
+                        <button type="submit">{% trans "Add comment" %}</button>
+                    </div>
+                    <br/>
+                    <h3>{% trans "History" %}</h3>
+                    <ul class="logs">
+
+                     {% for update in ticket.updates.all %}
+
+
+                            <li>
+
+                                {% if comment.creator.profileImage %}
+                                    <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}" class="avatar_img left"
+                                         alt=""/>
+                                {% endif %}
+                                <span class="logs-timestamp">{{ update.date_created|date:"Y.m.d H:i" }}</span>
+
+                                <p>
+                                    {{ comment.text|linebreaks }}
+                                </p>
+
+                                <em class="logs-meta">{% trans "Posted by" %} <a href="#">{{ update.creator }}</a></em>
+
+                                <br><br>
+
+                                <p>
+                                    {% if update.update_lines.all %}
+                                        <b>{% trans "Changes" %}</b>
+                                                <br>
+                                            {% for line in update.update_lines.all %}
+                                                 - {{ line.change }}<br>
+                                            {% endfor %}
+
+                                    {% endif %}
+                                </p>
+
+                                {% if update.comment %}
+                                    <p><b>{% trans "Comment" %}</b> <br> {{ update.comment|linebreaks }}</p>
+                                {% endif %}
+
+                                {% if update.attachment %}
+                                    <p>
+                                        <b>{% trans "Attachment" %}</b><br>
+                                        <a target="_blank" href="{{ update.get_attachment_url }}">
+                                            <img src="{{ STATIC_URL }}img/download.png"
+                                                 style="width:30px; height:30px; vertical-align:middle;">
+                                            {{ update.get_attachment_name }}</a>
+                                    </p>
+
+                                {% endif %}
+                                {% if ticket.clients.all %}
+                                    <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
+                                        <input type="hidden" value="{{ update.id }}"/>
+                                        {% trans "Public" %}<input type="checkbox" class="visibility_check"
+                                                {% if update.public %} checked="checked" {% endif %}/>
+                                    </form>
+                                {% endif %}
+
+
+                            </li>
+
+
+                        {% endfor %}
+
+                    </ul>
+
                 </div>
                 <!-- /Ticket Details -->
+
+
             </li>
         {% endfor %}
 

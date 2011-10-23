@@ -1313,49 +1313,7 @@ div.tab > img, div.tab > .image-frame img {
     margin: 5px 0 0;
 }
 
-/*  Event Logs  */
-.logs {
-    margin: 0;
-    padding: 0;
-}
-.logs ul {
-    list-style-type: none;
-}
-.logs li {
-    background: none;
-    list-style-type: none;
-    display: block;
-    padding: 10px 10px 10px 35px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    border: 1px solid;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    line-height: 100%;
-}
-.logs li .avatar_img{
-    margin: 0 10px 0 0;
-}
 
-.logs li h4 {
-    text-shadow: none;
-    font-size: 100%;
-}
-
-.logs li .logs-timestamp {
-    float: right;
-    font-size: 93%;
-}
-
-.logs li .logs-event {
-    text-decoration: none;
-    font-size: 116%;
-}
-
-.logs li .logs-meta a {
-    text-decoration: none;
-}
 
 /*  Contacts  */
 .contacts {
@@ -2310,4 +2268,50 @@ table .actions .delete {
     padding:0px;
     margin:0px;
     background-color: transparent;
+}
+
+/*  Event Logs  */
+.logs, .tickets .logs {
+    margin: 0;
+    padding: 0;
+}
+.logs ul {
+    list-style-type: none;
+}
+.logs li, .tickets .logs li {
+    width: 80%;
+    background: none;
+    list-style-type: none;
+    display: block;
+    padding: 10px 10px 10px 35px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 1px solid;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    line-height: 100%;
+    text-align: left;
+}
+.logs li .avatar_img, .tickets .logs li .avatar_img{
+    margin: 0 10px 0 0;
+}
+
+.logs li h4, .tickets .logs li h4 {
+    text-shadow: none;
+    font-size: 100%;
+}
+
+.logs li .logs-timestamp, .tickets .logs li .logs-timestamp {
+    float: right;
+    font-size: 93%;
+}
+
+.logs li .logs-event, .tickets .logs li .logs-event {
+    text-decoration: none;
+    font-size: 116%;
+}
+
+.logs li .logs-meta a, .tickets .logs .logs-meta a {
+    text-decoration: none;
 }

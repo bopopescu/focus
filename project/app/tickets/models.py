@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from app.projects.models import Milestone
 from app.tickets.utils import send_assigned_mail, send_update_mails
 from core import Core
 from core.auth.company.models import Company
@@ -117,6 +118,8 @@ class TicketType(models.Model):
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
 
 
+
+
 class Ticket(TicketBase):
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), )
@@ -133,7 +136,7 @@ class Ticket(TicketBase):
                                     related_name="assigned_tickets")
     #mail_excluded = models.ManyToManyField(User, null=True, blank=True)
     attachment = models.FileField(upload_to="tickets", storage=fs, null=True, verbose_name=_("Attachment"))
-
+    milestone = models.ForeignKey(Milestone, blank=True, null=True, verbose_name=_('milestone'))
     visited_by_since_last_edit = models.ManyToManyField(User)
 
     objects = PersistentManager()

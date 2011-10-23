@@ -16,7 +16,8 @@ import copy
 @require_permission("LIST", Ticket)
 def overview(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False).order_by("status", "-priority", "-date_edited")
-
+    for ticket in tickets:
+        ticket.ticket_form = EditTicketForm(instance=ticket)
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
 
