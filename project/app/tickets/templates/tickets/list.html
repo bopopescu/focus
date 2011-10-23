@@ -43,6 +43,7 @@
                         <li class="ticket-data-ticket" style="width:35%;">
 
                             <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
+
                             <p>{{ ticket.description|truncatewords:15 }}</p>
 
                         </li>
@@ -61,7 +62,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="ticket-details"> 
+                <div class="ticket-details">
                     <h4>{{ ticket.title }}</h4>
                     <dl>
                         <dt>{% trans "Opened" %}:</dt>
@@ -81,32 +82,34 @@
 
                     <p>{{ ticket.description }}</p>
                     <ul class="ticket-details-actions">
-                        <li><a href="{{ ticket.get_update_url }}" class="button gray">{% trans "Update ticket" %}</a></li>
+                        <li><a href="{{ ticket.get_update_url }}" class="button gray">{% trans "Update ticket" %}</a>
+                        </li>
                         <li><a href="#" class="button red">{% trans "Close ticket" %}</a></li>
                     </ul>
                     <div class="ticket_update">
                         <h3>{% trans "Comment: " %}</h3>
                         {{ ticket.ticket_form.comment }} <br/>
-                        {% if ticket.clients.all %}
+                        {% if ticket.get_clients %}
                             {{ ticket.ticket_form.public.label }} {{ ticket.ticket_form.public }}
                         {% endif %}
                         <button type="submit">{% trans "Add comment" %}</button>
                     </div>
                     <br/>
+
                     <h3>{% trans "History" %}</h3>
                     <ul class="logs">
 
-                     {% for update in ticket.updates.all %}
-
+                        {% for update in ticket.get_updates %}
 
                             <li>
-
                                 {% if comment.creator.profileImage %}
-                                    <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}" class="avatar_img left"
+                                    <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}"
+                                         class="avatar_img left"
                                          alt=""/>
                                 {% endif %}
-                                <span class="logs-timestamp">{{ update.date_created|date:"Y.m.d H:i" }}</span>
 
+                                <span class="logs-timestamp">{{ update.date_created|date:"Y.m.d H:i" }}</span>
+                            
                                 <p>
                                     {{ comment.text|linebreaks }}
                                 </p>
@@ -116,13 +119,12 @@
                                 <br><br>
 
                                 <p>
-                                    {% if update.update_lines.all %}
+                                    {% if update.get_update_lines %}
                                         <b>{% trans "Changes" %}</b>
-                                                <br>
-                                            {% for line in update.update_lines.all %}
-                                                 - {{ line.change }}<br>
-                                            {% endfor %}
-
+                                        <br>
+                                        {% for line in update.get_update_lines %}
+                                            - {{ line.change }}<br>
+                                        {% endfor %}
                                     {% endif %}
                                 </p>
 
@@ -138,33 +140,20 @@
                                                  style="width:30px; height:30px; vertical-align:middle;">
                                             {{ update.get_attachment_name }}</a>
                                     </p>
-
                                 {% endif %}
-                                {% if ticket.clients.all %}
+                                {% if ticket.get_clients %}
                                     <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
                                         <input type="hidden" value="{{ update.id }}"/>
                                         {% trans "Public" %}<input type="checkbox" class="visibility_check"
                                                 {% if update.public %} checked="checked" {% endif %}/>
                                     </form>
                                 {% endif %}
-
-
                             </li>
-
-
                         {% endfor %}
-
                     </ul>
-
                 </div>
-                <!-- /Ticket Details -->
-
-
             </li>
         {% endfor %}
-
     </ul>
-
-
 
 {% endblock %}

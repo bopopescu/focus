@@ -58,18 +58,25 @@ class TicketBase(models.Model):
 
         cache_key = "%s_%s_%s" % ("get_priority_color", self.id, "ticket")
         cache.delete(cache_key)
+
         cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")
         cache.delete(cache_key)
+
         cache_key = "%s_%s_%s" % (Core.current_user().id, self.id, "marked")
         cache.delete(cache_key)
-        
+
+        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_updates")
+        cache.delete(cache_key)
+
+        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_clients")
+        cache.delete(cache_key)
+
     def trash(self):
         self.trashed = True
         self.save()
 
     @property
     def creator(self):
-
         cache_key = "%s_%s_%s" % ("ticket_creator", self.id, "creator")
 
         if cache.get(cache_key):
@@ -114,11 +121,7 @@ class TicketType(models.Model):
     @staticmethod
     def simpleform():
         from app.tickets.forms import AddTicketTypeForm
-
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
-
-
-
 
 class Ticket(TicketBase):
     title = models.CharField(_("Title"), max_length=50)
@@ -147,6 +150,28 @@ class Ticket(TicketBase):
 
     class Meta:
         ordering = ['status', 'date_created']
+
+    def get_clients(self):
+        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_clients")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
+        clients = list(self.clients.all().select_related())
+        cache.set(cache_key, clients)
+        
+        return clients
+
+    def get_updates(self):
+        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_updates")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
+        updates = list(self.updates.all().select_related())
+        cache.set(cache_key, updates)
+
+        return updates
 
     def get_priority(self):
 
@@ -382,6 +407,21 @@ class TicketUpdate(TicketBase):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
         return None
+
+    def get_update_lines(self):
+        update_lines = []
+
+        cache_key = "%s_%s_%s" % ("ticket_update",self.id, "update_lines")
+
+        if cache.get(cache_key):
+            return cache.get(cache_key)
+
+        for update_line in self.update_lines.all().select_related():
+            update_lines.append(update_line)
+
+        cache.set(cache_key, update_lines)
+        
+        return update_lines
 
     def __unicode__(self):
         return u"Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))
