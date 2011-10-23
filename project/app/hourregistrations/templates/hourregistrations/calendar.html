@@ -140,7 +140,7 @@
                         $('#calender_list tbody tr').last().append("<td class='order_name' style='display:none;'>" + item.order_name + "</td>");
                         $('#calender_list tbody tr').last().append("<td class='type' style='display:none;'>" + item.type + "</td>");
                         $('#calender_list tbody tr').last().append("<td class='description' style='display:none;'>" + item.description + "</td>");
-                        $('#calender_list tbody tr').last().append("<td class='hours' style='display:none;'>" + item.hours + "</td>");
+                        $('#calender_list tbody tr').last().append("<td class='hours' style='display:none;'>" + roundNumber(item.hours, 2) + "</td>");
 
                         $('#calender_list tbody tr').last().append("<td>" + roundNumber(item.hours, 2) + " </td>");
                         $('#calender_list tbody tr').last().append("<td>" + item.time_start + " - " + item.time_end + " </td>");
