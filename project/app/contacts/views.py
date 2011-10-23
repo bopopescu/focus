@@ -37,6 +37,7 @@ def list_ajax(request, query, limit):
               'value': user.username} for user in users]
     return HttpResponse(JSONEncoder().encode(users), mimetype='application/json')
 
+
 @login_required()
 def overview_trashed(request):
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact).filter(trashed=True)
@@ -47,7 +48,7 @@ def overview_trashed(request):
 def overview_all(request):
     contacts = Core.current_user().get_permitted_objects("VIEW", Contact)
     return render(request, 'contacts/list.html',
-                               {'title': _("All deleted contacts"), 'contacts': contacts})
+            {'title': _("All deleted contacts"), 'contacts': contacts})
 
 
 @require_permission("CREATE", Contact)
@@ -63,8 +64,8 @@ def history(request, id):
                                  object_id=contact.id)
 
     return render(request, 'contacts/log.html', {'title': _("Latest events"),
-                                                              'contact': contact,
-                                                              'logs': history[::-1][0:150]})
+                                                 'contact': contact,
+                                                 'logs': history[::-1][0:150]})
 
 
 @require_permission("EDIT", Contact, "id")
@@ -77,7 +78,7 @@ def view(request, id):
     contact = get_object_or_404(Contact, id=id)
     comments = comment_block(request, contact)
     return render(request, 'contacts/view.html',
-                               {'title': _('Contact'), 'comments': comments, 'contact': contact})
+            {'title': _('Contact'), 'comments': comments, 'contact': contact})
 
 
 @require_permission("DELETE", Contact, "id")
@@ -95,10 +96,11 @@ def trash(request, id):
         return redirect(overview)
     else:
         return render(request, 'contacts/trash.html', {'title': _("Confirm delete"),
-                                                                    'contact': instance,
-                                                                    'can_be_deleted': instance.can_be_deleted()[0],
-                                                                    'reasons': instance.can_be_deleted()[1],
-                                                                    })
+                                                       'contact': instance,
+                                                       'can_be_deleted': instance.can_be_deleted()[0],
+                                                       'reasons': instance.can_be_deleted()[1],
+                                                       })
+
 
 @require_permission("DELETE", Contact, "id")
 def restore(request, id):
@@ -110,8 +112,8 @@ def restore(request, id):
         return redirect(view, contact.id)
     else:
         return render(request, 'contacts/restore.html', {'title': _("Confirm restore"),
-                                                          'contact': contact,
-                                                          })
+                                                         'contact': contact,
+                                                         })
 
 
 @suggest_ajax_parse_arguments()
@@ -165,10 +167,10 @@ def edit_image(request, id):
     else:
         form = ContactImageForm(instance=instance, initial={"image": None})
 
-    return render(request, "contacts/form.html", {'title': _("Contact"),
-                                                               'form': form,
-                                                               'contact': instance,
-                                                               })
+    return render(request, "contacts/form_image.html", {'title': _("Contact"),
+                                         'form': form,
+                                         'contact': instance,
+                                         })
 
 
 @login_required()
@@ -195,6 +197,6 @@ def form (request, id=False):
         form = ContactForm(instance=instance)
 
     return render(request, "contacts/form.html", {'title': _("Contact"),
-                                                               'form': form,
-                                                               'contact': instance,
-                                                               })
+                                                  'form': form,
+                                                  'contact': instance,
+                                                  })

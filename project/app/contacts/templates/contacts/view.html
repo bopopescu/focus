@@ -20,33 +20,36 @@
 
 
     <style>
-
-        .topPart {
-            width: auto;
-            height: 200px;
-
-        }
-
-        .topPart .left {
-            width: 350px;
+       
+        
+        .topleft {
+            width: 230px;
             float: left;
         }
 
-        .topPart .right {
+        .topright {
             width: 400px;
             float: left;
+            overflow: hidden;
         }
 
+        @media screen and (max-width:1500px) {
+            .topright {
+                width: 400px;
+                float:none;
+                overflow: hidden;
+            }
+        }
+    
     </style>
 
-    <div class="topPart">
-        <div class="left">
+        <div class="topleft">
             {% if contact.image %}
                 <img src="{{ contact.image|thumbnail_with_max_side:"220" }}">
             {% endif %}
         </div>
 
-        <div class="right">
+        <div class="topright">
             <table>
                 <thead>
                 <tr>
@@ -71,6 +74,7 @@
                 </tr>
 
                 <input type="hidden" id="id_zip" value="{{ contact.zip }}">
+
                 <script>
                     $(function() {
                         var input_field = $('#' + "id_zip");
@@ -92,11 +96,9 @@
 
             </table>
         </div>
-    </div>
 
+        <div class="clearer"></div>
 
-    <br><br><br><br><br><br>
-    {% include "comments.html" %}
-
+        {% include "comments.html" %}
 
 {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "contacts/base.html" %}
+{% load auth %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block content %}
+
+    {% if contact.image %}
+        <img src="{{ contact.image|thumbnail_with_max_side:"220" }}">
+    {% endif %}
+    
+    {% include "form_fields.html" %}
+
+{% endblock %}
