@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ p.pid }}</td>
                 <td><a href="{% url app.projects.views.project.view p.id %}">{{ p }}</a></td>
-                <td>{{ p.customer}}</td>
+                <td>{{ p.get_customer}}</td>
                 <td>{{ p.deliveryDate|date:"d.m.Y" }}</td>
                 <td>{{ p.responsible }}</td>
             </tr>

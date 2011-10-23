@@ -100,6 +100,8 @@ def edit(request, id):
         if ticket_form.is_valid():
             ticket = create_update_for_ticket(old_ticket, ticket_form)
 
+            ticket.invalidate_cache()
+
             request.message_success(_("Ticket updated"))
 
             return redirect(view, ticket.id)

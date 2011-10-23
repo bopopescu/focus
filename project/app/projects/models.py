@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from core.cache import cachedecorator
+from django.core.cache import cache
 from django.db import models
 from app.contacts.models import Contact
 from app.files.models import File
@@ -28,6 +30,13 @@ class Project(PersistentModel):
 
     def __unicode__(self):
         return self.project_name
+
+    @cachedecorator('get_customer')
+    def get_customer(self):
+        return self.customer
+
+    def invalidate_cache(self):
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_customer"))
 
     @staticmethod
     def calculate_next_pid():
@@ -80,6 +89,8 @@ class Project(PersistentModel):
 
         super(Project, self).save()
 
+        self.invalidate_cache()
+        
         #Give the user who created this ALL permissions on object
         if new:
             Core.current_user().grant_role("Owner", self)

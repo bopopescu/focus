@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.cache import cachedecorator
 from core.utils import get_content_type_for_model
 from django.core.cache import cache
 from django.db.models import Q
@@ -61,20 +62,9 @@ class User(models.Model):
     def __unicode__(self):
         return self.get_full_name()
 
+    @cachedecorator('get_company')
     def get_company(self):
-
-        cache_key = "%s_%s" % (self.id, "company")
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-
-        result = None
-        if self.company:
-            result = self.company
-            cache.set(cache_key, self.company)
-
-        return result
-    
+        return self.company
 
     def can_be_deleted(self):
         can_be_deleted = True
@@ -200,6 +190,7 @@ class User(models.Model):
         self.company = Core.current_user().get_company()
         self.save()
 
+    @cachedecorator('get_company_admingroup')
     def get_company_admingroup(self):
         if not self.company:
             return None
@@ -208,6 +199,7 @@ class User(models.Model):
 
         return self.company.admin_group
 
+    @cachedecorator('get_company_allemployeesgroup')
     def get_company_allemployeesgroup(self):
         if not self.company:
             return None
@@ -384,7 +376,6 @@ class User(models.Model):
         return Permission.objects.select_related("content_type","role").filter(Q(user=self) | Q(group__in=groups))
 
     def build_permission_tree(self):
-
         permissions = {}
 
         for perm in self.get_permissions():
@@ -400,20 +391,14 @@ class User(models.Model):
             for action in perm.get_valid_actions():
                 permissions[content_type.name][perm.object_id].add(action.name.upper())
 
-        cache.set("%s_%s" % (self.id, "permission_tree"), permissions, 3600)
-
         return permissions
 
     def invalidate_permission_tree(self, *args, **kwargs):
-        cache.delete("%s_%s" % (self.id, "permission_tree"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_permission_tree"))
 
+    @cachedecorator('get_permission_tree')
     def get_permission_tree(self):
-        cache_key = "%s_%s" %  (self.id, "permission_tree")
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-        else:
-            return self.build_permission_tree()
+        return self.build_permission_tree()
 
     def get_permitted_objects(self, action, model, order_by=None):
 
@@ -425,7 +410,6 @@ class User(models.Model):
             return model.objects.none()
 
         permission_tree = self.get_permission_tree()[content_type.name]
-
 
         ids = set([])
         for id,actions in permission_tree.items():

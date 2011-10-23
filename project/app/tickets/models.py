@@ -5,6 +5,7 @@ from app.tickets.utils import send_assigned_mail, send_update_mails
 from core import Core
 from core.auth.company.models import Company
 from core.auth.user.models import User
+from core.cache import cachedecorator
 from django.db import models
 from django.core.cache import cache
 from app.customers.models import Customer
@@ -55,21 +56,6 @@ class TicketBase(models.Model):
 
             if self.user:
                 self.user.grant_role('Admin', self)
-
-        cache_key = "%s_%s_%s" % ("get_priority_color", self.id, "ticket")
-        cache.delete(cache_key)
-
-        cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")
-        cache.delete(cache_key)
-
-        cache_key = "%s_%s_%s" % (Core.current_user().id, self.id, "marked")
-        cache.delete(cache_key)
-
-        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_updates")
-        cache.delete(cache_key)
-
-        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_clients")
-        cache.delete(cache_key)
 
     def trash(self):
         self.trashed = True
@@ -151,34 +137,23 @@ class Ticket(TicketBase):
     class Meta:
         ordering = ['status', 'date_created']
 
+
+    def invalidate_cache(self):
+      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_clients"))
+      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_updates"))
+      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_priority"))
+      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_status"))
+
+    @cachedecorator('get_clients')
     def get_clients(self):
-        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_clients")
+        return list(self.clients.all().select_related())
 
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-
-        clients = list(self.clients.all().select_related())
-        cache.set(cache_key, clients)
-        
-        return clients
-
+    @cachedecorator('get_updates')
     def get_updates(self):
-        cache_key = "%s_%s_%s" % ("ticket", self.id, "get_updates")
+        return list(self.updates.all().select_related())
 
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-
-        updates = list(self.updates.all().select_related())
-        cache.set(cache_key, updates)
-
-        return updates
-
+    @cachedecorator('get_priority')
     def get_priority(self):
-
-        cache_key = "%s_%s_%s" % ("get_priority_color", self.id, "ticket")
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
 
         result = ""
         if self.priority.name == ("Low"):
@@ -193,16 +168,10 @@ class Ticket(TicketBase):
         elif self.priority.name == ("standard"):
             result =  "gray"
 
-        cache.set(cache_key, {'color':result, 'name':self.priority.name})
         return {'color':result, 'name':self.priority.name}
 
-
+    @cachedecorator('get_status')
     def get_status(self):
-
-        cache_key = "%s_%s_%s" % ("get_status_color", self.id, "ticket")
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
 
         result = "red"
 
@@ -221,7 +190,6 @@ class Ticket(TicketBase):
         elif self.status.name == ("standard"):
             result =  "gray"
 
-        cache.set(cache_key, {'color':result, 'name': self.status.name})
         return {'color':result, 'name': self.status.name}
 
     def add_user_to_visited_by_since_last_edit(self, user):
@@ -289,6 +257,9 @@ class Ticket(TicketBase):
                     self.company.admin_group.grant_role('Admin', self)
                 if self.company.all_employees_group:
                     self.company.all_employees_group.grant_role('Member', self)
+
+        
+        self.invalidate_cache()
 
     def check_assigned_to(self):
         try:
@@ -386,6 +357,7 @@ class TicketUpdate(TicketBase):
     objects = PersistentManager()
     all_objects = models.Manager()
 
+    @cachedecorator('get_attachment_url')
     def get_attachment_url(self):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
@@ -394,6 +366,7 @@ class TicketUpdate(TicketBase):
     def get_view_url(self):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.ticket.id,))
 
+    @cachedecorator('get_attachment_name')
     def get_attachment_name(self):
         return self.attachment.name.split(os.sep)[-1]
 
@@ -403,25 +376,15 @@ class TicketUpdate(TicketBase):
                           (diff, _("changed from"), differences[diff][1], _("to"), differences[diff][0])
             TicketUpdateLine.objects.create(update=self, change=change_text)
 
+    @cachedecorator('get_attachment')
     def get_attachment(self):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
         return None
 
+    @cachedecorator('get_update_lines')
     def get_update_lines(self):
-        update_lines = []
-
-        cache_key = "%s_%s_%s" % ("ticket_update",self.id, "update_lines")
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-
-        for update_line in self.update_lines.all().select_related():
-            update_lines.append(update_line)
-
-        cache.set(cache_key, update_lines)
-        
-        return update_lines
+        return list(self.update_lines.all().select_related())
 
     def __unicode__(self):
         return u"Comment for ticket %s, by %s %s" % (self.ticket, self.user, self.date_created.strftime("%d.%m.%Y"))

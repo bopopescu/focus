@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.cache import cachedecorator
 from core.utils import get_content_type_for_model
 from django.core.cache import cache
 from core import Core
@@ -57,6 +58,10 @@ class PersistentModel(models.Model):
     class Meta:
         abstract = True
 
+    @cachedecorator('get_creator')
+    def get_creator(self):
+        return self.creator
+        
     def save(self, **kwargs):
         if not Core.current_user():
             super(PersistentModel, self).save()
@@ -124,6 +129,7 @@ class PersistentModel(models.Model):
         return Log.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__),
                                   object_id=self.id)
 
+    @cachedecorator('get_object')
     def get_object (self):
         """
         Gets the object even if it's deleted.
@@ -142,7 +148,6 @@ class PersistentModel(models.Model):
     who_has_permission_to
     returns a list of users who are permitted perform actions on the object
     """
-
     def who_has_permission_to(self, perm):
         try:
             content_type = get_content_type_for_model(self)

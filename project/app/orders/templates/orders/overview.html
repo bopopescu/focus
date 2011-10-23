@@ -25,13 +25,13 @@
                 <td><a href="{% url app.orders.views.order.view order.id %}">{{ order.title }}</a></td>
                 <td>{{ order.delivery_date }}</td>
                 <td>
-                    {% if order.customer %}
-                        <a href="{% url app.customers.views.view order.customer.id %}">{{ order.customer }}</a>
+                    {% if order.get_customer %}
+                        <a href="{% url app.customers.views.view order.get_customer.id %}">{{ order.get_customer }}</a>
                     {% endif %}
                 </td>
                 <td>
-                    {% if order.project %}
-                        <a href="{% url app.projects.views.project.view order.project.id %}">{{ order.project }}</a>
+                    {% if order.get_project %}
+                        <a href="{% url app.projects.views.project.view order.get_project.id %}">{{ order.get_project }}</a>
                     {% endif %}
                 </td>
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from core.cache import cachedecorator
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db import models
@@ -23,8 +24,10 @@ class Role(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
-    def grant_actions (self, actions):
+    def get_actions(self):
+        return list(self.actions.all())
 
+    def grant_actions (self, actions):
         if(isinstance(actions, str)):
             act = Action.objects.filter(name=actions)
         else:
@@ -37,6 +40,7 @@ class Role(models.Model):
 
         for perm in self.permissions.all():
             perm.invalidate_cache_for_user_and_members_of_groups()
+
 
 class Permission(models.Model):
     content_type = models.ForeignKey(ContentType, blank=True, null=True, related_name="permissions")
@@ -58,32 +62,29 @@ class Permission(models.Model):
         return _("Group") + ":" + " " + unicode(self.group)
 
     def invalidate_cache_for_user_and_members_of_groups(self):
-
         if self.user_id != 0 and self.user:
             self.user.invalidate_permission_tree()
 
         if self.group:
             self.group.invalidate_permission_tree_for_members()
 
-        cache_key = "%s_%s" % ("permission_valid_actions", self.id)
-        cache.delete(cache_key)
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_actions"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_valid_actions"))
 
+    @cachedecorator('get_actions')
     def get_actions(self):
         actions = []
         if self.actions:
-            actions.extend(self.actions.select_related().all())
+            actions.extend(self.actions.all())
         if self.role:
-            actions.extend(self.role.actions.select_related().all())
+            actions.extend(self.role.get_actions())
+
         return actions
 
+    @cachedecorator('get_valid_actions')
     def get_valid_actions(self):
-
-        cache_key = "%s_%s" % ("permission_valid_actions", self.id)
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-
         actions = self.get_actions()
+
         today = datetime.today()
 
         if not self.from_date:
@@ -91,10 +92,11 @@ class Permission(models.Model):
         if not self.to_date:
             self.to_date = today + timedelta(days=1)
 
+        result = []
         if today > self.from_date and today < self.to_date:
-            cache.set(cache_key, actions, 3600*24)
-            return actions
-        return []
+            result = list(actions)
+
+        return result
 
     def get_object(self):
         if not self.object_id:

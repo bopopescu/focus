@@ -16,8 +16,8 @@
         {% if comments.list %}
             {% for comment in comments.list %}
                 <li>
-                    {% if comment.creator.profileImage %}
-                        <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}"
+                    {% if comment.get_creator.profileImage %}
+                        <img src="{{ comment.get_creator.profileImage|thumbnail_with_max_side:"60" }}"
                              class="avatar_img left"
                              alt=""/>
                     {% endif %}
@@ -26,7 +26,7 @@
                     <p>
                         {{ comment.text|linebreaks }}
                     </p>
-                    <em class="logs-meta">Posted by <a href="#">{{ comment.creator }}</a></em>
+                    <em class="logs-meta">Posted by <a href="#">{{ comment.get_creator }}</a></em>
                 </li>
             {% endfor %}
         {% endif %}

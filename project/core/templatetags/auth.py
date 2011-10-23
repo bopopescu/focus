@@ -29,7 +29,8 @@ def require_permission(parser, token):
         {% end_require %}
             
     """
-    
+
+
     # Extract the params
     try:
         tag_name, action, object = token.split_contents()
@@ -37,7 +38,7 @@ def require_permission(parser, token):
     # Raise an error if we don't have the correct params    
     except ValueError:
         raise template.TemplateSyntaxError, "%r tag requires exactly two arguments" % token.contents.split()[0]
-    
+
     # Fetch everything from this tag to end_require
     multiple_nodes = [parser.parse(('else', 'end_require',)), None]
     token = parser.next_token()
@@ -46,6 +47,7 @@ def require_permission(parser, token):
         parser.delete_first_token()
 
     return PermissionNode(multiple_nodes, action, object)
+
 
 class PermissionNode(template.Node):
     """

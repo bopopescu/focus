@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from core.cache import cachedecorator
+from django.core.cache import cache
 from django.core import urlresolvers
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -46,6 +48,18 @@ class OrderBase(PersistentModel):
     files = models.ManyToManyField(File)
     comments = generic.GenericRelation(Comment)
 
+    @cachedecorator('get_customer')
+    def get_customer(self):
+        return self.customer
+
+    @cachedecorator('get_project')
+    def get_project(self):
+        return self.project
+
+    def invalidate_cache(self):
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_customer"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_project"))
+
     def copy_from(self, object):
         self.title = object.title
         self.customer = object.customer
@@ -82,6 +96,10 @@ class OrderBase(PersistentModel):
                     
             if p.id:
                 self.product_lines.add(p)
+
+    def save(self, **kwargs):
+        super(OrderBase, self).save()
+        self.invalidate_cache()
 
     def __unicode__(self):
         return self.title
