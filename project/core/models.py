@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import thread
 from core.cache import cachedecorator
 from core.utils import get_content_type_for_model
 from django.core.cache import cache
@@ -62,7 +63,7 @@ class PersistentModel(models.Model):
     def get_creator(self):
         return self.creator
         
-    def save(self, **kwargs):
+    def save(self, *args, **kwargs):
         if not Core.current_user():
             super(PersistentModel, self).save()
             return
@@ -111,7 +112,8 @@ class PersistentModel(models.Model):
                                  log=log,
                                  ).save()
 
-        Core.current_user().invalidate_permission_tree()
+            Core.current_user().invalidate_permission_tree()
+                    
 
     def trash(self, **kwargs):
         self.trashed = True
@@ -156,8 +158,8 @@ class PersistentModel(models.Model):
 
             object = content_type.get_object_for_this_type(id=id)
 
-            perm = Action.objects.get(name=perm.upper())
-            adminPerm = Action.objects.get(name="ALL")
+            perm = Action.get_by_name(perm.upper())
+            adminPerm = Action.get_by_name("ALL")
 
             for u in Permission.objects.filter(content_type=content_type, negative=False, object_id=id):
                 if perm in u.get_valid_actions():

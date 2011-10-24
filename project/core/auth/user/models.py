@@ -272,7 +272,7 @@ class User(models.Model):
 
         content_type = get_content_type_for_model(object)
 
-        act = Role.objects.get(name=role)
+        act = Role.get_by_name(role)
 
         perm = Permission(
             role=act,
@@ -304,12 +304,6 @@ class User(models.Model):
         if not isclass(object):
             object_id = object.id
 
-        #For making it possible to give both list and string for permission adding.
-        if(isinstance(actions, str)):
-            act = Action.objects.filter(name=actions)
-        else:
-            act = Action.objects.filter(name__in=actions)
-
         #Get info about the object
         content_type = get_content_type_for_model(object)
 
@@ -323,7 +317,7 @@ class User(models.Model):
             )
         perm.save()
 
-        for p in act:
+        for p in Action.get_list_by_names(actions):
             perm.actions.add(p)
 
         perm.save()

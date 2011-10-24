@@ -52,7 +52,7 @@ class Group(models.Model):
 
         content_type = get_content_type_for_model(object)
 
-        act = Role.objects.get(name=role)
+        act = Role.get_by_name(role)
 
         perm = Permission(
             role=act,
@@ -95,34 +95,20 @@ class Group(models.Model):
         to_date = None
         negative = False
 
-        """
-        Set time limits, if set in func-call
-        """
+        #Set time limits, if set in func-call
         if 'from_date' in kwargs:
             from_date = kwargs['from_date']
         if 'to_date' in kwargs:
             to_date = kwargs['to_date']
 
-        """
-        Set negative to negative value in kwargs
-        """
+        #Set negative to negative value in kwargs
         if 'negative' in kwargs:
             negative = True
 
-        """
-        Make it possible to set permissions for classes
-        """
+        #Make it possible to set permissions for classes
         object_id = 0
         if not isclass(object):
             object_id = object.id
-
-        """
-        For making it possible to give both list and string for permission adding.
-        """
-        if(isinstance(actions, str)):
-            act = Action.objects.filter(name=actions)
-        else:
-            act = Action.objects.filter(name__in=actions)
 
         #Get info about the object
         content_type = get_content_type_for_model(object)
@@ -137,14 +123,14 @@ class Group(models.Model):
             )
         perm.save()
 
-        for p in act:
+        for p in Action.get_list_by_names(actions):
             perm.actions.add(p)
 
         perm.save()
 
         self.invalidate_permission_tree_for_members()
 
-    def has_permission_to (self, action, object, id=None, any=False):
+    def has_permission_to (self, action_str, object, id=None, any=False):
         if isinstance(object, str):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
@@ -155,9 +141,8 @@ class Group(models.Model):
         if not isclass(object):
             object_id = object.id
 
-        action = Action.objects.get(name=action)
-        allAction = Action.objects.get(name="ALL")
-
+        action = Action.get_by_name(action_str)
+        allAction = Action.get_by_name('ALL')
 
         #Checks if the group is permitted
         perms = Permission.objects.filter(content_type=content_type,

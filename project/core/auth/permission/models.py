@@ -8,14 +8,36 @@ from django.utils.translation import ugettext as _
 from core import Core
 
 class Action(models.Model):
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40, unique=True)
     verb = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
 
     def __unicode__(self):
         return self.name
 
+    @classmethod
+    def get_by_name(cls, name):
 
+        cache_key = "get_action_by_name_%s" % name
+        cached = cache.get(cache_key)
+
+        if cached:
+            return cached
+
+        act = Action.objects.get(name=name)
+        cache.set(cache_key, act)
+        return act
+
+    @classmethod
+    def get_list_by_names(cls, actions):
+
+        if isinstance(actions, (list, set)):
+            act = [Action.get_by_name(action) for action in actions]
+        else:
+            act = [Action.get_by_name(actions)]
+
+        return act
+    
 class Role(models.Model):
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=250)
@@ -24,16 +46,25 @@ class Role(models.Model):
     def __unicode__(self):
         return unicode(self.name)
 
+    @classmethod
+    def get_by_name(cls, name):
+        cache_key = "get_role_by_name_%s" % name
+        cached = cache.get(cache_key)
+
+        if cached:
+            return cached
+
+        act = Role.objects.get(name=name)
+        cache.set(cache_key, act)
+        return act
+
+    @cachedecorator('get_actions')
     def get_actions(self):
         return list(self.actions.all())
 
     def grant_actions (self, actions):
-        if(isinstance(actions, str)):
-            act = Action.objects.filter(name=actions)
-        else:
-            act = Action.objects.filter(name__in=actions)
 
-        for p in act:
+        for p in Action.get_list_by_names(actions):
             self.actions.add(p)
 
         self.save()
