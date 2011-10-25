@@ -30,9 +30,10 @@ class cachedecorator:
             cache_key = "cachedecorator_%s_%s_%s" % (args[0].__class__.__name__, args[0].pk, self.label)
             cached = cache.get(cache_key)
 
-            if cached or isinstance(cached, (list, set)):
+            if cached is not None:
                 return cached
             else:
+                print "%s : %s " % (cache_key, cached)
                 value = func(*args, **kwargs)
                 cache.set(cache_key, value)
                 return value

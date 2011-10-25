@@ -21,7 +21,7 @@ class Action(models.Model):
         cache_key = "get_action_by_name_%s" % name
         cached = cache.get(cache_key)
 
-        if cached:
+        if cached is not None:
             return cached
 
         act = Action.objects.get(name=name)
@@ -51,7 +51,7 @@ class Role(models.Model):
         cache_key = "get_role_by_name_%s" % name
         cached = cache.get(cache_key)
 
-        if cached:
+        if cached is not None:
             return cached
 
         act = Role.objects.get(name=name)
@@ -110,10 +110,10 @@ class Permission(models.Model):
         if self.role:
             actions.extend(self.role.get_actions())
 
-        return actions
+        return list(actions)
 
-    @cachedecorator('get_valid_actions')
     def get_valid_actions(self):
+
         actions = self.get_actions()
 
         today = datetime.today()
