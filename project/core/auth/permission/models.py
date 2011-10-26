@@ -60,7 +60,7 @@ class Role(models.Model):
 
     @cachedecorator('get_actions')
     def get_actions(self):
-        return list(self.actions.all())
+        return list(self.actions.all().select_related())
 
     def grant_actions (self, actions):
 
@@ -99,13 +99,13 @@ class Permission(models.Model):
         if self.group:
             self.group.invalidate_permission_tree_for_members()
 
-        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_actions"))
+        #cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_actions"))
 
     @cachedecorator('get_actions')
     def get_actions(self):
         actions = []
         if self.actions:
-            actions.extend(self.actions.all())
+            actions.extend(self.actions.all().select_related())
         if self.role:
             actions.extend(self.role.get_actions())
 
