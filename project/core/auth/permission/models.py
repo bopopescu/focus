@@ -100,7 +100,6 @@ class Permission(models.Model):
             self.group.invalidate_permission_tree_for_members()
 
         cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_actions"))
-        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_valid_actions"))
 
     @cachedecorator('get_actions')
     def get_actions(self):
