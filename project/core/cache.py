@@ -33,7 +33,6 @@ class cachedecorator:
             if cached is not None:
                 return cached
             else:
-                print "%s : %s " % (cache_key, cached)
                 value = func(*args, **kwargs)
                 cache.set(cache_key, value)
                 return value
