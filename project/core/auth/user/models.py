@@ -365,9 +365,9 @@ class User(models.Model):
             groups.extend(group.get_parents())
 
         if content_type:
-            return Permission.objects.select_related("content_type","role").filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups))
+            return Permission.objects.filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups)).select_related("content_type","role")
 
-        return Permission.objects.select_related("content_type","role").filter(Q(user=self) | Q(group__in=groups))
+        return Permission.objects.filter(Q(user=self) | Q(group__in=groups)).select_related("content_type","role")
 
     def build_permission_tree(self):
         permissions = {}

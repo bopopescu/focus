@@ -101,7 +101,6 @@ class Permission(models.Model):
 
         #cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_actions"))
 
-    @cachedecorator('get_actions')
     def get_actions(self):
         actions = []
         if self.actions:
@@ -111,6 +110,7 @@ class Permission(models.Model):
 
         return list(actions)
 
+    @cachedecorator('get_valid_actions')
     def get_valid_actions(self):
 
         actions = self.get_actions()
