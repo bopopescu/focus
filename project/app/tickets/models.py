@@ -39,9 +39,6 @@ class TicketBase(models.Model):
         super(TicketBase, self).save()
 
         if Core.current_user():
-            #Clear cache
-            cache_key = "%s_%s" % (Core.current_user().id, self.__class__.__name__)
-            cache.delete(cache_key)
 
             if action == "ADD":
                 Core.current_user().grant_role("Admin", self)
@@ -62,17 +59,10 @@ class TicketBase(models.Model):
         self.save()
 
     @property
+    @cachedecorator('creator')
     def creator(self):
-        cache_key = "%s_%s_%s" % ("ticket_creator", self.id, "creator")
-
-        if cache.get(cache_key):
-            return cache.get(cache_key)
-
         creator = self.client_user or self.user
-        cache.set(cache_key, creator)
-
         return creator
-
 
 class TicketStatus(models.Model):
     name = models.CharField(max_length=20)
@@ -196,20 +186,9 @@ class Ticket(TicketBase):
         if user not in self.visited_by_since_last_edit.all():
             self.visited_by_since_last_edit.add(user)
 
+    @cachedecorator('mark_as_unread_for_current_user')
     def mark_as_unread_for_current_user(self):
-
-        cache_key = "%s_%s_%s" % (Core.current_user().id, self.id, "marked")
-
-        result = 0
-
-        if cache.get(cache_key):
-            result = cache.get(cache_key) == "True"
-
-        else:
-            result = Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
-            cache.set(cache_key, "%s"%result)
-
-        return result
+        return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
 
     def get_recipients(self):
         """
