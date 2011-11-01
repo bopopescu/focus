@@ -390,6 +390,10 @@ section[role=navigation] header h1 {
     background-image: url('../img/icons/icon_nav_projects.png');
 }
 
+#main-nav ul li a.calendar {
+    background-image: url('../img/icons/icon_nav_calendar.png');
+}
+
 #main-nav ul li a.customers {
     background-image: url('../img/icons/icon_nav_customers.png');
 }

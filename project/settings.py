@@ -49,7 +49,7 @@ TIME_FORMAT = 'H.i'
 _ = lambda s: s
 
 LANGUAGES = (
-    ('en', _('English')),
+    ('en', _('Entglish')),
     ('nb', _('Norwegian')),
     )
 
@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'app.customers',
     'app.projects',
     'app.files',
+    'app.calendar',
     'app.dashboard',
     'app.stock',
     'app.hourregistrations',

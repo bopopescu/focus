@@ -11,7 +11,6 @@ class TimeTrackerManager(models.Manager):
     def get_query_set(self):
         return super(TimeTrackerManager, self).get_query_set().filter(active=True).filter(deleted=False)
 
-
 class TimeTracker(PersistentModel):
     """
     A single timer that can be started, paused, resumed and stopped
@@ -29,7 +28,6 @@ class TimeTracker(PersistentModel):
         if (last and last.done) or not last:
             WorkPeriod.objects.create(tracker=self)
 
-
     def pause(self):
         """
         pauses the timer
@@ -46,7 +44,6 @@ class TimeTracker(PersistentModel):
         self.active = False
         self.save()
         self.create_hour_reg(description, order)
-
 
     def create_hour_reg(self, description, order):
         time_info = self.time_info()

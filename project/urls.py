@@ -21,6 +21,7 @@ urlpatterns = patterns('',
         (r'^search/', include('app.search.urls')),
         (r'^hourregistrations/', include('app.hourregistrations.urls')),
         (r'^announcements/', include('app.announcements.urls')),
+        (r'^calendar/', include('app.calendar.urls')),
 
                        #settings for admin
         (r'^admin/', include('app.admin.urls')),

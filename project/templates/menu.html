@@ -43,8 +43,16 @@
             </ul>
 
             {% end_require %}
-
+            
         </li>
+
+
+        {% require_permission LIST customers.Customer %}
+        <li class="{% active request "^/calendar/" %}">
+            <a href="" title="" class="calendar">{% trans "Planning" %}</a>
+            {% include "calendar/sidebar.html" %}
+        </li>
+        {% end_require %}
 
 
         {% require_permission LIST customers.Customer %}

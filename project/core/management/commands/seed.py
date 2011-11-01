@@ -34,6 +34,7 @@ def createNewCustomer(admin_group, adminuser_name, adminuser_password, adminuser
     #Manually give permission to the admin group
     admin_group.grant_permissions("ALL", admin_group)
     admin_group.grant_permissions("ALL", all_employees_group)
+    admin_group.grant_permissions("ALL", user)
 
     #Add admin user to admin group
     admin_group.add_member(user)
@@ -45,6 +46,7 @@ def createNewCustomer(admin_group, adminuser_name, adminuser_password, adminuser
     all_employees_group.save()
 
     #Give admin group all permissions on classes
+    admin_group.grant_role("Admin", Project)
     admin_group.grant_role("Admin", Project)
     admin_group.grant_role("Admin", Customer)
     admin_group.grant_role("Admin", Contact)

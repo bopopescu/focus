@@ -83,6 +83,7 @@ def createNewCustomer(data):
     #Manually give permission to the admin group
     admin_group.grant_role("Admin", admin_group)
     admin_group.grant_role("Admin", all_employees_group)
+    admin_group.grant_permissions("ALL", user)
 
     #Add admin user to admin group
     admin_group.add_member(user)

@@ -129,6 +129,13 @@ class User(models.Model):
 
         self.save()
 
+
+    def get_busy_dates(self):
+        dates = []
+        for event in self.events.all():
+            dates.extend(event.get_dates())
+        return dates
+
     def generate_valid_period(self, *args, **kwargs):
         now = datetime.now()
 

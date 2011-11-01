@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block maincontent %}
+
+    <script>
+        $(function() {
+            $("#loading").hide();
+            $("#form_button").click(function() {
+                $("#form_button").hide();
+                $("#loading").show();
+            })
+        })
+    </script>
+
+    <form enctype="multipart/form-data" method="post">
+
+        <fieldset>
+            <legend>{{ title }}</legend>
+            <dl>
+                {% for field in event_form %}
+                    <dt>
+                        <label>{{ field.label }}</label>
+                    </dt>
+                    <dd>
+                        {{ field }}
+                        <p><span
+                                {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                        </p>
+                    </dd>
+                {% endfor %}
+            </dl>
+
+            {% if not instance.parent_event %}
+                <dl>
+                    {% for field in repeat_form %}
+                        <dt>
+                            <label>{{ field.label }}</label>
+                        </dt>
+                        <dd>
+                            {{ field }}
+                            <p><span
+                                    {% if field.errors %}style="color:red;" {% endif %}> {% for error in field.errors %} {{ error }} {% endfor %}</span>
+                            </p>
+                        </dd>
+                    {% endfor %}
+                </dl>
+            {% endif %}
+
+        </fieldset>
+
+        <div id="loading">
+            <span class="loader red" title="Loading, please wait…"></span>
+        </div>
+
+        <button id="form_button" type="submit">{% trans "Save" %}</button>
+
+    </form>
+
+{% endblock %}
