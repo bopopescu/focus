@@ -68,3 +68,5 @@ class AddParticipantToOrderForm(forms.Form):
         super(AddParticipantToOrderForm, self).__init__(*args, **kwargs)
         self.fields['user'].queryset= User.objects.filter_current_company()
         self.fields['role'].queryset = Role.objects.all()
+
+    

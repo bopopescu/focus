@@ -4,6 +4,7 @@ from django.db import models
 from core.models import User, PersistentModel
 
 from dateutil.rrule import rrule, DAILY, WEEKLY, MONTHLY
+from django.core import urlresolvers
 
 types = (
     ("daily", _('Daily')),
@@ -51,6 +52,15 @@ class EventType(PersistentModel):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def add_ajax_url():
+        return urlresolvers.reverse('app.calendar.views.add_event_type_ajax')
+
+    @staticmethod
+    def simpleform():
+        return EventTypeForm(instance=EventType(), prefix="event_type")
+
+
 class Event(PersistentModel):
     start = models.DateTimeField()
     end = models.DateTimeField()
@@ -86,3 +96,5 @@ class Event(PersistentModel):
                 dates.add(date)
 
         return dates
+
+from app.calendar.forms import EventTypeForm

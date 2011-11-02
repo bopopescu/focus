@@ -1,4 +1,7 @@
+import calendar
 from collections import OrderedDict
+from datetime import datetime
+from app.calendar.forms import EventForm
 from core.utils import get_content_type_for_model
 from django.shortcuts import render, get_object_or_404, redirect
 from app.orders.forms import OrderForm, AddParticipantToOrderForm, CreateInvoiceForm
@@ -60,8 +63,8 @@ def view_hourregistrations(request, id):
             stats[year_month][hourregistration.creator]['hourregistrations'], reverse=True, key=attrgetter("date"))
 
     return render(request, "orders/hourregistrations.html", {'title': order.title,
-                                                      'stats': stats,
-                                                      'order': order})
+                                                             'stats': stats,
+                                                             'order': order})
 
 
 @require_permission("EDIT", Order, "id")
@@ -233,9 +236,65 @@ def participants(request, id, permission_id=None):
                                                         'permissions': permissions})
 
 
+def get_month_link(param, order, year, month):
+    if param == "next":
+        if month == 12:
+            month = 1
+            year += 1
+        else:
+            month += 1
+
+    else:
+        if month == 1:
+            month = 12
+            year -= 1
+        else:
+            month -= 1
+
+    return "/orders/order/%s/plan_work/%s/%s/" % (order.id, year, month)
+
 @require_permission("EDIT", Order, "id")
-def plan_work(request, id, event_id):
+def plan_work(request, id, year=datetime.now().year, month=datetime.now().month):
     order = get_object_or_404(Order, id=id)
 
+    if request.method == "POST":
+        form = EventForm(request.POST)
+
+        if form.is_valid():
+            event = form.save()
+
+            order.events.add(event)
+
+    form = EventForm()
+
+    cal = {}
+    
+    users = order.who_has_permission_to("VIEW")
+
+    year = int(year)
+    month = int(month)
+
+    days_in_month = calendar.monthrange(year, month)
+
+    for user in users:
+        cal[user] = {}
+
+        for day in range(1, days_in_month[1] + 1):
+            cal[user][day] = []
+
+        for event in user.events.all():
+            for date in event.get_dates():
+                if date.year == year and date.month == month:
+                    cal[user][date.day].append(event)
+
+    return render(request, "orders/plan_work.html", {'order': order,
+                                                     'title': _("Plan work"),
+                                                     'form': form,
+                                                     'cal': cal,
+                                                     'days_in_month': range(1, days_in_month[1] + 1),
+                                                     'current_month': (year, month),
+                                                     'next_month_link': get_month_link("next", order, year, month),
+                                                     'last_month_link': get_month_link("last", order, year, month)
+    })
 
 

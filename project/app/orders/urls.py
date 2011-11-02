@@ -11,6 +11,10 @@ urlpatterns = patterns('app.orders.views',
                        url(r'^order/(?P<id>\d+)/hourregistrations/$', 'order.view_hourregistrations'),
                        url(r'^order/(?P<id>\d+)/preview_html/$', 'order.preview_order_html'),
                        url(r'^order/(?P<id>\d+)/invoice/$', 'order.create_invoice'),
+
+                       url(r'^order/(?P<id>\d+)/plan_work/$', 'order.plan_work'),
+                       url(r'^order/(?P<id>\d+)/plan_work/(?P<year>\d+)/(?P<month>\d+)/$', 'order.plan_work'),
+
                        url(r'^order/(?P<id>\d+)/participants/((?P<permission_id>\d+)/)?$', 'order.participants'),
                        url(r'^order/(?P<id>\d+)/participants/(?P<permission_id>\d+)/delete/$', 'order.delete_permission_from_participants'),
 

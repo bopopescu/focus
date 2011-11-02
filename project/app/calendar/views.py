@@ -6,6 +6,8 @@ from core import Core
 from dateutil.rrule import rrule, DAILY, WEEKLY, MONTHLY
 import calendar
 from django.utils.translation import ugettext as _
+from django.utils import simplejson
+from django.http import HttpResponse
 
 from core.auth.user.models import User
 from core.decorators import require_permission, login_required
@@ -50,23 +52,47 @@ def overview(request, year=datetime.now().year, month=datetime.now().month):
                 if date.year == year and date.month == month:
                     cal[user][date.day].append(event)
 
-    return render(request, "calendar/calendar.html", {'cal': cal,
+    return render(request, "calendar/overview.html", {'cal': cal,
                                                       'days_in_month': range(1, days_in_month[1] + 1),
                                                       'current_month': (year,month),
                                                       'next_month_link':get_month_link("next", year, month),
                                                       'last_month_link':get_month_link("last", year, month)
                                                     })
 
+@login_required()
+def add_event_type_ajax(request, id=None):
+    event_type = EventType()
+
+    if id:
+        event_type = EventType.objects.filter_current_company().get(id=id)
+
+    form = EventTypeForm(request.POST, instance=event_type)
+
+    if form.is_valid():
+        a = form.save()
+        return HttpResponse(simplejson.dumps({'name': a.name,
+                                              'id': a.id,
+                                              'valid': True}), mimetype='application/json')
+
+    errors = dict([(field, errors[0]) for field, errors in form.errors.items()])
+
+    return HttpResponse(simplejson.dumps({'errors': errors,
+                                          'valid': False}), mimetype='application/json')
 
 @login_required()
 def add(request):
     return form(request)
 
-
 @login_required()
 def edit(request, id):
     return form(request, id)
 
+@login_required()
+def delete(request, id):
+    instance = get_object_or_404(Event, id=id, deleted=False)
+    instance.delete()
+
+    return redirect(overview)
 
 def form (request, id=False):
     if id:

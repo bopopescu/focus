@@ -31,7 +31,7 @@
                 {% endfor %}
             </dl>
 
-            {% if not instance.parent_event %}
+            {% if not event.id or event.parent_event %}
                 <dl>
                     {% for field in repeat_form %}
                         <dt>
@@ -56,5 +56,15 @@
         <button id="form_button" type="submit">{% trans "Save" %}</button>
 
     </form>
+
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+
+    {% if event.id %}
+        <a href="/calendar/{{ event.id }}/delete"
+           onclick="return confirm('{% trans "Shure you want to delete this event?" %}')">{% trans "Delete this event" %}</a>
+    {% endif %}
 
 {% endblock %}

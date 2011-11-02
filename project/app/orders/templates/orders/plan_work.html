@@ -1,0 +1,40 @@
+{% extends "orders/base.html" %}
+{% load auth %}
+{% load i18n %}
+{% load thumbnail %}
+
+{% block content %}
+
+    <h1>{% trans "Plan work" %}</h1>
+
+    {% include "form_fields.html" %}
+
+    <br><br>
+
+    <h1>{% trans "Events" %}</h1>
+
+    <table class="datatable">
+        <thead>
+
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+
+        </thead>
+        <tbody>
+            {% for event in order.events.all %}
+            <tr>
+                 <td>{{ event.start|date:"d.m.Y" }} - {{ event.end|date:"d.m.Y" }}</td>
+                 <td>{{ event.title }}</td>
+                 <td>{{ event.description }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>{% trans "Availability" %}</h1>
+
+    {% include "calendar/calendar.html" %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load auth %}
+{% load i18n %}
+
+{% block sidebar %}
+    {% include "dashboard/sidebar.html" %}
+{% endblock %}
+
+{% block maincontent %}
+
+    {% include "calendar/calendar.html" %}
+
+{% endblock %}

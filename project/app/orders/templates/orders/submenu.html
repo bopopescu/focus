@@ -17,6 +17,9 @@
 <li><a class="{% active request "statistics" %}"
        href="{% url app.orders.views.order.view_hourregistrations order.id%}">{% trans "HOURREGISTRATIONS" %}</a></li>
 
+<li><a class="{% active request "plan_work" %}"
+       href="{% url app.orders.views.order.plan_work order.id%}">{% trans "PLAN WORK" %}</a></li>
+
 <li><a class="{% active request "invoice" %}"
        href="{% url app.orders.views.order.create_invoice order.id%}">{% trans "CREATE INVOICE" %}
 </a></li>

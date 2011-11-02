@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from core import Core
 from core.auth.user.models import User
-from core.widgets import DatePickerField
+from core.widgets import DatePickerField, SelectWithPop
 
 
 class EventForm(ModelForm):
@@ -23,9 +23,10 @@ class EventForm(ModelForm):
         self.fields['end'].input_formats = ["%d.%m.%Y"]
         self.fields['end'].widget = DatePickerField(format="%d.%m.%Y")
 
-        self.fields['type'].queryset = EventType.objects.filter_current_company()
         self.fields['users'].queryset = User.objects.filter_current_company()
 
+        self.fields['type'].widget = SelectWithPop(EventType)
+        self.fields['type'].queryset = EventType.objects.filter_current_company()
 
 class RepeatOptionForm(ModelForm):
     class Meta:
