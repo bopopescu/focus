@@ -39,7 +39,7 @@ def archive(request):
 
 
 @require_permission("VIEW", Order, "id")
-def view_statistics(request, id):
+def view_hourregistrations(request, id):
     order = Order.objects.filter_current_company().get(id=id)
 
     stats = OrderedDict()
@@ -59,7 +59,7 @@ def view_statistics(request, id):
         stats[year_month][hourregistration.creator]['hourregistrations'] = sorted(
             stats[year_month][hourregistration.creator]['hourregistrations'], reverse=True, key=attrgetter("date"))
 
-    return render(request, "orders/statistics.html", {'title': order.title,
+    return render(request, "orders/hourregistrations.html", {'title': order.title,
                                                       'stats': stats,
                                                       'order': order})
 
