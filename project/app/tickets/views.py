@@ -90,7 +90,7 @@ def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")[:3]
 
-    ticket.add_user_to_visited_by_since_last_edit(Core.current_user())
+    ticket.visited_by_since_last_edit.add((Core.current_user()))
 
     if request.method == "POST":
         old_ticket = copy.copy(ticket)

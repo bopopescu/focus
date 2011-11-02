@@ -182,10 +182,6 @@ class Ticket(TicketBase):
 
         return {'color':result, 'name': self.status.name}
 
-    def add_user_to_visited_by_since_last_edit(self, user):
-        if user not in self.visited_by_since_last_edit.all():
-            self.visited_by_since_last_edit.add(user)
-
     @cachedecorator('mark_as_unread_for_current_user')
     def mark_as_unread_for_current_user(self):
         return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
