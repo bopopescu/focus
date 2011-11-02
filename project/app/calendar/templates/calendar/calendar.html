@@ -8,9 +8,7 @@
 
 {% block maincontent %}
 
-
-
-    <div id="title_calendar" style="text-align:center;"><h1>{{ current_month.0 }} {{ current_month.1 }}</h1></div>
+    <div id="title_calendar" style="text-align:center;"><h1> {{ current_month.1 }}.{{ current_month.0 }} </h1></div>
 
     <div id="arrows" style="text-align:center;">
         <a href="{{ last_month_link }}" id="decrement_month_arrow"><<</a> |
@@ -37,18 +35,16 @@
 
                         <td id="events_{{ user.id }}_for_day_{{ days }}_button"
                             style="width: 28px; background-color: {% for event in events %} {{ event.type.color }}{% endfor %}">
-
-                            </td>
+                        </td>
 
                         <div class="info" id="events_{{ user.id }}_for_day_{{ days }}">
                             <h1>Hendelser for {{ user }}, den {{ days }}</h1> <br>
+
                             {% for event in events %}
-
                                 <a href="/calendar/{{ event.id }}/edit">{{ event }}</a> <br>
-
                                 <br><br>
-
                             {% endfor %}
+                        
                         </div>
 
                         <script>

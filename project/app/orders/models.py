@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from app.calendar.models import Event
 from core.cache import cachedecorator
 from django.core.cache import cache
 from django.core import urlresolvers
@@ -168,6 +169,8 @@ class Order(OrderBase):
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
 
     status = models.CharField(default=None, null=True, max_length=10, choices=order_status_choices, verbose_name=_("Status"))
+
+    events = models.ManyToManyField(Event, related_name="orders")
 
     #Managers
     objects = OrderManager()

@@ -4,7 +4,45 @@
 {% block content %}
     <h1>{% trans "Statistics" %}</h1>
 
-    
 
+    <script>
+        $(function() {
+            $(".hours").hide();
+            $(".user").click(function() {
+
+
+                $(".hours").hide();
+
+                $(this).find(".hours").show();
+
+
+            });
+        });
+    </script>
+
+    <br><br><br>
+
+
+    {% for month, users in stats.items %}
+
+       {{ month.1 }}.{{ month.0 }}
+
+        {% for user, data in users.items %}
+
+            <div class="user">
+                {{ user }} {{ data.hours }}
+                <table>
+                    {% for hour in data.hourregistrations %}
+
+                        <tr class="hours">
+                            <td style="width:50px;">{{ hour.date|date:'d.m.Y' }}</td>
+                            <td style="width:400px;">{{ hour.description }}</td>
+                            <td>{{ hour.hours }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+    {% endfor %}
 
 {% endblock %}

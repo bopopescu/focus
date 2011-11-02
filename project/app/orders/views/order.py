@@ -30,6 +30,7 @@ def overview(request):
 @require_permission("VIEW", Order)
 def archive(request):
     orders = Order.archived_objects.filter_current_company()
+
     return render(request, "orders/overview.html", {'title': 'Orders',
                                                     'orders': orders})
 
@@ -37,9 +38,26 @@ def archive(request):
 @require_permission("VIEW", Order, "id")
 def view_statistics(request, id):
     order = Order.objects.filter_current_company().get(id=id)
-    return render(request, "orders/statistics.html", {'title': order.title,
-                                                      'order': order})
 
+    stats = {}
+
+    for hourregistration in order.hourregistrations.all():
+
+        year_month = (hourregistration.date.year, hourregistration.date.month)
+
+        if not year_month in stats:
+            stats[year_month] = {}
+
+        if not hourregistration.creator in stats[year_month]:
+            stats[year_month][hourregistration.creator] = {'hours': 0, 'hourregistrations': []}
+
+        stats[year_month][hourregistration.creator]['hours'] += hourregistration.hours
+        stats[year_month][hourregistration.creator]['hourregistrations'].append(hourregistration)
+
+
+    return render(request, "orders/statistics.html", {'title': order.title,
+                                                      'stats':stats,
+                                                      'order': order})
 
 @require_permission("EDIT", Order, "id")
 def history(request, id):
@@ -206,3 +224,10 @@ def participants(request, id, permission_id=None):
     return render(request, "orders/participants.html", {'form': add_participant_to_group_form,
                                                         'order': order,
                                                         'permissions': permissions})
+
+@require_permission("EDIT", Order, "id")
+def plan_work(request, id, event_id):
+    order = get_object_or_404(Order, id=id)
+
+
+
