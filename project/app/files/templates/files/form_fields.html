@@ -102,7 +102,7 @@
             <td>{{ file.editor }}</td>
             <td><img class="icon_for_file" src="{{ file.get_file_icon}}"
                      alt=""/> {{ file.name }}</td>
-            <td><a href="{{ file.get_file }}" target="_blank"><img class="icon_for_file"
+            <td><a href="{{ file.get_file }}" target="_blank"><img width="18px" height="18px" class="icon_for_file"
                                                                    src="{{ STATIC_URL }}img/icons/icon_download.png">{% trans "download" %}
             </a></td>
             <td></td>
@@ -132,11 +132,11 @@
                 <td>{{ f.editor }}</td>
                 <td><img class="icon_for_file" src="{{ f.get_file_icon}}"
                          alt=""/> {{ f.name }}</td>
-                <td><a href="{{ f.get_file }}" target="_blank"><img class="icon_for_file"
-                                                                    src="{{ STATIC_URL }}img/icons/icon_download.png">{% trans "download" %}
+                <td><a href="{{ f.get_file }}" target="_blank"><img width="18px" height="18px"  class="icon_for_file"
+                                                                    src="{{ STATIC_URL }}img/icons/icon_download.png"> {% trans "download" %}
                 </a></td>
-                <td><a href="{{ f.get_recover_url }}" target="_blank"><img class="icon_for_file"
-                                                                           src="{{ STATIC_URL }}img/icons/icon_restore.png">{% trans "recover" %}
+                <td><a href="{{ f.get_recover_url }}" target="_blank"><img width="18px" height="18px"  class="icon_for_file"
+                                                                           src="{{ STATIC_URL }}img/icons/icon_restore.png"> {% trans "recover" %}
                 </a></td>
             </tr>
         {% endfor %}
