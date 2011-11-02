@@ -383,7 +383,7 @@ msgid ""
 "Your password is: "
 msgstr ""
 "\n"
-"Ditt passord er"
+"Ditt passord er: "
 
 #: app/admin/views/user.py:77
 msgid "Successfully sent new password"

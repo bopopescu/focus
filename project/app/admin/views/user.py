@@ -66,6 +66,7 @@ def generate_new_password_for_user(user):
               [user.email], fail_silently=False)
 
     user.set_password("%s" % ret)
+    
     user.save()
     return ret
 
