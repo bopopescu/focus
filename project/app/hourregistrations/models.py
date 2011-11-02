@@ -49,6 +49,9 @@ class HourRegistration(PersistentModel):
     def __unicode__(self):
         return unicode(self.date)
 
+    def __eq__(self, other):
+        return self.date == other.date
+
     def get_order_name(self):
         if self.order:
             return self.order.title

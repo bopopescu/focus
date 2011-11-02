@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from core.utils import get_content_type_for_model
 from django.shortcuts import render, get_object_or_404, redirect
 from app.orders.forms import OrderForm, AddParticipantToOrderForm, CreateInvoiceForm
@@ -11,8 +12,10 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from core.shortcuts import comment_block
+from operator import itemgetter, attrgetter
 
 @require_permission("LIST", Order)
+
 def my_orders(request):
     orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False)
 
@@ -39,25 +42,27 @@ def archive(request):
 def view_statistics(request, id):
     order = Order.objects.filter_current_company().get(id=id)
 
-    stats = {}
+    stats = OrderedDict()
 
     for hourregistration in order.hourregistrations.all():
-
         year_month = (hourregistration.date.year, hourregistration.date.month)
 
         if not year_month in stats:
-            stats[year_month] = {}
+            stats[year_month] = OrderedDict()
 
         if not hourregistration.creator in stats[year_month]:
             stats[year_month][hourregistration.creator] = {'hours': 0, 'hourregistrations': []}
 
         stats[year_month][hourregistration.creator]['hours'] += hourregistration.hours
-        stats[year_month][hourregistration.creator]['hourregistrations'].append(hourregistration)
 
+        stats[year_month][hourregistration.creator]['hourregistrations'].append(hourregistration)
+        stats[year_month][hourregistration.creator]['hourregistrations'] = sorted(
+            stats[year_month][hourregistration.creator]['hourregistrations'], reverse=True, key=attrgetter("date"))
 
     return render(request, "orders/statistics.html", {'title': order.title,
-                                                      'stats':stats,
+                                                      'stats': stats,
                                                       'order': order})
+
 
 @require_permission("EDIT", Order, "id")
 def history(request, id):
@@ -114,8 +119,10 @@ def create_invoice(request, id):
 
     return render(request, "orders/create_invoice.html", {'title': order.title,
                                                           'order': order,
-                                                          'next_invoice_number': Invoice.calculate_next_invoice_number(),
+                                                          'next_invoice_number': Invoice.calculate_next_invoice_number()
+        ,
                                                           'form': form})
+
 
 @require_permission("VIEW", Order)
 def add(request):
@@ -174,9 +181,9 @@ def form(request, id=None):
                                                 'order': instance,
                                                 'products': products})
 
+
 @require_permission("EDIT", Order, "id")
 def delete_permission_from_participants(request, id, permission_id):
-
     try:
         permission = Permission.objects.get(id=permission_id)
 
@@ -224,6 +231,7 @@ def participants(request, id, permission_id=None):
     return render(request, "orders/participants.html", {'form': add_participant_to_group_form,
                                                         'order': order,
                                                         'permissions': permissions})
+
 
 @require_permission("EDIT", Order, "id")
 def plan_work(request, id, event_id):

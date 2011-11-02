@@ -8,7 +8,7 @@ import calendar
 from django.utils.translation import ugettext as _
 
 from core.auth.user.models import User
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 
 
 def get_month_link(param, year, month):
@@ -28,6 +28,7 @@ def get_month_link(param, year, month):
             
     return "/calendar/%s/%s/" % (year,month)
 
+@login_required()
 def overview(request, year=datetime.now().year, month=datetime.now().month):
     year = int(year)
     month = int(month)
@@ -57,10 +58,12 @@ def overview(request, year=datetime.now().year, month=datetime.now().month):
                                                     })
 
 
+@login_required()
 def add(request):
     return form(request)
 
 
+@login_required()
 def edit(request, id):
     return form(request, id)
 
@@ -102,10 +105,12 @@ def form (request, id=False):
                                                   })
 
 
+@login_required()
 def event_type_add(request):
     return event_type_form(request)
 
 
+@login_required()
 def event_type_edit(request, id):
     return event_type_form(request, id)
 

@@ -1,5 +1,6 @@
 {% extends "orders/base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block content %}
     <h1>{% trans "Statistics" %}</h1>
@@ -22,27 +23,38 @@
 
     <br><br><br>
 
-
     {% for month, users in stats.items %}
 
-       {{ month.1 }}.{{ month.0 }}
+        <h2>{{ month.1 }}.{{ month.0 }}</h2>
 
         {% for user, data in users.items %}
 
             <div class="user">
-                {{ user }} {{ data.hours }}
+
+            <br>
+                <ul class="contacts">
+                    <li>
+                        {% if user.profileImage %}
+                            <img src="{{ user.profileImage|thumbnail_with_max_side:"40" }}" title="User" alt=""/>
+                        {% endif %}
+                        {{ user.first_name }} {{ user.last_name }} <span style="float:right;">{{ data.hours }} {% trans "hours" %} </span>
+                    </li>
+                </ul>
+
                 <table>
                     {% for hour in data.hourregistrations %}
 
                         <tr class="hours">
-                            <td style="width:50px;">{{ hour.date|date:'d.m.Y' }}</td>
-                            <td style="width:400px;">{{ hour.description }}</td>
+                            <td style="padding-left:20px; width:120px;">{{ hour.date|date:'d.m.Y' }}</td>
+                            <td style="width:400px; text-align: left;">{{ hour.description }}</td>
                             <td>{{ hour.hours }}</td>
                         </tr>
                     {% endfor %}
                 </table>
+
             </div>
         {% endfor %}
+        <br>
     {% endfor %}
 
 {% endblock %}
