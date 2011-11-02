@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from app.tickets.models import Ticket
 from core.auth.company.models import Company
 from core.models import PersistentModel
 from django.db import models
@@ -9,7 +8,7 @@ from hashlib import sha1
 class ClientUser(models.Model):
     email = models.EmailField()
     password = models.CharField(_('password'), max_length=128, blank=True)
-    tickets = models.ManyToManyField(Ticket, related_name="clients")
+    tickets = models.ManyToManyField('tickets.Ticket', related_name="clients")
     offers = models.ManyToManyField('orders.Offer', related_name="clients")
     orders = models.ManyToManyField('orders.Order', related_name="clients")
 
@@ -48,3 +47,4 @@ class ClientUser(models.Model):
                 randid = random.randint(0, 4) #number of vowels
                 ret += vowels[randid]
         return ret
+
