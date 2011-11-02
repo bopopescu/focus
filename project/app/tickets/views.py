@@ -49,7 +49,7 @@ def view(request, id):
     })
 
 
-@require_permission("DELETE", Ticket, "id")
+@require_permission("VIEW", Ticket, "id")
 def trash(request, id):
     ticket = Ticket.objects.get(id=id)
 
@@ -70,7 +70,7 @@ def trash(request, id):
                                                       })
 
 
-@require_permission("CREATE", Ticket)
+@require_permission("VIEW", Ticket)
 def add(request):
     return form(request)
 
@@ -85,8 +85,7 @@ def create_update_for_ticket(old_ticket, ticket_form):
     ticket.save(update=ticket_update)
     return ticket
 
-
-@require_permission("CREATE", Ticket)
+@require_permission("VIEW", Ticket, "id")
 def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")[:3]
@@ -114,7 +113,6 @@ def edit(request, id):
                                                  'updates': updates,
                                                  'ticket_form': ticket_form,
                                                  })
-
 
 def form(request, id=False):
     if id:

@@ -63,10 +63,10 @@ def generate_new_password_for_user(user):
     ret += "%s" % random.randint(20, 99)
     send_mail(_("New password"), (_("Your username is: %s" % user.username) + _("\nYour password is: ") + '%s' % ret),
               settings.NO_REPLY_EMAIL,
-              [user.email], fail_silently=False)
+        [user.email], fail_silently=False)
 
     user.set_password("%s" % ret)
-    
+
     user.save()
     return ret
 
@@ -104,10 +104,11 @@ def delete_permission(request, id, permission_id):
     perm.delete()
     return redirect(permissions, id)
 
+
 @require_permission("EDIT", User, "id")
 def permissions(request, id):
     user = User.objects.get(id=id)
-    Permissions = user.get_permissions().order_by("group","content_type", "object_id")
+    Permissions = user.get_permissions().order_by("group", "content_type", "object_id")
 
     #Save and set to active, require valid form
     if request.method == 'POST':
@@ -116,7 +117,7 @@ def permissions(request, id):
             perm = permission_form.save(commit=False)
             perm.user = user
             perm.save()
-            
+
     else:
         permission_form = PermissionForm(instance=Permission())
 
@@ -125,6 +126,7 @@ def permissions(request, id):
                                                       'form': permission_form,
                                                       'permissions': Permissions,
                                                       })
+
 
 @require_permission("DELETE", User, "id")
 def trash(request, id):
@@ -215,4 +217,4 @@ def form (request, id=False):
         form = UserForm(instance=instance)
 
     return render(request, "admin/users/form.html",
-                  {'title': _("User"), 'userCard': instance, 'form': form})
+            {'title': _("User"), 'userCard': instance, 'form': form})

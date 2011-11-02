@@ -421,12 +421,15 @@ section[role=navigation] header h1 {
 #main-nav ul li a.hourregistrations {
     background-image: url('../img/icons/icon_nav_hourregistrations.png');
 }
+
 #main-nav ul li a.tickets {
     background-image: url('../img/icons/icon_nav_tickets.png');
 }
+
 #main-nav ul li a.supplier {
     background-image: url('../img/icons/icon_nav_supplier.png');
 }
+
 #main-nav ul li a.admin {
     background-image: url('../img/icons/icon_nav_admin.png');
 }
@@ -1119,12 +1122,14 @@ article section p a.button {
     background-color: #77ab13;
 }
 
-/*  Content Images  */
+/*  Content Images
 article img {
     padding: 4px;
     background-color: #fff;
     border: 1px solid;
 }
+
+*/
 
 div.tab > img, div.tab > .image-frame img {
     margin-top: 0;
@@ -1316,8 +1321,6 @@ div.tab > img, div.tab > .image-frame img {
 .stats-summary p {
     margin: 5px 0 0;
 }
-
-
 
 /*  Contacts  */
 .contacts {
@@ -2269,8 +2272,8 @@ table .actions .delete {
 /* custom */
 .icon_for_file {
     border: 0px;
-    padding:0px;
-    margin:0px;
+    padding: 0px;
+    margin: 0px;
     background-color: transparent;
 }
 
@@ -2279,9 +2282,11 @@ table .actions .delete {
     margin: 0;
     padding: 0;
 }
+
 .logs ul {
     list-style-type: none;
 }
+
 .logs li, .tickets .logs li {
     width: 80%;
     background: none;
@@ -2297,7 +2302,8 @@ table .actions .delete {
     line-height: 100%;
     text-align: left;
 }
-.logs li .avatar_img, .tickets .logs li .avatar_img{
+
+.logs li .avatar_img, .tickets .logs li .avatar_img {
     margin: 0 10px 0 0;
 }
 

@@ -21,7 +21,8 @@
         <li class="ticket-header">
             <ul>
                 <li class="ticket-data-priority" style="width: 10px;"></li>
-                <li class="ticket-data-activity" style="width:35%;">{% trans "Title" %}</li>
+                <li class="ticket-data-activity"
+                    style="width:25%; padding-left:40px; text-align: left;">{% trans "Title" %}</li>
                 <li class="ticket-data-activity">{% trans "Created by" %}</li>
                 <li class="ticket-data-activity">{% trans "Priority" %}</li>
                 <li class="ticket-data-activity">{% trans "Status" %}</li>
@@ -36,11 +37,12 @@
                     <ul>
                         <li class="ticket-data-priority" style="width: 10px;">
                             {% if ticket.mark_as_unread_for_current_user %}
-                                <span style="color:red; font-size: 20px;"> * </span>
+                                <img src="{{ STATIC_URL }}img/icons/notification.png"
+                                     style="padding-left: 15px; width:18px; height: 18px;">
                             {% endif %}
                         </li>
 
-                        <li class="ticket-data-ticket" style="width:35%;">
+                        <li class="ticket-data-ticket" style="width:25%; padding-left:40px; text-align: left;">
 
                             <a href="#" class="ticket-open-details">{{ ticket.title }}</a>
 
@@ -86,17 +88,12 @@
                         </li>
                         <li><a href="#" class="button red">{% trans "Close ticket" %}</a></li>
                     </ul>
-                    <div class="ticket_update">
-                        <h3>{% trans "Comment: " %}</h3>
-                        {{ ticket.ticket_form.comment }} <br/>
-                        {% if ticket.get_clients %}
-                            {{ ticket.ticket_form.public.label }} {{ ticket.ticket_form.public }}
-                        {% endif %}
-                        <button type="submit">{% trans "Add comment" %}</button>
-                    </div>
+
                     <br/>
 
-                    <h3>{% trans "History" %}</h3>
+                    {% if ticket.get_updates %}
+                        <h3>{% trans "History" %}</h3>
+                    {% endif %}
                     <ul class="logs">
 
                         {% for update in ticket.get_updates %}
@@ -109,7 +106,7 @@
                                 {% endif %}
 
                                 <span class="logs-timestamp">{{ update.date_created|date:"Y.m.d H:i" }}</span>
-                            
+
                                 <p>
                                     {{ comment.text|linebreaks }}
                                 </p>
