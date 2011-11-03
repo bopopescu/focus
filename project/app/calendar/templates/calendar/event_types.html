@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block maincontent %}
+
+    <div style="width: 500px;">
+        <table>
+            <thead>
+            <tr>
+                <th style="width:100px;">{% trans "Name" %}</th>
+                <th style="width:100px;">{% trans "Color" %}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for event_type in event_types %}
+                <tr>
+                    <td><a href="{% url app.calendar.views.event_type_edit event_type.id %}">{{ event_type.name }}</a></td>
+                    <td style="background-color: {{ event_type.color }}"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

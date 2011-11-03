@@ -130,6 +130,15 @@ def form (request, id=False):
                                                   'repeat_form': repeat_form,
                                                   })
 
+@login_required()
+def event_types(request):
+
+    event_types = EventType.objects.filter_current_company()
+    
+    return render(request, "calendar/event_types.html", {'event_types': event_types})
+
+
+
 
 @login_required()
 def event_type_add(request):
@@ -152,10 +161,10 @@ def event_type_form (request, id=False):
     if request.method == 'POST':
         form = EventTypeForm(request.POST, instance=instance)
 
+
         if form.is_valid():
             form.save()
-
-            return redirect(overview)
+            return redirect(event_types)
 
     else:
         form = EventTypeForm(instance=instance)

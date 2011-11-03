@@ -135,7 +135,7 @@ offer_status_choices = (
 )
 
 class Offer(OrderBase):
-    offer_number = models.IntegerField(_("Offer number"))
+    offer_number = models.CharField(_("Offer number"), max_length=150, default="")
     accepted = models.CharField(max_length=5, null=True, default=None, choices=offer_status_choices, verbose_name=_("Accepted"))
     project = models.ForeignKey(Project, related_name="offers", verbose_name=_("Project"), blank=True, null=True)
 
@@ -152,10 +152,13 @@ class Offer(OrderBase):
 
     @staticmethod
     def calculate_next_offer_number():
-        next = (Offer.objects.filter_current_company().aggregate(Max("offer_number"))['offer_number__max'])
-        if next:
-            return next + 1
-        return 1
+        try:
+            next = (Offer.objects.filter_current_company().aggregate(Max("offer_number"))['offer_number__max'])
+            if next:
+                return next + 1
+            return 1
+        except Exception, e:
+            return ""
 
 order_status_choices = (
     ("0", _("New")),
@@ -164,7 +167,7 @@ order_status_choices = (
     )
 
 class Order(OrderBase):
-    order_number = models.IntegerField(_("Order number"))
+    order_number = models.CharField(_("Order number"), max_length=150, default="")
     offer = models.ForeignKey('orders.Offer', verbose_name=_("Offer"), related_name="orders", null=True, blank=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
 
@@ -179,10 +182,13 @@ class Order(OrderBase):
 
     @staticmethod
     def calculate_next_order_number():
-        next = (Order.objects.filter_current_company().aggregate(Max("order_number"))['order_number__max'])
-        if next:
-            return next + 1
-        return 1
+        try:
+            next = (Order.objects.filter_current_company().aggregate(Max("order_number"))['order_number__max'])
+            if next:
+                return next + 1
+            return 1
+        except Exception, e:
+            return ""
 
     def get_view_url(self):
         return urlresolvers.reverse('app.orders.views.order.view', args=("%s" % self.id,))

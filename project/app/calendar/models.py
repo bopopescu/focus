@@ -21,7 +21,6 @@ class RepeatOption(PersistentModel):
         dates = set([])
 
         if self.available_option and self.times:
-
             option = {'daily': DAILY, 'monthly': MONTHLY, 'weekly': WEEKLY}
             for date in list(rrule(option[self.available_option],
                                    interval=self.times,
@@ -29,7 +28,7 @@ class RepeatOption(PersistentModel):
                                    until=self.repeat_until)):
                 dates.add(date)
 
-                for date in list(rrule(DAILY, dtstart=date, until=date+(event.end-event.start))):
+                for date in list(rrule(DAILY, dtstart=date, until=date + (event.end - event.start))):
                     dates.add(date)
 
         return dates
@@ -40,14 +39,23 @@ class RepeatOption(PersistentModel):
 event_type_colors = (
     ("red", _('Red')),
     ("blue", _('Blue')),
+    ("#87CEEB", _("Sky blue")),
     ("green", _('Green')),
     ("orange", _('Orange')),
     ("gray", _('Gray')),
+    ("#B22222", _('Dark Slate Gray')),
+    ("#F5F5DC", _('Beige')),
+    ("#5F9EA0", _('Cadet blue')),
+    ("#5F9EA0", _('Cyan')),
+    ("#E0FFFF", _('Light Cyan')),
+    ("#4B0082", _('Indigo')),
+    ("#87CEEB", _('Salmon')),
+    ("#B22222", _('Fire brick')),
     )
 
 class EventType(PersistentModel):
     name = models.CharField(max_length=50)
-    color = models.CharField(max_length=50, choices = event_type_colors)
+    color = models.CharField(max_length=50, choices=event_type_colors)
 
     def __unicode__(self):
         return self.name
@@ -68,7 +76,7 @@ class Event(PersistentModel):
     title = models.CharField(max_length=100, default="")
     description = models.TextField()
     type = models.ForeignKey(EventType, null=True)
-    
+
     users = models.ManyToManyField(User, related_name="events")
 
     repeat = models.ForeignKey(RepeatOption, null=True, blank=True)
@@ -89,7 +97,8 @@ class Event(PersistentModel):
 
         #cleaning up dates from special-cases
         for special_case in self.special_cases.all():
-            for date in list(rrule(DAILY, dtstart=special_case.start, until=special_case.start+(self.end-self.start))):
+            for date in list(
+                rrule(DAILY, dtstart=special_case.start, until=special_case.start + (self.end - self.start))):
                 dates.remove(date)
 
             for date in special_case.get_dates():
