@@ -96,15 +96,13 @@ def grant_role(request, role, userorgroup, user_id, app, model, object_id):
     request.message_success("Role granted")
     return redirect(urlresolvers.reverse('app.dashboard.views.overview'))
 
-"""
 
-For granting permission on-site
-
-Use like this: /grant/permission/ADD/user/user_id/customers/customer/customer_id/
-
-"""
 
 def grant_permission(request, perm, userorgroup, user_id, app, model, object_id):
+    """
+    For granting permission on-site
+    Use like this: /grant/permission/ADD/user/user_id/customers/customer/customer_id/
+    """
     object_type = ContentType.objects.get(app_label=app, model=model)
     list = []
     list.append(perm.upper())
