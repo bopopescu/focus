@@ -37,7 +37,8 @@ def retrieve_file(request, filename=''):
     response['Content-Length'] = os.path.getsize(abs_filename)
     return response
 
-def view_postal_by_zip(request, zip):
+def view_postal_by_zip(request, zip=""):
+
     if request.is_ajax():
             return HttpResponse(simplejson.dumps({'zip':zip, 'postal': get_postal_by_zip(zip),}), mimetype='application/json')
     return HttpResponse(get_postal_by_zip(zip))
@@ -70,15 +71,12 @@ def update_timeout(request):
     request.session.set_expiry(1800)
     return
 
-"""
-
-For granting permission on-site
-
-Use like this: /grant/role/Admin/user/user_id/customers/customer/customer_id/
-
-"""
 
 def grant_role(request, role, userorgroup, user_id, app, model, object_id):
+    """
+    For granting permission on-site
+    Use like this: /grant/role/Admin/user/user_id/customers/customer/customer_id/
+    """
     object_type = ContentType.objects.get(app_label=app, model=model)
 
     if userorgroup.upper() == 'USER':
