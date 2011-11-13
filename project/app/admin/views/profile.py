@@ -10,7 +10,8 @@ def edit(request):
     try:
         instance = request.user
         msg = _("Successfully changed your profile")
-    except:
+
+    except Exception, e:
         request.message_error(_("Unknown profile"))
         return redirect("/")
 
@@ -29,11 +30,12 @@ def edit(request):
 
     return render(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form, 'userCard': instance})
 
+
 def change_profile_image(request):
     try:
         instance = request.user
         msg = _("Successfully changed profile image")
-    except:
+    except Exception, e:
         request.message_error(_("Unknown profile"))
         return redirect("/")
 
@@ -48,7 +50,9 @@ def change_profile_image(request):
     else:
         form = UserProfileImageForm(instance=instance, initial={"profileImage": None})
 
-    return render(request, "admin/profile/formimage.html", {'title': _('Profile picture'), 'form': form, 'userCard': instance})
+    return render(request, "admin/profile/formimage.html",
+            {'title': _('Profile picture'), 'form': form, 'userCard': instance})
+
 
 def change_password(request):
     instance = request.user
@@ -68,4 +72,4 @@ def change_password(request):
         form = UserProfilePasswordForm(user=request.user)
 
     return render(request, "admin/profile/formpassword.html",
-                               {"title": _("Change password"), 'form': form, 'userCard': instance})
+            {"title": _("Change password"), 'form': form, 'userCard': instance})

@@ -49,7 +49,7 @@ TIME_FORMAT = 'H.i'
 _ = lambda s: s
 
 LANGUAGES = (
-    ('en', _('Entglish')),
+    ('en', _('English')),
     ('nb', _('Norwegian')),
     )
 

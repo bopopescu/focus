@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-02 07:49+0100\n"
+"POT-Creation-Date: 2011-11-13 22:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: settings.py:52
 #, fuzzy
-msgid "Entglish"
+msgid "English"
 msgstr "Engelsk"
 
 #: settings.py:53
@@ -215,6 +215,7 @@ msgstr "MEDLEMMER"
 #: app/admin/templates/admin/groups/members.html:21
 #: app/admin/templates/admin/users/list.html:10
 #: app/admin/templates/admin/users/view.html:16
+#: app/calendar/templates/calendar/event_types.html:14
 #: app/company/templates/company/list.html:16
 #: app/contacts/templates/contacts/list.html:16
 #: app/contacts/templates/contacts/view.html:62 app/customers/models.py:14
@@ -340,27 +341,27 @@ msgstr "Gruppe"
 msgid "Successfully changed your profile"
 msgstr "Vellykket endret profilen din"
 
-#: app/admin/views/profile.py:14 app/admin/views/profile.py:37
+#: app/admin/views/profile.py:15 app/admin/views/profile.py:39
 msgid "Unknown profile"
 msgstr "Ukjent profil"
 
-#: app/admin/views/profile.py:30
+#: app/admin/views/profile.py:31
 msgid "Profile"
 msgstr "Profil"
 
-#: app/admin/views/profile.py:35
+#: app/admin/views/profile.py:37
 msgid "Successfully changed profile image"
 msgstr "Vellykket endret profilbilde"
 
-#: app/admin/views/profile.py:51
+#: app/admin/views/profile.py:54
 msgid "Profile picture"
 msgstr "Profilbilde"
 
-#: app/admin/views/profile.py:63
+#: app/admin/views/profile.py:67
 msgid "Successfully edited password"
 msgstr "Vellykket endret passord"
 
-#: app/admin/views/profile.py:71
+#: app/admin/views/profile.py:75
 msgid "Change password"
 msgstr "Endre passord"
 
@@ -385,49 +386,49 @@ msgstr ""
 "\n"
 "Ditt passord er: "
 
-#: app/admin/views/user.py:77
+#: app/admin/views/user.py:78
 msgid "Successfully sent new password"
 msgstr "Vellykket sendt nytt passord"
 
-#: app/admin/views/user.py:85 app/contacts/views.py:66
+#: app/admin/views/user.py:86 app/contacts/views.py:66
 #: app/customers/views.py:79 app/offers/views.py:65
 #: app/orders/views/order.py:77 app/projects/views/project.py:75
 #: app/suppliers/views.py:85
 msgid "Latest events"
 msgstr "Siste events"
 
-#: app/admin/views/user.py:94 app/admin/views/user.py:217
+#: app/admin/views/user.py:95 app/admin/views/user.py:220
 #: app/calendar/templates/calendar/calendar.html:12
 #: app/orders/templates/orders/participants.html:12
 #: core/auth/permission/models.py:91
 msgid "User"
 msgstr "Bruker"
 
-#: app/admin/views/user.py:122
+#: app/admin/views/user.py:124
 #, python-format
 msgid "Permissions for %s"
 msgstr "Tillatelser for%s"
 
-#: app/admin/views/user.py:142 app/contacts/views.py:98
+#: app/admin/views/user.py:145 app/contacts/views.py:98
 #: app/customers/views.py:142 app/projects/views/project.py:104
 #: app/stock/views/product.py:60 app/suppliers/views.py:114
 #: app/tickets/views.py:66
 msgid "Confirm delete"
 msgstr "Bekreft sletting"
 
-#: app/admin/views/user.py:152
+#: app/admin/views/user.py:155
 msgid "User successfully edited"
 msgstr "Bruker endret"
 
-#: app/admin/views/user.py:170
+#: app/admin/views/user.py:173
 msgid "Change user"
 msgstr "Endre bruker"
 
-#: app/admin/views/user.py:179
+#: app/admin/views/user.py:182
 msgid "User successfully added"
 msgstr "Bruker lagt"
 
-#: app/admin/views/user.py:182
+#: app/admin/views/user.py:185
 msgid "New user successfully added"
 msgstr "Ny bruker lagt til"
 
@@ -436,7 +437,7 @@ msgstr "Ny bruker lagt til"
 #: app/dashboard/templates/dashboard/dashboard.html:74
 #: app/dashboard/templates/dashboard/dashboard.html:97
 #: app/offers/templates/offers/overview.html:10 app/orders/models.py:39
-#: app/tickets/models.py:103 app/tickets/templates/tickets/list.html:24
+#: app/tickets/models.py:103 app/tickets/templates/tickets/list.html:25
 msgid "Title"
 msgstr "Tittel"
 
@@ -445,7 +446,7 @@ msgid "Text"
 msgstr "Tekst"
 
 #: app/announcements/models.py:16 app/tickets/models.py:117
-#: app/tickets/templates/tickets/list.html:137
+#: app/tickets/templates/tickets/list.html:134
 #: app/tickets/templates/tickets/view.html:78
 #: app/tickets/templates/tickets/view.html:135
 msgid "Attachment"
@@ -464,13 +465,17 @@ msgstr "Ukentlig"
 msgid "Monthly"
 msgstr "Måneder"
 
-#: app/calendar/models.py:41
+#: app/calendar/models.py:40
 msgid "Red"
 msgstr "Rød"
 
-#: app/calendar/models.py:42
+#: app/calendar/models.py:41
 msgid "Blue"
 msgstr "Blå"
+
+#: app/calendar/models.py:42
+msgid "Sky blue"
+msgstr ""
 
 #: app/calendar/models.py:43
 msgid "Green"
@@ -485,12 +490,44 @@ msgstr "Orange"
 msgid "Gray"
 msgstr "Grå"
 
-#: app/calendar/views.py:100 app/calendar/views.py:147
+#: app/calendar/models.py:46
+msgid "Dark Slate Gray"
+msgstr ""
+
+#: app/calendar/models.py:47
+msgid "Beige"
+msgstr ""
+
+#: app/calendar/models.py:48
+msgid "Cadet blue"
+msgstr ""
+
+#: app/calendar/models.py:49
+msgid "Cyan"
+msgstr ""
+
+#: app/calendar/models.py:50
+msgid "Light Cyan"
+msgstr ""
+
+#: app/calendar/models.py:51
+msgid "Indigo"
+msgstr ""
+
+#: app/calendar/models.py:52
+msgid "Salmon"
+msgstr ""
+
+#: app/calendar/models.py:53
+msgid "Fire brick"
+msgstr ""
+
+#: app/calendar/views.py:100 app/calendar/views.py:156
 #: app/contacts/views.py:180
 msgid "Successfully edited contact"
 msgstr "Vellykket endret kontakt"
 
-#: app/calendar/views.py:103 app/calendar/views.py:150
+#: app/calendar/views.py:103 app/calendar/views.py:159
 #: app/contacts/views.py:183
 msgid "Successfully added new contact"
 msgstr "Lagt ny kontakt"
@@ -499,9 +536,13 @@ msgstr "Lagt ny kontakt"
 msgid "Event"
 msgstr "Event"
 
-#: app/calendar/views.py:163
+#: app/calendar/views.py:172 app/calendar/templates/calendar/sidebar.html:10
 msgid "Event types"
 msgstr "Eventtyper"
+
+#: app/calendar/templates/calendar/event_types.html:15
+msgid "Color"
+msgstr ""
 
 #: app/calendar/templates/calendar/form.html:67
 #, fuzzy
@@ -513,7 +554,7 @@ msgstr "Er du sikker du vil slette denne eventen?"
 msgid "Delete this event"
 msgstr "Slett ticket"
 
-#: app/calendar/templates/calendar/sidebar.html:6
+#: app/calendar/templates/calendar/sidebar.html:7
 #: app/contacts/templates/contacts/sidebar.html:5
 #: app/customers/templates/customers/sidebar.html:6
 #: app/projects/templates/projects/sidebar.html:7
@@ -522,9 +563,14 @@ msgstr "Slett ticket"
 msgid "Overview"
 msgstr "Oversikt"
 
-#: app/calendar/templates/calendar/sidebar.html:7
+#: app/calendar/templates/calendar/sidebar.html:8
 #, fuzzy
 msgid "New event"
+msgstr "Nytt oppslag"
+
+#: app/calendar/templates/calendar/sidebar.html:11
+#, fuzzy
+msgid "New event type"
 msgstr "Nytt oppslag"
 
 #: app/client/forms.py:11 app/tickets/forms.py:33
@@ -543,7 +589,7 @@ msgstr "Klientticket"
 msgid "Submitted by a client"
 msgstr "Skrevet av en klient"
 
-#: app/client/models.py:11
+#: app/client/models.py:10
 msgid "password"
 msgstr "passord"
 
@@ -569,7 +615,7 @@ msgstr "Din melding"
 
 #: app/client/templates/client/tickets/ticket_detail.html:27
 #: app/client/templates/client/tickets/ticket_detail.html:46
-#: app/tickets/templates/tickets/list.html:25
+#: app/tickets/templates/tickets/list.html:26
 msgid "Created by"
 msgstr "Opprettet av"
 
@@ -589,7 +635,7 @@ msgstr "Nytt passord sendes"
 msgid "Email not found"
 msgstr "E-post ikke funnet"
 
-#: app/client/views/tickets.py:31 app/tickets/views.py:105
+#: app/client/views/tickets.py:31 app/tickets/views.py:104
 msgid "Ticket updated"
 msgstr "Ticket oppdatert"
 
@@ -653,7 +699,7 @@ msgstr "Mobiltelefon"
 #: app/orders/models.py:41 app/orders/templates/orders/view.html:10
 #: app/projects/templates/projects/view.html:18 app/stock/models.py:70
 #: app/stock/templates/stock/products/view.html:76 app/tickets/models.py:104
-#: app/tickets/utils.py:89 app/tickets/templates/tickets/list.html:81
+#: app/tickets/utils.py:89 app/tickets/templates/tickets/list.html:83
 #: app/tickets/templates/tickets/view.html:71
 msgid "Description"
 msgstr "Beskrivelse"
@@ -847,7 +893,7 @@ msgid "Tickets"
 msgstr "Tickets"
 
 #: app/dashboard/templates/dashboard/dashboard.html:48
-#: app/tickets/models.py:106 app/tickets/templates/tickets/list.html:26
+#: app/tickets/models.py:106 app/tickets/templates/tickets/list.html:27
 msgid "Priority"
 msgstr "Prioritet"
 
@@ -988,12 +1034,12 @@ msgstr "Desember"
 #: app/hourregistrations/templates/hourregistrations/list_hours_print_friendly.html:53
 #: app/orders/models.py:117 app/orders/templates/orders/overview.html:13
 #: app/projects/templates/projects/orders.html:13 app/tickets/models.py:112
-#: app/tickets/templates/tickets/list.html:78
+#: app/tickets/templates/tickets/list.html:80
 msgid "Order"
 msgstr "Ordre"
 
 #: app/hourregistrations/models.py:37 app/tickets/views.py:46
-#: app/tickets/views.py:139 app/tickets/templates/tickets/view.html:32
+#: app/tickets/views.py:137 app/tickets/templates/tickets/view.html:32
 msgid "Ticket"
 msgstr "Ticket"
 
@@ -1162,21 +1208,21 @@ msgstr "Kunden"
 
 #: app/invoices/templates/invoices/overview.html:15
 #: app/offers/templates/offers/overview.html:14 app/orders/models.py:118
-#: app/orders/models.py:140 app/orders/models.py:169
+#: app/orders/models.py:140 app/orders/models.py:172
 #: app/orders/templates/orders/overview.html:16
 #: app/projects/templates/projects/orders.html:16
 msgid "Project"
 msgstr "Prosjekt"
 
 #: app/invoices/templates/invoices/overview.html:16 app/orders/models.py:119
-#: app/orders/models.py:171 app/orders/templates/orders/overview.html:17
-#: app/tickets/models.py:105 app/tickets/templates/tickets/list.html:27
+#: app/orders/models.py:174 app/orders/templates/orders/overview.html:17
+#: app/tickets/models.py:105 app/tickets/templates/tickets/list.html:28
 msgid "Status"
 msgstr "Status"
 
 #: app/invoices/templates/invoices/overview.html:39 app/orders/models.py:110
-#: app/orders/models.py:161 app/orders/templates/orders/overview.html:40
-#: app/tickets/models.py:378
+#: app/orders/models.py:164 app/orders/templates/orders/overview.html:40
+#: app/tickets/models.py:374
 msgid "New"
 msgstr "Nytt"
 
@@ -1244,7 +1290,7 @@ msgstr "Opprett ordre fra dette tilbudet"
 msgid "This offer is archived."
 msgstr "Dette tilbudet er arkivert"
 
-#: app/offers/templates/offers/create_order.html:39 app/orders/models.py:167
+#: app/offers/templates/offers/create_order.html:39 app/orders/models.py:170
 #: app/orders/templates/orders/overview.html:12
 #: app/projects/templates/projects/orders.html:12
 msgid "Order number"
@@ -1341,15 +1387,15 @@ msgstr "Arkivert"
 msgid "Pending reply"
 msgstr "Avventer svar"
 
-#: app/orders/models.py:162 app/orders/templates/orders/overview.html:43
+#: app/orders/models.py:165 app/orders/templates/orders/overview.html:43
 msgid "In progress"
 msgstr "Under arbeid"
 
-#: app/orders/models.py:163 app/orders/templates/orders/overview.html:46
+#: app/orders/models.py:166 app/orders/templates/orders/overview.html:46
 msgid "Done"
 msgstr "Utført"
 
-#: app/orders/models.py:168
+#: app/orders/models.py:171
 msgid "Offer"
 msgstr "Offer"
 
@@ -1644,7 +1690,7 @@ msgstr "Tilbrakte tid"
 msgid "Estimated time"
 msgstr "Estimert tid"
 
-#: app/tickets/models.py:114 app/tickets/templates/tickets/list.html:76
+#: app/tickets/models.py:114 app/tickets/templates/tickets/list.html:78
 msgid "Assigned to"
 msgstr "Tildelt til"
 
@@ -1653,40 +1699,40 @@ msgstr "Tildelt til"
 msgid "milestone"
 msgstr "Milepæler"
 
-#: app/tickets/models.py:267
+#: app/tickets/models.py:263
 msgid "Ticket has comments"
 msgstr "Ticket har merknader"
 
-#: app/tickets/models.py:355
+#: app/tickets/models.py:351
 msgid "changed from"
 msgstr "endret fra"
 
-#: app/tickets/models.py:355 core/auth/log/models.py:62
+#: app/tickets/models.py:351 core/auth/log/models.py:62
 #: core/auth/log/models.py:67
 msgid "to"
 msgstr "til"
 
-#: app/tickets/models.py:379
+#: app/tickets/models.py:375
 msgid "In Progress"
 msgstr "In Progress"
 
-#: app/tickets/models.py:380
+#: app/tickets/models.py:376
 msgid "Need feedback"
 msgstr "Trenger tilbakemelding"
 
-#: app/tickets/models.py:381
+#: app/tickets/models.py:377
 msgid "Closed"
 msgstr "Stengt"
 
-#: app/tickets/models.py:383
+#: app/tickets/models.py:379
 msgid "Low"
 msgstr "Lav"
 
-#: app/tickets/models.py:384
+#: app/tickets/models.py:380
 msgid "Medium"
 msgstr "Medium"
 
-#: app/tickets/models.py:385
+#: app/tickets/models.py:381
 msgid "High"
 msgstr "Høy"
 
@@ -1722,20 +1768,20 @@ msgstr "Link"
 msgid "You have been unassigned to the ticket"
 msgstr "Du har blitt tilordnet til ticket"
 
-#: app/tickets/views.py:112 app/tickets/templates/tickets/edit.html:21
+#: app/tickets/views.py:111 app/tickets/templates/tickets/edit.html:21
 #: app/tickets/templates/tickets/edit_form.html:22
 msgid "Update Ticket"
 msgstr "Update Ticket"
 
-#: app/tickets/views.py:122
+#: app/tickets/views.py:120
 msgid "Ticket changed"
 msgstr "Ticket endret"
 
-#: app/tickets/views.py:125
+#: app/tickets/views.py:123
 msgid "Ticket added"
 msgstr "Ticket lagt"
 
-#: app/tickets/views.py:210 app/tickets/templates/tickets/sidebar.html:36
+#: app/tickets/views.py:208 app/tickets/templates/tickets/sidebar.html:36
 msgid "New ticket"
 msgstr "Ny ticket"
 
@@ -1754,7 +1800,6 @@ msgstr "Endringer:"
 
 #: app/tickets/templates/tickets/edit.html:73
 #: app/tickets/templates/tickets/edit.html:96
-#: app/tickets/templates/tickets/list.html:90
 msgid "Comment: "
 msgstr "Kommentar:"
 
@@ -1788,60 +1833,56 @@ msgstr "endre egenskaper"
 msgid "status"
 msgstr "status"
 
-#: app/tickets/templates/tickets/list.html:28
+#: app/tickets/templates/tickets/list.html:29
 msgid "Date created"
 msgstr "Dato opprettet"
 
-#: app/tickets/templates/tickets/list.html:68
+#: app/tickets/templates/tickets/list.html:70
 msgid "Opened"
 msgstr "Åpent"
 
-#: app/tickets/templates/tickets/list.html:70
+#: app/tickets/templates/tickets/list.html:72
 #: app/tickets/templates/tickets/view.html:36
 msgid "Last updated"
 msgstr "Sist oppdatert"
 
-#: app/tickets/templates/tickets/list.html:72
+#: app/tickets/templates/tickets/list.html:74
 #, fuzzy
 msgid "Milestone"
 msgstr "Milepæler"
 
-#: app/tickets/templates/tickets/list.html:85
+#: app/tickets/templates/tickets/list.html:87
 #, fuzzy
 msgid "Update ticket"
 msgstr "Update Ticket"
 
-#: app/tickets/templates/tickets/list.html:87
+#: app/tickets/templates/tickets/list.html:89
 #, fuzzy
 msgid "Close ticket"
 msgstr "Klientticket"
 
-#: app/tickets/templates/tickets/list.html:95 templates/comments.html:51
-msgid "Add comment"
-msgstr "Legg til kommentar"
-
-#: app/tickets/templates/tickets/list.html:99
+#: app/tickets/templates/tickets/list.html:95
 #: app/tickets/templates/tickets/view.html:94
 msgid "History"
 msgstr "Historie"
 
-#: app/tickets/templates/tickets/list.html:117
+#: app/tickets/templates/tickets/list.html:114
 #: app/tickets/templates/tickets/view.html:114
 #, fuzzy
 msgid "Posted by"
 msgstr "Opprettet av"
 
-#: app/tickets/templates/tickets/list.html:123
+#: app/tickets/templates/tickets/list.html:120
 #: app/tickets/templates/tickets/view.html:120
 msgid "Changes"
 msgstr "Endringer:"
 
-#: app/tickets/templates/tickets/list.html:132
+#: app/tickets/templates/tickets/list.html:129
 #: app/tickets/templates/tickets/view.html:130
 msgid "Comment"
 msgstr "Kommentar"
 
-#: app/tickets/templates/tickets/list.html:147
+#: app/tickets/templates/tickets/list.html:144
 #: app/tickets/templates/tickets/view.html:146
 msgid "Public"
 msgstr "Offentlig"
@@ -1903,7 +1944,7 @@ msgstr "kunde"
 msgid "Comment added successfully!"
 msgstr "Kommentar lagt til!"
 
-#: core/views.py:64
+#: core/views.py:65
 msgid "invalid zip"
 msgstr "ugyldig postnr"
 
@@ -1938,6 +1979,10 @@ msgstr "kommentarer"
 #: templates/comments.html:11
 msgid "Comments"
 msgstr "Kommentarer"
+
+#: templates/comments.html:51
+msgid "Add comment"
+msgstr "Legg til kommentar"
 
 #: templates/log.html:12
 msgid "Changes by"
