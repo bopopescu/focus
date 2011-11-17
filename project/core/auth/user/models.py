@@ -352,14 +352,31 @@ class User(models.Model):
         try:
             permissons[content_type.name][object_id]
         except  Exception, e:
-            return False
+            pass
 
-        for actions in permissons[content_type.name][object_id]:
+        try:
+            actions = permissons[content_type.name][0]
+
             if action in actions:
                 return True
 
             if "ALL" in actions:
                 return True
+
+        except Exception, e:
+            pass
+
+        try:
+            for actions in permissons[content_type.name][object_id]:
+
+                if action in actions:
+                    return True
+
+                if "ALL" in actions:
+                    return True
+
+        except Exception, e:
+            pass
 
         return False
         
@@ -403,29 +420,16 @@ class User(models.Model):
 
     def get_permitted_objects(self, action, model, order_by=None):
 
-        content_type = get_content_type_for_model(model)
-            
-        try:
-            self.get_permission_tree()[content_type.name]
-        except Exception, e:
-            return model.objects.none()
-
-        permission_tree = self.get_permission_tree()[content_type.name]
-
         ids = set([])
-        for id,actions in permission_tree.items():
 
-            if not int(id)>0:
-                continue
+        objects = model.objects.filter_current_company()
 
-            if action in actions:
-                ids.add(id)
-                continue
+        for obj in objects:
 
-            if "ALL" in actions:
-                ids.add(id)
+            if self.has_permission_to(action, obj):
+                ids.add(obj.id)
 
-        result = model.objects.filter(id__in=ids)
+        result = model.objects.filter_current_company().filter(id__in=ids)
 
         return result
 

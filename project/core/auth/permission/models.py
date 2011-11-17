@@ -99,8 +99,6 @@ class Permission(models.Model):
         if self.group:
             self.group.invalidate_permission_tree_for_members()
 
-        #cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_actions"))
-
     def get_actions(self):
         actions = []
         if self.actions:

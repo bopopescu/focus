@@ -201,10 +201,6 @@ class Comment(PersistentModel):
     def __unicode__ (self):
         return self.text
 
-"""
-Adding some initial data to the model when run syncdb
-"""
-
 def initial_data ():
     print "creating Actions"
     Action.objects.get_or_create(name='ALL', verb='all', description='all actions on an object')
@@ -266,9 +262,7 @@ def initial_data ():
     a.set_password("superpassord")
     a.save()
 
-    u, created = User.all_objects.get_or_create(username="test",
-                                                first_name="Test1",
-                                                )
+    u, created = User.all_objects.get_or_create(username="test",first_name="Test1",)
     u.company = comp
     u.set_password("test")
     u.save()
