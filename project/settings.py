@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     #Other
     'south',
     'piston',
+    'debug_toolbar_htmltidy',
     'debug_toolbar',
     )
 
@@ -176,10 +177,12 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar_htmltidy.panels.HTMLTidyDebugPanel',
+    'cache_panel.CachePanel',
     )
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
-}
+    }
 
 TEST_RUNNER = 'core.tests.FocusTestSuiteRunner'

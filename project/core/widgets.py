@@ -81,22 +81,6 @@ class DatePickerField(forms.DateInput):
         return html + datepicker
 
 
-class MaskedField(Input):
-    def __init__(self, *args, **kwargs):
-        self.format = None
-
-        if 'format' in kwargs:
-            self.format = kwargs['format']
-            del kwargs['format']
-
-        super(MaskedField, self).__init__(*args, **kwargs)
-
-    def render(self, name, *args, **kwargs):
-        html = super(MaskedField, self).render(name, *args, **kwargs)
-        masked = render_to_string("masked.html", {'field': name, 'maskedFormat': self.format})
-        return html + masked
-
-
 def get_hexdigest(algorithm, salt, raw_password):
     """
     Returns a string of the hexdigest of the given plaintext password and salt

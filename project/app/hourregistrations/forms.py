@@ -3,7 +3,7 @@ from django import forms
 from app.hourregistrations.models import HourRegistration, HourRegistrationType, Disbursement
 from app.orders.models import Order
 from core import Core
-from core.widgets import DatePickerField, MaskedField
+from core.widgets import DatePickerField
 
 
 class HourRegistrationForm(ModelForm):
@@ -14,8 +14,6 @@ class HourRegistrationForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(HourRegistrationForm, self).__init__(*args, **kwargs)
 
-        self.fields['time_start'].widget = MaskedField(format="99:99")
-        self.fields['time_end'].widget = MaskedField(format="99:99")
         self.fields['time_start'].widget.attrs['class'] = 'time_input'
         self.fields['time_end'].widget.attrs['class'] = 'time_input'
 

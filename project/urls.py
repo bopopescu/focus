@@ -23,27 +23,28 @@ urlpatterns = patterns('',
     (r'^announcements/', include('app.announcements.urls')),
     (r'^calendar/', include('app.calendar.urls')),
 
-    #settings for admin
+                       #settings for admin
     (r'^admin/', include('app.admin.urls')),
 
-    #Stock
+                       #Stock
     (r'^stock/', include('app.stock.urls')),
 
-    #API
+                       #API
     (r'^api/', include('api.urls')),
 
-    #client ticket site
+                       #client ticket site
     (r'^client/', include('app.client.urls')),
 
-    #Suppliers
+                       #Suppliers
     (r'^suppliers/', include('app.suppliers.urls')),
     (r'^tickets/', include('app.tickets.urls')),
 
-    #Grant permissions
+                       #Grant permissions
     (r'grant/role/(?P<role>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
      , 'core.views.grant_role'),
 
-    (r'grant/permission/(?P<perm>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
+    (
+    r'grant/permission/(?P<perm>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
     , 'core.views.grant_permission'),
 
     (r'get_postal_by_zip//$', 'core.views.view_postal_by_zip'),
@@ -53,10 +54,10 @@ urlpatterns = patterns('',
 
     (r'^i18n/', include('django.conf.urls.i18n')),
 
+    url(r'^', include('debug_toolbar_htmltidy.urls'))
 
-                       )
+)
 
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
     urlpatterns += staticfiles_urlpatterns()
