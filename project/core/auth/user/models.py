@@ -397,7 +397,6 @@ class User(models.Model):
     def invalidate_permission_tree(self, *args, **kwargs):
         cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_permission_tree"))
 
-    @cachedecorator('get_permission_tree')
     def get_permission_tree(self):
         return self.build_permission_tree()
 
