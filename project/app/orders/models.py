@@ -32,8 +32,9 @@ class ProductLine(models.Model):
 
     def get_total_sum(self):
         if self.count and self.price:
-            return int(self.count)*int(self.price)
+            return int(self.count) * int(self.price)
         return 0
+
 
 class OrderBase(PersistentModel):
     title = models.CharField(_("Title"), max_length=80)
@@ -89,12 +90,12 @@ class OrderBase(PersistentModel):
 
                     if not p.price:
                         p.price = 0
-                        
+
                     if not p.tax:
                         p.price = 0
 
                     p.save()
-                    
+
             if p.id:
                 self.product_lines.add(p)
 
@@ -110,13 +111,14 @@ invoice_status_choices = (
     ("0", _("New")),
     ("1", _("Sent")),
     ("2", _("Paid")),
-)
+    )
 
 class Invoice(OrderBase):
     invoice_number = models.IntegerField(_("Invoice number"))
     order = models.ForeignKey("Order", verbose_name=_("Order"), related_name="invoices")
     project = models.ForeignKey(Project, related_name="invoices", verbose_name=_("Project"), blank=True, null=True)
-    status = models.CharField(default=None, null=True, max_length=10, choices=invoice_status_choices, verbose_name=_("Status"))
+    status = models.CharField(default=None, null=True, max_length=10, choices=invoice_status_choices,
+                              verbose_name=_("Status"))
 
     def get_view_url(self):
         return urlresolvers.reverse('app.invoices.views.view', args=("%s" % self.id,))
@@ -132,11 +134,12 @@ offer_status_choices = (
     ("0", _("Pending")),
     ("1", _("Accepted")),
     ("2", _("Declined")),
-)
+    )
 
 class Offer(OrderBase):
     offer_number = models.CharField(_("Offer number"), max_length=150, default="")
-    accepted = models.CharField(max_length=5, null=True, default=None, choices=offer_status_choices, verbose_name=_("Accepted"))
+    accepted = models.CharField(max_length=5, null=True, default=None, choices=offer_status_choices,
+                                verbose_name=_("Accepted"))
     project = models.ForeignKey(Project, related_name="offers", verbose_name=_("Project"), blank=True, null=True)
 
     def get_view_url(self):
@@ -171,7 +174,8 @@ class Order(OrderBase):
     offer = models.ForeignKey('orders.Offer', verbose_name=_("Offer"), related_name="orders", null=True, blank=True)
     project = models.ForeignKey(Project, related_name="orders", verbose_name=_("Project"), blank=True, null=True)
 
-    status = models.CharField(default=None, null=True, max_length=10, choices=order_status_choices, verbose_name=_("Status"))
+    status = models.CharField(default=None, null=True, max_length=10, choices=order_status_choices,
+                              verbose_name=_("Status"))
 
     events = models.ManyToManyField(Event, related_name="orders")
 

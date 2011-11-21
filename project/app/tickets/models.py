@@ -39,7 +39,6 @@ class TicketBase(models.Model):
         super(TicketBase, self).save()
 
         if Core.current_user():
-
             if action == "ADD":
                 Core.current_user().grant_role("Admin", self)
                 admin_group = Core.current_user().get_company_admingroup()
@@ -63,6 +62,7 @@ class TicketBase(models.Model):
     def creator(self):
         creator = self.client_user or self.user
         return creator
+
 
 class TicketStatus(models.Model):
     name = models.CharField(max_length=20)
@@ -97,7 +97,9 @@ class TicketType(models.Model):
     @staticmethod
     def simpleform():
         from app.tickets.forms import AddTicketTypeForm
+
         return AddTicketTypeForm(instance=TicketType(), prefix="ticket_type")
+
 
 class Ticket(TicketBase):
     title = models.CharField(_("Title"), max_length=50)
@@ -129,10 +131,10 @@ class Ticket(TicketBase):
 
 
     def invalidate_cache(self):
-      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_clients"))
-      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_updates"))
-      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_priority"))
-      cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_status"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_clients"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_updates"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_priority"))
+        cache.delete("cachedecorator_%s_%s_%s" % (self.__class__.__name__, self.pk, "get_status"))
 
     @cachedecorator('get_clients')
     def get_clients(self):
@@ -144,7 +146,6 @@ class Ticket(TicketBase):
 
     @cachedecorator('get_priority')
     def get_priority(self):
-
         result = ""
         if self.priority.name == ("Low"):
             result = "gray"
@@ -153,16 +154,15 @@ class Ticket(TicketBase):
             result = "blue"
 
         elif self.priority.name == ("High"):
-            result =  "red"
+            result = "red"
 
         elif self.priority.name == ("standard"):
-            result =  "gray"
+            result = "gray"
 
-        return {'color':result, 'name':self.priority.name}
+        return {'color': result, 'name': self.priority.name}
 
     @cachedecorator('get_status')
     def get_status(self):
-
         result = "red"
 
         if self.status.name == ("New"):
@@ -175,12 +175,12 @@ class Ticket(TicketBase):
             result = "red"
 
         elif self.status.name == ("Closed"):
-            result =  "gray"
+            result = "gray"
 
         elif self.status.name == ("standard"):
-            result =  "gray"
+            result = "gray"
 
-        return {'color':result, 'name': self.status.name}
+        return {'color': result, 'name': self.status.name}
 
     @cachedecorator('mark_as_unread_for_current_user')
     def mark_as_unread_for_current_user(self):
@@ -233,7 +233,6 @@ class Ticket(TicketBase):
                 if self.company.all_employees_group:
                     self.company.all_employees_group.grant_role('Member', self)
 
-        
         self.invalidate_cache()
 
     def check_assigned_to(self):

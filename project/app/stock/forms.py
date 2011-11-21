@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from app.stock.models import Product, UnitsForSizes, ProductGroup, Currency
 from app.suppliers.models import Supplier
-from core.widgets import SelectWithPop, JQueryAutoComplete
+from core.widgets import SelectWithPop
 from django.forms import forms
 
 class ProductForm(ModelForm):
@@ -43,25 +43,3 @@ class UnitsForSizesForm(ModelForm):
     class Meta:
         model = UnitsForSizes
         fields = ('name',)
-
-
-class ProductAutocompleteWidget(JQueryAutoComplete):
-    def __init__(self):
-        JQueryAutoComplete.__init__(self, source=partial(reverse, 'app.stock.views.product.autocomplete'))
-
-
-class ProductField(forms.Field):
-    widget = ProductAutocompleteWidget() # Default widget to use when rendering this type of Field.
-
-    def __init__(self, *args, **kwargs):
-        #self.max_length, self.min_length = max_length, min_length
-        super(ProductField, self).__init__(*args, **kwargs)
-
-    def clean(self, value):
-        """Checks that the user exists, and returns a user object"""
-        super(ProductField, self).clean(value)
-        try:
-            product = Product.objects.get(name=value)
-        except:
-            raise forms.ValidationError(_("Product with name %(name)s does not exist") % {'name': value})
-        return product

@@ -11,7 +11,6 @@ urlpatterns = patterns('app.stock.views',
                        url(r'^product/(?P<id>\d+)/orders/$', 'product.orders'),
                        url(r'^product/(?P<id>\d+)/view/$', 'product.view'),
                        url(r'^product/(?P<id>\d+)/trash/$', 'product.trash'),
-                       url(r'^ajax/product/$', 'product.autocomplete'),
 
                        #ProductFiles
                        url(r'^product/(?P<id>\d+)/files/$', 'files.overview'),

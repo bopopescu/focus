@@ -2,7 +2,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from core import Core
 from core.decorators import require_permission
-from core.utils import suggest_ajax_parse_arguments
 from core.views import  update_timeout
 from app.stock.forms import ProductForm
 from app.stock.models import Product
@@ -68,19 +67,6 @@ def trash(request, id):
 def recover(request, id):
     Product.objects.get(id=id).recover()
     return redirect(overview)
-
-
-@suggest_ajax_parse_arguments()
-def autocomplete(request, query, limit):
-    products = Product.objects.filter(
-        Q(name__startswith=query)
-    )[:limit]
-
-    products = [{'id': product.id,
-                 'label': "%s" % (product.name),
-                 'value': product.name} for product in products]
-
-    return HttpResponse(JSONEncoder().encode(products), mimetype='application/json')
 
 
 @require_permission("VIEW", Product, "id")

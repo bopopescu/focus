@@ -54,8 +54,6 @@ urlpatterns = patterns('',
 
     (r'^i18n/', include('django.conf.urls.i18n')),
 
-    url(r'^', include('debug_toolbar_htmltidy.urls'))
-
 )
 
 if settings.DEBUG:

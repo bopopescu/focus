@@ -7,7 +7,6 @@ urlpatterns = patterns('app.contacts.views',
                        url(r'^all/?$', 'overview_all'),
 
                        url(r'^new/$', 'add'),
-                       url(r'^ajax/contacts/$', 'autocomplete'),
                        url(r'^add_ajax/$', 'add_ajax'),
 
                        url(r'^(?P<id>\d+)/edit/$', 'edit'),

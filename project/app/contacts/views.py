@@ -10,7 +10,6 @@ from app.customers.models import Customer
 from core import Core
 from core.decorators import login_required, require_permission
 from core.models import Log
-from core.utils import suggest_ajax_parse_arguments
 from core.shortcuts import comment_block
 from core.views import update_timeout
 from django.utils import simplejson
@@ -116,17 +115,7 @@ def restore(request, id):
                                                          })
 
 
-@suggest_ajax_parse_arguments()
-def autocomplete(request, query, limit):
-    contacts = Contact.objects.filter_current_company().filter(
-        Q(name__startswith=query)
-    )[:limit]
 
-    contacts = [{'id': contact.id,
-                 'label': "%s" % (contact.name),
-                 'value': contact.name} for contact in contacts]
-
-    return HttpResponse(JSONEncoder().encode(contacts), mimetype='application/json')
 
 
 @require_permission("CREATE", Contact)

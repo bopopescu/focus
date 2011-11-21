@@ -98,8 +98,6 @@ class Core:
 
             # Remember me if I tell you to!
             if remember:
-
-                print "HELLO?"
                 request.session.set_expiry(settings.LOGIN_REMEMBER_TIME)
             else:
                 request.session.set_expiry(0) # Expire on browser exit

@@ -39,6 +39,7 @@ def overview_all(request):
 @require_permission("VIEW", Customer, 'id')
 def view(request, id):
     customer = Core.current_user().get_permitted_objects("VIEW", Customer).get(id=id)
+
     comments = comment_block(request, customer)
     form = CustomerForm(instance=customer, initial={'cid': customer.cid})
 

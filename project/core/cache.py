@@ -7,10 +7,9 @@ Cache framework
 """
 
 class cachedecorator:
-
     label = ""
 
-    def __init__(self, label, timeout = False):
+    def __init__(self, label, timeout=False):
         """
         Used for decorator caching
         Called when python finds a decorator
@@ -25,8 +24,6 @@ class cachedecorator:
         """
 
         def cache_function (*args, **kwargs):
-
-            
             cache_key = "cachedecorator_%s_%s_%s" % (args[0].__class__.__name__, args[0].pk, self.label)
             cached = cache.get(cache_key)
 

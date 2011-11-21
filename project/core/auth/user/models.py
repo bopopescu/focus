@@ -20,23 +20,26 @@ import time
 import os
 from django.utils import translation
 import thread
+from django.core.cache import cache
+import functools
 
 fs = FileSystemStorage(location=os.path.join(settings.BASE_PATH, "uploads"))
 
 class User(models.Model):
     username = models.CharField(('username'), max_length=30, unique=True, help_text=(
-    "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
+        "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"))
     first_name = models.CharField(('first name'), max_length=60, blank=True)
     last_name = models.CharField(('last name'), max_length=60, blank=True)
     email = models.EmailField(('e-mail address'), blank=True)
     password = models.CharField(('password'), max_length=128, help_text=(
-    "Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
+        "Use '[algo]$[salt]$[hexdigest]' or use the <a href=\"password/\">change password form</a>."))
     is_staff = models.BooleanField(('staff status'), default=False,
-                                   help_text=("Designates whether the user can log into this admin site."))
+                                                   help_text=(
+                                                       "Designates whether the user can log into this admin site."))
     is_active = models.BooleanField(('active'), default=True, help_text=(
-    "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."))
+        "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."))
     is_superuser = models.BooleanField(('superuser status'), default=False, help_text=(
-    "Designates that this user has all permissions without explicitly assigning them."))
+        "Designates that this user has all permissions without explicitly assigning them."))
     last_login = models.DateTimeField(('last login'), default=datetime.now)
     date_joined = models.DateTimeField(('date joined'), default=datetime.now)
 
@@ -55,7 +58,7 @@ class User(models.Model):
     percent_cover = models.IntegerField(null=True)
 
     language = models.CharField(max_length=30, choices=settings.LANGUAGES, default="nb")
-    
+
     objects = PersistentManager()
     all_objects = models.Manager()
 
@@ -93,9 +96,8 @@ class User(models.Model):
         return urlresolvers.reverse('app.admin.views.user.view', args=("%s" % self.id,))
 
     def save(self, *args, **kwargs):
-
         action = "EDIT"
-        
+
         if not self.id:
             action = "ADD"
 
@@ -276,7 +278,6 @@ class User(models.Model):
         if not isclass(object):
             object_id = object.id
 
-
         content_type = get_content_type_for_model(object)
 
         act = Role.get_by_name(role)
@@ -314,14 +315,12 @@ class User(models.Model):
         #Get info about the object
         content_type = get_content_type_for_model(object)
 
-        perm = Permission(
-            user=self,
-            content_type=content_type,
-            object_id=object_id,
-            from_date=from_date,
-            to_date=to_date,
-            negative=negative,
-            )
+        perm = Permission(user=self,
+                          content_type=content_type,
+                          object_id=object_id,
+                          from_date=from_date,
+                          to_date=to_date,
+                          negative=negative)
         perm.save()
 
         for p in Action.get_list_by_names(actions):
@@ -338,9 +337,9 @@ class User(models.Model):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
 
-        if Core.current_user().id == 1 and settings.DEBUG  == True:
+        if Core.current_user().id == 1 and settings.DEBUG == True:
             return True
-        
+
         object_id = 0
 
         if not isclass(object):
@@ -368,7 +367,6 @@ class User(models.Model):
 
         try:
             for actions in permissons[content_type.name][object_id]:
-
                 if action in actions:
                     return True
 
@@ -379,7 +377,7 @@ class User(models.Model):
             pass
 
         return False
-        
+
     def get_permissions(self, content_type=None):
         groups = []
         groups_queryset = self.groups.select_related().all()
@@ -389,15 +387,15 @@ class User(models.Model):
             groups.extend(group.get_parents())
 
         if content_type:
-            return Permission.objects.filter(content_type=content_type).filter(Q(user=self) | Q(group__in=groups)).select_related("content_type","role")
+            return Permission.objects.filter(content_type=content_type).filter(
+                Q(user=self) | Q(group__in=groups)).select_related("content_type", "role")
 
-        return Permission.objects.filter(Q(user=self) | Q(group__in=groups)).select_related("content_type","role")
+        return Permission.objects.filter(Q(user=self) | Q(group__in=groups)).select_related("content_type", "role")
 
     def build_permission_tree(self):
         permissions = {}
 
         for perm in self.get_permissions():
-
             content_type = perm.content_type
 
             if not content_type.name in permissions:
@@ -418,20 +416,17 @@ class User(models.Model):
     def get_permission_tree(self):
         return self.build_permission_tree()
 
-    def get_permitted_objects(self, action, model, order_by=None):
-
-        ids = set([])
+    def get_permitted_objects(self, action, model, order_by = None):
 
         objects = model.objects.filter_current_company()
 
-        for obj in objects:
+        ids = set([])
 
+        for obj in objects:
             if self.has_permission_to(action, obj):
                 ids.add(obj.id)
 
-        result = model.objects.filter_current_company().filter(id__in=ids)
-
-        return result
+        return objects.filter(id__in=ids)
 
 class AnonymousUser(User):
     id = 0
