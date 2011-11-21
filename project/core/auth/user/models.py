@@ -332,7 +332,8 @@ class User(models.Model):
 
         return perm
 
-    def has_permission_to (self, action, object, id=None, any=False):
+    def valid_permission(self, permissions, action, object, id=None, any=False):
+
         if isinstance(object, str):
             raise Exception(
                 'Argument 2 in user.has_permission_to was a string; The proper syntax is has_permission_to(action, object)!')
@@ -346,15 +347,14 @@ class User(models.Model):
             object_id = object.id
 
         content_type = get_content_type_for_model(object)
-        permissons = self.get_permission_tree()
 
         try:
-            permissons[content_type.name][object_id]
+            permissions[content_type.name][object_id]
         except  Exception, e:
             pass
 
         try:
-            actions = permissons[content_type.name][0]
+            actions = permissions[content_type.name][0]
 
             if action in actions:
                 return True
@@ -366,7 +366,7 @@ class User(models.Model):
             pass
 
         try:
-            for actions in permissons[content_type.name][object_id]:
+            for actions in permissions[content_type.name][object_id]:
                 if action in actions:
                     return True
 
@@ -377,6 +377,12 @@ class User(models.Model):
             pass
 
         return False
+
+
+    def has_permission_to (self, action, object, id=None, any=False):
+        permissions = self.get_permission_tree()
+        return self.valid_permission(permissions, action, object, id,any)
+        
 
     def get_permissions(self, content_type=None):
         groups = []
@@ -416,17 +422,18 @@ class User(models.Model):
     def get_permission_tree(self):
         return self.build_permission_tree()
 
-    def get_permitted_objects(self, action, model, order_by = None):
-
+    def get_permitted_objects(self, action, model, order_by=None):
         objects = model.objects.filter_current_company()
+        permissions = self.get_permission_tree()
 
         ids = set([])
 
         for obj in objects:
-            if self.has_permission_to(action, obj):
+            if self.valid_permission(permissions, action, obj):
                 ids.add(obj.id)
 
         return objects.filter(id__in=ids)
+
 
 class AnonymousUser(User):
     id = 0
