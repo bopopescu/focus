@@ -28,7 +28,6 @@ class Customer(PersistentModel):
 
     comments = generic.GenericRelation(Comment)
 
-
     def __unicode__(self):
         return self.name
 
@@ -62,16 +61,8 @@ class Customer(PersistentModel):
 
     @staticmethod
     def simpleform():
+        from forms import CustomerFormSimple
         return CustomerFormSimple(instance=Customer(), prefix="customers", initial= {'cid':Customer.calculate_next_cid()})
-
-    def save(self, *args, **kwargs):
-        new = False
-        if not self.id:
-            new = True
-
-        super(Customer, self).save()
 
     def get_view_url(self):
         return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
-
-from forms import CustomerFormSimple
