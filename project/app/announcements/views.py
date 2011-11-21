@@ -16,18 +16,22 @@ def overview_trashed(request):
 def add(request):
     return form(request)
 
+@login_required()
 def view(request, id):
     announcement = Core.current_user().get_permitted_objects("VIEW", Announcement).get(id=id)
     return render(request, 'announcements/view.html', {'title': 'Oppslag',
                                                                     'announcement': announcement})
 
+@login_required()
 def edit(request, id):
     return form(request, id)
 
+@login_required()
 def trash(request, id):
     Announcement.objects.filter().get(id=id).delete()
     return redirect(overview)
 
+@login_required()
 def recover(request, id):
     Announcement.objects.filter(deleted=True).get(id=id).recover()
     return redirect(overview)

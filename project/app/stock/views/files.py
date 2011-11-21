@@ -6,6 +6,7 @@ from app.stock.models import Product
 from core import Core
 from core.decorators import login_required
 
+@login_required()
 def overview(request, id):
     """
     id is project_id

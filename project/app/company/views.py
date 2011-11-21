@@ -7,7 +7,7 @@ from app.projects.models import Project
 from app.hourregistrations.models import HourRegistration
 from app.stock.models import Product
 from app.tickets.models import Ticket
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from core.views import update_timeout
 from core.auth.company.models import Company
 from core.auth.user.models import User
@@ -35,6 +35,7 @@ def edit(request, id):
     return form(request, id)
 
 
+@login_required()
 def form (request, id=False):
     if id:
         instance = Company.objects.all().get(id=id)

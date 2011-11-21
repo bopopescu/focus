@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 from app.stock.models import Product
 from core import Core
 from core.auth.log.models import Log
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from core.mail import send_mail
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -27,7 +27,7 @@ def view(request, id):
     return render(request, "offers/view.html", {'title': offer.title,
                                                 'offer': offer})
 
-
+@login_required()
 def create_order(request, id):
     offer = Offer.objects.get(id=id)
 
@@ -112,6 +112,7 @@ def edit(request, id):
     return form(request, id)
 
 
+@login_required()
 def form(request, id=None):
     products = []
 

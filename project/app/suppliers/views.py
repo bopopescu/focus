@@ -92,6 +92,7 @@ def add(request):
     return form(request)
 
 
+@login_required()
 def edit(request, id):
     return form(request, id)
 

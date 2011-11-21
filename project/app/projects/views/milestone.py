@@ -1,18 +1,21 @@
 from django.http import HttpResponse
 from app.projects.forms import MilestoneForm
 from app.projects.models import Project, Milestone
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from django.shortcuts import render
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 from app.projects.views.project import view as viewProject
 
+@login_required()
 def add(request, project_id):
     return form(request, project_id)
 
+@login_required()
 def edit(request, project_id, milestone_id):
     return form(request, project_id, milestone_id)
 
+@login_required()
 def form (request, project_id, milestone_id = False):
     if milestone_id:
         instance = get_object_or_404(Milestone, id=milestone_id, deleted=False)

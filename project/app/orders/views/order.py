@@ -10,7 +10,7 @@ from app.stock.models import Product
 from core import Core
 from core.auth.log.models import Log
 from core.auth.permission.models import Permission
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
@@ -18,7 +18,6 @@ from core.shortcuts import comment_block
 from operator import itemgetter, attrgetter
 
 @require_permission("LIST", Order)
-
 def my_orders(request):
     orders = Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False)
 
@@ -91,6 +90,7 @@ def view(request, id):
                                                 'who_can_see_this': who_can_see_this})
 
 
+@require_permission("VIEW", Order, "id")
 def preview_order_html(request, id):
     order = Order.objects.filter_current_company().get(id=id)
     return render(request, "orders/pdf.html", {'order': order})
@@ -137,6 +137,7 @@ def edit(request, id):
     return form(request, id)
 
 
+@login_required()
 def form(request, id=None):
     products = []
 

@@ -26,6 +26,7 @@ def get_absolute_filename(filename='', safe=True):
     return os.path.join(STATIC_ROOT, filename)
 
 
+@login_required()
 def retrieve_file(request, filename=''):
     abs_filename = get_absolute_filename(filename)
 
@@ -37,6 +38,7 @@ def retrieve_file(request, filename=''):
     response['Content-Length'] = os.path.getsize(abs_filename)
     return response
 
+@login_required()
 def view_postal_by_zip(request, zip=""):
 
     if request.is_ajax():
@@ -72,6 +74,7 @@ def update_timeout(request):
     return
 
 
+@login_required()
 def grant_role(request, role, userorgroup, user_id, app, model, object_id):
     """
     For granting permission on-site
@@ -98,6 +101,7 @@ def grant_role(request, role, userorgroup, user_id, app, model, object_id):
 
 
 
+@login_required()
 def grant_permission(request, perm, userorgroup, user_id, app, model, object_id):
     """
     For granting permission on-site

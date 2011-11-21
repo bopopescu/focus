@@ -34,6 +34,7 @@ def delete(request, id):
     return HttpResponseRedirect("/")
 
 
+@login_required()
 def file_form(request, file_id=None):
     if file_id:
         file_instance = get_object_or_404(File, id=file_id, deleted=False)
@@ -73,6 +74,7 @@ def handle_file_tags(tags):
         return []
 
 
+@login_required()
 def generic_form(request, instance, file_instance, redirect_view, additional_data, template=None):
     """
     instance = Project, Product etc

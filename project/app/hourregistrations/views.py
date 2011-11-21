@@ -129,7 +129,7 @@ def calendar_today(request):
     form = HourRegistrationForm()
     return render(request, "hourregistrations/calendar.html", {"form": form})
 
-
+@login_required()
 def timer(request):
     form = TimeTrackerForm()
     return render(request, 'hourregistrations/timer.html', {'form': form})
@@ -279,6 +279,7 @@ def user_archive(request, user_id):
     return archive(request, user_id)
 
 
+@login_required()
 def archive(request, user_id=None):
     year_with_months = {}
 

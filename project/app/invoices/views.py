@@ -5,8 +5,9 @@ from app.orders.models import  Offer, Invoice, ProductLine
 from django.utils.translation import ugettext as _
 from app.stock.models import Product
 from core import Core
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 
+@require_permission("LIST", Invoice)
 def overview(request):
     offers = Core.current_user().get_permitted_objects("VIEW", Invoice).filter(trashed=False)
     return render(request, "invoices/overview.html", {'title': _('Invoices'),
@@ -20,14 +21,17 @@ def view(request, id):
                                                   'invoice': invoice})
 
 
+@require_permission("CREATE", Invoice)
 def add(request):
     return form(request)
 
 
+@require_permission("EDIT", Invoice, "id")
 def edit(request, id):
     return form(request, id)
 
 
+@login_required()
 def form(request, id=None):
     products = []
 

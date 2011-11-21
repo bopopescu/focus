@@ -4,8 +4,9 @@ from django.utils.translation import ugettext as _
 from app.admin.forms import UserProfileForm, UserProfileImageForm, UserProfilePasswordForm
 from django.shortcuts import render
 from core.auth.user.models import User
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 
+@login_required()
 def edit(request):
     try:
         instance = request.user
@@ -31,6 +32,7 @@ def edit(request):
     return render(request, "admin/profile/form.html", {'title': _('Profile'), 'form': form, 'userCard': instance})
 
 
+@login_required()
 def change_profile_image(request):
     try:
         instance = request.user
@@ -54,6 +56,7 @@ def change_profile_image(request):
             {'title': _('Profile picture'), 'form': form, 'userCard': instance})
 
 
+@login_required()
 def change_password(request):
     instance = request.user
     if request.method == 'POST':

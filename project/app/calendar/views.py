@@ -94,6 +94,7 @@ def delete(request, id):
 
     return redirect(overview)
 
+@login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Event, id=id, deleted=False)
@@ -132,13 +133,8 @@ def form (request, id=False):
 
 @login_required()
 def event_types(request):
-
     event_types = EventType.objects.filter_current_company()
-    
     return render(request, "calendar/event_types.html", {'event_types': event_types})
-
-
-
 
 @login_required()
 def event_type_add(request):
@@ -149,14 +145,12 @@ def event_type_add(request):
 def event_type_edit(request, id):
     return event_type_form(request, id)
 
-
+@login_required()
 def event_type_form (request, id=False):
     if id:
         instance = get_object_or_404(EventType, id=id, deleted=False)
-        msg = _("Successfully edited contact")
     else:
         instance = EventType()
-        msg = _("Successfully added new contact")
 
     if request.method == 'POST':
         form = EventTypeForm(request.POST, instance=instance)

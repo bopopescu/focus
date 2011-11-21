@@ -20,7 +20,6 @@ def view(request, id):
     ticket = client.tickets.get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).filter(public=True).order_by("id")
 
-
     if request.method == "POST":
         ticket_form = ClientTicketForm(request.POST, request.FILES, instance=ticket)
         if ticket_form.is_valid():

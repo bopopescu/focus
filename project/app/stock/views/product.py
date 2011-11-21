@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404, redirect, render
 from core import Core
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from core.views import  update_timeout
 from app.stock.forms import ProductForm
 from app.stock.models import Product
@@ -78,6 +78,7 @@ def view(request, id):
                                                         })
 
 
+@login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Product, id=id, deleted=False)

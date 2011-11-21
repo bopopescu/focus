@@ -8,7 +8,7 @@ from app.projects.models import Project
 from core import Core
 from core.models import Log
 from core.shortcuts import comment_block
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from core.views import update_timeout
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
@@ -108,6 +108,7 @@ def trash(request, id):
                                                        })
 
 
+@login_required()
 def form (request, id=False):
     if id:
         instance = get_object_or_404(Project, id=id, deleted=False)

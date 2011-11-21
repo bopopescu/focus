@@ -21,10 +21,12 @@ def add(request):
     return form(request)
 
 
+@login_required()
 def edit(request, id):
     return form(request, id)
 
 
+@login_required()
 def delete(request, id):
     Project.objects.get(id=id).delete()
     return redirect(overview)

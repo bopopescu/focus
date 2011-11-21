@@ -7,6 +7,7 @@ from core.auth.log.models import Log
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.utils import translation
+from core.decorators import login_required
 
 def login(request):
     message = ""
@@ -58,6 +59,7 @@ def login(request):
 
     return render_to_response('login.html', {'form':form, 'message':message, 'LOGIN_URL': settings.LOGIN_URL})
 
+@login_required()
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/accounts/login/")

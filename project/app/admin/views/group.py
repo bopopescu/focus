@@ -17,9 +17,9 @@ def overview(request):
     return render(request, 'admin/groups/list.html', {'title': _("Groups"), 'groups': groups})
 
 
+@login_required()
 def add(request):
     return form(request)
-
 
 @login_required()
 def edit(request, id):

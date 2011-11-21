@@ -3,7 +3,7 @@ from django.conf import settings
 from app.client.models import ClientUser
 from app.tickets.models import Ticket, TicketUpdate, TicketType
 from core import Core
-from core.decorators import require_permission
+from core.decorators import require_permission, login_required
 from django.shortcuts import render, get_object_or_404
 from app.tickets.forms import TicketForm, EditTicketForm, AddTicketTypeForm, AddClientForm
 from django.shortcuts import redirect
@@ -114,6 +114,7 @@ def edit(request, id):
                                                  'ticket_form': ticket_form,
                                                  })
 
+@login_required()
 def form(request, id=False):
     if id:
         instance = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
@@ -177,6 +178,7 @@ def ajax_change_update_visibility(request):
     return HttpResponse(status=400)
 
 
+@require_permission("VIEW", Ticket, "id")
 def client_management(request, id):
     ticket = Ticket.objects.get(id=id)
 

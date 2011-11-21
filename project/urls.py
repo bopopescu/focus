@@ -44,8 +44,8 @@ urlpatterns = patterns('',
      , 'core.views.grant_role'),
 
     (
-    r'grant/permission/(?P<perm>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
-    , 'core.views.grant_permission'),
+        r'grant/permission/(?P<perm>\w+)/(?P<userorgroup>\w+)/(?P<user_id>\w+)/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\w+)/$'
+        , 'core.views.grant_permission'),
 
     (r'get_postal_by_zip//$', 'core.views.view_postal_by_zip'),
     (r'get_postal_by_zip/(?P<zip>\d+)/$', 'core.views.view_postal_by_zip'),
@@ -54,8 +54,9 @@ urlpatterns = patterns('',
 
     (r'^i18n/', include('django.conf.urls.i18n')),
 
-)
+                       )
 
 if settings.DEBUG:
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
     urlpatterns += staticfiles_urlpatterns()
