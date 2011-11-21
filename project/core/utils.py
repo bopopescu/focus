@@ -7,6 +7,9 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.utils.html import conditional_escape
 
+
+content_types = {}
+
 def get_content_type_for_model(model):
 
     try:
@@ -14,16 +17,14 @@ def get_content_type_for_model(model):
     except Exception, e:
         model_name = model.__class__.__name__
 
-    cache_key = "%s_%s" % ("content_type", model_name)
+    if model_name in content_types:
+        return content_types[model_name]
 
-    if cache.get(cache_key):
-        content_type = cache.get(cache_key)
-    else:
-        content_type = ContentType.objects.get_for_model(model)
-        cache.set(cache_key, content_type)
+    content_type = ContentType.objects.get_for_model(model)
+
+    content_types[model_name] = content_type
 
     return content_type
-
 
 def get_class(app, model):
     content_type = ContentType.objects.get(app_label=app, model=model)
