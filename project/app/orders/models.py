@@ -128,7 +128,7 @@ class Invoice(OrderBase):
         next = (Invoice.objects.filter_current_company().aggregate(Max("invoice_number"))['invoice_number__max'])
         if next:
             return next + 1
-        return 1
+        return 1.0
 
 offer_status_choices = (
     ("0", _("Pending")),
@@ -159,7 +159,7 @@ class Offer(OrderBase):
             next = (Offer.objects.filter_current_company().aggregate(Max("offer_number"))['offer_number__max'])
             if next:
                 return next + 1
-            return 1
+            return 1.0
         except Exception, e:
             return ""
 
@@ -190,7 +190,7 @@ class Order(OrderBase):
             next = (Order.objects.filter_current_company().aggregate(Max("order_number"))['order_number__max'])
             if next:
                 return next + 1
-            return 1
+            return 1.0
         except Exception, e:
             return ""
 
