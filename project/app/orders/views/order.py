@@ -107,7 +107,7 @@ def create_invoice(request, id):
             #Create order based on offer
             invoice_number = request.POST['invoice_number']
             invoice = Invoice()
-            invoice.invoice_number = int(invoice_number)
+            invoice.invoice_number = invoice_number
             invoice.order_id = order.id
             invoice.copy_from(order)
 

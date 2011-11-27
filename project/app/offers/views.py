@@ -37,7 +37,7 @@ def create_order(request, id):
         if form.is_valid():
             order_number = request.POST['order_number']
             order = Order()
-            order.order_number = int(order_number)
+            order.order_number = order_number
             order.copy_from(offer)
 
             #Archive the offer
