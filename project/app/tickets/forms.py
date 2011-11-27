@@ -12,8 +12,8 @@ class TicketForm(ModelForm):
     class Meta:
         model = Ticket
         fields = (
-        'title', 'customer', 'description', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
-        'attachment', "order")
+            'title', 'customer', 'description', 'status', 'priority', 'type', 'due_date', 'assigned_to',
+            'attachment', "order")
 
     def __init__(self, *args, **kwargs):
         super(TicketForm, self).__init__(*args, **kwargs)
@@ -37,8 +37,7 @@ class EditTicketForm(ModelForm):
     class Meta:
         model = Ticket
         fields = (
-        'title', 'description', 'customer', 'status', 'priority', 'type', 'estimated_time', 'due_date', 'assigned_to',
-        'spent_time', 'order',)
+            'title', 'customer', 'status', 'priority', 'type', 'due_date', 'assigned_to', 'order',)
 
     def __init__(self, *args, **kwargs):
         super(EditTicketForm, self).__init__(*args, **kwargs)
@@ -69,6 +68,7 @@ class AddTicketTypeForm(ModelForm):
     class Meta:
         model = TicketType
         fields = ('name', 'description')
+
 
 class AddClientForm(forms.Form):
     email = forms.EmailField()

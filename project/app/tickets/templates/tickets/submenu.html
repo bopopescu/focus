@@ -1,15 +1,12 @@
 {% load menu_tags %}
 {% load i18n %}
 {% load auth %}
+<li><a class="{% active request "edit" %}" href="{% url app.tickets.views.edit ticket.id %}">{% trans "VIS" %}</a></li>
+<li><a class="{% active request "client" %}"
+       href="{% url app.tickets.views.client_management ticket.id %}">{% trans "CLIENTS" %}</a></li>
 
-        <li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.assigned_to_user %}">{% trans "ASSIGNED TO YOU" %}</a></li>
-
-        <li><a class="{% active request "contacts/$" %}" href="{% url app.tickets.views.overview %}">{% trans "OVERVIEW" %}</a></li>
-
-        <li><a class="{% active request "view" %}" href="{% url app.tickets.views.view ticket.id %}">{% trans "VIEW" %}</a></li>
-
-        <li><a class="{% active request "edit" %}" href="{% url app.tickets.views.edit ticket.id %}">{% trans "UPDATE" %}</a></li>
-
-        <li><a class="{% active request "client" %}" href="{% url app.tickets.views.client_management ticket.id %}">{% trans "CLIENTS" %}</a></li>
-
-        <li><a class="{% active request "trash" %}" href="{% url app.tickets.views.trash ticket.id %}">{% trans "DELETE" %}</a></li>
+{% if not ticket.trashed %}
+    <li><a class="{% active request "trash" %}"
+           href="{% url app.tickets.views.trash ticket.id %}">{% trans "DELETE" %}</a>
+    </li>
+{% endif %}

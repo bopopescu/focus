@@ -8,30 +8,54 @@
 
 {% block content %}
 
+    <style type="text/css">
+        .visibility_form {
+            color: red;
+        }
+
+        .public_visibility {
+            color: green;
+        }
+    </style>
+
     <script>
         $(function() {
-            $("#loading").hide();
-            $("#form_button").click(function() {
-                $("#form_button").hide();
-                $("#loading").show();
-            })
+         
+            $('.tickets .ticket-details').show();
+
         })
+
     </script>
 
-    <h1>{% trans "Update Ticket" %}: {{ ticket.title }}</h1>
-    <br>
+    <ul class="tickets">
+        <li class="ticket-data">
+            <div class="ticket-details">
+                <h4>{{ ticket.title }}</h4>
+                <dl>
+                    <dt>{% trans "Opened" %}:</dt>
+                    <dd><strong>{{ ticket.date_created }}</strong></dd>
+                    <dt>{% trans "Last updated" %}:</dt>
+                    <dd><strong>{{ ticket.date_edited }}</strong></dd>
+                    <dt>{% trans "Milestone" %}:</dt>
+                    <dd><strong>{{ ticket }}</strong></dd>
+                    <dt class="clear">Reported by:</dt>
+                    <dd><strong>{{ ticket.creator }}</strong></dd>
+                    <dt>{% trans "Assigned to" %}:</dt>
+                    <dd>{% if ticket.assigned_to %}<strong>{{ ticket.assigned_to }}</strong>{% endif %}</dd>
+                    <dt>{% trans "Order" %}:</dt>
+                    <dd><strong>{% if ticket.order %}{{ ticket.order }}{% endif %}</strong></dd>
+                </dl>
+                <h5>{% trans "Description" %}</h5>
 
-    <b>{{ ticket.creator }}</b>:<br>
-    {{ ticket.description|linebreaks }}
+                 {{ ticket.description }}
 
-    <br><br>
+            </div>
+        </li>
+    </ul>
 
     {% if ticket_form.errors %}
-
         <div class="information" id="message">
-
             <p>Fix before submit again</p>
-
         </div>
 
         {% for i in ticket_form %}
@@ -45,166 +69,77 @@
 
     <div style="width:605px;">
 
-        {% if updates %}
-            <a href="show_updates" id="show_updates">{% trans "Show most recent updates" %}</a>
-            <table id="last_updates">
-                {% for update in updates %}
+        {% include "form_fields.html" %}
 
-                    <tr>
-                        <td><img
-                                src="{{ update.creator.profileImage|thumbnail_with_max_side:"130" }}" class="avatar_img"
-                                alt=""/></td>
-                        <td>
-                            <p><strong>{{ update.creator }}</strong> on {{ update.date_created }}</p>
-
-                            <p>
-                                {% if update.update_lines.all %}
-                                    <b>{% trans "Changes: " %}</b>
-                                    <ul>
-                                        {% for line in update.update_lines.all %}
-                                            <li>{{ line.change }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-
-                            </p>
-
-                            {% if update.comment %}
-                                <p><b>{% trans "Comment: " %}</b> {{ update.comment }}</p>
-                            {% endif %}
-
-                            {% if update.attachment %}
-                                <p>
-                                    <b>{% trans "New Attachment:" %}</b>
-                                    <a target="_blank" href="{{ update.get_attachment_url }}">
-                                        <img src="{{ STATIC_URL }}img/download.png"
-                                             style="width:30px; height:30px; vertical-align:middle;">
-                                        {{ update.get_attachment_name }}</a>
-                                </p>
-
-                            {% endif %}
-
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
-
-        <form enctype="multipart/form-data" class="form label-inline" action="" method="post">
-
-            <div class="ticket_update">
-                <h3>{% trans "Comment: " %}</h3>
-                {{ ticket_form.comment }} <br/>
-                {% if ticket.clients.all %}
-                    {{ ticket_form.public.label }} {{ ticket_form.public }}
-                {% endif %}
-            </div>
-
-            <div class="ticket_update">
-
-                <h3>{% trans "Change details" %}</h3>
-
-                <table class="ticket_attributes">
-                    <a href="javascript: void(0)" id="toggle_extra">{% trans "more" %}</a>
-                    <tr class="ticket_hideable">
-                        <td>
-                                <span {% if ticket_form.title.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.title.label }} </span> <br/>
-                            {{ ticket_form.title }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr class="ticket_hideable">
-
-                        <td>
-                                <span {% if ticket_form.customer.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.customer.label }} </span> <br/>
-                            {{ ticket_form.customer }}
-                        </td>
-                        <td>
-                                <span {% if ticket_form.order.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.order.label }} </span> <br/>
-                            {{ ticket_form.order }}
-                        </td>
-                    </tr>
-
-                    <tr class="ticket_hideable">
-                        <td colspan="2">
-                            {{ ticket_form.description.label }} <br/>
-                            {{ ticket_form.description }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                                <span {% if ticket_form.status.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.status.label }} </span> <br/>
-                            {{ ticket_form.status }}
-                        </td>
-
-                        <td>
-                             <span {% if ticket_form.due_date.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.due_date.label }} </span> <br/>
-                            {{ ticket_form.due_date }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                                <span {% if ticket_form.priority.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.priority.label }} </span> <br/>
-                            {{ ticket_form.priority }}
-                        </td>
-                        <td>
-                                <span {% if ticket_form.spent_time.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.spent_time.label }} </span> <br/>
-                            {{ ticket_form.spent_time }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                                <span {% if ticket_form.assigned_to.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.assigned_to.label }} </span> <br/>
-                            {{ ticket_form.assigned_to }}
-                        </td>
-                        <td>
-                                <span {% if ticket_form.estimated_time.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.estimated_time.label }} </span> <br/>
-                            {{ ticket_form.estimated_time }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                                <span {% if ticket_form.type.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.type.label }} </span> <br/>
-                            {{ ticket_form.type }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                                <span {% if ticket_form.attachment.errors %}style="color:red;" {% endif %}>
-                                    {{ ticket_form.attachment.label }} </span> <br/>
-                            {{ ticket_form.attachment }}
-                        </td>
-                    </tr>
-
-
-                </table>
-            </div>
-
-            <div id="loading">
-                <span class="loader red" title="Loading, please wait…"></span>
-            </div>
-
-            <button id="form_button" type="submit">{% trans "Save" %}</button>
-
-
-
-        </form>
     </div>
+
+
+    <br><br><br>
+    <h3>{% trans "Comments" %}</h3>
+    <br>
+
+    <ul class="logs">
+
+        {% for update in updates %}
+
+            <li>
+
+                {% if comment.creator.profileImage %}
+                    <img src="{{ comment.creator.profileImage|thumbnail_with_max_side:"60" }}" class="avatar_img left"
+                         alt=""/>
+                {% endif %}
+                <span class="logs-timestamp">{{ update.date_created|date:"Y.m.d H:i" }}</span>
+
+                <p>
+                    {{ comment.text|linebreaks }}
+                </p>
+
+                <em class="logs-meta">{% trans "Posted by" %} <a href="#">{{ update.creator }}</a></em>
+
+                <br><br>
+
+                <p>
+                    {% if update.update_lines.all %}
+                        <b>{% trans "Changes" %}</b>
+                        <br>
+                        {% for line in update.update_lines.all %}
+                            - {{ line.change }}<br>
+                        {% endfor %}
+
+                    {% endif %}
+                </p>
+
+                {% if update.comment %}
+                    <p><b>{% trans "Comment" %}</b> <br> {{ update.comment|linebreaks }}</p>
+                {% endif %}
+
+                {% if update.attachment %}
+                    <p>
+                        <b>{% trans "Attachment" %}</b><br>
+                        <a target="_blank" href="{{ update.get_attachment_url }}">
+                            <img src="{{ STATIC_URL }}img/download.png"
+                                 style="width:30px; height:30px; vertical-align:middle;">
+                            {{ update.get_attachment_name }}</a>
+                    </p>
+
+                {% endif %}
+                {% if ticket.clients.all %}
+                    <form class="visibility_form {% if update.public %} public_visibility {% endif %}">
+                        <input type="hidden" value="{{ update.id }}"/>
+                        {% trans "Public" %}<input type="checkbox" class="visibility_check"
+                                {% if update.public %} checked="checked" {% endif %}/>
+                    </form>
+                {% endif %}
+
+
+            </li>
+
+
+        {% endfor %}
+
+    </ul>
+
+
 
 
     <script>
@@ -227,6 +162,29 @@
                         "{% trans 'Hide updates' %}" : "{% trans 'Show most recent updates' %}");
             })
         });
+
+        var visibility_update_url = "{% url app.tickets.views.ajax_change_update_visibility %}"
+        $(function() {
+            $(".visibility_check").change(function() {
+                $("body").css("cursor", "progress");
+                var update_id = $(this).prev("input").val();
+                var visible = $(this).attr("checked") ? 1 : 0;
+                var data = {id: update_id, visible: visible};
+                var parent_form = $(this).parent();
+                $.post(visibility_update_url, data,
+                        function(data) {
+                            var visible = data.visible;
+                            if (data.visible) {
+                                parent_form.addClass("public_visibility");
+                            }
+                            else {
+                                parent_form.removeClass("public_visibility");
+                            }
+                            $("body").css("cursor", "auto")
+                        }, "json");
+            })
+        })
+
 
     </script>
 

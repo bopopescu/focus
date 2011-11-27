@@ -76,7 +76,7 @@
                         <dt class="clear">Reported by:</dt>
                         <dd><strong>{{ ticket.creator }}</strong></dd>
                         <dt>{% trans "Assigned to" %}:</dt>
-                        <dd>{% if ticket.assigne_to %}<strong>{{ ticket.assigned_to }}</strong>{% endif %}</dd>
+                        <dd>{% if ticket.assigned_to %}<strong>{{ ticket.assigned_to }}</strong>{% endif %}</dd>
                         <dt>{% trans "Order" %}:</dt>
                         <dd><strong>{% if ticket.order %}{{ ticket.order }}{% endif %}</strong></dd>
                     </dl>
@@ -84,9 +84,7 @@
 
                     <p>{{ ticket.description }}</p>
                     <ul class="ticket-details-actions">
-                        <li><a href="{{ ticket.get_update_url }}" class="button gray">{% trans "Update ticket" %}</a>
-                        </li>
-                        <li><a href="#" class="button red">{% trans "Close ticket" %}</a></li>
+                        <li><a href="{{ ticket.get_update_url }}" class="button gray">{% trans "Update ticket" %}</a> </li>
                     </ul>
 
                     <br/>

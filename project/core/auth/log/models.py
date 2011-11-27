@@ -45,7 +45,7 @@ class Log(models.Model):
         if lastLog:
             msg = ""
             lastLog = lastLog[len(lastLog) - 1]
-            print lastLog.message
+
             for i, value in eval(self.message).iteritems():
                 if i == "id" or i == "date_created" or i == "date_edited" or i == 'editor' or i == 'user':
                     continue
@@ -54,17 +54,27 @@ class Log(models.Model):
                     continue
 
                 if i in fields:
+
                     if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
                         lastObj = fields[i].objects.get(id=eval(lastLog.message)[i][0])
                         newObj = fields[i].objects.get(id=eval(self.message)[i][0])
 
-                        diff.append(value[1] + (" %s %s %s %s \n") % (
-                        _("was changed from"), lastObj, _("to"),newObj))
+
+                        diff.append(value[1] + (" %s %s %s %s \n") % (_("was changed from"), lastObj, _("to"),newObj))
+
                     continue
 
                 if eval(self.message)[i][0] != eval(lastLog.message)[i][0]:
-                    diff.append(value[1] + (" %s %s %s: %s \n") % (
-                    _("was changed from"), eval(lastLog.message)[i][0], _("to"), eval(self.message)[i][0]))
+
+                    from_value = eval(lastLog.message)[i][0]
+                    to_value = eval(self.message)[i][0]
+
+                    if from_value and to_value:
+                        diff.append(value[1] + (" %s %s to %s \n") % (_("was changed from"), from_value, to_value))
+                    elif from_value:
+                        diff.append(value[1] + (" %s %s %s \n") % (_("was changed from "), from_value, "to nothing"))
+                    elif to_value:
+                        diff.append(value[1] + (" %s %s \n") % (_("was set to"), to_value))
 
             if not len(diff):
                 diff.append(_("No changes"))
