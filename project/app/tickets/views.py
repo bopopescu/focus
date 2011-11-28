@@ -15,25 +15,21 @@ import copy
 
 @require_permission("LIST", Ticket)
 def overview(request):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False).order_by("status",
-                                                                                                       "-priority",
-                                                                                                       "-date_edited")
-    for ticket in tickets:
-        ticket.ticket_form = EditTicketForm(instance=ticket)
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).\
+    filter(trashed=False).order_by("status", "-priority", "-date_edited")
+
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
 
 
 @require_permission("LIST", Ticket)
 def assigned_to_user(request):
-    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=False,
-                                                                               assigned_to=request.user).order_by(
-        "status", "-priority", "-date_edited")
+    tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).\
+    filter(trashed=False, assigned_to=request.user).order_by("status", "-priority", "-date_edited")
 
     return render(request, 'tickets/list.html', {"title": "Tickets",
                                                  "assigned_to": True,
                                                  'tickets': tickets})
-
 
 @require_permission("LIST", Ticket)
 def overview_trashed(request):
@@ -41,8 +37,7 @@ def overview_trashed(request):
                                                                                                       "-priority",
                                                                                                       "-date_edited")
 
-    for ticket in tickets:
-        ticket.ticket_form = EditTicketForm(instance=ticket)
+
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
 
@@ -67,9 +62,11 @@ def trash(request, id):
                                                       'reasons': ticket.can_be_deleted()[1],
                                                       })
 
+
 @require_permission("VIEW", Ticket)
 def add(request):
     return form(request)
+
 
 def create_update_for_ticket(old_ticket, ticket_form):
     ticket, ticket_update = ticket_form.save(commit=False)
