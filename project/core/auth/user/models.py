@@ -385,7 +385,6 @@ class User(models.Model):
         
         cached = cache.get(cache_key)
 
-        print cache_key
 
         if cached:
             return cached
@@ -466,7 +465,6 @@ class User(models.Model):
                 ids.add(obj.id)
 
         result = objects.select_related(*get_select_related_for_model(model)).filter(id__in=ids)
-        result =  FocusList(result)
 
         cache.set(cache_key, result)
 
