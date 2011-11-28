@@ -379,24 +379,22 @@ class User(models.Model):
 
 
     def has_permission_to (self, action, object, id=None, any=False):
-
         content_type = get_content_type_for_model(object)
-
         cache_key = "has_permission_to_%s_%s_%s" % (Core.current_user().id, action, content_type.name)
-
+        cache_key = str(cache_key).strip()
+        
         cached = cache.get(cache_key)
+
+        print cache_key
 
         if cached:
             return cached
 
         permissions = self.get_permission_tree()
-
         cached = self.valid_permission(permissions, action, object, id, any)
-
         cache.set(cache_key, cached, 5000)
 
         return cached
-
 
     def get_permissions(self, content_type=None):
         groups = []
@@ -447,8 +445,11 @@ class User(models.Model):
                 return select_related_table[model.__name__]
 
             return []
-        
-        cache_key = "permitted_objects_%s_%s_%s" % (Core.current_user().id, action, model.__name__)
+
+        content_type = get_content_type_for_model(model)
+
+        cache_key = "permitted_objects_%s_%s_%s" % (Core.current_user().id, action, content_type.name)
+        cache_key = str(cache_key).strip()
 
         result = cache.get(cache_key)
 
