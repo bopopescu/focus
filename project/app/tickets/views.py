@@ -36,7 +36,7 @@ def overview_trashed(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True).order_by("status",
                                                                                                       "-priority",
                                                                                                       "-date_edited")
-    
+
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
 
@@ -83,7 +83,7 @@ def edit(request, id):
     ticket = Core.current_user().get_permitted_objects("VIEW", Ticket).get(id=id)
     updates = TicketUpdate.objects.filter(ticket=ticket).order_by("-id")
 
-    ticket.visited_by_since_last_edit.add((Core.current_user()))
+    #ticket.visited_by_since_last_edit.add((Core.current_user()))
 
     if request.method == "POST":
         old_ticket = copy.copy(ticket)
