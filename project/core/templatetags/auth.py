@@ -1,7 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
-from core import Core
 
 register = template.Library()
 
@@ -47,8 +46,8 @@ def require_permission(parser, token):
         multiple_nodes[1] = parser.parse(('end_require',))
         parser.delete_first_token()
 
-
     return PermissionNode(multiple_nodes, action, object)
+
 
 class PermissionNode(template.Node):
     """
@@ -86,7 +85,6 @@ class PermissionNode(template.Node):
             # Make a function that's cached
             def get_content_type(app, model):
                 cache_key = "%s_%s" % (app, model.__class__.__name__)
-                cache_key = cache_key.replace(' ','')
 
                 if cache.get(cache_key):
                     return cache.get(cache_key)
@@ -117,4 +115,3 @@ class PermissionNode(template.Node):
                 else:
                     return ''
 
-    
