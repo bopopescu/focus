@@ -13,7 +13,6 @@ class JSONCachedEmitter(Emitter):
         cache_key = str(Core.current_user().id) + request.path + request.META['QUERY_STRING']
         old = cache.get(cache_key)
         if old:
-            print "cache"
             return old
         seria = simplejson.dumps(self.construct(), cls=DateTimeAwareJSONEncoder, ensure_ascii=False, indent=4)
         cache.set(cache_key, seria)
