@@ -382,12 +382,7 @@ class User(models.Model):
 
         content_type = get_content_type_for_model(object)
 
-        if not id:
-            id = ""
-        if not any:
-            any = ""
-
-        cache_key = "has_permission_to_%s_%s_%s_%s_%s" % (Core.current_user().id, action, content_type.name, id, any)
+        cache_key = "has_permission_to_%s_%s_%s" % (Core.current_user().id, action, content_type.name)
 
         cached = cache.get(cache_key)
 
