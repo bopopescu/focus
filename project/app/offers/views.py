@@ -15,8 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 
 @require_permission("LIST", Offer)
 def overview(request):
-    offers = Core.current_user().get_permitted_objects("VIEW", Offer).filter(trashed=False).select_related("project",
-                                                                                                           "customer")
+    offers = Core.current_user().get_permitted_objects("VIEW", Offer).filter(trashed=False)
+    
     return render(request, "offers/overview.html", {'title': _('Offers'),
                                                     'offers': offers})
 

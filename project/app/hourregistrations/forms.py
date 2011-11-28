@@ -19,6 +19,7 @@ class HourRegistrationForm(ModelForm):
 
         self.fields['type'].queryset = HourRegistrationType.objects.filter(trashed=False,
                                                                            company=Core.current_user().get_company())
+
         self.fields['order'].queryset = Core.current_user().get_permitted_objects("VIEW", Order).filter(trashed=False)
 
         if 'instance' in kwargs:

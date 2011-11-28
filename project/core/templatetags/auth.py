@@ -1,6 +1,7 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
+from core import Core
 
 register = template.Library()
 
@@ -46,8 +47,8 @@ def require_permission(parser, token):
         multiple_nodes[1] = parser.parse(('end_require',))
         parser.delete_first_token()
 
-    return PermissionNode(multiple_nodes, action, object)
 
+    return PermissionNode(multiple_nodes, action, object)
 
 class PermissionNode(template.Node):
     """

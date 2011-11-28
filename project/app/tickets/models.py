@@ -58,7 +58,6 @@ class TicketBase(models.Model):
         self.save()
 
     @property
-    @cachedecorator('creator')
     def creator(self):
         creator = self.client_user or self.user
         return creator
@@ -144,7 +143,6 @@ class Ticket(TicketBase):
     def get_updates(self):
         return list(self.updates.all().select_related())
 
-    @cachedecorator('get_priority')
     def get_priority(self):
         result = ""
         if self.priority.name == ("Low"):
@@ -161,7 +159,6 @@ class Ticket(TicketBase):
 
         return {'color': result, 'name': self.priority.name}
 
-    @cachedecorator('get_status')
     def get_status(self):
         result = "red"
 

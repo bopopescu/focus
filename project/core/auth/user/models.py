@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from core.cache import cachedecorator
-from core.utils import get_content_type_for_model
+from core.utils import get_content_type_for_model, FocusList
 from django.core.cache import cache
 from django.db.models import Q
 from django.conf import settings
@@ -379,8 +379,23 @@ class User(models.Model):
 
 
     def has_permission_to (self, action, object, id=None, any=False):
+
+        content_type = get_content_type_for_model(object)
+
+        cache_key = "has_permission_to_%s_%s_%s_%s_%s" % (Core.current_user().id, action, content_type.name, id, any)
+
+        cached = cache.get(cache_key)
+
+        if cached:
+            return cached
+
         permissions = self.get_permission_tree()
-        return self.valid_permission(permissions, action, object, id, any)
+
+        cached = self.valid_permission(permissions, action, object, id, any)
+
+        cache.set(cache_key, cached, 5000)
+
+        return cached
 
 
     def get_permissions(self, content_type=None):
@@ -422,6 +437,24 @@ class User(models.Model):
         return self.build_permission_tree()
 
     def get_permitted_objects(self, action, model, order_by=None):
+
+        def get_select_related_for_model(model):
+            select_related_table = {'Offer': ['project','customer'],
+                                    'Ticket': ['creator','status','priority','updates','clients','user','client_user']
+                                    }
+
+            if model.__name__ in select_related_table:
+                return select_related_table[model.__name__]
+
+            return []
+        
+        cache_key = "permitted_objects_%s_%s_%s" % (Core.current_user().id, action, model.__name__)
+
+        result = cache.get(cache_key)
+
+        if result:
+            return result
+        
         objects = model.objects.filter_current_company()
         permissions = self.get_permission_tree()
 
@@ -431,8 +464,12 @@ class User(models.Model):
             if self.valid_permission(permissions, action, obj):
                 ids.add(obj.id)
 
-        return objects.filter(id__in=ids)
+        result = objects.select_related(*get_select_related_for_model(model)).filter(id__in=ids)
+        result =  FocusList(result)
 
+        cache.set(cache_key, result)
+
+        return result
 
 class AnonymousUser(User):
     id = 0

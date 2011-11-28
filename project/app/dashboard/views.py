@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from app.tickets.models import Ticket
-
 from core import Core
 from app.announcements.models import Announcement
 from app.orders.models import Order

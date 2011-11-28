@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.core.cache import cache
 import functools
+from core import Core
 
 """
 Cache framework
 """
+
 
 class cachedecorator:
     label = ""
@@ -16,6 +18,7 @@ class cachedecorator:
         """
 
         self.label = label
+        self.timeout = timeout
 
     def __call__(self, func):
         """
@@ -31,7 +34,11 @@ class cachedecorator:
                 return cached
             else:
                 value = func(*args, **kwargs)
-                cache.set(cache_key, value)
+                if self.timeout:
+                    cache.set(cache_key, value, self.timeout)
+                else:
+                    cache.set(cache_key, value)
+                                    
                 return value
 
         functools.update_wrapper(cache_function, func)

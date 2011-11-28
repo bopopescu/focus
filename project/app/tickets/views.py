@@ -16,7 +16,7 @@ import copy
 @require_permission("LIST", Ticket)
 def overview(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).\
-    filter(trashed=False).order_by("status", "-priority", "-date_edited")
+    filter(trashed=False).order_by('title')
 
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
@@ -36,8 +36,7 @@ def overview_trashed(request):
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket).filter(trashed=True).order_by("status",
                                                                                                       "-priority",
                                                                                                       "-date_edited")
-
-
+    
     return render(request, 'tickets/list.html',
             {"title": "Tickets", 'tickets': tickets})
 
