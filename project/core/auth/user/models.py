@@ -381,7 +381,7 @@ class User(models.Model):
     def has_permission_to (self, action, object, id=None, any=False):
         content_type = get_content_type_for_model(object)
         cache_key = "has_permission_to_%s_%s_%s" % (Core.current_user().id, action, content_type.name)
-        cache_key = str(cache_key).strip()
+        cache_key = cache_key.replace(' ','')
         
         cached = cache.get(cache_key)
 
@@ -449,7 +449,7 @@ class User(models.Model):
         content_type = get_content_type_for_model(model)
 
         cache_key = "permitted_objects_%s_%s_%s" % (Core.current_user().id, action, content_type.name)
-        cache_key = str(cache_key).strip()
+        cache_key = cache_key.replace(' ','')
 
         result = cache.get(cache_key)
 

@@ -86,7 +86,7 @@ class PermissionNode(template.Node):
             # Make a function that's cached
             def get_content_type(app, model):
                 cache_key = "%s_%s" % (app, model.__class__.__name__)
-                cache_key = str(cache_key).strip()
+                cache_key = cache_key.replace(' ','')
 
                 if cache.get(cache_key):
                     return cache.get(cache_key)
