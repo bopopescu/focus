@@ -1,5 +1,4 @@
 import calendar
-from collections import OrderedDict
 from datetime import datetime
 from app.calendar.forms import EventForm
 from core.utils import get_content_type_for_model
@@ -16,6 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from core.shortcuts import comment_block
 from operator import itemgetter, attrgetter
+from util.ordereddict import OrderedDict
 
 @require_permission("LIST", Order)
 def my_orders(request):

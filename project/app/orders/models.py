@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from app.calendar.models import Event
+from core.auth.user.models import User
 from core.cache import cachedecorator
 from django.core.cache import cache
 from django.core import urlresolvers
@@ -196,3 +197,13 @@ class Order(OrderBase):
 
     def get_view_url(self):
         return urlresolvers.reverse('app.orders.views.order.view', args=("%s" % self.id,))
+
+
+class OrderMembership(PersistentModel):
+    order = models.ForeignKey(Order, related_name="memberships")
+    user = models.ForeignKey(User, related_name="orders_memberships")
+    description = models.TextField()
+    work_done = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "%s member of %s " % (self.user, self.order)

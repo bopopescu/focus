@@ -181,7 +181,8 @@ class Ticket(TicketBase):
 
     @cachedecorator('mark_as_unread_for_current_user')
     def mark_as_unread_for_current_user(self):
-        return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
+        #return Core.current_user() in self.get_recipients() and not Core.current_user() in self.visited_by_since_last_edit.all()
+        return False
 
     def get_recipients(self):
         """
