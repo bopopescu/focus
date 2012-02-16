@@ -23,6 +23,8 @@ urlpatterns = patterns('',
     (r'^announcements/', include('app.announcements.urls')),
     (r'^calendar/', include('app.calendar.urls')),
 
+    (r'^email/', include('app.email.urls')),
+
                        #settings for admin
     (r'^admin/', include('app.admin.urls')),
 

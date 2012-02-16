@@ -41,10 +41,9 @@ class newCompanyForm(forms.Form):
     admin_group          = forms.CharField(label="Gruppenavn admin")
     all_employees_group   = forms.CharField(label="Gruppenavn ansatte")
 
-    email_address       = forms.CharField(label="Email address")
-    email_host          = forms.CharField(label="Email host")
-    email_username      = forms.CharField(label="Email username")
-    email_password      = forms.CharField(label="Email password")
+    email_support       = forms.CharField(label="Email address support")
+    email_archive        = forms.CharField(label="Email address archive")
+
 
     adminuser_name       = forms.CharField(label="Fullt navn admin")
     adminuser_username   = forms.CharField(label="Brukernavn for admin")

@@ -20,7 +20,7 @@
     {% for customer in customers %}
         <tr>
             <td>{{ customer.cid }}</td>
-            <td><a href="{% url app.customers.views.view customer.id %}">{{ customer.name }}</a></td>
+            <td><a href="{{ customer.get_view_url }}">{{ customer.name }}</a></td>
             <td>{{ customer.address }}</td>
             <td>{{ customer.phone }}</td>
             <td>{{ customer.email }}</td>

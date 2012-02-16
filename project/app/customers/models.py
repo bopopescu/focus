@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from app.files.models import File
 from core import Core
 from core.models import PersistentModel, Comment
 from django.core import urlresolvers
@@ -26,6 +27,8 @@ class Customer(PersistentModel):
 
     contacts = models.ManyToManyField(Contact, blank=True, related_name="customers", verbose_name=_("Contacts"))
 
+    files = models.ManyToManyField(File)
+
     comments = generic.GenericRelation(Comment)
 
     def __unicode__(self):
@@ -51,13 +54,13 @@ class Customer(PersistentModel):
             reasons.append(_("Customer has active projects"))
 
         if can_be_deleted:
-            return (True, "OK")
+            return True, "OK"
 
-        return (False, reasons)
+        return False, reasons
 
     @staticmethod
     def add_ajax_url():
-        return urlresolvers.reverse('app.customers.views.add_ajax')
+        return urlresolvers.reverse('app.customers.views.customer.add_ajax')
 
     @staticmethod
     def simpleform():
@@ -65,4 +68,4 @@ class Customer(PersistentModel):
         return CustomerFormSimple(instance=Customer(), prefix="customers", initial= {'cid':Customer.calculate_next_cid()})
 
     def get_view_url(self):
-        return urlresolvers.reverse('app.customers.views.view', args=("%s" % self.id,))
+        return urlresolvers.reverse('app.customers.views.customer.view', args=("%s" % self.id,))

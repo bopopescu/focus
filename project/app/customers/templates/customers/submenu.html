@@ -2,18 +2,22 @@
 {% load i18n %}
 {% load auth %}
 
-<li><a class="{% active request "view" %}" href="{% url app.customers.views.view customer.id %}">{% trans "VIEW" %}</a>
+<li><a class="{% active request "view" %}" href="{% url app.customers.views.customer.view customer.id %}">{% trans "VIEW" %}</a>
 </li>
 
 
 {% require_permission EDIT customer %}
-<li><a class="{% active request "edit" %}" href="{% url app.customers.views.edit customer.id %}">{% trans "EDIT" %}</a>
+<li><a class="{% active request "edit$" %}" href="{% url app.customers.views.customer.edit customer.id %}">{% trans "EDIT" %}</a>
 </li>
 {% end_require %}
 
+<li><a class="{% active request "files" %}"
+       href="{% url app.customers.views.files.overview customer.id %}">{% trans "FILES" %}</a></li>
+
+
 {% require_permission EDIT customer %}
 <li><a class="{% active request "contacts" %}"
-       href="{% url app.customers.views.list_contacts customer.id %}">{% trans "CONTACTS" %}</a>
+       href="{% url app.customers.views.customer.list_contacts customer.id %}">{% trans "CONTACTS" %}</a>
 </li>
 
 {% end_require %}
@@ -23,7 +27,7 @@
 {% require_permission EDIT customer %}
 
 <li><a class="{% active request "history" %}"
-       href="{% url app.customers.views.history customer.id %}">{% trans "HISTORY" %}</a></li>
+       href="{% url app.customers.views.customer.history customer.id %}">{% trans "HISTORY" %}</a></li>
 
 {% end_require %}
 
@@ -32,11 +36,11 @@
 
 {% if customer.trashed %}
     <li><a class="{% active request "trash" %}"
-           href="{% url app.customers.views.restore customer.id %}">{% trans "RESTORE" %}</a></li>
+           href="{% url app.customers.views.customer.restore customer.id %}">{% trans "RESTORE" %}</a></li>
 
 {% else %}
     <li><a class="{% active request "trash" %}"
-           href="{% url app.customers.views.trash customer.id %}">{% trans "DELETE" %}</a></li>
+           href="{% url app.customers.views.customer.trash customer.id %}">{% trans "DELETE" %}</a></li>
 {% endif %}
 
 {% end_require %}

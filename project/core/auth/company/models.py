@@ -18,11 +18,9 @@ class Company(models.Model):
     hours_needed_for_50_overtime_pay = models.IntegerField("Timer før 50%", default=160)
     hours_needed_for_100_overtime_pay = models.IntegerField("Timer før 100%", default=240)
 
-    email_address   = models.CharField(max_length=100, null=True, blank=True)
-    email_host      = models.CharField(max_length=100, null=True, blank=True)
-    email_username  = models.CharField(max_length=100, null=True, blank=True)
-    email_password  = models.CharField(max_length=100, null=True, blank=True)
-            
+    email_support   = models.CharField(max_length=100, null=True, blank=True)
+    email_archive   = models.CharField(max_length=100, null=True, blank=True)
+
     def __unicode__(self):
         return self.name
 

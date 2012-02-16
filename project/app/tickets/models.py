@@ -119,6 +119,8 @@ class Ticket(TicketBase):
     milestone = models.ForeignKey(Milestone, blank=True, null=True, verbose_name=_('milestone'))
     visited_by_since_last_edit = models.ManyToManyField(User)
 
+    mailbox_hash = models.CharField(max_length=230, default="")
+
     objects = PersistentManager()
     all_objects = models.Manager()
 
@@ -334,6 +336,18 @@ class TicketUpdate(TicketBase):
         if self.attachment:
             return os.path.join("/file/", self.attachment.name)
         return None
+
+    def get_clean_comment(self):
+
+        max = len(self.comment)
+        print max
+
+        for look_for in ["--", "Fra: ","From: ", ">", "_____________________"]:
+
+            if self.comment.find(look_for) > 0 and self.comment.find(look_for) < max:
+                max = self.comment.find(look_for)
+
+        return self.comment[0:max]
 
     def get_view_url(self):
         return urlresolvers.reverse('app.tickets.views.view', args=("%s" % self.ticket.id,))

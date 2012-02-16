@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from core import Core
 from core.mail import send_mail
 from django.conf import settings
+import hashlib
 
 def send_update_mails(ticket, ticket_update):
     """
@@ -12,6 +13,11 @@ def send_update_mails(ticket, ticket_update):
     assigned_sent = check_assigned_to(ticket)
 
     recipients = set([])
+
+    if not ticket.mailbox_hash:
+
+        ticket.mailbox_hash = hashlib.sha224("ticket-%s"%ticket.id).hexdigest()
+        ticket.save()
 
     if ticket.assigned_to:
         if ticket.assigned_to.email:
@@ -33,7 +39,7 @@ def send_update_mails(ticket, ticket_update):
         _send_to_clients(ticket, ticket_update)
 
     msg = _create_msg(ticket, ticket_update)
-    send_mail(_("Ticket update"), msg, settings.NO_REPLY_EMAIL, recipients)
+    send_mail(_("Ticket update"), msg, "support+"+ticket.mailbox_hash+"@focustime.no", recipients)
 
 def _send_to_clients(ticket, ticket_update):
     recipients = [client.email for client in ticket.clients.all()]
@@ -52,7 +58,8 @@ def _create_msg(ticket, ticket_update):
 
 def _create_client_msg(ticket, ticket_update):
     url = settings.SITE_URL + reverse("ticket_view", kwargs={'id': ticket.id})
-    msg = ("%s %s (%s) %s:") % (_("The ticket "), ticket.title, url, _("has been updated"))
+    msg = "------------------------------------------------------------------------------------------------\n"
+    msg += ("%s %s (%s) %s:") % (_("The ticket "), ticket.title, url, _("has been updated"))
     if ticket_update.comment:
         msg += "\n\n" + _("Comment:") + "\n%s" % ticket_update.comment
 

@@ -18,6 +18,8 @@ def overview(request):
     your_orders = Core.current_user().get_permitted_objects("VIEW", Order, order_by="?")[0:3]
     tickets = Core.current_user().get_permitted_objects("VIEW", Ticket, order_by="?")[0:3]
 
+
+
     return render(request, 'dashboard/dashboard.html', {'title': title,
                                                         'announcements': announcements,
                                                         'orders': your_orders,

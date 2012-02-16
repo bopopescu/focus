@@ -69,10 +69,9 @@ def createNewCustomer(data):
     company = Company(name=data['name'], admin_group=admin_group, all_employees_group=all_employees_group)
 
     #Set up email for receiving tickets
-    company.email_address = data['email_address']
-    company.email_host = data['email_host']
-    company.email_password = data['email_password']
-    company.email_username = data['email_username']
+    company.email_support  = data['email_support']
+    company.email_archive = data['email_archive']
+
     company.save()
 
     #Create the admin user

@@ -26,7 +26,7 @@
                 <td>{{ order.delivery_date }}</td>
                 <td>
                     {% if order.get_customer %}
-                        <a href="{% url app.customers.views.view order.get_customer.id %}">{{ order.get_customer }}</a>
+                        <a href="{% url app.customers.views.customer.view order.get_customer.id %}">{{ order.get_customer }}</a>
                     {% endif %}
                 </td>
                 <td>

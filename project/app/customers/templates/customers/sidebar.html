@@ -3,6 +3,6 @@
 {% load auth %}
 
 <ul>
-    <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.overview %}">{% trans "Overview" %}</a></li>
-    <li><a class="{% active request "new" %}" href="{% url app.customers.views.add %}">{% trans "New customer" %}</a></li>
+    <li><a class="{% active request "customers/$" %}" href="{% url app.customers.views.customer.overview %}">{% trans "Overview" %}</a></li>
+    <li><a class="{% active request "new" %}" href="{% url app.customers.views.customer.add %}">{% trans "New customer" %}</a></li>
 </ul>

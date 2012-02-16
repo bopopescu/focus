@@ -156,7 +156,7 @@ class PersistentModel(models.Model):
             id = self.id
             users = []
 
-            object = content_type.get_object_for_this_type(id=id)
+            #object = content_type.get_object_for_this_type(id=id)
 
             perm = Action.get_by_name(perm.upper())
             adminPerm = Action.get_by_name("ALL")

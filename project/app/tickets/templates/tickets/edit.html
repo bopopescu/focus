@@ -110,7 +110,7 @@
                 </p>
 
                 {% if update.comment %}
-                    <p><b>{% trans "Comment" %}</b> <br> {{ update.comment|linebreaks }}</p>
+                    <p><b>{% trans "Comment" %}</b> <br> {{ update.get_clean_comment|linebreaks }}</p>
                 {% endif %}
 
                 {% if update.attachment %}
